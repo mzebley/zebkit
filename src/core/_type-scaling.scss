@@ -1,0 +1,87 @@
+:root {
+    // Fluid + dynamically user-adjustable non-linear type scaling
+
+    // SMALLEST_SIZE: 16px;
+    // LARGEST_SIZE: 20px;
+    // A11Y_MODIFIER: 1;
+    // VIEWPORT_SCALE: .4vw;
+    // FONT_SIZE: clamp(
+    //    (SMALLEST_SIZE * A11Y_MODIFIER),
+    //    ((SMALLEST_SIZE + VIEWPORT_SCALE) * A11Y_MODIFIER),
+    //    (LARGEST_SIZE * A11Y_MODIFIER)
+    //   )
+
+    --viewport-modifier: 1vw;
+
+    // Font size 2xs
+    --min-font-size-2xs: 10px;
+    --max-font-size-2xs: 14px;
+    --a11y-font-size-2xs-modifier: 1;
+    --font-size-2xs: clamp(
+        calc(var(--min-font-size-2xs) * var(--a11y-font-size-2xs-modifier)), calc((var(--min-font-size-2xs) + var(--viewport-modifier)) * var(--a11y-font-size-2xs-modifier)), 
+        calc(var(--max-font-size-2xs) * var(--a11y-font-size-2xs-modifier))
+    );
+
+    // Font size xs
+    --min-font-size-xs: 12px;
+    --max-font-size-xs: 17px;
+    --a11y-font-size-xs-modifier: 1;
+    --font-size-xs: clamp(
+        calc(var(--min-font-size-xs) * var(--a11y-font-size-xs-modifier)), calc((var(--min-font-size-xs) + var(--viewport-modifier)) * var(--a11y-font-size-xs-modifier)), 
+        calc(var(--max-font-size-xs) * var(--a11y-font-size-xs-modifier))
+    );
+
+    // Font size sm
+    --min-font-size-sm: 14px;
+    --max-font-size-sm: 20px;
+    --a11y-font-size-sm-modifier: 1;
+    --font-size-sm: clamp(
+        calc(var(--min-font-size-sm) * var(--a11y-font-size-sm-modifier)), calc((var(--min-font-size-sm) + var(--viewport-modifier)) * var(--a11y-font-size-sm-modifier)), 
+        calc(var(--max-font-size-sm) * var(--a11y-font-size-sm-modifier))
+    );
+
+    // Font size md
+    --min-font-size-md: 16px;
+    --max-font-size-md: 24px;
+    --a11y-font-size-md-modifier: 1;
+    --font-size-md: clamp(
+        calc(var(--min-font-size-md) * var(--a11y-font-size-md-modifier)), calc((var(--min-font-size-md) + var(--viewport-modifier)) * var(--a11y-font-size-md-modifier)), 
+        calc(var(--max-font-size-md) * var(--a11y-font-size-md-modifier))
+    );
+
+    // Font size lg
+    --min-font-size-lg: 24px;
+    --max-font-size-lg: 32px;
+    --a11y-font-size-lg-modifier: 1;
+    --font-size-lg: clamp(
+        calc(var(--min-font-size-lg) * var(--a11y-font-size-lg-modifier)), calc((var(--min-font-size-lg) + var(--viewport-modifier)) * var(--a11y-font-size-lg-modifier)), 
+        calc(var(--max-font-size-lg) * var(--a11y-font-size-lg-modifier))
+    );
+
+    // Font size xl
+    --min-font-size-xl: 32px;
+    --max-font-size-xl: 48px;
+    --a11y-font-size-xl-modifier: 1;
+    --font-size-xl: clamp(
+        calc(var(--min-font-size-xl) * var(--a11y-font-size-xl-modifier)), calc((var(--min-font-size-xl) + var(--viewport-modifier)) * var(--a11y-font-size-xl-modifier)), 
+        calc(var(--max-font-size-xl) * var(--a11y-font-size-xl-modifier))
+    );
+
+    // Font size 2xl
+    --min-font-size-2xl: 48px;
+    --max-font-size-2xl: 64px;
+    --a11y-font-size-2xl-modifier: 1;
+    --font-size-2xl: clamp(
+        calc(var(--min-font-size-2xl) * var(--a11y-font-size-2xl-modifier)), calc((var(--min-font-size-2xl) + var(--viewport-modifier)) * var(--a11y-font-size-2xl-modifier)), 
+        calc(var(--max-font-size-2xl) * var(--a11y-font-size-2xl-modifier))
+    );
+
+    // Font size 3xl
+    --min-font-size-3xl: 64px;
+    --max-font-size-3xl: 80px;
+    --a11y-font-size-3xl-modifier: 1;
+    --font-size-3xl: clamp(
+        calc(var(--min-font-size-3xl) * var(--a11y-font-size-3xl-modifier)), calc((var(--min-font-size-3xl) + var(--viewport-modifier)) * var(--a11y-font-size-3xl-modifier)), 
+        calc(var(--max-font-size-3xl) * var(--a11y-font-size-3xl-modifier))
+    );
+}

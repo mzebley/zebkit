@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Z-Button</title>
+    <link rel="stylesheet" type="text/css" href="../dist/styles.css">
+    <script type="module">
+        import { ZButton } from '../dist/bundle.esm.js';
+
+        // Make the test function globally accessible
+        window.test = function () {
+           const button = document.getElementById('myButton');
+           button.setDisabledState(true);
+        };
+
+    </script>
+</head>
+
+<body>
+    <z-button tabindex="3" id="myButton" (click)="test()">
+        <span slot="icon">🔍</span>
+        Click me!
+    </z-button>
+</body>
+
+</html>

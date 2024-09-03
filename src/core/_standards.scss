@@ -1,0 +1,65 @@
+:root {
+
+    --tablet-width: 40rem;
+    --tablet-lg-width: 47rem;
+    --desktop-width: 64rem;
+    --widescreen-width: 80rem;
+
+    --background-texture: url(../../../assets/paperstock.png);
+
+    --blur-standard: blur(32px) saturate(2);
+    --blur-no-saturation: blur(32px);
+    --blur-desaturate: blur(32px) saturate(.175);
+    --desaturate: saturate(.775);
+
+    --border-radius-2xs: var(--spacing-005);
+    --border-radius-xs: var(--spacing-05);
+    --border-radius-sm:  var(--spacing-1);
+    --border-radius-md:  var(--spacing-105);
+    --border-radius-lg:  var(--spacing-205);
+    --border-radius-pill:  50%;
+
+    --border-width: var(--spacing-005);
+    --border-width-thin: calc(var(--spacing-005) * .75);
+
+    --sticky-top-base: var(--gap-base);
+    --gap-base: var(--spacing-1);
+    --gap-lg: var(--spacing-105);
+    --gap-sm: var(--spacing-05);
+    --gap-xs: var(--spacing-005);
+    --gap-page: var(--spacing-4);
+
+    --focus-width: var(--gap-xs);
+    --focus-offset: var(--gap-xs);
+
+    --component-shadow-offset: var(--spacing-005);
+    --component-transition-timing: cubic-bezier(.3, .7, .4, 1);
+
+    --extrusion-offset: calc(var(--gap-base) * -1);
+    --extrusion-amt: translateY(calc(var(--extrusion-offset) * .25));
+
+    --transition-duration: 325ms;
+    --transition-timing: ease;
+    --transition-timing-natural: cubic-bezier(0.280, 0.840, 0.420, 1);
+    --transition-timing-smooth: cubic-bezier(0.44, 0.21, 0, 1);
+
+    --mz-transition-timing-bounce:cubic-bezier(.47,1.64,.41,.8);
+  
+    // --shadow-color: 330deg 6% 64%;
+  
+    --shadow-elevation-low:
+    -0.1px .5px 1.6px hsla(var(--shadow-h), var(--shadow-s), var(--shadow-l), 0.46),
+    -0.4px .8px 1.9px -2.5px hsla(var(--shadow-h), var(--shadow-s), var(--shadow-l), 0.46),
+    -0.8px 2.1px 3.5px -2.9px hsla(var(--shadow-h), var(--shadow-s), var(--shadow-l), 0.37);
+    --shadow-inset-low:
+    -0.1px 0.7px 1px hsl(var(--shadow-h), var(--shadow-s), var(--shadow-l) / 0.1) inset,
+    -0.4px 2.5px 3.4px -0.2px hsl(var(--shadow-h), var(--shadow-s), var(--shadow-l) / 0.1) inset,
+    -0.8px 4.5px 6.2px -0.5px hsl(var(--shadow-h), var(--shadow-s), var(--shadow-l) / 0.2) inset,
+    -4px 4px 2px -2px hsl(var(--shadow-h), var(--shadow-s), var(--shadow-l) / 0.2) inset;
+    --shadow-elevation-medium:
+    -0.1px 0.7px 1px hsla(var(--shadow-h), var(--shadow-s), var(--shadow-l), 0.1),
+    -0.4px 2.5px 3.4px -0.2px hsla(var(--shadow-h), var(--shadow-s), var(--shadow-l), 0.16),
+    -0.8px 4.5px 6.2px -0.5px hsla(var(--shadow-h), var(--shadow-s), var(--shadow-l), 0.23),
+    -1.3px 8px 11px -0.7px hsla(var(--shadow-h), var(--shadow-s), var(--shadow-l), 0.29),
+    -2.4px 14.2px 19.5px -0.9px hsla(var(--shadow-h), var(--shadow-s), var(--shadow-l), 0.36);
+}

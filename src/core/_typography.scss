@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,500;0,700;1,500;1,700&display=swap');
+
+:root {
+
+    --sans-serif-font-stack: "Atkinson Hyperlegible", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --monospace-font-stack: "IBM Plex Mono", monospace;
+
+    --interface-font-family: var(--sans-serif-font-stack);
+    --heading-font-family: var(--sans-serif-font-stack);
+    --body-font-family: var(--sans-serif-font-stack);
+    --monospace-font-family: var(--monospace-font-stack);
+
+    --posts-archive-font-family: "Neuton", serif;
+
+    --line-height-1: calc(1.125 * var(--a11y-line-height-modifier));
+    --line-height-2: calc(1.25 * var(--a11y-line-height-modifier));
+    --line-height-3: calc(1.4 * var(--a11y-line-height-modifier));
+    --line-height-4: calc(1.6 * var(--a11y-line-height-modifier));
+
+}
+
+// Additional fonts for playground projects

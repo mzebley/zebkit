@@ -1,0 +1,188 @@
+:root {
+
+    --btn-line-height:var(--font-size-md);
+    --btn-font-size: var(--font-size-sm);
+    --btn-font-family: var(--interface-font-family);
+
+    --btn-border-radius: var(--border-radius-sm);
+
+    --btn-padding-x: var(--gap-sm);
+    --btn-padding-y: var(--gap-sm);
+
+    --btn-icon-stroke-width: 2.25;
+    --btn-border-width: var(--border-width);
+
+    --btn-background: var(--primary);
+    --btn-background-hover: var(--primary-100);
+    --btn-border-color-selected: var(--accent);
+    --btn-border-color: var(--accent);
+    --btn-border-color-hover: var(--accent);
+    --btn-foreground: var(--ink);
+    --btn-focus-color: var(--accent);
+    --btn-gap: var(--gap-xs);
+
+    --btn-offset-color: 
+    var(--accent);
+    // linear-gradient(to left,
+    //         hsl(var(--accent-h), var(--accent-s), 35%) 0%,
+    //         var(--accent) 8%,
+    //         var(--accent) 92%,
+    //         hsl(var(--accent-h), var(--accent-s), 35%) 100%);
+
+}
+
+z-button {
+    display: inline-flex;
+    visibility:hidden;
+
+    &.z-button-ready {
+        visibility: visible;
+    }
+
+    .z-button {
+        position: relative;
+        border: none;
+        background: transparent;
+        padding: 0;
+        cursor: pointer;
+        outline-width: 0rem;
+        transition: outline var(--transition-duration) ease-in-out;
+        font-family: var(--btn-font-family);
+        border-radius: var(--btn-border-radius);
+
+        &.flat {
+            --btn-border-color: transparent;
+            --btn-background: var(--body-background);
+        }
+        .z-button__edge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--btn-border-radius);
+            background: var(--btn-offset-color);
+            // transition: opacity 64ms ease;
+            opacity: 0;
+        }
+
+        .z-button__front {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--btn-gap);
+            position: relative;
+            padding: var(--btn-padding-y) var(--btn-padding-x);
+            border-radius: var(--btn-border-radius);
+            font-weight: 500;
+            line-height: var(--btn-line-height);
+            font-size: var(--btn-font-size);
+            color: var(--btn-foreground);
+            background: var(--btn-background);
+            will-change: transform;
+            border: var(--btn-border-width) solid var(--btn-border-color);
+            transition:
+                transform 600ms var(--component-transition-timing);
+            min-height: 44px; // WCAG guidelines min target size
+            min-width: 44px;
+        }
+
+        &:not([disabled]):active {
+            .z-button__front {
+                // transform: translateY(calc((var(--gap-base) / 6) * -1));
+                transform: translateY(0);
+                transition: transform 64ms;
+                --btn-border-color: var(--btn-border-color-hover);
+                --btn-background: var(--btn-background-hover);
+            }
+        }
+
+        &:focus {
+            --focus-offset: 0;
+            outline: var(--focus-width) solid var(--focus-color);
+            outline-offset: var(--focus-offset);
+        }
+
+        &.active-selection {
+            --btn-background: var(--btn-background-hover);
+            --btn-border-color: var(--btn-border-color-selected);
+        }
+
+        &.extruded {
+            --btn-background: var(--btn-background-hover);
+            --btn-border-color: var(--btn-border-color-hover);
+
+            &:not(:active) {
+                .z-button__edge {
+                    opacity: 1;
+                }
+
+                .z-button__front {
+                    transform: var(--extrusion-amt);
+                    transition:
+                        transform 250ms var(--component-transition-timing);
+                }
+            }
+        }
+
+        &.visible-active {
+            --btn-background: var(--btn-background-hover);
+            --btn-border-color: var(--btn-border-color-hover);
+
+            &:not(:active) {
+                .z-button__edge {
+                    opacity: 1;
+                }
+
+                .z-button__front {
+                    transform: var(--extrusion-amt);
+                    transition:
+                        transform 250ms var(--component-transition-timing);
+                }
+            }
+        }
+
+        &[disabled] {
+            opacity: .66;
+        }
+
+    }
+
+    .z-button__icon {
+        display: inline-flex;
+        --icon-size: var(--font-size-md);
+        font-size: var(--icon-size);
+
+        &.large {
+            --icon-size: var(--font-size-lg);
+        }
+
+
+        &.huge {
+            --icon-size: var(--font-size-xl);
+        }
+
+        &.small {
+            --icon-size: var(--font-size-xs);
+        }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        .z-button:not([disabled]):hover {
+            --btn-background: var(--btn-background-hover);
+            --btn-border-color: var(--btn-border-color-hover);
+
+            &:not(:active) {
+                .z-button__edge {
+                    opacity: 1;
+                }
+
+                .z-button__front {
+                    transform: var(--extrusion-amt);
+                    transition:
+                        transform 250ms var(--component-transition-timing);
+                }
+            }
+        }
+    }
+}
