@@ -1,16 +1,45 @@
 :root {
 
-    --btn-line-height:var(--font-size-md);
+    --btn-line-height: var(--line-height-3);
     --btn-font-size: var(--font-size-sm);
     --btn-font-family: var(--interface-font-family);
 
-    --btn-border-radius: var(--border-radius-sm);
+    --btn-xs-line-height: var(--line-height-2);
+    --btn-xs-font-size: var(--font-size-2xs);
+    --btn-xs-font-family: var(--btn-font-family);
 
-    --btn-padding-x: var(--gap-sm);
+    --btn-sm-line-height: var(--btn-line-height);
+    --btn-sm-font-size: var(--font-size-xs);
+    --btn-sm-font-family: var(--btn-font-family);
+
+    --btn-lg-line-height: var(--btn-line-height);
+    --btn-lg-font-size: var(--font-size-md);
+    --btn-lg-font-family: var(--btn-font-family);
+
+    --btn-border-radius: var(--border-radius-sm);
+    --btn-xs-border-radius: var(--border-radius-xs);
+    --btn-sm-border-radius: var(--border-radius-xs);
+    --btn-lg-border-radius: var(--border-radius-md);
+
+    --btn-padding-x: var(--gap-md);
     --btn-padding-y: var(--gap-sm);
+    --btn-xs-padding-x: var(--gap-xs);
+    --btn-xs-padding-y: var(--gap-2xs);
+    --btn-sm-padding-x: var(--gap-sm);
+    --btn-sm-padding-y: var(--gap-xs);
+    --btn-lg-padding-x: var(--gap-lg);
+    --btn-lg-padding-y: var(--gap-md);
 
     --btn-icon-stroke-width: 2.25;
-    --btn-border-width: var(--border-width);
+    --btn-icon-font-size: var(--font-size-md);
+    --btn-xs-icon-font-size:  var(--font-size-xs);
+    --btn-sm-icon-font-size:  var(--font-size-sm);
+    --btn-lg-icon-font-size:  var(--font-size-lg);
+
+    --btn-border-width: var(--border-width-md);
+    --btn-xs-border-width: var(--btn-sm-border-width);
+    --btn-sm-border-width: var(--border-width-sm);
+    --btn-lg-border-width: var(--border-width-lg);
 
     --btn-background: var(--primary);
     --btn-background-hover: var(--primary-100);
@@ -19,21 +48,16 @@
     --btn-border-color-hover: var(--accent);
     --btn-foreground: var(--ink);
     --btn-focus-color: var(--accent);
-    --btn-gap: var(--gap-xs);
+    --btn-gap: var(--gap-sm);
 
-    --btn-offset-color: 
-    var(--accent);
-    // linear-gradient(to left,
-    //         hsl(var(--accent-h), var(--accent-s), 35%) 0%,
-    //         var(--accent) 8%,
-    //         var(--accent) 92%,
-    //         hsl(var(--accent-h), var(--accent-s), 35%) 100%);
+    --btn-offset-color: var(--accent);
 
 }
 
 z-button {
     display: inline-flex;
-    visibility:hidden;
+    visibility: hidden;
+
 
     &.z-button-ready {
         visibility: visible;
@@ -47,13 +71,62 @@ z-button {
         cursor: pointer;
         outline-width: 0rem;
         transition: outline var(--transition-duration) ease-in-out;
-        font-family: var(--btn-font-family);
+ 
         border-radius: var(--btn-border-radius);
+    
 
         &.flat {
             --btn-border-color: transparent;
             --btn-background: var(--body-background);
         }
+
+        &.xs {
+            --focus-offset: var(--gap-2xs);
+            --focus-width: var(--gap-2xs);
+            --btn-icon-font-size: var(--btn-xs-icon-font-size);
+            --btn-border-radius: var(--btn-xs-border-radius);
+            --btn-padding-y: var(--btn-xs-padding-y);
+            --btn-padding-x: var(--btn-xs-padding-x);
+            --btn-border-width: var(--btn-xs-border-width);
+            --btn-font-size: var(--btn-xs-font-size);
+            --btn-line-height: var(--btn-xs-line-height);
+            --btn-font-family: var(--btn-xs-font-family);
+
+            .z-button__front {
+                min-width: unset;
+                min-height: unset;
+            }
+        }
+
+        &.sm {
+            --focus-offset: var(--gap-2xs);
+            --focus-width: var(--gap-2xs);
+            --btn-icon-font-size: var(--btn-sm-icon-font-size);
+            --btn-border-radius: var(--btn-xs-border-radius);
+            --btn-padding-y: var(--btn-sm-padding-y);
+            --btn-padding-x: var(--btn-sm-padding-x);
+            --btn-border-width: var(--btn-sm-border-width);
+            --btn-font-size: var(--btn-sm-font-size);
+            --btn-line-height: var(--btn-sm-line-height);
+            --btn-font-family: var(--btn-sm-font-family);
+
+            .z-button__front {
+                min-width: unset;
+                min-height: unset;
+            }
+        }
+
+        &.lg {
+            --btn-icon-font-size: var(--btn-lg-icon-font-size);
+            --btn-border-radius: var(--btn-lg-border-radius);
+            --btn-padding-y: var(--btn-lg-padding-y);
+            --btn-padding-x: var(--btn-lg-padding-x);
+            --btn-border-width: var(--btn-lg-border-width);
+            --btn-font-size: var(--btn-lg-font-size);
+            --btn-line-height: var(--btn-lg-line-height);
+            --btn-font-family: var(--btn-lg-font-family);
+        }
+
         .z-button__edge {
             position: absolute;
             top: 0;
@@ -62,8 +135,33 @@ z-button {
             height: 100%;
             border-radius: var(--btn-border-radius);
             background: var(--btn-offset-color);
-            // transition: opacity 64ms ease;
             opacity: 0;
+        }
+
+        &.unstyled {
+            .z-button__edge {
+                display: none;
+            }
+
+            .z-button__front {
+                display: unset;
+                align-items: unset;
+                justify-content: unset;
+                gap: unset;
+                position: unset;
+                padding: unset;
+                border-radius: unset;
+                font-weight: 500;
+                line-height: var(--btn-line-height);
+                font-size: var(--btn-font-size);
+                color: var(--action);
+                background: transparent;
+                will-change: transform;
+                border: unset;
+                transition: unset;
+                min-height: 44px; // WCAG guidelines min target size
+                min-width: 44px;
+            }
         }
 
         .z-button__front {
@@ -85,9 +183,11 @@ z-button {
                 transform 600ms var(--component-transition-timing);
             min-height: 44px; // WCAG guidelines min target size
             min-width: 44px;
+            box-sizing: border-box;
+            font-family: var(--btn-font-family);
         }
 
-        &:not([disabled]):active {
+        &:not([disabled]):not(.unstyled):active {
             .z-button__front {
                 // transform: translateY(calc((var(--gap-base) / 6) * -1));
                 transform: translateY(0);
@@ -108,8 +208,7 @@ z-button {
             --btn-border-color: var(--btn-border-color-selected);
         }
 
-        &.extruded {
-            --btn-background: var(--btn-background-hover);
+        &.raised {
             --btn-border-color: var(--btn-border-color-hover);
 
             &:not(:active) {
@@ -144,35 +243,39 @@ z-button {
 
         &[disabled] {
             opacity: .66;
+            cursor: not-allowed;
         }
 
     }
 
     .z-button__icon {
         display: inline-flex;
-        --icon-size: var(--font-size-md);
-        font-size: var(--icon-size);
+        font-size: var(--btn-icon-font-size);
 
-        &.large {
-            --icon-size: var(--font-size-lg);
+        &.lg {
+            --btn-icon-font-size: var(--font-size-lg);
         }
 
 
-        &.huge {
-            --icon-size: var(--font-size-xl);
+        &.xl {
+            --btn-icon-font-size: var(--font-size-xl);
         }
 
-        &.small {
-            --icon-size: var(--font-size-xs);
+        &.sm {
+            --btn-icon-font-size: var(--font-size-xs);
+        }
+
+        &.xs {
+            --btn-icon-font-size: var(--font-size-2xs);
         }
     }
 
     @media (hover: hover) and (pointer: fine) {
-        .z-button:not([disabled]):hover {
+        .z-button:not([disabled]):not(.unstyled):hover {
             --btn-background: var(--btn-background-hover);
             --btn-border-color: var(--btn-border-color-hover);
 
-            &:not(:active) {
+            &:not(:active):not(.unstyled) {
                 .z-button__edge {
                     opacity: 1;
                 }

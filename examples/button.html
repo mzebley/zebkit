@@ -5,22 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Z-Button</title>
-    <link rel="stylesheet" type="text/css" href="../dist/styles.css">
+    <link rel="stylesheet" type="text/css" href="../zebkit.css">
     <script type="module">
-        import { ZButton } from '../dist/bundle.esm.js';
+        import { core } from '../zebkit.js';
 
+        const { defineCoreComponents } = core;
+
+        defineCoreComponents();
         // Make the test function globally accessible
         window.test = function () {
-           const button = document.getElementById('myButton');
-           button.setDisabledState(true);
+            const button = document.getElementById('myButton');
+            button.updateOptions({ iconPosition: 'end' });
+            button.classList.add('active-selection');
         };
 
     </script>
 </head>
 
 <body>
-    <z-button tabindex="3" id="myButton" (click)="test()">
+    <z-button id="myButton0" size="lg">
         <span slot="icon">🔍</span>
+        Click me!
+    </z-button>
+    <z-button id="myButton" (click)="test()">
+        <span slot="icon">🔍</span>
+        Click me!
+    </z-button>
+    <z-button id="myButton2" size="sm">
+        <span slot="icon">🔍</span>
+        Click me!
+    </z-button>
+    <z-button id="myButton3" variant="flat" size="xs">
         Click me!
     </z-button>
 </body>

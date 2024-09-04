@@ -19,23 +19,27 @@
     --border-radius-lg:  var(--spacing-205);
     --border-radius-pill:  50%;
 
-    --border-width: var(--spacing-005);
-    --border-width-thin: calc(var(--spacing-005) * .75);
+    --border-width-lg: var(--spacing-05);
+    --border-width-md: var(--spacing-005);
+    --border-width-sm:calc(var(--spacing-005) * .875);
+    --border-width-xs:calc(var(--spacing-005) * .775);
+    --border-width-2xs: calc(var(--spacing-005) * .66);
 
     --sticky-top-base: var(--gap-base);
-    --gap-base: var(--spacing-1);
-    --gap-lg: var(--spacing-105);
-    --gap-sm: var(--spacing-05);
-    --gap-xs: var(--spacing-005);
-    --gap-page: var(--spacing-4);
+    --gap-md: var(--spacing-105);
+    --gap-lg: var(--spacing-2);
+    --gap-sm: var(--spacing-1);
+    --gap-xs: var(--spacing-05);
+    --gap-2xs: var(--spacing-005);
+    --gap-xl: var(--spacing-3);
 
     --focus-width: var(--gap-xs);
     --focus-offset: var(--gap-xs);
 
-    --component-shadow-offset: var(--spacing-005);
+    --component-shadow-offset: var(--spacing-05);
     --component-transition-timing: cubic-bezier(.3, .7, .4, 1);
 
-    --extrusion-offset: calc(var(--gap-base) * -1);
+    --extrusion-offset: calc(var(--gap-md) * -1);
     --extrusion-amt: translateY(calc(var(--extrusion-offset) * .25));
 
     --transition-duration: 325ms;
