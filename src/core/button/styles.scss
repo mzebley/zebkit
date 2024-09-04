@@ -1,56 +1,58 @@
 :root {
 
-    --btn-line-height: var(--line-height-3);
-    --btn-font-size: var(--font-size-sm);
-    --btn-font-family: var(--interface-font-family);
+    --zbk-btn-line-height: var(--zbk-line-height-3);
+    --zbk-btn-font-size: var(--zbk-font-size-sm);
+    --zbk-btn-font-family: var(--zbk-interface-font-family);
 
-    --btn-xs-line-height: var(--line-height-2);
-    --btn-xs-font-size: var(--font-size-2xs);
-    --btn-xs-font-family: var(--btn-font-family);
+    --zbk-btn-xs-line-height: var(--zbk-line-height-2);
+    --zbk-btn-xs-font-size: var(--zbk-font-size-2xs);
+    --zbk-btn-xs-font-family: var(--zbk-btn-font-family);
 
-    --btn-sm-line-height: var(--btn-line-height);
-    --btn-sm-font-size: var(--font-size-xs);
-    --btn-sm-font-family: var(--btn-font-family);
+    --zbk-btn-sm-line-height: var(--zbk-btn-line-height);
+    --zbk-btn-sm-font-size: var(--zbk-font-size-xs);
+    --zbk-btn-sm-font-family: var(--zbk-btn-font-family);
 
-    --btn-lg-line-height: var(--btn-line-height);
-    --btn-lg-font-size: var(--font-size-md);
-    --btn-lg-font-family: var(--btn-font-family);
+    --zbk-btn-lg-line-height: var(--zbk-btn-line-height);
+    --zbk-btn-lg-font-size: var(--zbk-font-size-md);
+    --zbk-btn-lg-font-family: var(--zbk-btn-font-family);
 
-    --btn-border-radius: var(--border-radius-sm);
-    --btn-xs-border-radius: var(--border-radius-xs);
-    --btn-sm-border-radius: var(--border-radius-xs);
-    --btn-lg-border-radius: var(--border-radius-md);
+    --zbk-btn-border-radius: var(--zbk-border-radius-sm);
+    --zbk-btn-xs-border-radius: var(--zbk-border-radius-xs);
+    --zbk-btn-sm-border-radius: var(--zbk-border-radius-sm);
+    --zbk-btn-lg-border-radius: var(--zbk-border-radius-md);
 
-    --btn-padding-x: var(--gap-md);
-    --btn-padding-y: var(--gap-sm);
-    --btn-xs-padding-x: var(--gap-xs);
-    --btn-xs-padding-y: var(--gap-2xs);
-    --btn-sm-padding-x: var(--gap-sm);
-    --btn-sm-padding-y: var(--gap-xs);
-    --btn-lg-padding-x: var(--gap-lg);
-    --btn-lg-padding-y: var(--gap-md);
+    --zbk-btn-padding-x: var(--zbk-gap-md);
+    --zbk-btn-padding-y: var(--zbk-gap-sm);
+    --zbk-btn-xs-padding-x: var(--zbk-gap-xs);
+    --zbk-btn-xs-padding-y: var(--zbk-gap-2xs);
+    --zbk-btn-sm-padding-x: var(--zbk-gap-sm);
+    --zbk-btn-sm-padding-y: var(--zbk-gap-xs);
+    --zbk-btn-lg-padding-x: var(--zbk-gap-lg);
+    --zbk-btn-lg-padding-y: var(--zbk-gap-md);
 
-    --btn-icon-stroke-width: 2.25;
-    --btn-icon-font-size: var(--font-size-md);
-    --btn-xs-icon-font-size:  var(--font-size-xs);
-    --btn-sm-icon-font-size:  var(--font-size-sm);
-    --btn-lg-icon-font-size:  var(--font-size-lg);
+    --zbk-btn-icon-stroke-width: 2.25;
+    --zbk-btn-icon-font-size: var(--zbk-font-size-md);
+    --zbk-btn-xs-icon-font-size:  var(--zbk-font-size-xs);
+    --zbk-btn-sm-icon-font-size:  var(--zbk-font-size-sm);
+    --zbk-btn-lg-icon-font-size:  var(--zbk-font-size-lg);
 
-    --btn-border-width: var(--border-width-md);
-    --btn-xs-border-width: var(--btn-sm-border-width);
-    --btn-sm-border-width: var(--border-width-sm);
-    --btn-lg-border-width: var(--border-width-lg);
+    --zbk-btn-border-width: var(--zbk-border-width-md);
+    --zbk-btn-xs-border-width: var(--zbk-btn-sm-border-width);
+    --zbk-btn-sm-border-width: var(--zbk-border-width-sm);
+    --zbk-btn-lg-border-width: var(--zbk-border-width-lg);
 
-    --btn-background: var(--primary);
-    --btn-background-hover: var(--primary-100);
-    --btn-border-color-selected: var(--accent);
-    --btn-border-color: var(--accent);
-    --btn-border-color-hover: var(--accent);
-    --btn-foreground: var(--ink);
-    --btn-focus-color: var(--accent);
-    --btn-gap: var(--gap-sm);
+    --zbk-btn-raised-amount: 1;
 
-    --btn-offset-color: var(--accent);
+    --zbk-btn-background: var(--zbk-primary);
+    --zbk-btn-background-hover: var(--zbk-primary-100);
+    --zbk-btn-border-color-selected: var(--zbk-accent);
+    --zbk-btn-border-color: var(--zbk-accent);
+    --zbk-btn-border-color-hover: var(--zbk-accent);
+    --zbk-btn-foreground: var(--zbk-ink);
+    --zbk-btn-focus-color: var(--zbk-accent);
+    --zbk-btn-gap: var(--zbk-gap-sm);
+
+    --zbk-btn-offset-color: var(--zbk-accent);
 
 }
 
@@ -70,27 +72,27 @@ z-button {
         padding: 0;
         cursor: pointer;
         outline-width: 0rem;
-        transition: outline var(--transition-duration) ease-in-out;
+        transition: outline var(--zbk-transition-duration) ease-in-out;
  
-        border-radius: var(--btn-border-radius);
+        border-radius: var(--zbk-btn-border-radius);
     
 
         &.flat {
-            --btn-border-color: transparent;
-            --btn-background: var(--body-background);
+            --zbk-btn-border-color: transparent;
+            --zbk-btn-background: var(--zbk-body-background);
         }
 
         &.xs {
-            --focus-offset: var(--gap-2xs);
-            --focus-width: var(--gap-2xs);
-            --btn-icon-font-size: var(--btn-xs-icon-font-size);
-            --btn-border-radius: var(--btn-xs-border-radius);
-            --btn-padding-y: var(--btn-xs-padding-y);
-            --btn-padding-x: var(--btn-xs-padding-x);
-            --btn-border-width: var(--btn-xs-border-width);
-            --btn-font-size: var(--btn-xs-font-size);
-            --btn-line-height: var(--btn-xs-line-height);
-            --btn-font-family: var(--btn-xs-font-family);
+            --zbk-focus-offset: var(--zbk-gap-2xs);
+            --zbk-focus-width: var(--zbk-gap-2xs);
+            --zbk-btn-icon-font-size: var(--zbk-btn-xs-icon-font-size);
+            --zbk-btn-border-radius: var(--zbk-btn-xs-border-radius);
+            --zbk-btn-padding-y: var(--zbk-btn-xs-padding-y);
+            --zbk-btn-padding-x: var(--zbk-btn-xs-padding-x);
+            --zbk-btn-border-width: var(--zbk-btn-xs-border-width);
+            --zbk-btn-font-size: var(--zbk-btn-xs-font-size);
+            --zbk-btn-line-height: var(--zbk-btn-xs-line-height);
+            --zbk-btn-font-family: var(--zbk-btn-xs-font-family);
 
             .z-button__front {
                 min-width: unset;
@@ -99,16 +101,16 @@ z-button {
         }
 
         &.sm {
-            --focus-offset: var(--gap-2xs);
-            --focus-width: var(--gap-2xs);
-            --btn-icon-font-size: var(--btn-sm-icon-font-size);
-            --btn-border-radius: var(--btn-xs-border-radius);
-            --btn-padding-y: var(--btn-sm-padding-y);
-            --btn-padding-x: var(--btn-sm-padding-x);
-            --btn-border-width: var(--btn-sm-border-width);
-            --btn-font-size: var(--btn-sm-font-size);
-            --btn-line-height: var(--btn-sm-line-height);
-            --btn-font-family: var(--btn-sm-font-family);
+            --zbk-focus-offset: var(--zbk-gap-2xs);
+            --zbk-focus-width: var(--zbk-gap-2xs);
+            --zbk-btn-icon-font-size: var(--zbk-btn-sm-icon-font-size);
+            --zbk-btn-border-radius: var(--zbk-btn-sm-border-radius);
+            --zbk-btn-padding-y: var(--zbk-btn-sm-padding-y);
+            --zbk-btn-padding-x: var(--zbk-btn-sm-padding-x);
+            --zbk-btn-border-width: var(--zbk-btn-sm-border-width);
+            --zbk-btn-font-size: var(--zbk-btn-sm-font-size);
+            --zbk-btn-line-height: var(--zbk-btn-sm-line-height);
+            --zbk-btn-font-family: var(--zbk-btn-sm-font-family);
 
             .z-button__front {
                 min-width: unset;
@@ -117,14 +119,14 @@ z-button {
         }
 
         &.lg {
-            --btn-icon-font-size: var(--btn-lg-icon-font-size);
-            --btn-border-radius: var(--btn-lg-border-radius);
-            --btn-padding-y: var(--btn-lg-padding-y);
-            --btn-padding-x: var(--btn-lg-padding-x);
-            --btn-border-width: var(--btn-lg-border-width);
-            --btn-font-size: var(--btn-lg-font-size);
-            --btn-line-height: var(--btn-lg-line-height);
-            --btn-font-family: var(--btn-lg-font-family);
+            --zbk-btn-icon-font-size: var(--zbk-btn-lg-icon-font-size);
+            --zbk-btn-border-radius: var(--zbk-btn-lg-border-radius);
+            --zbk-btn-padding-y: var(--zbk-btn-lg-padding-y);
+            --zbk-btn-padding-x: var(--zbk-btn-lg-padding-x);
+            --zbk-btn-border-width: var(--zbk-btn-lg-border-width);
+            --zbk-btn-font-size: var(--zbk-btn-lg-font-size);
+            --zbk-btn-line-height: var(--zbk-btn-lg-line-height);
+            --zbk-btn-font-family: var(--zbk-btn-lg-font-family);
         }
 
         .z-button__edge {
@@ -133,8 +135,8 @@ z-button {
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: var(--btn-border-radius);
-            background: var(--btn-offset-color);
+            border-radius: var(--zbk-btn-border-radius);
+            background: var(--zbk-btn-offset-color);
             opacity: 0;
         }
 
@@ -152,9 +154,9 @@ z-button {
                 padding: unset;
                 border-radius: unset;
                 font-weight: 500;
-                line-height: var(--btn-line-height);
-                font-size: var(--btn-font-size);
-                color: var(--action);
+                line-height: var(--zbk-btn-line-height);
+                font-size: var(--zbk-btn-font-size);
+                color: var(--zbk-action);
                 background: transparent;
                 will-change: transform;
                 border: unset;
@@ -168,48 +170,48 @@ z-button {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--btn-gap);
+            gap: var(--zbk-btn-gap);
             position: relative;
-            padding: var(--btn-padding-y) var(--btn-padding-x);
-            border-radius: var(--btn-border-radius);
+            padding: var(--zbk-btn-padding-y) var(--zbk-btn-padding-x);
+            border-radius: var(--zbk-btn-border-radius);
             font-weight: 500;
-            line-height: var(--btn-line-height);
-            font-size: var(--btn-font-size);
-            color: var(--btn-foreground);
-            background: var(--btn-background);
+            line-height: var(--zbk-btn-line-height);
+            font-size: var(--zbk-btn-font-size);
+            color: var(--zbk-btn-foreground);
+            background: var(--zbk-btn-background);
             will-change: transform;
-            border: var(--btn-border-width) solid var(--btn-border-color);
+            border: var(--zbk-btn-border-width) solid var(--zbk-btn-border-color);
             transition:
-                transform 600ms var(--component-transition-timing);
+                transform 600ms var(--zbk-component-transition-timing);
             min-height: 44px; // WCAG guidelines min target size
             min-width: 44px;
             box-sizing: border-box;
-            font-family: var(--btn-font-family);
+            font-family: var(--zbk-btn-font-family);
         }
 
         &:not([disabled]):not(.unstyled):active {
             .z-button__front {
-                // transform: translateY(calc((var(--gap-base) / 6) * -1));
+                // transform: translateY(calc((var(--zbk-gap-base) / 6) * -1));
                 transform: translateY(0);
                 transition: transform 64ms;
-                --btn-border-color: var(--btn-border-color-hover);
-                --btn-background: var(--btn-background-hover);
+                --zbk-btn-border-color: var(--zbk-btn-border-color-hover);
+                --zbk-btn-background: var(--zbk-btn-background-hover);
             }
         }
 
         &:focus {
-            --focus-offset: 0;
-            outline: var(--focus-width) solid var(--focus-color);
-            outline-offset: var(--focus-offset);
+            --zbk-focus-offset: 0;
+            outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
+            outline-offset: var(--zbk-focus-offset);
         }
 
         &.active-selection {
-            --btn-background: var(--btn-background-hover);
-            --btn-border-color: var(--btn-border-color-selected);
+            --zbk-btn-background: var(--zbk-btn-background-hover);
+            --zbk-btn-border-color: var(--zbk-btn-border-color-selected);
         }
 
         &.raised {
-            --btn-border-color: var(--btn-border-color-hover);
+            --zbk-btn-border-color: var(--zbk-btn-border-color-hover);
 
             &:not(:active) {
                 .z-button__edge {
@@ -217,16 +219,16 @@ z-button {
                 }
 
                 .z-button__front {
-                    transform: var(--extrusion-amt);
+                    transform: translateY(calc(var(--zbk-btn-border-width) * (var(--zbk-btn-raised-amount) * -1)));
                     transition:
-                        transform 250ms var(--component-transition-timing);
+                        transform 250ms var(--zbk-component-transition-timing);
                 }
             }
         }
 
         &.visible-active {
-            --btn-background: var(--btn-background-hover);
-            --btn-border-color: var(--btn-border-color-hover);
+            --zbk-btn-background: var(--zbk-btn-background-hover);
+            --zbk-btn-border-color: var(--zbk-btn-border-color-hover);
 
             &:not(:active) {
                 .z-button__edge {
@@ -234,9 +236,9 @@ z-button {
                 }
 
                 .z-button__front {
-                    transform: var(--extrusion-amt);
+                    transform: translateY(calc(var(--zbk-btn-border-width) * (var(--zbk-btn-raised-amount) * -1)));
                     transition:
-                        transform 250ms var(--component-transition-timing);
+                        transform 250ms var(--zbk-component-transition-timing);
                 }
             }
         }
@@ -250,30 +252,30 @@ z-button {
 
     .z-button__icon {
         display: inline-flex;
-        font-size: var(--btn-icon-font-size);
+        font-size: var(--zbk-btn-icon-font-size);
 
         &.lg {
-            --btn-icon-font-size: var(--font-size-lg);
+            --zbk-btn-icon-font-size: var(--zbk-font-size-lg);
         }
 
 
         &.xl {
-            --btn-icon-font-size: var(--font-size-xl);
+            --zbk-btn-icon-font-size: var(--zbk-font-size-xl);
         }
 
         &.sm {
-            --btn-icon-font-size: var(--font-size-xs);
+            --zbk-btn-icon-font-size: var(--zbk-font-size-xs);
         }
 
         &.xs {
-            --btn-icon-font-size: var(--font-size-2xs);
+            --zbk-btn-icon-font-size: var(--zbk-font-size-2xs);
         }
     }
 
     @media (hover: hover) and (pointer: fine) {
         .z-button:not([disabled]):not(.unstyled):hover {
-            --btn-background: var(--btn-background-hover);
-            --btn-border-color: var(--btn-border-color-hover);
+            --zbk-btn-background: var(--zbk-btn-background-hover);
+            --zbk-btn-border-color: var(--zbk-btn-border-color-hover);
 
             &:not(:active):not(.unstyled) {
                 .z-button__edge {
@@ -281,9 +283,9 @@ z-button {
                 }
 
                 .z-button__front {
-                    transform: var(--extrusion-amt);
+                    transform: translateY(calc(var(--zbk-btn-border-width) * (var(--zbk-btn-raised-amount) * -1)));
                     transition:
-                        transform 250ms var(--component-transition-timing);
+                        transform 250ms var(--zbk-component-transition-timing);
                 }
             }
         }
