@@ -42,4 +42,30 @@ describe("ZButton", () => {
     expect(element.querySelectorAll("button")).toHaveLength(1);
     expect(element.firstElementChild).toBe(internalButton);
   });
+
+  it("reapplies variant classes when the variant attribute changes", async () => {
+    const element = document.createElement("z-button") as ZButton;
+    element.textContent = "Label";
+
+    document.body.appendChild(element);
+
+    // Allow MutationObservers to sync the initial classes
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(element.classList.contains("outline")).toBe(true);
+    expect(element.classList.contains("raised")).toBe(false);
+
+    element.setAttribute("variant", "raised");
+
+    // Wait for attribute change handling and class mirroring to complete
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(element.classList.contains("raised")).toBe(true);
+    expect(element.classList.contains("outline")).toBe(false);
+
+    const internalButton = element.querySelector("button");
+    expect(internalButton).toBeInstanceOf(HTMLButtonElement);
+    expect(internalButton?.classList.contains("raised")).toBe(true);
+    expect(internalButton?.classList.contains("outline")).toBe(false);
+  });
 });
