@@ -8,6 +8,7 @@ import { babel } from "@rollup/plugin-babel";
 import dts from "rollup-plugin-dts";
 import fs from "fs/promises";
 import path from "path";
+import { pathToFileURL } from "node:url";
 import chalk from "chalk";
 import sass from "sass";
 import postcss from "postcss";
@@ -73,15 +74,16 @@ async function generateConfigs(
   const toCamelCase = (str: string): string =>
     str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 
+  const toImportSpecifier = (filePath: string): string =>
+    pathToFileURL(filePath).href;
+
   const virtualEntryContent = `
-import * as core from '${path.join(coreDir, "index.ts")}';
+import * as core from '${toImportSpecifier(path.join(coreDir, "index.ts"))}';
 ${selectedComponents
   .map(
     (component) =>
-      `import * as ${toCamelCase(component)}Module from '${path.join(
-        componentsDir,
-        component,
-        "index.ts"
+      `import * as ${toCamelCase(component)}Module from '${toImportSpecifier(
+        path.join(componentsDir, component, "index.ts")
       )}';`
   )
   .join("\n")}
@@ -91,7 +93,9 @@ ${selectedComponents
   .map(
     (component) => `
 export const ${toCamelCase(component)} = ${toCamelCase(component)}Module;
-export * from '${path.join(componentsDir, component, "index.ts")}';
+export * from '${toImportSpecifier(
+        path.join(componentsDir, component, "index.ts")
+      )}';
 `
   )
   .join("\n")}
