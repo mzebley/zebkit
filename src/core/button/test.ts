@@ -19,11 +19,15 @@ describe('ZButton', () => {
   it('renders with the correct text', async () => {
     document.body.innerHTML = '<z-button>Click me</z-button>';
     const button = document.querySelector('z-button');
-    await waitFor(() => {
-      const shadowButton = button?.shadowRoot?.querySelector('button');
-      expect(shadowButton).not.toBeNull();
-      expect(shadowButton?.textContent).toBe('Click me');
+    const lightDomButton = await waitFor(() => {
+      const innerButton = button?.querySelector('button.z-button');
+      if (!innerButton) {
+        throw new Error('Button not rendered');
+      }
+      return innerButton;
     }, { timeout: 2000 });
+
+    expect(lightDomButton.textContent?.trim()).toBe('Click me');
   });
 
   it('fires a custom event when clicked', async () => {
@@ -32,9 +36,15 @@ describe('ZButton', () => {
     const mockHandler = jest.fn();
     button?.addEventListener('z-click', mockHandler);
 
-    await waitFor(() => {
-      fireEvent.click(button?.shadowRoot?.querySelector('button') as Element);
+    const lightDomButton = await waitFor(() => {
+      const innerButton = button?.querySelector('button.z-button');
+      if (!innerButton) {
+        throw new Error('Button not rendered');
+      }
+      return innerButton;
     });
+
+    fireEvent.click(lightDomButton);
 
     expect(mockHandler).toHaveBeenCalled();
   });
@@ -42,13 +52,19 @@ describe('ZButton', () => {
   it('executes the (click) attribute when clicked', async () => {
     const mockFn = jest.fn();
     window.testClick = mockFn;
-    
+
     document.body.innerHTML = '<z-button (click)="testClick()">Click me</z-button>';
     const button = document.querySelector('z-button');
 
-    await waitFor(() => {
-      fireEvent.click(button?.shadowRoot?.querySelector('button') as Element);
+    const lightDomButton = await waitFor(() => {
+      const innerButton = button?.querySelector('button.z-button');
+      if (!innerButton) {
+        throw new Error('Button not rendered');
+      }
+      return innerButton;
     });
+
+    fireEvent.click(lightDomButton);
 
     expect(mockFn).toHaveBeenCalled();
     delete (window as any).testClick;
