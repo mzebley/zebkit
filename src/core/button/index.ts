@@ -35,6 +35,23 @@ export class ZButton extends HTMLElement {
     "tabindex",
   ];
 
+  /** Variant classes that can be applied to the button. */
+  private static readonly variantClasses = [
+    "flat",
+    "raised",
+    "outline",
+    "unstyled",
+  ];
+
+  /** Size classes that can be applied to the button. */
+  private static readonly sizeClasses = [
+    "xs",
+    "sm",
+    "md",
+    "lg",
+    "xl",
+  ];
+
   /** Default options for all ZButton instances. */
   private static defaultOptions: ZButtonOptions = {
     iconPosition: "start",
@@ -257,8 +274,22 @@ export class ZButton extends HTMLElement {
       }
     }
 
-    if (this.options.variant) this.classList.add(this.options.variant);
-    if (this.options.size) this.classList.add(this.options.size);
+    // Remove any existing variant and size classes before applying new ones
+    ZButton.variantClasses.forEach((variantClass) => {
+      this.classList.remove(variantClass);
+    });
+
+    ZButton.sizeClasses.forEach((sizeClass) => {
+      this.classList.remove(sizeClass);
+    });
+
+    if (this.options.variant) {
+      this.classList.add(this.options.variant);
+    }
+
+    if (this.options.size) {
+      this.classList.add(this.options.size);
+    }
   }
 
   /**
