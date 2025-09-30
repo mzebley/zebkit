@@ -503,8 +503,6 @@ export class ZButton extends HTMLElement {
           // Valid values: empty string, -1, or any non-negative integer
           const tabIndexValue = value === "" ? 0 : parseInt(value, 10);
           this.button.tabIndex = tabIndexValue;
-          console.log(this.button);
-          console.log(this.button.tabIndex);
         } else {
           console.warn(
             `ZButton: Invalid tabindex value "${value}". Expected -1, a non-negative integer, or empty string. Disregarding and removing attribute.`
