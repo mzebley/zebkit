@@ -21,6 +21,17 @@ export class ZButton extends HTMLElement {
   /** Stores the click handler function if provided. */
   private clickHandler: Function | null = null;
 
+  /** Accessibility-related attributes that should be synced to the inner button. */
+  private static readonly accessibilityAttributes = [
+    "aria-label",
+    "aria-describedby",
+    "aria-pressed",
+    "aria-expanded",
+    "aria-controls",
+    "role",
+    "tabindex",
+  ];
+
   /** Default options for all ZButton instances. */
   private static defaultOptions: ZButtonOptions = {
     iconPosition: "start",
@@ -31,6 +42,9 @@ export class ZButton extends HTMLElement {
   /** Current options for this ZButton instance. */
   private options: ZButtonOptions = { ...ZButton.defaultOptions };
 
+  /** Indicates if accessibility attributes are currently being migrated. */
+  private isMigratingAccessibilityAttributes = false;
+
   /**
    * Specifies which attributes should be observed for changes.
    * Changes to these attributes will trigger the attributeChangedCallback.
@@ -38,15 +52,11 @@ export class ZButton extends HTMLElement {
   static get observedAttributes() {
     return [
       "(click)",
-      "aria-label",
-      "aria-describedby",
-      "aria-pressed",
-      "aria-expanded",
-      "aria-controls",
-      "role",
-      "tabindex",
+      ...ZButton.accessibilityAttributes,
       "icon-position",
       "options",
+      "variant",
+      "size",
     ];
   }
 
@@ -150,17 +160,10 @@ export class ZButton extends HTMLElement {
   ) {
     if (name === "(click)") {
       this.updateClickHandler();
-    } else if (
-      [
-        "aria-label",
-        "aria-describedby",
-        "aria-pressed",
-        "aria-expanded",
-        "aria-controls",
-        "role",
-        "tabindex",
-      ].includes(name)
-    ) {
+    } else if (ZButton.accessibilityAttributes.includes(name)) {
+      if (this.isMigratingAccessibilityAttributes) {
+        return;
+      }
       this.updateAccessibilityAttribute(name, newValue);
     } else if (
       name === "options" ||
@@ -344,19 +347,18 @@ export class ZButton extends HTMLElement {
     }
 
     // Transfer existing accessibility attributes
-    [
-      "aria-label",
-      "aria-describedby",
-      "aria-pressed",
-      "aria-expanded",
-      "aria-controls",
-      "role",
-      "tabindex",
-    ].forEach((attr) => {
-      const value = this.getAttribute(attr);
-      this.updateAccessibilityAttribute(attr, value);
-      this.removeAttribute(attr);
-    });
+    this.isMigratingAccessibilityAttributes = true;
+    try {
+      ZButton.accessibilityAttributes.forEach((attr) => {
+        const value = this.getAttribute(attr);
+        if (value !== null) {
+          this.updateAccessibilityAttribute(attr, value);
+          this.removeAttribute(attr);
+        }
+      });
+    } finally {
+      this.isMigratingAccessibilityAttributes = false;
+    }
 
     // If no accessible name is provided, use the sanitized button's text content or log a warning
     if (
@@ -402,6 +404,13 @@ export class ZButton extends HTMLElement {
    * @param value - The new value for the attribute.
    */
   private updateAccessibilityAttribute(name: string, value: string | null) {
+    if (
+      this.isMigratingAccessibilityAttributes &&
+      value === null &&
+      ZButton.accessibilityAttributes.includes(name)
+    ) {
+      return;
+    }
     if (value === null) {
       this.button.removeAttribute(name);
       return;

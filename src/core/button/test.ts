@@ -69,4 +69,19 @@ describe('ZButton', () => {
     expect(mockFn).toHaveBeenCalled();
     delete (window as any).testClick;
   });
+
+  it('retains migrated aria attributes on the inner button', async () => {
+    document.body.innerHTML = '<z-button aria-label="Label">Content</z-button>';
+    const button = document.querySelector('z-button');
+
+    const lightDomButton = await waitFor(() => {
+      const innerButton = button?.querySelector('button.z-button');
+      if (!innerButton) {
+        throw new Error('Button not rendered');
+      }
+      return innerButton;
+    });
+
+    expect(lightDomButton?.getAttribute('aria-label')).toBe('Label');
+  });
 });
