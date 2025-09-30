@@ -21,6 +21,37 @@ export class ZButton extends HTMLElement {
   /** Stores the click handler function if provided. */
   private clickHandler: Function | null = null;
 
+  /** Stores the bound handleClick reference for add/remove event listener symmetry. */
+  private boundHandleClick: EventListener;
+
+  /** Accessibility-related attributes that should be synced to the inner button. */
+  private static readonly accessibilityAttributes = [
+    "aria-label",
+    "aria-describedby",
+    "aria-pressed",
+    "aria-expanded",
+    "aria-controls",
+    "role",
+    "tabindex",
+  ];
+
+  /** Variant classes that can be applied to the button. */
+  private static readonly variantClasses = [
+    "flat",
+    "raised",
+    "outline",
+    "unstyled",
+  ];
+
+  /** Size classes that can be applied to the button. */
+  private static readonly sizeClasses = [
+    "xs",
+    "sm",
+    "md",
+    "lg",
+    "xl",
+  ];
+
   /** Default options for all ZButton instances. */
   private static defaultOptions: ZButtonOptions = {
     iconPosition: "start",
@@ -31,6 +62,15 @@ export class ZButton extends HTMLElement {
   /** Current options for this ZButton instance. */
   private options: ZButtonOptions = { ...ZButton.defaultOptions };
 
+  /** Tracks the previously applied variant class. */
+  private previousVariant?: ZButtonOptions["variant"];
+
+  /** Tracks the previously applied size class. */
+  private previousSize?: ZButtonOptions["size"];
+
+  /** Indicates if accessibility attributes are currently being migrated. */
+  private isMigratingAccessibilityAttributes = false;
+
   /**
    * Specifies which attributes should be observed for changes.
    * Changes to these attributes will trigger the attributeChangedCallback.
@@ -38,15 +78,11 @@ export class ZButton extends HTMLElement {
   static get observedAttributes() {
     return [
       "(click)",
-      "aria-label",
-      "aria-describedby",
-      "aria-pressed",
-      "aria-expanded",
-      "aria-controls",
-      "role",
-      "tabindex",
+      ...ZButton.accessibilityAttributes,
       "icon-position",
       "options",
+      "variant",
+      "size",
     ];
   }
 
@@ -61,6 +97,7 @@ export class ZButton extends HTMLElement {
     super();
     this.button = document.createElement("button");
     this.button.classList.add("z-button");
+    this.boundHandleClick = this.handleClick.bind(this);
     // Initialize the MutationObserver
     this.classObserver = new MutationObserver(
       this.handleClassChanges.bind(this)
@@ -73,7 +110,7 @@ export class ZButton extends HTMLElement {
    */
   connectedCallback() {
     this.setupButton();
-    this.button.addEventListener("click", this.handleClick.bind(this));
+    this.button.addEventListener("click", this.boundHandleClick);
     this.updateClickHandler();
     this.setupAccessibility();
     this.parseOptions();
@@ -96,7 +133,7 @@ export class ZButton extends HTMLElement {
    * Removes the click event listener and class observer
    */
   disconnectedCallback() {
-    this.button.removeEventListener("click", this.handleClick.bind(this));
+    this.button.removeEventListener("click", this.boundHandleClick);
     this.classObserver.disconnect();
   }
 
@@ -150,17 +187,10 @@ export class ZButton extends HTMLElement {
   ) {
     if (name === "(click)") {
       this.updateClickHandler();
-    } else if (
-      [
-        "aria-label",
-        "aria-describedby",
-        "aria-pressed",
-        "aria-expanded",
-        "aria-controls",
-        "role",
-        "tabindex",
-      ].includes(name)
-    ) {
+    } else if (ZButton.accessibilityAttributes.includes(name)) {
+      if (this.isMigratingAccessibilityAttributes) {
+        return;
+      }
       this.updateAccessibilityAttribute(name, newValue);
     } else if (
       name === "options" ||
@@ -250,27 +280,64 @@ export class ZButton extends HTMLElement {
       }
     }
 
-    if (this.options.variant) this.classList.add(this.options.variant);
-    if (this.options.size) this.classList.add(this.options.size);
+    const { variant, size } = this.options;
+
+    if (this.previousVariant && this.previousVariant !== variant) {
+      this.classList.remove(this.previousVariant);
+    }
+
+    if (variant) {
+      this.classList.add(variant);
+    }
+
+    this.previousVariant = variant;
+
+    if (this.previousSize && this.previousSize !== size) {
+      this.classList.remove(this.previousSize);
+    }
+
+    if (size) {
+      this.classList.add(size);
+    }
+
+    this.previousSize = size;
   }
 
   /**
    * Sets up the initial structure of the button.
    */
   private setupButton() {
-    // Create edge element
-    const edge = document.createElement("span");
-    edge.classList.add("z-button__edge");
+    const button = this.button;
 
-    // Create content wrapper
-    const contentWrapper = document.createElement("span");
-    contentWrapper.classList.add("z-button__front");
+    // Ensure the internal edge element exists
+    let edge = button.querySelector(".z-button__edge") as HTMLElement | null;
+    if (!edge) {
+      edge = document.createElement("span");
+      edge.classList.add("z-button__edge");
+      button.insertBefore(edge, button.firstChild);
+    }
 
-    let iconElement: HTMLElement | null = null;
+    // Ensure the internal content wrapper exists
+    let contentWrapper = button.querySelector(
+      ".z-button__front"
+    ) as HTMLElement | null;
+    if (!contentWrapper) {
+      contentWrapper = document.createElement("span");
+      contentWrapper.classList.add("z-button__front");
+      button.appendChild(contentWrapper);
+    }
 
-    // Move existing content to appropriate wrappers
-    while (this.firstChild) {
-      const child = this.firstChild;
+    // Reuse existing icon wrapper if present
+    let iconElement = contentWrapper.querySelector(
+      ".z-button__icon"
+    ) as HTMLElement | null;
+
+    const children = Array.from(this.childNodes);
+    for (const child of children) {
+      if (child === button) {
+        continue;
+      }
+
       if (
         child instanceof HTMLElement &&
         child.getAttribute("slot") === "icon"
@@ -285,21 +352,25 @@ export class ZButton extends HTMLElement {
       }
     }
 
-    // Only add the icon wrapper if an icon was found
-    if (iconElement) {
+    if (iconElement && !contentWrapper.contains(iconElement)) {
+      // Ensure the icon wrapper is attached to the content wrapper
       if (this.options.iconPosition === "end") {
         contentWrapper.appendChild(iconElement);
       } else {
         contentWrapper.prepend(iconElement);
       }
+    } else if (iconElement) {
+      // Adjust icon wrapper position based on current option
+      if (this.options.iconPosition === "end") {
+        contentWrapper.appendChild(iconElement);
+      } else if (contentWrapper.firstChild !== iconElement) {
+        contentWrapper.insertBefore(iconElement, contentWrapper.firstChild);
+      }
     }
 
-    // Append wrappers to button
-    this.button.appendChild(edge);
-    this.button.appendChild(contentWrapper);
-
-    // Append button to component
-    this.appendChild(this.button);
+    if (button.parentElement !== this) {
+      this.appendChild(button);
+    }
   }
 
   /**
@@ -344,19 +415,18 @@ export class ZButton extends HTMLElement {
     }
 
     // Transfer existing accessibility attributes
-    [
-      "aria-label",
-      "aria-describedby",
-      "aria-pressed",
-      "aria-expanded",
-      "aria-controls",
-      "role",
-      "tabindex",
-    ].forEach((attr) => {
-      const value = this.getAttribute(attr);
-      this.updateAccessibilityAttribute(attr, value);
-      this.removeAttribute(attr);
-    });
+    this.isMigratingAccessibilityAttributes = true;
+    try {
+      ZButton.accessibilityAttributes.forEach((attr) => {
+        const value = this.getAttribute(attr);
+        if (value !== null) {
+          this.updateAccessibilityAttribute(attr, value);
+          this.removeAttribute(attr);
+        }
+      });
+    } finally {
+      this.isMigratingAccessibilityAttributes = false;
+    }
 
     // If no accessible name is provided, use the sanitized button's text content or log a warning
     if (
@@ -402,6 +472,13 @@ export class ZButton extends HTMLElement {
    * @param value - The new value for the attribute.
    */
   private updateAccessibilityAttribute(name: string, value: string | null) {
+    if (
+      this.isMigratingAccessibilityAttributes &&
+      value === null &&
+      ZButton.accessibilityAttributes.includes(name)
+    ) {
+      return;
+    }
     if (value === null) {
       this.button.removeAttribute(name);
       return;
@@ -426,8 +503,6 @@ export class ZButton extends HTMLElement {
           // Valid values: empty string, -1, or any non-negative integer
           const tabIndexValue = value === "" ? 0 : parseInt(value, 10);
           this.button.tabIndex = tabIndexValue;
-          console.log(this.button);
-          console.log(this.button.tabIndex);
         } else {
           console.warn(
             `ZButton: Invalid tabindex value "${value}". Expected -1, a non-negative integer, or empty string. Disregarding and removing attribute.`
