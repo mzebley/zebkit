@@ -53,9 +53,10 @@ export async function buildAllowedTokenKeyMap(
           allowedTokenMap[key] = tokenKeysData[key];
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.warn(
-        `Error processing token-keys.ts at ${filePath}: ${error.message}`
+        `Error processing token-keys.ts at ${filePath}: ${message}`
       );
     }
   };
@@ -130,9 +131,10 @@ export async function gatherTokens(
         ...tokens[tokenKey], // Merge existing tokens for the same key
         ...tokenValue, // Add new token data
       };
-    } catch (error) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.warn(
-        `Error processing token file at ${filePath}: ${error.message}`
+        `Error processing token file at ${filePath}: ${message}`
       );
     }
   };
@@ -230,9 +232,18 @@ export function mergeTokens(
 
   for (const component in customTokens) {
     if (mergedTokens[component]) {
-      mergedTokens[component].styles = {
-        ...mergedTokens[component].styles,
-        ...customTokens[component].styles,
+      const { styles: defaultStyles = {}, ...defaultRoot } =
+        mergedTokens[component];
+      const { styles: customStyles = {}, ...customRoot } =
+        customTokens[component];
+
+      mergedTokens[component] = {
+        ...defaultRoot,
+        ...customRoot,
+        styles: {
+          ...defaultStyles,
+          ...customStyles,
+        },
       };
     } else {
       mergedTokens[component] = customTokens[component];
@@ -363,7 +374,8 @@ export async function generateTokenTemplates(
         console.log(`Token template generated: ${jsonFilePath}`);
       }
     }
-  } catch (error) {
-    console.error(`Error generating token templates: ${error.message}`);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`Error generating token templates: ${message}`);
   }
 }
