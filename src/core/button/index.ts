@@ -21,6 +21,9 @@ export class ZButton extends HTMLElement {
   /** Stores the click handler function if provided. */
   private clickHandler: Function | null = null;
 
+  /** Stores the bound handleClick reference for add/remove event listener symmetry. */
+  private boundHandleClick: EventListener;
+
   /** Accessibility-related attributes that should be synced to the inner button. */
   private static readonly accessibilityAttributes = [
     "aria-label",
@@ -71,6 +74,7 @@ export class ZButton extends HTMLElement {
     super();
     this.button = document.createElement("button");
     this.button.classList.add("z-button");
+    this.boundHandleClick = this.handleClick.bind(this);
     // Initialize the MutationObserver
     this.classObserver = new MutationObserver(
       this.handleClassChanges.bind(this)
@@ -83,7 +87,7 @@ export class ZButton extends HTMLElement {
    */
   connectedCallback() {
     this.setupButton();
-    this.button.addEventListener("click", this.handleClick.bind(this));
+    this.button.addEventListener("click", this.boundHandleClick);
     this.updateClickHandler();
     this.setupAccessibility();
     this.parseOptions();
@@ -106,7 +110,7 @@ export class ZButton extends HTMLElement {
    * Removes the click event listener and class observer
    */
   disconnectedCallback() {
-    this.button.removeEventListener("click", this.handleClick.bind(this));
+    this.button.removeEventListener("click", this.boundHandleClick);
     this.classObserver.disconnect();
   }
 

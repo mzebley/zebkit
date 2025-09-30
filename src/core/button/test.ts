@@ -49,6 +49,31 @@ describe('ZButton', () => {
     expect(mockHandler).toHaveBeenCalled();
   });
 
+  it('does not fire z-click after being disconnected', async () => {
+    document.body.innerHTML = '<div id="wrapper"></div>';
+    const wrapper = document.getElementById('wrapper');
+    const button = document.createElement('z-button');
+    button.textContent = 'Click me';
+    wrapper?.appendChild(button);
+
+    const mockHandler = jest.fn();
+    button.addEventListener('z-click', mockHandler);
+
+    const lightDomButton = await waitFor(() => {
+      const innerButton = button.querySelector('button.z-button');
+      if (!innerButton) {
+        throw new Error('Button not rendered');
+      }
+      return innerButton;
+    });
+
+    wrapper?.removeChild(button);
+
+    fireEvent.click(lightDomButton);
+
+    expect(mockHandler).not.toHaveBeenCalled();
+  });
+
   it('executes the (click) attribute when clicked', async () => {
     const mockFn = jest.fn();
     window.testClick = mockFn;
