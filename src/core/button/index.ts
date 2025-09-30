@@ -265,19 +265,37 @@ export class ZButton extends HTMLElement {
    * Sets up the initial structure of the button.
    */
   private setupButton() {
-    // Create edge element
-    const edge = document.createElement("span");
-    edge.classList.add("z-button__edge");
+    const button = this.button;
 
-    // Create content wrapper
-    const contentWrapper = document.createElement("span");
-    contentWrapper.classList.add("z-button__front");
+    // Ensure the internal edge element exists
+    let edge = button.querySelector(".z-button__edge") as HTMLElement | null;
+    if (!edge) {
+      edge = document.createElement("span");
+      edge.classList.add("z-button__edge");
+      button.insertBefore(edge, button.firstChild);
+    }
 
-    let iconElement: HTMLElement | null = null;
+    // Ensure the internal content wrapper exists
+    let contentWrapper = button.querySelector(
+      ".z-button__front"
+    ) as HTMLElement | null;
+    if (!contentWrapper) {
+      contentWrapper = document.createElement("span");
+      contentWrapper.classList.add("z-button__front");
+      button.appendChild(contentWrapper);
+    }
 
-    // Move existing content to appropriate wrappers
-    while (this.firstChild) {
-      const child = this.firstChild;
+    // Reuse existing icon wrapper if present
+    let iconElement = contentWrapper.querySelector(
+      ".z-button__icon"
+    ) as HTMLElement | null;
+
+    const children = Array.from(this.childNodes);
+    for (const child of children) {
+      if (child === button) {
+        continue;
+      }
+
       if (
         child instanceof HTMLElement &&
         child.getAttribute("slot") === "icon"
@@ -292,21 +310,25 @@ export class ZButton extends HTMLElement {
       }
     }
 
-    // Only add the icon wrapper if an icon was found
-    if (iconElement) {
+    if (iconElement && !contentWrapper.contains(iconElement)) {
+      // Ensure the icon wrapper is attached to the content wrapper
       if (this.options.iconPosition === "end") {
         contentWrapper.appendChild(iconElement);
       } else {
         contentWrapper.prepend(iconElement);
       }
+    } else if (iconElement) {
+      // Adjust icon wrapper position based on current option
+      if (this.options.iconPosition === "end") {
+        contentWrapper.appendChild(iconElement);
+      } else if (contentWrapper.firstChild !== iconElement) {
+        contentWrapper.insertBefore(iconElement, contentWrapper.firstChild);
+      }
     }
 
-    // Append wrappers to button
-    this.button.appendChild(edge);
-    this.button.appendChild(contentWrapper);
-
-    // Append button to component
-    this.appendChild(this.button);
+    if (button.parentElement !== this) {
+      this.appendChild(button);
+    }
   }
 
   /**
