@@ -62,6 +62,12 @@ export class ZButton extends HTMLElement {
   /** Current options for this ZButton instance. */
   private options: ZButtonOptions = { ...ZButton.defaultOptions };
 
+  /** Tracks the previously applied variant class. */
+  private previousVariant?: ZButtonOptions["variant"];
+
+  /** Tracks the previously applied size class. */
+  private previousSize?: ZButtonOptions["size"];
+
   /** Indicates if accessibility attributes are currently being migrated. */
   private isMigratingAccessibilityAttributes = false;
 
@@ -274,22 +280,27 @@ export class ZButton extends HTMLElement {
       }
     }
 
-    // Remove any existing variant and size classes before applying new ones
-    ZButton.variantClasses.forEach((variantClass) => {
-      this.classList.remove(variantClass);
-    });
+    const { variant, size } = this.options;
 
-    ZButton.sizeClasses.forEach((sizeClass) => {
-      this.classList.remove(sizeClass);
-    });
-
-    if (this.options.variant) {
-      this.classList.add(this.options.variant);
+    if (this.previousVariant && this.previousVariant !== variant) {
+      this.classList.remove(this.previousVariant);
     }
 
-    if (this.options.size) {
-      this.classList.add(this.options.size);
+    if (variant) {
+      this.classList.add(variant);
     }
+
+    this.previousVariant = variant;
+
+    if (this.previousSize && this.previousSize !== size) {
+      this.classList.remove(this.previousSize);
+    }
+
+    if (size) {
+      this.classList.add(size);
+    }
+
+    this.previousSize = size;
   }
 
   /**
