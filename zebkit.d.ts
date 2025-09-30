@@ -9,6 +9,11 @@ interface ZButtonOptions {
     /** Specifies the size class applied to the button. */
     size?: "xs" | "sm" | "md" | "lg" | "xl";
 }
+interface ZCheckboxChangeDetail {
+    checked: boolean;
+    indeterminate: boolean;
+    value: string;
+}
 /**
  * ZButton is a custom web component that creates an enhanced button element.
  * It provides additional functionality and styling options beyond a standard HTML button.
@@ -139,15 +144,51 @@ declare class ZButton extends HTMLElement {
  * This function checks if the custom element is already defined before defining it.
  */
 declare function defineZButton(): void;
+declare class ZCheckbox extends HTMLElement {
+    private input;
+    private label;
+    private mutationObserver?;
+    private static readonly mirroredBooleanAttributes;
+    private static readonly mirroredStringAttributes;
+    private static readonly accessibilityAttributes;
+    static get observedAttributes(): string[];
+    constructor();
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null): void;
+    get checked(): boolean;
+    set checked(value: boolean);
+    get indeterminate(): boolean;
+    set indeterminate(value: boolean);
+    get disabled(): boolean;
+    set disabled(value: boolean);
+    get name(): string;
+    set name(value: string);
+    get value(): string;
+    set value(value: string);
+    get required(): boolean;
+    set required(value: boolean);
+    focus(options?: FocusOptions): void;
+    private handleClick;
+    private handleInputChange;
+    private syncFromAttributes;
+    private reflectClassToLabel;
+    private reflectAllClasses;
+}
+declare function defineZCheckbox(): void;
 
 declare const defineCoreComponents: () => void;
 
 type index_ZButton = ZButton;
 declare const index_ZButton: typeof ZButton;
+type index_ZCheckbox = ZCheckbox;
+declare const index_ZCheckbox: typeof ZCheckbox;
+type index_ZCheckboxChangeDetail = ZCheckboxChangeDetail;
 declare const index_defineCoreComponents: typeof defineCoreComponents;
 declare const index_defineZButton: typeof defineZButton;
+declare const index_defineZCheckbox: typeof defineZCheckbox;
 declare namespace index {
-  export { index_ZButton as ZButton, index_defineCoreComponents as defineCoreComponents, index_defineZButton as defineZButton };
+  export { index_ZButton as ZButton, index_ZCheckbox as ZCheckbox, index_ZCheckboxChangeDetail as ZCheckboxChangeDetail, index_defineCoreComponents as defineCoreComponents, index_defineZButton as defineZButton, index_defineZCheckbox as defineZCheckbox };
 }
 
 export { index as core };
