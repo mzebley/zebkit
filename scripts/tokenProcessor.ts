@@ -1,6 +1,7 @@
 // tokenProcessor.ts
 
 import fs from "fs/promises";
+import type { Dirent } from "fs";
 import path from "path";
 
 interface TokenValue {
@@ -61,7 +62,15 @@ export async function buildAllowedTokenKeyMap(
 
   // Scan each provided directory (core and components directories)
   for (const dir of directories) {
-    const items = await fs.readdir(dir, { withFileTypes: true });
+    let items: Dirent[] = [];
+    try {
+      items = await fs.readdir(dir, { withFileTypes: true });
+    } catch (error: any) {
+      console.warn(
+        `Skipping token directory ${dir}: ${error?.message ?? error}`
+      );
+      continue;
+    }
 
     // Check for token-keys.ts at the root level
     const rootTokenKeysPath = path.join(dir, "token-keys.ts");
@@ -85,8 +94,17 @@ export async function gatherTokens(
   directory: string,
   isCustomToken: boolean = false
 ): Promise<TokenObject> {
-  const items = await fs.readdir(directory, { withFileTypes: true });
   const tokens: TokenObject = {};
+
+  let items: Dirent[] = [];
+  try {
+    items = await fs.readdir(directory, { withFileTypes: true });
+  } catch (error: any) {
+    console.warn(
+      `Skipping token gathering for ${directory}: ${error?.message ?? error}`
+    );
+    return tokens;
+  }
 
   // Helper function to process a TypeScript or JSON file based on whether it's a custom token
   const processTokenFile = async (filePath: string) => {
