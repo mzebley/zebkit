@@ -255,17 +255,25 @@ async function main(): Promise<void> {
     }
 
     // Build the allowed token key map from TypeScript files and generate templates
-    const directoriesToScan = [
-      path.join(process.cwd(), "src", "core"),
-      path.join(process.cwd(), "src", "components"),
-    ];
+    const coreDir = path.join(process.cwd(), "src", "core");
+    const componentsDir = path.join(process.cwd(), "src", "components");
+
+    const directoriesToScanCandidates = [coreDir, componentsDir];
+    const directoriesToScan: string[] = [];
+    for (const directory of directoriesToScanCandidates) {
+      try {
+        await fs.access(directory);
+        directoriesToScan.push(directory);
+      } catch (error: any) {
+        log.warn(
+          `Token directory not found, skipping: ${directory} (${error?.message ?? error})`
+        );
+      }
+    }
+
     const allowedTokenMap = await tokenProcessor.buildAllowedTokenKeyMap(
       directoriesToScan
     );
-
-    // Gather default tokens from core and component directories (TypeScript files)
-    const coreDir = path.join(process.cwd(), "src", "core");
-    const componentsDir = path.join(process.cwd(), "src", "components");
 
     const coreTokens = await tokenProcessor.gatherTokens(coreDir); // Default tokens are TypeScript files
     const componentTokens = await tokenProcessor.gatherTokens(componentsDir); // Default tokens are TypeScript files
