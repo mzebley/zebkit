@@ -8,7 +8,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "type-check": "tsc --noEmit",
-    "build": "node build.js"
+    "build": "tsx scripts/build.ts",
+    "build-scripts": "tsc"
   },
   "repository": {
     "type": "git",
@@ -34,7 +35,9 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.5.0",
+    "@types/inquirer": "^9.0.7",
     "@types/jest": "^29.5.12",
+    "@types/node": "^22.5.5",
     "autoprefixer": "^10.4.20",
     "chalk": "^5.3.0",
     "core-js": "^3.38.1",
@@ -49,7 +52,9 @@
     "rollup-plugin-scss": "^4.0.0",
     "sass": "^1.78.0",
     "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
     "tslib": "^2.7.0",
+    "tsx": "^4.19.1",
     "typescript": "^5.5.4"
   }
 }
