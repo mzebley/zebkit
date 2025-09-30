@@ -11,6 +11,47 @@ describe("ZButton", () => {
     document.body.innerHTML = "";
   });
 
+  describe("tabindex sanitization", () => {
+    it("handles empty, negative, and positive tabindex values", () => {
+      const element = document.createElement("z-button") as ZButton;
+      element.setAttribute("aria-label", "Example");
+      document.body.appendChild(element);
+
+      const internalButton = element.querySelector("button");
+      expect(internalButton).toBeInstanceOf(HTMLButtonElement);
+
+      element.setAttribute("tabindex", "");
+      expect(internalButton?.tabIndex).toBe(0);
+      expect(internalButton?.getAttribute("tabindex")).toBe("0");
+
+      element.setAttribute("tabindex", "-1");
+      expect(internalButton?.tabIndex).toBe(-1);
+      expect(internalButton?.getAttribute("tabindex")).toBe("-1");
+
+      element.setAttribute("tabindex", "5");
+      expect(internalButton?.tabIndex).toBe(5);
+      expect(internalButton?.getAttribute("tabindex")).toBe("5");
+    });
+
+    it("warns and removes invalid tabindex values", () => {
+      const warnSpy = jest.spyOn(console, "warn").mockImplementation();
+      const element = document.createElement("z-button") as ZButton;
+      element.setAttribute("aria-label", "Example");
+      document.body.appendChild(element);
+
+      const internalButton = element.querySelector("button");
+      expect(internalButton).toBeInstanceOf(HTMLButtonElement);
+
+      element.setAttribute("tabindex", "abc");
+
+      expect(internalButton?.hasAttribute("tabindex")).toBe(false);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(warnSpy.mock.calls[0]?.[0]).toContain("Invalid tabindex value \"abc\"");
+
+      warnSpy.mockRestore();
+    });
+  });
+
   it("reuses the internal structure when disconnected and reconnected", () => {
     const element = document.createElement("z-button") as ZButton;
     element.innerHTML = "<span>Label</span><span slot=\"icon\">⭐</span>";
