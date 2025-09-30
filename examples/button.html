@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Z-Button</title>
     <link rel="stylesheet" type="text/css" href="../zebkit.css">
+    <link rel="stylesheet" type="text/css" href="../zebkit-vars.css">
     <script type="module">
         import { core } from '../zebkit.js';
 
@@ -23,9 +24,13 @@
 </head>
 
 <body>
-    <z-button id="myButton0" size="lg">
+    <h1 class="font-family-heading">I am in the heading font. 1234567890</h1>
+    <p class="font-family-body">I am in the body font. 1234567890</p>
+    <p class="font-family-alt">I am in the alternate font. 1234567890</p>
+    <p class="font-family-mono">I am in the monospace font. 1234567890</p>
+    <z-button id="myButton0" class="text-tabular-numbers" size="lg">
         <span slot="icon">🔍</span>
-        Click me!
+        123456
     </z-button>
     <z-button id="myButton" (click)="test()">
         <span slot="icon">🔍</span>
