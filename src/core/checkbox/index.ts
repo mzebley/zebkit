@@ -125,10 +125,33 @@ export class ZCheckbox extends HTMLElement {
     if (ZCheckbox.mirroredStringAttributes.includes(name as any)) {
       if (name === "tabindex") {
         if (newValue === null) {
-          this.input.removeAttribute("tabindex");
           this.input.tabIndex = 0;
-        } else {
-          this.input.tabIndex = Number(newValue);
+          this.input.removeAttribute("tabindex");
+          return;
+        }
+
+        const value = newValue.trim();
+
+        if (value === "") {
+          this.input.tabIndex = 0;
+          this.input.setAttribute("tabindex", "0");
+          return;
+        }
+
+        if (value === "-1" || /^\d+$/.test(value)) {
+          const parsedValue = value === "-1" ? -1 : parseInt(value, 10);
+          this.input.tabIndex = parsedValue;
+          this.input.setAttribute("tabindex", value);
+          return;
+        }
+
+        console.warn(
+          `ZCheckbox: Invalid tabindex value "${newValue}". Expected -1, a non-negative integer, or empty string. Disregarding and removing attribute.`
+        );
+        this.input.tabIndex = 0;
+        this.input.removeAttribute("tabindex");
+        if (this.hasAttribute("tabindex")) {
+          this.removeAttribute("tabindex");
         }
         return;
       }
