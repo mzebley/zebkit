@@ -2,7 +2,7 @@ export const zbkTypographyTokens = {
   "zbk-typography": {
     styles: {
       "font-family-primary": {
-        value: `"UnifrakturCook", sans-serif`,
+        value: `"Open Sans", sans-serif`,
         type: "fontFamily",
         weights: "700",
         variableFont: "false",
