@@ -4,6 +4,136 @@ export interface ZCheckboxChangeDetail {
   value: string;
 }
 
+const CHECKBOX_STYLE = /* css */ `
+:host {
+  display: inline-block;
+}
+
+.z-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zbk-checkbox-label-gap);
+  font: inherit;
+  color: var(--zbk-checkbox-label-color);
+  cursor: pointer;
+  user-select: none;
+}
+
+.z-checkbox__input {
+  appearance: none;
+  width: var(--zbk-checkbox-size);
+  height: var(--zbk-checkbox-size);
+  margin: 0;
+  border-radius: var(--zbk-checkbox-border-radius);
+  border: var(--zbk-checkbox-border-width) solid
+    var(--zbk-checkbox-border-color);
+  background-color: var(--zbk-checkbox-background);
+  display: grid;
+  place-content: center;
+  transition:
+    background-color var(--zbk-checkbox-transition-duration) ease,
+    border-color var(--zbk-checkbox-transition-duration) ease,
+    box-shadow var(--zbk-checkbox-transition-duration) ease,
+    transform var(--zbk-checkbox-transition-duration) ease;
+  position: relative;
+}
+
+.z-checkbox__input::before {
+  content: "";
+  width: calc(var(--zbk-checkbox-size) * 0.5);
+  height: calc(var(--zbk-checkbox-size) * 0.25);
+  border-right: var(--zbk-border-width-sm) solid
+    var(--zbk-checkbox-indicator-color);
+  border-bottom: var(--zbk-border-width-sm) solid
+    var(--zbk-checkbox-indicator-color);
+  border-left: 0;
+  border-top: 0;
+  transform: scale(0) rotate(45deg);
+  transform-origin: center;
+  transition: transform var(--zbk-checkbox-transition-duration) ease;
+}
+
+.z-checkbox__input::after {
+  content: "";
+  width: calc(var(--zbk-checkbox-size) * 0.6);
+  height: var(--zbk-checkbox-indeterminate-bar-height);
+  background-color: var(--zbk-checkbox-indicator-color);
+  border-radius: var(--zbk-border-radius-pill);
+  transform: scaleX(0);
+  transition: transform var(--zbk-checkbox-transition-duration) ease;
+}
+
+.z-checkbox__input:focus {
+  outline: none;
+}
+
+.z-checkbox__input:focus-visible {
+  outline: var(--zbk-checkbox-focus-ring-width) solid
+    var(--zbk-checkbox-focus-ring-color);
+  outline-offset: var(--zbk-checkbox-focus-ring-offset);
+  border-color: var(--zbk-checkbox-border-color-active);
+}
+
+.z-checkbox__input:checked {
+  border-color: var(--zbk-checkbox-border-color-active);
+  background-color: var(--zbk-checkbox-background-checked);
+}
+
+.z-checkbox__input:checked::before {
+  transform: scale(1) rotate(45deg);
+}
+
+.z-checkbox__input:indeterminate {
+  border-color: var(--zbk-checkbox-border-color-active);
+  background-color: var(--zbk-checkbox-background-indeterminate);
+}
+
+.z-checkbox__input:indeterminate::before {
+  transform: scale(0) rotate(45deg);
+}
+
+.z-checkbox__input:indeterminate::after {
+  transform: scaleX(1);
+}
+
+.z-checkbox__input:disabled {
+  border-color: var(--zbk-checkbox-border-color-disabled);
+  background-color: var(--zbk-checkbox-background);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.z-checkbox__input:disabled::before {
+  border-right-color: var(--zbk-checkbox-indicator-disabled-color);
+  border-bottom-color: var(--zbk-checkbox-indicator-disabled-color);
+}
+
+.z-checkbox__input:disabled::after {
+  background-color: var(--zbk-checkbox-indicator-disabled-color);
+}
+
+:host([disabled]) .z-checkbox,
+.z-checkbox__input:disabled + slot {
+  cursor: not-allowed;
+  color: var(--zbk-checkbox-label-disabled-color);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .z-checkbox__input:not(:disabled):hover {
+    border-color: var(--zbk-checkbox-border-color-hover);
+  }
+}
+`;
+
+const CHECKBOX_TEMPLATE = document.createElement("template");
+CHECKBOX_TEMPLATE.innerHTML = `
+  <style>${CHECKBOX_STYLE}</style>
+  <label class="z-checkbox">
+    <input type="checkbox" class="z-checkbox__input" />
+    <slot></slot>
+  </label>
+`;
+
 export class ZCheckbox extends HTMLElement {
   private input: HTMLInputElement;
   private label: HTMLLabelElement;
@@ -47,17 +177,17 @@ export class ZCheckbox extends HTMLElement {
     super();
 
     const shadow = this.attachShadow({ mode: "open" });
-    this.label = document.createElement("label");
-    this.label.classList.add("z-checkbox");
+    const templateContent = CHECKBOX_TEMPLATE.content.cloneNode(true);
+    shadow.append(templateContent);
 
-    this.input = document.createElement("input");
-    this.input.type = "checkbox";
-    this.input.classList.add("z-checkbox__input");
+    this.label = shadow.querySelector("label.z-checkbox") as HTMLLabelElement;
+    this.input = shadow.querySelector(
+      "input.z-checkbox__input"
+    ) as HTMLInputElement;
 
-    const slot = document.createElement("slot");
-
-    this.label.append(this.input, slot);
-    shadow.append(this.label);
+    if (!this.label || !this.input) {
+      throw new Error("ZCheckbox: Failed to initialize shadow DOM structure.");
+    }
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
