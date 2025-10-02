@@ -92,9 +92,19 @@ const CHECKBOX_STYLE=`:host {
 }
 
 .z-checkbox__input:disabled {
-  border-color: var(--zbk-checkbox-border-color-disabled);
-  background-color: var(--zbk-checkbox-background);
-  cursor: not-allowed;
+const CHECKBOX_TEMPLATE_HTML=`<style>${CHECKBOX_STYLE}</style>
+let checkboxTemplate;
+const getCheckboxTemplate=()=>{
+  if("undefined"==typeof document){
+    throw new Error("ZCheckbox: document is not available. Ensure this component is used in a browser environment.");
+  }
+  if(!checkboxTemplate){
+    checkboxTemplate=document.createElement("template");
+    checkboxTemplate.innerHTML=CHECKBOX_TEMPLATE_HTML;
+  }
+  return checkboxTemplate;
+};
+    const templateContent=getCheckboxTemplate().content.cloneNode(true);
   opacity: 0.7;
 }
 

@@ -125,14 +125,30 @@ const CHECKBOX_STYLE = /* css */ `
 }
 `;
 
-const CHECKBOX_TEMPLATE = document.createElement("template");
-CHECKBOX_TEMPLATE.innerHTML = `
+const CHECKBOX_TEMPLATE_HTML = `
   <style>${CHECKBOX_STYLE}</style>
   <label class="z-checkbox">
     <input type="checkbox" class="z-checkbox__input" />
     <slot></slot>
   </label>
 `;
+
+let checkboxTemplate: HTMLTemplateElement | undefined;
+
+function getCheckboxTemplate(): HTMLTemplateElement {
+  if (typeof document === "undefined") {
+    throw new Error(
+      "ZCheckbox: document is not available. Ensure this component is used in a browser environment."
+    );
+  }
+
+  if (!checkboxTemplate) {
+    checkboxTemplate = document.createElement("template");
+    checkboxTemplate.innerHTML = CHECKBOX_TEMPLATE_HTML;
+  }
+
+  return checkboxTemplate;
+}
 
 export class ZCheckbox extends HTMLElement {
   private input: HTMLInputElement;
@@ -177,7 +193,7 @@ export class ZCheckbox extends HTMLElement {
     super();
 
     const shadow = this.attachShadow({ mode: "open" });
-    const templateContent = CHECKBOX_TEMPLATE.content.cloneNode(true);
+    const templateContent = getCheckboxTemplate().content.cloneNode(true);
     shadow.append(templateContent);
 
     this.label = shadow.querySelector("label.z-checkbox") as HTMLLabelElement;
