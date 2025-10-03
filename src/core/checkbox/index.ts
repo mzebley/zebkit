@@ -13,7 +13,11 @@ const CHECKBOX_STYLE = /* css */ `
   display: inline-flex;
   align-items: center;
   gap: var(--zbk-checkbox-label-gap);
-  font: inherit;
+  font-family: var(--zbk-checkbox-label-font-family);
+  font-size: var(--zbk-checkbox-label-font-size);
+  font-weight: var(--zbk-checkbox-label-font-weight);
+  line-height: var(--zbk-checkbox-label-line-height);
+  letter-spacing: var(--zbk-checkbox-label-letter-spacing);
   color: var(--zbk-checkbox-label-color);
   cursor: pointer;
   user-select: none;
@@ -31,10 +35,14 @@ const CHECKBOX_STYLE = /* css */ `
   display: grid;
   place-content: center;
   transition:
-    background-color var(--zbk-checkbox-transition-duration) ease,
-    border-color var(--zbk-checkbox-transition-duration) ease,
-    box-shadow var(--zbk-checkbox-transition-duration) ease,
-    transform var(--zbk-checkbox-transition-duration) ease;
+    background-color var(--zbk-checkbox-transition-duration)
+      var(--zbk-checkbox-transition-timing-function),
+    border-color var(--zbk-checkbox-transition-duration)
+      var(--zbk-checkbox-transition-timing-function),
+    box-shadow var(--zbk-checkbox-transition-duration)
+      var(--zbk-checkbox-transition-timing-function),
+    transform var(--zbk-checkbox-transition-duration)
+      var(--zbk-checkbox-transition-timing-function);
   position: relative;
 }
 
@@ -42,15 +50,16 @@ const CHECKBOX_STYLE = /* css */ `
   content: "";
   width: calc(var(--zbk-checkbox-size) * 0.5);
   height: calc(var(--zbk-checkbox-size) * 0.25);
-  border-right: var(--zbk-border-width-sm) solid
+  border-right: var(--zbk-checkbox-indicator-stroke-width) solid
     var(--zbk-checkbox-indicator-color);
-  border-bottom: var(--zbk-border-width-sm) solid
+  border-bottom: var(--zbk-checkbox-indicator-stroke-width) solid
     var(--zbk-checkbox-indicator-color);
   border-left: 0;
   border-top: 0;
   transform: scale(0) rotate(45deg);
   transform-origin: center;
-  transition: transform var(--zbk-checkbox-transition-duration) ease;
+  transition: transform var(--zbk-checkbox-transition-duration)
+    var(--zbk-checkbox-transition-timing-function);
 }
 
 .z-checkbox__input::after {
@@ -58,9 +67,10 @@ const CHECKBOX_STYLE = /* css */ `
   width: calc(var(--zbk-checkbox-size) * 0.6);
   height: var(--zbk-checkbox-indeterminate-bar-height);
   background-color: var(--zbk-checkbox-indicator-color);
-  border-radius: var(--zbk-border-radius-pill);
+  border-radius: var(--zbk-checkbox-indeterminate-bar-radius);
   transform: scaleX(0);
-  transition: transform var(--zbk-checkbox-transition-duration) ease;
+  transition: transform var(--zbk-checkbox-transition-duration)
+    var(--zbk-checkbox-transition-timing-function);
 }
 
 .z-checkbox__input:focus {
@@ -100,7 +110,7 @@ const CHECKBOX_STYLE = /* css */ `
   border-color: var(--zbk-checkbox-border-color-disabled);
   background-color: var(--zbk-checkbox-background);
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: var(--zbk-checkbox-disabled-opacity);
 }
 
 .z-checkbox__input:disabled::before {
