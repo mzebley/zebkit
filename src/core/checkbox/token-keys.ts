@@ -1,0 +1,71 @@
+export const zbkCheckboxTokenKeys = {
+    "zbk-checkbox": {
+      "rootAllowedKeys": [
+        "styles"
+      ],
+      "styles": {
+        "allowed": [
+          "checkbox-size",
+          "checkbox-border-radius",
+          "checkbox-border-width",
+          "checkbox-background",
+          "checkbox-background-checked",
+          "checkbox-background-indeterminate",
+          "checkbox-border-color",
+          "checkbox-border-color-hover",
+          "checkbox-border-color-active",
+          "checkbox-border-color-disabled",
+          "checkbox-indicator-stroke-width",
+          "checkbox-indicator-color",
+          "checkbox-indicator-disabled-color",
+          "checkbox-indeterminate-bar-height",
+          "checkbox-indeterminate-bar-radius",
+          "checkbox-focus-ring-color",
+          "checkbox-focus-ring-width",
+          "checkbox-focus-ring-offset",
+          "checkbox-transition-timing-function",
+          "checkbox-disabled-opacity",
+          "checkbox-label-color",
+          "checkbox-label-disabled-color",
+          "checkbox-label-font-family",
+          "checkbox-label-font-size",
+          "checkbox-label-font-weight",
+          "checkbox-label-line-height",
+          "checkbox-label-letter-spacing",
+          "checkbox-label-gap",
+          "checkbox-transition-duration"
+        ],
+        "subsets": {
+          "checkbox-size": { type: "spacing" },
+          "checkbox-border-radius": { type: "borderRadius" },
+          "checkbox-border-width": { type: "borderWidth" },
+          "checkbox-background": { type: "color" },
+          "checkbox-background-checked": { type: "color" },
+          "checkbox-background-indeterminate": { type: "color" },
+          "checkbox-border-color": { type: "color" },
+          "checkbox-border-color-hover": { type: "color" },
+          "checkbox-border-color-active": { type: "color" },
+          "checkbox-border-color-disabled": { type: "color" },
+          "checkbox-indicator-stroke-width": { type: "borderWidth" },
+          "checkbox-indicator-color": { type: "color" },
+          "checkbox-indicator-disabled-color": { type: "color" },
+          "checkbox-indeterminate-bar-height": { type: "borderWidth" },
+          "checkbox-indeterminate-bar-radius": { type: "borderRadius" },
+          "checkbox-focus-ring-color": { type: "color" },
+          "checkbox-focus-ring-width": { type: "borderWidth" },
+          "checkbox-focus-ring-offset": { type: "spacing" },
+          "checkbox-transition-timing-function": { type: "custom" },
+          "checkbox-disabled-opacity": { type: "custom" },
+          "checkbox-label-color": { type: "color" },
+          "checkbox-label-disabled-color": { type: "color" },
+          "checkbox-label-font-family": { type: "fontFamily" },
+          "checkbox-label-font-size": { type: "fontSize" },
+          "checkbox-label-font-weight": { type: "custom" },
+          "checkbox-label-line-height": { type: "lineHeight" },
+          "checkbox-label-letter-spacing": { type: "letterSpacing" },
+          "checkbox-label-gap": { type: "spacing" },
+          "checkbox-transition-duration": { type: "custom" }
+        }
+      }
+    }
+  };
