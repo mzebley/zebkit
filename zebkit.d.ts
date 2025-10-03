@@ -9,11 +9,6 @@ interface ZButtonOptions {
     /** Specifies the size class applied to the button. */
     size?: "xs" | "sm" | "md" | "lg" | "xl";
 }
-interface ZCheckboxChangeDetail {
-    checked: boolean;
-    indeterminate: boolean;
-    value: string;
-}
 /**
  * ZButton is a custom web component that creates an enhanced button element.
  * It provides additional functionality and styling options beyond a standard HTML button.
@@ -23,10 +18,24 @@ declare class ZButton extends HTMLElement {
     private button;
     /** Stores the click handler function if provided. */
     private clickHandler;
+    /** Stores the bound handleClick reference for add/remove event listener symmetry. */
+    private boundHandleClick;
+    /** Accessibility-related attributes that should be synced to the inner button. */
+    private static readonly accessibilityAttributes;
+    /** Variant classes that can be applied to the button. */
+    private static readonly variantClasses;
+    /** Size classes that can be applied to the button. */
+    private static readonly sizeClasses;
     /** Default options for all ZButton instances. */
     private static defaultOptions;
     /** Current options for this ZButton instance. */
     private options;
+    /** Tracks the previously applied variant class. */
+    private previousVariant?;
+    /** Tracks the previously applied size class. */
+    private previousSize?;
+    /** Indicates if accessibility attributes are currently being migrated. */
+    private isMigratingAccessibilityAttributes;
     /**
      * Specifies which attributes should be observed for changes.
      * Changes to these attributes will trigger the attributeChangedCallback.
@@ -144,6 +153,7 @@ declare class ZButton extends HTMLElement {
  * This function checks if the custom element is already defined before defining it.
  */
 declare function defineZButton(): void;
+
 declare class ZCheckbox extends HTMLElement {
     private input;
     private label;
@@ -177,18 +187,51 @@ declare class ZCheckbox extends HTMLElement {
 }
 declare function defineZCheckbox(): void;
 
+declare class ZRadio extends HTMLElement {
+    private input;
+    private label;
+    private mutationObserver?;
+    private static readonly mirroredBooleanAttributes;
+    private static readonly mirroredStringAttributes;
+    private static readonly accessibilityAttributes;
+    static get observedAttributes(): string[];
+    constructor();
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null): void;
+    get checked(): boolean;
+    set checked(value: boolean);
+    get disabled(): boolean;
+    set disabled(value: boolean);
+    get required(): boolean;
+    set required(value: boolean);
+    get name(): string;
+    set name(value: string);
+    get value(): string;
+    set value(value: string);
+    focus(options?: FocusOptions): void;
+    private handleClick;
+    private handleInputChange;
+    private syncFromAttributes;
+    private reflectClassToLabel;
+    private reflectAllClasses;
+}
+declare function defineZRadio(): void;
+
 declare const defineCoreComponents: () => void;
 
 type index_ZButton = ZButton;
 declare const index_ZButton: typeof ZButton;
 type index_ZCheckbox = ZCheckbox;
 declare const index_ZCheckbox: typeof ZCheckbox;
-type index_ZCheckboxChangeDetail = ZCheckboxChangeDetail;
+type index_ZRadio = ZRadio;
+declare const index_ZRadio: typeof ZRadio;
 declare const index_defineCoreComponents: typeof defineCoreComponents;
 declare const index_defineZButton: typeof defineZButton;
 declare const index_defineZCheckbox: typeof defineZCheckbox;
+declare const index_defineZRadio: typeof defineZRadio;
 declare namespace index {
-  export { index_ZButton as ZButton, index_ZCheckbox as ZCheckbox, index_ZCheckboxChangeDetail as ZCheckboxChangeDetail, index_defineCoreComponents as defineCoreComponents, index_defineZButton as defineZButton, index_defineZCheckbox as defineZCheckbox };
+  export { index_ZButton as ZButton, index_ZCheckbox as ZCheckbox, index_ZRadio as ZRadio, index_defineCoreComponents as defineCoreComponents, index_defineZButton as defineZButton, index_defineZCheckbox as defineZCheckbox, index_defineZRadio as defineZRadio };
 }
 
 export { index as core };
