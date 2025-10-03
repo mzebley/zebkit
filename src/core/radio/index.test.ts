@@ -119,4 +119,31 @@ describe("ZRadio", () => {
     expect(input.hasAttribute("tabindex")).toBe(false);
     expect(input.tabIndex).toBe(0);
   });
+
+  it("enforces single selection across radios sharing the same name", () => {
+    const first = document.createElement("z-radio") as ZRadio;
+    first.name = "group";
+    first.checked = true;
+
+    const second = document.createElement("z-radio") as ZRadio;
+    second.name = "group";
+
+    document.body.append(first, second);
+
+    const firstInput = getInternalInput(first);
+    const secondInput = getInternalInput(second);
+
+    expect(first.checked).toBe(true);
+    expect(firstInput.checked).toBe(true);
+    expect(second.checked).toBe(false);
+    expect(secondInput.checked).toBe(false);
+
+    secondInput.checked = true;
+    secondInput.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(second.checked).toBe(true);
+    expect(secondInput.checked).toBe(true);
+    expect(first.checked).toBe(false);
+    expect(firstInput.checked).toBe(false);
+  });
 });

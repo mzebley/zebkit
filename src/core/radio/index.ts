@@ -342,6 +342,9 @@ export class ZRadio extends HTMLElement {
     }
 
     const isChecked = this.input.checked;
+    if (isChecked) {
+      this.uncheckOtherRadiosInGroup();
+    }
     this.toggleAttribute("checked", isChecked);
 
     const detail: ZRadioChangeDetail = {
@@ -356,6 +359,48 @@ export class ZRadio extends HTMLElement {
         composed: true,
       })
     );
+  }
+
+  private uncheckOtherRadiosInGroup(): void {
+    const rawName = this.getAttribute("name");
+    if (!rawName) {
+      return;
+    }
+
+    const normalizedName = rawName.trim();
+    if (!normalizedName) {
+      return;
+    }
+
+    const searchRoot = this.getRadioGroupRoot();
+    const radios = Array.from(
+      searchRoot.querySelectorAll<ZRadio>("z-radio[name]")
+    );
+
+    for (const radio of radios) {
+      if (radio === this) {
+        continue;
+      }
+
+      const otherName = radio.getAttribute("name");
+      if (otherName && otherName.trim() === normalizedName) {
+        radio.checked = false;
+      }
+    }
+  }
+
+  private getRadioGroupRoot(): ParentNode {
+    const form = this.closest("form");
+    if (form) {
+      return form;
+    }
+
+    const root = this.getRootNode({ composed: true });
+    if (root instanceof Document || root instanceof DocumentFragment) {
+      return root;
+    }
+
+    return document;
   }
 
   private syncFromAttributes(): void {
