@@ -224,7 +224,8 @@
       }
 
       .button-row,
-      .checkbox-row {
+      .checkbox-row,
+      .radio-row {
         display: flex;
         flex-wrap: wrap;
         gap: 0.75rem;
@@ -301,8 +302,8 @@
       <h1>Zebkit component gallery</h1>
       <p>
         Inspect the core Web Components, adjust shared design tokens on the fly,
-        and try the runtime APIs exposed by <code>&lt;z-button&gt;</code> and
-        <code>&lt;z-checkbox&gt;</code>. This page is a static bundle that can be
+        and try the runtime APIs exposed by <code>&lt;z-button&gt;</code>,
+        <code>&lt;z-checkbox&gt;</code>, and <code>&lt;z-radio&gt;</code>. This page is a static bundle that can be
         deployed as-is to services like Vercel for remote QA.
       </p>
     </header>
@@ -471,6 +472,59 @@
               </article>
             </div>
           </section>
+          <section class="demo-section" id="radio-demo">
+            <header>
+              <h2>&lt;z-radio&gt;</h2>
+              <p>
+                Radios coordinate selection with native grouping while mirroring
+                control attributes and ARIA to the underlying input.
+              </p>
+            </header>
+            <div class="preview-grid columns">
+              <article class="preview-card">
+                <h3>Group behaviour</h3>
+                <p>Share the same <code>name</code> attribute for exclusivity.</p>
+                <div class="radio-row" role="group" aria-label="Plan selection">
+                  <z-radio name="plan" value="starter" checked>Starter</z-radio>
+                  <z-radio name="plan" value="pro">Pro</z-radio>
+                  <z-radio name="plan" value="enterprise">Enterprise</z-radio>
+                </div>
+              </article>
+              <article class="preview-card">
+                <h3>Disabled + required</h3>
+                <p>Reflect <code>disabled</code> and <code>required</code> states.</p>
+                <div class="radio-row">
+                  <z-radio disabled>Disabled option</z-radio>
+                  <z-radio required name="required-radio">Required option</z-radio>
+                </div>
+              </article>
+              <article class="preview-card">
+                <h3>Programmatic selection</h3>
+                <p>
+                  Toggle <code>checked</code> via script while keeping the group in
+                  sync.
+                </p>
+                <div class="radio-row">
+                  <z-radio
+                    name="runtime-radio"
+                    id="runtime-radio-a"
+                    value="a"
+                    checked
+                  >
+                    Option A
+                  </z-radio>
+                  <z-radio
+                    name="runtime-radio"
+                    id="runtime-radio-b"
+                    value="b"
+                  >
+                    Option B
+                  </z-radio>
+                  <button id="radio-toggle" type="button">Select option B</button>
+                </div>
+              </article>
+            </div>
+          </section>
         </div>
       </div>
     </main>
@@ -544,6 +598,19 @@
         indeterminateToggle.textContent = parentCheckbox.indeterminate
           ? "Mark as decided"
           : "Show indeterminate";
+      });
+
+      const radioToggle = document.getElementById("radio-toggle");
+      const runtimeRadioA = document.getElementById("runtime-radio-a");
+      const runtimeRadioB = document.getElementById("runtime-radio-b");
+
+      radioToggle.addEventListener("click", () => {
+        const selectingB = !runtimeRadioB.checked;
+        runtimeRadioB.checked = selectingB;
+        runtimeRadioA.checked = !selectingB;
+        radioToggle.textContent = selectingB
+          ? "Select option A"
+          : "Select option B";
       });
     </script>
   </body>

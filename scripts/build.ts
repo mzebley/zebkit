@@ -74,8 +74,10 @@ async function generateConfigs(
   const toCamelCase = (str: string): string =>
     str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 
-  const toImportSpecifier = (filePath: string): string =>
-    pathToFileURL(filePath).href;
+  const toImportSpecifier = (filePath: string): string => {
+    const relativePath = path.relative(process.cwd(), filePath).replace(/\\/g, "/");
+    return relativePath.startsWith(".") ? relativePath : `./${relativePath}`;
+  };
 
   const virtualEntryContent = `
 import * as core from '${toImportSpecifier(path.join(coreDir, "index.ts"))}';
