@@ -10,7 +10,9 @@
     "type-check": "tsc --noEmit",
     "build:components": "tsx src/scripts/components/build.ts",
     "build-scripts": "tsc",
-    "build:tokens": "tsx -r tsconfig-paths/register src/scripts/tokens/build-tokens.ts"
+    "build:tokens": "tsx -r tsconfig-paths/register src/scripts/tokens/build-tokens.ts",
+    "docs:dev": "cd docs && npm run dev",
+    "docs:build": "cd docs && npm run build"
   },
   "repository": {
     "type": "git",

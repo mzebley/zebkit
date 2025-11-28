@@ -1,0 +1,249 @@
+---
+---
+<section class="button-showcase">
+  <div class="preview-grid columns">
+    <article class="preview-card">
+      <header>
+        <h3>Size presets</h3>
+        <p>Compare <code>size="xs"</code> through <code>xl</code>.</p>
+      </header>
+      <div class="button-row">
+        <zbk-button size="xs">Extra small</zbk-button>
+        <zbk-button size="sm">Small</zbk-button>
+        <zbk-button size="md">Medium</zbk-button>
+        <zbk-button size="lg">Large</zbk-button>
+        <zbk-button size="xl">Extra large</zbk-button>
+      </div>
+    </article>
+    <article class="preview-card">
+      <header>
+        <h3>Variants</h3>
+        <p>Available via the <code>variant</code> attribute.</p>
+      </header>
+      <div class="button-row">
+        <zbk-button variant="outline">Outline</zbk-button>
+        <zbk-button variant="flat">Flat</zbk-button>
+        <zbk-button variant="raised">Raised</zbk-button>
+        <zbk-button variant="unstyled">Unstyled</zbk-button>
+      </div>
+    </article>
+    <article class="preview-card icon-demo">
+      <header>
+        <h3>Icon slot</h3>
+        <p>Supply <code>slot="icon"</code> and flip with <code>icon-position</code>.</p>
+      </header>
+      <div class="button-row">
+        <zbk-button>
+          <span slot="icon" aria-hidden="true">⬇️</span>
+          Download
+        </zbk-button>
+        <zbk-button icon-position="end">
+          Continue
+          <span slot="icon" aria-hidden="true">➡️</span>
+        </zbk-button>
+        <zbk-button variant="raised">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2a10 10 0 0 0-3.162 19.479c.5.09.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.776.603-3.362-1.338-3.362-1.338-.455-1.155-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.004.071 1.532 1.028 1.532 1.028.892 1.53 2.341 1.088 2.91.833.091-.647.35-1.088.636-1.338-2.217-.252-4.554-1.108-4.554-4.939 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.026 2.748-1.026.545 1.378.202 2.397.1 2.65.64.699 1.027 1.592 1.027 2.683 0 3.841-2.34 4.685-4.566 4.932.359.309.678.919.678 1.852 0 1.337-.012 2.416-.012 2.743 0 .267.18.577.688.479A10.002 10.002 0 0 0 12 2Z"
+              fill="currentColor"
+            />
+          </svg>
+          GitHub
+        </zbk-button>
+      </div>
+    </article>
+  </div>
+  <div class="preview-grid columns">
+    <article class="preview-card">
+      <header>
+        <h3>Disabled and aria-disabled</h3>
+        <p>Toggle disabled programmatically to match runtime states.</p>
+      </header>
+      <div class="button-row">
+        <zbk-button id="disabled-demo" disabled>Disabled button</zbk-button>
+        <button id="disabled-toggle" type="button" class="zbk-button">
+          Disable runtime button
+        </button>
+        <zbk-button aria-disabled="true">Focusable but inactive</zbk-button>
+      </div>
+    </article>
+    <article class="preview-card">
+      <header>
+        <h3>Runtime options</h3>
+        <p>Update <code>variant</code>, <code>size</code>, and text on the fly.</p>
+      </header>
+      <div class="button-row dynamic-row">
+        <zbk-button id="options-demo" variant="flat" size="md">Runtime target</zbk-button>
+        <div class="method-controls">
+          <label>
+            Variant
+            <select id="options-demo-variant">
+              <option value="flat">flat</option>
+              <option value="outline">outline</option>
+              <option value="raised">raised</option>
+            </select>
+          </label>
+          <label>
+            Size
+            <select id="options-demo-size">
+              <option value="xs">xs</option>
+              <option value="sm">sm</option>
+              <option value="md" selected>md</option>
+              <option value="lg">lg</option>
+              <option value="xl">xl</option>
+            </select>
+          </label>
+          <label>
+            Text
+            <input id="options-demo-text" type="text" value="Runtime target" />
+          </label>
+          <button id="options-apply" type="button">Apply</button>
+          <button id="options-reset" type="button" class="secondary">Reset</button>
+        </div>
+        <p class="status" id="options-status" aria-live="polite">Ready for runtime tweaks</p>
+      </div>
+    </article>
+  </div>
+</section>
+<script type="module">
+  const disabledDemo = document.getElementById('disabled-demo');
+  const disabledToggle = document.getElementById('disabled-toggle');
+  if (disabledDemo && disabledToggle) {
+    disabledToggle.textContent = 'Disable runtime button';
+    disabledToggle.addEventListener('click', () => {
+      const nextState = !disabledDemo.getDisabledState();
+      disabledDemo.setDisabledState(nextState);
+      disabledToggle.textContent = nextState ? 'Enable runtime button' : 'Disable runtime button';
+    });
+  }
+
+  const optionsDemo = document.getElementById('options-demo');
+  const optionsStatus = document.getElementById('options-status');
+  const variantSelect = document.getElementById('options-demo-variant');
+  const sizeSelect = document.getElementById('options-demo-size');
+  const textInput = document.getElementById('options-demo-text');
+  const applyButton = document.getElementById('options-apply');
+  const resetButton = document.getElementById('options-reset');
+
+  function syncStatus(message) {
+    const timestamp = new Date().toLocaleTimeString();
+    if (optionsStatus) {
+      optionsStatus.textContent = `${message} (${timestamp})`;
+    }
+  }
+
+  if (optionsDemo && variantSelect && sizeSelect && textInput && applyButton && resetButton) {
+    applyButton.addEventListener('click', () => {
+      optionsDemo.updateOptions({
+        variant: variantSelect.value,
+        size: sizeSelect.value,
+      });
+      optionsDemo.setButtonText(textInput.value.trim() || 'Runtime target');
+      syncStatus('Applied runtime updates');
+    });
+
+    resetButton.addEventListener('click', () => {
+      optionsDemo.updateOptions({ variant: 'flat', size: 'md' });
+      optionsDemo.setButtonText('Runtime target');
+      variantSelect.value = 'flat';
+      sizeSelect.value = 'md';
+      textInput.value = 'Runtime target';
+      syncStatus('Reset to defaults');
+    });
+  }
+</script>
+<style>
+  .button-showcase {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .preview-grid.columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .preview-card {
+    border: 1px solid var(--sl-color-gray-6);
+    border-radius: 14px;
+    padding: 1rem;
+    display: grid;
+    gap: 0.75rem;
+    background: var(--sl-color-gray-7);
+  }
+
+  .preview-card header {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .preview-card h3 {
+    margin: 0;
+  }
+
+  .preview-card p {
+    margin: 0;
+  }
+
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .dynamic-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .method-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-end;
+  }
+
+  .method-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.95rem;
+  }
+
+  .method-controls select,
+  .method-controls input[type='text'] {
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    border: 1px solid var(--sl-color-gray-6);
+    min-width: 180px;
+    font: inherit;
+  }
+
+  .method-controls button {
+    background: var(--sl-color-purple-high);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.6rem 1.1rem;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .method-controls button.secondary {
+    background: transparent;
+    color: var(--sl-color-purple-high);
+    border: 1px solid var(--sl-color-gray-6);
+  }
+
+  .status {
+    margin: 0;
+    color: var(--sl-color-gray-2);
+  }
+
+  .icon-demo svg {
+    width: 1.25em;
+    height: 1.25em;
+  }
+</style>

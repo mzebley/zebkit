@@ -1,0 +1,32 @@
+---
+title: App colors
+description: Neutral application surfaces and ink pairings.
+---
+
+App colors support everyday UI surfaces: layouts, panels, navigation, and default text. They give you neutral contrast without
+drifting into accent territory.
+
+## Usage
+
+- Lay down `canvas-app` or `canvas-app-soft` for primary surfaces.
+- Use `ink-app` and `ink-app-strong` for body text, navigation labels, and dense forms.
+- Borders like `border-app-muted` help separate sections without pulling focus.
+
+```html
+<section class="canvas-app ink-app">
+  <h2 class="ink-app-strong">Dashboard</h2>
+  <p>Use app ink for the everyday reading experience.</p>
+</section>
+```
+
+## Tokens
+
+Canvas, ink, and border roles mirror other families with soft, muted, strong, and inverse variants for dark sections.
+
+## Examples
+
+App tokens pair naturally with accent families for callouts and with brand tokens for primary actions.
+
+## TODO
+
+- Add contrast guidance for app text on inverse canvases.
