@@ -14,6 +14,7 @@ import {
 import { buildZebkitVariants } from '@token-scripts/compile-variants';
 import { convertTokensToCssVars } from '@token-scripts/token-converter';
 import { compileSass, CompileSassOptions } from '@token-scripts/compile-css';
+import { loadZebkitConfig, TokensConfig } from '../config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,10 +43,26 @@ async function getComponents(): Promise<string[]> {
 
 async function run() {
   displayWelcome();
+  const loadedConfig = await loadZebkitConfig();
+  const tokensConfig: TokensConfig | undefined = loadedConfig?.config.tokens;
+  if (loadedConfig) {
+    console.log(chalk.green(`Using config from ${loadedConfig.path}`));
+  }
   try {
     const components = await getComponents();
-    const selectedComponents =
-      components.length > 0
+    const selectedComponents = tokensConfig?.selectedComponents
+      ? tokensConfig.selectedComponents.filter((component) => {
+          const exists = components.includes(component);
+          if (!exists) {
+            console.warn(
+              chalk.yellow(
+                `Component "${component}" not found. Ignoring this entry from config.`
+              )
+            );
+          }
+          return exists;
+        })
+      : components.length > 0
         ? (
             await inquirer.prompt([
               {
@@ -58,89 +75,108 @@ async function run() {
           ).selectedComponents
         : [];
 
-    const { destinationPath, assetFilePath } = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'destinationPath',
-        message: 'Destination directory for exported files:',
-        default: './dist',
-      },
-      {
-        type: 'input',
-        name: 'assetFilePath',
-        message:
-          'Path to your project assets (used for compiled CSS asset URLs):',
-        default: '/assets/',
-      },
-    ]);
+    const { destinationPath, assetFilePath } = tokensConfig
+      ? {
+          destinationPath: tokensConfig.destinationPath ?? './dist',
+          assetFilePath: tokensConfig.assetFilePath ?? '/assets/',
+        }
+      : await inquirer.prompt([
+          {
+            type: 'input',
+            name: 'destinationPath',
+            message: 'Destination directory for exported files:',
+            default: './dist',
+          },
+          {
+            type: 'input',
+            name: 'assetFilePath',
+            message:
+              'Path to your project assets (used for compiled CSS asset URLs):',
+            default: '/assets/',
+          },
+        ]);
 
-    const themeAnswers = await inquirer.prompt([
-      {
-        type: 'list',
-        name: 'theme',
-        message: 'Select the theme for your tokens:',
-        choices: ['default', 'quiet-boutique', 'dark-boutique', 'custom'],
-        default: 'default',
-      },
-      {
-        type: 'input',
-        name: 'customTokenPath',
-        message: 'Path to custom token overrides file or folder:',
-        when: (answers) => answers.theme === 'custom',
-        validate: (input) => (input ? true : 'Path cannot be empty.'),
-      },
-      {
-        type: 'input',
-        name: 'customThemeName',
-        message: 'Name for your custom theme:',
-        when: (answers) => answers.theme === 'custom',
-        default: 'custom',
-      },
-    ]);
+    const themeAnswers = tokensConfig
+      ? {
+          theme: tokensConfig.theme ?? 'default',
+          customTokenPath: tokensConfig.customTokenPath,
+          customThemeName: tokensConfig.customThemeName,
+        }
+      : await inquirer.prompt([
+          {
+            type: 'list',
+            name: 'theme',
+            message: 'Select the theme for your tokens:',
+            choices: ['default', 'quiet-boutique', 'dark-boutique', 'custom'],
+            default: 'default',
+          },
+          {
+            type: 'input',
+            name: 'customTokenPath',
+            message: 'Path to custom token overrides file or folder:',
+            when: (answers) => answers.theme === 'custom',
+            validate: (input) => (input ? true : 'Path cannot be empty.'),
+          },
+          {
+            type: 'input',
+            name: 'customThemeName',
+            message: 'Name for your custom theme:',
+            when: (answers) => answers.theme === 'custom',
+            default: 'custom',
+          },
+        ]);
 
-    const { exportTokens } = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'exportTokens',
-        message: 'Export token artifacts (JSON/TS/JS)?',
-        default: false,
-      },
-    ]);
+    const { exportTokens } = tokensConfig
+      ? { exportTokens: tokensConfig.exportTokens ?? false }
+      : await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'exportTokens',
+            message: 'Export token artifacts (JSON/TS/JS)?',
+            default: false,
+          },
+        ]);
 
     let splitMode: BuildZebkitTokensOptions['splitMode'] = 'combined';
     let outputFormats: string[] = [];
 
     if (exportTokens) {
-      const tokenExportAnswers = await inquirer.prompt([
-        {
-          type: 'list',
-          name: 'splitMode',
-          message: 'Choose file splitting mode:',
-          choices: [
-            { name: 'combined (one file per format)', value: 'combined' },
-            { name: 'per-module (one file per token module)', value: 'per-module' },
-          ],
-          default: 'combined',
-        },
-        {
-          type: 'checkbox',
-          name: 'outputFormats',
-          message: 'Select output format(s):',
-          choices: [
-            { name: 'JSON', value: 'JSON', checked: true },
-            { name: 'TypeScript', value: 'TypeScript' },
-            { name: 'JavaScript', value: 'JavaScript' },
-          ],
-          validate: (input) =>
-            input.length > 0 ? true : 'You must select at least one format.',
-        },
-      ]);
-      splitMode = tokenExportAnswers.splitMode;
-      outputFormats = tokenExportAnswers.outputFormats;
+      if (tokensConfig?.splitMode && tokensConfig?.outputFormats?.length) {
+        splitMode = tokensConfig.splitMode;
+        outputFormats = tokensConfig.outputFormats;
+      } else {
+        const tokenExportAnswers = await inquirer.prompt([
+          {
+            type: 'list',
+            name: 'splitMode',
+            message: 'Choose file splitting mode:',
+            choices: [
+              { name: 'combined (one file per format)', value: 'combined' },
+              { name: 'per-module (one file per token module)', value: 'per-module' },
+            ],
+            default: 'combined',
+          },
+          {
+            type: 'checkbox',
+            name: 'outputFormats',
+            message: 'Select output format(s):',
+            choices: [
+              { name: 'JSON', value: 'JSON', checked: true },
+              { name: 'TypeScript', value: 'TypeScript' },
+              { name: 'JavaScript', value: 'JavaScript' },
+            ],
+            validate: (input) =>
+              input.length > 0 ? true : 'You must select at least one format.',
+          },
+        ]);
+        splitMode = tokenExportAnswers.splitMode;
+        outputFormats = tokenExportAnswers.outputFormats;
+      }
     }
 
     const writeVariantRegistry = exportTokens
-      ? (
+      ? tokensConfig?.writeVariantRegistry ??
+        (
           await inquirer.prompt([
             {
               type: 'confirm',

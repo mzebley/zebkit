@@ -16,6 +16,7 @@ import {
   BuildZebkitTokensOptions,
 } from "@token-scripts/compile-tokens";
 import type { TokenInterface } from "@definitions/tokens";
+import { loadZebkitConfig } from "../config";
 
 const log = {
   info: (msg: string): void => console.log(chalk.blue(msg)),
@@ -204,10 +205,24 @@ async function main(): Promise<void> {
   try {
     log.info("Starting component build process...");
 
+    const loadedConfig = await loadZebkitConfig();
+    const componentsConfig = loadedConfig?.config.components;
+    if (loadedConfig) {
+      log.info(`Using config from ${loadedConfig.path}`);
+    }
+
     const components = await getComponents();
 
     let selectedComponents: SelectedComponents = [];
-    if (components.length > 0) {
+    if (componentsConfig?.selectedComponents) {
+      selectedComponents = componentsConfig.selectedComponents.filter((component) => {
+        const exists = components.includes(component);
+        if (!exists) {
+          log.warn(`Component "${component}" not found. Ignoring this entry from config.`);
+        }
+        return exists;
+      });
+    } else if (components.length > 0) {
       const answers = await inquirer.prompt([
         {
           type: "checkbox",
@@ -221,14 +236,17 @@ async function main(): Promise<void> {
       log.info("No optional components found. Proceeding with core only.");
     }
 
-    let { jsOutput } = await inquirer.prompt([
-      {
-        type: "input",
-        name: "jsOutput",
-        message: "Enter the path for the JavaScript output file:",
-        default: "zebkit.js",
-      },
-    ]);
+    let { jsOutput } =
+      componentsConfig?.jsOutput !== undefined
+        ? { jsOutput: componentsConfig.jsOutput }
+        : await inquirer.prompt([
+            {
+              type: "input",
+              name: "jsOutput",
+              message: "Enter the path for the JavaScript output file:",
+              default: "zebkit.js",
+            },
+          ]);
 
     // Normalize output to a file path
     if (!path.extname(jsOutput)) {
