@@ -3,7 +3,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 // Import all components
-import { ZButton, defineZButton } from "./button";
+import { ZbkButton, defineZbkButton } from "./button";
 import { ZCheckbox, defineZCheckbox } from "./checkbox";
 import { ZRadio, defineZRadio } from "./radio";
 // Import future components here, e.g.:
@@ -12,8 +12,8 @@ import { ZRadio, defineZRadio } from "./radio";
 
 // Export all components
 export {
-  ZButton,
-  defineZButton,
+  ZbkButton,
+  defineZbkButton,
   ZCheckbox,
   defineZCheckbox,
   ZRadio,
@@ -24,7 +24,7 @@ export {
 };
 
 export const defineCoreComponents = () => {
-  defineZButton();
+  defineZbkButton();
   defineZCheckbox();
   defineZRadio();
   // Add future component definitions here, e.g.:

@@ -1,0 +1,9 @@
+@use 'core/styles/utilities/color' as color-utils;
+
+:root {
+  @include color-utils.primitiveColor("dusk", 220, 22%);
+}
+
+@layer utilities {
+  @include color-utils.generate-color-utilities("dusk");
+}

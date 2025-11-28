@@ -1,0 +1,107 @@
+@use 'core/styles/variables/breakpoints' as vars;
+
+// Map for align-self values
+$align-self-values: (
+    'auto': auto,
+    'start': flex-start,
+    'end': flex-end,
+    'center': center,
+    'baseline': baseline,
+    'stretch': stretch
+);
+
+// Map for align-items values
+$align-items-values: (
+    'start': flex-start,
+    'end': flex-end,
+    'center': center,
+    'baseline': baseline,
+    'stretch': stretch
+);
+
+// Map for flex-direction values
+$flex-direction-values: (
+    'row': row,
+    'row-reverse': row-reverse,
+    'column': column,
+    'column-reverse': column-reverse
+);
+
+// Map for justify-content values
+$justify-content-values: (
+    'start': flex-start,
+    'end': flex-end,
+    'center': center,
+    'between': space-between,
+    'around': space-around,
+    'evenly': space-evenly
+);
+
+
+// Mixin to generate flexbox utility classes
+@mixin generate-flex-utilities($property, $values) {
+    @each $key, $value in $values {
+        .#{$property}-#{$key} {
+            #{$property}: #{$value};
+        }
+    }
+}
+
+@mixin generate-flex-media-queries($property, $values, $breakpoints) {
+    @each $breakpoint, $min-width in vars.$breakpoints {
+        @media (min-width: #{$min-width}) {
+            @each $key, $value in $values {
+                .#{$breakpoint}\:#{$property}-#{$key} {
+                    #{$property}: #{$value};
+                }
+            }
+        }
+    }
+}
+
+// Map for display values (flex and inline-flex)
+$display-values: (
+    'flex': flex,
+    'inline-flex': inline-flex,
+    'block': block,
+    'inline-block': inline-block,
+    'inline': inline,
+    'none': none
+);
+
+// Generate display utility classes
+@mixin generate-display-utilities($values) {
+    @each $key, $value in $values {
+        .display-#{$key} {
+            display: #{$value};
+        }
+    }
+}
+
+@mixin generate-display-media-queries($values, $breakpoints) {
+    @each $breakpoint, $min-width in vars.$breakpoints {
+        @media (min-width: #{$min-width}) {
+            @each $key, $value in $values {
+                .#{$breakpoint}\:display-#{$key} {
+                    display: #{$value};
+                }
+            }
+        }
+    }
+}
+
+// Single entry point so callers can wrap emitted utilities in a layer.
+@mixin emit-layout-utilities() {
+    @include generate-flex-utilities(align-self, $align-self-values);
+    @include generate-flex-utilities(align-items, $align-items-values);
+    @include generate-flex-utilities(flex-direction, $flex-direction-values);
+    @include generate-flex-utilities(justify-content, $justify-content-values);
+    @include generate-flex-media-queries(align-self, $align-self-values, vars.$breakpoints);
+    @include generate-flex-media-queries(align-items, $align-items-values, vars.$breakpoints);
+    @include generate-flex-media-queries(flex-direction, $flex-direction-values, vars.$breakpoints);
+    @include generate-flex-media-queries(justify-content, $justify-content-values, vars.$breakpoints);
+
+    @include generate-display-utilities($display-values);
+    @include generate-display-media-queries($display-values, vars.$breakpoints);
+}
+

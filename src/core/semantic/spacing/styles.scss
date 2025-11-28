@@ -1,0 +1,92 @@
+@use 'core/styles/utilities/spacing' as spacing-utils;
+
+$size-values:(
+  'card': var(--#{$cssVarPrefix}-spacing-card),
+  'mobile': var(--#{$cssVarPrefix}-spacing-mobile),
+  'mobile-lg': var(--#{$cssVarPrefix}-spacing-mobile-lg),
+  'tablet': var(--#{$cssVarPrefix}-spacing-tablet),
+  'tablet-lg': var(--#{$cssVarPrefix}-spacing-tablet-lg),
+  'desktop': var(--#{$cssVarPrefix}-spacing-desktop),
+  'desktop-lg': var(--#{$cssVarPrefix}-spacing-desktop-lg),
+  'widescreen': var(--#{$cssVarPrefix}-spacing-widescreen),
+  'section': var(--#{$cssVarPrefix}-spacing-section),
+  'aside': var(--#{$cssVarPrefix}-spacing-aside),
+  );
+
+// Generate min/max height/width utility classes
+@include spacing-utils.generate-size-classes(height, $size-values);
+@include spacing-utils.generate-size-classes(min-height, $size-values);
+@include spacing-utils.generate-size-classes(max-height, $size-values);
+@include spacing-utils.generate-size-classes(width, $size-values);
+@include spacing-utils.generate-size-classes(min-width, $size-values);
+@include spacing-utils.generate-size-classes(max-width, $size-values);
+@include spacing-utils.generate-size-media-queries(height, $size-values);
+@include spacing-utils.generate-size-media-queries(min-height, $size-values);
+@include spacing-utils.generate-size-media-queries(max-height, $size-values);
+@include spacing-utils.generate-size-media-queries(width, $size-values);
+@include spacing-utils.generate-size-media-queries(min-width, $size-values);
+@include spacing-utils.generate-size-media-queries(max-width, $size-values);
+
+$spacing-values: '2xs',
+'xs',
+'sm',
+'md',
+'lg',
+'xl',
+'2xl',
+'3xl';
+
+.page-padding-block {
+    padding-block: var(--zbk-spacing-page-padding-block);
+}
+
+.page-padding-block-start {
+    padding-block-start: var(--zbk-spacing-page-padding-block);
+}
+
+.page-padding-block-end {
+    padding-block-end: var(--zbk-spacing-page-padding-block);
+}
+
+.page-padding-inline {
+    padding-inline: var(--zbk-spacing-page-padding-inline);
+}
+
+.page-padding-inline-start {
+    padding-inline-start: var(--zbk-spacing-page-padding-inline);
+}
+
+.page-padding-inline-end {
+    padding-inline-end: var(--zbk-spacing-page-padding-inline);
+}
+
+.section-margin-block {
+    margin-block: var(--zbk-spacing-section-margin-block);
+}
+
+.section-margin-block-start {
+    margin-block-start: var(--zbk-spacing-section-margin-block);
+}
+
+.section-margin-block-end {
+    margin-block-end: var(--zbk-spacing-section-margin-block);
+}
+
+.section-margin-inline {
+    margin-inline: var(--zbk-spacing-section-margin-inline);
+}
+
+.section-margin-inline-start {
+    margin-inline-start: var(--zbk-spacing-section-margin-inline);
+}
+
+.section-margin-inline-end {
+    margin-inline-end: var(--zbk-spacing-section-margin-inline);
+}
+
+
+// Usage: Generate spacing classes and breakpoint-specific classes
+@include spacing-utils.generate-spacing-classes(margin, $spacing-values);
+@include spacing-utils.generate-spacing-classes(padding, $spacing-values);
+@include spacing-utils.generate-media-queries(margin, $spacing-values);
+@include spacing-utils.generate-media-queries(padding, $spacing-values);

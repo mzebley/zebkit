@@ -1,0 +1,9 @@
+@use 'core/styles/utilities/color' as color-utils;
+
+:root {
+  @include color-utils.primitiveColor("stone", 40, 18%);
+}
+
+@layer utilities {
+  @include color-utils.generate-color-utilities("stone");
+}

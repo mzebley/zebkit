@@ -1,154 +1,72 @@
-import { ZButton, defineZButton } from "./index";
+import { defineZbkButton } from "./index";
 
-const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
-
-describe("ZButton", () => {
+describe("ZbkButton (light DOM)", () => {
   beforeAll(() => {
-    defineZButton();
+    defineZbkButton();
   });
 
   afterEach(() => {
     document.body.innerHTML = "";
+    jest.restoreAllMocks();
   });
 
-  describe("tabindex sanitization", () => {
-    it("handles empty, negative, and positive tabindex values", () => {
-      const element = document.createElement("z-button") as ZButton;
-      element.setAttribute("aria-label", "Example");
-      document.body.appendChild(element);
+  const getInternalButton = (el: HTMLElement): HTMLButtonElement => {
+    const button = el.querySelector("button");
+    if (!(button instanceof HTMLButtonElement)) {
+      throw new Error("Internal button not found");
+    }
+    return button;
+  };
 
-      const internalButton = element.querySelector("button");
-      expect(internalButton).toBeInstanceOf(HTMLButtonElement);
+  it("renders a native button and moves children inside", () => {
+    const el = document.createElement("zbk-button");
+    el.setAttribute("aria-label", "label");
+    el.innerHTML = `<span slot="icon">★</span><span>Label</span>`;
+    document.body.appendChild(el);
 
-      element.setAttribute("tabindex", "");
-      expect(internalButton?.tabIndex).toBe(0);
-      expect(internalButton?.getAttribute("tabindex")).toBe("0");
-
-      element.setAttribute("tabindex", "-1");
-      expect(internalButton?.tabIndex).toBe(-1);
-      expect(internalButton?.getAttribute("tabindex")).toBe("-1");
-
-      element.setAttribute("tabindex", "5");
-      expect(internalButton?.tabIndex).toBe(5);
-      expect(internalButton?.getAttribute("tabindex")).toBe("5");
-    });
-
-    it("warns and removes invalid tabindex values", () => {
-      const warnSpy = jest.spyOn(console, "warn").mockImplementation();
-      const element = document.createElement("z-button") as ZButton;
-      element.setAttribute("aria-label", "Example");
-      document.body.appendChild(element);
-
-      const internalButton = element.querySelector("button");
-      expect(internalButton).toBeInstanceOf(HTMLButtonElement);
-
-      element.setAttribute("tabindex", "abc");
-
-      expect(internalButton?.hasAttribute("tabindex")).toBe(false);
-      expect(warnSpy).toHaveBeenCalledTimes(1);
-      expect(warnSpy.mock.calls[0]?.[0]).toContain("Invalid tabindex value \"abc\"");
-
-      warnSpy.mockRestore();
-    });
+    const btn = getInternalButton(el);
+    expect(btn.textContent).toContain("Label");
+    expect(btn.querySelector('[slot="icon"]')).toBeInstanceOf(HTMLElement);
+    // Host and internal button share classes via mirroring
+    expect(btn.classList.contains("zbk-button")).toBe(true);
   });
 
-  it("reuses the internal structure when disconnected and reconnected", () => {
-    const element = document.createElement("z-button") as ZButton;
-    element.innerHTML = "<span>Label</span><span slot=\"icon\">⭐</span>";
+  it("auto-applies .zbk-icon to slotted icons lacking the class", () => {
+    const el = document.createElement("zbk-button");
+    el.setAttribute("aria-label", "download");
+    const icon = document.createElement("i");
+    icon.setAttribute("slot", "icon");
+    el.append(icon, document.createTextNode("Download"));
+    document.body.appendChild(el);
 
-    expect(() => {
-      document.body.appendChild(element);
-      document.body.removeChild(element);
-      document.body.appendChild(element);
-    }).not.toThrow();
-
-    const internalButton = element.querySelector("button");
-    expect(internalButton).toBeInstanceOf(HTMLButtonElement);
-    expect(internalButton?.parentElement).toBe(element);
-
-    const edgeElements = internalButton!.querySelectorAll(".z-button__edge");
-    expect(edgeElements).toHaveLength(1);
-
-    const frontElements = internalButton!.querySelectorAll(".z-button__front");
-    expect(frontElements).toHaveLength(1);
-
-    const front = frontElements[0] as HTMLElement;
-    const iconWrappers = front.querySelectorAll(".z-button__icon");
-    expect(iconWrappers).toHaveLength(1);
-
-    const iconWrapper = iconWrappers[0] as HTMLElement;
-    expect(iconWrapper.children).toHaveLength(1);
-    expect(iconWrapper.firstElementChild?.getAttribute("slot")).toBe("icon");
-
-    expect(front.textContent).toContain("Label");
-
-    expect(element.querySelectorAll("button")).toHaveLength(1);
-    expect(element.firstElementChild).toBe(internalButton);
+    const btn = getInternalButton(el);
+    const slotted = btn.querySelector('[slot="icon"]') as HTMLElement;
+    expect(slotted.classList.contains("zbk-icon")).toBe(true);
   });
 
-  it("reapplies variant classes when the variant attribute changes", async () => {
-    const element = document.createElement("z-button") as ZButton;
-    element.textContent = "Label";
+  it("applies variant classes from space/comma separated values", () => {
+    const el = document.createElement("zbk-button");
+    el.setAttribute("aria-label", "variants");
+    el.setAttribute("variant", "outline, large");
+    document.body.appendChild(el);
 
-    document.body.appendChild(element);
+    expect(el.classList.contains("zbk-button--outline")).toBe(true);
+    expect(el.classList.contains("zbk-button--large")).toBe(true);
 
-    // Allow MutationObservers to sync the initial classes
-    await flush();
+    const btn = getInternalButton(el);
+    expect(btn.classList.contains("zbk-button--outline")).toBe(true);
+    expect(btn.classList.contains("zbk-button--large")).toBe(true);
+  });
 
-    expect(element.classList.contains("outline")).toBe(true);
-    expect(element.classList.contains("raised")).toBe(false);
+  it("setButtonText updates text content and fallback aria-label", () => {
+    const el = document.createElement("zbk-button") as any;
+    el.setAttribute("aria-label", "initial");
+    document.body.appendChild(el);
 
-    element.setAttribute("variant", "raised");
+    const btn = getInternalButton(el);
+    el.setButtonText("Submit");
 
-    // Wait for attribute change handling and class mirroring to complete
-    await flush();
-
-    expect(element.classList.contains("raised")).toBe(true);
-    expect(element.classList.contains("outline")).toBe(false);
-
-    const internalButton = element.querySelector("button");
-    expect(internalButton).toBeInstanceOf(HTMLButtonElement);
-    expect(internalButton?.classList.contains("raised")).toBe(true);
-    expect(internalButton?.classList.contains("outline")).toBe(false);
-
-    element.setAttribute("variant", "flat");
-    await flush();
-
-    expect(element.classList.contains("flat")).toBe(true);
-    expect(element.classList.contains("raised")).toBe(false);
-    expect(element.classList.contains("outline")).toBe(false);
-    expect(internalButton?.classList.contains("flat")).toBe(true);
-    expect(internalButton?.classList.contains("raised")).toBe(false);
-
-    element.setAttribute("variant", "unstyled");
-    await flush();
-
-    expect(element.classList.contains("unstyled")).toBe(true);
-    expect(element.classList.contains("flat")).toBe(false);
-    expect(element.classList.contains("raised")).toBe(false);
-    expect(element.classList.contains("outline")).toBe(false);
-    expect(internalButton?.classList.contains("unstyled")).toBe(true);
-    expect(internalButton?.classList.contains("flat")).toBe(false);
-    expect(internalButton?.classList.contains("raised")).toBe(false);
-    expect(internalButton?.classList.contains("outline")).toBe(false);
-
-    expect(element.classList.contains("md")).toBe(true);
-    element.setAttribute("size", "lg");
-    await flush();
-
-    expect(element.classList.contains("lg")).toBe(true);
-    expect(element.classList.contains("md")).toBe(false);
-    expect(internalButton?.classList.contains("lg")).toBe(true);
-    expect(internalButton?.classList.contains("md")).toBe(false);
-
-    element.setAttribute("size", "xs");
-    await flush();
-
-    expect(element.classList.contains("xs")).toBe(true);
-    expect(element.classList.contains("lg")).toBe(false);
-    expect(element.classList.contains("md")).toBe(false);
-    expect(internalButton?.classList.contains("xs")).toBe(true);
-    expect(internalButton?.classList.contains("lg")).toBe(false);
-    expect(internalButton?.classList.contains("md")).toBe(false);
+    expect(btn.textContent).toBe("Submit");
+    expect(btn.getAttribute("aria-label")).toBe("submit");
   });
 });

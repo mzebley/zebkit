@@ -1,0 +1,9 @@
+@use 'core/styles/utilities/color' as color-utils;
+
+:root {
+  @include color-utils.primitiveColor("merlot", 330, 70%);
+}
+
+@layer utilities {
+  @include color-utils.generate-color-utilities("merlot");
+}

@@ -1,0 +1,13 @@
+@use 'core/styles/utilities/color' as color-utils;
+
+:root {
+  @include color-utils.primitiveColor("rosewater", 350, 68%);
+}
+
+@layer utilities {
+  @include color-utils.generate-color-utilities("rosewater");
+}
+
+@layer utilities {
+  @include color-utils.generate-color-utilities("rosewater");
+}

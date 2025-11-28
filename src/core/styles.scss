@@ -1,8 +1,5 @@
-@import './colors';
-@import './spacing';
-@import './standards';
-@import './a11y';
-@import './button/styles';
-@import './fonts/styles';
-@import './checkbox/styles';
-@import './radio/styles';
+@use './styles/utilities/index' as utilities;
+
+@layer utilities {
+  @include utilities.emit-layout-utilities();
+}

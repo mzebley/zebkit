@@ -1,19 +1,18 @@
 /**
- * Interface defining the options for the ZButton component.
+ * Interface defining the options for the ZbkButton component.
  */
-interface ZButtonOptions {
-    /** Specifies the position of the icon within the button. */
-    iconPosition?: "start" | "end";
-    /** Specifies the variant class applied to the button. */
-    variant?: "flat" | "raised" | "outline" | "unstyled";
-    /** Specifies the size class applied to the button. */
-    size?: "xs" | "sm" | "md" | "lg" | "xl";
+interface ZbkButtonOptions {
+    /**
+     * Optional list of variant names (space/comma separated in the `variant` attribute)
+     * that will be converted into scoped variant classes (zbk-button--{name}).
+     */
+    variant?: string[];
 }
 /**
- * ZButton is a custom web component that creates an enhanced button element.
+ * ZbkButton is a custom web component that creates an enhanced button element.
  * It provides additional functionality and styling options beyond a standard HTML button.
  */
-declare class ZButton extends HTMLElement {
+declare class ZbkButton extends HTMLElement {
     /** The actual button element that this component wraps. */
     private button;
     /** Stores the click handler function if provided. */
@@ -22,18 +21,14 @@ declare class ZButton extends HTMLElement {
     private boundHandleClick;
     /** Accessibility-related attributes that should be synced to the inner button. */
     private static readonly accessibilityAttributes;
-    /** Variant classes that can be applied to the button. */
-    private static readonly variantClasses;
-    /** Size classes that can be applied to the button. */
-    private static readonly sizeClasses;
-    /** Default options for all ZButton instances. */
+    /** Default options for all ZbkButton instances. */
     private static defaultOptions;
-    /** Current options for this ZButton instance. */
+    /** Current options for this ZbkButton instance. */
     private options;
-    /** Tracks the previously applied variant class. */
-    private previousVariant?;
-    /** Tracks the previously applied size class. */
-    private previousSize?;
+    /** Tracks the concrete classes applied for variants to enable removal. */
+    private previousVariantClasses;
+    /** Normalized class names sourced from the variant attribute. */
+    private variantNames;
     /** Indicates if accessibility attributes are currently being migrated. */
     private isMigratingAccessibilityAttributes;
     /**
@@ -44,7 +39,7 @@ declare class ZButton extends HTMLElement {
     /** MutationObserver to watch for class changes */
     private classObserver;
     /**
-     * Constructor for the ZButton component.
+     * Constructor for the ZbkButton component.
      * Initializes the button element and adds the base class.
      */
     constructor();
@@ -126,7 +121,7 @@ declare class ZButton extends HTMLElement {
      * Updates the options for the button.
      * @param newOptions - The new options to apply.
      */
-    updateOptions(newOptions: Partial<ZButtonOptions>): void;
+    updateOptions(newOptions: Partial<ZbkButtonOptions>): void;
     /**
      * Sets the text content of the button.
      * @param text - The new text for the button.
@@ -147,12 +142,17 @@ declare class ZButton extends HTMLElement {
      * @param isExpanded - Whether the button is in an expanded state.
      */
     setAriaExpanded(isExpanded: boolean): void;
+    /**
+     * Resolve variant names into concrete class names. Uses registered variants
+     * when available and also applies legacy classes for compatibility.
+     */
+    private resolveVariantClasses;
 }
 /**
  * Helper function to define the custom element.
  * This function checks if the custom element is already defined before defining it.
  */
-declare function defineZButton(): void;
+declare function defineZbkButton(): void;
 
 declare class ZCheckbox extends HTMLElement {
     private input;
@@ -212,6 +212,8 @@ declare class ZRadio extends HTMLElement {
     focus(options?: FocusOptions): void;
     private handleClick;
     private handleInputChange;
+    private uncheckOtherRadiosInGroup;
+    private getRadioGroupRoot;
     private syncFromAttributes;
     private reflectClassToLabel;
     private reflectAllClasses;
@@ -220,18 +222,38 @@ declare function defineZRadio(): void;
 
 declare const defineCoreComponents: () => void;
 
-type index_ZButton = ZButton;
-declare const index_ZButton: typeof ZButton;
-type index_ZCheckbox = ZCheckbox;
-declare const index_ZCheckbox: typeof ZCheckbox;
-type index_ZRadio = ZRadio;
-declare const index_ZRadio: typeof ZRadio;
-declare const index_defineCoreComponents: typeof defineCoreComponents;
-declare const index_defineZButton: typeof defineZButton;
-declare const index_defineZCheckbox: typeof defineZCheckbox;
-declare const index_defineZRadio: typeof defineZRadio;
-declare namespace index {
-  export { index_ZButton as ZButton, index_ZCheckbox as ZCheckbox, index_ZRadio as ZRadio, index_defineCoreComponents as defineCoreComponents, index_defineZButton as defineZButton, index_defineZCheckbox as defineZCheckbox, index_defineZRadio as defineZRadio };
+type core_ZCheckbox = ZCheckbox;
+declare const core_ZCheckbox: typeof ZCheckbox;
+type core_ZRadio = ZRadio;
+declare const core_ZRadio: typeof ZRadio;
+type core_ZbkButton = ZbkButton;
+declare const core_ZbkButton: typeof ZbkButton;
+declare const core_defineCoreComponents: typeof defineCoreComponents;
+declare const core_defineZCheckbox: typeof defineZCheckbox;
+declare const core_defineZRadio: typeof defineZRadio;
+declare const core_defineZbkButton: typeof defineZbkButton;
+declare namespace core {
+  export { core_ZCheckbox as ZCheckbox, core_ZRadio as ZRadio, core_ZbkButton as ZbkButton, core_defineCoreComponents as defineCoreComponents, core_defineZCheckbox as defineZCheckbox, core_defineZRadio as defineZRadio, core_defineZbkButton as defineZbkButton };
 }
 
-export { index as core };
+const __SETTINGS = {};
+const __MODULE_MAP = { core };
+
+
+function applySettings(target, component) {
+  const componentSettings = __SETTINGS[component];
+  if (!componentSettings || !target) return;
+  Object.values(target).forEach((ctor) => {
+    if (ctor && typeof ctor === 'function' && 'defaultOptions' in ctor) {
+      const defaults = ctor.defaultOptions || {};
+      ctor.defaultOptions = { ...defaults, ...componentSettings };
+    }
+  });
+}
+
+Object.keys(__SETTINGS).forEach((component) => {
+  const target = __MODULE_MAP[component] || core;
+  applySettings(target, component);
+});
+
+export { core };

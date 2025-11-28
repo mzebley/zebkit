@@ -4,8 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Zebkit component gallery</title>
-    <link rel="stylesheet" href="./zebkit-vars.css" />
-    <link rel="stylesheet" href="./zebkit.css" />
+    <link rel="stylesheet" href="../zbk-default.min.css" />
     <style>
       :root {
         color-scheme: light;
@@ -53,32 +52,6 @@
         gap: clamp(1.5rem, 3vw, 3rem);
       }
 
-      @media (min-width: 1200px) {
-        .layout {
-          grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
-          align-items: start;
-        }
-      }
-
-      #token-controls {
-        position: sticky;
-        top: 1.5rem;
-        align-self: start;
-        background: rgba(255, 255, 255, 0.72);
-        backdrop-filter: blur(18px);
-        border: 1px solid rgba(99, 77, 122, 0.15);
-        border-radius: 20px;
-        padding: clamp(1.25rem, 2vw, 2rem);
-        display: flex;
-        flex-direction: column;
-        gap: 1.75rem;
-        box-shadow: 0 40px 80px rgba(79, 56, 109, 0.08);
-      }
-
-      #token-controls h2 {
-        font-size: 1.4rem;
-        margin: 0;
-      }
 
       .control-group {
         display: grid;
@@ -232,11 +205,11 @@
         align-items: center;
       }
 
-      z-button {
+      zbk-button {
         min-width: 0;
       }
 
-      z-button[variant="unstyled"] {
+      zbk-button[variant="unstyled"] {
         padding: 0.5rem;
         border-radius: 12px;
         background: transparent;
@@ -298,28 +271,22 @@
     </style>
   </head>
   <body>
-    <header>
+    <header class="width-full max-width-section">
       <h1>Zebkit component gallery</h1>
       <p>
         Inspect the core Web Components, adjust shared design tokens on the fly,
-        and try the runtime APIs exposed by <code>&lt;z-button&gt;</code>,
+        and try the runtime APIs exposed by <code>&lt;zbk-button&gt;</code>,
         <code>&lt;z-checkbox&gt;</code>, and <code>&lt;z-radio&gt;</code>. This page is a static bundle that can be
         deployed as-is to services like Vercel for remote QA.
       </p>
     </header>
     <main>
       <div class="layout">
-        <aside id="token-controls" aria-label="Design token controls">
-          <h2>Live token controls</h2>
-          <p>
-            Adjust the primary button tokens to preview theme changes. Reset
-            when you want to return to the defaults.
-          </p>
-        </aside>
+ 
         <div class="gallery">
           <section class="demo-section" id="buttons-demo">
             <header>
-              <h2>&lt;z-button&gt;</h2>
+              <h2>&lt;zbk-button&gt;</h2>
               <p>
                 The button component exposes size presets, visual variants,
                 slots, and imperative helpers. Each example below uses the same
@@ -331,21 +298,21 @@
                 <h3>Size presets</h3>
                 <p>Compare <code>size="xs"</code> through <code>xl</code>.</p>
                 <div class="button-row">
-                  <z-button size="xs">Extra small</z-button>
-                  <z-button size="sm">Small</z-button>
-                  <z-button size="md">Medium</z-button>
-                  <z-button size="lg">Large</z-button>
-                  <z-button size="xl">Extra large</z-button>
+                  <zbk-button size="xs">Extra small</zbk-button>
+                  <zbk-button size="sm">Small</zbk-button>
+                  <zbk-button size="md">Medium</zbk-button>
+                  <zbk-button size="lg">Large</zbk-button>
+                  <zbk-button size="xl">Extra large</zbk-button>
                 </div>
               </article>
               <article class="preview-card">
                 <h3>Variants</h3>
                 <p>Available via the <code>variant</code> attribute.</p>
                 <div class="button-row">
-                  <z-button variant="outline">Outline</z-button>
-                  <z-button variant="flat">Flat</z-button>
-                  <z-button variant="raised">Raised</z-button>
-                  <z-button variant="unstyled">Unstyled</z-button>
+                  <zbk-button variant="outline">Outline</zbk-button>
+                  <zbk-button variant="flat">Flat</zbk-button>
+                  <zbk-button variant="raised">Raised</zbk-button>
+                  <zbk-button variant="unstyled">Unstyled</zbk-button>
                 </div>
               </article>
               <article class="preview-card icon-demo">
@@ -355,15 +322,15 @@
                   ordering with <code>icon-position</code>.
                 </p>
                 <div class="button-row">
-                  <z-button>
+                  <zbk-button>
                     <span slot="icon" aria-hidden="true">⬇️</span>
                     Download
-                  </z-button>
-                  <z-button icon-position="end">
+                  </zbk-button>
+                  <zbk-button icon-position="end">
                     Continue
                     <span slot="icon" aria-hidden="true">➡️</span>
-                  </z-button>
-                  <z-button variant="raised">
+                  </zbk-button>
+                  <zbk-button variant="raised">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <path
                         d="M12 2a10 10 0 0 0-3.162 19.479c.5.09.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.776.603-3.362-1.338-3.362-1.338-.455-1.155-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.004.071 1.532 1.028 1.532 1.028.892 1.53 2.341 1.088 2.91.833.091-.647.35-1.088.636-1.338-2.217-.252-4.554-1.108-4.554-4.939 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.026 2.748-1.026.545 1.378.202 2.397.1 2.65.64.699 1.027 1.592 1.027 2.683 0 3.841-2.34 4.685-4.566 4.932.359.309.678.919.678 1.852 0 1.337-.012 2.416-.012 2.743 0 .267.18.577.688.479A10.002 10.002 0 0 0 12 2Z"
@@ -371,16 +338,16 @@
                       ></path>
                     </svg>
                     GitHub
-                  </z-button>
+                  </zbk-button>
                 </div>
               </article>
               <article class="preview-card">
                 <h3>Disabled states</h3>
                 <p>Use <code>disabled</code> or call <code>setDisabledState</code>.</p>
                 <div class="button-row">
-                  <z-button disabled>Disabled</z-button>
-                  <z-button id="disabled-demo" variant="raised"
-                    >Toggle me</z-button
+                  <zbk-button disabled>Disabled</zbk-button>
+                  <zbk-button id="disabled-demo" variant="raised"
+                    >Toggle me</zbk-button
                   >
                   <button id="disabled-toggle" type="button">
                     Toggle disabled
@@ -393,9 +360,9 @@
                   Interact with <code>updateOptions</code> and text helpers.
                 </p>
                 <div class="method-controls">
-                  <z-button id="options-demo" variant="flat">
+                  <zbk-button id="options-demo" variant="flat">
                     Runtime target
-                  </z-button>
+                  </zbk-button>
                   <label>
                     Variant
                     <select id="options-demo-variant">

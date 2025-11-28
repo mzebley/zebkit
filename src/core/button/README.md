@@ -1,9 +1,7 @@
-# `<z-button>`
+# `<zbk-button>`
 
-`<z-button>` is a Web Component that wraps the native `<button>` element with
-Zebkit's interaction patterns, accessibility affordances, and design tokens.
-It supports variants, size presets, icon placement, and design token driven
-theming.
+`<zbk-button>` wraps a native `<button>` element with Zebkit's interaction
+patterns, accessibility affordances, design tokens, and variant classes.
 
 ## Installation & Registration
 
@@ -17,13 +15,13 @@ theming.
    application bootstrap:
 
    ```ts
-   import { defineZButton } from "zebkit/src/core/button";
+   import { defineZbkButton } from "zebkit/src/core/button";
    import "zebkit/zebkit.css"; // global tokens & component styles
 
-   defineZButton();
+   defineZbkButton();
    ```
 
-   The helper will no-op if `<z-button>` is already registered, so it is safe to
+   The helper will no-op if `<zbk-button>` is already registered, so it is safe to
    call from multiple modules.
 
 ## Usage
@@ -31,32 +29,43 @@ theming.
 ### Basic button
 
 ```html
-<z-button>Save changes</z-button>
+<zbk-button>Save changes</zbk-button>
 ```
 
-### Icon slot
+### Icon slot (auto-tagged)
 
-Supply any element with `slot="icon"`. The component will ensure the icon is
-placed before the label by default or after it when `icon-position="end"`.
+Supply any element with `slot="icon"`. The component will add `.zbk-icon`
+automatically if it is missing. You control placement by the order of children;
+there is no `icon-position` attribute.
 
 ```html
-<z-button variant="raised">
+<zbk-button variant="raised outline">
   <svg slot="icon" viewBox="0 0 16 16" aria-hidden="true">...</svg>
   Upload file
-</z-button>
+</zbk-button>
 
-<z-button icon-position="end">
+<zbk-button>
   Continue
   <span slot="icon" aria-hidden="true">➡️</span>
-</z-button>
+</zbk-button>
+```
+
+### Variants (space or comma separated)
+
+The `variant` attribute accepts multiple values (space or comma separated). Each
+value maps to a class of the form `zbk-button--{name}`. Registered variants
+(e.g., `large`) also apply any className override provided in their config.
+
+```html
+<zbk-button variant="outline large">Outline + Large</zbk-button>
 ```
 
 ### Accessibility guidance
 
-- The internal button mirrors `aria-*`, `role`, and `tabindex` attributes set on
-  `<z-button>`. Provide an accessible name with `aria-label`, `aria-labelledby`,
-  or visible text. When no name is supplied, the component falls back to the
-  sanitized text content and logs a warning.
+- The internal button mirrors `aria-*`, `role`, and `tabindex` attributes set
+  on `<zbk-button>`. Provide an accessible name with `aria-label`,
+  `aria-labelledby`, or visible text. When no name is supplied, the component
+  falls back to the sanitized text content and logs a warning.
 - Meet WCAG target sizing by keeping icons purely decorative (`aria-hidden`) and
   supplementing text labels for ambiguous actions.
 - Use the `disabled` attribute to prevent interaction; the component manages the
@@ -64,17 +73,15 @@ placed before the label by default or after it when `icon-position="end"`.
 
 ## Attributes & Options
 
-You can configure `<z-button>` declaratively with attributes or programmatically
+You can configure `<zbk-button>` declaratively with attributes or programmatically
 through `updateOptions`.
 
-| Attribute         | Type / Values                                             | Description |
-| ----------------- | --------------------------------------------------------- | ----------- |
-| `variant`         | `flat` · `raised` · `outline` · `unstyled` (default `outline`) | Chooses a visual style. |
-| `size`            | `xs` · `sm` · `md` · `lg` · `xl` (default `md`)               | Adjusts typography, padding, and focus affordances. |
-| `icon-position`   | `start` (default) · `end`                                  | Moves the slotted icon before or after the label. |
-| `options`         | JSON string `ZButtonOptions`                               | Bulk apply `iconPosition`, `variant`, and `size`. |
-| `(click)`         | Inline handler source                                      | Evaluated when `z-click` fires. Prefer adding listeners via JavaScript in frameworks. |
-| `disabled`        | Boolean                                                    | Disables the internal button and sets `aria-disabled="true"`. |
+| Attribute  | Type / Values                         | Description |
+| ---------- | ------------------------------------- | ----------- |
+| `variant`  | Space/comma separated variant names   | Each name maps to `zbk-button--{name}` plus any registered overrides. |
+| `options`  | JSON string `ZButtonOptions`          | Bulk apply `variant` array. |
+| `(click)`  | Inline handler source                 | Evaluated when `z-click` fires. Prefer adding listeners via JavaScript in frameworks. |
+| `disabled` | Boolean                               | Disables the internal button and sets `aria-disabled="true"`. |
 
 > **Tip:** Options passed through `options="{...}"` are merged with individual
 > attributes. Invalid values are ignored with console warnings to aid debugging.
@@ -103,24 +110,7 @@ All methods are available on the element instance (e.g. via
 ## Design token reference
 
 The button styles use CSS custom properties derived from Zebkit's token system.
-Override these variables in your theme to adjust visuals consistently.
-
-| Custom property | Visual role |
-| --------------- | ----------- |
-| `--zbk-btn-font-family` | Base typeface for button text. |
-| `--zbk-btn-font-size` · `--zbk-btn-line-height` | Default typography scale for `md` buttons. Size-specific tokens (`--zbk-btn-xs-*`, `--zbk-btn-sm-*`, `--zbk-btn-lg-*`) adjust each preset. |
-| `--zbk-btn-border-radius` | Corner radius of the button surface; size variants have dedicated overrides. |
-| `--zbk-btn-padding-x` · `--zbk-btn-padding-y` | Horizontal and vertical spacing inside the button. |
-| `--zbk-btn-icon-font-size` · size variants | Icon sizing for elements slotted into `icon`. |
-| `--zbk-btn-icon-stroke-width` | Stroke weight for vector icons to harmonize with text weight. |
-| `--zbk-btn-border-width` | Stroke width for the outline; variants override when needed. |
-| `--zbk-btn-gap` | Space between icon and label. |
-| `--zbk-btn-background` · `--zbk-btn-background-hover` | Surface color in idle and hover/active states. |
-| `--zbk-btn-border-color` · `--zbk-btn-border-color-hover` · `--zbk-btn-border-color-selected` | Border colors for default, hover/active, and selected states. |
-| `--zbk-btn-foreground` | Text and icon color. |
-| `--zbk-btn-focus-color` · `--zbk-focus-width` · `--zbk-focus-offset` | Outline accent when the button receives focus. |
-| `--zbk-btn-offset-color` | Color of the raised edge shadow for `raised` and hover states. |
-| `--zbk-btn-raised-amount` | Vertical translation distance used for raised/hover elevation. |
-
-To theme the button, set these properties on any ancestor (e.g. `:root` or a
-scoped wrapper) so the component inherits them without shadow DOM boundaries.
+Tokens live under `src/core/button/tokens/` with a Zod schema at
+`token-schema.ts`. The token builder emits CSS variables using the `zbk-button`
+prefix; variants scope overrides with classes like `.zbk-button--large`. Override
+the emitted variables in your theme to adjust visuals consistently.

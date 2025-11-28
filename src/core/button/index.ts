@@ -1,20 +1,31 @@
+import { buttonVariants } from "./variants/index";
+import { buildVariantClassMap } from "@component-scripts/helpers";
+import { ZEBKIT_PREFIX } from "@config";
+
+type ButtonVariantEntry = (typeof buttonVariants)[number];
+
+const REGISTERED_VARIANT_CLASSES: Record<string, string> = buildVariantClassMap(
+  "button",
+  ZEBKIT_PREFIX,
+  buttonVariants as ButtonVariantEntry[]
+);
+
 /**
- * Interface defining the options for the ZButton component.
+ * Interface defining the options for the ZbkButton component.
  */
-export interface ZButtonOptions {
-  /** Specifies the position of the icon within the button. */
-  iconPosition?: "start" | "end";
-  /** Specifies the variant class applied to the button. */
-  variant?: "flat" | "raised" | "outline" | "unstyled";
-   /** Specifies the size class applied to the button. */
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+export interface ZbkButtonOptions {
+  /**
+   * Optional list of variant names (space/comma separated in the `variant` attribute)
+   * that will be converted into scoped variant classes (zbk-button--{name}).
+   */
+  variant?: string[];
 }
 
 /**
- * ZButton is a custom web component that creates an enhanced button element.
+ * ZbkButton is a custom web component that creates an enhanced button element.
  * It provides additional functionality and styling options beyond a standard HTML button.
  */
-export class ZButton extends HTMLElement {
+export class ZbkButton extends HTMLElement {
   /** The actual button element that this component wraps. */
   private button: HTMLButtonElement;
 
@@ -35,38 +46,16 @@ export class ZButton extends HTMLElement {
     "tabindex",
   ];
 
-  /** Variant classes that can be applied to the button. */
-  private static readonly variantClasses = [
-    "flat",
-    "raised",
-    "outline",
-    "unstyled",
-  ];
+  /** Default options for all ZbkButton instances. */
+  private static defaultOptions: ZbkButtonOptions = {};
 
-  /** Size classes that can be applied to the button. */
-  private static readonly sizeClasses = [
-    "xs",
-    "sm",
-    "md",
-    "lg",
-    "xl",
-  ];
+  /** Current options for this ZbkButton instance. */
+  private options: ZbkButtonOptions = { ...ZbkButton.defaultOptions };
 
-  /** Default options for all ZButton instances. */
-  private static defaultOptions: ZButtonOptions = {
-    iconPosition: "start",
-    variant: "outline",
-    size: "md",
-  };
-
-  /** Current options for this ZButton instance. */
-  private options: ZButtonOptions = { ...ZButton.defaultOptions };
-
-  /** Tracks the previously applied variant class. */
-  private previousVariant?: ZButtonOptions["variant"];
-
-  /** Tracks the previously applied size class. */
-  private previousSize?: ZButtonOptions["size"];
+  /** Tracks the concrete classes applied for variants to enable removal. */
+  private previousVariantClasses: string[] = [];
+  /** Normalized class names sourced from the variant attribute. */
+  private variantNames: string[] = [];
 
   /** Indicates if accessibility attributes are currently being migrated. */
   private isMigratingAccessibilityAttributes = false;
@@ -78,11 +67,9 @@ export class ZButton extends HTMLElement {
   static get observedAttributes() {
     return [
       "(click)",
-      ...ZButton.accessibilityAttributes,
-      "icon-position",
+      ...ZbkButton.accessibilityAttributes,
       "options",
       "variant",
-      "size",
     ];
   }
 
@@ -90,13 +77,13 @@ export class ZButton extends HTMLElement {
   private classObserver: MutationObserver;
 
   /**
-   * Constructor for the ZButton component.
+   * Constructor for the ZbkButton component.
    * Initializes the button element and adds the base class.
    */
   constructor() {
     super();
     this.button = document.createElement("button");
-    this.button.classList.add("z-button");
+    this.button.classList.add("zbk-button");
     this.boundHandleClick = this.handleClick.bind(this);
     // Initialize the MutationObserver
     this.classObserver = new MutationObserver(
@@ -124,7 +111,7 @@ export class ZButton extends HTMLElement {
 
     // Use requestAnimationFrame to defer showing the button
     requestAnimationFrame(() => {
-      this.classList.add("z-button-ready");
+      this.classList.add("zbk-button-ready");
     });
   }
 
@@ -161,14 +148,14 @@ export class ZButton extends HTMLElement {
 
     // Remove all existing mirrored classes from the button
     this.button.classList.forEach((cls) => {
-      if (cls !== "z-button" && !cls.startsWith("z-button__")) {
+      if (cls !== "zbk-button" && !cls.startsWith("zbk-button--")) {
         this.button.classList.remove(cls);
       }
     });
 
     // Add all classes from the custom element to the button
     elementClasses.forEach((cls) => {
-      if (cls !== "z-button-ready") {
+      if (cls !== "zbk-button-ready") {
         this.button.classList.add(cls);
       }
     });
@@ -187,7 +174,7 @@ export class ZButton extends HTMLElement {
   ) {
     if (name === "(click)") {
       this.updateClickHandler();
-    } else if (ZButton.accessibilityAttributes.includes(name)) {
+    } else if (ZbkButton.accessibilityAttributes.includes(name)) {
       if (this.isMigratingAccessibilityAttributes) {
         return;
       }
@@ -195,8 +182,7 @@ export class ZButton extends HTMLElement {
     } else if (
       name === "options" ||
       name === "icon-position" ||
-      name === "variant" ||
-      name === "size"
+      name === "variant"
     ) {
       this.parseOptions();
     }
@@ -206,13 +192,16 @@ export class ZButton extends HTMLElement {
    * Parses and updates the component's options.
    * @param newOptions - Optional object containing new options to apply.
    */
-  private parseOptions(newOptions?: Partial<ZButtonOptions>) {
-    // Start with the current options
-    let updatedOptions: ZButtonOptions = { ...this.options };
+  private parseOptions(newOptions?: Partial<ZbkButtonOptions>) {
+    // Start with current options and normalized variant set
+    let updatedOptions: ZbkButtonOptions = { ...this.options };
+    const variantSet: Set<string> = new Set(
+      (updatedOptions.variant || []).filter(Boolean)
+    );
 
     if (newOptions) {
-      // If newOptions is provided, merge it with current options
       updatedOptions = { ...updatedOptions, ...newOptions };
+      (newOptions.variant || []).forEach((v) => v && variantSet.add(v));
     } else {
       // Parse options from the 'options' attribute
       const optionsAttr = this.getAttribute("options");
@@ -220,6 +209,7 @@ export class ZButton extends HTMLElement {
         try {
           const parsedOptions = JSON.parse(optionsAttr);
           updatedOptions = { ...updatedOptions, ...parsedOptions };
+          (parsedOptions.variant || []).forEach((v: string) => v && variantSet.add(v));
         } catch (error) {
           console.warn("Error parsing options:", error);
           console.warn(
@@ -228,36 +218,20 @@ export class ZButton extends HTMLElement {
         }
       }
 
-      // Parse individual option attributes
-      const iconPosition = this.getAttribute("icon-position");
-      if (iconPosition === "start" || iconPosition === "end") {
-        updatedOptions.iconPosition = iconPosition;
+      const variantAttr = this.getAttribute("variant");
+      if (variantAttr) {
+        variantAttr
+          .split(/[\s,]+/)
+          .map((v) => v.trim())
+          .filter(Boolean)
+          .forEach((v) => variantSet.add(v));
       }
 
-      const variant = this.getAttribute("variant");
-      if (
-        variant === "flat" ||
-        variant === "raised" ||
-        variant === "outline" ||
-        variant === "unstyled"
-      ) {
-        updatedOptions.variant = variant;
-      }
-
-      const size = this.getAttribute("size");
-      if (
-        size === "xs" ||
-        size === "sm" ||
-        size === "md" ||
-        size === "lg" ||
-        size === "xl"
-      ) {
-        updatedOptions.size = size;
-      }
+      updatedOptions.variant = Array.from(variantSet);
     }
 
-    // Update the options
     this.options = updatedOptions;
+    this.variantNames = Array.from(new Set(variantSet));
     this.applyOptions();
   }
 
@@ -265,42 +239,16 @@ export class ZButton extends HTMLElement {
    * Applies the current options to the button's layout.
    */
   private applyOptions() {
-    const iconWrapper = this.button.querySelector(
-      ".z-button__icon"
-    ) as HTMLElement;
-    const contentWrapper = this.button.querySelector(
-      ".z-button__front"
-    ) as HTMLElement;
-
-    if (iconWrapper && contentWrapper) {
-      if (this.options.iconPosition === "end") {
-        contentWrapper.appendChild(iconWrapper);
-      } else {
-        contentWrapper.prepend(iconWrapper);
-      }
+    // Remove previously applied variant classes
+    if (this.previousVariantClasses.length > 0) {
+      this.classList.remove(...this.previousVariantClasses);
     }
 
-    const { variant, size } = this.options;
-
-    if (this.previousVariant && this.previousVariant !== variant) {
-      this.classList.remove(this.previousVariant);
+    const variantClasses = this.resolveVariantClasses(this.variantNames);
+    if (variantClasses.length > 0) {
+      this.classList.add(...variantClasses);
     }
-
-    if (variant) {
-      this.classList.add(variant);
-    }
-
-    this.previousVariant = variant;
-
-    if (this.previousSize && this.previousSize !== size) {
-      this.classList.remove(this.previousSize);
-    }
-
-    if (size) {
-      this.classList.add(size);
-    }
-
-    this.previousSize = size;
+    this.previousVariantClasses = variantClasses;
   }
 
   /**
@@ -309,63 +257,19 @@ export class ZButton extends HTMLElement {
   private setupButton() {
     const button = this.button;
 
-    // Ensure the internal edge element exists
-    let edge = button.querySelector(".z-button__edge") as HTMLElement | null;
-    if (!edge) {
-      edge = document.createElement("span");
-      edge.classList.add("z-button__edge");
-      button.insertBefore(edge, button.firstChild);
-    }
-
-    // Ensure the internal content wrapper exists
-    let contentWrapper = button.querySelector(
-      ".z-button__front"
-    ) as HTMLElement | null;
-    if (!contentWrapper) {
-      contentWrapper = document.createElement("span");
-      contentWrapper.classList.add("z-button__front");
-      button.appendChild(contentWrapper);
-    }
-
-    // Reuse existing icon wrapper if present
-    let iconElement = contentWrapper.querySelector(
-      ".z-button__icon"
-    ) as HTMLElement | null;
-
     const children = Array.from(this.childNodes);
     for (const child of children) {
-      if (child === button) {
-        continue;
-      }
-
-      if (
-        child instanceof HTMLElement &&
-        child.getAttribute("slot") === "icon"
-      ) {
-        if (!iconElement) {
-          iconElement = document.createElement("span");
-          iconElement.classList.add("z-button__icon");
+      if (child === button) continue;
+      if (child instanceof HTMLElement && child.getAttribute("slot") === "icon") {
+        if (!child.classList.contains("zbk-icon")) {
+          child.classList.add("zbk-icon");
         }
-        iconElement.appendChild(child);
-      } else {
-        contentWrapper.appendChild(child);
       }
+      button.appendChild(child);
     }
 
-    if (iconElement && !contentWrapper.contains(iconElement)) {
-      // Ensure the icon wrapper is attached to the content wrapper
-      if (this.options.iconPosition === "end") {
-        contentWrapper.appendChild(iconElement);
-      } else {
-        contentWrapper.prepend(iconElement);
-      }
-    } else if (iconElement) {
-      // Adjust icon wrapper position based on current option
-      if (this.options.iconPosition === "end") {
-        contentWrapper.appendChild(iconElement);
-      } else if (contentWrapper.firstChild !== iconElement) {
-        contentWrapper.insertBefore(iconElement, contentWrapper.firstChild);
-      }
+    if (!button.classList.contains("zbk-button")) {
+      button.classList.add("zbk-button");
     }
 
     if (button.parentElement !== this) {
@@ -417,7 +321,7 @@ export class ZButton extends HTMLElement {
     // Transfer existing accessibility attributes
     this.isMigratingAccessibilityAttributes = true;
     try {
-      ZButton.accessibilityAttributes.forEach((attr) => {
+      ZbkButton.accessibilityAttributes.forEach((attr) => {
         const value = this.getAttribute(attr);
         if (value !== null) {
           this.updateAccessibilityAttribute(attr, value);
@@ -439,7 +343,7 @@ export class ZButton extends HTMLElement {
         this.button.setAttribute("aria-label", sanitizedText);
       } else {
         console.warn(
-          "ZButton: No accessible name provided. Please add an aria-label or aria-labelledby attribute."
+          "ZbkButton: No accessible name provided. Please add an aria-label or aria-labelledby attribute."
         );
       }
     }
@@ -475,7 +379,7 @@ export class ZButton extends HTMLElement {
     if (
       this.isMigratingAccessibilityAttributes &&
       value === null &&
-      ZButton.accessibilityAttributes.includes(name)
+      ZbkButton.accessibilityAttributes.includes(name)
     ) {
       return;
     }
@@ -494,7 +398,7 @@ export class ZButton extends HTMLElement {
           this.button.setAttribute(name, value);
         } else {
           console.warn(
-            `ZButton: Invalid value for ${name}. Expected "true" or "false".`
+            `ZbkButton: Invalid value for ${name}. Expected "true" or "false".`
           );
         }
         break;
@@ -505,7 +409,7 @@ export class ZButton extends HTMLElement {
           this.button.tabIndex = tabIndexValue;
         } else {
           console.warn(
-            `ZButton: Invalid tabindex value "${value}". Expected -1, a non-negative integer, or empty string. Disregarding and removing attribute.`
+            `ZbkButton: Invalid tabindex value "${value}". Expected -1, a non-negative integer, or empty string. Disregarding and removing attribute.`
           );
           this.button.removeAttribute(name);
         }
@@ -540,7 +444,7 @@ export class ZButton extends HTMLElement {
    * Updates the options for the button.
    * @param newOptions - The new options to apply.
    */
-  updateOptions(newOptions: Partial<ZButtonOptions>): void {
+  updateOptions(newOptions: Partial<ZbkButtonOptions>): void {
     this.parseOptions(newOptions);
   }
 
@@ -549,17 +453,14 @@ export class ZButton extends HTMLElement {
    * @param text - The new text for the button.
    */
   setButtonText(text: string): void {
-    const contentWrapper = this.button.querySelector(".z-button__front");
-    if (contentWrapper) {
-      contentWrapper.textContent = text;
-      // Update aria-label if it was previously auto-generated
-      if (
-        !this.getAttribute("aria-label") &&
-        !this.getAttribute("aria-labelledby")
-      ) {
-        const sanitizedText = this.sanitizeText(text);
-        this.button.setAttribute("aria-label", sanitizedText);
-      }
+    this.button.textContent = text;
+    // Update aria-label if it was previously auto-generated
+    if (
+      !this.getAttribute("aria-label") &&
+      !this.getAttribute("aria-labelledby")
+    ) {
+      const sanitizedText = this.sanitizeText(text);
+      this.button.setAttribute("aria-label", sanitizedText);
     }
   }
 
@@ -568,8 +469,7 @@ export class ZButton extends HTMLElement {
    * @returns The current text content of the button.
    */
   getButtonText(): string {
-    const contentWrapper = this.button.querySelector(".z-button__front");
-    return contentWrapper ? contentWrapper.textContent || "" : "";
+    return this.button.textContent || "";
   }
 
   /**
@@ -587,14 +487,34 @@ export class ZButton extends HTMLElement {
   setAriaExpanded(isExpanded: boolean): void {
     this.button.setAttribute("aria-expanded", isExpanded.toString());
   }
+
+  /**
+   * Resolve variant names into concrete class names. Uses registered variants
+   * when available and also applies legacy classes for compatibility.
+   */
+  private resolveVariantClasses(variantNames: string[]): string[] {
+    const classes: string[] = [];
+
+    for (const name of variantNames) {
+      const normalized = name.toLowerCase();
+      const registeredClass =
+        REGISTERED_VARIANT_CLASSES[normalized] ||
+        `${ZEBKIT_PREFIX}-button--${normalized}`;
+
+      classes.push(registeredClass);
+
+    }
+
+    return Array.from(new Set(classes));
+  }
 }
 
 /**
  * Helper function to define the custom element.
  * This function checks if the custom element is already defined before defining it.
  */
-export function defineZButton() {
-  if (typeof window !== "undefined" && !customElements.get("z-button")) {
-    customElements.define("z-button", ZButton);
+export function defineZbkButton() {
+  if (typeof window !== "undefined" && !customElements.get("zbk-button")) {
+    customElements.define("zbk-button", ZbkButton);
   }
 }

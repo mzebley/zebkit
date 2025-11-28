@@ -1,0 +1,9 @@
+@use 'core/styles/utilities/color' as color-utils;
+
+:root {
+  @include color-utils.primitiveColor("gold", 42, 80%);
+}
+
+@layer utilities {
+  @include color-utils.generate-color-utilities("gold");
+}

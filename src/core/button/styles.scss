@@ -1,235 +1,146 @@
-z-button {
+@layer components {
+  // Base selector covers:
+  // - direct inner element: <zbk-button><button class="zbk-button">
+  // - standalone usage: <button class="zbk-button">
+  .zbk-button,
+  zbk-button>.zbk-button {
+    /* Core text & color */
+    color: var(--#{$cssVarPrefix}-button-color);
+    background-color: var(--#{$cssVarPrefix}-button-background);
+    border-color: var(--#{$cssVarPrefix}-button-border-color);
+
+    /* Border geometry */
+    border-width: var(--#{$cssVarPrefix}-button-border-width);
+    border-style: var(--#{$cssVarPrefix}-button-border-style);
+    border-radius: var(--#{$cssVarPrefix}-button-border-radius);
+
+    /* Typography */
+    font-family: var(--#{$cssVarPrefix}-button-font-family);
+    font-size: var(--#{$cssVarPrefix}-button-font-size);
+    font-weight: var(--#{$cssVarPrefix}-button-font-weight);
+    line-height: var(--#{$cssVarPrefix}-button-line-height);
+    letter-spacing: var(--#{$cssVarPrefix}-button-letter-spacing);
+    text-transform: var(--#{$cssVarPrefix}-button-text-transform);
+    text-decoration: var(--#{$cssVarPrefix}-button-text-decoration);
+    text-align: var(--#{$cssVarPrefix}-button-text-align);
+
+    /* Layout & sizing */
+    display: var(--#{$cssVarPrefix}-button-display);
+    width: var(--#{$cssVarPrefix}-button-width);
+    min-width: var(--#{$cssVarPrefix}-button-min-width);
+    max-width: var(--#{$cssVarPrefix}-button-max-width);
+    height: var(--#{$cssVarPrefix}-button-height);
+    min-height: var(--#{$cssVarPrefix}-button-min-height);
+    max-height: var(--#{$cssVarPrefix}-button-max-height);
+
+    /* Internal spacing (padding) */
+    padding-block: var(--#{$cssVarPrefix}-button-padding-block);
+    padding-inline: var(--#{$cssVarPrefix}-button-padding-inline);
+
+    // Optional directional overrides
+    padding-inline-start: var(--#{$cssVarPrefix}-button-padding-inline-start);
+    padding-inline-end: var(--#{$cssVarPrefix}-button-padding-inline-end);
+    padding-block-start: var(--#{$cssVarPrefix}-button-padding-block-start);
+    padding-block-end: var(--#{$cssVarPrefix}-button-padding-block-end);
+
+    /* External spacing (margin) */
+    // Base margins
+    margin-inline: var(--#{$cssVarPrefix}-button-margin-inline);
+    margin-block: var(--#{$cssVarPrefix}-button-margin-block);
+
+    // Optional directional overrides
+    margin-inline-start: var(--#{$cssVarPrefix}-button-margin-inline-start);
+    margin-inline-end: var(--#{$cssVarPrefix}-button-margin-inline-end);
+    margin-block-start: var(--#{$cssVarPrefix}-button-margin-block-start);
+    margin-block-end: var(--#{$cssVarPrefix}-button-margin-block-end);
+
+    /* Layout alignment (flex-based button content) */
+    flex-direction: var(--#{$cssVarPrefix}-button-flex-direction);
+    justify-content: var(--#{$cssVarPrefix}-button-justify-content);
+    align-items: var(--#{$cssVarPrefix}-button-align-items);
+
+    /* Icon-related */
+    // See .zbk-button__icon below for size usage
+
+    /* Focus ring */
+    outline: none;
+
+    /* Shadows / elevation */
+    box-shadow: var(--#{$cssVarPrefix}-button-box-shadow);
+
+    /* Interaction behavior */
+    cursor: var(--#{$cssVarPrefix}-button-cursor);
+
+    /* Transitions */
+    transition-property: var(--#{$cssVarPrefix}-button-transition-property);
+    transition-duration: var(--#{$cssVarPrefix}-button-transition-duration);
+    transition-timing-function: var(--#{$cssVarPrefix}-button-transition-timing-function);
+    transition-delay: var(--#{$cssVarPrefix}-button-transition-delay);
+
+    /* Other */
+    opacity: var(--#{$cssVarPrefix}-button-opacity);
+    gap: var(--#{$cssVarPrefix}-button-gap);
+  }
+
+  /* Hover state (only when interactive) */
+  zbk-button:hover .zbk-button,
+  .zbk-button:hover,
+  zbk-button>.zbk-button:hover {
+    color: var(--#{$cssVarPrefix}-button-color-hover);
+    background-color: var(--#{$cssVarPrefix}-button-background-hover);
+    border-color: var(--#{$cssVarPrefix}-button-border-color-hover);
+    box-shadow: var(--#{$cssVarPrefix}-button-box-shadow-hover);
+  }
+
+  /* Active / pressed state */
+  zbk-button:active .zbk-button,
+  .zbk-button:active,
+  zbk-button>.zbk-button:active {
+    color: var(--#{$cssVarPrefix}-button-color-active);
+    background-color: var(--#{$cssVarPrefix}-button-background-active);
+    border-color: var(--#{$cssVarPrefix}-button-border-color-selected);
+    box-shadow: var(--#{$cssVarPrefix}-button-box-shadow-active);
+  }
+
+  /* Focus-visible state (keyboard focus) */
+  zbk-button:focus-visible .zbk-button,
+  .zbk-button:focus-visible,
+  zbk-button>.zbk-button:focus-visible {
+    outline-color: var(--#{$cssVarPrefix}-button-focus-color);
+    outline-width: var(--#{$cssVarPrefix}-button-focus-width);
+    outline-style: solid;
+    outline-offset: var(--#{$cssVarPrefix}-button-focus-offset);
+    box-shadow: var(--#{$cssVarPrefix}-button-box-shadow-focus);
+  }
+
+  /* Disabled state (native + ARIA) */
+  zbk-button[disabled] .zbk-button,
+  zbk-button[aria-disabled='true'] .zbk-button,
+  .zbk-button[disabled],
+  .zbk-button[aria-disabled='true'],
+  zbk-button>.zbk-button[disabled],
+  zbk-button>.zbk-button[aria-disabled='true'] {
+    color: var(--#{$cssVarPrefix}-button-color-disabled);
+    background-color: var(--#{$cssVarPrefix}-button-background-disabled);
+    border-color: var(--#{$cssVarPrefix}-button-border-color-disabled);
+    box-shadow: none;
+    opacity: var(--#{$cssVarPrefix}-button-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Icon sizing / layout */
+  zbk-button .zbk-button__icon,
+  .zbk-button .zbk-button__icon,
+  zbk-button>.zbk-button .zbk-button__icon {
+    inline-size: var(--#{$cssVarPrefix}-button-icon-size);
+    block-size: var(--#{$cssVarPrefix}-button-icon-size);
+    flex-shrink: 0;
+  }
+
+  /* Button groups (using group-gap token) */
+  .zbk-button-group {
     display: inline-flex;
-    visibility: hidden;
-
-
-    &.z-button-ready {
-        visibility: visible;
-    }
-
-    .z-button {
-        position: relative;
-        border: none;
-        background: transparent;
-        padding: 0;
-        cursor: pointer;
-        outline-width: 0rem;
-        transition: outline var(--zbk-transition-duration) ease-in-out;
- 
-        border-radius: var(--zbk-btn-border-radius);
-    
-
-        &.flat {
-            --zbk-btn-border-color: transparent;
-            --zbk-btn-background: var(--zbk-body-background);
-        }
-
-        &.xs {
-            --zbk-focus-offset: var(--zbk-gap-2xs);
-            --zbk-focus-width: var(--zbk-gap-2xs);
-            --zbk-btn-icon-font-size: var(--zbk-btn-xs-icon-font-size);
-            --zbk-btn-border-radius: var(--zbk-btn-xs-border-radius);
-            --zbk-btn-padding-y: var(--zbk-btn-xs-padding-y);
-            --zbk-btn-padding-x: var(--zbk-btn-xs-padding-x);
-            --zbk-btn-border-width: var(--zbk-btn-xs-border-width);
-            --zbk-btn-font-size: var(--zbk-btn-xs-font-size);
-            --zbk-btn-line-height: var(--zbk-btn-xs-line-height);
-            --zbk-btn-font-family: var(--zbk-btn-xs-font-family);
-
-            .z-button__front {
-                min-width: unset;
-                min-height: unset;
-            }
-        }
-
-        &.sm {
-            --zbk-focus-offset: var(--zbk-gap-2xs);
-            --zbk-focus-width: var(--zbk-gap-2xs);
-            --zbk-btn-icon-font-size: var(--zbk-btn-sm-icon-font-size);
-            --zbk-btn-border-radius: var(--zbk-btn-sm-border-radius);
-            --zbk-btn-padding-y: var(--zbk-btn-sm-padding-y);
-            --zbk-btn-padding-x: var(--zbk-btn-sm-padding-x);
-            --zbk-btn-border-width: var(--zbk-btn-sm-border-width);
-            --zbk-btn-font-size: var(--zbk-btn-sm-font-size);
-            --zbk-btn-line-height: var(--zbk-btn-sm-line-height);
-            --zbk-btn-font-family: var(--zbk-btn-sm-font-family);
-
-            .z-button__front {
-                min-width: unset;
-                min-height: unset;
-            }
-        }
-
-        &.lg {
-            --zbk-btn-icon-font-size: var(--zbk-btn-lg-icon-font-size);
-            --zbk-btn-border-radius: var(--zbk-btn-lg-border-radius);
-            --zbk-btn-padding-y: var(--zbk-btn-lg-padding-y);
-            --zbk-btn-padding-x: var(--zbk-btn-lg-padding-x);
-            --zbk-btn-border-width: var(--zbk-btn-lg-border-width);
-            --zbk-btn-font-size: var(--zbk-btn-lg-font-size);
-            --zbk-btn-line-height: var(--zbk-btn-lg-line-height);
-            --zbk-btn-font-family: var(--zbk-btn-lg-font-family);
-        }
-
-        .z-button__edge {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: var(--zbk-btn-border-radius);
-            background: var(--zbk-btn-offset-color);
-            opacity: 0;
-        }
-
-        &.unstyled {
-            .z-button__edge {
-                display: none;
-            }
-
-            .z-button__front {
-                display: unset;
-                align-items: unset;
-                justify-content: unset;
-                gap: unset;
-                position: unset;
-                padding: unset;
-                border-radius: unset;
-                font-weight: 500;
-                line-height: var(--zbk-btn-line-height);
-                font-size: var(--zbk-btn-font-size);
-                color: var(--zbk-action);
-                background: transparent;
-                will-change: transform;
-                border: unset;
-                transition: unset;
-                min-height: 44px; // WCAG guidelines min target size
-                min-width: 44px;
-            }
-        }
-
-        .z-button__front {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--zbk-btn-gap);
-            position: relative;
-            padding: var(--zbk-btn-padding-y) var(--zbk-btn-padding-x);
-            border-radius: var(--zbk-btn-border-radius);
-            font-weight: 500;
-            line-height: var(--zbk-btn-line-height);
-            font-size: var(--zbk-btn-font-size);
-            color: var(--zbk-btn-foreground);
-            background: var(--zbk-btn-background);
-            will-change: transform;
-            border: var(--zbk-btn-border-width) solid var(--zbk-btn-border-color);
-            transition:
-                transform 600ms var(--zbk-component-transition-timing);
-            min-height: 44px; // WCAG guidelines min target size
-            min-width: 44px;
-            box-sizing: border-box;
-            font-family: var(--zbk-btn-font-family);
-        }
-
-        &:not([disabled]):not(.unstyled):active {
-            .z-button__front {
-                // transform: translateY(calc((var(--zbk-gap-base) / 6) * -1));
-                transform: translateY(0);
-                transition: transform 64ms;
-                --zbk-btn-border-color: var(--zbk-btn-border-color-hover);
-                --zbk-btn-background: var(--zbk-btn-background-hover);
-            }
-        }
-
-        &:focus {
-            --zbk-focus-offset: 0;
-            outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
-            outline-offset: var(--zbk-focus-offset);
-        }
-
-        &.active-selection {
-            --zbk-btn-background: var(--zbk-btn-background-hover);
-            --zbk-btn-border-color: var(--zbk-btn-border-color-selected);
-        }
-
-        &.raised {
-            --zbk-btn-border-color: var(--zbk-btn-border-color-hover);
-
-            &:not(:active) {
-                .z-button__edge {
-                    opacity: 1;
-                }
-
-                .z-button__front {
-                    transform: translateY(calc(var(--zbk-btn-border-width) * (var(--zbk-btn-raised-amount) * -1)));
-                    transition:
-                        transform 250ms var(--zbk-component-transition-timing);
-                }
-            }
-        }
-
-        &.visible-active {
-            --zbk-btn-background: var(--zbk-btn-background-hover);
-            --zbk-btn-border-color: var(--zbk-btn-border-color-hover);
-
-            &:not(:active) {
-                .z-button__edge {
-                    opacity: 1;
-                }
-
-                .z-button__front {
-                    transform: translateY(calc(var(--zbk-btn-border-width) * (var(--zbk-btn-raised-amount) * -1)));
-                    transition:
-                        transform 250ms var(--zbk-component-transition-timing);
-                }
-            }
-        }
-
-        &[disabled] {
-            opacity: .66;
-            cursor: not-allowed;
-        }
-
-    }
-
-    .z-button__icon {
-        display: inline-flex;
-        font-size: var(--zbk-btn-icon-font-size);
-
-        &.lg {
-            --zbk-btn-icon-font-size: var(--zbk-font-size-lg);
-        }
-
-
-        &.xl {
-            --zbk-btn-icon-font-size: var(--zbk-font-size-xl);
-        }
-
-        &.sm {
-            --zbk-btn-icon-font-size: var(--zbk-font-size-xs);
-        }
-
-        &.xs {
-            --zbk-btn-icon-font-size: var(--zbk-font-size-2xs);
-        }
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-        .z-button:not([disabled]):not(.unstyled):hover {
-            --zbk-btn-background: var(--zbk-btn-background-hover);
-            --zbk-btn-border-color: var(--zbk-btn-border-color-hover);
-
-            &:not(:active):not(.unstyled) {
-                .z-button__edge {
-                    opacity: 1;
-                }
-
-                .z-button__front {
-                    transform: translateY(calc(var(--zbk-btn-border-width) * (var(--zbk-btn-raised-amount) * -1)));
-                    transition:
-                        transform 250ms var(--zbk-component-transition-timing);
-                }
-            }
-        }
-    }
+    gap: var(--#{$cssVarPrefix}-button-group-gap);
+  }
 }

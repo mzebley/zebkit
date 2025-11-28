@@ -1,0 +1,351 @@
+import type { LayerName } from "@definitions/layers";
+import { z } from "zod";
+import { tokenSchema } from "./token-schema";
+
+/**
+ * Zebkit button design tokens. The module key is fixed to `button` so these
+ * values become `--zbk-button-*` CSS custom properties during the token build.
+ * Tokens stay declarative and can be referenced with dot-notation overrides.
+ */
+export const key = "button";
+export const layer: LayerName = "base";
+
+export type ButtonTokens = z.infer<typeof tokenSchema>;
+
+const tokens = {
+  // Core label colors
+  color: {
+    value: "{body.ink}",
+    type: "color",
+    description: "Default button label color.",
+  },
+  "color-hover": {
+    value: "{body.ink}",
+    type: "color",
+    description: "Label color when hovered.",
+  },
+  "color-active": {
+    value: "{body.ink}",
+    type: "color",
+    description: "Label color when active or pressed.",
+  },
+  "color-disabled": {
+    value: "{disabled.color}",
+    type: "color",
+    description: "Label color for disabled buttons.",
+  },
+
+  // Background colors
+  background: {
+    value: "{primary}",
+    type: "color",
+    description: "Default button background.",
+  },
+  "background-hover": {
+    value: "{primary.dark}",
+    type: "color",
+    description: "Background for hover state.",
+  },
+  "background-active": {
+    value: "{primary.darker}",
+    type: "color",
+    description: "Background for active/pressed state.",
+  },
+  "background-disabled": {
+    value: "{disabled.background}",
+    type: "color",
+    description: "Background for disabled buttons.",
+  },
+
+  // Border colors
+  "border-color": {
+    value: "{accent}",
+    type: "color",
+    description: "Default button border color.",
+  },
+  "border-color-hover": {
+    value: "{accent.dark}",
+    type: "color",
+    description: "Border color on hover.",
+  },
+  "border-color-selected": {
+    value: "{accent}",
+    type: "color",
+    description: "Border color when the button is selected/active.",
+  },
+  "border-color-disabled": {
+    value: "{disabled.border-color}",
+    type: "color",
+    description: "Border color for disabled buttons.",
+  },
+
+  // Border geometry
+  "border-width": {
+    value: "{spacing.2px}",
+    type: "borderWidth",
+    description: "Base border width.",
+  },
+  "border-style": {
+    value: "solid",
+    type: "borderStyle",
+    description: "Border style (solid, dashed, etc) for standard buttons.",
+  },
+  "border-radius": {
+    value: "{spacing.05}",
+    type: "borderRadius",
+    description: "Corner radius for standard buttons.",
+  },
+
+  // Typography
+  "font-family": {
+    value: "{font-family.interface}",
+    type: "fontFamily",
+    description: "Font family for button labels.",
+  },
+  "font-size": {
+    value: "{font-size.md}",
+    type: "fontSize",
+    description: "Base font size for button labels.",
+  },
+  "font-weight": {
+    value: "{body.weight}",
+    type: "fontWeight",
+    description: "Font weight for button labels.",
+  },
+  "line-height": {
+    value: "{body.line-height}",
+    type: "lineHeight",
+    description: "Base line height for buttons.",
+  },
+  "letter-spacing": {
+    value: "{body.letter-spacing}",
+    type: "letterSpacing",
+    description: "Letter spacing for button labels.",
+  },
+  "text-transform": {
+    value: "none",
+    type: "textTransform",
+    description: "Text transform for button labels.",
+  },
+  "text-decoration": {
+    value: "none",
+    type: "textDecoration",
+    description: "Text decoration for button labels.",
+  },
+  "text-align": {
+    value: "center",
+    type: "textAlignment",
+    description: "Text alignment for button content.",
+  },
+
+  // Internal spacing (logical axes)
+  "padding-inline": {
+    value: "{spacing.2}",
+    type: "spacing",
+    description: "Inline (horizontal) padding for standard buttons.",
+  },
+  "padding-block": {
+    value: "{spacing.05}",
+    type: "spacing",
+    description: "Block (vertical) padding for standard buttons.",
+  },
+  "padding-inline-start": {
+    value: "{button.padding-inline}",
+    type: "spacing",
+    description: "Inline-start padding override when needed.",
+  },
+  "padding-inline-end": {
+    value: "{button.padding-inline}",
+    type: "spacing",
+    description: "Inline-end padding override when needed.",
+  },
+  "padding-block-start": {
+    value: "{button.padding-block}",
+    type: "spacing",
+    description: "Block-start padding override when needed.",
+  },
+  "padding-block-end": {
+    value: "{button.padding-block}",
+    type: "spacing",
+    description: "Block-end padding override when needed.",
+  },
+
+  // External spacing (margins)
+  "margin-inline": {
+    value: "0",
+    type: "spacing",
+    description: "Inline margin for standalone buttons.",
+  },
+  "margin-block": {
+    value: "0",
+    type: "spacing",
+    description: "Block margin for standalone buttons.",
+  },
+  "margin-inline-start": {
+    value: "{button.margin-inline}",
+    type: "spacing",
+    description: "Inline-start margin override when needed.",
+  },
+  "margin-inline-end": {
+    value: "{button.margin-inline}",
+    type: "spacing",
+    description: "Inline-end margin override when needed.",
+  },
+  "margin-block-start": {
+    value: "{button.margin-block}",
+    type: "spacing",
+    description: "Block-start margin override when needed.",
+  },
+  "margin-block-end": {
+    value: "{button.margin-block}",
+    type: "spacing",
+    description: "Block-end margin override when needed.",
+  },
+
+  // Gaps
+  gap: {
+    value: "{button.padding-block}",
+    type: "spacing",
+    description: "Gap between button icon and label.",
+  },
+  "group-gap": {
+    value: "{spacing.105}",
+    type: "spacing",
+    description: "Gap between buttons when rendered in a group.",
+  },
+
+  // Layout & sizing
+  display: {
+    value: "inline-flex",
+    type: "display",
+    description: "Display mode for buttons.",
+  },
+  width: {
+    value: "auto",
+    type: "sizing",
+    description: "Default button width.",
+  },
+  "min-width": {
+    value: "44px",
+    type: "sizing",
+    description: "Minimum button width.",
+  },
+  "max-width": {
+    value: "none",
+    type: "sizing",
+    description: "Maximum button width.",
+  },
+  height: {
+    value: "auto",
+    type: "sizing",
+    description: "Default button height.",
+  },
+  "min-height": {
+    value: "44px",
+    type: "sizing",
+    description: "Minimum height to ensure tappable area.",
+  },
+  "max-height": {
+    value: "none",
+    type: "sizing",
+    description: "Maximum button height.",
+  },
+
+  // Icon-related
+  "icon-size": {
+    value: "1.125rem",
+    type: "sizing",
+    description: "Default icon size within buttons.",
+  },
+
+  // Focus & interaction
+  "focus-color": {
+    value: "{accent}",
+    type: "color",
+    description: "Outline color for focus state.",
+  },
+  "focus-width": {
+    value: "2px",
+    type: "borderWidth",
+    description: "Outline width for focus state.",
+  },
+  "focus-offset": {
+    value: "0px",
+    type: "spacing",
+    description: "Outline offset for focus state.",
+  },
+
+  // Shadow / elevation
+  "box-shadow": {
+    value: "none",
+    type: "boxShadow",
+    description: "Default box shadow for buttons.",
+  },
+  "box-shadow-hover": {
+    value: "none",
+    type: "boxShadow",
+    description: "Box shadow on hover.",
+  },
+  "box-shadow-active": {
+    value: "none",
+    type: "boxShadow",
+    description: "Box shadow when active/pressed.",
+  },
+  "box-shadow-focus": {
+    value: "none",
+    type: "boxShadow",
+    description: "Box shadow in focus state (in addition to outline).",
+  },
+
+  // Interaction behavior & layout alignment
+  cursor: {
+    value: "pointer",
+    type: "utility",
+    description: "Cursor style when hovering over buttons.",
+  },
+  "flex-direction": {
+    value: "row",
+    type: "flex",
+    description: "Direction of icon and label layout.",
+  },
+  "justify-content": {
+    value: "center",
+    type: "flex",
+    description: "Main axis alignment for button contents.",
+  },
+  "align-items": {
+    value: "center",
+    type: "flex",
+    description: "Cross axis alignment for button contents.",
+  },
+
+  // Transitions
+  "transition-duration": {
+    value: "150ms",
+    type: "transition",
+    description: "Duration for hover/active transitions.",
+    a11y: true,
+  },
+  "transition-timing-function": {
+    value: "ease-out",
+    type: "transition",
+    description: "Timing function for button transitions.",
+  },
+  "transition-property": {
+    value: "background-color, color, border-color, box-shadow, transform, outline",
+    type: "transition",
+    description: "CSS properties that should animate on interaction.",
+  },
+    "transition-delay": {
+    value: "0",
+    type: "transition",
+    description: "Delay before CSS properties run through their animate on interaction.",
+  },
+  opacity: {
+    value: 1,
+    type: "opacity",
+    description: "Visual opacity of button.",
+  },
+} as const satisfies ButtonTokens;
+
+export default tokens;

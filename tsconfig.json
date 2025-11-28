@@ -10,7 +10,14 @@
     "declaration": false,
     "noEmitOnError": true,
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "baseUrl": "src",
+    "paths": {
+      "@config": ["config/zebkit.ts"],
+      "@definitions/*": ["definitions/*"],
+      "@token-scripts/*": ["scripts/tokens/*"],
+      "@component-scripts/*": ["scripts/components/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": [
