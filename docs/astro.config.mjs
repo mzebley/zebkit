@@ -10,6 +10,10 @@ export default defineConfig({
       title: 'zebkit',
       tagline: 'Token-driven, accessibility-first web components and utilities.',
       plugins: [rapide()],
+      head: [
+        { tag: 'link', attrs: { rel: 'stylesheet', href: '/zebkit.css' } },
+        { tag: 'script', attrs: { type: 'module', src: '/zebkit.js' } },
+      ],
       sidebar: [
         {
           label: 'Foundations',
