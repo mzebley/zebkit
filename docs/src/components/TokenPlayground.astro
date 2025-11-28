@@ -43,13 +43,16 @@ const {
     </div>
   </div>
 </section>
-<script type="module">
-  const playground = document.currentScript?.closest('.token-playground');
-  if (!playground) {
-    return;
-  }
+<script type="module" data-groups={JSON.stringify(groups)}>
+  (() => {
+    const currentScript = document.currentScript;
+    const playground = currentScript ? currentScript.closest('.token-playground') : null;
+    if (!playground) {
+      return;
+    }
 
-  const controlGroups = ${JSON.stringify(groups)};
+  const rawGroups = currentScript?.dataset.groups;
+  const controlGroups = rawGroups ? JSON.parse(rawGroups) : [];
   const scopeSelector = playground.dataset.scopeSelector || ':root';
   const scopeElement =
     scopeSelector === ':root'
@@ -218,30 +221,36 @@ const {
     const resetAll = actionsHost.querySelector('[data-action="reset"]');
     const copyCss = actionsHost.querySelector('[data-action="copy"]');
 
-    resetAll?.addEventListener('click', () => {
-      controlGroups.forEach((group) => {
-        group.tokens.forEach((token) => {
-          const stored = defaultValues.get(token.property);
-          applyTokenValue(token.property, stored);
-          const input = host?.querySelector(`#${CSS.escape(token.property)}`);
-          if (!input) return;
-          if (token.type === 'range') {
-            const numeric = extractNumeric(stored);
-            input.value = Number.isNaN(numeric) ? token.min : numeric;
-            const output = input.parentElement?.querySelector('output');
-            if (output) {
-              output.textContent = formatValue(token, extractNumeric(input.value));
+    if (resetAll) {
+      resetAll.addEventListener('click', () => {
+        controlGroups.forEach((group) => {
+          group.tokens.forEach((token) => {
+            const stored = defaultValues.get(token.property);
+            applyTokenValue(token.property, stored);
+            const input = host ? host.querySelector(`#${CSS.escape(token.property)}`) : null;
+            if (!input) return;
+            if (token.type === 'range') {
+              const numeric = extractNumeric(stored);
+              input.value = Number.isNaN(numeric) ? token.min : numeric;
+              const parent = input.parentElement;
+              if (parent) {
+                const output = parent.querySelector('output');
+                if (output) {
+                  output.textContent = formatValue(token, extractNumeric(input.value));
+                }
+              }
+            } else if (token.type === 'color') {
+              input.value = toHex(stored);
+            } else {
+              input.value = stored;
             }
-          } else if (token.type === 'color') {
-            input.value = toHex(stored);
-          } else {
-            input.value = stored;
-          }
+          });
         });
       });
-    });
+    }
 
-    copyCss?.addEventListener('click', async () => {
+    if (copyCss) {
+      copyCss.addEventListener('click', async () => {
       const overrides = [];
       controlGroups.forEach((group) => {
         group.tokens.forEach((token) => {
@@ -269,9 +278,11 @@ const {
         setTimeout(() => {
           copyCss.textContent = 'Copy CSS';
         }, 2000);
-      }
-    });
+        }
+      });
+    }
   }
+  })();
 </script>
 <style>
   .token-playground {

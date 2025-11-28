@@ -6,7 +6,7 @@ interface ZbkButtonOptions {
      * Optional list of variant names (space/comma separated in the `variant` attribute)
      * that will be converted into scoped variant classes (zbk-button--{name}).
      */
-    variant?: string[];
+    variant?: string | string[];
 }
 /**
  * ZbkButton is a custom web component that creates an enhanced button element.
@@ -74,6 +74,10 @@ declare class ZbkButton extends HTMLElement {
      * @param newOptions - Optional object containing new options to apply.
      */
     private parseOptions;
+    /**
+     * Normalizes different variant inputs to a trimmed string array.
+     */
+    private normalizeVariantInput;
     /**
      * Applies the current options to the button's layout.
      */

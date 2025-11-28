@@ -18,7 +18,7 @@ export interface ZbkButtonOptions {
    * Optional list of variant names (space/comma separated in the `variant` attribute)
    * that will be converted into scoped variant classes (zbk-button--{name}).
    */
-  variant?: string[];
+  variant?: string | string[];
 }
 
 /**
@@ -196,12 +196,16 @@ export class ZbkButton extends HTMLElement {
     // Start with current options and normalized variant set
     let updatedOptions: ZbkButtonOptions = { ...this.options };
     const variantSet: Set<string> = new Set(
-      (updatedOptions.variant || []).filter(Boolean)
+      this.normalizeVariantInput(updatedOptions.variant)
     );
+
+    const mergeVariants = (value?: string | string[] | null) => {
+      this.normalizeVariantInput(value).forEach((v) => variantSet.add(v));
+    };
 
     if (newOptions) {
       updatedOptions = { ...updatedOptions, ...newOptions };
-      (newOptions.variant || []).forEach((v) => v && variantSet.add(v));
+      mergeVariants(newOptions.variant);
     } else {
       // Parse options from the 'options' attribute
       const optionsAttr = this.getAttribute("options");
@@ -209,7 +213,7 @@ export class ZbkButton extends HTMLElement {
         try {
           const parsedOptions = JSON.parse(optionsAttr);
           updatedOptions = { ...updatedOptions, ...parsedOptions };
-          (parsedOptions.variant || []).forEach((v: string) => v && variantSet.add(v));
+          mergeVariants(parsedOptions.variant);
         } catch (error) {
           console.warn("Error parsing options:", error);
           console.warn(
@@ -218,21 +222,34 @@ export class ZbkButton extends HTMLElement {
         }
       }
 
-      const variantAttr = this.getAttribute("variant");
-      if (variantAttr) {
-        variantAttr
-          .split(/[\s,]+/)
-          .map((v) => v.trim())
-          .filter(Boolean)
-          .forEach((v) => variantSet.add(v));
-      }
-
-      updatedOptions.variant = Array.from(variantSet);
+      mergeVariants(this.getAttribute("variant"));
     }
+
+    updatedOptions.variant = Array.from(variantSet);
 
     this.options = updatedOptions;
     this.variantNames = Array.from(new Set(variantSet));
     this.applyOptions();
+  }
+
+  /**
+   * Normalizes different variant inputs to a trimmed string array.
+   */
+  private normalizeVariantInput(
+    value?: string | string[] | null
+  ): string[] {
+    if (!value) {
+      return [];
+    }
+
+    if (Array.isArray(value)) {
+      return value.map((v) => v.trim()).filter(Boolean);
+    }
+
+    return value
+      .split(/[\s,]+/)
+      .map((v) => v.trim())
+      .filter(Boolean);
   }
 
   /**

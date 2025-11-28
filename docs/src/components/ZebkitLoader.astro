@@ -5,8 +5,12 @@ const scriptPath = '/zebkit/zebkit.js';
 ---
 <link rel="stylesheet" href={varsHref} />
 <link rel="stylesheet" href={cssHref} />
-<script type="module">
-  const moduleHref = {JSON.stringify(scriptPath)};
+<script type="module" data-script={scriptPath}>
+  const currentScript = document.currentScript;
+  const moduleHref =
+    currentScript && currentScript.dataset && currentScript.dataset.script
+      ? currentScript.dataset.script
+      : '/zebkit/zebkit.js';
   if (!window.__zebkitLoaded) {
     window.__zebkitLoaded = true;
     import(moduleHref).then(({ core }) => {
