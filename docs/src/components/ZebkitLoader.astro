@@ -1,0 +1,16 @@
+---
+const cssHref = '/zebkit/zbk-default.min.css';
+const varsHref = '/zebkit/zebkit-vars.css';
+const scriptPath = '/zebkit/zebkit.js';
+---
+<link rel="stylesheet" href={varsHref} />
+<link rel="stylesheet" href={cssHref} />
+<script type="module">
+  const moduleHref = {JSON.stringify(scriptPath)};
+  if (!window.__zebkitLoaded) {
+    window.__zebkitLoaded = true;
+    import(moduleHref).then(({ core }) => {
+      core.defineCoreComponents();
+    });
+  }
+</script>

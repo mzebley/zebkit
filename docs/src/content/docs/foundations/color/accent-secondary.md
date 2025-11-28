@@ -1,0 +1,31 @@
+---
+title: Accent secondary colors
+description: Tertiary accent palette for decorative or contextual emphasis.
+---
+
+Accent secondary provides a tertiary palette for subtle differentiation, badges, or decorative flourishes that shouldn’t outweigh
+primary messaging.
+
+## Usage
+
+- `canvas-accent-secondary-muted` works for lightly tinted panels and cards.
+- Use `ink-accent-secondary` for supporting labels or metadata.
+- Pair `border-accent-secondary` with neutral canvases for gentle dividers.
+
+```html
+<span class="ink-accent-secondary border-accent-secondary-soft">
+  Secondary accent label
+</span>
+```
+
+## Tokens
+
+Canvas, ink, and border slots follow the same intensity and inverse model as other families, keeping swaps predictable.
+
+## Examples
+
+Try accent secondary in badges or chips where a softer palette reduces visual noise.
+
+## TODO
+
+- Add examples that pair accent secondary with brand buttons for multi-tone layouts.
