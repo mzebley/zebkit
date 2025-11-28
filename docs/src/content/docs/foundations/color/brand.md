@@ -21,10 +21,32 @@ Brand colors are the anchor palette for Zebkit. Use them for primary actions, hi
 
 ## Tokens
 
-- `brand-canvas`, `brand-canvas-soft`, `brand-canvas-muted`, `brand-canvas-strong`
-- `brand-canvas-inverse`, `brand-canvas-inverse-soft`, `brand-canvas-inverse-muted`, `brand-canvas-inverse-strong`
-- `brand-ink`, `brand-ink-soft`, `brand-ink-muted`, `brand-ink-strong` plus matching inverse variants
-- `brand-border`, `brand-border-soft`, `brand-border-muted`, `brand-border-strong` plus matching inverse variants
+| Token | Value | Description |
+| --- | --- | --- |
+| `brand.canvas` | `{color.butterfield-200}` | Base brand canvas color for primary branded surfaces. |
+| `brand.canvas-soft` | `{color.butterfield-50}` | Soft brand canvas color for lightly tinted branded surfaces. |
+| `brand.canvas-muted` | `{color.butterfield-100}` | Muted brand canvas color for low-emphasis branded surfaces. |
+| `brand.canvas-strong` | `{color.butterfield-600}` | Strong brand canvas color for high-emphasis branded surfaces. |
+| `brand.canvas-inverse` | `{color.butterfield-600}` | Base inverse brand canvas color for branded surfaces on dark or inverted contexts. |
+| `brand.canvas-inverse-soft` | `{color.butterfield-500}` | Soft inverse brand canvas color for lightly tinted branded surfaces in inverse contexts. |
+| `brand.canvas-inverse-muted` | `{color.butterfield-300}` | Muted inverse brand canvas color for low-emphasis branded surfaces in inverse contexts. |
+| `brand.canvas-inverse-strong` | `{color.butterfield-50}` | Strong inverse brand canvas color for high-emphasis branded surfaces in inverse contexts. |
+| `brand.ink` | `{color.butterfield-800}` | Base brand ink color for text and icons on neutral or light canvases. |
+| `brand.ink-soft` | `{color.butterfield-400}` | Soft brand ink color for lower-emphasis text and icons. |
+| `brand.ink-muted` | `{color.butterfield-600}` | Muted brand ink color for subtle or secondary text and icons. |
+| `brand.ink-strong` | `{color.butterfield-950}` | Strong brand ink color for high-emphasis text and icons. |
+| `brand.ink-inverse` | `{color.butterfield-100}` | Base inverse brand ink color for text and icons on inverse or dark canvases. |
+| `brand.ink-inverse-soft` | `{color.butterfield-200}` | Soft inverse brand ink color for lower-emphasis text and icons on inverse canvases. |
+| `brand.ink-inverse-muted` | `{color.butterfield-300}` | Muted inverse brand ink color for subtle text and icons on inverse canvases. |
+| `brand.ink-inverse-strong` | `{color.butterfield-50}` | Strong inverse brand ink color for high-emphasis text and icons on inverse canvases. |
+| `brand.border` | `` | Base brand border color for outlines, strokes, and dividers. |
+| `brand.border-soft` | `` | Soft brand border color for low-emphasis outlines and dividers. |
+| `brand.border-muted` | `` | Muted brand border color for subtle outlines and dividers. |
+| `brand.border-strong` | `` | Strong brand border color for high-emphasis outlines and dividers. |
+| `brand.border-inverse` | `` | Base inverse brand border color for outlines and dividers on inverse canvases. |
+| `brand.border-inverse-soft` | `` | Soft inverse brand border color for low-emphasis outlines on inverse canvases. |
+| `brand.border-inverse-muted` | `` | Muted inverse brand border color for subtle outlines on inverse canvases. |
+| `brand.border-inverse-strong` | `` | Strong inverse brand border color for high-emphasis outlines on inverse canvases. |
 
 ## Examples
 

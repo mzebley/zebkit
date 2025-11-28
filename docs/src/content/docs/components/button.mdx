@@ -158,6 +158,72 @@ export const buttonTokenGroups = [
 
 Zebkit buttons provide a semantic, token-aligned call to action. Use them for primary flows, secondary actions, destructive confirmation, and inline controls while keeping styling driven entirely by CSS variables and utility classes.
 
+## Tokens
+
+| Token | Value | Description |
+| --- | --- | --- |
+| `button.color` | `{body.ink}` | Default button label color. |
+| `button.color-hover` | `{body.ink}` | Label color when hovered. |
+| `button.color-active` | `{body.ink}` | Label color when active or pressed. |
+| `button.color-disabled` | `{disabled.color}` | Label color for disabled buttons. |
+| `button.background` | `{primary}` | Default button background. |
+| `button.background-hover` | `{primary.dark}` | Background for hover state. |
+| `button.background-active` | `{primary.darker}` | Background for active/pressed state. |
+| `button.background-disabled` | `{disabled.background}` | Background for disabled buttons. |
+| `button.border-color` | `{accent}` | Default button border color. |
+| `button.border-color-hover` | `{accent.dark}` | Border color on hover. |
+| `button.border-color-selected` | `{accent}` | Border color when the button is selected/active. |
+| `button.border-color-disabled` | `{disabled.border-color}` | Border color for disabled buttons. |
+| `button.border-width` | `{spacing.2px}` | Base border width. |
+| `button.border-style` | `solid` | Border style (solid, dashed, etc) for standard buttons. |
+| `button.border-radius` | `{spacing.05}` | Corner radius for standard buttons. |
+| `button.font-family` | `{font-family.interface}` | Font family for button labels. |
+| `button.font-size` | `{font-size.md}` | Base font size for button labels. |
+| `button.font-weight` | `{body.weight}` | Font weight for button labels. |
+| `button.line-height` | `{body.line-height}` | Base line height for buttons. |
+| `button.letter-spacing` | `{body.letter-spacing}` | Letter spacing for button labels. |
+| `button.text-transform` | `none` | Text transform for button labels. |
+| `button.text-decoration` | `none` | Text decoration for button labels. |
+| `button.text-align` | `center` | Text alignment for button content. |
+| `button.padding-inline` | `{spacing.2}` | Inline (horizontal) padding for standard buttons. |
+| `button.padding-block` | `{spacing.05}` | Block (vertical) padding for standard buttons. |
+| `button.padding-inline-start` | `{button.padding-inline}` | Inline-start padding override when needed. |
+| `button.padding-inline-end` | `{button.padding-inline}` | Inline-end padding override when needed. |
+| `button.padding-block-start` | `{button.padding-block}` | Block-start padding override when needed. |
+| `button.padding-block-end` | `{button.padding-block}` | Block-end padding override when needed. |
+| `button.margin-inline` | `0` | Inline margin for standalone buttons. |
+| `button.margin-block` | `0` | Block margin for standalone buttons. |
+| `button.margin-inline-start` | `{button.margin-inline}` | Inline-start margin override when needed. |
+| `button.margin-inline-end` | `{button.margin-inline}` | Inline-end margin override when needed. |
+| `button.margin-block-start` | `{button.margin-block}` | Block-start margin override when needed. |
+| `button.margin-block-end` | `{button.margin-block}` | Block-end margin override when needed. |
+| `button.gap` | `{button.padding-block}` | Gap between button icon and label. |
+| `button.group-gap` | `{spacing.105}` | Gap between buttons when rendered in a group. |
+| `button.display` | `inline-flex` | Display mode for buttons. |
+| `button.width` | `auto` | Default button width. |
+| `button.min-width` | `44px` | Minimum button width. |
+| `button.max-width` | `none` | Maximum button width. |
+| `button.height` | `auto` | Default button height. |
+| `button.min-height` | `44px` | Minimum height to ensure tappable area. |
+| `button.max-height` | `none` | Maximum button height. |
+| `button.icon-size` | `1.125rem` | Default icon size within buttons. |
+| `button.focus-color` | `{accent}` | Outline color for focus state. |
+| `button.focus-width` | `2px` | Outline width for focus state. |
+| `button.focus-offset` | `0px` | Outline offset for focus state. |
+| `button.box-shadow` | `none` | Default box shadow for buttons. |
+| `button.box-shadow-hover` | `none` | Box shadow on hover. |
+| `button.box-shadow-active` | `none` | Box shadow when active/pressed. |
+| `button.box-shadow-focus` | `none` | Box shadow in focus state (in addition to outline). |
+| `button.cursor` | `pointer` | Cursor style when hovering over buttons. |
+| `button.flex-direction` | `row` | Direction of icon and label layout. |
+| `button.justify-content` | `center` | Main axis alignment for button contents. |
+| `button.align-items` | `center` | Cross axis alignment for button contents. |
+| `button.transition-duration` | `150ms` | Duration for hover/active transitions. |
+| `button.transition-timing-function` | `ease-out` | Timing function for button transitions. |
+| `button.transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | CSS properties that should animate on interaction. |
+| `button.transition-delay` | `0` | Delay before CSS properties run through their animate on interaction. |
+| `button.opacity` | `1` | Visual opacity of button. |
+
 ## Live examples
 
 <ButtonShowcase />
@@ -226,7 +292,7 @@ Button styles react to standard interaction and accessibility states:
 - Focus styles rely on `:focus-visible` to avoid outlining mouse clicks while remaining keyboard-obvious.
 - Disabled handling respects both native disabling and `aria-disabled` for situations where you need to prevent activation but maintain focusability.
 
-## Tokens
+## Token overview
 
 Button tokens are exposed as `--zbk-btn-*` CSS custom properties and map back to component defaults:
 
