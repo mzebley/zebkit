@@ -1,0 +1,54 @@
+---
+title: Critical colors
+description: Destructive palette for errors and irreversible actions.
+---
+
+import { buildTokenRows } from '../../../../utils/token-docs';
+import criticalTokens, { key as criticalKey } from '../../../../../../src/core/colors/critical/tokens/tokens';
+
+export const criticalTokenRows = buildTokenRows(criticalKey, criticalTokens);
+
+Critical colors communicate errors, destructive actions, and blocking states. Reserve them for irreversible or high-risk flows.
+
+## Usage
+
+- Surfaces: `canvas-critical-strong` backs destructive confirmations; use `canvas-critical-soft` for inline error messaging.
+- Foreground: `ink-critical` and `ink-critical-strong` for error text or destructive button labels.
+- Borders: `border-critical` highlights invalid fields or destructive button outlines.
+
+```html
+<button class="zbk-button canvas-critical-strong ink-critical-inverse">
+  Delete item
+</button>
+```
+
+## Tokens
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Type</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {criticalTokenRows.map(({ token, type, value, description }) => (
+      <tr key={token}>
+        <td><code>{token}</code></td>
+        <td><code>{type}</code></td>
+        <td><code>{String(value)}</code></td>
+        <td>{description}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Examples
+
+Pair critical ink with app or brand canvases only when the destructive message needs to dominate the region.
+
+## TODO
+
+- Add form validation recipes that combine critical borders with app ink.

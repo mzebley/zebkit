@@ -1,0 +1,57 @@
+---
+title: Brand colors
+description: Primary identity palette used for core actions and hero moments.
+---
+
+import { buildTokenRows } from '../../../../utils/token-docs';
+import brandTokens, { key as brandKey } from '../../../../../../src/core/colors/brand/tokens/tokens';
+
+export const brandTokenRows = buildTokenRows(brandKey, brandTokens);
+
+Brand colors are the anchor palette for Zebkit. Use them for primary actions, high-visibility surfaces, and UI that should read as
+“on brand.”
+
+## Usage
+
+- Default surfaces: `canvas-brand` or `canvas-brand-soft` for subtle tints.
+- Text and icons: `ink-brand` for base text, `ink-brand-strong` for emphasis, and `ink-brand-inverse` when sitting on strong brand
+  canvases.
+- Borders and outlines: `border-brand-muted` for dividers or `border-brand-strong` for interactive affordances.
+
+```html
+<button class="zbk-button canvas-brand focus:border-brand-inverse">
+  Primary action
+</button>
+```
+
+## Tokens
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Type</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {brandTokenRows.map(({ token, type, value, description }) => (
+      <tr key={token}>
+        <td><code>{token}</code></td>
+        <td><code>{type}</code></td>
+        <td><code>{String(value)}</code></td>
+        <td>{description}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Examples
+
+Pair brand ink with brand canvases to maintain contrast, and use the inverse variants on strong backgrounds.
+
+## TODO
+
+- Document example swatches for each intensity.
+- Add guidance for pairing brand with secondary accents.

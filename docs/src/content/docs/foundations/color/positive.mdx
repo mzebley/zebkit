@@ -1,0 +1,54 @@
+---
+title: Positive colors
+description: Success palette for confirmations and “done” states.
+---
+
+import { buildTokenRows } from '../../../../utils/token-docs';
+import positiveTokens, { key as positiveKey } from '../../../../../../src/core/colors/positive/tokens/tokens';
+
+export const positiveTokenRows = buildTokenRows(positiveKey, positiveTokens);
+
+Positive colors highlight success and completion. Use them to reinforce confirmations, status chips, and celebratory states.
+
+## Usage
+
+- Surfaces: `canvas-positive-soft` for inline confirmations and `canvas-positive-strong` for celebratory cards.
+- Text: `ink-positive` for success messaging and `ink-positive-inverse` when paired with strong canvases.
+- Borders: `border-positive` outlines success toasts or form confirmations.
+
+```html
+<span class="canvas-positive-soft border-positive ink-positive">
+  Saved
+</span>
+```
+
+## Tokens
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Type</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {positiveTokenRows.map(({ token, type, value, description }) => (
+      <tr key={token}>
+        <td><code>{token}</code></td>
+        <td><code>{type}</code></td>
+        <td><code>{String(value)}</code></td>
+        <td>{description}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Examples
+
+Pair positive ink with app canvases for inline confirmations or with brand canvases for celebratory banners.
+
+## TODO
+
+- Document success toast patterns that mix positive ink with brand buttons.

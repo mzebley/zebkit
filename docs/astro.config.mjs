@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url';
+
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import rapide from 'starlight-theme-rapide';
@@ -42,4 +44,11 @@ export default defineConfig({
       ],
     }),
   ],
+  vite: {
+    resolve: {
+      alias: {
+        '@definitions': fileURLToPath(new URL('../src/definitions', import.meta.url)),
+      },
+    },
+  },
 });

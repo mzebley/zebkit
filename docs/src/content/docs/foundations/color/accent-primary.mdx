@@ -1,0 +1,59 @@
+---
+title: Accent primary colors
+description: Supporting accent palette for secondary emphasis.
+---
+
+import { buildTokenRows } from '../../../../utils/token-docs';
+import accentPrimaryTokens, {
+  key as accentPrimaryKey,
+} from '../../../../../../src/core/colors/accent-primary/tokens/tokens';
+
+export const accentPrimaryTokenRows = buildTokenRows(
+  accentPrimaryKey,
+  accentPrimaryTokens
+);
+
+Accent primary colors offer a secondary emphasis that complements the brand palette without competing with primary actions.
+
+## Usage
+
+- Use `canvas-accent-primary-soft` for gentle backgrounds on cards or banners.
+- Reach for `ink-accent-primary-strong` when you need a vivid highlight that is still distinct from brand ink.
+- Borders can lean on `border-accent-primary-muted` for separators or `border-accent-primary-strong` for interactive affordances.
+
+```html
+<p class="ink-accent-primary-strong border-accent-primary-muted">
+  Accent callouts pair well with neutral canvases.
+</p>
+```
+
+## Tokens
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Type</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {accentPrimaryTokenRows.map(({ token, type, value, description }) => (
+      <tr key={token}>
+        <td><code>{token}</code></td>
+        <td><code>{type}</code></td>
+        <td><code>{String(value)}</code></td>
+        <td>{description}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Examples
+
+Combine accent primary ink with neutral or app canvases to keep secondary emphasis clear.
+
+## TODO
+
+- Add example swatches and contrast pairings against app canvases.

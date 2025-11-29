@@ -1,0 +1,56 @@
+---
+title: Action colors
+description: Semantic action palette for interactive controls and links.
+---
+
+import { buildTokenRows } from '../../../../utils/token-docs';
+import actionTokens, {
+  key as actionKey,
+} from '../../../../../../src/core/colors/action/tokens/tokens';
+
+export const actionTokenRows = buildTokenRows(actionKey, actionTokens);
+
+Action colors emphasize interactive affordances and call-to-action moments without borrowing from the core brand ramp.
+
+## Usage
+
+- Set control backgrounds with `canvas-action` or `canvas-action-strong` for higher emphasis.
+- Align icons and labels to `ink-action` and move to `ink-action-inverse` on dark canvases.
+- Outlines and dividers can use `border-action` or `border-action-strong` for interactive hover/focus borders.
+
+```html
+<a class="ink-action hover:ink-action-strong border-action-muted" href="#">
+  Inline action link
+</a>
+```
+
+## Tokens
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Type</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {actionTokenRows.map(({ token, type, value, description }) => (
+      <tr key={token}>
+        <td><code>{token}</code></td>
+        <td><code>{type}</code></td>
+        <td><code>{String(value)}</code></td>
+        <td>{description}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Examples
+
+Pair action colors with app canvases to separate secondary controls from primary brand buttons.
+
+## TODO
+
+- Add guidance for composing action tokens with stateful utilities on buttons.
