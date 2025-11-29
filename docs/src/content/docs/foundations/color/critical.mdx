@@ -6,7 +6,7 @@ description: Destructive palette for errors and irreversible actions.
 import { buildTokenRows } from '../../../../utils/token-docs';
 import criticalTokens, { key as criticalKey } from '../../../../../../src/core/colors/critical/tokens/tokens';
 
-const criticalTokenRows = buildTokenRows(criticalKey, criticalTokens);
+export const criticalTokenRows = buildTokenRows(criticalKey, criticalTokens);
 
 Critical colors communicate errors, destructive actions, and blocking states. Reserve them for irreversible or high-risk flows.
 

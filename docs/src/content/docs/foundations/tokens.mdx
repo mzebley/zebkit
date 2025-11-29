@@ -3,9 +3,9 @@ title: Token structure
 description: How Zebkit token modules are shaped, validated, and typed.
 ---
 
-import { allowedTokenTypes } from '../../../../src/definitions/tokens';
+import { allowedTokenTypes } from '../../../../../src/definitions/tokens';
 
-const tokenTypes = allowedTokenTypes.options;
+export const tokenTypes = allowedTokenTypes.options;
 
 Zebkit treats tokens as structured data so the compiler, docs, and components stay in sync. Each token module exports a typed map of entries, plus metadata that slots the tokens into the cascade.
 

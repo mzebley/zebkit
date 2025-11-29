@@ -9,7 +9,7 @@ import TokenPlayground from '../../../components/TokenPlayground.astro';
 import { buildTokenRows } from '../../../utils/token-docs';
 import buttonTokens, { key as buttonTokenKey } from '../../../../../src/core/button/tokens/tokens';
 
-const buttonTokenRows = buildTokenRows(buttonTokenKey, buttonTokens);
+export const buttonTokenRows = buildTokenRows(buttonTokenKey, buttonTokens);
 
 export const buttonTokenGroups = [
   {

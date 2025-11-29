@@ -6,7 +6,7 @@ description: Warning palette for cautionary feedback and soft alerts.
 import { buildTokenRows } from '../../../../utils/token-docs';
 import cautionTokens, { key as cautionKey } from '../../../../../../src/core/colors/caution/tokens/tokens';
 
-const cautionTokenRows = buildTokenRows(cautionKey, cautionTokens);
+export const cautionTokenRows = buildTokenRows(cautionKey, cautionTokens);
 
 Caution colors express warnings that need attention without implying failure. Use them for pre-error states, reminders, and
 non-destructive confirmations.
