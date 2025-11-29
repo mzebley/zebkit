@@ -4,8 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "sync:tokens": "npm run build:tokens --prefix .. -- --config zebkit.docs.config.json",
+    "predev": "npm run sync:tokens",
     "dev": "astro dev",
+    "prestart": "npm run sync:tokens",
     "start": "astro dev",
+    "prebuild": "npm run sync:tokens",
     "build": "astro build",
     "preview": "astro preview"
   },

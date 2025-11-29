@@ -6,6 +6,7 @@ description: Zebkit’s token-driven button component and utility patterns.
 import ZebkitLoader from '../../../components/ZebkitLoader.astro';
 import ButtonShowcase from '../../../components/ButtonShowcase.astro';
 import TokenPlayground from '../../../components/TokenPlayground.astro';
+import TokenLookupDemo from '../../../components/TokenLookupDemo.astro';
 import { buildTokenRows } from '../../../utils/token-docs';
 import buttonTokens, { key as buttonTokenKey } from '../../../../../src/core/button/tokens/tokens';
 
@@ -184,6 +185,12 @@ Zebkit buttons provide a semantic, token-aligned call to action. Use them for pr
     ))}
   </tbody>
 </table>
+
+## Token alias lookup
+
+Use the lookup to see how any button alias resolves to a CSS custom property at runtime.
+
+<TokenLookupDemo />
 
 ## Live examples
 

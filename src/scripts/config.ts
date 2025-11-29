@@ -4,6 +4,7 @@ import chalk from 'chalk';
 
 export type TokensConfig = {
   selectedComponents?: string[];
+  includeAllComponents?: boolean;
   destinationPath?: string;
   assetFilePath?: string;
   theme?: 'default' | 'quiet-boutique' | 'dark-boutique' | 'custom';
@@ -13,6 +14,7 @@ export type TokensConfig = {
   splitMode?: 'combined' | 'per-module';
   outputFormats?: Array<'JSON' | 'TypeScript' | 'JavaScript'>;
   writeVariantRegistry?: boolean;
+  tokenLookupOutputPath?: string;
 };
 
 export type ComponentsConfig = {

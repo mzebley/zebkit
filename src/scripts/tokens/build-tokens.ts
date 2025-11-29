@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import { fileURLToPath } from 'node:url';
 import type { Dirent } from 'fs';
+import type { TokenInterface } from '@definitions/tokens';
 import { gatherZebkitFiles } from '@token-scripts/gather-files';
 import {
   buildZebkitTokens,
@@ -50,30 +51,33 @@ async function run() {
   }
   try {
     const components = await getComponents();
-    const selectedComponents = tokensConfig?.selectedComponents
-      ? tokensConfig.selectedComponents.filter((component) => {
-          const exists = components.includes(component);
-          if (!exists) {
-            console.warn(
-              chalk.yellow(
-                `Component "${component}" not found. Ignoring this entry from config.`
-              )
-            );
-          }
-          return exists;
-        })
-      : components.length > 0
-        ? (
-            await inquirer.prompt([
-              {
-                type: 'checkbox',
-                name: 'selectedComponents',
-                message: 'Select components to include:',
-                choices: components,
-              },
-            ])
-          ).selectedComponents
-        : [];
+    const includeAllComponents = tokensConfig?.includeAllComponents;
+    const selectedComponents = includeAllComponents
+      ? components
+      : tokensConfig?.selectedComponents
+          ? tokensConfig.selectedComponents.filter((component) => {
+              const exists = components.includes(component);
+              if (!exists) {
+                console.warn(
+                  chalk.yellow(
+                    `Component "${component}" not found. Ignoring this entry from config.`
+                  )
+                );
+              }
+              return exists;
+            })
+          : components.length > 0
+            ? (
+                await inquirer.prompt([
+                  {
+                    type: 'checkbox',
+                    name: 'selectedComponents',
+                    message: 'Select components to include:',
+                    choices: components,
+                  },
+                ])
+              ).selectedComponents
+            : [];
 
     const { destinationPath, assetFilePath } = tokensConfig
       ? {
@@ -95,6 +99,10 @@ async function run() {
             default: '/assets/',
           },
         ]);
+
+    const resolvedDestinationPath = path.isAbsolute(destinationPath)
+      ? destinationPath
+      : path.resolve(process.cwd(), destinationPath);
 
     const themeAnswers = tokensConfig
       ? {
@@ -219,22 +227,26 @@ async function run() {
     const { tokens, layers } = await buildZebkitTokens(
       themeName,
       files.tokenFiles,
-      destinationPath,
+      resolvedDestinationPath,
       customTokenPath,
       outputFormats,
       { splitMode: splitMode as BuildZebkitTokensOptions['splitMode'] }
     );
 
     const cssVars = convertTokensToCssVars(tokens, { layers });
+    const tokenLookupOutputPath = resolveLookupOutputPath(
+      tokensConfig?.tokenLookupOutputPath,
+      resolvedDestinationPath
+    );
 
     const { registry: variantRegistry, inlineCss, extraStylesheets } =
       await buildZebkitVariants(tokens);
     if (writeVariantRegistry) {
       const variantRegistryPath = path.join(
-        destinationPath,
+        resolvedDestinationPath,
         `zbk-${themeName.toLowerCase()}-variants.json`
       );
-      await fs.ensureDir(destinationPath);
+      await fs.ensureDir(resolvedDestinationPath);
       await fs.writeJson(variantRegistryPath, variantRegistry, { spaces: 2 });
     }
 
@@ -243,7 +255,7 @@ async function run() {
     const sassOptions: CompileSassOptions = {
       stylesheets: allStylesheets,
       cssVars,
-      destination: destinationPath,
+      destination: resolvedDestinationPath,
       projectName: themeName,
       sassVariables: {
         assetFilePath: { value: assetFilePath, modify: true },
@@ -253,6 +265,9 @@ async function run() {
     };
 
     await compileSass(sassOptions);
+
+    const lookupMap = buildTokenLookup(tokens);
+    await writeTokenLookupFile(tokenLookupOutputPath, lookupMap);
   } catch (error: any) {
     if (error?.name === 'ExitPromptError') {
       console.log(chalk.yellow('\nPrompt cancelled by user.'));
@@ -261,6 +276,54 @@ async function run() {
       console.error(chalk.red('An error occurred:'), error);
       process.exit(1);
     }
+  }
+}
+
+function resolveLookupOutputPath(
+  configuredPath: string | undefined,
+  destinationPath: string
+): string {
+  if (configuredPath) {
+    return path.isAbsolute(configuredPath)
+      ? configuredPath
+      : path.resolve(process.cwd(), configuredPath);
+  }
+  return path.join(destinationPath, 'token-lookup.json');
+}
+
+function buildTokenLookup(tokens: Record<string, TokenInterface>): Record<string, string> {
+  const lookup: Record<string, string> = {};
+  const prefix = `${ZEBKIT_PREFIX}-`;
+
+  for (const [tokenKey, tokenProperties] of Object.entries(tokens)) {
+    const moduleName = tokenKey.startsWith(prefix)
+      ? tokenKey.slice(prefix.length)
+      : tokenKey;
+
+    if (!tokenProperties) continue;
+
+    for (const propertyKey of Object.keys(tokenProperties)) {
+      const cssVar = `--${[tokenKey, propertyKey].filter(Boolean).join('-')}`;
+      const reference = `${moduleName}.${propertyKey}`;
+      lookup[reference] = cssVar;
+      lookup[`{${reference}}`] = cssVar;
+    }
+  }
+
+  return lookup;
+}
+
+async function writeTokenLookupFile(
+  outputPath: string,
+  lookup: Record<string, string>
+): Promise<void> {
+  try {
+    await fs.ensureDir(path.dirname(outputPath));
+    await fs.writeJson(outputPath, lookup, { spaces: 2 });
+    console.log(chalk.green(`Token lookup written to ${outputPath}`));
+  } catch (error) {
+    console.error(chalk.red('Failed to write token lookup map.'), error);
+    throw error;
   }
 }
 

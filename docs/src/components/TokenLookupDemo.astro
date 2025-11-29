@@ -1,0 +1,168 @@
+---
+const lookupHref = '/zebkit/token-lookup.json';
+const buttonPrefix = 'button.';
+---
+<section
+  class="token-lookup-demo"
+  id="button-token-lookup"
+  data-lookup={lookupHref}
+  data-prefix={buttonPrefix}
+>
+  <header>
+    <h3>Token alias lookup</h3>
+    <p>Select any button token reference to see the compiled CSS variable.</p>
+  </header>
+  <label class="token-lookup-demo__select">
+    <span>Button token alias</span>
+    <select disabled>
+      <option>Loading button tokens…</option>
+    </select>
+  </label>
+  <div class="token-lookup-demo__result">
+    <div>
+      <span>Reference</span>
+      <code data-alias>–</code>
+    </div>
+    <div>
+      <span>CSS custom property</span>
+      <code data-output>var(--zbk-…)</code>
+    </div>
+  </div>
+  <p class="token-lookup-demo__status" data-status>Fetching lookup…</p>
+</section>
+
+<script type="module" is:inline>
+  const container = document.getElementById('button-token-lookup');
+  if (container) {
+    const select = container.querySelector('select');
+    const aliasDisplay = container.querySelector('[data-alias]');
+    const outputDisplay = container.querySelector('[data-output]');
+    const status = container.querySelector('[data-status]');
+    const lookupHref = container.dataset.lookup || '/zebkit/token-lookup.json';
+    const prefix = container.dataset.prefix || '';
+
+    const setStatus = (message, isError = false) => {
+      if (status) {
+        status.textContent = message;
+        status.dataset.state = isError ? 'error' : 'default';
+      }
+    };
+
+    const updateDisplay = () => {
+      if (!select || !aliasDisplay || !outputDisplay) return;
+      const option = select.selectedOptions[0];
+      if (!option || !option.value) {
+        aliasDisplay.textContent = '–';
+        outputDisplay.textContent = 'Select a token';
+        return;
+      }
+      aliasDisplay.textContent = option.dataset.alias || option.textContent;
+      outputDisplay.textContent = `var(${option.value})`;
+    };
+
+    const populateOptions = (entries) => {
+      if (!select) return;
+      select.innerHTML = '';
+      for (const [ref, cssVar] of entries) {
+        const option = document.createElement('option');
+        option.value = cssVar;
+        option.textContent = ref;
+        option.dataset.alias = ref;
+        select.appendChild(option);
+      }
+      select.disabled = entries.length === 0;
+      if (entries.length) {
+        select.selectedIndex = 0;
+        updateDisplay();
+        setStatus('Token references loaded. Choose any alias to view the CSS variable.');
+      } else {
+        setStatus('No button token aliases found.', true);
+      }
+    };
+
+    const hydrate = async () => {
+      setStatus('Loading token lookup…');
+      try {
+        const response = await fetch(lookupHref, { cache: 'no-cache' });
+        if (!response.ok) {
+          throw new Error(`Lookup request failed with ${response.status}`);
+        }
+        const data = await response.json();
+        const entries = Object.entries(data)
+          .filter(([key]) => !key.startsWith('{') && (!prefix || key.startsWith(prefix)))
+          .sort((a, b) => a[0].localeCompare(b[0]));
+        populateOptions(entries);
+      } catch (error) {
+        console.error('Failed to load token lookup:', error);
+        setStatus('Unable to load token lookup. Ensure tokens were built before running docs.', true);
+        if (select) select.disabled = true;
+      }
+    };
+
+    if (select) {
+      select.addEventListener('change', updateDisplay);
+    }
+
+    hydrate();
+  }
+</script>
+
+<style>
+  .token-lookup-demo {
+    border: 1px solid var(--sl-color-gray-6);
+    border-radius: 16px;
+    padding: 1rem;
+    display: grid;
+    gap: 0.75rem;
+    background: var(--sl-color-gray-7);
+  }
+
+  .token-lookup-demo header {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .token-lookup-demo__select {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .token-lookup-demo__select select {
+    padding: 0.4rem 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-gray-6);
+    color: inherit;
+  }
+
+  .token-lookup-demo__result {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    background: var(--sl-color-gray-6);
+    border-radius: 12px;
+    padding: 0.75rem;
+  }
+
+  .token-lookup-demo__result span {
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-3);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .token-lookup-demo__result code {
+    display: block;
+    font-size: 0.95rem;
+    word-break: break-all;
+  }
+
+  .token-lookup-demo__status[data-state='error'] {
+    color: var(--sl-color-red-high);
+  }
+
+  .token-lookup-demo__status {
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-3);
+  }
+</style>
