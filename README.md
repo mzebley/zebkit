@@ -4,6 +4,8 @@
 - Token modules live in `src/core/**/tokens.ts` (and later `src/components/**/tokens.ts`) with matching `token-schema.ts` files.
 - Shared token definitions and maps are under `src/definitions`.
 - Build tokens and CSS with `npm run build:tokens` and follow the prompts to choose components, theme, output formats, and split mode.
+- To skip prompts when running `npm run build:tokens` or `npm run build:components`, supply answers in a `zebkit.config.json` (or `zebkit-config.json` / `zekit.config.json`) file. You can also point to a custom location with `--config path/to/config.json`.
+- Config files accept a `tokens` section (for component selection, destination, asset path, theme/custom overrides, export settings, split mode, and output formats) and a `components` section (for selected components and `jsOutput`).
 - Theme overrides can be a single JSON file `src/themes/<name>.json` or a folder `src/themes/<name>/` containing multiple JSON override files.
 - Combined mode writes one set of files per format (e.g., `<theme>-tokens.json`); per-module mode writes `zbk-<module>.tokens.<ext>` for each token module.
 
