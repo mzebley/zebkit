@@ -1,0 +1,56 @@
+---
+title: App colors
+description: Neutral application surfaces and ink pairings.
+---
+
+import { buildTokenRows } from '../../../../utils/token-docs';
+import appTokens, { key as appKey } from '../../../../../../src/core/colors/app/tokens/tokens';
+
+const appTokenRows = buildTokenRows(appKey, appTokens);
+
+App colors support everyday UI surfaces: layouts, panels, navigation, and default text. They give you neutral contrast without
+drifting into accent territory.
+
+## Usage
+
+- Lay down `canvas-app` or `canvas-app-soft` for primary surfaces.
+- Use `ink-app` and `ink-app-strong` for body text, navigation labels, and dense forms.
+- Borders like `border-app-muted` help separate sections without pulling focus.
+
+```html
+<section class="canvas-app ink-app">
+  <h2 class="ink-app-strong">Dashboard</h2>
+  <p>Use app ink for the everyday reading experience.</p>
+</section>
+```
+
+## Tokens
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Type</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {appTokenRows.map(({ token, type, value, description }) => (
+      <tr key={token}>
+        <td><code>{token}</code></td>
+        <td><code>{type}</code></td>
+        <td><code>{String(value)}</code></td>
+        <td>{description}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Examples
+
+App tokens pair naturally with accent families for callouts and with brand tokens for primary actions.
+
+## TODO
+
+- Add contrast guidance for app text on inverse canvases.

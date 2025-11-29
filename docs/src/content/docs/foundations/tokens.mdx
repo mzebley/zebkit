@@ -1,0 +1,47 @@
+---
+title: Token structure
+description: How Zebkit token modules are shaped, validated, and typed.
+---
+
+import { allowedTokenTypes } from '../../../../src/definitions/tokens';
+
+const tokenTypes = allowedTokenTypes.options;
+
+Zebkit treats tokens as structured data so the compiler, docs, and components stay in sync. Each token module exports a typed map of entries, plus metadata that slots the tokens into the cascade.
+
+## Module contract
+
+Every token module follows the same contract used across foundations, semantics, and components:
+
+- **`key`**: the module name that prefixes every generated CSS custom property (e.g., `button` yields `--zbk-button-*`).
+- **`layer`**: one of the cascade layers defined in `@definitions/layers`, used by the compiler to wrap CSS in the correct `@layer` block.
+- **`default export`**: an object that matches `TokenInterface` where each property maps a token name to its configuration.
+
+## Token object shape
+
+Each token entry must conform to the shared schema:
+
+- `value` — string or number that represents the token’s default output (often a reference like `{spacing.05}`).
+- `type` — constrained to one of the supported token types listed below.
+- `description` — human-readable explanation for docs and audits.
+- `a11y` (optional) — boolean or note flagging accessibility significance for the token.
+- `additional` (optional) — freeform metadata for build-time consumers.
+
+## Allowed token types
+
+<table>
+  <thead>
+    <tr>
+      <th>Token type</th>
+    </tr>
+  </thead>
+  <tbody>
+    {tokenTypes.map((type) => (
+      <tr key={type}>
+        <td><code>{type}</code></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+Token builders and docs pull these values directly from `allowedTokenTypes`, so adding a new type requires updating the shared schema first. This keeps component token definitions (like button and color families) aligned with the canonical type list.
