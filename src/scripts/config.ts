@@ -64,6 +64,11 @@ export async function loadZebkitConfig(): Promise<
         const parsed = JSON.parse(fileContents) as ZebkitConfig;
         return { config: parsed, path: resolved };
       }
+
+      if (explicitPath) {
+        console.error(chalk.red(`Config file not found at ${resolved}.`));
+        process.exit(1);
+      }
     } catch (error) {
       console.warn(chalk.yellow(`Unable to read config file at ${candidate}: ${error}`));
       return undefined;
