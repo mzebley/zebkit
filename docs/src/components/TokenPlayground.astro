@@ -42,8 +42,8 @@ const {
       <slot />
     </div>
   </div>
-</section>
-<script type="module" data-groups={JSON.stringify(groups)}>
+  <script type="application/json" data-token-groups>{JSON.stringify(groups)}</script>
+  <script type="module">
   (() => {
     const currentScript = document.currentScript;
     const playground = currentScript ? currentScript.closest('.token-playground') : null;
@@ -51,8 +51,16 @@ const {
       return;
     }
 
-  const rawGroups = currentScript?.dataset.groups;
-  const controlGroups = rawGroups ? JSON.parse(rawGroups) : [];
+    const dataScript = playground.querySelector('script[data-token-groups]');
+    const rawGroups = dataScript?.textContent || '[]';
+    let controlGroups = [];
+    try {
+      controlGroups = JSON.parse(rawGroups);
+    } catch (error) {
+      console.error('Failed to parse token playground groups', error);
+      controlGroups = [];
+    }
+
   const scopeSelector = playground.dataset.scopeSelector || ':root';
   const scopeElement =
     scopeSelector === ':root'
@@ -283,7 +291,8 @@ const {
     }
   }
   })();
-</script>
+  </script>
+</section>
 <style>
   .token-playground {
     border: 1px solid var(--sl-color-gray-5);

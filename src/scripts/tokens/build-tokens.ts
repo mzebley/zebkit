@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import { fileURLToPath } from 'node:url';
 import type { Dirent } from 'fs';
+import { allowedTokenTypes } from '@definitions/tokens';
 import type { TokenInterface } from '@definitions/tokens';
 import { gatherZebkitFiles } from '@token-scripts/gather-files';
 import {
@@ -268,6 +269,9 @@ async function run() {
 
     const lookupMap = buildTokenLookup(tokens);
     await writeTokenLookupFile(tokenLookupOutputPath, lookupMap);
+
+    const allowedTypesPath = path.join(resolvedDestinationPath, 'allowed-token-types.json');
+    await writeAllowedTokenTypes(allowedTypesPath, [...allowedTokenTypes.options]);
   } catch (error: any) {
     if (error?.name === 'ExitPromptError') {
       console.log(chalk.yellow('\nPrompt cancelled by user.'));
@@ -323,6 +327,17 @@ async function writeTokenLookupFile(
     console.log(chalk.green(`Token lookup written to ${outputPath}`));
   } catch (error) {
     console.error(chalk.red('Failed to write token lookup map.'), error);
+    throw error;
+  }
+}
+
+async function writeAllowedTokenTypes(outputPath: string, types: string[]): Promise<void> {
+  try {
+    await fs.ensureDir(path.dirname(outputPath));
+    await fs.writeJson(outputPath, types, { spaces: 2 });
+    console.log(chalk.green(`Allowed token types written to ${outputPath}`));
+  } catch (error) {
+    console.error(chalk.red('Failed to write allowed token types.'), error);
     throw error;
   }
 }

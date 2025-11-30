@@ -7,157 +7,7 @@ import ZebkitLoader from '../../../components/ZebkitLoader.astro';
 import ButtonShowcase from '../../../components/ButtonShowcase.astro';
 import TokenPlayground from '../../../components/TokenPlayground.astro';
 import TokenLookupDemo from '../../../components/TokenLookupDemo.astro';
-import { buildTokenRows } from '../../../utils/token-docs';
-import buttonTokens, { key as buttonTokenKey } from '../../../../../src/core/button/tokens/tokens';
-
-export const buttonTokenRows = buildTokenRows(buttonTokenKey, buttonTokens);
-
-export const buttonTokenGroups = [
-  {
-    title: 'Surface & borders',
-    tokens: [
-      {
-        property: '--zbk-btn-background',
-        label: 'Background',
-        description: 'Default canvas color for buttons.',
-        type: 'color',
-      },
-      {
-        property: '--zbk-btn-background-hover',
-        label: 'Background (hover)',
-        description: 'Surface color applied on hover/active states.',
-        type: 'color',
-      },
-      {
-        property: '--zbk-btn-border-color',
-        label: 'Border color',
-        description: 'Outline color for default buttons.',
-        type: 'color',
-      },
-      {
-        property: '--zbk-btn-border-radius',
-        label: 'Border radius',
-        description: 'Corner radius for medium buttons.',
-        type: 'range',
-        min: 0,
-        max: 48,
-        step: 1,
-        unit: 'px',
-      },
-      {
-        property: '--zbk-btn-border-width',
-        label: 'Border width',
-        description: 'Outline thickness for medium buttons.',
-        type: 'range',
-        min: 0,
-        max: 8,
-        step: 0.5,
-        unit: 'px',
-      },
-      {
-        property: '--zbk-btn-raised-amount',
-        label: 'Raised amount',
-        description: 'Vertical translation for raised & hover styles.',
-        type: 'range',
-        min: 0,
-        max: 6,
-        step: 0.25,
-      },
-    ],
-  },
-  {
-    title: 'Typography',
-    tokens: [
-      {
-        property: '--zbk-btn-font-family',
-        label: 'Font family',
-        description: 'Typeface used for default button text.',
-        type: 'text',
-      },
-      {
-        property: '--zbk-btn-font-size',
-        label: 'Font size',
-        description: 'Font size applied to medium buttons.',
-        type: 'range',
-        min: 10,
-        max: 48,
-        step: 0.5,
-        unit: 'px',
-      },
-      {
-        property: '--zbk-btn-line-height',
-        label: 'Line height',
-        description: 'Line height for the medium size preset.',
-        type: 'range',
-        min: 1,
-        max: 3,
-        step: 0.05,
-      },
-    ],
-  },
-  {
-    title: 'Spacing',
-    tokens: [
-      {
-        property: '--zbk-btn-padding-x',
-        label: 'Horizontal padding',
-        description: 'Space on the left/right of the label.',
-        type: 'range',
-        min: 0,
-        max: 64,
-        step: 1,
-        unit: 'px',
-      },
-      {
-        property: '--zbk-btn-padding-y',
-        label: 'Vertical padding',
-        description: 'Space above and below the label.',
-        type: 'range',
-        min: 0,
-        max: 32,
-        step: 0.5,
-        unit: 'px',
-      },
-      {
-        property: '--zbk-btn-gap',
-        label: 'Icon gap',
-        description: 'Gap between the icon slot and label.',
-        type: 'range',
-        min: 0,
-        max: 48,
-        step: 1,
-        unit: 'px',
-      },
-      {
-        property: '--zbk-btn-icon-font-size',
-        label: 'Icon font size',
-        description: 'Font size used for icons inside buttons.',
-        type: 'range',
-        min: 8,
-        max: 48,
-        step: 0.5,
-        unit: 'px',
-      },
-    ],
-  },
-  {
-    title: 'Foreground',
-    tokens: [
-      {
-        property: '--zbk-btn-foreground',
-        label: 'Label color',
-        description: 'Foreground color for icons and text.',
-        type: 'color',
-      },
-      {
-        property: '--zbk-btn-focus-color',
-        label: 'Focus ring',
-        description: 'Accent color used for focus-visible outlines.',
-        type: 'color',
-      },
-    ],
-  },
-];
+import { buttonTokenRows, buttonTokenGroups } from '../../../data/button-docs';
 
 <ZebkitLoader />
 
@@ -190,7 +40,12 @@ Zebkit buttons provide a semantic, token-aligned call to action. Use them for pr
 
 Use the lookup to see how any button alias resolves to a CSS custom property at runtime.
 
-<TokenLookupDemo />
+<TokenLookupDemo
+  prefix="button."
+  label="Button token alias"
+  title="Button token lookup"
+  description="Select any button alias to see the compiled CSS custom property."
+/>
 
 ## Live examples
 
@@ -211,9 +66,9 @@ You can use the custom element (`<zbk-button>`) or apply the `.zbk-button` class
 
 ### Variants and composition
 
-- Base appearance comes from component tokens (`--zbk-btn-background`, `--zbk-btn-foreground`, `--zbk-btn-border-color`).
-- State tokens drive interaction: `--zbk-btn-background-hover`, `--zbk-btn-foreground-active`, and focus ring tokens like `--zbk-btn-focus-color` and `--zbk-btn-border-width`.
-- Layout tokens keep tap targets consistent: `--zbk-btn-min-height`, `--zbk-btn-padding-x`, and `--zbk-btn-padding-y` ensure a minimum 44px hit area.
+- Base appearance comes from component tokens (`--zbk-button-background`, `--zbk-button-foreground`, `--zbk-button-border-color`).
+- State tokens drive interaction: `--zbk-button-background-hover`, `--zbk-button-foreground-active`, and focus ring tokens like `--zbk-button-focus-color` and `--zbk-button-border-width`.
+- Layout tokens keep tap targets consistent: `--zbk-button-min-height`, `--zbk-button-padding-x`, and `--zbk-button-padding-y` ensure a minimum 44px hit area.
 
 Use color utilities to align the component with the active palette, or override component tokens inline for quick experiments:
 
@@ -225,7 +80,7 @@ Use color utilities to align the component with the active palette, or override 
 
 <button
   class="zbk-button"
-  style="--zbk-btn-background: var(--zbk-color-brand-500); --zbk-btn-border-radius: var(--zbk-spacing-05);"
+  style="--zbk-button-background: var(--zbk-color-brand-500); --zbk-button-border-radius: var(--zbk-spacing-05);"
 >
   Token-tuned button
 </button>
@@ -249,9 +104,9 @@ Use color utilities to align the component with the active palette, or override 
 
 Button styles react to standard interaction and accessibility states:
 
-- **Hover**: applies `--zbk-btn-foreground-hover`, `--zbk-btn-background-hover`, and `--zbk-btn-border-color-hover`.
-- **Active/pressed**: uses `--zbk-btn-foreground-active`, `--zbk-btn-background-hover`, and the selected border color token.
-- **Focus-visible**: draws an outline from `--zbk-btn-focus-color`, width, and offset tokens plus any `--zbk-btn-box-shadow-focus` hooks.
+- **Hover**: applies `--zbk-button-foreground-hover`, `--zbk-button-background-hover`, and `--zbk-button-border-color-hover`.
+- **Active/pressed**: uses `--zbk-button-foreground-active`, `--zbk-button-background-hover`, and the selected border color token.
+- **Focus-visible**: draws an outline from `--zbk-button-focus-color`, width, and offset tokens plus any `--zbk-button-box-shadow-focus` hooks.
 - **Disabled**: both native `disabled` and `aria-disabled="true"` routes share the disabled color tokens, remove shadows, and prevent pointer events.
 
 ## Accessibility
@@ -262,13 +117,13 @@ Button styles react to standard interaction and accessibility states:
 
 ## Token overview
 
-Button tokens are exposed as `--zbk-btn-*` CSS custom properties and map back to component defaults:
+Button tokens are exposed as `--zbk-button-*` CSS custom properties and map back to component defaults:
 
 - **Color + background**: `foreground`, `foreground-hover`, `foreground-active`, `foreground-disabled`, `background`, `background-hover`, `background-active`, `background-disabled`, `border-color` (+ hover/selected/disabled).
-- **Geometry**: `border-width`, `border-style`, `border-radius`, plus padding tokens (`padding-inline` via `--zbk-btn-padding-x`, `padding-block` via `--zbk-btn-padding-y`), directional overrides, spacing like `--zbk-btn-gap`, and `--zbk-btn-icon-font-size`.
+- **Geometry**: `border-width`, `border-style`, `border-radius`, plus padding tokens (`padding-inline` via `--zbk-button-padding-x`, `padding-block` via `--zbk-button-padding-y`), directional overrides, spacing like `--zbk-button-gap`, and `--zbk-button-icon-font-size`.
 - **Typography**: `font-family`, `font-size`, `font-weight`, `line-height`, `letter-spacing`, `text-transform`, `text-decoration`, `text-align`.
-- **Layout + interaction**: sizing tokens (`min-width`, `min-height`), cursor, flex alignment, transitions, shadows, opacity, and `--zbk-btn-raised-amount` for the raised variant.
-- **Focus**: `--zbk-btn-focus-color`, `--zbk-btn-focus-width`, and offsets control the outline.
+- **Layout + interaction**: sizing tokens (`min-width`, `min-height`), cursor, flex alignment, transitions, shadows, opacity, and `--zbk-button-raised-amount` for the raised variant.
+- **Focus**: `--zbk-button-focus-color`, `--zbk-button-focus-width`, and offsets control the outline.
 
 Override tokens globally or per-instance to retheme buttons without changing markup.
 

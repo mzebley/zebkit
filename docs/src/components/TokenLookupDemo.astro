@@ -1,21 +1,48 @@
 ---
-const lookupHref = '/zebkit/token-lookup.json';
-const buttonPrefix = 'button.';
+interface Props {
+  title?: string;
+  description?: string;
+  prefix?: string;
+  label?: string;
+  lookupHref?: string;
+  id?: string;
+}
+
+const defaultLabel = 'Token alias';
+
+const {
+  title = 'Token alias lookup',
+  description: providedDescription,
+  prefix = '',
+  label = defaultLabel,
+  lookupHref = '/zebkit/token-lookup.json',
+  id,
+} = Astro.props as Props;
+
+const description = providedDescription ?? `Select any ${label.toLowerCase()} to see the generated CSS variable.`;
+
+const normalizedPrefix = prefix.trim();
+const fallbackId = normalizedPrefix
+  ? `token-lookup-${normalizedPrefix.replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '')}`
+  : 'token-lookup-all';
+const elementId = id ?? fallbackId;
+const loadingLabel = `Loading ${label.toLowerCase()}…`;
 ---
 <section
   class="token-lookup-demo"
-  id="button-token-lookup"
+  id={elementId}
   data-lookup={lookupHref}
-  data-prefix={buttonPrefix}
+  data-prefix={normalizedPrefix}
+  data-label={label}
 >
   <header>
-    <h3>Token alias lookup</h3>
-    <p>Select any button token reference to see the compiled CSS variable.</p>
+    <h3>{title}</h3>
+    <p>{description}</p>
   </header>
   <label class="token-lookup-demo__select">
-    <span>Button token alias</span>
+    <span>{label}</span>
     <select disabled>
-      <option>Loading button tokens…</option>
+      <option>{loadingLabel}</option>
     </select>
   </label>
   <div class="token-lookup-demo__result">
@@ -32,7 +59,8 @@ const buttonPrefix = 'button.';
 </section>
 
 <script type="module" is:inline>
-  const container = document.getElementById('button-token-lookup');
+  const containerId = '{elementId}';
+  const container = document.getElementById(containerId);
   if (container) {
     const select = container.querySelector('select');
     const aliasDisplay = container.querySelector('[data-alias]');
@@ -40,6 +68,7 @@ const buttonPrefix = 'button.';
     const status = container.querySelector('[data-status]');
     const lookupHref = container.dataset.lookup || '/zebkit/token-lookup.json';
     const prefix = container.dataset.prefix || '';
+    const label = container.dataset.label || 'Token alias';
 
     const setStatus = (message, isError = false) => {
       if (status) {
@@ -74,9 +103,9 @@ const buttonPrefix = 'button.';
       if (entries.length) {
         select.selectedIndex = 0;
         updateDisplay();
-        setStatus('Token references loaded. Choose any alias to view the CSS variable.');
+        setStatus(`Loaded ${label.toLowerCase()} entries. Choose one to view the CSS variable.`);
       } else {
-        setStatus('No button token aliases found.', true);
+        setStatus(`No ${label.toLowerCase()} entries found.`, true);
       }
     };
 

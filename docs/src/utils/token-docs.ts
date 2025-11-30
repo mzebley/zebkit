@@ -1,5 +1,3 @@
-import type { TokenInterface } from "../../../src/definitions/tokens";
-
 export interface TokenRow {
   token: string;
   type: string;
@@ -7,7 +5,20 @@ export interface TokenRow {
   description: string;
 }
 
-export function buildTokenRows(tokenKey: string, tokens: TokenInterface): TokenRow[] {
+export interface CompiledToken {
+  value: string | number;
+  type: string;
+  description: string;
+}
+
+export type CompiledTokenMap = Record<string, CompiledToken>;
+
+export function buildTokenRows(
+  tokenKey: string,
+  tokens: CompiledTokenMap | undefined
+): TokenRow[] {
+  if (!tokens) return [];
+
   return Object.entries(tokens).map(([name, token]) => ({
     token: `${tokenKey}.${name}`,
     type: token.type,
