@@ -1,4 +1,6 @@
 ---
+import { randomUUID } from 'node:crypto';
+
 interface TokenControl {
   property: string;
   label: string;
@@ -15,6 +17,7 @@ interface Props {
   description?: string;
   groups: { title: string; tokens: TokenControl[] }[];
   scopeSelector?: string;
+  id?: string;
 }
 
 const {
@@ -22,9 +25,16 @@ const {
   description,
   groups,
   scopeSelector = ':root',
+  id,
 } = Astro.props as Props;
+
+const elementId = id ?? `token-playground-${randomUUID()}`;
 ---
-<section class="token-playground" data-scope-selector={scopeSelector}>
+<section
+  class="token-playground"
+  id={elementId}
+  data-scope-selector={scopeSelector}
+>
   <div class="playground-heading">
     <div>
       <p class="eyebrow">Live overrides</p>
@@ -43,13 +53,11 @@ const {
     </div>
   </div>
   <script type="application/json" data-token-groups>{JSON.stringify(groups)}</script>
-  <script type="module">
-  (() => {
-    const currentScript = document.currentScript;
-    const playground = currentScript ? currentScript.closest('.token-playground') : null;
-    if (!playground) {
-      return;
-    }
+  <script type="module" is:inline>
+    (() => {
+    const containerId = '{elementId}';
+    const playground = document.getElementById(containerId);
+    if (!playground) return;
 
     const dataScript = playground.querySelector('script[data-token-groups]');
     const rawGroups = dataScript?.textContent || '[]';
@@ -61,236 +69,236 @@ const {
       controlGroups = [];
     }
 
-  const scopeSelector = playground.dataset.scopeSelector || ':root';
-  const scopeElement =
-    scopeSelector === ':root'
-      ? document.documentElement
-      : playground.querySelector(scopeSelector) || document.querySelector(scopeSelector) || document.documentElement;
+    const scopeSelector = playground.dataset.scopeSelector || ':root';
+    const scopeElement =
+      scopeSelector === ':root'
+        ? document.documentElement
+        : playground.querySelector(scopeSelector) ||
+          document.querySelector(scopeSelector) ||
+          document.documentElement;
 
-  const host = playground.querySelector('[data-token-controls]');
-  const defaultValues = new Map();
+    const host = playground.querySelector('[data-token-controls]');
+    const defaultValues = new Map();
 
-  function readInitialValue(property) {
-    const computed = getComputedStyle(scopeElement).getPropertyValue(property);
-    return computed.trim();
-  }
-
-  function extractNumeric(value) {
-    if (!value) return NaN;
-    const match = value.match(/-?\d*\.?\d+/);
-    return match ? Number(match[0]) : NaN;
-  }
-
-  function toHex(color) {
-    const value = color.trim();
-    if (!value) return '#000000';
-    if (value.startsWith('#')) return value;
-    const rgbMatch = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
-    if (rgbMatch) {
-      const [r, g, b] = rgbMatch.slice(1, 4).map(Number);
-      return (
-        '#' +
-        [r, g, b]
-          .map((component) => component.toString(16).padStart(2, '0'))
-          .join('')
-      );
-    }
-    return '#000000';
-  }
-
-  function formatValue(token, rawValue) {
-    if (token.type === 'range' && token.unit) {
-      return `${rawValue}${token.unit}`;
-    }
-    return rawValue;
-  }
-
-  function applyTokenValue(property, value) {
-    scopeElement.style.setProperty(property, value);
-  }
-
-  function createControl(token) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'token-control';
-
-    const defaultValue = defaultValues.get(token.property);
-
-    const label = document.createElement('label');
-    label.setAttribute('for', token.property);
-    label.textContent = token.label;
-
-    const controlRow = document.createElement('div');
-    controlRow.className = 'control-input';
-
-    let input;
-    let output;
-
-    if (token.type === 'color') {
-      input = document.createElement('input');
-      input.type = 'color';
-      input.id = token.property;
-      input.value = toHex(defaultValue || '#000000');
-    } else if (token.type === 'range') {
-      input = document.createElement('input');
-      input.type = 'range';
-      input.id = token.property;
-      input.min = token.min;
-      input.max = token.max;
-      input.step = token.step;
-      const numeric = extractNumeric(defaultValue);
-      const fallback = Number.isNaN(numeric) ? token.min : numeric;
-      input.value = fallback;
-      output = document.createElement('output');
-      output.textContent = formatValue(token, input.value);
-      controlRow.appendChild(output);
-    } else {
-      input = document.createElement('input');
-      input.type = 'text';
-      input.id = token.property;
-      input.value = defaultValue;
+    function readInitialValue(property) {
+      const computed = getComputedStyle(scopeElement).getPropertyValue(property);
+      return computed.trim();
     }
 
-    controlRow.prepend(input);
-    wrapper.appendChild(label);
-    wrapper.appendChild(controlRow);
-
-    if (token.description) {
-      const description = document.createElement('small');
-      description.textContent = token.description;
-      wrapper.appendChild(description);
+    function extractNumeric(value) {
+      if (!value) return NaN;
+      const match = value.match(/-?\d*\.?\d+/);
+      return match ? Number(match[0]) : NaN;
     }
 
-    const resetButton = document.createElement('button');
-    resetButton.type = 'button';
-    resetButton.textContent = 'Reset';
-    wrapper.appendChild(resetButton);
-
-    const update = () => {
-      if (token.type === 'range') {
-        const numericValue = extractNumeric(input.value);
-        const finalValue = token.unit ? `${numericValue}${token.unit}` : `${numericValue}`;
-        applyTokenValue(token.property, finalValue);
-        if (output) {
-          output.textContent = formatValue(token, numericValue);
-        }
-      } else if (token.type === 'color') {
-        applyTokenValue(token.property, input.value);
-      } else {
-        applyTokenValue(token.property, input.value);
+    function toHex(color) {
+      const value = color.trim();
+      if (!value) return '#000000';
+      if (value.startsWith('#')) return value;
+      const rgbMatch = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+      if (rgbMatch) {
+        const [r, g, b] = rgbMatch.slice(1, 4).map(Number);
+        return (
+          '#' +
+          [r, g, b]
+            .map((component) => component.toString(16).padStart(2, '0'))
+            .join('')
+        );
       }
-    };
-
-    input.addEventListener('input', update);
-    input.addEventListener('change', update);
-
-    resetButton.addEventListener('click', () => {
-      const stored = defaultValues.get(token.property);
-      if (token.type === 'range') {
-        const numeric = extractNumeric(stored);
-        input.value = Number.isNaN(numeric) ? token.min : numeric;
-      } else if (token.type === 'color') {
-        input.value = toHex(stored);
-      } else {
-        input.value = stored;
-      }
-      update();
-    });
-
-    return wrapper;
-  }
-
-  if (host) {
-    controlGroups.forEach((group) => {
-      group.tokens.forEach((token) => {
-        if (!defaultValues.has(token.property)) {
-          defaultValues.set(token.property, readInitialValue(token.property));
-        }
-      });
-    });
-
-    controlGroups.forEach((group) => {
-      const groupWrapper = document.createElement('section');
-      groupWrapper.className = 'control-group';
-
-      const heading = document.createElement('h4');
-      heading.textContent = group.title;
-      groupWrapper.appendChild(heading);
-
-      group.tokens.forEach((token) => {
-        groupWrapper.appendChild(createControl(token));
-      });
-
-      host.appendChild(groupWrapper);
-    });
-  }
-
-  const actionsHost = playground.querySelector('[data-actions]');
-  if (actionsHost) {
-    const resetAll = actionsHost.querySelector('[data-action="reset"]');
-    const copyCss = actionsHost.querySelector('[data-action="copy"]');
-
-    if (resetAll) {
-      resetAll.addEventListener('click', () => {
-        controlGroups.forEach((group) => {
-          group.tokens.forEach((token) => {
-            const stored = defaultValues.get(token.property);
-            applyTokenValue(token.property, stored);
-            const input = host ? host.querySelector(`#${CSS.escape(token.property)}`) : null;
-            if (!input) return;
-            if (token.type === 'range') {
-              const numeric = extractNumeric(stored);
-              input.value = Number.isNaN(numeric) ? token.min : numeric;
-              const parent = input.parentElement;
-              if (parent) {
-                const output = parent.querySelector('output');
-                if (output) {
-                  output.textContent = formatValue(token, extractNumeric(input.value));
-                }
-              }
-            } else if (token.type === 'color') {
-              input.value = toHex(stored);
-            } else {
-              input.value = stored;
-            }
-          });
-        });
-      });
+      return '#000000';
     }
 
-    if (copyCss) {
-      copyCss.addEventListener('click', async () => {
-      const overrides = [];
+    function formatValue(token, rawValue) {
+      if (token.type === 'range' && token.unit) {
+        return `${rawValue}${token.unit}`;
+      }
+      return rawValue;
+    }
+
+    function applyTokenValue(property, value) {
+      scopeElement.style.setProperty(property, value);
+    }
+
+    function createControl(token) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'token-control';
+
+      const defaultValue = defaultValues.get(token.property);
+
+      const label = document.createElement('label');
+      label.setAttribute('for', token.property);
+      label.textContent = token.label;
+
+      const controlRow = document.createElement('div');
+      controlRow.className = 'control-input';
+
+      let input;
+      let output;
+
+      if (token.type === 'color') {
+        input = document.createElement('input');
+        input.type = 'color';
+        input.id = token.property;
+        input.value = toHex(defaultValue || '#000000');
+      } else if (token.type === 'range') {
+        input = document.createElement('input');
+        input.type = 'range';
+        input.id = token.property;
+        input.min = token.min;
+        input.max = token.max;
+        input.step = token.step;
+        const numeric = extractNumeric(defaultValue);
+        const fallback = Number.isNaN(numeric) ? token.min : numeric;
+        input.value = fallback;
+        output = document.createElement('output');
+        output.textContent = formatValue(token, input.value);
+        controlRow.appendChild(output);
+      } else {
+        input = document.createElement('input');
+        input.type = 'text';
+        input.id = token.property;
+        input.value = defaultValue;
+      }
+
+      controlRow.prepend(input);
+      wrapper.appendChild(label);
+      wrapper.appendChild(controlRow);
+
+      if (token.description) {
+        const description = document.createElement('small');
+        description.textContent = token.description;
+        wrapper.appendChild(description);
+      }
+
+      const resetButton = document.createElement('button');
+      resetButton.type = 'button';
+      resetButton.textContent = 'Reset';
+      wrapper.appendChild(resetButton);
+
+      const update = () => {
+        if (token.type === 'range') {
+          const numericValue = extractNumeric(input.value);
+          const finalValue = token.unit ? `${numericValue}${token.unit}` : `${numericValue}`;
+          applyTokenValue(token.property, finalValue);
+          if (output) {
+            output.textContent = formatValue(token, numericValue);
+          }
+        } else {
+          applyTokenValue(token.property, input.value);
+        }
+      };
+
+      input.addEventListener('input', update);
+      input.addEventListener('change', update);
+
+      resetButton.addEventListener('click', () => {
+        const stored = defaultValues.get(token.property);
+        if (token.type === 'range') {
+          const numeric = extractNumeric(stored);
+          input.value = Number.isNaN(numeric) ? token.min : numeric;
+        } else if (token.type === 'color') {
+          input.value = toHex(stored);
+        } else {
+          input.value = stored;
+        }
+        update();
+      });
+
+      return wrapper;
+    }
+
+    if (host) {
       controlGroups.forEach((group) => {
         group.tokens.forEach((token) => {
-          const current = getComputedStyle(scopeElement).getPropertyValue(token.property);
-          const stored = defaultValues.get(token.property);
-          if (!stored || current.trim() !== stored.trim()) {
-            overrides.push(`  ${token.property}: ${current.trim() || token.min || ''};`);
+          if (!defaultValues.has(token.property)) {
+            defaultValues.set(token.property, readInitialValue(token.property));
           }
         });
       });
 
-      const css = overrides.length
-        ? `:root {\n${overrides.join('\n')}\n}`
-        : ':root {\n  /* No overrides applied */\n}';
+      controlGroups.forEach((group) => {
+        const groupWrapper = document.createElement('section');
+        groupWrapper.className = 'control-group';
 
-      try {
-        await navigator.clipboard.writeText(css);
-        copyCss.textContent = 'Copied!';
-        setTimeout(() => {
-          copyCss.textContent = 'Copy CSS';
-        }, 2000);
-      } catch (error) {
-        console.error('Clipboard copy failed', error);
-        copyCss.textContent = 'Copy failed';
-        setTimeout(() => {
-          copyCss.textContent = 'Copy CSS';
-        }, 2000);
-        }
+        const heading = document.createElement('h4');
+        heading.textContent = group.title;
+        groupWrapper.appendChild(heading);
+
+        group.tokens.forEach((token) => {
+          groupWrapper.appendChild(createControl(token));
+        });
+
+        host.appendChild(groupWrapper);
       });
     }
-  }
-  })();
+
+    const actionsHost = playground.querySelector('[data-actions]');
+    if (actionsHost) {
+      const resetAll = actionsHost.querySelector('[data-action="reset"]');
+      const copyCss = actionsHost.querySelector('[data-action="copy"]');
+
+      if (resetAll) {
+        resetAll.addEventListener('click', () => {
+          controlGroups.forEach((group) => {
+            group.tokens.forEach((token) => {
+              const stored = defaultValues.get(token.property);
+              applyTokenValue(token.property, stored);
+              const input = host ? host.querySelector(`#${CSS.escape(token.property)}`) : null;
+              if (!input) return;
+              if (token.type === 'range') {
+                const numeric = extractNumeric(stored);
+                input.value = Number.isNaN(numeric) ? token.min : numeric;
+                const parent = input.parentElement;
+                if (parent) {
+                  const output = parent.querySelector('output');
+                  if (output) {
+                    output.textContent = formatValue(token, extractNumeric(input.value));
+                  }
+                }
+              } else if (token.type === 'color') {
+                input.value = toHex(stored);
+              } else {
+                input.value = stored;
+              }
+            });
+          });
+        });
+      }
+
+      if (copyCss) {
+        copyCss.addEventListener('click', async () => {
+          const overrides = [];
+          controlGroups.forEach((group) => {
+            group.tokens.forEach((token) => {
+              const current = getComputedStyle(scopeElement).getPropertyValue(token.property);
+              const stored = defaultValues.get(token.property);
+              if (!stored || current.trim() !== stored.trim()) {
+                overrides.push(`  ${token.property}: ${current.trim() || token.min || ''};`);
+              }
+            });
+          });
+
+          const css = overrides.length
+            ? `:root {\n${overrides.join('\n')}\n}`
+            : `:root {\n  /* No overrides applied */\n}`;
+
+          try {
+            await navigator.clipboard.writeText(css);
+            copyCss.textContent = 'Copied!';
+            setTimeout(() => {
+              copyCss.textContent = 'Copy CSS';
+            }, 2000);
+          } catch (error) {
+            console.error('Clipboard copy failed', error);
+            copyCss.textContent = 'Copy failed';
+            setTimeout(() => {
+              copyCss.textContent = 'Copy CSS';
+            }, 2000);
+          }
+        });
+      }
+    }
+    })();
   </script>
 </section>
 <style>
