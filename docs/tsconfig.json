@@ -3,7 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@definitions/*": ["../src/definitions/*"]
+      "@definitions/*": ["../src/definitions/*"],
+      "@data/*": ["./src/data/*"],
+      "@components/*": ["./src/components/*"]
     }
   }
 }

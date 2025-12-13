@@ -14,84 +14,84 @@ export type ButtonTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   // Core label colors
-  color: {
-    value: "{body.ink}",
+  ink: {
+    value: "{app.ink}",
     type: "color",
     description: "Default button label color.",
   },
-  "color-hover": {
-    value: "{body.ink}",
+  "ink-hover": {
+    value: "{app.ink}",
     type: "color",
     description: "Label color when hovered.",
   },
-  "color-active": {
-    value: "{body.ink}",
+  "ink-active": {
+    value: "{app.ink}",
     type: "color",
     description: "Label color when active or pressed.",
   },
-  "color-disabled": {
-    value: "{disabled.color}",
+  "ink-disabled": {
+    value: "{disabled.ink}",
     type: "color",
     description: "Label color for disabled buttons.",
   },
 
   // Background colors
-  background: {
-    value: "{primary}",
+  canvas: {
+    value: "{brand.200}",
     type: "color",
     description: "Default button background.",
   },
-  "background-hover": {
-    value: "{primary.dark}",
+  "canvas-hover": {
+    value: "{brand.300}",
     type: "color",
     description: "Background for hover state.",
   },
-  "background-active": {
-    value: "{primary.darker}",
+  "canvas-active": {
+    value: "{brand.300}",
     type: "color",
     description: "Background for active/pressed state.",
   },
-  "background-disabled": {
-    value: "{disabled.background}",
+  "canvas-disabled": {
+    value: "{disabled.canvas}",
     type: "color",
     description: "Background for disabled buttons.",
   },
 
   // Border colors
   "border-color": {
-    value: "{accent}",
+    value: "{accent-primary.500}",
     type: "color",
     description: "Default button border color.",
   },
   "border-color-hover": {
-    value: "{accent.dark}",
+    value: "{accent-primary.600}",
     type: "color",
     description: "Border color on hover.",
   },
   "border-color-selected": {
-    value: "{accent}",
+    value: "{accent-primary.500}",
     type: "color",
     description: "Border color when the button is selected/active.",
   },
   "border-color-disabled": {
-    value: "{disabled.border-color}",
+    value: "{disabled.border}",
     type: "color",
     description: "Border color for disabled buttons.",
   },
 
   // Border geometry
   "border-width": {
-    value: "{spacing.2px}",
+    value: "{border.width-sm}",
     type: "borderWidth",
     description: "Base border width.",
   },
   "border-style": {
-    value: "solid",
+    value: "{border.style}",
     type: "borderStyle",
     description: "Border style (solid, dashed, etc) for standard buttons.",
   },
   "border-radius": {
-    value: "{spacing.05}",
+    value: "{border.radius-md}",
     type: "borderRadius",
     description: "Corner radius for standard buttons.",
   },
@@ -108,17 +108,17 @@ const tokens = {
     description: "Base font size for button labels.",
   },
   "font-weight": {
-    value: "{body.weight}",
+    value: "{font-weight.medium}",
     type: "fontWeight",
     description: "Font weight for button labels.",
   },
   "line-height": {
-    value: "{body.line-height}",
+    value: "{line-height.2}",
     type: "lineHeight",
     description: "Base line height for buttons.",
   },
   "letter-spacing": {
-    value: "{body.letter-spacing}",
+    value: "{tracking.normal}",
     type: "letterSpacing",
     description: "Letter spacing for button labels.",
   },
@@ -140,7 +140,7 @@ const tokens = {
 
   // Internal spacing (logical axes)
   "padding-inline": {
-    value: "{spacing.2}",
+    value: "{spacing.1}",
     type: "spacing",
     description: "Inline (horizontal) padding for standard buttons.",
   },
@@ -260,17 +260,17 @@ const tokens = {
 
   // Focus & interaction
   "focus-color": {
-    value: "{accent}",
+    value: "{focus.color}",
     type: "color",
     description: "Outline color for focus state.",
   },
   "focus-width": {
-    value: "2px",
+    value: "{focus.width}",
     type: "borderWidth",
     description: "Outline width for focus state.",
   },
   "focus-offset": {
-    value: "0px",
+    value: "{focus.offset}",
     type: "spacing",
     description: "Outline offset for focus state.",
   },

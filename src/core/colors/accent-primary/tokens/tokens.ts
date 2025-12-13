@@ -3,145 +3,69 @@ import { z } from "zod";
 import { tokenSchema } from "./token-schema";
 
 /**
- * Zebkit accent-primary color design tokens. 
+ * Zebkit primary accent color design tokens. 
  */
 export const key = "accent-primary";
-export const layer: LayerName = "base";
+export const layer: LayerName = "theme";
 
 export type AccentPrimaryTokenSchema = z.infer<typeof tokenSchema>;
 
 const tokens = {
-  // Canvas: base primary accent surfaces
-  "canvas": {
-    value: "{color.dusk-50}",
+  50: {
+    value: "{color.violet-50}",
     type: "color",
-    description: "Base primary accent canvas color for primary surfaces."
+    description: "For primary accent surfaces."
   },
-  "canvas-soft": {
-    value: "",
+    100: {
+    value: "{color.violet-100}",
     type: "color",
-    description: "Soft primary accent canvas color for lightly tinted surfaces."
+    description: "For primary accent surfaces."
   },
-  "canvas-muted": {
-    value: "",
+    200: {
+    value: "{color.violet-200}",
     type: "color",
-    description: "Muted primary accent canvas color for low-emphasis surfaces."
+    description: "For primary accent surfaces."
   },
-  "canvas-strong": {
-    value: "",
+    300: {
+    value: "{color.violet-300}",
     type: "color",
-    description: "Strong primary accent canvas color for high-emphasis surfaces."
+    description: "For primary accent surfaces."
   },
-
-  // Canvas (inverse): primary accent surfaces in inverse contexts
-  "canvas-inverse": {
-    value: "",
+    400: {
+    value: "{color.violet-400}",
     type: "color",
-    description: "Base inverse primary accent canvas color for surfaces on dark or inverted contexts."
+    description: "For primary accent surfaces."
   },
-  "canvas-inverse-soft": {
-    value: "",
+    500: {
+    value: "{color.violet-500}",
     type: "color",
-    description: "Soft inverse primary accent canvas color for lightly tinted surfaces in inverse contexts."
+    description: "For primary accent surfaces."
   },
-  "canvas-inverse-muted": {
-    value: "",
+    600: {
+    value: "{color.violet-600}",
     type: "color",
-    description: "Muted inverse primary accent canvas color for low-emphasis surfaces in inverse contexts."
+    description: "For primary accent surfaces."
   },
-  "canvas-inverse-strong": {
-    value: "",
+    700: {
+    value: "{color.violet-700}",
     type: "color",
-    description: "Strong inverse primary accent canvas color for high-emphasis surfaces in inverse contexts."
+    description: "For primary accent surfaces."
   },
-
-  // Ink: primary accent text and icon colors
-  "ink": {
-    value: "",
+    800: {
+    value: "{color.violet-800}",
     type: "color",
-    description: "Base primary accent ink color for text and icons on neutral or light canvases."
+    description: "For primary accent surfaces."
   },
-  "ink-soft": {
-    value: "",
+    900: {
+    value: "{color.violet-900}",
     type: "color",
-    description: "Soft primary accent ink color for lower-emphasis text and icons."
+    description: "For primary accent surfaces."
   },
-  "ink-muted": {
-    value: "",
+    950: {
+    value: "{color.violet-950}",
     type: "color",
-    description: "Muted primary accent ink color for subtle or secondary text and icons."
+    description: "For primary accent surfaces."
   },
-  "ink-strong": {
-    value: "",
-    type: "color",
-    description: "Strong primary accent ink color for high-emphasis text and icons."
-  },
-
-  // Ink (inverse): primary accent text and icon colors on inverse canvases
-  "ink-inverse": {
-    value: "",
-    type: "color",
-    description: "Base inverse primary accent ink color for text and icons on inverse or dark canvases."
-  },
-  "ink-inverse-soft": {
-    value: "",
-    type: "color",
-    description: "Soft inverse primary accent ink color for lower-emphasis text and icons on inverse canvases."
-  },
-  "ink-inverse-muted": {
-    value: "",
-    type: "color",
-    description: "Muted inverse primary accent ink color for subtle text and icons on inverse canvases."
-  },
-  "ink-inverse-strong": {
-    value: "",
-    type: "color",
-    description: "Strong inverse primary accent ink color for high-emphasis text and icons on inverse canvases."
-  },
-
-  // Border: primary accent border, outline, and divider colors
-  "border": {
-    value: "",
-    type: "color",
-    description: "Base primary accent border color for outlines, strokes, and dividers."
-  },
-  "border-soft": {
-    value: "",
-    type: "color",
-    description: "Soft primary accent border color for low-emphasis outlines and dividers."
-  },
-  "border-muted": {
-    value: "",
-    type: "color",
-    description: "Muted primary accent border color for subtle outlines and dividers."
-  },
-  "border-strong": {
-    value: "",
-    type: "color",
-    description: "Strong primary accent border color for high-emphasis outlines and dividers."
-  },
-
-  // Border (inverse): primary accent borders in inverse contexts
-  "border-inverse": {
-    value: "",
-    type: "color",
-    description: "Base inverse primary accent border color for outlines and dividers on inverse canvases."
-  },
-  "border-inverse-soft": {
-    value: "",
-    type: "color",
-    description: "Soft inverse primary accent border color for low-emphasis outlines on inverse canvases."
-  },
-  "border-inverse-muted": {
-    value: "",
-    type: "color",
-    description: "Muted inverse primary accent border color for subtle outlines on inverse canvases."
-  },
-  "border-inverse-strong": {
-    value: "",
-    type: "color",
-    description: "Strong inverse primary accent border color for high-emphasis outlines on inverse canvases."
-  }
 } as const satisfies AccentPrimaryTokenSchema;
 
 export default tokens;

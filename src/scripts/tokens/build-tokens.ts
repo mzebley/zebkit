@@ -1,45 +1,45 @@
 #!/usr/bin/env ts-node
 
-import path from 'path';
-import inquirer from 'inquirer';
-import chalk from 'chalk';
-import fs from 'fs-extra';
-import { fileURLToPath } from 'node:url';
-import type { Dirent } from 'fs';
-import { allowedTokenTypes } from '@definitions/tokens';
-import type { TokenInterface } from '@definitions/tokens';
-import { gatherZebkitFiles } from '@token-scripts/gather-files';
+import path from "path";
+import inquirer from "inquirer";
+import chalk from "chalk";
+import fs from "fs-extra";
+import { fileURLToPath } from "node:url";
+import type { Dirent } from "fs";
+import { allowedTokenTypes } from "@definitions/tokens";
+import type { TokenInterface } from "@definitions/tokens";
+import { gatherZebkitFiles } from "@token-scripts/gather-files";
 import {
   buildZebkitTokens,
   BuildZebkitTokensOptions,
-} from '@token-scripts/compile-tokens';
-import { buildZebkitVariants } from '@token-scripts/compile-variants';
-import { convertTokensToCssVars } from '@token-scripts/token-converter';
-import { compileSass, CompileSassOptions } from '@token-scripts/compile-css';
-import { loadZebkitConfig, TokensConfig } from '../config';
+} from "@token-scripts/compile-tokens";
+import { buildZebkitVariants } from "@token-scripts/compile-variants";
+import { convertTokensToCssVars } from "@token-scripts/token-converter";
+import { compileSass, CompileSassOptions } from "@token-scripts/compile-css";
+import { loadZebkitConfig, TokensConfig } from "../config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const ZEBKIT_PREFIX = 'zbk';
+const ZEBKIT_PREFIX = "zbk";
 
 /**
  * Interactive entry point for building Zebkit tokens and CSS.
  * Expects each token folder to export `key` and a default token map alongside a `token-schema.ts`.
  */
 function displayWelcome() {
-  console.log(chalk.cyan('============================'));
-  console.log(chalk.cyan('     Zebkit Token Builder    '));
-  console.log(chalk.cyan('============================'));
+  console.log(chalk.cyan("============================"));
+  console.log(chalk.cyan("     Zebkit Token Builder    "));
+  console.log(chalk.cyan("============================"));
 }
 
 async function getComponents(): Promise<string[]> {
-  const componentsDir = path.resolve(__dirname, '../../components');
+  const componentsDir = path.resolve(__dirname, "../../components");
   if (!(await fs.pathExists(componentsDir))) return [];
 
   const items = await fs.readdir(componentsDir, { withFileTypes: true });
   return items
-    .filter((item: Dirent) => item.isDirectory() && !item.name.startsWith('.'))
+    .filter((item: Dirent) => item.isDirectory() && !item.name.startsWith("."))
     .map((item: Dirent) => item.name);
 }
 
@@ -56,48 +56,48 @@ async function run() {
     const selectedComponents = includeAllComponents
       ? components
       : tokensConfig?.selectedComponents
-          ? tokensConfig.selectedComponents.filter((component) => {
-              const exists = components.includes(component);
-              if (!exists) {
-                console.warn(
-                  chalk.yellow(
-                    `Component "${component}" not found. Ignoring this entry from config.`
-                  )
-                );
-              }
-              return exists;
-            })
-          : components.length > 0
-            ? (
-                await inquirer.prompt([
-                  {
-                    type: 'checkbox',
-                    name: 'selectedComponents',
-                    message: 'Select components to include:',
-                    choices: components,
-                  },
-                ])
-              ).selectedComponents
-            : [];
+      ? tokensConfig.selectedComponents.filter((component) => {
+          const exists = components.includes(component);
+          if (!exists) {
+            console.warn(
+              chalk.yellow(
+                `Component "${component}" not found. Ignoring this entry from config.`
+              )
+            );
+          }
+          return exists;
+        })
+      : components.length > 0
+      ? (
+          await inquirer.prompt([
+            {
+              type: "checkbox",
+              name: "selectedComponents",
+              message: "Select components to include:",
+              choices: components,
+            },
+          ])
+        ).selectedComponents
+      : [];
 
     const { destinationPath, assetFilePath } = tokensConfig
       ? {
-          destinationPath: tokensConfig.destinationPath ?? './dist',
-          assetFilePath: tokensConfig.assetFilePath ?? '/assets/',
+          destinationPath: tokensConfig.destinationPath ?? "./dist",
+          assetFilePath: tokensConfig.assetFilePath ?? "/assets/",
         }
       : await inquirer.prompt([
           {
-            type: 'input',
-            name: 'destinationPath',
-            message: 'Destination directory for exported files:',
-            default: './dist',
+            type: "input",
+            name: "destinationPath",
+            message: "Destination directory for exported files:",
+            default: "./dist",
           },
           {
-            type: 'input',
-            name: 'assetFilePath',
+            type: "input",
+            name: "assetFilePath",
             message:
-              'Path to your project assets (used for compiled CSS asset URLs):',
-            default: '/assets/',
+              "Path to your project assets (used for compiled CSS asset URLs):",
+            default: "/assets/",
           },
         ]);
 
@@ -107,31 +107,31 @@ async function run() {
 
     const themeAnswers = tokensConfig
       ? {
-          theme: tokensConfig.theme ?? 'default',
+          theme: tokensConfig.theme ?? "default",
           customTokenPath: tokensConfig.customTokenPath,
           customThemeName: tokensConfig.customThemeName,
         }
       : await inquirer.prompt([
           {
-            type: 'list',
-            name: 'theme',
-            message: 'Select the theme for your tokens:',
-            choices: ['default', 'quiet-boutique', 'dark-boutique', 'custom'],
-            default: 'default',
+            type: "list",
+            name: "theme",
+            message: "Select the theme for your tokens:",
+            choices: ["default", "quiet-boutique", "dark-boutique", "custom"],
+            default: "default",
           },
           {
-            type: 'input',
-            name: 'customTokenPath',
-            message: 'Path to custom token overrides file or folder:',
-            when: (answers) => answers.theme === 'custom',
-            validate: (input) => (input ? true : 'Path cannot be empty.'),
+            type: "input",
+            name: "customTokenPath",
+            message: "Path to custom token overrides file or folder:",
+            when: (answers) => answers.theme === "custom",
+            validate: (input) => (input ? true : "Path cannot be empty."),
           },
           {
-            type: 'input',
-            name: 'customThemeName',
-            message: 'Name for your custom theme:',
-            when: (answers) => answers.theme === 'custom',
-            default: 'custom',
+            type: "input",
+            name: "customThemeName",
+            message: "Name for your custom theme:",
+            when: (answers) => answers.theme === "custom",
+            default: "custom",
           },
         ]);
 
@@ -139,15 +139,18 @@ async function run() {
       ? { exportTokens: tokensConfig.exportTokens ?? false }
       : await inquirer.prompt([
           {
-            type: 'confirm',
-            name: 'exportTokens',
-            message: 'Export token artifacts (JSON/TS/JS)?',
+            type: "confirm",
+            name: "exportTokens",
+            message: "Export token artifacts (JSON/TS/JS)?",
             default: false,
           },
         ]);
 
-    let splitMode: BuildZebkitTokensOptions['splitMode'] = 'combined';
+    let splitMode: BuildZebkitTokensOptions["splitMode"] = "combined";
     let outputFormats: string[] = [];
+    let writeAllowedTokenTypesFlag: boolean =
+      tokensConfig?.writeAllowedTokenTypes ?? false;
+    let writeTokenLookupFlag: boolean = tokensConfig?.writeTokenLookup ?? false;
 
     if (exportTokens) {
       if (tokensConfig?.splitMode && tokensConfig?.outputFormats?.length) {
@@ -156,30 +159,47 @@ async function run() {
       } else {
         const tokenExportAnswers = await inquirer.prompt([
           {
-            type: 'list',
-            name: 'splitMode',
-            message: 'Choose file splitting mode:',
+            type: "list",
+            name: "splitMode",
+            message: "Choose file splitting mode:",
             choices: [
-              { name: 'combined (one file per format)', value: 'combined' },
-              { name: 'per-module (one file per token module)', value: 'per-module' },
+              { name: "combined (one file per format)", value: "combined" },
+              {
+                name: "per-module (one file per token module)",
+                value: "per-module",
+              },
             ],
-            default: 'combined',
+            default: "combined",
           },
           {
-            type: 'checkbox',
-            name: 'outputFormats',
-            message: 'Select output format(s):',
+            type: "checkbox",
+            name: "outputFormats",
+            message: "Select output format(s):",
             choices: [
-              { name: 'JSON', value: 'JSON', checked: true },
-              { name: 'TypeScript', value: 'TypeScript' },
-              { name: 'JavaScript', value: 'JavaScript' },
+              { name: "JSON", value: "JSON", checked: true },
+              { name: "TypeScript", value: "TypeScript" },
+              { name: "JavaScript", value: "JavaScript" },
             ],
             validate: (input) =>
-              input.length > 0 ? true : 'You must select at least one format.',
+              input.length > 0 ? true : "You must select at least one format.",
+          },
+          {
+            type: "confirm",
+            name: "writeTokenLookup",
+            message: "Export token alias lookup JSON file?",
+            default: false,
+          },
+          {
+            type: "confirm",
+            name: "writeAllowedTokenTypes",
+            message: "Export allowed token types JSON file?",
+            default: false,
           },
         ]);
         splitMode = tokenExportAnswers.splitMode;
         outputFormats = tokenExportAnswers.outputFormats;
+        writeAllowedTokenTypesFlag = tokenExportAnswers.writeAllowedTokenTypes;
+        writeTokenLookupFlag = tokenExportAnswers.writeTokenLookup;
       }
     }
 
@@ -188,9 +208,9 @@ async function run() {
         (
           await inquirer.prompt([
             {
-              type: 'confirm',
-              name: 'writeVariantRegistry',
-              message: 'Write variant registry JSON output?',
+              type: "confirm",
+              name: "writeVariantRegistry",
+              message: "Write variant registry JSON output?",
               default: false,
             },
           ])
@@ -201,24 +221,29 @@ async function run() {
     let themeName = themeAnswers.theme;
 
     switch (themeAnswers.theme) {
-      case 'quiet-boutique':
-        customTokenPath = path.resolve(__dirname, '../../themes/quiet-boutique');
+      case "quiet-boutique":
+        customTokenPath = path.resolve(
+          __dirname,
+          "../../themes/quiet-boutique"
+        );
         break;
-      case 'dark-boutique':
-        customTokenPath = path.resolve(__dirname, '../../themes/dark-boutique');
+      case "dark-boutique":
+        customTokenPath = path.resolve(__dirname, "../../themes/dark-boutique");
         break;
-      case 'custom':
+      case "custom":
         customTokenPath = themeAnswers.customTokenPath;
-        themeName = themeAnswers.customThemeName || 'custom';
+        themeName = themeAnswers.customThemeName || "custom";
         break;
       default:
         customTokenPath = undefined;
-        themeName = 'default';
+        themeName = "default";
     }
 
     if (customTokenPath && !(await fs.pathExists(customTokenPath))) {
       console.warn(
-        chalk.yellow(`Custom token path not found at ${customTokenPath}. Skipping overrides.`)
+        chalk.yellow(
+          `Custom token path not found at ${customTokenPath}. Skipping overrides.`
+        )
       );
       customTokenPath = undefined;
     }
@@ -231,7 +256,8 @@ async function run() {
       resolvedDestinationPath,
       customTokenPath,
       outputFormats,
-      { splitMode: splitMode as BuildZebkitTokensOptions['splitMode'] }
+      { splitMode: splitMode as BuildZebkitTokensOptions["splitMode"] },
+      exportTokens
     );
 
     const cssVars = convertTokensToCssVars(tokens, { layers });
@@ -240,8 +266,11 @@ async function run() {
       resolvedDestinationPath
     );
 
-    const { registry: variantRegistry, inlineCss, extraStylesheets } =
-      await buildZebkitVariants(tokens);
+    const {
+      registry: variantRegistry,
+      inlineCss,
+      extraStylesheets,
+    } = await buildZebkitVariants(tokens);
     if (writeVariantRegistry) {
       const variantRegistryPath = path.join(
         resolvedDestinationPath,
@@ -267,17 +296,26 @@ async function run() {
 
     await compileSass(sassOptions);
 
-    const lookupMap = buildTokenLookup(tokens);
-    await writeTokenLookupFile(tokenLookupOutputPath, lookupMap);
+    if (writeTokenLookupFlag) {
+      const lookupMap = buildTokenLookup(tokens);
+      await writeTokenLookupFile(tokenLookupOutputPath, lookupMap);
+    }
 
-    const allowedTypesPath = path.join(resolvedDestinationPath, 'allowed-token-types.json');
-    await writeAllowedTokenTypes(allowedTypesPath, [...allowedTokenTypes.options]);
+    if (writeAllowedTokenTypesFlag) {
+      const allowedTypesPath = path.join(
+        resolvedDestinationPath,
+        "allowed-token-types.json"
+      );
+      await writeAllowedTokenTypes(allowedTypesPath, [
+        ...allowedTokenTypes.options,
+      ]);
+    }
   } catch (error: any) {
-    if (error?.name === 'ExitPromptError') {
-      console.log(chalk.yellow('\nPrompt cancelled by user.'));
+    if (error?.name === "ExitPromptError") {
+      console.log(chalk.yellow("\nPrompt cancelled by user."));
       process.exit(0);
     } else {
-      console.error(chalk.red('An error occurred:'), error);
+      console.error(chalk.red("An error occurred:"), error);
       process.exit(1);
     }
   }
@@ -292,10 +330,12 @@ function resolveLookupOutputPath(
       ? configuredPath
       : path.resolve(process.cwd(), configuredPath);
   }
-  return path.join(destinationPath, 'token-lookup.json');
+  return path.join(destinationPath, "token-lookup.json");
 }
 
-function buildTokenLookup(tokens: Record<string, TokenInterface>): Record<string, string> {
+function buildTokenLookup(
+  tokens: Record<string, TokenInterface>
+): Record<string, string> {
   const lookup: Record<string, string> = {};
   const prefix = `${ZEBKIT_PREFIX}-`;
 
@@ -307,7 +347,7 @@ function buildTokenLookup(tokens: Record<string, TokenInterface>): Record<string
     if (!tokenProperties) continue;
 
     for (const propertyKey of Object.keys(tokenProperties)) {
-      const cssVar = `--${[tokenKey, propertyKey].filter(Boolean).join('-')}`;
+      const cssVar = `--${[tokenKey, propertyKey].filter(Boolean).join("-")}`;
       const reference = `${moduleName}.${propertyKey}`;
       lookup[reference] = cssVar;
       lookup[`{${reference}}`] = cssVar;
@@ -326,18 +366,21 @@ async function writeTokenLookupFile(
     await fs.writeJson(outputPath, lookup, { spaces: 2 });
     console.log(chalk.green(`Token lookup written to ${outputPath}`));
   } catch (error) {
-    console.error(chalk.red('Failed to write token lookup map.'), error);
+    console.error(chalk.red("Failed to write token lookup map."), error);
     throw error;
   }
 }
 
-async function writeAllowedTokenTypes(outputPath: string, types: string[]): Promise<void> {
+async function writeAllowedTokenTypes(
+  outputPath: string,
+  types: string[]
+): Promise<void> {
   try {
     await fs.ensureDir(path.dirname(outputPath));
     await fs.writeJson(outputPath, types, { spaces: 2 });
     console.log(chalk.green(`Allowed token types written to ${outputPath}`));
   } catch (error) {
-    console.error(chalk.red('Failed to write allowed token types.'), error);
+    console.error(chalk.red("Failed to write allowed token types."), error);
     throw error;
   }
 }

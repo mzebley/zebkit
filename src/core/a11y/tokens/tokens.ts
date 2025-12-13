@@ -28,6 +28,12 @@ const tokens = {
     description:
       "Fallback amount to multiple font size variables by in the event their specific modifier isn't set.",
   },
+  "transition-timing-modifier": {
+    value: `1`,
+    type: "utility",
+    description:
+      "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'",
+  }
 } as const satisfies A11yTokens;
 
 export default tokens;

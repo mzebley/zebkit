@@ -8,11 +8,11 @@ export type FontFamilyTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   primary: {
-    value: `"Open Sans", sans-serif`,
+    value: `"Atkinson Hyperlegible Next", sans-serif`,
     description:
       "Primary font family for use in the system. Usually used for body content and interface items.",
-    variable: false,
-    weights: "300,400,700,900",
+    variable: true,
+    weights: "200,800",
     type: "googleFont",
   },
   alt: {

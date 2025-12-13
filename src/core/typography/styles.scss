@@ -1,0 +1,16 @@
+@use 'core/styles/utilities/font'as font-utils;
+
+
+@layer utilities {
+    // Generate font classes
+    @include font-utils.generate-font-family-classes();
+    @include font-utils.generate-font-size-classes();
+    @include font-utils.generate-font-size-media-queries();
+    @include font-utils.generate-line-height-classes();
+    @include font-utils.generate-line-height-media-queries();
+    @include font-utils.generate-font-weight-classes();
+    @include font-utils.generate-font-weight-media-queries();
+    @include font-utils.generate-tracking-classes();
+    @include font-utils.generate-text-measure-classes();
+    @include font-utils.generate-text-measure-media-queries();
+}

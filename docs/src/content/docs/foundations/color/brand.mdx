@@ -3,7 +3,8 @@ title: Brand colors
 description: Primary identity palette used for core actions and hero moments.
 ---
 
-import { brandTokenRows } from '../../../../data/foundation-colors';
+import { brandTokenRows } from '@data/foundation-colors';
+import TokenTable from '@components/TokenTable.astro';
 
 Brand colors are the anchor palette for Zebkit. Use them for primary actions, high-visibility surfaces, and UI that should read as
 “on brand.”
@@ -16,33 +17,18 @@ Brand colors are the anchor palette for Zebkit. Use them for primary actions, hi
 - Borders and outlines: `border-brand-muted` for dividers or `border-brand-strong` for interactive affordances.
 
 ```html
-<button class="zbk-button canvas-brand focus:border-brand-inverse">
+<button class="zbk-button canvas-brand-strong border-brand-muted ink-brand-soft">
   Primary action
 </button>
 ```
 
+<button class="zbk-button canvas-brand-strong border-brand-muted ink-brand-inverse">
+  Primary action
+</button>
+
 ## Tokens
 
-<table>
-  <thead>
-    <tr>
-      <th>Token</th>
-      <th>Type</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    {brandTokenRows.map(({ token, type, value, description }) => (
-      <tr key={token}>
-        <td><code>{token}</code></td>
-        <td><code>{type}</code></td>
-        <td><code>{String(value)}</code></td>
-        <td>{description}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<TokenTable rows={brandTokenRows} />
 
 ## Examples
 

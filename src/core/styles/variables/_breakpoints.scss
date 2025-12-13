@@ -1,7 +1,13 @@
+$breakpoint-tablet: 40rem !default;
+$breakpoint-tablet-lg: 50rem !default;
+$breakpoint-desktop: 70rem !default;
+$breakpoint-desktop-lg: 80rem !default;
+$breakpoint-widescreen: 100rem !default;
+
 $breakpoints: (
-    'tablet': 40rem,
-    'tablet-lg': 50rem,
-    'desktop': 70rem,
-    'desktop-lg': 80rem,
-    'widescreen': 100rem
+    'tablet': $breakpoint-tablet,
+    'tablet-lg': $breakpoint-tablet-lg,
+    'desktop': $breakpoint-desktop,
+    'desktop-lg': $breakpoint-desktop-lg,
+    'widescreen': $breakpoint-widescreen
 );

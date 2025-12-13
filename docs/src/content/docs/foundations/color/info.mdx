@@ -3,7 +3,8 @@ title: Info colors
 description: Informational palette for neutral alerts and tips.
 ---
 
-import { infoTokenRows } from '../../../../data/foundation-colors';
+import TokenTable from '@components/TokenTable.astro';
+import { infoTokenRows } from '@data/foundation-colors';
 
 Info colors convey neutral notices, hints, and contextual tips. They should draw attention without implying success or failure.
 
@@ -21,26 +22,7 @@ Info colors convey neutral notices, hints, and contextual tips. They should draw
 
 ## Tokens
 
-<table>
-  <thead>
-    <tr>
-      <th>Token</th>
-      <th>Type</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    {infoTokenRows.map(({ token, type, value, description }) => (
-      <tr key={token}>
-        <td><code>{token}</code></td>
-        <td><code>{type}</code></td>
-        <td><code>{String(value)}</code></td>
-        <td>{description}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<TokenTable rows={infoTokenRows} />
 
 ## Examples
 

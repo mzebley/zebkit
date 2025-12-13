@@ -3,38 +3,21 @@ title: Button
 description: Zebkit’s token-driven button component and utility patterns.
 ---
 
-import ZebkitLoader from '../../../components/ZebkitLoader.astro';
-import ButtonShowcase from '../../../components/ButtonShowcase.astro';
-import TokenPlayground from '../../../components/TokenPlayground.astro';
-import TokenLookupDemo from '../../../components/TokenLookupDemo.astro';
-import { buttonTokenRows, buttonTokenGroups } from '../../../data/button-docs';
-
-<ZebkitLoader />
+import ButtonShowcase from '@components/ButtonShowcase.astro';
+import TokenTable from '@components/TokenTable.astro';
+import TokenPlayground from '@components/TokenPlayground.astro';
+import TokenLookupDemo from '@components/TokenLookupDemo.astro';
+import { buttonTokenRows, buttonTokenGroups } from '@data/button-docs';
 
 Zebkit buttons provide a semantic, token-aligned call to action. Use them for primary flows, secondary actions, destructive confirmation, and inline controls while keeping styling driven entirely by CSS variables and utility classes.
 
+## Live examples
+
+<ButtonShowcase />
+
 ## Tokens
 
-<table>
-  <thead>
-    <tr>
-      <th>Token</th>
-      <th>Type</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    {buttonTokenRows.map(({ token, type, value, description }) => (
-      <tr key={token}>
-        <td><code>{token}</code></td>
-        <td><code>{type}</code></td>
-        <td><code>{String(value)}</code></td>
-        <td>{description}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<TokenTable rows={buttonTokenRows} showColorSwatches={true} />
 
 ## Token alias lookup
 
@@ -47,9 +30,7 @@ Use the lookup to see how any button alias resolves to a CSS custom property at 
   description="Select any button alias to see the compiled CSS custom property."
 />
 
-## Live examples
 
-<ButtonShowcase />
 
 ## Usage
 

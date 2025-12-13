@@ -3,7 +3,8 @@ title: Accent primary colors
 description: Supporting accent palette for secondary emphasis.
 ---
 
-import { accentPrimaryTokenRows } from '../../../../data/foundation-colors';
+import TokenTable from '@components/TokenTable.astro';
+import { accentPrimaryTokenRows } from '@data/foundation-colors';
 
 Accent primary colors offer a secondary emphasis that complements the brand palette without competing with primary actions.
 
@@ -21,26 +22,7 @@ Accent primary colors offer a secondary emphasis that complements the brand pale
 
 ## Tokens
 
-<table>
-  <thead>
-    <tr>
-      <th>Token</th>
-      <th>Type</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    {accentPrimaryTokenRows.map(({ token, type, value, description }) => (
-      <tr key={token}>
-        <td><code>{token}</code></td>
-        <td><code>{type}</code></td>
-        <td><code>{String(value)}</code></td>
-        <td>{description}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<TokenTable rows={accentPrimaryTokenRows} />
 
 ## Examples
 

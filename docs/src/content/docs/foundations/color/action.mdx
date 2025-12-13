@@ -3,7 +3,8 @@ title: Action colors
 description: Semantic action palette for interactive controls and links.
 ---
 
-import { actionTokenRows } from '../../../../data/foundation-colors';
+import TokenTable from '@components/TokenTable.astro';
+import { actionTokenRows } from '@data/foundation-colors';
 
 Action colors emphasize interactive affordances and call-to-action moments without borrowing from the core brand ramp.
 
@@ -21,26 +22,7 @@ Action colors emphasize interactive affordances and call-to-action moments witho
 
 ## Tokens
 
-<table>
-  <thead>
-    <tr>
-      <th>Token</th>
-      <th>Type</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    {actionTokenRows.map(({ token, type, value, description }) => (
-      <tr key={token}>
-        <td><code>{token}</code></td>
-        <td><code>{type}</code></td>
-        <td><code>{String(value)}</code></td>
-        <td>{description}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<TokenTable rows={actionTokenRows} />
 
 ## Examples
 

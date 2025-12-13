@@ -6,4 +6,5 @@ export const tokenSchema = z.object({
   "line-height-modifier": tokenObjectSchema,
   "letter-spacing-modifier": tokenObjectSchema,
   "fallback-font-size-modifier": tokenObjectSchema,
+  "transition-timing-modifier": tokenObjectSchema
 });

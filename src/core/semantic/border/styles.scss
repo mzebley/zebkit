@@ -1,0 +1,24 @@
+@use 'core/styles/utilities/border'as border-utils;
+
+@layer utilities {
+  // Generate border width classes
+  @include border-utils.generate-border-width-classes(border-width);
+  @include border-utils.generate-border-width-media-queries(border-width);
+  // Generate border radius classes
+  @include border-utils.generate-border-radius-classes(radius);
+  @include border-utils.generate-border-radius-media-queries(radius);
+  @include border-utils.generate-border-radius-classes(radius, 'pill');
+  @include border-utils.generate-border-radius-media-queries(radius, 'pill');
+}
+
+.border-solid {
+  border-style: solid;
+}
+
+.border-dashed {
+  border-style: dashed;
+}
+
+.border-dotted {
+  border-style: dotted;
+}

@@ -7,7 +7,9 @@
     "exportTokens": true,
     "splitMode": "combined",
     "outputFormats": ["JSON"],
-    "writeVariantRegistry": false,
+    "writeVariantRegistry": true,
+    "writeTokenLookup": true,
+    "writeAllowedTokenTypes": true,
     "tokenLookupOutputPath": "./docs/public/zebkit/token-lookup.json"
   }
 }

@@ -33,7 +33,8 @@ export async function buildZebkitTokens(
   destinationPath: string,
   customTokenPath: string | undefined,
   outputFormats: string[],
-  options: BuildZebkitTokensOptions = {}
+  options: BuildZebkitTokensOptions = {},
+  exportFile: boolean
 ): Promise<BuildZebkitTokensResult> {
   const tokens: Record<string, TokenInterface> = {};
   const layers: Record<string, LayerName> = {};
@@ -140,7 +141,7 @@ export async function buildZebkitTokens(
     return { tokens, layers };
   }
 
-  await writeTokensToFile(tokens, resolvedDestination, outputFormats, themeName, splitMode);
+  if (exportFile) await writeTokensToFile(tokens, resolvedDestination, outputFormats, themeName, splitMode);
 
   return { tokens, layers };
 }

@@ -3,7 +3,8 @@ title: App colors
 description: Neutral application surfaces and ink pairings.
 ---
 
-import { appTokenRows } from '../../../../data/foundation-colors';
+import TokenTable from '@components/TokenTable.astro';
+import { appTokenRows } from '@data/foundation-colors';
 
 App colors support everyday UI surfaces: layouts, panels, navigation, and default text. They give you neutral contrast without
 drifting into accent territory.
@@ -23,26 +24,7 @@ drifting into accent territory.
 
 ## Tokens
 
-<table>
-  <thead>
-    <tr>
-      <th>Token</th>
-      <th>Type</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    {appTokenRows.map(({ token, type, value, description }) => (
-      <tr key={token}>
-        <td><code>{token}</code></td>
-        <td><code>{type}</code></td>
-        <td><code>{String(value)}</code></td>
-        <td>{description}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<TokenTable rows={appTokenRows} />
 
 ## Examples
 

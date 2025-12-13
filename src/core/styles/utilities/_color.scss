@@ -6,23 +6,23 @@ $cssVarPrefix: 'zbk' !default;
 @mixin primitiveColor($name, $hue, $saturation) {
   --#{$cssVarPrefix}-color-#{$name}-hue: #{$hue};
   --#{$cssVarPrefix}-color-#{$name}-saturation: #{$saturation};
-  --#{$cssVarPrefix}-color-#{$name}-50: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 97%);
+  --#{$cssVarPrefix}-color-#{$name}-50: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 98%);
   --#{$cssVarPrefix}-color-#{$name}-100: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 93%);
-  --#{$cssVarPrefix}-color-#{$name}-200: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 86%);
+  --#{$cssVarPrefix}-color-#{$name}-200: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 87%);
   --#{$cssVarPrefix}-color-#{$name}-300: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 78%);
-  --#{$cssVarPrefix}-color-#{$name}-400: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 70%);
-  --#{$cssVarPrefix}-color-#{$name}-500: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 60%);
-  --#{$cssVarPrefix}-color-#{$name}-600: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 52%);
-  --#{$cssVarPrefix}-color-#{$name}-700: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 44%);
-  --#{$cssVarPrefix}-color-#{$name}-800: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 36%);
-  --#{$cssVarPrefix}-color-#{$name}-900: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 28%);
-  --#{$cssVarPrefix}-color-#{$name}-950: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 20%);
+  --#{$cssVarPrefix}-color-#{$name}-400: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 69%);
+  --#{$cssVarPrefix}-color-#{$name}-500: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 58%);
+  --#{$cssVarPrefix}-color-#{$name}-600: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 48%);
+  --#{$cssVarPrefix}-color-#{$name}-700: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 36%);
+  --#{$cssVarPrefix}-color-#{$name}-800: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 26%);
+  --#{$cssVarPrefix}-color-#{$name}-900: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 18%);
+  --#{$cssVarPrefix}-color-#{$name}-950: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 10%);
 }
 
 // Which roles we support and what CSS property they map to.
 $color-roles: ('ink': color,
   'canvas': background-color,
-  'border': border-color) !default;
+  'border': border-color, 'fill': fill) !default;
 
 $color-intensity: 'soft',
 'muted',
@@ -75,12 +75,16 @@ $color-states: ('base': null,
         $pseudo in $states {
           @if $state-name !='base' {
             @if $state-name=='hover' {
-
-              // Only apply hover styles on devices that actually hover.
               @media (hover: hover) and (pointer: fine) {
                 .#{$state-name}\:#{$role}-#{$family}-#{$step}#{$pseudo} {
                   #{$property}: primitive-color-var($family, $step);
                 }
+              }
+            }
+
+            @else if $pseudo==null {
+              [class~="#{$state-name}:#{$role}-#{$family}-#{$step}"] {
+                #{$property}: primitive-color-var($family, $step);
               }
             }
 
@@ -185,8 +189,6 @@ $color-states: ('base': null,
             }
 
             @else if $state-name=='hover' {
-
-              // Only apply hover styles on devices that actually hover.
               @media (hover: hover) and (pointer: fine) {
                 .#{$state-name}\:#{$class-name}#{$pseudo} {
                   @include semantic-color-declaration($properties, $var-ref);
@@ -195,12 +197,51 @@ $color-states: ('base': null,
             }
 
             @else {
-
-              // Focus / active / disabled, etc.
-              // e.g. class="focus:border-action-inverse"
               [class~="#{$state-name}\:#{$class-name}"]#{$pseudo} {
                 @include semantic-color-declaration($properties, $var-ref);
               }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+// ---------- Semi-semantic color utilities (brand, primary & secondary accents) ----------
+
+@mixin generate-semi-semantic-color-classes($name, $roles: $color-roles, $steps: $color-steps, $states: $color-states) {
+  @each $step in $steps {
+
+    @each $role,
+    $property in $roles {
+
+      .#{$role}-#{$name}-#{$step} {
+        #{$property}: var(--#{$cssVarPrefix}-#{$name}-#{$step});
+      }
+
+      // State-prefixed variants (focus:, hover:, etc.)
+      @each $state-name,
+      $pseudo in $states {
+        @if $state-name !='base' {
+          @if $state-name=='hover' {
+            @media (hover: hover) and (pointer: fine) {
+              .#{$state-name}\:#{$role}-#{$name}-#{$step}#{$pseudo} {
+                #{$property}: var(--#{$cssVarPrefix}-#{$name}-#{$step});
+              }
+            }
+          }
+
+          @else if $pseudo==null {
+            [class~="#{$state-name}:#{$role}-#{$name}-#{$step}"] {
+              #{$property}: var(--#{$cssVarPrefix}-#{$name}-#{$step});
+            }
+          }
+
+          @else {
+            [class~="#{$state-name}:#{$role}-#{$name}-#{$step}"]#{$pseudo} {
+              #{$property}: var(--#{$cssVarPrefix}-#{$name}-#{$step});
             }
           }
         }

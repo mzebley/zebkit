@@ -7,15 +7,15 @@ import { tokenObjectSchema } from '@definitions/tokens';
  */
 export const tokenSchema = z.object({
   // Core text & color
-  color: tokenObjectSchema,
-  'color-hover': tokenObjectSchema,
-  'color-active': tokenObjectSchema,
-  'color-disabled': tokenObjectSchema,
+  ink: tokenObjectSchema,
+  'ink-hover': tokenObjectSchema,
+  'ink-active': tokenObjectSchema,
+  'ink-disabled': tokenObjectSchema,
 
-  background: tokenObjectSchema,
-  'background-hover': tokenObjectSchema,
-  'background-active': tokenObjectSchema,
-  'background-disabled': tokenObjectSchema,
+  canvas: tokenObjectSchema,
+  'canvas-hover': tokenObjectSchema,
+  'canvas-active': tokenObjectSchema,
+  'canvas-disabled': tokenObjectSchema,
 
   'border-color': tokenObjectSchema,
   'border-color-hover': tokenObjectSchema,

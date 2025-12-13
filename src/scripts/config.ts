@@ -13,6 +13,8 @@ export type TokensConfig = {
   exportTokens?: boolean;
   splitMode?: 'combined' | 'per-module';
   outputFormats?: Array<'JSON' | 'TypeScript' | 'JavaScript'>;
+  writeAllowedTokenTypes?: boolean;
+  writeTokenLookup?: boolean;
   writeVariantRegistry?: boolean;
   tokenLookupOutputPath?: string;
 };

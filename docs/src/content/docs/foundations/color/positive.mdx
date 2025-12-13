@@ -3,7 +3,8 @@ title: Positive colors
 description: Success palette for confirmations and “done” states.
 ---
 
-import { positiveTokenRows } from '../../../../data/foundation-colors';
+import TokenTable from '@components/TokenTable.astro';
+import { positiveTokenRows } from '@data/foundation-colors';
 
 Positive colors highlight success and completion. Use them to reinforce confirmations, status chips, and celebratory states.
 
@@ -21,26 +22,7 @@ Positive colors highlight success and completion. Use them to reinforce confirma
 
 ## Tokens
 
-<table>
-  <thead>
-    <tr>
-      <th>Token</th>
-      <th>Type</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    {positiveTokenRows.map(({ token, type, value, description }) => (
-      <tr key={token}>
-        <td><code>{token}</code></td>
-        <td><code>{type}</code></td>
-        <td><code>{String(value)}</code></td>
-        <td>{description}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<TokenTable rows={positiveTokenRows} />
 
 ## Examples
 

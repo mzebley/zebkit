@@ -130,7 +130,8 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
         filteredCssVars = otherLines.join('\n');
       }
 
-      const cssCode = `${importBlock ? `${importBlock}\n` : ''}${sassResult.css.toString()}\n${filteredCssVars}\n${variantCss}`;
+      const layerOrdering = '@layer theme, base, components, utilities;';
+      const cssCode = `${importBlock ? `${importBlock}\n` : ''}${layerOrdering}\n${sassResult.css.toString()}\n${filteredCssVars}\n${variantCss}`;
 
       const result = await postcss([
         postcssPresetEnv({

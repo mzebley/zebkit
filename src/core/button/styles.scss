@@ -5,8 +5,8 @@
   .zbk-button,
   zbk-button>.zbk-button {
     /* Core text & color */
-    color: var(--#{$cssVarPrefix}-button-color);
-    background-color: var(--#{$cssVarPrefix}-button-background);
+    color: var(--#{$cssVarPrefix}-button-ink);
+    background-color: var(--#{$cssVarPrefix}-button-canvas);
     border-color: var(--#{$cssVarPrefix}-button-border-color);
 
     /* Border geometry */
@@ -86,8 +86,8 @@
   zbk-button:hover .zbk-button,
   .zbk-button:hover,
   zbk-button>.zbk-button:hover {
-    color: var(--#{$cssVarPrefix}-button-color-hover);
-    background-color: var(--#{$cssVarPrefix}-button-background-hover);
+    color: var(--#{$cssVarPrefix}-button-ink-hover);
+    background-color: var(--#{$cssVarPrefix}-button-canvas-hover);
     border-color: var(--#{$cssVarPrefix}-button-border-color-hover);
     box-shadow: var(--#{$cssVarPrefix}-button-box-shadow-hover);
   }
@@ -96,8 +96,8 @@
   zbk-button:active .zbk-button,
   .zbk-button:active,
   zbk-button>.zbk-button:active {
-    color: var(--#{$cssVarPrefix}-button-color-active);
-    background-color: var(--#{$cssVarPrefix}-button-background-active);
+    color: var(--#{$cssVarPrefix}-button-ink-active);
+    background-color: var(--#{$cssVarPrefix}-button-canvas-active);
     border-color: var(--#{$cssVarPrefix}-button-border-color-selected);
     box-shadow: var(--#{$cssVarPrefix}-button-box-shadow-active);
   }
@@ -120,8 +120,8 @@
   .zbk-button[aria-disabled='true'],
   zbk-button>.zbk-button[disabled],
   zbk-button>.zbk-button[aria-disabled='true'] {
-    color: var(--#{$cssVarPrefix}-button-color-disabled);
-    background-color: var(--#{$cssVarPrefix}-button-background-disabled);
+    color: var(--#{$cssVarPrefix}-button-ink-disabled);
+    background-color: var(--#{$cssVarPrefix}-button-canvas-disabled);
     border-color: var(--#{$cssVarPrefix}-button-border-color-disabled);
     box-shadow: none;
     opacity: var(--#{$cssVarPrefix}-button-opacity);

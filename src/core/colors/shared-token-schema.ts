@@ -3,10 +3,8 @@ import { z } from 'zod';
 import { tokenObjectSchema } from '@definitions/tokens';
 
 /**
- * Generic schema for a single color family:
- * - roles: canvas, ink, border
- * - intensities: base, soft, muted, strong
- * - variants: base, inverse, inverse-soft, inverse-muted, inverse-strong
+ * Palette schema for a semi-semantic color family:
+ * - intensity: 50-950
  *
  * This schema is reused for:
  * - brand
@@ -15,30 +13,17 @@ import { tokenObjectSchema } from '@definitions/tokens';
  */
 
 const slots = [
-  "canvas",
-  "canvas-soft",
-  "canvas-muted",
-  "canvas-strong",
-  "canvas-inverse",
-  "canvas-inverse-soft",
-  "canvas-inverse-muted",
-  "canvas-inverse-strong",
-  "ink",
-  "ink-soft",
-  "ink-muted",
-  "ink-strong",
-  "ink-inverse",
-  "ink-inverse-soft",
-  "ink-inverse-muted",
-  "ink-inverse-strong",
-  "border",
-  "border-soft",
-  "border-muted",
-  "border-strong",
-  "border-inverse",
-  "border-inverse-soft",
-  "border-inverse-muted",
-  "border-inverse-strong",
+  50,
+  100,
+  200,
+  300,
+  400,
+  500,
+  600,
+  700,
+  800,
+  900,
+  950
 ] as const;
 
 type ColorSlot = (typeof slots)[number];
