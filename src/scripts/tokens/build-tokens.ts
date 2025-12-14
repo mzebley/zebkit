@@ -13,7 +13,10 @@ import {
   buildZebkitTokens,
   BuildZebkitTokensOptions,
 } from "@token-scripts/compile-tokens";
-import { buildZebkitVariants } from "@token-scripts/compile-variants";
+import {
+  buildZebkitVariants,
+  VariantRegistry,
+} from "@token-scripts/compile-variants";
 import { convertTokensToCssVars } from "@token-scripts/token-converter";
 import { compileSass, CompileSassOptions } from "@token-scripts/compile-css";
 import { loadZebkitConfig, TokensConfig } from "../config";
@@ -250,13 +253,16 @@ async function run() {
 
     const files = await gatherZebkitFiles(selectedComponents);
 
+    const resolvedSplitMode =
+      splitMode as BuildZebkitTokensOptions["splitMode"];
+
     const { tokens, layers } = await buildZebkitTokens(
       themeName,
       files.tokenFiles,
       resolvedDestinationPath,
       customTokenPath,
       outputFormats,
-      { splitMode: splitMode as BuildZebkitTokensOptions["splitMode"] },
+      { splitMode: resolvedSplitMode },
       exportTokens
     );
 
@@ -270,14 +276,14 @@ async function run() {
       registry: variantRegistry,
       inlineCss,
       extraStylesheets,
-    } = await buildZebkitVariants(tokens);
+    } = await buildZebkitVariants(tokens, customTokenPath);
     if (writeVariantRegistry) {
-      const variantRegistryPath = path.join(
+      await writeVariantRegistryFiles(
+        variantRegistry,
         resolvedDestinationPath,
-        `zbk-${themeName.toLowerCase()}-variants.json`
+        themeName,
+        resolvedSplitMode
       );
-      await fs.ensureDir(resolvedDestinationPath);
-      await fs.writeJson(variantRegistryPath, variantRegistry, { spaces: 2 });
     }
 
     const allStylesheets = [...files.stylesheets, ...extraStylesheets];
@@ -383,6 +389,42 @@ async function writeAllowedTokenTypes(
     console.error(chalk.red("Failed to write allowed token types."), error);
     throw error;
   }
+}
+
+async function writeVariantRegistryFiles(
+  registry: VariantRegistry,
+  destinationPath: string,
+  themeName: string,
+  splitMode: BuildZebkitTokensOptions["splitMode"]
+): Promise<void> {
+  await fs.ensureDir(destinationPath);
+
+  if (splitMode === "per-module") {
+    for (const [component, variants] of Object.entries(registry)) {
+      for (const [variantName, entry] of Object.entries(variants)) {
+        const componentSlug = slugifyFileSegment(component);
+        const variantSlug = slugifyFileSegment(variantName);
+        const fileName = `${ZEBKIT_PREFIX}-${componentSlug}.variant.${variantSlug}.json`;
+        const filePath = path.join(destinationPath, fileName);
+        await fs.writeJson(filePath, entry, { spaces: 2 });
+      }
+    }
+  } else {
+    const combinedPath = path.join(
+      destinationPath,
+      `zbk-${themeName.toLowerCase()}-variants.json`
+    );
+    await fs.writeJson(combinedPath, registry, { spaces: 2 });
+  }
+}
+
+function slugifyFileSegment(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-_]/g, "-")
+    .replace(/-+/g, "-");
 }
 
 run();

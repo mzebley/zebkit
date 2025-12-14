@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { glob } from 'glob';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { ZodObject, ZodSchema, z } from 'zod';
+import { ZodSchema, z } from 'zod';
 import { TokenInterface } from '@definitions/tokens';
 import { DEFAULT_LAYER, LayerName } from '@definitions/layers';
 import { ZEBKIT_PREFIX } from '@config';
@@ -95,6 +95,13 @@ export async function buildZebkitTokens(
             tokenSchemas[tokenKey] = tokenSchema;
             layers[tokenKey] = moduleLayer;
           } else {
+            const existingSchema = tokenSchemas[tokenKey];
+            if (
+              existingSchema instanceof z.ZodObject &&
+              tokenSchema instanceof z.ZodObject
+            ) {
+              tokenSchemas[tokenKey] = existingSchema.merge(tokenSchema);
+            }
             if (layers[tokenKey] && layers[tokenKey] !== moduleLayer) {
               console.warn(
                 chalk.yellow(
@@ -185,13 +192,20 @@ async function applyCustomOverrides(
 
       for (const file of overrideFiles) {
         const data = await fs.readJson(file);
-        const fileName = path.basename(file, path.extname(file));
-        const inferredKey = `${ZEBKIT_PREFIX}-${fileName}`;
+        const inferredKey = inferTokenKeyFromFilename(file);
 
         if (Object.keys(data).some((key) => key.startsWith(`${ZEBKIT_PREFIX}-`))) {
           mergeOverrideObject(data, tokens, tokenSchemas);
-        } else if (tokens[inferredKey]) {
+        } else if (inferredKey && tokens[inferredKey]) {
           mergeOverrideObject({ [inferredKey]: data }, tokens, tokenSchemas);
+        } else if (isVariantOverrideFile(file)) {
+          console.info(
+            chalk.gray(
+              `Detected variant override file '${path.basename(
+                file
+              )}'. It will be applied during variant processing.`
+            )
+          );
         } else {
           console.warn(
             chalk.yellow(`No matching token key for override file: ${path.basename(file)}`)
@@ -206,6 +220,32 @@ async function applyCustomOverrides(
     spinner.fail(chalk.red('Failed to process custom token overrides.'));
     console.error(error);
   }
+}
+
+function inferTokenKeyFromFilename(filePath: string): string | undefined {
+  const baseName = path.basename(filePath, path.extname(filePath));
+  if (!baseName) return undefined;
+
+  const knownSuffixes = ['.tokens'];
+  let normalized = baseName;
+
+  for (const suffix of knownSuffixes) {
+    if (normalized.endsWith(suffix)) {
+      normalized = normalized.slice(0, -suffix.length);
+      break;
+    }
+  }
+
+  if (!normalized) return undefined;
+
+  return normalized.startsWith(`${ZEBKIT_PREFIX}-`)
+    ? normalized
+    : `${ZEBKIT_PREFIX}-${normalized}`;
+}
+
+function isVariantOverrideFile(filePath: string): boolean {
+  const baseName = path.basename(filePath, path.extname(filePath));
+  return /-variants$/i.test(baseName) || /\.variant\./i.test(path.basename(filePath));
 }
 
 function mergeOverrideObject(
@@ -265,32 +305,30 @@ function mergeTokens(
     }
 
     try {
-      if (
+      const overrideValue =
         typeof customValue === 'object' &&
         customValue !== null &&
         !Array.isArray(customValue) &&
         'value' in customValue
-      ) {
-        const valueSchema = (subSchema as ZodObject<any>).shape.value;
-        valueSchema.parse(customValue.value);
-        merged[key] = {
-          ...defaultTokens[key],
-          value: customValue.value,
-        };
-      } else if (typeof customValue === 'string' || typeof customValue === 'number') {
-        const valueSchema = (subSchema as ZodObject<any>).shape.value;
-        valueSchema.parse(customValue);
-        merged[key] = {
-          ...defaultTokens[key],
-          value: customValue,
-        };
-      } else {
+          ? (customValue as Record<string, any>).value
+          : customValue;
+
+      if (typeof overrideValue !== 'string' && typeof overrideValue !== 'number') {
         console.warn(
           chalk.yellow(
             `Custom token for '${keyPath}.${key}' does not contain a valid 'value'. Using default token.`
           )
         );
+        continue;
       }
+
+      const nextToken = {
+        ...defaultTokens[key],
+        value: overrideValue,
+      };
+
+      (subSchema as ZodSchema).parse(nextToken);
+      merged[key] = nextToken;
     } catch (error) {
       console.warn(
         chalk.yellow(`Invalid value for '${keyPath}.${key}'. Using default value.`)
