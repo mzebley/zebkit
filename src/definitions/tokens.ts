@@ -12,6 +12,7 @@ export const allowedTokenTypes = z.enum([
   'lineHeight',
   'letterSpacing',
   'fontWeight',
+  'fontStyle',
   'textDecoration',
   'textTransform',
   'textAlignment',

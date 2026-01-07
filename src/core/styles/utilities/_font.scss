@@ -1,13 +1,13 @@
 @use 'core/styles/variables/breakpoints'as vars;
 @use 'core/styles/variables/fonts'as font-vars;
-$cssVarPrefix: 'zbk' !default;
+@use 'core/styles/variables/prefix'as prefix;
 
 // ---------- Font family utilities ----------
 
 @mixin generate-font-family-classes($names: font-vars.$font-family-names) {
     @each $name in $names {
         .font-#{$name} {
-            font-family: var(--#{$cssVarPrefix}-font-family-#{$name});
+            font-family: var(--#{prefix.$cssVar}-font-family-#{$name});
         }
     }
 }
@@ -19,7 +19,7 @@ $cssVarPrefix: 'zbk' !default;
 
         .font-#{$size},
         .text-#{$size} {
-            font-size: var(--#{$cssVarPrefix}-font-size-#{$size});
+            font-size: var(--#{prefix.$cssVar}-font-size-#{$size});
         }
     }
 }
@@ -33,7 +33,7 @@ $cssVarPrefix: 'zbk' !default;
 
                 .#{$breakpoint}\:font-#{$size},
                 .#{$breakpoint}\:text-#{$size} {
-                    font-size: var(--#{$cssVarPrefix}-font-size-#{$size});
+                    font-size: var(--#{prefix.$cssVar}-font-size-#{$size});
                 }
             }
         }
@@ -55,7 +55,7 @@ $default-line-heights: 0,
         $value: 0;
 
         @if $size !=0 {
-            $value: var(--#{$cssVarPrefix}-line-height-#{$size});
+            $value: var(--#{prefix.$cssVar}-line-height-#{$size});
         }
 
         .line-height-#{$size} {
@@ -73,7 +73,7 @@ $default-line-heights: 0,
                 $value: 0;
 
                 @if $size !=0 {
-                    $value: var(--#{$cssVarPrefix}-line-height-#{$size});
+                    $value: var(--#{prefix.$cssVar}-line-height-#{$size});
                 }
 
                 .#{$breakpoint}\:line-height-#{$size} {
@@ -86,24 +86,23 @@ $default-line-heights: 0,
 
 // ---------- Font weight utilities ----------
 
-$default-font-weights: ('thin': 100,
-    'extralight': 300,
-    'light': 300,
-    'normal': 400,
-    'medium': 500,
-    'semibold': 600,
-    'bold': 700,
-    'extrabold': 800,
-    'black':900);
+$default-font-weights: 'thin',
+    'extralight',
+    'light',
+    'normal',
+    'medium',
+    'semibold',
+    'bold',
+    'extrabold',
+    'black';
 
 @mixin generate-font-weight-classes($values: $default-font-weights) {
 
-    @each $key,
-    $value in $values {
+    @each $weight in $values {
 
         .font-weight-#{$key},
         .text-#{$key} {
-            font-weight: #{$value};
+            font-weight: var(--#{prefix.$cssVar}-font-weight-#{$weight});
         }
     }
 
@@ -115,12 +114,11 @@ $default-font-weights: ('thin': 100,
     $min-width in $breakpoints {
         @media (min-width: #{$min-width}) {
 
-            @each $key,
-            $value in $values {
+            @each $weight in $values {
 
                 .#{$breakpoint}\:font-weight-#{$key},
                 .#{$breakpoint}\:text-#{$key} {
-                    line-height: $value;
+                    font-weight: var(--#{prefix.$cssVar}-font-weight-#{$weight});
                 }
             }
         }
@@ -130,26 +128,23 @@ $default-font-weights: ('thin': 100,
 
 // ---------- Tracking (letterspacing) utilities ----------
 
-$default-tracking-values: ('tighter': '-.05rem',
-    'tight': '-.025rem',
-    'normal': '0rem',
-    'wide': '.025rem',
-    'wider': '.05rem',
-);
+$default-tracking-values: 'tighter',
+    'tight',
+    'normal',
+    'wide',
+    'wider';
 
 @mixin generate-tracking-classes($values: $default-tracking-values) {
 
-    @each $key,
-    $value in $values {
+    @each $spacing in $values {
 
         .letter-spacing-#{$key},
         .tracking-#{$key} {
-            letter-spacing: #{$value};
+            letter-spacing: var(--#{prefix.$cssVar}-letter-spacing-#{$spacing});
         }
     }
 
 }
-
 
 // ---------- Measure utilities ----------
 
@@ -166,7 +161,7 @@ $default-text-measures: 0,
         $value: 'none';
 
         @if $item !=0 {
-            $value: var(--#{$cssVarPrefix}-text-measure-#{$item});
+            $value: var(--#{prefix.$cssVar}-text-measure-#{$item});
         }
 
         .measure-#{$item} {
@@ -186,11 +181,71 @@ $default-text-measures: 0,
                 $value: 'none';
 
                 @if $item !=0 {
-                    $value: var(--#{$cssVarPrefix}-text-measure-#{$item});
+                    $value: var(--#{prefix.$cssVar}-text-measure-#{$item});
                 }
 
                 .#{$breakpoint}\:measure-#{$item} {
                     max-width: $value;
+                }
+            }
+        }
+    }
+}
+
+// ---------- Line clamp utilities ----------
+
+
+$default-line-clamp-values: 1,
+2,
+3,
+4,
+5,
+10,
+15;
+
+@mixin generate-line-clamp-classes($values: $default-line-clamp-values) {
+    .line-clamp-unset {
+        overflow: visible;
+        display: block;
+        -webkit-box-orient: horizontal;
+        -webkit-line-clamp: unset;
+    }
+
+    @each $item in $values {
+
+
+        .line-clamp-#{$item} {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: $item;
+        }
+
+
+
+    }
+}
+
+@mixin generate-line-clamp-media-queries($values: $default-line-clamp-values, $breakpoints: vars.$breakpoints) {
+
+    @each $breakpoint,
+    $min-width in $breakpoints {
+        @media (min-width: #{$min-width}) {
+
+            .#{$breakpoint}\:line-clamp-unset {
+                overflow: visible;
+                display: block;
+                -webkit-box-orient: horizontal;
+                -webkit-line-clamp: unset;
+            }
+
+            @each $item in $values {
+
+                .#{$breakpoint}\:line-clamp-#{$item} {
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: $item;
                 }
             }
         }

@@ -1,98 +1,31 @@
 @use 'core/styles/utilities/spacing'as spacing-utils;
-
-$size-values: ('auto': auto,
-  'full': 100%,
-  'viewport': 100vw,
-  'min': min-content,
-  'max': max-content,
-  'inherit': inherit,
-  'neg-1px': var(--#{$cssVarPrefix}-spacing-neg-1px),
-  '0': var(--#{$cssVarPrefix}-spacing-0),
-  '1px': var(--#{$cssVarPrefix}-spacing-1px),
-  '2px': var(--#{$cssVarPrefix}-spacing-2px),
-  '025': var(--#{$cssVarPrefix}-spacing-025),
-  '05': var(--#{$cssVarPrefix}-spacing-05),
-  '1': var(--#{$cssVarPrefix}-spacing-1),
-  '105': var(--#{$cssVarPrefix}-spacing-105),
-  '2': var(--#{$cssVarPrefix}-spacing-2),
-  '205': var(--#{$cssVarPrefix}-spacing-205),
-  '3': var(--#{$cssVarPrefix}-spacing-3),
-  '4': var(--#{$cssVarPrefix}-spacing-4),
-  '5': var(--#{$cssVarPrefix}-spacing-5),
-  '6': var(--#{$cssVarPrefix}-spacing-6),
-  '7': var(--#{$cssVarPrefix}-spacing-7),
-  '8': var(--#{$cssVarPrefix}-spacing-8),
-  '9': var(--#{$cssVarPrefix}-spacing-9),
-  '10': var(--#{$cssVarPrefix}-spacing-10),
-  '15': var(--#{$cssVarPrefix}-spacing-15),
-  '20': var(--#{$cssVarPrefix}-spacing-20),
-  '25': var(--#{$cssVarPrefix}-spacing-25),
-  '30': var(--#{$cssVarPrefix}-spacing-30),
-  '40': var(--#{$cssVarPrefix}-spacing-40),
-  '50': var(--#{$cssVarPrefix}-spacing-50),
-  '60': var(--#{$cssVarPrefix}-spacing-60),
-  '70': var(--#{$cssVarPrefix}-spacing-70),
-  '80': var(--#{$cssVarPrefix}-spacing-80),
-  '90': var(--#{$cssVarPrefix}-spacing-90),
-  '100': var(--#{$cssVarPrefix}-spacing-100),
-);
-
-$spacing-values: 'neg-15',
-'neg-10',
-'neg-9',
-'neg-8',
-'neg-7',
-'neg-6',
-'neg-5',
-'neg-4',
-'neg-3',
-'neg-205',
-'neg-2',
-'neg-105',
-'neg-1',
-'neg-05',
-'neg-025',
-'neg-2px',
-'neg-1px',
-'0',
-'1px',
-'2px',
-'025',
-'05',
-'1',
-'105',
-'2',
-'205',
-'3',
-'4',
-'5',
-'6',
-'7',
-'8',
-'9',
-'10',
-'15',
-'20',
-;
+@use 'core/styles/utilities/position'as position-utils;
+@use 'core/styles/variables/spacing'as spacing-vars;
 
 @layer utilities {
   // Generate min/max height/width utility classes
-  @include spacing-utils.generate-size-classes(height, $size-values);
-  @include spacing-utils.generate-size-classes(min-height, $size-values);
-  @include spacing-utils.generate-size-classes(max-height, $size-values);
-  @include spacing-utils.generate-size-classes(width, $size-values);
-  @include spacing-utils.generate-size-classes(min-width, $size-values);
-  @include spacing-utils.generate-size-classes(max-width, $size-values);
-  @include spacing-utils.generate-size-media-queries(height, $size-values);
-  @include spacing-utils.generate-size-media-queries(min-height, $size-values);
-  @include spacing-utils.generate-size-media-queries(max-height, $size-values);
-  @include spacing-utils.generate-size-media-queries(width, $size-values);
-  @include spacing-utils.generate-size-media-queries(min-width, $size-values);
-  @include spacing-utils.generate-size-media-queries(max-width, $size-values);
+  @include spacing-utils.generate-size-classes(height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-classes(min-height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-classes(max-height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-classes(width, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-classes(min-width, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-classes(max-width, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(min-height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(max-height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(width, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(min-width, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(max-width, spacing-vars.$size-values);
 
   // Usage: Generate spacing classes and breakpoint-specific classes
-  @include spacing-utils.generate-spacing-classes(margin, $spacing-values);
-  @include spacing-utils.generate-spacing-classes(padding, $spacing-values);
-  @include spacing-utils.generate-media-queries(margin, $spacing-values);
-  @include spacing-utils.generate-media-queries(padding, $spacing-values);
+  @include spacing-utils.generate-spacing-classes(margin, spacing-vars.$spacing-values);
+  @include spacing-utils.generate-spacing-classes(padding, spacing-vars.$spacing-values);
+  @include spacing-utils.generate-spacing-classes(gap, spacing-vars.$spacing-values,  ('':''));
+  @include spacing-utils.generate-spacing-media-queries(margin, spacing-vars.$spacing-values);
+  @include spacing-utils.generate-spacing-media-queries(padding, spacing-vars.$spacing-values);
+  @include spacing-utils.generate-spacing-media-queries(gap, spacing-vars.$spacing-values,  ('':''));
 }
+
+// Generate positioning classes ( .top-05, .left-5, etc)
+@include position-utils.generate-position-classes(spacing-vars.$spacing-values);
+@include position-utils.generate-position-media-queries(spacing-vars.$spacing-values);

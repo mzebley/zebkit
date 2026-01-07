@@ -9,5 +9,5 @@ export const a11yMap: { [key: string]: string } = {
   lineHeight: `--${ZEBKIT_PREFIX}-a11y-line-height-modifier`,
   letterSpacing: `--${ZEBKIT_PREFIX}-a11y-letter-spacing-modifier`,
   fontSize: `--${ZEBKIT_PREFIX}-a11y-fallback-font-size-modifier`,
-  transition: `--${ZEBKIT_PREFIX}-a11y-transition-timing-modifier`
+  transition: `--${ZEBKIT_PREFIX}-a11y-transition-duration-modifier`
 };

@@ -1,0 +1,32 @@
+import { z } from "zod";
+import { tokenObjectSchema } from "@definitions/tokens";
+
+export const tokenSchema = z.object({
+  "duration-default": tokenObjectSchema,
+  "duration-slow": tokenObjectSchema,
+  "duration-fast": tokenObjectSchema,
+  "playful-motion-function-default": tokenObjectSchema,
+  "playful-motion-function-slow": tokenObjectSchema,
+  "playful-motion-function-fast": tokenObjectSchema,
+  "playful-motion-duration-default": tokenObjectSchema,
+  "playful-motion-duration-slow": tokenObjectSchema,
+  "playful-motion-duration-fast": tokenObjectSchema,
+  "playful-fx-function-default": tokenObjectSchema,
+  "playful-fx-function-slow": tokenObjectSchema,
+  "playful-fx-function-fast": tokenObjectSchema,
+  "playful-fx-duration-default": tokenObjectSchema,
+  "playful-fx-duration-slow": tokenObjectSchema,
+  "playful-fx-duration-fast": tokenObjectSchema,
+  "calm-motion-function-default": tokenObjectSchema,
+  "calm-motion-function-slow": tokenObjectSchema,
+  "calm-motion-function-fast": tokenObjectSchema,
+  "calm-motion-duration-default": tokenObjectSchema,
+  "calm-motion-duration-slow": tokenObjectSchema,
+  "calm-motion-duration-fast": tokenObjectSchema,
+  "calm-fx-function-default": tokenObjectSchema,
+  "calm-fx-function-slow": tokenObjectSchema,
+  "calm-fx-function-fast": tokenObjectSchema,
+  "calm-fx-duration-default": tokenObjectSchema,
+  "calm-fx-duration-slow": tokenObjectSchema,
+  "calm-fx-duration-fast": tokenObjectSchema,
+});

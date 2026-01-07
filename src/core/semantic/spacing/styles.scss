@@ -1,40 +1,20 @@
 @use 'core/styles/utilities/spacing' as spacing-utils;
-
-$size-values:(
-  'card': var(--#{$cssVarPrefix}-spacing-card),
-  'mobile': var(--#{$cssVarPrefix}-spacing-mobile),
-  'mobile-lg': var(--#{$cssVarPrefix}-spacing-mobile-lg),
-  'tablet': var(--#{$cssVarPrefix}-spacing-tablet),
-  'tablet-lg': var(--#{$cssVarPrefix}-spacing-tablet-lg),
-  'desktop': var(--#{$cssVarPrefix}-spacing-desktop),
-  'desktop-lg': var(--#{$cssVarPrefix}-spacing-desktop-lg),
-  'widescreen': var(--#{$cssVarPrefix}-spacing-widescreen),
-  'section': var(--#{$cssVarPrefix}-spacing-section),
-  'aside': var(--#{$cssVarPrefix}-spacing-aside),
-  );
+@use 'core/styles/utilities/position' as position-utils;
+@use 'core/styles/variables/spacing' as spacing-vars;
 
 // Generate min/max height/width utility classes
-@include spacing-utils.generate-size-classes(height, $size-values);
-@include spacing-utils.generate-size-classes(min-height, $size-values);
-@include spacing-utils.generate-size-classes(max-height, $size-values);
-@include spacing-utils.generate-size-classes(width, $size-values);
-@include spacing-utils.generate-size-classes(min-width, $size-values);
-@include spacing-utils.generate-size-classes(max-width, $size-values);
-@include spacing-utils.generate-size-media-queries(height, $size-values);
-@include spacing-utils.generate-size-media-queries(min-height, $size-values);
-@include spacing-utils.generate-size-media-queries(max-height, $size-values);
-@include spacing-utils.generate-size-media-queries(width, $size-values);
-@include spacing-utils.generate-size-media-queries(min-width, $size-values);
-@include spacing-utils.generate-size-media-queries(max-width, $size-values);
-
-$spacing-values: '2xs',
-'xs',
-'sm',
-'md',
-'lg',
-'xl',
-'2xl',
-'3xl';
+@include spacing-utils.generate-size-classes(height, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-classes(min-height, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-classes(max-height, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-classes(width, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-classes(min-width, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-classes(max-width, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-media-queries(height, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-media-queries(min-height, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-media-queries(max-height, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-media-queries(width, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-media-queries(min-width, spacing-vars.$semantic-size-values);
+@include spacing-utils.generate-size-media-queries(max-width, spacing-vars.$semantic-size-values);
 
 .page-padding-block {
     padding-block: var(--zbk-spacing-page-padding-block);
@@ -86,7 +66,13 @@ $spacing-values: '2xs',
 
 
 // Usage: Generate spacing classes and breakpoint-specific classes
-@include spacing-utils.generate-spacing-classes(margin, $spacing-values);
-@include spacing-utils.generate-spacing-classes(padding, $spacing-values);
-@include spacing-utils.generate-media-queries(margin, $spacing-values);
-@include spacing-utils.generate-media-queries(padding, $spacing-values);
+@include spacing-utils.generate-spacing-classes(margin, spacing-vars.$semantic-spacing-values);
+@include spacing-utils.generate-spacing-classes(padding, spacing-vars.$semantic-spacing-values);
+@include spacing-utils.generate-spacing-classes(gap, spacing-vars.$semantic-spacing-values, ('':''));
+@include spacing-utils.generate-spacing-media-queries(margin, spacing-vars.$semantic-spacing-values);
+@include spacing-utils.generate-spacing-media-queries(padding, spacing-vars.$semantic-spacing-values);
+@include spacing-utils.generate-spacing-media-queries(gap, spacing-vars.$semantic-spacing-values, ('':''));
+
+// Generate semantic positioning classes ( .top-xs, .left-lg, etc)
+@include position-utils.generate-position-classes(spacing-vars.$semantic-spacing-values);
+@include position-utils.generate-position-media-queries(spacing-vars.$semantic-spacing-values);

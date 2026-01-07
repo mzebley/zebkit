@@ -1,22 +1,22 @@
 // Primitive color mixin
 // Usage:
 //   @include primitiveColor(red, 0, 80%);
-$cssVarPrefix: 'zbk' !default;
+@use 'core/styles/variables/prefix'as prefix;
 
 @mixin primitiveColor($name, $hue, $saturation) {
-  --#{$cssVarPrefix}-color-#{$name}-hue: #{$hue};
-  --#{$cssVarPrefix}-color-#{$name}-saturation: #{$saturation};
-  --#{$cssVarPrefix}-color-#{$name}-50: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 98%);
-  --#{$cssVarPrefix}-color-#{$name}-100: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 93%);
-  --#{$cssVarPrefix}-color-#{$name}-200: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 87%);
-  --#{$cssVarPrefix}-color-#{$name}-300: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 78%);
-  --#{$cssVarPrefix}-color-#{$name}-400: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 69%);
-  --#{$cssVarPrefix}-color-#{$name}-500: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 58%);
-  --#{$cssVarPrefix}-color-#{$name}-600: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 48%);
-  --#{$cssVarPrefix}-color-#{$name}-700: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 36%);
-  --#{$cssVarPrefix}-color-#{$name}-800: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 26%);
-  --#{$cssVarPrefix}-color-#{$name}-900: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 18%);
-  --#{$cssVarPrefix}-color-#{$name}-950: hsl(var(--#{$cssVarPrefix}-color-#{$name}-hue), var(--#{$cssVarPrefix}-color-#{$name}-saturation), 10%);
+  --#{prefix.$cssVar}-color-#{$name}-hue: #{$hue};
+  --#{prefix.$cssVar}-color-#{$name}-saturation: #{$saturation};
+  --#{prefix.$cssVar}-color-#{$name}-50: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 98%);
+  --#{prefix.$cssVar}-color-#{$name}-100: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 93%);
+  --#{prefix.$cssVar}-color-#{$name}-200: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 87%);
+  --#{prefix.$cssVar}-color-#{$name}-300: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 78%);
+  --#{prefix.$cssVar}-color-#{$name}-400: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 69%);
+  --#{prefix.$cssVar}-color-#{$name}-500: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 58%);
+  --#{prefix.$cssVar}-color-#{$name}-600: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 48%);
+  --#{prefix.$cssVar}-color-#{$name}-700: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 36%);
+  --#{prefix.$cssVar}-color-#{$name}-800: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 26%);
+  --#{prefix.$cssVar}-color-#{$name}-900: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 18%);
+  --#{prefix.$cssVar}-color-#{$name}-950: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 10%);
 }
 
 // Which roles we support and what CSS property they map to.
@@ -50,7 +50,7 @@ $color-states: ('base': null,
 
 // Helper: builds the var() reference for a given primitive family + step.
 @function primitive-color-var($family, $step) {
-  @return var(--#{$cssVarPrefix}-color-#{$family}-#{$step});
+  @return var(--#{prefix.$cssVar}-color-#{$family}-#{$step});
 }
 
 // Main generator.
@@ -120,7 +120,7 @@ $color-states: ('base': null,
     $joined: if($joined=="", "#{$segment}", "#{$joined}-#{$segment}");
   }
 
-  @return var(--#{$cssVarPrefix}-#{$joined});
+  @return var(--#{prefix.$cssVar}-#{$joined});
 }
 
 // Helper: builds class suffix for semantic utilities (role-family-intensity?-variant?).
@@ -218,7 +218,7 @@ $color-states: ('base': null,
     $property in $roles {
 
       .#{$role}-#{$name}-#{$step} {
-        #{$property}: var(--#{$cssVarPrefix}-#{$name}-#{$step});
+        #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
       }
 
       // State-prefixed variants (focus:, hover:, etc.)
@@ -228,20 +228,20 @@ $color-states: ('base': null,
           @if $state-name=='hover' {
             @media (hover: hover) and (pointer: fine) {
               .#{$state-name}\:#{$role}-#{$name}-#{$step}#{$pseudo} {
-                #{$property}: var(--#{$cssVarPrefix}-#{$name}-#{$step});
+                #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
               }
             }
           }
 
           @else if $pseudo==null {
             [class~="#{$state-name}:#{$role}-#{$name}-#{$step}"] {
-              #{$property}: var(--#{$cssVarPrefix}-#{$name}-#{$step});
+              #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
             }
           }
 
           @else {
             [class~="#{$state-name}:#{$role}-#{$name}-#{$step}"]#{$pseudo} {
-              #{$property}: var(--#{$cssVarPrefix}-#{$name}-#{$step});
+              #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
             }
           }
         }

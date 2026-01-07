@@ -1,0 +1,136 @@
+@use 'core/styles/variables/prefix'as prefix;
+
+:root {
+    --#{prefix.$cssVar}-transition-timing-function: ease;
+    --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-duration-default);
+}
+
+[class^='transition-'],
+[class*=' transition-'] {
+    transition-timing-function: var(--#{prefix.$cssVar}-transition-timing-function);
+    transition-duration: var(--#{prefix.$cssVar}-transition-duration);
+
+    &.transition-slow {
+        --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-duration-slow);
+    }
+
+    &.transition-fast {
+        --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-duration-fast);
+    }
+}
+
+.transition-ease {
+    --#{prefix.$cssVar}-transition-timing-function: ease;
+}
+
+.transition-ease-in {
+    --#{prefix.$cssVar}-transition-timing-function: ease-in;
+}
+
+.transition-ease-out {
+    --#{prefix.$cssVar}-transition-timing-function: ease-out;
+}
+
+.transition-ease-in-out {
+    --#{prefix.$cssVar}-transition-timing-function: ease-in-out;
+}
+
+.transition-linear {
+    --#{prefix.$cssVar}-transition-timing-function: linear;
+}
+
+.transition-playful-motion {
+    --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-playful-motion-function-default);
+    --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-playful-motion-duration-default);
+
+    &.transition-slow {
+        --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-playful-motion-function-slow);
+        --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-playful-motion-duration-slow);
+    }
+
+    &.transition-fast {
+        --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-playful-motion-function-fast);
+        --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-playful-motion-duration-fast);
+    }
+}
+
+.transition-playful-fx {
+    --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-playful-fx-function-default);
+    --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-playful-fx-duration-default);
+
+    &.transition-slow {
+        --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-playful-fx-function-slow);
+        --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-playful-fx-duration-slow);
+    }
+
+    &.transition-fast {
+        --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-playful-fx-function-fast);
+        --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-playful-fx-duration-fast);
+    }
+}
+
+.transition-calm-motion {
+    --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-calm-motion-function-default);
+    --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-calm-motion-duration-default);
+
+    &.transition-slow {
+        --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-calm-motion-function-slow);
+        --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-calm-motion-duration-slow);
+    }
+
+    &.transition-fast {
+        --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-calm-motion-function-fast);
+        --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-calm-motion-duration-fast);
+    }
+}
+
+.transition-calm-fx {
+    --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-calm-fx-function-default);
+    --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-calm-fx-duration-default);
+
+    &.transition-slow {
+        --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-calm-fx-function-slow);
+        --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-calm-fx-duration-slow);
+    }
+
+    &.transition-fast {
+        --#{prefix.$cssVar}-transition-timing-function: var(--#{prefix.$cssVar}-transition-calm-fx-function-fast);
+        --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-calm-fx-duration-fast);
+    }
+}
+
+.transition-all {
+    transition-property: all;
+}
+
+.transition-opacity {
+    transition-property: opacity;
+}
+
+.transition-transform {
+    transition-property: transform;
+}
+
+.transition-color {
+    transition-property: color;
+}
+
+.transition-background {
+    transition-property: background;
+}
+
+.transition-background-color {
+    transition-property: background-color;
+}
+
+.transition-height {
+    transition-property: height;
+}
+
+.transition-width {
+    transition-property: width;
+}
+
+.transition-fill {
+    transition-property: fill;
+}

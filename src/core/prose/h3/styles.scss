@@ -1,0 +1,21 @@
+@use 'core/styles/variables/prefix'as prefix;
+
+.prose > h3, h3.prose {
+  font-family: var(--#{prefix.$cssVar}-h3-font-family);
+  font-size: var(--#{prefix.$cssVar}-h3-font-size);
+  font-weight: var(--#{prefix.$cssVar}-h3-font-weight);
+  line-height: var(--#{prefix.$cssVar}-h3-line-height);
+  letter-spacing: var(--#{prefix.$cssVar}-h3-letter-spacing);
+  max-width: var(--#{prefix.$cssVar}-h3-measure);
+  color: var(--#{prefix.$cssVar}-h3-color);
+  font-style: var(--#{prefix.$cssVar}-h3-font-style);
+  text-transform: var(--#{prefix.$cssVar}-h3-text-transform);
+}
+
+.prose>*+h3 {
+  margin-top:var(--#{prefix.$cssVar}-h3-spacing-before);
+}
+
+.prose>h3+*, h3.prose+* {
+  margin-top:var(--#{prefix.$cssVar}-h3-spacing-after);
+}

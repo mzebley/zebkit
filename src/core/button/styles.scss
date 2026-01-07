@@ -1,3 +1,5 @@
+@use 'core/styles/variables/prefix'as prefix;
+
 @layer components {
   // Base selector covers:
   // - direct inner element: <zbk-button><button class="zbk-button">
@@ -5,59 +7,59 @@
   .zbk-button,
   zbk-button>.zbk-button {
     /* Core text & color */
-    color: var(--#{$cssVarPrefix}-button-ink);
-    background-color: var(--#{$cssVarPrefix}-button-canvas);
-    border-color: var(--#{$cssVarPrefix}-button-border-color);
+    color: var(--#{prefix.$cssVar}-button-ink);
+    background-color: var(--#{prefix.$cssVar}-button-canvas);
+    border-color: var(--#{prefix.$cssVar}-button-border-color);
 
     /* Border geometry */
-    border-width: var(--#{$cssVarPrefix}-button-border-width);
-    border-style: var(--#{$cssVarPrefix}-button-border-style);
-    border-radius: var(--#{$cssVarPrefix}-button-border-radius);
+    border-width: var(--#{prefix.$cssVar}-button-border-width);
+    border-style: var(--#{prefix.$cssVar}-button-border-style);
+    border-radius: var(--#{prefix.$cssVar}-button-border-radius);
 
     /* Typography */
-    font-family: var(--#{$cssVarPrefix}-button-font-family);
-    font-size: var(--#{$cssVarPrefix}-button-font-size);
-    font-weight: var(--#{$cssVarPrefix}-button-font-weight);
-    line-height: var(--#{$cssVarPrefix}-button-line-height);
-    letter-spacing: var(--#{$cssVarPrefix}-button-letter-spacing);
-    text-transform: var(--#{$cssVarPrefix}-button-text-transform);
-    text-decoration: var(--#{$cssVarPrefix}-button-text-decoration);
-    text-align: var(--#{$cssVarPrefix}-button-text-align);
+    font-family: var(--#{prefix.$cssVar}-button-font-family);
+    font-size: var(--#{prefix.$cssVar}-button-font-size);
+    font-weight: var(--#{prefix.$cssVar}-button-font-weight);
+    line-height: var(--#{prefix.$cssVar}-button-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-button-letter-spacing);
+    text-transform: var(--#{prefix.$cssVar}-button-text-transform);
+    text-decoration: var(--#{prefix.$cssVar}-button-text-decoration);
+    text-align: var(--#{prefix.$cssVar}-button-text-align);
 
     /* Layout & sizing */
-    display: var(--#{$cssVarPrefix}-button-display);
-    width: var(--#{$cssVarPrefix}-button-width);
-    min-width: var(--#{$cssVarPrefix}-button-min-width);
-    max-width: var(--#{$cssVarPrefix}-button-max-width);
-    height: var(--#{$cssVarPrefix}-button-height);
-    min-height: var(--#{$cssVarPrefix}-button-min-height);
-    max-height: var(--#{$cssVarPrefix}-button-max-height);
+    display: var(--#{prefix.$cssVar}-button-display);
+    width: var(--#{prefix.$cssVar}-button-width);
+    min-width: var(--#{prefix.$cssVar}-button-min-width);
+    max-width: var(--#{prefix.$cssVar}-button-max-width);
+    height: var(--#{prefix.$cssVar}-button-height);
+    min-height: var(--#{prefix.$cssVar}-button-min-height);
+    max-height: var(--#{prefix.$cssVar}-button-max-height);
 
     /* Internal spacing (padding) */
-    padding-block: var(--#{$cssVarPrefix}-button-padding-block);
-    padding-inline: var(--#{$cssVarPrefix}-button-padding-inline);
+    padding-block: var(--#{prefix.$cssVar}-button-padding-block);
+    padding-inline: var(--#{prefix.$cssVar}-button-padding-inline);
 
     // Optional directional overrides
-    padding-inline-start: var(--#{$cssVarPrefix}-button-padding-inline-start);
-    padding-inline-end: var(--#{$cssVarPrefix}-button-padding-inline-end);
-    padding-block-start: var(--#{$cssVarPrefix}-button-padding-block-start);
-    padding-block-end: var(--#{$cssVarPrefix}-button-padding-block-end);
+    padding-inline-start: var(--#{prefix.$cssVar}-button-padding-inline-start);
+    padding-inline-end: var(--#{prefix.$cssVar}-button-padding-inline-end);
+    padding-block-start: var(--#{prefix.$cssVar}-button-padding-block-start);
+    padding-block-end: var(--#{prefix.$cssVar}-button-padding-block-end);
 
     /* External spacing (margin) */
     // Base margins
-    margin-inline: var(--#{$cssVarPrefix}-button-margin-inline);
-    margin-block: var(--#{$cssVarPrefix}-button-margin-block);
+    margin-inline: var(--#{prefix.$cssVar}-button-margin-inline);
+    margin-block: var(--#{prefix.$cssVar}-button-margin-block);
 
     // Optional directional overrides
-    margin-inline-start: var(--#{$cssVarPrefix}-button-margin-inline-start);
-    margin-inline-end: var(--#{$cssVarPrefix}-button-margin-inline-end);
-    margin-block-start: var(--#{$cssVarPrefix}-button-margin-block-start);
-    margin-block-end: var(--#{$cssVarPrefix}-button-margin-block-end);
+    margin-inline-start: var(--#{prefix.$cssVar}-button-margin-inline-start);
+    margin-inline-end: var(--#{prefix.$cssVar}-button-margin-inline-end);
+    margin-block-start: var(--#{prefix.$cssVar}-button-margin-block-start);
+    margin-block-end: var(--#{prefix.$cssVar}-button-margin-block-end);
 
     /* Layout alignment (flex-based button content) */
-    flex-direction: var(--#{$cssVarPrefix}-button-flex-direction);
-    justify-content: var(--#{$cssVarPrefix}-button-justify-content);
-    align-items: var(--#{$cssVarPrefix}-button-align-items);
+    flex-direction: var(--#{prefix.$cssVar}-button-flex-direction);
+    justify-content: var(--#{prefix.$cssVar}-button-justify-content);
+    align-items: var(--#{prefix.$cssVar}-button-align-items);
 
     /* Icon-related */
     // See .zbk-button__icon below for size usage
@@ -66,51 +68,51 @@
     outline: none;
 
     /* Shadows / elevation */
-    box-shadow: var(--#{$cssVarPrefix}-button-box-shadow);
+    box-shadow: var(--#{prefix.$cssVar}-button-box-shadow);
 
     /* Interaction behavior */
-    cursor: var(--#{$cssVarPrefix}-button-cursor);
+    cursor: var(--#{prefix.$cssVar}-button-cursor);
 
     /* Transitions */
-    transition-property: var(--#{$cssVarPrefix}-button-transition-property);
-    transition-duration: var(--#{$cssVarPrefix}-button-transition-duration);
-    transition-timing-function: var(--#{$cssVarPrefix}-button-transition-timing-function);
-    transition-delay: var(--#{$cssVarPrefix}-button-transition-delay);
+    transition-property: var(--#{prefix.$cssVar}-button-transition-property);
+    transition-duration: var(--#{prefix.$cssVar}-button-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-button-transition-timing-function);
+    transition-delay: var(--#{prefix.$cssVar}-button-transition-delay);
 
     /* Other */
-    opacity: var(--#{$cssVarPrefix}-button-opacity);
-    gap: var(--#{$cssVarPrefix}-button-gap);
+    opacity: var(--#{prefix.$cssVar}-button-opacity);
+    gap: var(--#{prefix.$cssVar}-button-gap);
   }
 
   /* Hover state (only when interactive) */
   zbk-button:hover .zbk-button,
   .zbk-button:hover,
   zbk-button>.zbk-button:hover {
-    color: var(--#{$cssVarPrefix}-button-ink-hover);
-    background-color: var(--#{$cssVarPrefix}-button-canvas-hover);
-    border-color: var(--#{$cssVarPrefix}-button-border-color-hover);
-    box-shadow: var(--#{$cssVarPrefix}-button-box-shadow-hover);
+    color: var(--#{prefix.$cssVar}-button-ink-hover);
+    background-color: var(--#{prefix.$cssVar}-button-canvas-hover);
+    border-color: var(--#{prefix.$cssVar}-button-border-color-hover);
+    box-shadow: var(--#{prefix.$cssVar}-button-box-shadow-hover);
   }
 
   /* Active / pressed state */
   zbk-button:active .zbk-button,
   .zbk-button:active,
   zbk-button>.zbk-button:active {
-    color: var(--#{$cssVarPrefix}-button-ink-active);
-    background-color: var(--#{$cssVarPrefix}-button-canvas-active);
-    border-color: var(--#{$cssVarPrefix}-button-border-color-selected);
-    box-shadow: var(--#{$cssVarPrefix}-button-box-shadow-active);
+    color: var(--#{prefix.$cssVar}-button-ink-active);
+    background-color: var(--#{prefix.$cssVar}-button-canvas-active);
+    border-color: var(--#{prefix.$cssVar}-button-border-color-selected);
+    box-shadow: var(--#{prefix.$cssVar}-button-box-shadow-active);
   }
 
   /* Focus-visible state (keyboard focus) */
   zbk-button:focus-visible .zbk-button,
   .zbk-button:focus-visible,
   zbk-button>.zbk-button:focus-visible {
-    outline-color: var(--#{$cssVarPrefix}-button-focus-color);
-    outline-width: var(--#{$cssVarPrefix}-button-focus-width);
+    outline-color: var(--#{prefix.$cssVar}-button-focus-color);
+    outline-width: var(--#{prefix.$cssVar}-button-focus-width);
     outline-style: solid;
-    outline-offset: var(--#{$cssVarPrefix}-button-focus-offset);
-    box-shadow: var(--#{$cssVarPrefix}-button-box-shadow-focus);
+    outline-offset: var(--#{prefix.$cssVar}-button-focus-offset);
+    box-shadow: var(--#{prefix.$cssVar}-button-box-shadow-focus);
   }
 
   /* Disabled state (native + ARIA) */
@@ -120,11 +122,11 @@
   .zbk-button[aria-disabled='true'],
   zbk-button>.zbk-button[disabled],
   zbk-button>.zbk-button[aria-disabled='true'] {
-    color: var(--#{$cssVarPrefix}-button-ink-disabled);
-    background-color: var(--#{$cssVarPrefix}-button-canvas-disabled);
-    border-color: var(--#{$cssVarPrefix}-button-border-color-disabled);
+    color: var(--#{prefix.$cssVar}-button-ink-disabled);
+    background-color: var(--#{prefix.$cssVar}-button-canvas-disabled);
+    border-color: var(--#{prefix.$cssVar}-button-border-color-disabled);
     box-shadow: none;
-    opacity: var(--#{$cssVarPrefix}-button-opacity);
+    opacity: var(--#{prefix.$cssVar}-button-opacity);
     cursor: not-allowed;
     pointer-events: none;
   }
@@ -133,14 +135,14 @@
   zbk-button .zbk-button__icon,
   .zbk-button .zbk-button__icon,
   zbk-button>.zbk-button .zbk-button__icon {
-    inline-size: var(--#{$cssVarPrefix}-button-icon-size);
-    block-size: var(--#{$cssVarPrefix}-button-icon-size);
+    inline-size: var(--#{prefix.$cssVar}-button-icon-size);
+    block-size: var(--#{prefix.$cssVar}-button-icon-size);
     flex-shrink: 0;
   }
 
   /* Button groups (using group-gap token) */
   .zbk-button-group {
     display: inline-flex;
-    gap: var(--#{$cssVarPrefix}-button-group-gap);
+    gap: var(--#{prefix.$cssVar}-button-group-gap);
   }
 }

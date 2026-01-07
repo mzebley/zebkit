@@ -10,25 +10,25 @@ const tokens = {
   "spacing-modifier": {
     value: `1`,
     type: "utility",
-    description: "Amount to multiple spacing variables by.",
+    description: "Amount to multiply spacing variables by.",
   },
   "line-height-modifier": {
     value: `1`,
     type: "utility",
-    description: "Amount to multiple line height variables by.",
+    description: "Amount to multiply line height variables by.",
   },
   "letter-spacing-modifier": {
     value: `1`,
     type: "utility",
-    description: "Amount to multiple letter spacing variables by.",
+    description: "Amount to multiply letter spacing variables by.",
   },
   "fallback-font-size-modifier": {
     value: `1`,
     type: "utility",
     description:
-      "Fallback amount to multiple font size variables by in the event their specific modifier isn't set.",
+      "Fallback amount to multiply font size variables by in the event their specific modifier isn't set.",
   },
-  "transition-timing-modifier": {
+  "transition-duration-modifier": {
     value: `1`,
     type: "utility",
     description:

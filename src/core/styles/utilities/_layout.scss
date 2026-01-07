@@ -1,46 +1,40 @@
-@use 'core/styles/variables/breakpoints' as vars;
+@use 'core/styles/variables/breakpoints'as vars;
 
 // Map for align-self values
-$align-self-values: (
-    'auto': auto,
+$align-self-values: ('auto': auto,
     'start': flex-start,
     'end': flex-end,
     'center': center,
     'baseline': baseline,
-    'stretch': stretch
-);
+    'stretch': stretch);
 
 // Map for align-items values
-$align-items-values: (
-    'start': flex-start,
+$align-items-values: ('start': flex-start,
     'end': flex-end,
     'center': center,
     'baseline': baseline,
-    'stretch': stretch
-);
+    'stretch': stretch);
 
 // Map for flex-direction values
-$flex-direction-values: (
-    'row': row,
+$flex-direction-values: ('row': row,
     'row-reverse': row-reverse,
     'column': column,
-    'column-reverse': column-reverse
-);
+    'column-reverse': column-reverse);
 
 // Map for justify-content values
-$justify-content-values: (
-    'start': flex-start,
+$justify-content-values: ('start': flex-start,
     'end': flex-end,
     'center': center,
     'between': space-between,
     'around': space-around,
-    'evenly': space-evenly
-);
+    'evenly': space-evenly);
 
 
 // Mixin to generate flexbox utility classes
 @mixin generate-flex-utilities($property, $values) {
-    @each $key, $value in $values {
+
+    @each $key,
+    $value in $values {
         .#{$property}-#{$key} {
             #{$property}: #{$value};
         }
@@ -48,9 +42,13 @@ $justify-content-values: (
 }
 
 @mixin generate-flex-media-queries($property, $values, $breakpoints) {
-    @each $breakpoint, $min-width in vars.$breakpoints {
+
+    @each $breakpoint,
+    $min-width in vars.$breakpoints {
         @media (min-width: #{$min-width}) {
-            @each $key, $value in $values {
+
+            @each $key,
+            $value in $values {
                 .#{$breakpoint}\:#{$property}-#{$key} {
                     #{$property}: #{$value};
                 }
@@ -60,18 +58,18 @@ $justify-content-values: (
 }
 
 // Map for display values (flex and inline-flex)
-$display-values: (
-    'flex': flex,
+$display-values: ('flex': flex,
     'inline-flex': inline-flex,
     'block': block,
     'inline-block': inline-block,
     'inline': inline,
-    'none': none
-);
+    'none': none);
 
 // Generate display utility classes
 @mixin generate-display-utilities($values) {
-    @each $key, $value in $values {
+
+    @each $key,
+    $value in $values {
         .display-#{$key} {
             display: #{$value};
         }
@@ -79,9 +77,13 @@ $display-values: (
 }
 
 @mixin generate-display-media-queries($values, $breakpoints) {
-    @each $breakpoint, $min-width in vars.$breakpoints {
+
+    @each $breakpoint,
+    $min-width in vars.$breakpoints {
         @media (min-width: #{$min-width}) {
-            @each $key, $value in $values {
+
+            @each $key,
+            $value in $values {
                 .#{$breakpoint}\:display-#{$key} {
                     display: #{$value};
                 }
@@ -92,6 +94,41 @@ $display-values: (
 
 // Single entry point so callers can wrap emitted utilities in a layer.
 @mixin emit-layout-utilities() {
+
+    .visually-hidden {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+    }
+
+    .position-static {
+        position: static;
+    }
+
+    .position-relative {
+        position: relative;
+    }
+
+    .position-fixed {
+        position: fixed;
+    }
+
+    .position-sticky {
+        position: sticky;
+    }
+
+    .position-unset {
+        position: unset;
+    }
+
+    .position-absolute {
+        position: absolute;
+    }
+
     @include generate-flex-utilities(align-self, $align-self-values);
     @include generate-flex-utilities(align-items, $align-items-values);
     @include generate-flex-utilities(flex-direction, $flex-direction-values);
@@ -104,4 +141,3 @@ $display-values: (
     @include generate-display-utilities($display-values);
     @include generate-display-media-queries($display-values, vars.$breakpoints);
 }
-

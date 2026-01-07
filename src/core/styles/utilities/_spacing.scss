@@ -1,5 +1,5 @@
 @use 'core/styles/variables/breakpoints' as vars;
-$cssVarPrefix: 'zbk' !default;
+@use 'core/styles/variables/prefix' as prefix;
 
 $default-directions: (
   '': ('inline', 'block'), // All sides
@@ -40,10 +40,10 @@ $default-directions: (
     @each $direction, $sides in $directions {
       .#{$property}#{$direction}-#{$spacing} {
         @if type-of($sides) == 'string' {
-          #{$property}#{$direction}: var(--#{$cssVarPrefix}-spacing-#{$spacing});
+          #{$property}#{$direction}: var(--#{prefix.$cssVar}-spacing-#{$spacing});
         } @else {
           @each $side in $sides {
-            #{$property}-#{$side}: var(--#{$cssVarPrefix}-spacing-#{$spacing});
+            #{$property}-#{$side}: var(--#{prefix.$cssVar}-spacing-#{$spacing});
           }
         }
       }
@@ -51,17 +51,17 @@ $default-directions: (
   }
 }
 
-@mixin generate-media-queries($property, $spacing-values, $directions: $default-directions, $breakpoints: vars.$breakpoints) {
+@mixin generate-spacing-media-queries($property, $spacing-values, $directions: $default-directions, $breakpoints: vars.$breakpoints) {
   @each $breakpoint, $min-width in $breakpoints {
     @media (min-width: #{$min-width}) {
       @each $spacing in $spacing-values {
         @each $direction, $sides in $directions {
           .#{$breakpoint}\:#{$property}#{$direction}-#{$spacing} {
             @if type-of($sides) == 'string' {
-              #{$property}#{$direction}: var(--#{$cssVarPrefix}-spacing-#{$spacing});
+              #{$property}#{$direction}: var(--#{prefix.$cssVar}-spacing-#{$spacing});
             } @else {
               @each $side in $sides {
-                #{$property}-#{$side}: var(--#{$cssVarPrefix}-spacing-#{$spacing});
+                #{$property}-#{$side}: var(--#{prefix.$cssVar}-spacing-#{$spacing});
               }
             }
           }
