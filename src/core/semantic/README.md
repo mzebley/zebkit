@@ -147,14 +147,18 @@ In themed builds, the underlying primitive may change — but your semantic API 
 
 ---
 
+## Current Semantic Modules
+
+- `semantic/color/` → Functional color roles (success, danger, warning, info, brand, accent, etc.)
+- `semantic/border/` → Border roles (hairline, control, container, emphasis)
+- `semantic/spacing/` → Layout-specific spacing (card, desktop, compact, etc.)
+
 ## Future Semantic Modules
 
-This folder is intended to grow.
+This folder is intended to grow beyond the current modules.
 
-Planned semantic modules include:
+Additional planned semantic modules include:
 
-- `semantic/borders` → border roles (hairline, control, container, emphasis)
-- `semantic/typography` → type roles (title, body, eyebrow, mini)
-- `semantic/color` → functional color roles (success, danger, brand, accent)
-- `semantic/layout` → grid + page structure roles
+- `semantic/typography` → Type roles (title, body, eyebrow, mini)
+- `semantic/layout` → Grid and page structure roles
 

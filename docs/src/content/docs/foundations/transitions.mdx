@@ -1,0 +1,160 @@
+---
+title: Transitions
+description: Animation system with motion curves and durations in Zebkit.
+---
+
+Zebkit's transition system provides durations and easing curves separated by character (playful vs. calm) and purpose (motion vs. effects). This structure lets you mix-and-match timing functions and durations for fine-grained animation control.
+
+## Core Concept
+
+Transitions are divided into two dimensions:
+
+1. **Character**: Playful (expressive, springy) or Calm (restrained, smooth)
+2. **Purpose**: Motion (spatial movement) or Effects (opacity, color, shadow)
+
+This creates four families of tokens, each with fast/default/slow variants.
+
+## Duration Tokens
+
+All durations respect `prefers-reduced-motion`.
+
+**Standard durations** (for non-specialized timing):
+- `--zbk-transition-duration-fast` (125ms)
+- `--zbk-transition-duration-default` (325ms)
+- `--zbk-transition-duration-slow` (625ms)
+
+**Playful motion** (movement with springy character):
+- `--zbk-transition-playful-motion-duration-fast` (350ms)
+- `--zbk-transition-playful-motion-duration-default` (500ms)
+- `--zbk-transition-playful-motion-duration-slow` (650ms)
+
+**Playful effects** (color, opacity, shadow with subtle bounce):
+- `--zbk-transition-playful-fx-duration-fast` (150ms)
+- `--zbk-transition-playful-fx-duration-default` (200ms)
+- `--zbk-transition-playful-fx-duration-slow` (300ms)
+
+**Calm motion** (steady, restrained movement):
+- `--zbk-transition-calm-motion-duration-fast` (350ms)
+- `--zbk-transition-calm-motion-duration-default` (500ms)
+- `--zbk-transition-calm-motion-duration-slow` (750ms)
+
+**Calm effects** (smooth, predictable visual changes):
+- `--zbk-transition-calm-fx-duration-fast` (150ms)
+- `--zbk-transition-calm-fx-duration-default` (200ms)
+- `--zbk-transition-calm-fx-duration-slow` (300ms)
+
+## Easing Curves
+
+**Playful motion** (cubic-bezier with overshoot for spatial movement):
+- `--zbk-transition-playful-motion-function-fast` (snappy, expressive)
+- `--zbk-transition-playful-motion-function-default` (balanced bounce)
+- `--zbk-transition-playful-motion-function-slow` (larger, more noticeable overshoot)
+
+**Playful effects** (smooth with subtle bounce, no spatial overshoot):
+- `--zbk-transition-playful-fx-function-fast` (quick, responsive)
+- `--zbk-transition-playful-fx-function-default` (default smooth bounce)
+- `--zbk-transition-playful-fx-function-slow` (longer, more deliberate)
+
+**Calm motion** (consistent curve across all speeds):
+- `--zbk-transition-calm-motion-function-default` (standard, stable ease)
+- `--zbk-transition-calm-motion-function-fast` (fast, standard motion)
+- `--zbk-transition-calm-motion-function-slow` (slow, deliberate motion)
+
+**Calm effects** (smooth, no bounce, same curve across all speeds):
+- `--zbk-transition-calm-fx-function-fast` (quick fade)
+- `--zbk-transition-calm-fx-function-default` (standard fade)
+- `--zbk-transition-calm-fx-function-slow` (deliberate fade)
+
+## Usage Examples
+
+**Playful slide-in animation:**
+```css
+.drawer {
+  transition: transform var(--zbk-transition-playful-motion-duration-default) var(--zbk-transition-playful-motion-function-default);
+  transform: translateX(-100%);
+}
+
+.drawer.open {
+  transform: translateX(0);
+}
+```
+
+**Calm fade for overlay:**
+```css
+.modal-backdrop {
+  opacity: 0;
+  transition: opacity var(--zbk-transition-calm-fx-duration-default) var(--zbk-transition-calm-fx-function-default);
+}
+
+.modal-backdrop.visible {
+  opacity: var(--zbk-opacity-50);
+}
+```
+
+**Playful button hover effect:**
+```css
+.button {
+  transition: background-color var(--zbk-transition-playful-fx-duration-fast) var(--zbk-transition-playful-fx-function-fast);
+}
+
+.button:hover {
+  background-color: var(--zbk-color-brand-600);
+}
+```
+
+**Calm, steady dropdown open:**
+```css
+.dropdown {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--zbk-transition-calm-motion-duration-default) var(--zbk-transition-calm-motion-function-default);
+}
+
+.dropdown.open {
+  max-height: 500px;
+}
+```
+
+## Accessibility
+
+All transition tokens include the `a11y` flag, respecting `prefers-reduced-motion`:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+Designers and developers should always respect user motion preferences.
+
+## Theming
+
+Override motion curves and durations per theme:
+
+```json
+{
+  "transition": {
+    "playful-motion-duration-default": {
+      "value": "600ms"
+    },
+    "playful-motion-function-default": {
+      "value": "cubic-bezier(0.35, 1.25, 0.25, 1.00)"
+    }
+  }
+}
+```
+
+All token names stay consistent; only values change per theme.
+
+## Choosing Motion Character and Purpose
+
+- **Playful motion**: Use for navigation, slides, drawer opens—movement that should feel responsive and characterful.
+- **Playful effects**: Use for hover states, fades, color changes where you want subtle bounce but no spatial overshoot.
+- **Calm motion**: Use for data table expansions, panel opens, layout shifts—movement that should feel solid and predictable.
+- **Calm effects**: Use for disabled states, loading indicators, and changes that should feel smooth and restrained.
+
+Start with playful for interactive elements and calm for structural changes. Adjust speeds based on distance or importance: quick for small movements, slow for large or emphasized changes.

@@ -1,0 +1,102 @@
+---
+title: Z-Index
+description: Stacking order system and semantic layering in Zebkit.
+---
+
+Z-index tokens provide a predictable stacking order. They range from numeric levels (0–100) for general use to semantic tokens for common UI patterns (dropdowns, modals, tooltips).
+
+## Numeric Scale
+
+For general elevation and layering:
+
+- `--zbk-z-index-0` - Base level
+- `--zbk-z-index-10` through `--zbk-z-index-100` - Progressive elevation (10-unit steps)
+- `--zbk-z-index-auto` - Lets browser determine stacking
+
+## Semantic Tokens
+
+Named tokens for common UI patterns (all values are > 1000 to avoid conflicts):
+
+- `--zbk-z-index-dropdown` (1000) - Dropdown menus
+- `--zbk-z-index-sticky` (1020) - Sticky headers and footers
+- `--zbk-z-index-fixed` (1030) - Fixed position elements
+- `--zbk-z-index-modal-backdrop` (1040) - Modal overlays
+- `--zbk-z-index-modal` (1050) - Modal dialogs
+- `--zbk-z-index-popover` (1060) - Popovers and tooltips with fallback
+- `--zbk-z-index-tooltip` (1070) - Tooltips (highest layer)
+
+## Usage in CSS
+
+**General elevation:**
+```css
+.card-elevated {
+  position: relative;
+  z-index: var(--zbk-z-index-10);
+}
+
+.floating-action-button {
+  position: fixed;
+  z-index: var(--zbk-z-index-50);
+}
+```
+
+**Modal and overlay patterns:**
+```css
+.modal-backdrop {
+  position: fixed;
+  z-index: var(--zbk-z-index-modal-backdrop);
+}
+
+.modal-dialog {
+  position: fixed;
+  z-index: var(--zbk-z-index-modal);
+}
+
+.tooltip {
+  position: absolute;
+  z-index: var(--zbk-z-index-tooltip);
+}
+```
+
+**Sticky elements:**
+```css
+.navbar {
+  position: sticky;
+  z-index: var(--zbk-z-index-sticky);
+}
+```
+
+## Stacking Context
+
+Remember that z-index only works on positioned elements (`position: relative`, `absolute`, `fixed`, `sticky`).
+The value is relative to the parent stacking context, not global.
+
+If a modal backdrop and dialog are children of the same container, use:
+
+```css
+.modal-backdrop {
+  position: fixed;
+  z-index: var(--zbk-z-index-modal-backdrop);
+}
+
+.modal-dialog {
+  position: fixed;
+  z-index: var(--zbk-z-index-modal);
+}
+```
+
+## Theming
+
+Override the stacking order per theme:
+
+```json
+{
+  "z-index": {
+    "modal": {
+      "value": 2000
+    }
+  }
+}
+```
+
+All layer names remain stable across themes; only the numeric values change.

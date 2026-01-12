@@ -1,0 +1,88 @@
+---
+title: Opacity
+description: Opacity scale for transparency and visibility control in Zebkit.
+---
+
+Opacity tokens provide a consistent scale (0–100) for controlling transparency. Use them to fade overlays, soften backgrounds, and create visual hierarchy through opacity layers.
+
+## Opacity Scale
+
+Tokens are named by their percentage value (0–100 in 5% increments):
+
+- `--zbk-opacity-0` - Fully transparent (invisible)
+- `--zbk-opacity-5` - 5% opacity (barely visible)
+- `--zbk-opacity-10` - 10% opacity (very faint)
+- `--zbk-opacity-25` - 25% opacity (subtle)
+- `--zbk-opacity-50` - 50% opacity (half visible)
+- `--zbk-opacity-75` - 75% opacity (mostly opaque)
+- `--zbk-opacity-100` - Fully opaque (default)
+
+Full range: 0, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 75, 80, 85, 90, 95, 100.
+
+## Usage in CSS
+
+Apply opacity to any element:
+
+```css
+.overlay {
+  opacity: var(--zbk-opacity-50);
+}
+
+.disabled-content {
+  opacity: var(--zbk-opacity-30);
+}
+
+.visible-on-hover {
+  opacity: var(--zbk-opacity-0);
+  transition: opacity 200ms ease;
+}
+
+.visible-on-hover:hover {
+  opacity: var(--zbk-opacity-100);
+}
+```
+
+## Common Patterns
+
+**Faded text or secondary content:**
+```css
+.caption {
+  opacity: var(--zbk-opacity-70);
+}
+```
+
+**Disabled or inactive state:**
+```css
+[aria-disabled="true"] {
+  opacity: var(--zbk-opacity-40);
+  pointer-events: none;
+}
+```
+
+**Semi-transparent backdrop:**
+```css
+.modal-backdrop {
+  background: black;
+  opacity: var(--zbk-opacity-25);
+}
+```
+
+## Accessibility Note
+
+Opacity alone should not convey critical information. Always pair with color, pattern, or additional visual cues. For disabled states, combine opacity with `aria-disabled` and pointer-event control.
+
+## Theming
+
+Override the opacity scale per theme:
+
+```json
+{
+  "opacity": {
+    "50": {
+      "value": 0.55
+    }
+  }
+}
+```
+
+Numeric keys stay consistent; only values change per theme.

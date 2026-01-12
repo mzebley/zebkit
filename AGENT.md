@@ -34,7 +34,7 @@ tokens.
 - Tokens should offer state, mode, or size variants when the experience demands it. Avoid duplicating raw values—reference the lower layer via `var(--token)`.
 - Document new tokens in the component's token registry file under `src/core/*`.
 - When introducing new token groups, update any rendered CSS bundle and ensure defaults land in `zebkit-vars.css`.
-- Color primitives cover neutral, brand, accent, and status ramps in `src/core/_colors.scss`. Define new colors there before creating or updating aliases.
+- Color primitives are organized in `src/core/colors/` by palette intent. Define new colors there before creating or updating semantic aliases in `src/core/semantic/color/`.
 
 ## Component Authoring Standards
 - Structure files as `[component]/index.ts`, `[component]/tokens.ts`, and
@@ -84,11 +84,16 @@ tokens.
 - If a change impacts public CSS variable names, note the breaking surface area
   explicitly.
 
+## Implemented Foundation Modules
+- **Elevation** - Complete box shadow system with semantic sizes (xs, sm, md, lg, xl, 2xl) and inner variants
+- **Opacity** - Full opacity scale (0–100) in 5% increments
+- **Z-Index** - Numeric stacking order with semantic tokens (dropdown, sticky, fixed, modal, tooltip)
+- **Transition** - Playful and calm motion/effects easing curves with accessibility-aware durations
+- **Semantic color, border, spacing** - Functional aliases for all major visual properties
+
 ## Future Enhancements (Vision Backlog)
-- Live theming playground to adjust tokens at runtime for demos and automated
-  audits.
-- Automated accessibility regression tests that validate focus order, aria
-  semantics, and color contrast.
-- Token documentation site with usage guidance, fallback values, and examples.
+- Live theming playground to adjust tokens at runtime for demos and audits.
+- Automated accessibility regression tests that validate focus order, aria semantics, and color contrast.
+- Component composition guides to demonstrate complex, themeable component patterns.
 
 Keep Zebkit opinionated about semantics and flexible about aesthetics. When in doubt, prioritize inclusive defaults and token completeness over visual flair.
