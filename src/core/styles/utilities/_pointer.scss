@@ -1,0 +1,32 @@
+@use './generators' as gen;
+
+$pointer-events-values: (
+  'none': none,
+  'auto': auto
+);
+
+$user-select-values: (
+  'none': none,
+  'text': text,
+  'all': all,
+  'auto': auto
+);
+
+$touch-action-values: (
+  'auto': auto,
+  'none': none,
+  'pan-x': pan-x,
+  'pan-y': pan-y,
+  'pan-left': pan-left,
+  'pan-right': pan-right,
+  'pan-up': pan-up,
+  'pan-down': pan-down,
+  'pinch-zoom': pinch-zoom,
+  'manipulation': manipulation
+);
+
+@layer utilities {
+  @include gen.generate-responsive-utility('pointer-events', pointer-events, $pointer-events-values);
+  @include gen.generate-responsive-utility('user-select', user-select, $user-select-values);
+  @include gen.generate-responsive-utility('touch-action', touch-action, $touch-action-values);
+}

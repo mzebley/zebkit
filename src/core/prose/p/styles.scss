@@ -1,5 +1,7 @@
 @use 'core/styles/variables/prefix'as prefix;
 
+@layer base {
+
 .prose > p, p.prose {
   font-family: var(--#{prefix.$cssVar}-p-font-family);
   font-size: var(--#{prefix.$cssVar}-p-font-size);
@@ -19,3 +21,5 @@
 .prose>p+*, p.prose+* {
   margin-top:var(--#{prefix.$cssVar}-p-spacing-after);
 }
+
+} // @layer base

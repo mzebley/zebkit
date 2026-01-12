@@ -30,6 +30,8 @@
     --zbk-checkbox-transition-duration: 120ms;
 }
 
+@layer components {
+
 z-checkbox {
     display: inline-block;
 }
@@ -148,3 +150,5 @@ z-checkbox[disabled] .z-checkbox,
         border-color: var(--zbk-checkbox-border-color-hover);
     }
 }
+
+} // @layer components

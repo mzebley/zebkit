@@ -1,0 +1,15 @@
+@use './generators' as gen;
+
+$overflow-values: (
+  'auto': auto,
+  'hidden': hidden,
+  'visible': visible,
+  'scroll': scroll,
+  'clip': clip
+);
+
+@layer utilities {
+  @include gen.generate-responsive-utility('overflow', overflow, $overflow-values);
+  @include gen.generate-responsive-utility('overflow-x', overflow-x, $overflow-values);
+  @include gen.generate-responsive-utility('overflow-y', overflow-y, $overflow-values);
+}

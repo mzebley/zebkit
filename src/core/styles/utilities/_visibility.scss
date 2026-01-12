@@ -1,0 +1,7 @@
+@use './generators' as gen;
+
+@layer utilities {
+  @include gen.generate-responsive-single-utility('visible', (visibility: visible));
+  @include gen.generate-responsive-single-utility('invisible', (visibility: hidden));
+  @include gen.generate-responsive-single-utility('collapse', (visibility: collapse));
+}

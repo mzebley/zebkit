@@ -28,6 +28,8 @@
     --zbk-radio-label-gap: var(--zbk-spacing-1);
 }
 
+@layer components {
+
 z-radio {
     display: inline-block;
 }
@@ -115,3 +117,5 @@ z-radio[disabled] .z-radio,
         border-color: var(--zbk-radio-border-color-hover);
     }
 }
+
+} // @layer components

@@ -24,8 +24,8 @@
   @include spacing-utils.generate-spacing-media-queries(margin, spacing-vars.$spacing-values);
   @include spacing-utils.generate-spacing-media-queries(padding, spacing-vars.$spacing-values);
   @include spacing-utils.generate-spacing-media-queries(gap, spacing-vars.$spacing-values,  ('':''));
-}
 
-// Generate positioning classes ( .top-05, .left-5, etc)
-@include position-utils.generate-position-classes(spacing-vars.$spacing-values);
-@include position-utils.generate-position-media-queries(spacing-vars.$spacing-values);
+  // Generate positioning classes ( .top-05, .left-5, etc)
+  @include position-utils.generate-position-classes(spacing-vars.$spacing-values);
+  @include position-utils.generate-position-media-queries(spacing-vars.$spacing-values);
+}

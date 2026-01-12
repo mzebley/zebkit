@@ -1,0 +1,42 @@
+@use './generators' as gen;
+
+$flex-wrap-values: (
+  'wrap': wrap,
+  'nowrap': nowrap,
+  'wrap-reverse': wrap-reverse
+);
+
+$flex-grow-values: (
+  '0': 0,
+  '1': 1
+);
+
+$flex-shrink-values: (
+  '0': 0,
+  '1': 1
+);
+
+$flex-basis-values: (
+  'auto': auto,
+  '0': 0,
+  'full': 100%
+);
+
+$order-values: (
+  'first': -9999,
+  'last': 9999,
+  'none': 0,
+  '1': 1,
+  '2': 2,
+  '3': 3,
+  '4': 4,
+  '5': 5
+);
+
+@layer utilities {
+  @include gen.generate-responsive-utility('flex-wrap', flex-wrap, $flex-wrap-values);
+  @include gen.generate-responsive-utility('flex-grow', flex-grow, $flex-grow-values);
+  @include gen.generate-responsive-utility('flex-shrink', flex-shrink, $flex-shrink-values);
+  @include gen.generate-responsive-utility('flex-basis', flex-basis, $flex-basis-values);
+  @include gen.generate-responsive-utility('order', order, $order-values);
+}

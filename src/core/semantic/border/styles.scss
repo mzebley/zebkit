@@ -9,16 +9,16 @@
   @include border-utils.generate-border-radius-media-queries(radius);
   @include border-utils.generate-border-radius-classes(radius, 'pill');
   @include border-utils.generate-border-radius-media-queries(radius, 'pill');
-}
 
-.border-solid {
-  border-style: solid;
-}
+  .border-solid {
+    border-style: solid;
+  }
 
-.border-dashed {
-  border-style: dashed;
-}
+  .border-dashed {
+    border-style: dashed;
+  }
 
-.border-dotted {
-  border-style: dotted;
+  .border-dotted {
+    border-style: dotted;
+  }
 }

@@ -5,6 +5,8 @@
     --#{prefix.$cssVar}-transition-duration: var(--#{prefix.$cssVar}-transition-duration-default);
 }
 
+@layer utilities {
+
 [class^='transition-'],
 [class*=' transition-'] {
     transition-timing-function: var(--#{prefix.$cssVar}-transition-timing-function);
@@ -134,3 +136,5 @@
 .transition-fill {
     transition-property: fill;
 }
+
+} // @layer utilities

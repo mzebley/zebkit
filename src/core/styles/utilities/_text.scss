@@ -1,0 +1,57 @@
+@use './generators' as gen;
+
+$whitespace-values: (
+  'normal': normal,
+  'nowrap': nowrap,
+  'pre': pre,
+  'pre-line': pre-line,
+  'pre-wrap': pre-wrap,
+  'break-spaces': break-spaces
+);
+
+$text-overflow-values: (
+  'ellipsis': ellipsis,
+  'clip': clip
+);
+
+$word-break-values: (
+  'normal': normal,
+  'break-all': break-all,
+  'keep-all': keep-all,
+  'break-word': break-word
+);
+
+$overflow-wrap-values: (
+  'normal': normal,
+  'break-word': break-word,
+  'anywhere': anywhere
+);
+
+$hyphens-values: (
+  'none': none,
+  'manual': manual,
+  'auto': auto
+);
+
+$text-wrap-values: (
+  'wrap': wrap,
+  'nowrap': nowrap,
+  'balance': balance,
+  'pretty': pretty
+);
+
+@layer utilities {
+  @include gen.generate-responsive-utility('whitespace', white-space, $whitespace-values);
+  @include gen.generate-responsive-utility('text-overflow', text-overflow, $text-overflow-values);
+  @include gen.generate-responsive-utility('word-break', word-break, $word-break-values);
+  @include gen.generate-responsive-utility('overflow-wrap', overflow-wrap, $overflow-wrap-values);
+  @include gen.generate-responsive-utility('hyphens', hyphens, $hyphens-values);
+  @include gen.generate-responsive-utility('text-wrap', text-wrap, $text-wrap-values);
+
+  // Truncate utility (combines multiple properties)
+  @include gen.generate-responsive-single-utility('truncate', (
+    overflow: hidden,
+    text-overflow: ellipsis,
+    white-space: nowrap
+  ));
+}

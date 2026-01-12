@@ -1,5 +1,7 @@
 @use 'core/styles/variables/prefix'as prefix;
 
+@layer utilities {
+
 .focusable:focus,
 .focusable:focus-within,
 .focusable:focus-visible {
@@ -7,3 +9,5 @@
   outline-offset: var(--#{prefix.$cssVar}-focus-offset);
   outline-color: var(--#{prefix.$cssVar}-focus-color);
 }
+
+} // @layer utilities
