@@ -10,6 +10,164 @@ const REGISTERED_VARIANT_CLASSES: Record<string, string> = buildVariantClassMap(
   buttonVariants as ButtonVariantEntry[]
 );
 
+const CSS_VAR_PREFIX = `--${ZEBKIT_PREFIX}-button-`;
+const buttonVar = (name: string): string => `var(${CSS_VAR_PREFIX}${name})`;
+
+const BUTTON_SHADOW_STYLES = `
+  :host {
+    display: inline-block;
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+
+  button {
+    /* Core text & color */
+    color: ${buttonVar("ink")};
+    background-color: ${buttonVar("canvas")};
+    border-color: ${buttonVar("border-color")};
+
+    /* Border geometry */
+    border-width: ${buttonVar("border-width")};
+    border-style: ${buttonVar("border-style")};
+    border-radius: ${buttonVar("border-radius")};
+
+    /* Typography */
+    font-family: ${buttonVar("font-family")};
+    font-size: ${buttonVar("font-size")};
+    font-weight: ${buttonVar("font-weight")};
+    line-height: ${buttonVar("line-height")};
+    letter-spacing: ${buttonVar("letter-spacing")};
+    text-transform: ${buttonVar("text-transform")};
+    text-decoration: ${buttonVar("text-decoration")};
+    text-align: ${buttonVar("text-align")};
+
+    /* Layout & sizing */
+    display: ${buttonVar("display")};
+    width: ${buttonVar("width")};
+    min-width: ${buttonVar("min-width")};
+    max-width: ${buttonVar("max-width")};
+    height: ${buttonVar("height")};
+    min-height: ${buttonVar("min-height")};
+    max-height: ${buttonVar("max-height")};
+
+    /* Internal spacing (padding) */
+    padding-block: ${buttonVar("padding-block")};
+    padding-inline: ${buttonVar("padding-inline")};
+
+    /* Optional directional overrides */
+    padding-inline-start: ${buttonVar("padding-inline-start")};
+    padding-inline-end: ${buttonVar("padding-inline-end")};
+    padding-block-start: ${buttonVar("padding-block-start")};
+    padding-block-end: ${buttonVar("padding-block-end")};
+
+    /* External spacing (margin) */
+    margin-inline: ${buttonVar("margin-inline")};
+    margin-block: ${buttonVar("margin-block")};
+    margin-inline-start: ${buttonVar("margin-inline-start")};
+    margin-inline-end: ${buttonVar("margin-inline-end")};
+    margin-block-start: ${buttonVar("margin-block-start")};
+    margin-block-end: ${buttonVar("margin-block-end")};
+
+    /* Layout alignment (flex-based button content) */
+    flex-direction: ${buttonVar("flex-direction")};
+    justify-content: ${buttonVar("justify-content")};
+    align-items: ${buttonVar("align-items")};
+
+    /* Focus ring */
+    outline: none;
+
+    /* Shadows / elevation */
+    box-shadow: ${buttonVar("box-shadow")};
+
+    /* Interaction behavior */
+    cursor: ${buttonVar("cursor")};
+
+    /* Transitions */
+    transition-property: ${buttonVar("transition-property")};
+    transition-duration: ${buttonVar("transition-duration")};
+    transition-timing-function: ${buttonVar("transition-timing-function")};
+    transition-delay: ${buttonVar("transition-delay")};
+
+    /* Other */
+    opacity: ${buttonVar("opacity")};
+    gap: ${buttonVar("gap")};
+  }
+
+  :host(:hover) button {
+    color: ${buttonVar("ink-hover")};
+    background-color: ${buttonVar("canvas-hover")};
+    border-color: ${buttonVar("border-color-hover")};
+    box-shadow: ${buttonVar("box-shadow-hover")};
+  }
+
+  :host(:active) button {
+    color: ${buttonVar("ink-active")};
+    background-color: ${buttonVar("canvas-active")};
+    border-color: ${buttonVar("border-color-selected")};
+    box-shadow: ${buttonVar("box-shadow-active")};
+  }
+
+  button:focus-visible {
+    outline-color: ${buttonVar("focus-color")};
+    outline-width: ${buttonVar("focus-width")};
+    outline-style: solid;
+    outline-offset: ${buttonVar("focus-offset")};
+    box-shadow: ${buttonVar("box-shadow-focus")};
+  }
+
+  button:disabled,
+  button[aria-disabled='true'] {
+    color: ${buttonVar("ink-disabled")};
+    background-color: ${buttonVar("canvas-disabled")};
+    border-color: ${buttonVar("border-color-disabled")};
+    box-shadow: none;
+    opacity: ${buttonVar("opacity")};
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  slot[name='icon'] {
+    display: none;
+  }
+
+  :host([data-has-icon]) slot[name='icon'] {
+    display: contents;
+  }
+
+  ::slotted([slot='icon']),
+  [data-fallback-icon] {
+    inline-size: ${buttonVar("icon-size")};
+    block-size: ${buttonVar("icon-size")};
+    flex-shrink: 0;
+  }
+
+  [data-fallback-icon] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :host(:not([data-has-icon])) [data-fallback-icon] {
+    display: none;
+  }
+`;
+
+// Shadow DOM template uses slots with fallback content to enable icon-class usage.
+const SHADOW_TEMPLATE = document.createElement("template");
+SHADOW_TEMPLATE.innerHTML = `
+  <style>${BUTTON_SHADOW_STYLES}</style>
+  <button part="button" class="zbk-button" type="button">
+    <slot name="icon" part="icon-slot">
+      <span data-fallback-icon part="icon" class="zbk-icon" aria-hidden="true"></span>
+    </slot>
+    <slot>
+      <span data-fallback-label></span>
+    </slot>
+  </button>
+`;
+
 /**
  * Interface defining the options for the ZbkButton component.
  */
@@ -19,6 +177,11 @@ export interface ZbkButtonOptions {
    * that will be converted into scoped variant classes (zbk-button--{name}).
    */
   variant?: string | string[];
+  /**
+   * Optional icon class used to render the fallback icon when no icon slot is provided.
+   * Intended for icon font systems like Tabler.
+   */
+  iconClass?: string;
 }
 
 /**
@@ -26,14 +189,39 @@ export interface ZbkButtonOptions {
  * It provides additional functionality and styling options beyond a standard HTML button.
  */
 export class ZbkButton extends HTMLElement {
+  /** Shadow root that owns the internal button markup. */
+  private shadowRootRef: ShadowRoot;
+
   /** The actual button element that this component wraps. */
   private button: HTMLButtonElement;
+
+  /** Named slot for icons so consumers can project custom SVGs. */
+  private iconSlot: HTMLSlotElement;
+
+  /** Default slot for label content. */
+  private labelSlot: HTMLSlotElement;
+
+  /** Fallback icon element when no icon slot is provided. */
+  private fallbackIcon: HTMLElement;
+
+  /** Fallback label element when the default slot is empty. */
+  private fallbackLabel: HTMLElement;
+
+  /** Tracks when a named icon slot is populated. */
+  private hasIconSlot = false;
+
+  /** Tracks when the default slot is populated. */
+  private hasLabelSlot = false;
 
   /** Stores the click handler function if provided. */
   private clickHandler: Function | null = null;
 
   /** Stores the bound handleClick reference for add/remove event listener symmetry. */
   private boundHandleClick: EventListener;
+
+  /** Stores the bound slot change handlers for add/remove symmetry. */
+  private boundHandleIconSlotChange: EventListener;
+  private boundHandleLabelSlotChange: EventListener;
 
   /** Accessibility-related attributes that should be synced to the inner button. */
   private static readonly accessibilityAttributes = [
@@ -47,7 +235,7 @@ export class ZbkButton extends HTMLElement {
   ];
 
   /** Default options for all ZbkButton instances. */
-  private static defaultOptions: ZbkButtonOptions = {};
+  static defaultOptions: ZbkButtonOptions = {};
 
   /** Current options for this ZbkButton instance. */
   private options: ZbkButtonOptions = { ...ZbkButton.defaultOptions };
@@ -59,6 +247,8 @@ export class ZbkButton extends HTMLElement {
 
   /** Indicates if accessibility attributes are currently being migrated. */
   private isMigratingAccessibilityAttributes = false;
+  /** Indicates when disabled changes are being synced from internal APIs. */
+  private isSyncingDisabledAttribute = false;
 
   /**
    * Specifies which attributes should be observed for changes.
@@ -67,28 +257,63 @@ export class ZbkButton extends HTMLElement {
   static get observedAttributes() {
     return [
       "(click)",
+      "disabled",
+      "icon-class",
       ...ZbkButton.accessibilityAttributes,
       "options",
       "variant",
     ];
   }
 
-  /** MutationObserver to watch for class changes */
-  private classObserver: MutationObserver;
-
   /**
    * Constructor for the ZbkButton component.
-   * Initializes the button element and adds the base class.
+   * Initializes the shadow DOM structure, slots, and event handlers.
    */
   constructor() {
     super();
-    this.button = document.createElement("button");
-    this.button.classList.add("zbk-button");
-    this.boundHandleClick = this.handleClick.bind(this);
-    // Initialize the MutationObserver
-    this.classObserver = new MutationObserver(
-      this.handleClassChanges.bind(this)
+    this.shadowRootRef = this.attachShadow({ mode: "open" });
+    this.shadowRootRef.appendChild(
+      SHADOW_TEMPLATE.content.cloneNode(true)
     );
+
+    const button = this.shadowRootRef.querySelector("button");
+    if (!(button instanceof HTMLButtonElement)) {
+      throw new Error("ZbkButton: internal button element missing.");
+    }
+
+    const iconSlot = this.shadowRootRef.querySelector("slot[name='icon']");
+    if (!(iconSlot instanceof HTMLSlotElement)) {
+      throw new Error("ZbkButton: icon slot missing.");
+    }
+
+    const labelSlot = this.shadowRootRef.querySelector("slot:not([name])");
+    if (!(labelSlot instanceof HTMLSlotElement)) {
+      throw new Error("ZbkButton: label slot missing.");
+    }
+
+    const fallbackIcon = this.shadowRootRef.querySelector(
+      "[data-fallback-icon]"
+    );
+    if (!(fallbackIcon instanceof HTMLElement)) {
+      throw new Error("ZbkButton: fallback icon element missing.");
+    }
+
+    const fallbackLabel = this.shadowRootRef.querySelector(
+      "[data-fallback-label]"
+    );
+    if (!(fallbackLabel instanceof HTMLElement)) {
+      throw new Error("ZbkButton: fallback label element missing.");
+    }
+
+    this.button = button;
+    this.iconSlot = iconSlot;
+    this.labelSlot = labelSlot;
+    this.fallbackIcon = fallbackIcon;
+    this.fallbackLabel = fallbackLabel;
+
+    this.boundHandleClick = this.handleClick.bind(this);
+    this.boundHandleIconSlotChange = this.handleIconSlotChange.bind(this);
+    this.boundHandleLabelSlotChange = this.handleLabelSlotChange.bind(this);
   }
 
   /**
@@ -96,18 +321,18 @@ export class ZbkButton extends HTMLElement {
    * Sets up the button, event listeners, and initial state.
    */
   connectedCallback() {
-    this.setupButton();
+    if (!this.classList.contains("zbk-button")) {
+      this.classList.add("zbk-button");
+    }
     this.button.addEventListener("click", this.boundHandleClick);
+    this.iconSlot.addEventListener("slotchange", this.boundHandleIconSlotChange);
+    this.labelSlot.addEventListener("slotchange", this.boundHandleLabelSlotChange);
+
     this.updateClickHandler();
     this.setupAccessibility();
     this.parseOptions();
-    this.mirrorClasses();
-
-    // Start observing class changes
-    this.classObserver.observe(this, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
+    this.handleIconSlotChange();
+    this.handleLabelSlotChange();
 
     // Use requestAnimationFrame to defer showing the button
     requestAnimationFrame(() => {
@@ -117,48 +342,18 @@ export class ZbkButton extends HTMLElement {
 
   /**
    * Lifecycle callback that runs when the component is removed from the DOM.
-   * Removes the click event listener and class observer
+   * Removes the click event listener and slot observers.
    */
   disconnectedCallback() {
     this.button.removeEventListener("click", this.boundHandleClick);
-    this.classObserver.disconnect();
-  }
-
-  /**
-   * Handles class changes on the custom element.
-   * @param mutations - MutationRecord objects describing the changes.
-   */
-  private handleClassChanges(mutations: MutationRecord[]) {
-    mutations.forEach((mutation) => {
-      if (
-        mutation.type === "attributes" &&
-        mutation.attributeName === "class"
-      ) {
-        this.mirrorClasses();
-      }
-    });
-  }
-
-  /**
-   * Mirrors classes from the custom element to the internal button.
-   */
-  private mirrorClasses() {
-    // Get all classes from the custom element
-    const elementClasses = Array.from(this.classList);
-
-    // Remove all existing mirrored classes from the button
-    this.button.classList.forEach((cls) => {
-      if (cls !== "zbk-button" && !cls.startsWith("zbk-button--")) {
-        this.button.classList.remove(cls);
-      }
-    });
-
-    // Add all classes from the custom element to the button
-    elementClasses.forEach((cls) => {
-      if (cls !== "zbk-button-ready") {
-        this.button.classList.add(cls);
-      }
-    });
+    this.iconSlot.removeEventListener(
+      "slotchange",
+      this.boundHandleIconSlotChange
+    );
+    this.labelSlot.removeEventListener(
+      "slotchange",
+      this.boundHandleLabelSlotChange
+    );
   }
 
   /**
@@ -174,16 +369,19 @@ export class ZbkButton extends HTMLElement {
   ) {
     if (name === "(click)") {
       this.updateClickHandler();
+    } else if (name === "disabled") {
+      if (this.isSyncingDisabledAttribute) {
+        return;
+      }
+      this.updateDisabledState(newValue !== null);
+    } else if (name === "icon-class") {
+      this.parseOptions({ iconClass: newValue ?? undefined });
     } else if (ZbkButton.accessibilityAttributes.includes(name)) {
       if (this.isMigratingAccessibilityAttributes) {
         return;
       }
       this.updateAccessibilityAttribute(name, newValue);
-    } else if (
-      name === "options" ||
-      name === "icon-position" ||
-      name === "variant"
-    ) {
+    } else if (name === "options" || name === "variant") {
       this.parseOptions();
     }
   }
@@ -223,6 +421,8 @@ export class ZbkButton extends HTMLElement {
       }
 
       mergeVariants(this.getAttribute("variant"));
+      updatedOptions.iconClass =
+        this.getAttribute("icon-class") ?? updatedOptions.iconClass;
     }
 
     updatedOptions.variant = Array.from(variantSet);
@@ -266,32 +466,8 @@ export class ZbkButton extends HTMLElement {
       this.classList.add(...variantClasses);
     }
     this.previousVariantClasses = variantClasses;
-  }
 
-  /**
-   * Sets up the initial structure of the button.
-   */
-  private setupButton() {
-    const button = this.button;
-
-    const children = Array.from(this.childNodes);
-    for (const child of children) {
-      if (child === button) continue;
-      if (child instanceof HTMLElement && child.getAttribute("slot") === "icon") {
-        if (!child.classList.contains("zbk-icon")) {
-          child.classList.add("zbk-icon");
-        }
-      }
-      button.appendChild(child);
-    }
-
-    if (!button.classList.contains("zbk-button")) {
-      button.classList.add("zbk-button");
-    }
-
-    if (button.parentElement !== this) {
-      this.appendChild(button);
-    }
+    this.renderIconFallback();
   }
 
   /**
@@ -327,6 +503,63 @@ export class ZbkButton extends HTMLElement {
   }
 
   /**
+   * Syncs slotted icon nodes and flags when an icon is provided.
+   */
+  private handleIconSlotChange() {
+    const assigned = this.getAssignedLightNodes(this.iconSlot);
+    this.hasIconSlot = assigned.length > 0;
+
+    assigned.forEach((node) => {
+      if (node instanceof HTMLElement && !node.classList.contains("zbk-icon")) {
+        node.classList.add("zbk-icon");
+      }
+    });
+
+    if (this.hasIconSlot && this.options.iconClass) {
+      console.warn(
+        "ZbkButton: icon-class is ignored because a slot=\"icon\" node was provided."
+      );
+    }
+
+    this.updateIconState();
+  }
+
+  /**
+   * Updates label slot state so accessible naming can use visible content.
+   */
+  private handleLabelSlotChange() {
+    const assigned = this.getAssignedLightNodes(this.labelSlot);
+    this.hasLabelSlot = assigned.length > 0;
+    this.updateAccessibleName();
+  }
+
+  /**
+   * Updates the fallback icon element based on icon-class and slot presence.
+   */
+  private renderIconFallback() {
+    const iconClass = this.options.iconClass?.trim() ?? "";
+    const shouldShowFallback = Boolean(iconClass) && !this.hasIconSlot;
+
+    this.fallbackIcon.className = "zbk-icon";
+    if (iconClass) {
+      iconClass.split(/\s+/).forEach((cls) => {
+        if (cls) this.fallbackIcon.classList.add(cls);
+      });
+    }
+
+    this.fallbackIcon.toggleAttribute("hidden", !shouldShowFallback);
+    this.updateIconState();
+  }
+
+  /**
+   * Sets a host attribute so CSS can avoid layout gaps when no icon exists.
+   */
+  private updateIconState() {
+    const hasIcon = this.hasIconSlot || Boolean(this.options.iconClass?.trim());
+    this.toggleAttribute("data-has-icon", hasIcon);
+  }
+
+  /**
    * Sets up accessibility attributes and ensures proper ARIA support.
    */
   private setupAccessibility() {
@@ -349,25 +582,67 @@ export class ZbkButton extends HTMLElement {
       this.isMigratingAccessibilityAttributes = false;
     }
 
-    // If no accessible name is provided, use the sanitized button's text content or log a warning
+    // If role is not provided, set it to "button"
+    if (!this.button.getAttribute("role")) {
+      this.button.setAttribute("role", "button");
+    }
+
+    if (this.hasAttribute("disabled")) {
+      this.updateDisabledState(true);
+    }
+  }
+
+  /**
+   * Computes a fallback accessible label from slotted or fallback text.
+   */
+  private getAccessibleLabelText(): string | null {
+    const assigned = this.getAssignedLightNodes(this.labelSlot);
+    const assignedText = assigned
+      .map((node) => node.textContent ?? "")
+      .join(" ")
+      .trim();
+
+    if (assignedText) {
+      return this.sanitizeText(assignedText);
+    }
+
+    const fallbackText = this.fallbackLabel.textContent?.trim();
+    if (fallbackText) {
+      return this.sanitizeText(fallbackText);
+    }
+
+    const hostText = this.textContent?.trim();
+    if (hostText) {
+      return this.sanitizeText(hostText);
+    }
+
+    return null;
+  }
+
+  /**
+   * Returns only light DOM nodes assigned to a slot, excluding fallback content.
+   */
+  private getAssignedLightNodes(slot: HTMLSlotElement): Node[] {
+    const assigned = slot.assignedNodes({ flatten: true });
+    return assigned.filter((node) => node.getRootNode() !== this.shadowRootRef);
+  }
+
+  /**
+   * Updates the aria-label when no explicit name is provided.
+   */
+  private updateAccessibleName() {
     if (
       !this.button.getAttribute("aria-label") &&
       !this.button.getAttribute("aria-labelledby")
     ) {
-      const buttonText = this.button.textContent?.trim();
-      if (buttonText) {
-        const sanitizedText = this.sanitizeText(buttonText);
-        this.button.setAttribute("aria-label", sanitizedText);
+      const labelText = this.getAccessibleLabelText();
+      if (labelText) {
+        this.button.setAttribute("aria-label", labelText);
       } else {
         console.warn(
           "ZbkButton: No accessible name provided. Please add an aria-label or aria-labelledby attribute."
         );
       }
-    }
-
-    // If role is not provided, set it to "button"
-    if (!this.button.getAttribute("role")) {
-      this.button.setAttribute("role", "button");
     }
   }
 
@@ -437,16 +712,33 @@ export class ZbkButton extends HTMLElement {
   }
 
   /**
-   * Sets the disabled state of the button.
-   * @param isDisabled - Whether the button should be disabled.
+   * Syncs the disabled state onto the internal button and aria-disabled state.
    */
-  setDisabledState(isDisabled: boolean): void {
+  private updateDisabledState(isDisabled: boolean): void {
     this.button.disabled = isDisabled;
     if (isDisabled) {
       this.button.setAttribute("aria-disabled", "true");
     } else {
       this.button.removeAttribute("aria-disabled");
     }
+  }
+
+  /**
+   * Sets the disabled state of the button.
+   * @param isDisabled - Whether the button should be disabled.
+   */
+  setDisabledState(isDisabled: boolean): void {
+    this.isSyncingDisabledAttribute = true;
+    try {
+      if (isDisabled && !this.hasAttribute("disabled")) {
+        this.setAttribute("disabled", "");
+      } else if (!isDisabled && this.hasAttribute("disabled")) {
+        this.removeAttribute("disabled");
+      }
+    } finally {
+      this.isSyncingDisabledAttribute = false;
+    }
+    this.updateDisabledState(isDisabled);
   }
 
   /**
@@ -470,15 +762,15 @@ export class ZbkButton extends HTMLElement {
    * @param text - The new text for the button.
    */
   setButtonText(text: string): void {
-    this.button.textContent = text;
-    // Update aria-label if it was previously auto-generated
-    if (
-      !this.getAttribute("aria-label") &&
-      !this.getAttribute("aria-labelledby")
-    ) {
-      const sanitizedText = this.sanitizeText(text);
-      this.button.setAttribute("aria-label", sanitizedText);
+    this.fallbackLabel.textContent = text;
+    if (!this.hasLabelSlot) {
+      this.updateAccessibleName();
+      return;
     }
+
+    console.warn(
+      "ZbkButton: setButtonText updated the fallback label, but slotted content is present. Update the slotted content directly to change the visible label."
+    );
   }
 
   /**
@@ -486,7 +778,7 @@ export class ZbkButton extends HTMLElement {
    * @returns The current text content of the button.
    */
   getButtonText(): string {
-    return this.button.textContent || "";
+    return this.fallbackLabel.textContent || "";
   }
 
   /**
@@ -518,20 +810,25 @@ export class ZbkButton extends HTMLElement {
         REGISTERED_VARIANT_CLASSES[normalized] ||
         `${ZEBKIT_PREFIX}-button--${normalized}`;
 
-      classes.push(registeredClass);
+      if (!classes.includes(registeredClass)) {
+        classes.push(registeredClass);
+      }
 
+      // Ensure the base variant class is always added for compatibility
+      const legacyClass = `${ZEBKIT_PREFIX}-button--${normalized}`;
+      if (!classes.includes(legacyClass)) {
+        classes.push(legacyClass);
+      }
     }
 
-    return Array.from(new Set(classes));
+    return classes;
   }
 }
 
-/**
- * Helper function to define the custom element.
- * This function checks if the custom element is already defined before defining it.
- */
-export function defineZbkButton() {
+export const defineZbkButton = () => {
   if (typeof window !== "undefined" && !customElements.get("zbk-button")) {
     customElements.define("zbk-button", ZbkButton);
   }
-}
+};
+
+export default ZbkButton;

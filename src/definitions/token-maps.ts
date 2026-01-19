@@ -58,6 +58,7 @@ export const tokenCompatibilityMap: {
   fontWeight: ["fontWeight"],
   textDecoration: ["textDecoration"],
   textTransform: ["textTransform"],
+  fontStyle: ["fontStyle"],
   textAlignment: ["textAlignment"],
   sizing: ["sizing", "dimension", "spacing", "rootSize"],
   spacing: ["spacing", "dimension", "sizing", "rootSize"],

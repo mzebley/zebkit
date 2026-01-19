@@ -1,11 +1,9 @@
 @use 'core/styles/variables/prefix'as prefix;
 
 @layer components {
-  // Base selector covers:
-  // - direct inner element: <zbk-button><button class="zbk-button">
-  // - standalone usage: <button class="zbk-button">
-  .zbk-button,
-  zbk-button>.zbk-button {
+  // Base selector covers standalone usage: <button class="zbk-button">
+  // Shadow DOM components style their own internals; this keeps host elements untouched.
+  button.zbk-button {
     /* Core text & color */
     color: var(--#{prefix.$cssVar}-button-ink);
     background-color: var(--#{prefix.$cssVar}-button-canvas);
@@ -85,9 +83,7 @@
   }
 
   /* Hover state (only when interactive) */
-  zbk-button:hover .zbk-button,
-  .zbk-button:hover,
-  zbk-button>.zbk-button:hover {
+  button.zbk-button:hover {
     color: var(--#{prefix.$cssVar}-button-ink-hover);
     background-color: var(--#{prefix.$cssVar}-button-canvas-hover);
     border-color: var(--#{prefix.$cssVar}-button-border-color-hover);
@@ -95,9 +91,7 @@
   }
 
   /* Active / pressed state */
-  zbk-button:active .zbk-button,
-  .zbk-button:active,
-  zbk-button>.zbk-button:active {
+  button.zbk-button:active {
     color: var(--#{prefix.$cssVar}-button-ink-active);
     background-color: var(--#{prefix.$cssVar}-button-canvas-active);
     border-color: var(--#{prefix.$cssVar}-button-border-color-selected);
@@ -105,9 +99,7 @@
   }
 
   /* Focus-visible state (keyboard focus) */
-  zbk-button:focus-visible .zbk-button,
-  .zbk-button:focus-visible,
-  zbk-button>.zbk-button:focus-visible {
+  button.zbk-button:focus-visible {
     outline-color: var(--#{prefix.$cssVar}-button-focus-color);
     outline-width: var(--#{prefix.$cssVar}-button-focus-width);
     outline-style: solid;
@@ -116,12 +108,8 @@
   }
 
   /* Disabled state (native + ARIA) */
-  zbk-button[disabled] .zbk-button,
-  zbk-button[aria-disabled='true'] .zbk-button,
-  .zbk-button[disabled],
-  .zbk-button[aria-disabled='true'],
-  zbk-button>.zbk-button[disabled],
-  zbk-button>.zbk-button[aria-disabled='true'] {
+  button.zbk-button[disabled],
+  button.zbk-button[aria-disabled='true'] {
     color: var(--#{prefix.$cssVar}-button-ink-disabled);
     background-color: var(--#{prefix.$cssVar}-button-canvas-disabled);
     border-color: var(--#{prefix.$cssVar}-button-border-color-disabled);
@@ -132,9 +120,7 @@
   }
 
   /* Icon sizing / layout */
-  zbk-button .zbk-button__icon,
-  .zbk-button .zbk-button__icon,
-  zbk-button>.zbk-button .zbk-button__icon {
+  button.zbk-button .zbk-button__icon {
     inline-size: var(--#{prefix.$cssVar}-button-icon-size);
     block-size: var(--#{prefix.$cssVar}-button-icon-size);
     flex-shrink: 0;

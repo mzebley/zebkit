@@ -1,0 +1,46 @@
+import adapter from '@sveltejs/adapter-static';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { mdsvex } from 'mdsvex';
+import path from 'node:path';
+
+const docsRoot = process.cwd().endsWith(`${path.sep}docs`)
+  ? process.cwd()
+  : path.join(process.cwd(), 'docs');
+
+const layoutPath = (relativePath) => path.join(docsRoot, relativePath);
+
+const config = {
+  extensions: ['.svelte', '.md', '.mdx'],
+  preprocess: [
+    vitePreprocess(),
+    mdsvex({
+      extensions: ['.md', '.mdx'],
+      layout: {
+        foundations: layoutPath('src/lib/layouts/FoundationsLayout.svelte'),
+        components: layoutPath('src/lib/layouts/ComponentLayout.svelte'),
+        _: layoutPath('src/lib/layouts/DefaultLayout.svelte')
+      }
+    })
+  ],
+  kit: {
+    adapter: adapter({
+      pages: 'build',
+      assets: 'build',
+      fallback: null,
+      precompress: false,
+      strict: true
+    }),
+    prerender: {
+      entries: ['*'],
+      handleHttpError: 'warn'
+    },
+    alias: {
+      $definitions: '../src/definitions',
+      $data: './src/lib/data',
+      $components: './src/lib/components',
+      $utils: './src/lib/utils'
+    }
+  }
+};
+
+export default config;

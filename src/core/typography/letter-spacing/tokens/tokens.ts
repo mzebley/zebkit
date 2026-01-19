@@ -34,7 +34,7 @@ const tokens = {
     a11y: true
   },
   wider: {
-    value: `.05rem'`,
+    value: `.05rem`,
     type: "letterSpacing",
     description: "",
     a11y: true

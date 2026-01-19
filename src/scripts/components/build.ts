@@ -267,7 +267,8 @@ async function main(): Promise<void> {
       path.dirname(jsOutput),
       undefined,
       [],
-      { splitMode: "combined" as BuildZebkitTokensOptions["splitMode"] }
+      { splitMode: "combined" as BuildZebkitTokensOptions["splitMode"] },
+      false
     );
     const settingDefaults = extractSettingDefaults(tokens);
 

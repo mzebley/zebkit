@@ -1,6 +1,6 @@
 import { defineZbkButton } from "./index";
 
-describe("ZbkButton (light DOM)", () => {
+describe("ZbkButton (shadow DOM)", () => {
   beforeAll(() => {
     defineZbkButton();
   });
@@ -11,23 +11,26 @@ describe("ZbkButton (light DOM)", () => {
   });
 
   const getInternalButton = (el: HTMLElement): HTMLButtonElement => {
-    const button = el.querySelector("button");
+    const button = el.shadowRoot?.querySelector("button") ?? null;
     if (!(button instanceof HTMLButtonElement)) {
       throw new Error("Internal button not found");
     }
     return button;
   };
 
-  it("renders a native button and moves children inside", () => {
+  it("renders a native button with shadow DOM slots", () => {
     const el = document.createElement("zbk-button");
     el.setAttribute("aria-label", "label");
     el.innerHTML = `<span slot="icon">★</span><span>Label</span>`;
     document.body.appendChild(el);
 
     const btn = getInternalButton(el);
-    expect(btn.textContent).toContain("Label");
-    expect(btn.querySelector('[slot="icon"]')).toBeInstanceOf(HTMLElement);
-    // Host and internal button share classes via mirroring
+    const iconSlot = el.shadowRoot?.querySelector("slot[name='icon']");
+    const defaultSlot = el.shadowRoot?.querySelector("slot:not([name])");
+    expect(iconSlot).toBeInstanceOf(HTMLSlotElement);
+    expect(defaultSlot).toBeInstanceOf(HTMLSlotElement);
+    // Host and internal button share a base class for overrides
+    expect(el.classList.contains("zbk-button")).toBe(true);
     expect(btn.classList.contains("zbk-button")).toBe(true);
   });
 
@@ -39,9 +42,7 @@ describe("ZbkButton (light DOM)", () => {
     el.append(icon, document.createTextNode("Download"));
     document.body.appendChild(el);
 
-    const btn = getInternalButton(el);
-    const slotted = btn.querySelector('[slot="icon"]') as HTMLElement;
-    expect(slotted.classList.contains("zbk-icon")).toBe(true);
+    expect(icon.classList.contains("zbk-icon")).toBe(true);
   });
 
   it("applies variant classes from space/comma separated values", () => {
@@ -52,21 +53,19 @@ describe("ZbkButton (light DOM)", () => {
 
     expect(el.classList.contains("zbk-button--outline")).toBe(true);
     expect(el.classList.contains("zbk-button--large")).toBe(true);
-
-    const btn = getInternalButton(el);
-    expect(btn.classList.contains("zbk-button--outline")).toBe(true);
-    expect(btn.classList.contains("zbk-button--large")).toBe(true);
   });
 
-  it("setButtonText updates text content and fallback aria-label", () => {
+  it("setButtonText updates fallback label and aria-label", () => {
     const el = document.createElement("zbk-button") as any;
-    el.setAttribute("aria-label", "initial");
     document.body.appendChild(el);
 
     const btn = getInternalButton(el);
     el.setButtonText("Submit");
 
-    expect(btn.textContent).toBe("Submit");
+    const fallbackLabel = el.shadowRoot?.querySelector(
+      "[data-fallback-label]"
+    ) as HTMLElement | null;
+    expect(fallbackLabel?.textContent).toBe("Submit");
     expect(btn.getAttribute("aria-label")).toBe("submit");
   });
 });

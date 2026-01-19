@@ -100,8 +100,8 @@ $default-font-weights: 'thin',
 
     @each $weight in $values {
 
-        .font-weight-#{$key},
-        .text-#{$key} {
+        .font-weight-#{$weight},
+        .text-#{$weight} {
             font-weight: var(--#{prefix.$cssVar}-font-weight-#{$weight});
         }
     }
@@ -116,8 +116,8 @@ $default-font-weights: 'thin',
 
             @each $weight in $values {
 
-                .#{$breakpoint}\:font-weight-#{$key},
-                .#{$breakpoint}\:text-#{$key} {
+                .#{$breakpoint}\:font-weight-#{$weight},
+                .#{$breakpoint}\:text-#{$weight} {
                     font-weight: var(--#{prefix.$cssVar}-font-weight-#{$weight});
                 }
             }
@@ -138,8 +138,8 @@ $default-tracking-values: 'tighter',
 
     @each $spacing in $values {
 
-        .letter-spacing-#{$key},
-        .tracking-#{$key} {
+        .letter-spacing-#{$spacing},
+        .tracking-#{$spacing} {
             letter-spacing: var(--#{prefix.$cssVar}-letter-spacing-#{$spacing});
         }
     }

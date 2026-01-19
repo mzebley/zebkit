@@ -2,9 +2,9 @@ import type { LayerName } from "@definitions/layers";
 import { z } from "zod";
 import { tokenSchema } from "./token-schema";
 
-export const key = "h6";
+export const key = "list";
 export const layer: LayerName = "base";
-export type H6Tokens = z.infer<typeof tokenSchema>;
+export type ListTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "font-family": {
@@ -55,7 +55,19 @@ const tokens = {
     description:
       "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
-  color: {
+  "padding-block-start": {
+    value: `{spacing.105}`,
+    type: "spacing",
+    description:
+      "Amount of spacing before list items.",
+  },
+  "padding-block-end": {
+    value: `{spacing.0}`,
+    type: "spacing",
+    description:
+      "Amount of spacing after list items.",
+  },
+ color: {
     value: `{ink}`,
     type: "color",
     description:
@@ -73,6 +85,6 @@ const tokens = {
     description:
       "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
-} as const satisfies H6Tokens;
+} as const satisfies ListTokens;
 
 export default tokens;
