@@ -38,7 +38,7 @@ const tokens = {
       "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   measure: {
-    value: `{measure.3}`,
+    value: `{text-measure.3}`,
     type: "sizing",
     description:
       "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container.",
@@ -56,7 +56,7 @@ const tokens = {
       "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   color: {
-    value: `{ink}`,
+    value: `{app.ink}`,
     type: "color",
     description:
       "Color of H6 elements with .prose applied directly or that are a child of a .prose container.",
