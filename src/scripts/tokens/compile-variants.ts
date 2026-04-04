@@ -75,7 +75,7 @@ export interface BuildZebkitVariantsResult {
  */
 export async function buildZebkitVariants(
   tokens: Record<string, TokenInterface>,
-  customVariantPath?: string
+  customVariantPath?: string | string[]
 ): Promise<BuildZebkitVariantsResult> {
   // Friendly CLI spinner to give the user feedback during variant collection.
   const spinner = ora('Processing Zebkit variants...').start();
@@ -122,9 +122,18 @@ export async function buildZebkitVariants(
     const buildOutputs = () => buildVariantOutputs(registry, variantMetadata, tokens);
     let { inlineCss, extraStylesheets } = buildOutputs();
 
-    if (customVariantPath) {
+    const overridePaths = Array.isArray(customVariantPath)
+      ? customVariantPath
+      : customVariantPath
+      ? [customVariantPath]
+      : [];
+
+    for (const overridePath of overridePaths) {
       // Once built-in variants are loaded, optionally apply overlay JSON overrides.
-      await applyVariantOverrides(customVariantPath, registry, tokens, variantMetadata);
+      await applyVariantOverrides(overridePath, registry, tokens, variantMetadata);
+    }
+
+    if (overridePaths.length > 0) {
       ({ inlineCss, extraStylesheets } = buildOutputs());
     }
 

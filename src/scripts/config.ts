@@ -7,7 +7,7 @@ export type TokensConfig = {
   includeAllComponents?: boolean;
   destinationPath?: string;
   assetFilePath?: string;
-  theme?: 'default' | 'quiet-boutique' | 'dark-boutique' | 'custom';
+  theme?: string;
   customTokenPath?: string;
   customThemeName?: string;
   exportTokens?: boolean;

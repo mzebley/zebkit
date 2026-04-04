@@ -25,3 +25,12 @@ export function getZebkitDefaultsDir(): string {
   // The bundle lives at dist/cli/zebkit.mjs; defaults are in the same dir at dist/cli/defaults/
   return path.resolve(dir, 'defaults');
 }
+
+/**
+ * Returns the directory containing bundled built-in theme token snapshots.
+ * In the installed CLI bundle this resolves to dist/cli/presets/.
+ */
+export function getZebkitPresetsDir(): string {
+  const dir = path.dirname(fileURLToPath(import.meta.url));
+  return path.resolve(dir, 'presets');
+}

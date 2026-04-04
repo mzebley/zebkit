@@ -40,7 +40,8 @@ Reference the output CSS in your project:
     "destinationPath": "./dist",
     "assetFilePath": "/",
     "theme": "default",
-    "customTokenPath": "./tokens"
+    "customTokenPath": "./tokens",
+    "customThemeName": "my-project"
   }
 }
 ```
@@ -49,7 +50,7 @@ Once the config exists, `zebkit build` is non-interactive — no prompts. Useful
 
 ### Customizing tokens
 
-Run `zebkit init` with the option to copy default token files. This places per-module JSON files in `./tokens/`:
+Run `zebkit init` with the option to copy token files into your project. This places per-module JSON files in `./tokens/`:
 
 ```
 tokens/
@@ -59,7 +60,7 @@ tokens/
   ...
 ```
 
-Each file contains the token values for that module. Edit the `value` fields to customize:
+The selected base theme remains the fallback source of truth. Edit only the files or token values you want to change:
 
 ```json
 {
@@ -70,7 +71,7 @@ Each file contains the token values for that module. Edit the `value` fields to 
 }
 ```
 
-Run `zebkit build` to recompile CSS with your overrides applied.
+Run `zebkit build` to recompile CSS with your overrides applied on top of the selected base theme. Missing files or token keys in `./tokens/` fall back to the base theme automatically.
 
 ### Config reference
 
@@ -95,9 +96,9 @@ Run `zebkit build` to recompile CSS with your overrides applied.
 |---|---|---|
 | `destinationPath` | `./dist` | Where to write the compiled CSS |
 | `assetFilePath` | `/` | Base URL for asset references in CSS |
-| `theme` | `default` | `default`, `quiet-boutique`, `dark-boutique`, or `custom` |
-| `customTokenPath` | — | Path to a JSON override file or folder of JSON overrides |
-| `customThemeName` | `custom` | Name used in output filename when theme is `custom` |
+| `theme` | `default` | Base theme name. `zebkit init` prompts with `default` plus any bundled presets. |
+| `customTokenPath` | — | Path to a JSON override file or folder of partial JSON overrides |
+| `customThemeName` | theme name | Name used in the output filename |
 | `selectedComponents` | `[]` | Components to include (empty = core only) |
 | `includeAllComponents` | `false` | Include all available components |
 | `exportTokens` | `false` | Also write token artifacts (JSON/TS/JS) |
@@ -114,7 +115,8 @@ Run `zebkit build` to recompile CSS with your overrides applied.
 - Build tokens and CSS with `npm run build:tokens` and follow the prompts to choose components, theme, output formats, and split mode.
 - To skip prompts, supply answers in a `zebkit.config.json` (or `zebkit-config.json` / `zekit.config.json`) file. You can also point to a custom location with `--config path/to/config.json`.
 - Config files accept a `tokens` section (for component selection, destination, asset path, theme/custom overrides, export settings, split mode, and output formats) and a `components` section (for selected components and `jsOutput`).
-- Theme overrides can be a single JSON file `src/themes/<name>.json` or a folder `src/themes/<name>/` containing multiple JSON override files.
+- Built-in theme presets live under `theme/<name>/` in this repo and are bundled into the published CLI as base-theme snapshots.
+- Project overrides can be a single JSON file or a folder of partial JSON overrides.
 - Combined mode writes one set of files per format (e.g., `<theme>-tokens.json`); per-module mode writes `zbk-<module>.tokens.<ext>` for each token module.
 
 ### Publishing

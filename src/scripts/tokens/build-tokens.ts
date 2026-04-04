@@ -20,6 +20,14 @@ import {
 import { convertTokensToCssVars } from "@token-scripts/token-converter";
 import { compileSass, CompileSassOptions } from "@token-scripts/compile-css";
 import { loadZebkitConfig, TokensConfig, ZebkitConfig } from "../config";
+import {
+  DEFAULT_THEME_NAME,
+  getBuiltInThemeNames,
+  getThemePromptChoices,
+  resolveBundledThemeTokensDir,
+  getBundledThemeVariantOverridesDir,
+  resolveSourceThemeOverridePath,
+} from "../theme-presets";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -73,6 +81,9 @@ export async function runTokenBuild(
   const componentsDir = zebkitPackageRoot
     ? path.join(zebkitPackageRoot, "src", "components")
     : undefined;
+  const builtInThemeNames = getThemePromptChoices(
+    await getBuiltInThemeNames(zebkitPackageRoot)
+  );
 
   try {
     const components = await getComponents(componentsDir);
@@ -129,9 +140,22 @@ export async function runTokenBuild(
       ? destinationPath
       : path.resolve(process.cwd(), destinationPath);
 
+    const configuredTheme =
+      tokensConfig?.theme === "custom"
+        ? DEFAULT_THEME_NAME
+        : tokensConfig?.theme ?? DEFAULT_THEME_NAME;
+
+    if (tokensConfig?.theme === "custom") {
+      console.warn(
+        chalk.yellow(
+          'Config value "theme": "custom" is deprecated. Using "default" as the base theme and applying customTokenPath as an override layer.'
+        )
+      );
+    }
+
     const themeAnswers = tokensConfig
       ? {
-          theme: tokensConfig.theme ?? "default",
+          theme: configuredTheme,
           customTokenPath: tokensConfig.customTokenPath,
           customThemeName: tokensConfig.customThemeName,
         }
@@ -139,23 +163,21 @@ export async function runTokenBuild(
           {
             type: "list",
             name: "theme",
-            message: "Select the theme for your tokens:",
-            choices: ["default", "quiet-boutique", "dark-boutique", "custom"],
-            default: "default",
+            message: "Select the base theme for your tokens:",
+            choices: builtInThemeNames,
+            default: DEFAULT_THEME_NAME,
           },
           {
             type: "input",
             name: "customTokenPath",
-            message: "Path to custom token overrides file or folder:",
-            when: (answers) => answers.theme === "custom",
-            validate: (input) => (input ? true : "Path cannot be empty."),
+            message:
+              "Optional path to custom token overrides file or folder (leave blank to skip):",
           },
           {
             type: "input",
             name: "customThemeName",
-            message: "Name for your custom theme:",
-            when: (answers) => answers.theme === "custom",
-            default: "custom",
+            message: "Output theme name:",
+            default: (answers) => answers.theme || DEFAULT_THEME_NAME,
           },
         ]);
 
@@ -241,26 +263,26 @@ export async function runTokenBuild(
         ).writeVariantRegistry
       : false;
 
-    let customTokenPath: string | undefined;
-    let themeName = themeAnswers.theme;
+    const baseThemeName = builtInThemeNames.includes(themeAnswers.theme)
+      ? themeAnswers.theme
+      : DEFAULT_THEME_NAME;
+    const themeName = themeAnswers.customThemeName || baseThemeName;
+    let customTokenPath = themeAnswers.customTokenPath?.trim() || undefined;
+    const overridePaths: string[] = [];
 
-    switch (themeAnswers.theme) {
-      case "quiet-boutique":
-        customTokenPath = path.resolve(
-          __dirname,
-          "../../themes/quiet-boutique"
-        );
-        break;
-      case "dark-boutique":
-        customTokenPath = path.resolve(__dirname, "../../themes/dark-boutique");
-        break;
-      case "custom":
-        customTokenPath = themeAnswers.customTokenPath;
-        themeName = themeAnswers.customThemeName || "custom";
-        break;
-      default:
-        customTokenPath = undefined;
-        themeName = "default";
+    if (!builtInThemeNames.includes(themeAnswers.theme)) {
+      console.warn(
+        chalk.yellow(
+          `Unknown theme "${themeAnswers.theme}". Falling back to ${DEFAULT_THEME_NAME}.`
+        )
+      );
+    }
+
+    if (!zebkitPackageRoot) {
+      const sourceThemeOverridePath = resolveSourceThemeOverridePath(baseThemeName);
+      if (sourceThemeOverridePath) {
+        overridePaths.push(sourceThemeOverridePath);
+      }
     }
 
     if (customTokenPath && !(await fs.pathExists(customTokenPath))) {
@@ -272,11 +294,35 @@ export async function runTokenBuild(
       customTokenPath = undefined;
     }
 
+    const selectedTokenDefaultsDir =
+      zebkitPackageRoot && tokenDefaultsDir
+        ? resolveBundledThemeTokensDir(
+            baseThemeName,
+            tokenDefaultsDir,
+            zebkitPackageRoot
+          )
+        : undefined;
+
+    if (
+      selectedTokenDefaultsDir &&
+      !(await fs.pathExists(selectedTokenDefaultsDir))
+    ) {
+      console.warn(
+        chalk.yellow(
+          `Bundled base theme "${baseThemeName}" was not found at ${selectedTokenDefaultsDir}. Falling back to ${tokenDefaultsDir}.`
+        )
+      );
+    }
+
     const gatherOptions = zebkitPackageRoot
       ? {
           coreDir: path.join(zebkitPackageRoot, "src", "core"),
           componentsDir: path.join(zebkitPackageRoot, "src", "components"),
-          tokenDefaultsDir,
+          tokenDefaultsDir:
+            selectedTokenDefaultsDir &&
+            (await fs.pathExists(selectedTokenDefaultsDir))
+              ? selectedTokenDefaultsDir
+              : tokenDefaultsDir,
         }
       : undefined;
 
@@ -291,7 +337,7 @@ export async function runTokenBuild(
       resolvedDestinationPath,
       customTokenPath,
       outputFormats,
-      { splitMode: resolvedSplitMode },
+      { splitMode: resolvedSplitMode, overridePaths },
       exportTokens
     );
 
@@ -301,11 +347,23 @@ export async function runTokenBuild(
       resolvedDestinationPath
     );
 
+    const bundledVariantOverridePath =
+      zebkitPackageRoot && baseThemeName !== DEFAULT_THEME_NAME
+        ? getBundledThemeVariantOverridesDir(zebkitPackageRoot, baseThemeName)
+        : undefined;
+
     const {
       registry: variantRegistry,
       inlineCss,
       extraStylesheets,
-    } = await buildZebkitVariants(tokens, customTokenPath);
+    } = await buildZebkitVariants(tokens, [
+      ...(bundledVariantOverridePath &&
+      (await fs.pathExists(bundledVariantOverridePath))
+        ? [bundledVariantOverridePath]
+        : []),
+      ...overridePaths,
+      ...(customTokenPath ? [customTokenPath] : []),
+    ]);
     if (writeVariantRegistry) {
       await writeVariantRegistryFiles(
         variantRegistry,
@@ -348,8 +406,8 @@ export async function runTokenBuild(
     }
   } catch (error: any) {
     if (error?.name === "ExitPromptError") {
-      console.log(chalk.yellow("\nPrompt cancelled by user."));
-      process.exit(0);
+      console.log(chalk.yellow("\nBuild cancelled."));
+      return;
     } else {
       console.error(chalk.red("An error occurred:"), error);
       process.exit(1);
@@ -456,4 +514,3 @@ function slugifyFileSegment(value: string): string {
     .replace(/[^a-z0-9-_]/g, "-")
     .replace(/-+/g, "-");
 }
-

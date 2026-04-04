@@ -14,6 +14,7 @@ const __dirname = path.dirname(__filename);
 
 export interface BuildZebkitTokensOptions {
   splitMode?: 'combined' | 'per-module';
+  overridePaths?: string[];
 }
 
 export interface BuildZebkitTokensResult {
@@ -40,6 +41,7 @@ export async function buildZebkitTokens(
   const layers: Record<string, LayerName> = {};
   const tokenSchemas: Record<string, ZodSchema> = {};
   const splitMode = options.splitMode ?? 'combined';
+  const overridePaths = options.overridePaths ?? [];
 
   const spinner = ora('Processing Zebkit tokens...').start();
   const coreDir = path.resolve(__dirname, '../../core');
@@ -154,8 +156,13 @@ export async function buildZebkitTokens(
     ? destinationPath
     : path.resolve(process.cwd(), destinationPath);
 
-  if (customTokenPath) {
-    await applyCustomOverrides(customTokenPath, tokens, tokenSchemas);
+  const mergedOverridePaths = [
+    ...overridePaths,
+    ...(customTokenPath ? [customTokenPath] : []),
+  ];
+
+  for (const overridePath of mergedOverridePaths) {
+    await applyCustomOverrides(overridePath, tokens, tokenSchemas);
   }
 
   if (Object.keys(tokens).length === 0) {
@@ -276,10 +283,6 @@ function mergeOverrideObject(
     }
 
     const tokenSchema = tokenSchemas[key];
-    if (!tokenSchema) {
-      console.warn(chalk.yellow(`No schema found for '${key}'. Cannot validate custom tokens.`));
-      continue;
-    }
 
     try {
       const mergedTokens = mergeTokens(tokens[key], overrideData[key], tokenSchema, key);
@@ -295,7 +298,7 @@ function mergeOverrideObject(
 function mergeTokens(
   defaultTokens: TokenInterface,
   customTokens: Record<string, any>,
-  schema: ZodSchema,
+  schema: ZodSchema | undefined,
   keyPath: string
 ): TokenInterface {
   const merged: TokenInterface = { ...defaultTokens };
@@ -312,7 +315,7 @@ function mergeTokens(
 
     const customValue = customTokens[key];
     const subSchema = schema instanceof z.ZodObject ? schema.shape[key] : undefined;
-    if (!subSchema) {
+    if (schema && !subSchema) {
       console.warn(
         chalk.yellow(`Invalid key '${keyPath}.${key}' not defined in schema. Ignoring.`)
       );
@@ -342,7 +345,9 @@ function mergeTokens(
         value: overrideValue,
       };
 
-      (subSchema as ZodSchema).parse(nextToken);
+      if (subSchema) {
+        (subSchema as ZodSchema).parse(nextToken);
+      }
       merged[key] = nextToken;
     } catch (error) {
       console.warn(
