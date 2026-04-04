@@ -19,7 +19,7 @@ import {
 } from "@token-scripts/compile-variants";
 import { convertTokensToCssVars } from "@token-scripts/token-converter";
 import { compileSass, CompileSassOptions } from "@token-scripts/compile-css";
-import { loadZebkitConfig, TokensConfig } from "../config";
+import { loadZebkitConfig, TokensConfig, ZebkitConfig } from "../config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,25 +36,46 @@ function displayWelcome() {
   console.log(chalk.cyan("============================"));
 }
 
-async function getComponents(): Promise<string[]> {
-  const componentsDir = path.resolve(__dirname, "../../components");
-  if (!(await fs.pathExists(componentsDir))) return [];
+async function getComponents(componentsDir?: string): Promise<string[]> {
+  const dir = componentsDir ?? path.resolve(__dirname, "../../components");
+  if (!(await fs.pathExists(dir))) return [];
 
-  const items = await fs.readdir(componentsDir, { withFileTypes: true });
+  const items = await fs.readdir(dir, { withFileTypes: true });
   return items
     .filter((item: Dirent) => item.isDirectory() && !item.name.startsWith("."))
     .map((item: Dirent) => item.name);
 }
 
-async function run() {
+/**
+ * Run the full token build pipeline.
+ *
+ * @param overrideConfig - Optional config to use instead of loading from disk.
+ * @param zebkitPackageRoot - Root of the zebkit package (for installed CLI mode).
+ *   When provided, SCSS include paths resolve against this directory.
+ * @param tokenDefaultsDir - Directory containing pre-compiled JSON token defaults.
+ *   When provided, loads tokens from JSON instead of dynamic TS imports (installed CLI mode).
+ */
+export async function runTokenBuild(
+  overrideConfig?: ZebkitConfig,
+  zebkitPackageRoot?: string,
+  tokenDefaultsDir?: string
+): Promise<void> {
   displayWelcome();
-  const loadedConfig = await loadZebkitConfig();
+
+  const loadedConfig = overrideConfig
+    ? { config: overrideConfig, path: "(provided)" }
+    : await loadZebkitConfig();
   const tokensConfig: TokensConfig | undefined = loadedConfig?.config.tokens;
-  if (loadedConfig) {
+  if (loadedConfig && loadedConfig.path !== "(provided)") {
     console.log(chalk.green(`Using config from ${loadedConfig.path}`));
   }
+
+  const componentsDir = zebkitPackageRoot
+    ? path.join(zebkitPackageRoot, "src", "components")
+    : undefined;
+
   try {
-    const components = await getComponents();
+    const components = await getComponents(componentsDir);
     const includeAllComponents = tokensConfig?.includeAllComponents;
     const selectedComponents = includeAllComponents
       ? components
@@ -251,7 +272,15 @@ async function run() {
       customTokenPath = undefined;
     }
 
-    const files = await gatherZebkitFiles(selectedComponents);
+    const gatherOptions = zebkitPackageRoot
+      ? {
+          coreDir: path.join(zebkitPackageRoot, "src", "core"),
+          componentsDir: path.join(zebkitPackageRoot, "src", "components"),
+          tokenDefaultsDir,
+        }
+      : undefined;
+
+    const files = await gatherZebkitFiles(selectedComponents, gatherOptions);
 
     const resolvedSplitMode =
       splitMode as BuildZebkitTokensOptions["splitMode"];
@@ -298,6 +327,7 @@ async function run() {
         cssVarPrefix: { value: ZEBKIT_PREFIX, modify: false },
       },
       variantCss: inlineCss,
+      zebkitPackageRoot,
     };
 
     await compileSass(sassOptions);
@@ -427,4 +457,3 @@ function slugifyFileSegment(value: string): string {
     .replace(/-+/g, "-");
 }
 
-run();

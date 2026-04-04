@@ -1,13 +1,127 @@
 # zebkit
 
+A token-driven, accessibility-first CSS design system. Every visual decision flows through a three-tier token system (primitives → aliases → component tokens) that compiles to CSS custom properties. Swap tokens to retheme any project without touching component markup or CSS structure.
+
+## Using zebkit in your project
+
+Install zebkit:
+
+```bash
+npm install zebkit
+```
+
+Initialize zebkit in your project (creates `zebkit.config.json`, optionally copies default tokens for customization):
+
+```bash
+npx zebkit init
+```
+
+Build CSS:
+
+```bash
+npx zebkit build
+```
+
+Reference the output CSS in your project:
+
+```html
+<link rel="stylesheet" href="./dist/zbk-default.min.css" />
+```
+
+### Config file
+
+`zebkit init` creates a `zebkit.config.json` in your project root. You can also create one manually:
+
+```json
+{
+  "tokens": {
+    "destinationPath": "./dist",
+    "assetFilePath": "/",
+    "theme": "default",
+    "customTokenPath": "./tokens"
+  }
+}
+```
+
+Once the config exists, `zebkit build` is non-interactive — no prompts. Useful for CI and build scripts.
+
+### Customizing tokens
+
+Run `zebkit init` with the option to copy default token files. This places per-module JSON files in `./tokens/`:
+
+```
+tokens/
+  zbk-button.json
+  zbk-spacing.json
+  zbk-color.json
+  ...
+```
+
+Each file contains the token values for that module. Edit the `value` fields to customize:
+
+```json
+{
+  "zbk-button": {
+    "canvas": { "value": "#0057ff" },
+    "border-radius": { "value": "0" }
+  }
+}
+```
+
+Run `zebkit build` to recompile CSS with your overrides applied.
+
+### Config reference
+
+```json
+{
+  "tokens": {
+    "destinationPath": "./dist",
+    "assetFilePath": "/",
+    "theme": "default",
+    "customTokenPath": "./tokens",
+    "customThemeName": "my-theme",
+    "selectedComponents": [],
+    "includeAllComponents": false,
+    "exportTokens": false,
+    "splitMode": "combined",
+    "outputFormats": ["JSON"]
+  }
+}
+```
+
+| Field | Default | Description |
+|---|---|---|
+| `destinationPath` | `./dist` | Where to write the compiled CSS |
+| `assetFilePath` | `/` | Base URL for asset references in CSS |
+| `theme` | `default` | `default`, `quiet-boutique`, `dark-boutique`, or `custom` |
+| `customTokenPath` | — | Path to a JSON override file or folder of JSON overrides |
+| `customThemeName` | `custom` | Name used in output filename when theme is `custom` |
+| `selectedComponents` | `[]` | Components to include (empty = core only) |
+| `includeAllComponents` | `false` | Include all available components |
+| `exportTokens` | `false` | Also write token artifacts (JSON/TS/JS) |
+| `splitMode` | `combined` | `combined` (one file) or `per-module` (one file per token module) |
+| `outputFormats` | `["JSON"]` | `JSON`, `TypeScript`, and/or `JavaScript` |
+
+---
+
+## Development (working in this repo)
+
 ## Token Build Pipeline
 - Token modules live in `src/core/**/tokens.ts` (and later `src/components/**/tokens.ts`) with matching `token-schema.ts` files.
 - Shared token definitions and maps are under `src/definitions`.
 - Build tokens and CSS with `npm run build:tokens` and follow the prompts to choose components, theme, output formats, and split mode.
-- To skip prompts when running `npm run build:tokens` or `npm run build:components`, supply answers in a `zebkit.config.json` (or `zebkit-config.json` / `zekit.config.json`) file. You can also point to a custom location with `--config path/to/config.json`.
+- To skip prompts, supply answers in a `zebkit.config.json` (or `zebkit-config.json` / `zekit.config.json`) file. You can also point to a custom location with `--config path/to/config.json`.
 - Config files accept a `tokens` section (for component selection, destination, asset path, theme/custom overrides, export settings, split mode, and output formats) and a `components` section (for selected components and `jsOutput`).
 - Theme overrides can be a single JSON file `src/themes/<name>.json` or a folder `src/themes/<name>/` containing multiple JSON override files.
 - Combined mode writes one set of files per format (e.g., `<theme>-tokens.json`); per-module mode writes `zbk-<module>.tokens.<ext>` for each token module.
+
+### Publishing
+
+```bash
+npm run build:defaults  # compile token defaults to dist/cli/defaults/
+npm run build:cli       # bundle CLI to dist/cli/zebkit.mjs
+npm publish             # runs prepublishOnly (both builds) then publishes
+```
 
 ## Foundation Token Modules
 

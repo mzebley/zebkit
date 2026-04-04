@@ -47,6 +47,21 @@ export async function buildZebkitTokens(
 
   try {
     for (const file of files) {
+      // JSON mode: pre-compiled defaults loaded by the installed CLI
+      if (path.isAbsolute(file) && file.endsWith('.json')) {
+        try {
+          const data = await fs.readJson(file);
+          const { _key, _layer, ...tokenData } = data as Record<string, any>;
+          const tokenKey: string = _key ?? path.basename(file, '.json');
+          const moduleLayer: LayerName = _layer ?? DEFAULT_LAYER;
+          tokens[tokenKey] = tokenData as TokenInterface;
+          layers[tokenKey] = moduleLayer;
+        } catch (error) {
+          console.error(chalk.red(`Error loading JSON token file ${file}:`), error);
+        }
+        continue;
+      }
+
       let baseDir = '';
       let relativePath = '';
 

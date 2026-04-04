@@ -32,6 +32,12 @@ export interface CompileSassOptions {
    * that should be appended to the compiled bundle.
    */
   variantCss?: string;
+  /**
+   * Root of the zebkit package installation. Required when running from the
+   * installed CLI so Sass can resolve @import paths inside zebkit's src/.
+   * Defaults to the package root inferred from this file's location (dev mode).
+   */
+  zebkitPackageRoot?: string;
 }
 
 export async function compileSass(options: CompileSassOptions): Promise<void> {
@@ -44,12 +50,15 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
     sassVariables = {},
     utilityStylesheetPatterns = ['utilities', 'utility', 'color'],
     variantCss = '',
+    zebkitPackageRoot,
   } = options;
 
-  const projectRoot = path.resolve(__dirname, '../../..');
+  // In dev mode, resolve from this file's location. In installed CLI mode,
+  // the caller provides zebkitPackageRoot (e.g., node_modules/zebkit/).
+  const zbkRoot = zebkitPackageRoot ?? path.resolve(__dirname, '../../..');
   const resolvedDestination = path.isAbsolute(destination)
     ? destination
-    : path.resolve(projectRoot, destination);
+    : path.resolve(process.cwd(), destination);
 
   try {
     await fs.ensureDir(resolvedDestination);
@@ -82,13 +91,13 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
     }
     const orderedSheets = [...nonUtilitySheets, ...utilitySheets];
 
-    // Create import statements relative to src root
-    const includeBasePath = path.resolve(__dirname, '../../');
+    // Create import statements relative to zebkit's src root
+    const includeBasePath = path.join(zbkRoot, 'src');
     let importStatements = '';
     for (const sheet of orderedSheets) {
       const absoluteSheet = path.isAbsolute(sheet)
         ? sheet
-        : path.resolve(projectRoot, sheet);
+        : path.resolve(zbkRoot, sheet);
       const importPath = path
         .relative(includeBasePath, absoluteSheet)
         .replace(/\\/g, '/');
@@ -98,13 +107,14 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
     const sassCode = variableDefinitions + importStatements;
 
     const includePaths = [
-      path.join(projectRoot, 'src'),
-      path.join(projectRoot, 'src', 'core'),
-      path.join(projectRoot, 'src', 'components'),
-      projectRoot,
+      path.join(zbkRoot, 'src'),
+      path.join(zbkRoot, 'src', 'core'),
+      path.join(zbkRoot, 'src', 'components'),
+      zbkRoot,
     ];
 
-    const tmpSassFile = path.join(projectRoot, `zbk-temp-${Date.now()}.scss`);
+    // Write temp file to cwd (always writable, even when zebkit is in node_modules)
+    const tmpSassFile = path.join(process.cwd(), `zbk-temp-${Date.now()}.scss`);
     await fs.writeFile(tmpSassFile, sassCode);
 
     try {

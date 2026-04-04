@@ -8,20 +8,32 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+export interface GatherOptions {
+  /** Override for core SCSS/token source directory (defaults to src/core relative to this file) */
+  coreDir?: string;
+  /** Override for components directory */
+  componentsDir?: string;
+  /**
+   * When set, loads pre-compiled JSON token defaults from this directory instead of
+   * dynamically importing TS token modules. Used by the installed CLI.
+   */
+  tokenDefaultsDir?: string;
+}
+
 /**
  * Collects Zebkit token sources and SCSS entry points.
  * Expects token files at src/core/.../tokens.ts and src/components/.../tokens.ts.
+ * In installed CLI mode, pass tokenDefaultsDir to load pre-compiled JSON defaults instead.
  */
-export async function gatherZebkitFiles(components: string[]) {
+export async function gatherZebkitFiles(components: string[], options?: GatherOptions) {
   const stylesheets: string[] = [];
   const tokenFiles: string[] = [];
 
   const spinner = ora('Gathering Zebkit token files...').start();
 
   try {
-    const coreDir = path.resolve(__dirname, '../../core');
-    const componentsDir = path.resolve(__dirname, '../../components');
-    const projectRoot = path.resolve(__dirname, '../../');
+    const coreDir = options?.coreDir ?? path.resolve(__dirname, '../../core');
+    const componentsDir = options?.componentsDir ?? path.resolve(__dirname, '../../components');
 
     // Core stylesheets: entry styles.scss plus nested styles/*.scss
     const coreStyles = await glob(
@@ -34,12 +46,23 @@ export async function gatherZebkitFiles(components: string[]) {
     );
     stylesheets.push(...coreStyles);
 
-    // Core token files reported as relative "core/..." (includes semantic modules under core/semantic/**/tokens.ts)
-    const coreTokens = await glob('**/tokens/tokens.ts', {
-      cwd: coreDir,
-      nodir: true,
-    });
-    tokenFiles.push(...coreTokens.map((file) => path.join('core', file)));
+    if (options?.tokenDefaultsDir) {
+      // Installed CLI mode: load pre-compiled JSON token defaults
+      const jsonFiles = await glob('*.json', {
+        cwd: options.tokenDefaultsDir,
+        absolute: true,
+        nodir: true,
+        ignore: ['manifest.json'],
+      });
+      tokenFiles.push(...jsonFiles);
+    } else {
+      // Dev mode: discover TypeScript token modules
+      const coreTokens = await glob('**/tokens/tokens.ts', {
+        cwd: coreDir,
+        nodir: true,
+      });
+      tokenFiles.push(...coreTokens.map((file) => path.join('core', file)));
+    }
 
     if (components.length > 0 && (await fs.pathExists(componentsDir))) {
       for (const component of components) {
