@@ -1,5 +1,6 @@
 @use 'core/styles/variables/breakpoints' as vars;
 @use 'core/styles/variables/prefix' as prefix;
+@use 'sass:meta';
 
 $default-directions: (
   '': ('inline', 'block'), // All sides
@@ -39,7 +40,7 @@ $default-directions: (
   @each $spacing in $spacing-values {
     @each $direction, $sides in $directions {
       .#{$property}#{$direction}-#{$spacing} {
-        @if type-of($sides) == 'string' {
+        @if meta.type-of($sides) == 'string' {
           #{$property}#{$direction}: var(--#{prefix.$cssVar}-spacing-#{$spacing});
         } @else {
           @each $side in $sides {
@@ -57,7 +58,7 @@ $default-directions: (
       @each $spacing in $spacing-values {
         @each $direction, $sides in $directions {
           .#{$breakpoint}\:#{$property}#{$direction}-#{$spacing} {
-            @if type-of($sides) == 'string' {
+            @if meta.type-of($sides) == 'string' {
               #{$property}#{$direction}: var(--#{prefix.$cssVar}-spacing-#{$spacing});
             } @else {
               @each $side in $sides {

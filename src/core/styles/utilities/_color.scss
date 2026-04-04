@@ -2,6 +2,8 @@
 // Usage:
 //   @include primitiveColor(red, 0, 80%);
 @use 'core/styles/variables/prefix'as prefix;
+@use 'sass:list';
+@use 'sass:meta';
 
 @mixin primitiveColor($name, $hue, $saturation) {
   --#{prefix.$cssVar}-color-#{$name}-hue: #{$hue};
@@ -103,21 +105,25 @@ $color-states: ('base': null,
 // Helper: builds var() for semantic color family/role with optional variant/intensity.
 @function semantic-color-var($family, $role, $variant: null, $intensity: null) {
   $segments: ();
-  $segments: append($segments, $family);
-  $segments: append($segments, $role);
+  $segments: list.append($segments, $family);
+  $segments: list.append($segments, $role);
 
   @if $variant {
-    $segments: append($segments, $variant);
+    $segments: list.append($segments, $variant);
   }
 
   @if $intensity {
-    $segments: append($segments, $intensity);
+    $segments: list.append($segments, $intensity);
   }
 
   $joined: "";
 
   @each $segment in $segments {
-    $joined: if($joined=="", "#{$segment}", "#{$joined}-#{$segment}");
+    @if $joined == "" {
+      $joined: "#{$segment}";
+    } @else {
+      $joined: "#{$joined}-#{$segment}";
+    }
   }
 
   @return var(--#{prefix.$cssVar}-#{$joined});
@@ -126,21 +132,25 @@ $color-states: ('base': null,
 // Helper: builds class suffix for semantic utilities (role-family-intensity?-variant?).
 @function semantic-color-class($role, $family, $intensity: null, $variant: null) {
   $segments: ();
-  $segments: append($segments, $role);
-  $segments: append($segments, $family);
+  $segments: list.append($segments, $role);
+  $segments: list.append($segments, $family);
 
   @if $intensity {
-    $segments: append($segments, $intensity);
+    $segments: list.append($segments, $intensity);
   }
 
   @if $variant {
-    $segments: append($segments, $variant);
+    $segments: list.append($segments, $variant);
   }
 
   $joined: "";
 
   @each $segment in $segments {
-    $joined: if($joined=="", "#{$segment}", "#{$joined}-#{$segment}");
+    @if $joined == "" {
+      $joined: "#{$segment}";
+    } @else {
+      $joined: "#{$joined}-#{$segment}";
+    }
   }
 
   @return $joined;
@@ -148,7 +158,7 @@ $color-states: ('base': null,
 
 // Apply a value to one or more properties.
 @mixin semantic-color-declaration($properties, $value) {
-  @if type-of($properties)=='list' {
+  @if meta.type-of($properties)=='list' {
     @each $prop in $properties {
       #{$prop}: $value;
     }

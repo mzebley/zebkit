@@ -34,7 +34,7 @@ export interface CompileSassOptions {
   variantCss?: string;
   /**
    * Root of the zebkit package installation. Required when running from the
-   * installed CLI so Sass can resolve @import paths inside zebkit's src/.
+   * installed CLI so Sass can resolve stylesheet paths inside zebkit's src/.
    * Defaults to the package root inferred from this file's location (dev mode).
    */
   zebkitPackageRoot?: string;
@@ -91,20 +91,20 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
     }
     const orderedSheets = [...nonUtilitySheets, ...utilitySheets];
 
-    // Create import statements relative to zebkit's src root
+    // Create stylesheet uses relative to zebkit's src root.
     const includeBasePath = path.join(zbkRoot, 'src');
-    let importStatements = '';
-    for (const sheet of orderedSheets) {
+    let moduleUses = '';
+    orderedSheets.forEach((sheet, index) => {
       const absoluteSheet = path.isAbsolute(sheet)
         ? sheet
         : path.resolve(zbkRoot, sheet);
       const importPath = path
         .relative(includeBasePath, absoluteSheet)
         .replace(/\\/g, '/');
-      importStatements += `@import '${importPath}';\n`;
-    }
+      moduleUses += `@use '${importPath}' as zbk_module_${index};\n`;
+    });
 
-    const sassCode = variableDefinitions + importStatements;
+    const sassCode = variableDefinitions + moduleUses;
 
     const includePaths = [
       path.join(zbkRoot, 'src'),
@@ -113,54 +113,45 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
       zbkRoot,
     ];
 
-    // Write temp file to cwd (always writable, even when zebkit is in node_modules)
-    const tmpSassFile = path.join(process.cwd(), `zbk-temp-${Date.now()}.scss`);
-    await fs.writeFile(tmpSassFile, sassCode);
+    const sassResult = sass.compileString(sassCode, {
+      loadPaths: includePaths,
+    });
 
-    try {
-      const sassResult = sass.renderSync({
-        file: tmpSassFile,
-        includePaths,
+    // Ensure @import statements from token conversion (e.g., Google Fonts) stay at the top
+    let importBlock = '';
+    let filteredCssVars = cssVars;
+    if (cssVars.includes('@import')) {
+      const importLines: string[] = [];
+      const otherLines: string[] = [];
+      cssVars.split('\n').forEach((line) => {
+        if (line.trim().startsWith('@import')) {
+          importLines.push(line.trim());
+        } else {
+          otherLines.push(line);
+        }
       });
-
-      // Ensure @import statements from token conversion (e.g., Google Fonts) stay at the top
-      let importBlock = '';
-      let filteredCssVars = cssVars;
-      if (cssVars.includes('@import')) {
-        const importLines: string[] = [];
-        const otherLines: string[] = [];
-        cssVars.split('\n').forEach((line) => {
-          if (line.trim().startsWith('@import')) {
-            importLines.push(line.trim());
-          } else {
-            otherLines.push(line);
-          }
-        });
-        importBlock = importLines.join('\n');
-        filteredCssVars = otherLines.join('\n');
-      }
-
-      const layerOrdering = '@layer theme, base, components, utilities;';
-      const cssCode = `${importBlock ? `${importBlock}\n` : ''}${layerOrdering}\n${sassResult.css.toString()}\n${filteredCssVars}\n${variantCss}`;
-
-      const result = await postcss([
-        postcssPresetEnv({
-          stage: 3,
-          features: { 'custom-properties': false },
-        }),
-        autoprefixer(),
-        cssnano({ preset: 'default' }),
-      ]).process(cssCode, { from: undefined });
-
-      const outputFilePath = path.join(
-        resolvedDestination,
-        `zbk-${projectName.toLowerCase()}.min.css`
-      );
-      await fs.writeFile(outputFilePath, result.css);
-      spinner.succeed(chalk.green(`CSS written to ${outputFilePath}`));
-    } finally {
-      await fs.remove(tmpSassFile);
+      importBlock = importLines.join('\n');
+      filteredCssVars = otherLines.join('\n');
     }
+
+    const layerOrdering = '@layer theme, base, components, utilities;';
+    const cssCode = `${importBlock ? `${importBlock}\n` : ''}${layerOrdering}\n${sassResult.css}\n${filteredCssVars}\n${variantCss}`;
+
+    const result = await postcss([
+      postcssPresetEnv({
+        stage: 3,
+        features: { 'custom-properties': false },
+      }),
+      autoprefixer(),
+      cssnano({ preset: 'default' }),
+    ]).process(cssCode, { from: undefined });
+
+    const outputFilePath = path.join(
+      resolvedDestination,
+      `zbk-${projectName.toLowerCase()}.min.css`
+    );
+    await fs.writeFile(outputFilePath, result.css);
+    spinner.succeed(chalk.green(`CSS written to ${outputFilePath}`));
   } catch (error) {
     spinner.fail(chalk.red('SCSS compilation failed'));
     console.error(error);
