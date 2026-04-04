@@ -7,7 +7,9 @@ A token-driven, accessibility-first CSS design system. Every visual decision flo
 Install zebkit:
 
 ```bash
-npm install zebkit
+// npm install zebkit
+// Use through GitHub for now
+npm install github:mzebley/zebkit
 ```
 
 Initialize zebkit in your project (creates `zebkit.config.json`, optionally copies default tokens for customization):
