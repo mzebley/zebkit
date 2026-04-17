@@ -2,10 +2,20 @@ import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 
+export const EXTENDED_TOKEN_BREAKPOINTS = [
+  'tablet',
+  'tablet-lg',
+  'desktop',
+  'desktop-lg',
+  'widescreen',
+] as const;
+
+export type ExtendedTokenBreakpoint = (typeof EXTENDED_TOKEN_BREAKPOINTS)[number];
+
 export type ExtendedTokensConfig = {
   /**
    * Controls which primitive color palette families are compiled into the output CSS.
-   * 'all' (default) includes all 23 families.
+   * 'all' (default) includes all 22 families.
    * 'smart' includes only families referenced in your token chain, reducing output size.
    */
   colors?: 'all' | 'smart';
@@ -15,7 +25,7 @@ export type ExtendedTokensConfig = {
    * false = no responsive utility classes.
    * string[] = only the named breakpoints.
    */
-  breakpoints?: boolean | Array<'tablet' | 'tablet-lg' | 'desktop' | 'desktop-lg' | 'widescreen'>;
+  breakpoints?: boolean | ExtendedTokenBreakpoint[];
 };
 
 export type TokensConfig = {

@@ -19,7 +19,13 @@ import {
 } from "@token-scripts/compile-variants";
 import { convertTokensToCssVars } from "@token-scripts/token-converter";
 import { compileSass, CompileSassOptions } from "@token-scripts/compile-css";
-import { loadZebkitConfig, TokensConfig, ZebkitConfig } from "../config";
+import {
+  EXTENDED_TOKEN_BREAKPOINTS,
+  ExtendedTokenBreakpoint,
+  loadZebkitConfig,
+  TokensConfig,
+  ZebkitConfig,
+} from "../config";
 import {
   DEFAULT_THEME_NAME,
   getBuiltInThemeNames,
@@ -59,10 +65,26 @@ function extractReferencedColorFamilies(
 
 function buildEnabledBreakpointsList(
   config: boolean | string[] | undefined
-): string[] | false | undefined {
+): ExtendedTokenBreakpoint[] | false | undefined {
   if (config === undefined || config === true) return undefined;
   if (config === false) return false;
-  return config as string[];
+
+  const invalidBreakpoints = config.filter(
+    (breakpoint): breakpoint is string =>
+      !EXTENDED_TOKEN_BREAKPOINTS.includes(
+        breakpoint as ExtendedTokenBreakpoint
+      )
+  );
+
+  if (invalidBreakpoints.length > 0) {
+    throw new Error(
+      `Invalid extendedTokens.breakpoints value(s): ${invalidBreakpoints.join(
+        ", "
+      )}. Expected one or more of: ${EXTENDED_TOKEN_BREAKPOINTS.join(", ")}.`
+    );
+  }
+
+  return config as ExtendedTokenBreakpoint[];
 }
 
 /**

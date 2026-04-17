@@ -108,12 +108,12 @@ Run `zebkit build` to recompile CSS with your overrides applied on top of the se
 | `exportTokens` | `false` | Also write token artifacts (JSON/TS/JS) |
 | `splitMode` | `combined` | `combined` (one file) or `per-module` (one file per token module) |
 | `outputFormats` | `["JSON"]` | `JSON`, `TypeScript`, and/or `JavaScript` |
-| `extendedTokens.colors` | `"all"` | `"all"` includes all 23 primitive color families. `"smart"` includes only families referenced in your token chain. |
+| `extendedTokens.colors` | `"all"` | `"all"` includes all 22 primitive color families. `"smart"` includes only families referenced in your token chain. |
 | `extendedTokens.breakpoints` | all | `true`/absent = all 5 breakpoints. `false` = no responsive utilities. Array = specific breakpoints only (`"tablet"`, `"tablet-lg"`, `"desktop"`, `"desktop-lg"`, `"widescreen"`). |
 
 ### Reducing output CSS size
 
-By default zebkit compiles all primitive color palettes (23 families × 11 shades) and responsive utility classes for all 5 breakpoints. Use `extendedTokens` in your config to reduce output when you don't need everything:
+By default zebkit compiles all primitive color palettes (22 families × 11 shades) and responsive utility classes for all 5 breakpoints. Use `extendedTokens` in your config to reduce output when you don't need everything:
 
 ```json
 {
