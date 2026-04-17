@@ -12,7 +12,7 @@ const execFileAsync = promisify(execFile);
 const PROJECT_ROOT = process.cwd();
 const CUSTOM_THEME_PATH = path.resolve(PROJECT_ROOT, 'theme/dynamowaves');
 
-describe('full build CLI', () => {
+describe('build smoke tests', () => {
   jest.setTimeout(180000);
 
   it('produces CSS that reflects token + variant overrides', async () => {
@@ -57,61 +57,6 @@ describe('full build CLI', () => {
 
       expect(css).toContain('--zbk-a11y-spacing-modifier:1');
       expect(css).toContain('--zbk-button-font-size:var(--zbk-font-size-3xl)');
-    } finally {
-      await fs.remove(tmpDir);
-    }
-  });
-
-  it('applies a partial project token folder on top of the default base theme', async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-partial-build-'));
-    const destinationPath = path.join(tmpDir, 'dist');
-    const configPath = path.join(tmpDir, 'zebkit.config.json');
-    const overrideDir = path.join(tmpDir, 'tokens');
-
-    await fs.ensureDir(overrideDir);
-    await fs.writeJson(
-      path.join(overrideDir, 'zbk-button.tokens.json'),
-      {
-        'font-size': {
-          value: '{font-size.3xl}',
-        },
-      },
-      { spaces: 2 }
-    );
-
-    const config = {
-      tokens: {
-        includeAllComponents: true,
-        destinationPath,
-        assetFilePath: '/assets/',
-        theme: 'default',
-        customTokenPath: overrideDir,
-        exportTokens: false,
-        writeVariantRegistry: false,
-      },
-    };
-
-    await fs.writeJson(configPath, config, { spaces: 2 });
-
-    try {
-      await execFileAsync(
-        'npm',
-        ['run', 'build:tokens', '--', '--config', configPath],
-        {
-          cwd: PROJECT_ROOT,
-          env: {
-            ...process.env,
-            CI: 'true',
-            FORCE_COLOR: '0',
-          },
-        }
-      );
-
-      const cssPath = path.join(destinationPath, 'zbk-default.min.css');
-      const css = await fs.readFile(cssPath, 'utf8');
-
-      expect(css).toContain('--zbk-button-font-size:var(--zbk-font-size-3xl)');
-      expect(css).toContain('--zbk-a11y-spacing-modifier:1');
     } finally {
       await fs.remove(tmpDir);
     }

@@ -8,6 +8,13 @@ import { ZodSchema, z } from 'zod';
 import { TokenInterface } from '@definitions/tokens';
 import { DEFAULT_LAYER, LayerName } from '@definitions/layers';
 import { ZEBKIT_PREFIX } from '@config';
+import {
+  buildFilePayload,
+  inferTokenKeyFromFilename,
+  isVariantOverrideFile,
+  mergeOverrideObject,
+  mergeTokens,
+} from './compile-token-helpers';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -244,123 +251,15 @@ async function applyCustomOverrides(
   }
 }
 
-function inferTokenKeyFromFilename(filePath: string): string | undefined {
-  const baseName = path.basename(filePath, path.extname(filePath));
-  if (!baseName) return undefined;
+export {
+  buildFilePayload,
+  inferTokenKeyFromFilename,
+  isVariantOverrideFile,
+  mergeOverrideObject,
+  mergeTokens,
+} from './compile-token-helpers';
 
-  const knownSuffixes = ['.tokens'];
-  let normalized = baseName;
-
-  for (const suffix of knownSuffixes) {
-    if (normalized.endsWith(suffix)) {
-      normalized = normalized.slice(0, -suffix.length);
-      break;
-    }
-  }
-
-  if (!normalized) return undefined;
-
-  return normalized.startsWith(`${ZEBKIT_PREFIX}-`)
-    ? normalized
-    : `${ZEBKIT_PREFIX}-${normalized}`;
-}
-
-function isVariantOverrideFile(filePath: string): boolean {
-  const baseName = path.basename(filePath, path.extname(filePath));
-  return /-variants$/i.test(baseName) || /\.variant\./i.test(path.basename(filePath));
-}
-
-function mergeOverrideObject(
-  overrideData: Record<string, any>,
-  tokens: Record<string, TokenInterface>,
-  tokenSchemas: Record<string, ZodSchema>
-) {
-  const validKeys = Object.keys(tokens);
-  for (const key of Object.keys(overrideData)) {
-    if (!validKeys.includes(key)) {
-      console.warn(chalk.yellow(`Custom tokens contain an unrecognized key '${key}'. Skipping.`));
-      continue;
-    }
-
-    const tokenSchema = tokenSchemas[key];
-
-    try {
-      const mergedTokens = mergeTokens(tokens[key], overrideData[key], tokenSchema, key);
-      tokens[key] = mergedTokens;
-    } catch (error) {
-      console.warn(
-        chalk.yellow(`Custom tokens for '${key}' are invalid. Using default tokens.`)
-      );
-    }
-  }
-}
-
-function mergeTokens(
-  defaultTokens: TokenInterface,
-  customTokens: Record<string, any>,
-  schema: ZodSchema | undefined,
-  keyPath: string
-): TokenInterface {
-  const merged: TokenInterface = { ...defaultTokens };
-
-  for (const key in customTokens) {
-    if (!Object.prototype.hasOwnProperty.call(customTokens, key)) continue;
-
-    if (!defaultTokens.hasOwnProperty(key)) {
-      console.warn(
-        chalk.yellow(`Extra key '${keyPath}.${key}' not found in default tokens. Ignoring.`)
-      );
-      continue;
-    }
-
-    const customValue = customTokens[key];
-    const subSchema = schema instanceof z.ZodObject ? schema.shape[key] : undefined;
-    if (schema && !subSchema) {
-      console.warn(
-        chalk.yellow(`Invalid key '${keyPath}.${key}' not defined in schema. Ignoring.`)
-      );
-      continue;
-    }
-
-    try {
-      const overrideValue =
-        typeof customValue === 'object' &&
-        customValue !== null &&
-        !Array.isArray(customValue) &&
-        'value' in customValue
-          ? (customValue as Record<string, any>).value
-          : customValue;
-
-      if (typeof overrideValue !== 'string' && typeof overrideValue !== 'number') {
-        console.warn(
-          chalk.yellow(
-            `Custom token for '${keyPath}.${key}' does not contain a valid 'value'. Using default token.`
-          )
-        );
-        continue;
-      }
-
-      const nextToken = {
-        ...defaultTokens[key],
-        value: overrideValue,
-      };
-
-      if (subSchema) {
-        (subSchema as ZodSchema).parse(nextToken);
-      }
-      merged[key] = nextToken;
-    } catch (error) {
-      console.warn(
-        chalk.yellow(`Invalid value for '${keyPath}.${key}'. Using default value.`)
-      );
-      merged[key] = defaultTokens[key];
-    }
-  }
-
-  return merged;
-}
-
-async function writeTokensToFile(
+export async function writeTokensToFile(
   tokens: Record<string, TokenInterface>,
   destinationPath: string,
   outputFormats: string[],
@@ -404,31 +303,5 @@ async function writeTokensToFile(
   } catch (error) {
     writeSpinner.fail(chalk.red('Failed to write tokens to file(s).'));
     console.error(error);
-  }
-}
-
-function buildFilePayload(
-  format: string,
-  basePath: string,
-  payload: unknown
-): { filePath: string; fileContent: string } {
-  switch (format) {
-    case 'json':
-      return {
-        filePath: `${basePath}.json`,
-        fileContent: JSON.stringify(payload, null, 2),
-      };
-    case 'typescript':
-      return {
-        filePath: `${basePath}.ts`,
-        fileContent: `export default ${JSON.stringify(payload, null, 2)};\n`,
-      };
-    case 'javascript':
-      return {
-        filePath: `${basePath}.js`,
-        fileContent: `module.exports = ${JSON.stringify(payload, null, 2)};\n`,
-      };
-    default:
-      throw new Error(`Unsupported format: ${format}`);
   }
 }

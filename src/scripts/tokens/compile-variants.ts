@@ -12,6 +12,14 @@ import type { TokenInterface } from '@definitions/tokens';
 import type { VariantConfig } from '@definitions/token-variants';
 import { convertDotNotation } from './token-converter';
 import { ZEBKIT_PREFIX } from '@config';
+import {
+  buildVariantMetaKey,
+  extractVariantOverrideEntries,
+  isVariantOverrideFile,
+  mergeVariantOverrideEntry,
+  normalizeVariantOverrideEntry,
+  VariantMetadataEntry,
+} from './compile-variant-helpers';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,14 +43,7 @@ export interface VariantRegistry {
     [variantName: string]: VariantRuntimeEntry;
   };
 }
-
-interface VariantMetadataEntry {
-  component: string;
-  name: string;
-  className: string;
-  inlineStyles: string[];
-  stylesheetPaths: string[];
-}
+export type { VariantMetadataEntry } from './compile-variant-helpers';
 
 /**
  * Output shape from buildZebkitVariants. Besides the registry it produces any inline
@@ -266,153 +267,13 @@ async function applyVariantOverrides(
   }
 }
 
-function isVariantOverrideFile(filePath: string): boolean {
-  const baseName = path.basename(filePath, path.extname(filePath));
-  return /-variants$/i.test(baseName) || /\.variant\./i.test(path.basename(filePath));
-}
-
-function extractVariantOverrideEntries(data: any): VariantRuntimeEntry[] {
-  // Accept arrays, single objects, or nested component -> variant structures.
-  if (!data) return [];
-
-  if (Array.isArray(data)) {
-    return data
-      .map((entry) => normalizeVariantOverrideEntry(entry))
-      .filter(Boolean) as VariantRuntimeEntry[];
-  }
-
-  if (typeof data === 'object') {
-    if ('component' in data && 'name' in data) {
-      const entry = normalizeVariantOverrideEntry(data);
-      return entry ? [entry] : [];
-    }
-
-    const entries: VariantRuntimeEntry[] = [];
-    for (const [componentKey, variants] of Object.entries(data)) {
-      if (!variants || typeof variants !== 'object') continue;
-
-      if (Array.isArray(variants)) {
-        for (const variant of variants) {
-          const normalized = normalizeVariantOverrideEntry(variant, componentKey);
-          if (normalized) entries.push(normalized);
-        }
-      } else {
-        for (const [variantName, variantData] of Object.entries(variants as Record<string, any>)) {
-          const normalized = normalizeVariantOverrideEntry(variantData, componentKey, variantName);
-          if (normalized) entries.push(normalized);
-        }
-      }
-    }
-    return entries;
-  }
-
-  return [];
-}
-
-function normalizeVariantOverrideEntry(
-  entry: any,
-  fallbackComponent?: string,
-  fallbackName?: string
-): VariantRuntimeEntry | undefined {
-  // Normalize common structures into VariantRuntimeEntry objects.
-  if (!entry || typeof entry !== 'object') return undefined;
-
-  const component =
-    typeof entry.component === 'string' && entry.component.trim().length > 0
-      ? entry.component.trim()
-      : fallbackComponent;
-
-  const name =
-    typeof entry.name === 'string' && entry.name.trim().length > 0
-      ? entry.name.trim()
-      : fallbackName;
-
-  if (!component || !name) return undefined;
-
-  const overridesInput =
-    entry.overrides && typeof entry.overrides === 'object' ? entry.overrides : {};
-
-  const overrides: Record<string, string> = {};
-  for (const [key, value] of Object.entries(overridesInput)) {
-    if (typeof value === 'string') {
-      overrides[key] = value;
-    }
-  }
-
-  const className =
-    typeof entry.className === 'string' && entry.className.trim().length > 0
-      ? entry.className.trim()
-      : `${ZEBKIT_PREFIX}-${component}--${name}`;
-
-  return {
-    component,
-    name,
-    className,
-    overrides,
-  };
-}
-
-function mergeVariantOverrideEntry(
-  entry: VariantRuntimeEntry,
-  registry: VariantRegistry,
-  tokens: Record<string, TokenInterface>,
-  variantMetadata: Map<string, VariantMetadataEntry>,
-  sourceLabel: string
-) {
-  const tokenKey = `${ZEBKIT_PREFIX}-${entry.component}`;
-  const sourceTokens = tokens[tokenKey];
-  // Ensure the overrides reference an actual component token map; otherwise warn.
-  if (!sourceTokens) {
-    console.warn(
-      chalk.yellow(
-        `Variant override '${entry.component}.${entry.name}' references unknown component tokens. Source: ${sourceLabel}`
-      )
-    );
-    return;
-  }
-
-  const sanitizedOverrides: Record<string, string> = {};
-  for (const [key, value] of Object.entries(entry.overrides || {})) {
-    if (!Object.prototype.hasOwnProperty.call(sourceTokens, key)) {
-      console.warn(
-        chalk.yellow(
-          `Variant override '${entry.component}.${entry.name}' references unknown token '${key}'. Source: ${sourceLabel}`
-        )
-      );
-      continue;
-    }
-    sanitizedOverrides[key] = value;
-  }
-
-  const componentRegistry = registry[entry.component] ?? {};
-  const existing = componentRegistry[entry.name];
-
-  const className =
-    entry.className ||
-    existing?.className ||
-    `${ZEBKIT_PREFIX}-${entry.component}--${entry.name}`;
-
-  registry[entry.component] = componentRegistry;
-  componentRegistry[entry.name] = {
-    component: entry.component,
-    name: entry.name,
-    className,
-    overrides: {
-      ...(existing?.overrides ?? {}),
-      ...sanitizedOverrides,
-    },
-  };
-
-  const metaKey = buildVariantMetaKey(entry.component, entry.name);
-  const existingMeta = variantMetadata.get(metaKey);
-  variantMetadata.set(metaKey, {
-    component: entry.component,
-    name: entry.name,
-    className,
-    inlineStyles: existingMeta?.inlineStyles ?? [],
-    stylesheetPaths: existingMeta?.stylesheetPaths ?? [],
-  });
-}
+export {
+  buildVariantMetaKey,
+  extractVariantOverrideEntries,
+  isVariantOverrideFile,
+  mergeVariantOverrideEntry,
+  normalizeVariantOverrideEntry,
+} from './compile-variant-helpers';
 
 async function registerVariant(
   variant: VariantConfig<string, string>,
@@ -562,8 +423,4 @@ function buildVariantOutputs(
     inlineCss,
     extraStylesheets: Array.from(extraStylesheetSet),
   };
-}
-
-function buildVariantMetaKey(component: string, name: string): string {
-  return `${component}::${name}`;
 }
