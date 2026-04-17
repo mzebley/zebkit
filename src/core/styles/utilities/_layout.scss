@@ -41,10 +41,10 @@ $justify-content-values: ('start': flex-start,
     }
 }
 
-@mixin generate-flex-media-queries($property, $values, $breakpoints) {
+@mixin generate-flex-media-queries($property, $values, $breakpoints: vars.$resolved) {
 
     @each $breakpoint,
-    $min-width in vars.$breakpoints {
+    $min-width in $breakpoints {
         @media (min-width: #{$min-width}) {
 
             @each $key,
@@ -76,10 +76,10 @@ $display-values: ('flex': flex,
     }
 }
 
-@mixin generate-display-media-queries($values, $breakpoints) {
+@mixin generate-display-media-queries($values, $breakpoints: vars.$resolved) {
 
     @each $breakpoint,
-    $min-width in vars.$breakpoints {
+    $min-width in $breakpoints {
         @media (min-width: #{$min-width}) {
 
             @each $key,
@@ -133,11 +133,11 @@ $display-values: ('flex': flex,
     @include generate-flex-utilities(align-items, $align-items-values);
     @include generate-flex-utilities(flex-direction, $flex-direction-values);
     @include generate-flex-utilities(justify-content, $justify-content-values);
-    @include generate-flex-media-queries(align-self, $align-self-values, vars.$breakpoints);
-    @include generate-flex-media-queries(align-items, $align-items-values, vars.$breakpoints);
-    @include generate-flex-media-queries(flex-direction, $flex-direction-values, vars.$breakpoints);
-    @include generate-flex-media-queries(justify-content, $justify-content-values, vars.$breakpoints);
+    @include generate-flex-media-queries(align-self, $align-self-values, vars.$resolved);
+    @include generate-flex-media-queries(align-items, $align-items-values, vars.$resolved);
+    @include generate-flex-media-queries(flex-direction, $flex-direction-values, vars.$resolved);
+    @include generate-flex-media-queries(justify-content, $justify-content-values, vars.$resolved);
 
     @include generate-display-utilities($display-values);
-    @include generate-display-media-queries($display-values, vars.$breakpoints);
+    @include generate-display-media-queries($display-values, vars.$resolved);
 }

@@ -2,6 +2,22 @@ import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 
+export type ExtendedTokensConfig = {
+  /**
+   * Controls which primitive color palette families are compiled into the output CSS.
+   * 'all' (default) includes all 23 families.
+   * 'smart' includes only families referenced in your token chain, reducing output size.
+   */
+  colors?: 'all' | 'smart';
+  /**
+   * Controls which responsive breakpoint utility classes are generated.
+   * true or absent = all 5 breakpoints (default).
+   * false = no responsive utility classes.
+   * string[] = only the named breakpoints.
+   */
+  breakpoints?: boolean | Array<'tablet' | 'tablet-lg' | 'desktop' | 'desktop-lg' | 'widescreen'>;
+};
+
 export type TokensConfig = {
   selectedComponents?: string[];
   includeAllComponents?: boolean;
@@ -17,6 +33,7 @@ export type TokensConfig = {
   writeTokenLookup?: boolean;
   writeVariantRegistry?: boolean;
   tokenLookupOutputPath?: string;
+  extendedTokens?: ExtendedTokensConfig;
 };
 
 export type ComponentsConfig = {

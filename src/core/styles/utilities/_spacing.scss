@@ -22,7 +22,7 @@ $default-directions: (
   }
 }
 
-@mixin generate-size-media-queries($property, $values, $breakpoints: vars.$breakpoints) {
+@mixin generate-size-media-queries($property, $values, $breakpoints: vars.$resolved) {
   @each $breakpoint, $min-width in $breakpoints {
     @media (min-width: #{$min-width}) {
       @each $size, $value in $values {
@@ -52,7 +52,7 @@ $default-directions: (
   }
 }
 
-@mixin generate-spacing-media-queries($property, $spacing-values, $directions: $default-directions, $breakpoints: vars.$breakpoints) {
+@mixin generate-spacing-media-queries($property, $spacing-values, $directions: $default-directions, $breakpoints: vars.$resolved) {
   @each $breakpoint, $min-width in $breakpoints {
     @media (min-width: #{$min-width}) {
       @each $spacing in $spacing-values {

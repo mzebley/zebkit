@@ -34,6 +34,37 @@ const __dirname = path.dirname(__filename);
 
 const ZEBKIT_PREFIX = "zbk";
 
+const PALETTE_GLOBAL_COLORS = `:root {
+  --zbk-color-global-black: #131313;
+  --zbk-color-global-white: #fefefe;
+  --zbk-color-global-transparent: transparent;
+}`;
+
+function extractReferencedColorFamilies(
+  tokens: Record<string, TokenInterface>
+): Set<string> {
+  const families = new Set<string>();
+  const pattern = /\{color\.([a-z]+)-\d+\}/g;
+  for (const tokenGroup of Object.values(tokens)) {
+    if (!tokenGroup) continue;
+    for (const token of Object.values(tokenGroup as Record<string, unknown>)) {
+      const value = typeof (token as any)?.value === "string" ? (token as any).value : "";
+      for (const match of value.matchAll(pattern)) {
+        families.add(match[1]);
+      }
+    }
+  }
+  return families;
+}
+
+function buildEnabledBreakpointsList(
+  config: boolean | string[] | undefined
+): string[] | false | undefined {
+  if (config === undefined || config === true) return undefined;
+  if (config === false) return false;
+  return config as string[];
+}
+
 /**
  * Interactive entry point for building Zebkit tokens and CSS.
  * Expects each token folder to export `key` and a default token map alongside a `token-schema.ts`.
@@ -373,7 +404,32 @@ export async function runTokenBuild(
       );
     }
 
-    const allStylesheets = [...files.stylesheets, ...extraStylesheets];
+    let allStylesheets = [...files.stylesheets, ...extraStylesheets];
+
+    // Smart color filtering: only include palette families referenced in the token chain.
+    let additionalModuleUses = "";
+    let finalVariantCss = inlineCss;
+    if (tokensConfig?.extendedTokens?.colors === "smart") {
+      const referencedFamilies = extractReferencedColorFamilies(tokens);
+      allStylesheets = allStylesheets.filter((sheet) => {
+        const isPaletteEntry =
+          sheet.includes("colors/palette/styles.scss") ||
+          sheet.includes("colors\\palette\\styles.scss");
+        return !isPaletteEntry;
+      });
+      additionalModuleUses = [...referencedFamilies]
+        .sort()
+        .map(
+          (family, i) =>
+            `@use 'core/colors/palette/${family}' as zbk_smart_palette_${i};\n`
+        )
+        .join("");
+      finalVariantCss = `${inlineCss}\n${PALETTE_GLOBAL_COLORS}`;
+    }
+
+    const enabledBreakpoints = buildEnabledBreakpointsList(
+      tokensConfig?.extendedTokens?.breakpoints
+    );
 
     const sassOptions: CompileSassOptions = {
       stylesheets: allStylesheets,
@@ -384,8 +440,10 @@ export async function runTokenBuild(
         assetFilePath: { value: assetFilePath, modify: true },
         cssVarPrefix: { value: ZEBKIT_PREFIX, modify: false },
       },
-      variantCss: inlineCss,
+      variantCss: finalVariantCss,
       zebkitPackageRoot,
+      enabledBreakpoints,
+      additionalModuleUses,
     };
 
     await compileSass(sassOptions);

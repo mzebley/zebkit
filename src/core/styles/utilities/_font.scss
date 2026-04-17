@@ -24,7 +24,7 @@
     }
 }
 
-@mixin generate-font-size-media-queries($sizes: font-vars.$font-family-sizes, $breakpoints: vars.$breakpoints) {
+@mixin generate-font-size-media-queries($sizes: font-vars.$font-family-sizes, $breakpoints: vars.$resolved) {
 
     @each $breakpoint,
     $min-width in $breakpoints {
@@ -64,7 +64,7 @@ $default-line-heights: 0,
     }
 }
 
-@mixin generate-line-height-media-queries($sizes: $default-line-heights, $breakpoints: vars.$breakpoints) {
+@mixin generate-line-height-media-queries($sizes: $default-line-heights, $breakpoints: vars.$resolved) {
 
     @each $breakpoint,
     $min-width in $breakpoints {
@@ -108,7 +108,7 @@ $default-font-weights: 'thin',
 
 }
 
-@mixin generate-font-weight-media-queries($values: $default-font-weights, $breakpoints: vars.$breakpoints) {
+@mixin generate-font-weight-media-queries($values: $default-font-weights, $breakpoints: vars.$resolved) {
 
     @each $breakpoint,
     $min-width in $breakpoints {
@@ -170,7 +170,7 @@ $default-text-measures: 0,
     }
 }
 
-@mixin generate-text-measure-media-queries($values: $default-text-measures, $breakpoints: vars.$breakpoints) {
+@mixin generate-text-measure-media-queries($values: $default-text-measures, $breakpoints: vars.$resolved) {
 
     @each $breakpoint,
     $min-width in $breakpoints {
@@ -226,7 +226,7 @@ $default-line-clamp-values: 1,
     }
 }
 
-@mixin generate-line-clamp-media-queries($values: $default-line-clamp-values, $breakpoints: vars.$breakpoints) {
+@mixin generate-line-clamp-media-queries($values: $default-line-clamp-values, $breakpoints: vars.$resolved) {
 
     @each $breakpoint,
     $min-width in $breakpoints {

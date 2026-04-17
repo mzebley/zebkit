@@ -63,7 +63,7 @@ $default-radius-directions: ('': null, // All sides
     }
 }
 
-@mixin generate-border-width-media-queries($property, $values: $default-semantic-values, $breakpoints: vars.$breakpoints) {
+@mixin generate-border-width-media-queries($property, $values: $default-semantic-values, $breakpoints: vars.$resolved) {
 
     @each $breakpoint,
     $min-width in $breakpoints {
@@ -135,7 +135,7 @@ $default-radius-directions: ('': null, // All sides
     }
 }
 
-@mixin generate-border-radius-media-queries($property, $values: $default-semantic-values, $breakpoints: vars.$breakpoints) {
+@mixin generate-border-radius-media-queries($property, $values: $default-semantic-values, $breakpoints: vars.$resolved) {
 
     @each $breakpoint,
     $min-width in $breakpoints {

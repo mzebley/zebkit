@@ -17,6 +17,23 @@ export interface SassVariable {
   modify?: boolean;
 }
 
+const BREAKPOINT_WIDTHS: Record<string, string> = {
+  tablet: '40rem',
+  'tablet-lg': '50rem',
+  desktop: '70rem',
+  'desktop-lg': '80rem',
+  widescreen: '100rem',
+};
+
+function buildBreakpointsUse(enabled: string[] | false | undefined): string {
+  if (enabled === undefined) return '';
+  const map =
+    enabled === false
+      ? '()'
+      : `(${enabled.map((bp) => `'${bp}': ${BREAKPOINT_WIDTHS[bp]}`).join(', ')})`;
+  return `@use 'core/styles/variables/breakpoints' with ($active-breakpoints: ${map});\n`;
+}
+
 /**
  * Compiles SCSS bundles for a given theme, injecting CSS variables and Sass variables.
  */
@@ -38,6 +55,18 @@ export interface CompileSassOptions {
    * Defaults to the package root inferred from this file's location (dev mode).
    */
   zebkitPackageRoot?: string;
+  /**
+   * Controls which responsive breakpoints are compiled into utility classes.
+   * undefined = all breakpoints (default behavior).
+   * false = no responsive utility classes.
+   * string[] = only the named breakpoints.
+   */
+  enabledBreakpoints?: string[] | false;
+  /**
+   * Additional @use statements to prepend before the gathered stylesheet modules.
+   * Used for smart color filtering to include only referenced palette families.
+   */
+  additionalModuleUses?: string;
 }
 
 export async function compileSass(options: CompileSassOptions): Promise<void> {
@@ -51,6 +80,8 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
     utilityStylesheetPatterns = ['utilities', 'utility', 'color'],
     variantCss = '',
     zebkitPackageRoot,
+    enabledBreakpoints,
+    additionalModuleUses = '',
   } = options;
 
   // In dev mode, resolve from this file's location. In installed CLI mode,
@@ -104,7 +135,8 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
       moduleUses += `@use '${importPath}' as zbk_module_${index};\n`;
     });
 
-    const sassCode = variableDefinitions + moduleUses;
+    const breakpointsUse = buildBreakpointsUse(enabledBreakpoints);
+    const sassCode = variableDefinitions + breakpointsUse + additionalModuleUses + moduleUses;
 
     const includePaths = [
       path.join(zbkRoot, 'src'),

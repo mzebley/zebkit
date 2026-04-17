@@ -18,7 +18,7 @@ $default-directions: 'top',
     }
 }
 
-@mixin generate-position-media-queries($values, $directions: $default-directions, $breakpoints: vars.$breakpoints) {
+@mixin generate-position-media-queries($values, $directions: $default-directions, $breakpoints: vars.$resolved) {
 
     @each $breakpoint,
     $min-width in $breakpoints {

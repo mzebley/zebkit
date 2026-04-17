@@ -4,6 +4,10 @@ $breakpoint-desktop: 70rem !default;
 $breakpoint-desktop-lg: 80rem !default;
 $breakpoint-widescreen: 100rem !default;
 
+// When set via @use with(), only the specified breakpoints are compiled into responsive utilities.
+// null (default) = include all breakpoints.
+$active-breakpoints: null !default;
+
 $breakpoints: (
     'tablet': $breakpoint-tablet,
     'tablet-lg': $breakpoint-tablet-lg,
@@ -11,3 +15,6 @@ $breakpoints: (
     'desktop-lg': $breakpoint-desktop-lg,
     'widescreen': $breakpoint-widescreen
 );
+
+// Resolved map used by generators — filtered when $active-breakpoints is set.
+$resolved: if($active-breakpoints != null, $active-breakpoints, $breakpoints);
