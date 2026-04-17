@@ -108,26 +108,45 @@ Semantic border tokens applied as utilities:
 
 ## Responsive Variants
 
-All utilities generate breakpoint variants automatically:
+All utilities generate breakpoint variants automatically using a mobile-first approach:
 
 ```html
-<!-- Default on mobile, large on tablet and up -->
-<div class="p-spacing-2 md:p-spacing-6 lg:p-spacing-8">
+<!-- Default on mobile, larger spacing on tablet and up -->
+<div class="p-spacing-2 tablet:p-spacing-6 desktop:p-spacing-8">
   Responsive padding
 </div>
 
-<!-- Hidden on mobile, visible on tablet -->
-<div class="hidden md:flex">
+<!-- Hidden on mobile, visible at tablet width -->
+<div class="display-none tablet:display-flex">
   Desktop navigation
 </div>
 ```
 
 Breakpoint prefixes:
-- `sm:` - Small breakpoint
-- `md:` - Medium breakpoint
-- `lg:` - Large breakpoint
-- `xl:` - Extra-large breakpoint
-- `2xl:` - 2XL breakpoint
+
+| Prefix | Min-width | Target |
+|---|---|---|
+| `tablet:` | 40rem | Tablets and up |
+| `tablet-lg:` | 50rem | Large tablets and up |
+| `desktop:` | 70rem | Desktop and up |
+| `desktop-lg:` | 80rem | Large desktop and up |
+| `widescreen:` | 100rem | Widescreen displays |
+
+### Controlling which breakpoints are compiled
+
+By default all five breakpoints are generated. Use `extendedTokens.breakpoints` in `zebkit.config.json` to reduce output:
+
+```json
+{
+  "tokens": {
+    "extendedTokens": {
+      "breakpoints": ["tablet", "desktop"]
+    }
+  }
+}
+```
+
+Set to `false` to generate no responsive classes at all. Only the breakpoints you list will have utility prefixes compiled into the CSS.
 
 ## State Variants
 

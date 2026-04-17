@@ -87,7 +87,11 @@ Run `zebkit build` to recompile CSS with your overrides applied on top of the se
     "includeAllComponents": false,
     "exportTokens": false,
     "splitMode": "combined",
-    "outputFormats": ["JSON"]
+    "outputFormats": ["JSON"],
+    "extendedTokens": {
+      "colors": "smart",
+      "breakpoints": ["tablet", "desktop"]
+    }
   }
 }
 ```
@@ -104,6 +108,27 @@ Run `zebkit build` to recompile CSS with your overrides applied on top of the se
 | `exportTokens` | `false` | Also write token artifacts (JSON/TS/JS) |
 | `splitMode` | `combined` | `combined` (one file) or `per-module` (one file per token module) |
 | `outputFormats` | `["JSON"]` | `JSON`, `TypeScript`, and/or `JavaScript` |
+| `extendedTokens.colors` | `"all"` | `"all"` includes all 23 primitive color families. `"smart"` includes only families referenced in your token chain. |
+| `extendedTokens.breakpoints` | all | `true`/absent = all 5 breakpoints. `false` = no responsive utilities. Array = specific breakpoints only (`"tablet"`, `"tablet-lg"`, `"desktop"`, `"desktop-lg"`, `"widescreen"`). |
+
+### Reducing output CSS size
+
+By default zebkit compiles all primitive color palettes (23 families × 11 shades) and responsive utility classes for all 5 breakpoints. Use `extendedTokens` in your config to reduce output when you don't need everything:
+
+```json
+{
+  "tokens": {
+    "extendedTokens": {
+      "colors": "smart",
+      "breakpoints": ["tablet", "desktop"]
+    }
+  }
+}
+```
+
+**`colors: "smart"`** — analyzes your token chain and only compiles the primitive color families that are actually referenced. If your theme uses `stone` and `brand` but not `blue` or `violet`, those palettes are excluded from the output. Any colors assigned in your custom tokens are always included automatically.
+
+**`breakpoints`** — controls which responsive utility prefixes are generated. Omit any breakpoints your design doesn't use. Set to `false` to generate no responsive classes at all.
 
 ---
 
