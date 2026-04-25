@@ -57,12 +57,11 @@ async function extractAllowedTokenTypes(): Promise<string[]> {
 /**
  * Generate per-module JSON Schema for a specific token file
  */
-async function generateModuleSchema(
+function generateModuleSchema(
   module: ManifestModule,
-  tokenData: TokenData
-): Promise<object> {
-  const allowedTokenTypes = await extractAllowedTokenTypes();
-
+  tokenData: TokenData,
+  refsByType: Record<string, string[]>
+): object {
   // Build properties for each token key
   const properties: Record<string, any> = {};
 
@@ -70,15 +69,23 @@ async function generateModuleSchema(
     if (tokenName.startsWith('_')) continue; // Skip _key, _layer
 
     const token = tokenObj as TokenObject;
+    const valueSchema: any = {
+      type: ['string', 'number'],
+    };
+
+    // Add examples for matching token type references
+    const examples = refsByType[token.type];
+    if (examples && examples.length > 0) {
+      valueSchema.examples = examples;
+    }
+
     properties[tokenName] = {
       type: 'object',
       description: token.description,
       required: ['value', 'type', 'description'],
       additionalProperties: false,
       properties: {
-        value: {
-          type: ['string', 'number'],
-        },
+        value: valueSchema,
         type: {
           const: token.type,
         },
@@ -189,23 +196,58 @@ async function buildEditor() {
     await fs.ensureDir(editorDir);
     await fs.ensureDir(schemasDir);
 
-    // Generate and write per-module schemas
-    console.log('Generating per-module schemas...');
     const manifestPath = path.join(defaultsDir, 'manifest.json');
     const manifest = await fs.readJson(manifestPath) as { modules: ManifestModule[] };
+
+    // Extract allowed token types once
+    const allowedTokenTypes = await extractAllowedTokenTypes();
+
+    // PASS 1: Build map of token type -> list of reference strings
+    console.log('Scanning token modules for references...');
+    const refsByType: Record<string, string[]> = {};
 
     for (const module of manifest.modules) {
       const tokenFilePath = path.join(defaultsDir, module.file);
       const tokenData = await fs.readJson(tokenFilePath) as TokenData;
 
-      const moduleSchema = await generateModuleSchema(module, tokenData);
+      // Extract namespace from module key: "zbk-brand" -> "brand", "zbk-app" -> "app"
+      const namespace = module.key.replace('zbk-', '');
+
+      for (const [tokenName, tokenObj] of Object.entries(tokenData)) {
+        if (tokenName.startsWith('_')) continue; // Skip _key, _layer
+
+        const token = tokenObj as TokenObject;
+        const tokenType = token.type;
+
+        if (!refsByType[tokenType]) {
+          refsByType[tokenType] = [];
+        }
+
+        const reference = `{${namespace}.${tokenName}}`;
+        refsByType[tokenType].push(reference);
+      }
+    }
+
+    // Log summary of references found
+    for (const [type, refs] of Object.entries(refsByType)) {
+      console.log(`  Found ${refs.length} ${type} references`);
+    }
+
+    // PASS 2: Generate and write per-module schemas
+    console.log('\nGenerating per-module schemas...');
+
+    for (const module of manifest.modules) {
+      const tokenFilePath = path.join(defaultsDir, module.file);
+      const tokenData = await fs.readJson(tokenFilePath) as TokenData;
+
+      const moduleSchema = generateModuleSchema(module, tokenData, refsByType);
       const schemaPath = path.join(schemasDir, `${module.key}.schema.json`);
       await fs.writeJson(schemaPath, moduleSchema, { spaces: 2 });
       console.log(`  Written: ${schemaPath}`);
     }
 
     // Generate and write CSS custom data
-    console.log('Generating zebkit.css-data.json...');
+    console.log('\nGenerating zebkit.css-data.json...');
     const cssData = await generateCssCustomData();
     const cssDataPath = path.join(editorDir, 'zebkit.css-data.json');
     await fs.writeJson(cssDataPath, cssData, { spaces: 2 });
