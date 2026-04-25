@@ -9,10 +9,15 @@
   },
   "exports": {
     ".": "./dist/cli/zebkit.mjs",
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
     "dist/cli/",
+    "dist/components/",
     "src/**/*.scss"
   ],
   "scripts": {
@@ -23,13 +28,13 @@
     "type-check": "tsc --noEmit",
     "check:docs": "npm --prefix docs run build",
     "check": "npm run test:unit -- --runInBand && npm run type-check && npm run check:docs",
-    "build:components": "tsx src/scripts/components/build.ts",
+    "build:components": "tsx scripts/build-components.ts",
     "build-scripts": "tsc",
     "build:tokens": "tsx -r tsconfig-paths/register src/scripts/tokens/run.ts",
     "build:defaults": "tsx -r tsconfig-paths/register scripts/build-defaults.ts",
     "build:cli": "tsx scripts/build-cli.ts",
-    "prepare": "npm run build:defaults && npm run build:cli",
-    "prepublishOnly": "npm run build:defaults && npm run build:cli",
+    "prepare": "npm run build:defaults && npm run build:cli && npm run build:components",
+    "prepublishOnly": "npm run build:defaults && npm run build:cli && npm run build:components",
     "docs:dev": "cd docs && npm run dev",
     "docs:build": "cd docs && npm run build"
   },
@@ -54,6 +59,9 @@
     "postcss-preset-env": "^10.0.1",
     "sass": "^1.78.0"
   },
+  "peerDependencies": {
+    "lit": ">=3.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.4",
@@ -77,6 +85,7 @@
     "inquirer": "^10.2.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "lit": "^3.3.2",
     "ora": "^8.1.1",
     "regenerator-runtime": "^0.14.1",
     "rollup": "^4.21.2",
