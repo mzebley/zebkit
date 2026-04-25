@@ -76,7 +76,7 @@ describe('pull command', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['./tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
         ],
@@ -127,7 +127,7 @@ describe('pull command', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['./tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
         ],
@@ -188,7 +188,7 @@ describe('pull command', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['./tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
         ],

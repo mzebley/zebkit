@@ -159,11 +159,11 @@ describe('writeVscodeSettings', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['./tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
           {
-            fileMatch: ['./tokens/zbk-app.json'],
+            fileMatch: ['/tokens/zbk-app.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
           },
         ],
@@ -188,11 +188,11 @@ describe('writeVscodeSettings', () => {
         'editor.defaultFormatter': 'prettier',
         'json.schemas': [
           {
-            fileMatch: ['./tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
           {
-            fileMatch: ['./tokens/zbk-app.json'],
+            fileMatch: ['/tokens/zbk-app.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
           },
         ],
@@ -206,11 +206,11 @@ describe('writeVscodeSettings', () => {
     mockReadJsonSafe.mockResolvedValue({
       'json.schemas': [
         {
-          fileMatch: ['./tokens/zbk-button.json'],
+          fileMatch: ['/tokens/zbk-button.json'],
           url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
         },
         {
-          fileMatch: ['./tokens/zbk-app.json'],
+          fileMatch: ['/tokens/zbk-app.json'],
           url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
         },
       ],
@@ -224,11 +224,11 @@ describe('writeVscodeSettings', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['./tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
           {
-            fileMatch: ['./tokens/zbk-app.json'],
+            fileMatch: ['/tokens/zbk-app.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
           },
         ],

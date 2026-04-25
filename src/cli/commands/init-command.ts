@@ -91,10 +91,10 @@ export async function writeVscodeSettings(
   );
 
   // Add per-module schema entries
+  const tokenPathNormalized = customTokenPath.replace(/^\.\//, '');
   for (const module of modules) {
-    const fileMatch = `${customTokenPath}/${module.file}`;
     const tokenSchemaEntry = {
-      fileMatch: [fileMatch],
+      fileMatch: [`/${tokenPathNormalized}/${module.file}`],
       url: `./node_modules/zebkit/dist/editor/schemas/${module.key}.schema.json`,
     };
     jsonSchemas.push(tokenSchemaEntry);
