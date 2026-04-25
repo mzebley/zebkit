@@ -1,7 +1,3 @@
-
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-
 // Import all components
 import { ZbkButton, defineZbkButton } from "./button";
 import { ZCheckbox, defineZCheckbox } from "./checkbox";

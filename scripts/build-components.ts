@@ -23,15 +23,7 @@ const outDts = path.resolve(root, 'dist/components/index.d.ts');
 const tsconfigPath = path.resolve(root, 'tsconfig.json');
 
 // Packages that must be installed by the consumer, not bundled here.
-const EXTERNALS = [
-  'lit',
-  'lit/*',
-  '@lit/*',
-  'core-js',
-  'core-js/*',
-  'regenerator-runtime',
-  'regenerator-runtime/*',
-];
+const EXTERNALS = ['lit', 'lit/*', '@lit/*'];
 
 // --- JS bundle ---
 console.log('Building component JS bundle...');
