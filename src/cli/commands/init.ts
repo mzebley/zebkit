@@ -23,6 +23,13 @@ export async function init() {
     pathExists: fs.pathExists,
     writeJson: fs.writeJson,
     readJson: fs.readJson,
+    readJsonSafe: async (p: string) => {
+      try {
+        return await fs.readJson(p);
+      } catch {
+        return undefined;
+      }
+    },
     ensureDir: fs.ensureDir,
     prompt: inquirer.prompt,
     getZebkitPackageRoot,

@@ -18,6 +18,7 @@
   "files": [
     "dist/cli/",
     "dist/components/",
+    "dist/editor/",
     "src/**/*.scss"
   ],
   "scripts": {
@@ -32,9 +33,10 @@
     "build-scripts": "tsc",
     "build:tokens": "tsx -r tsconfig-paths/register src/scripts/tokens/run.ts",
     "build:defaults": "tsx -r tsconfig-paths/register scripts/build-defaults.ts",
+    "build:editor": "tsx scripts/build-editor.ts",
     "build:cli": "tsx scripts/build-cli.ts",
-    "prepare": "npm run build:defaults && npm run build:cli && npm run build:components",
-    "prepublishOnly": "npm run build:defaults && npm run build:cli && npm run build:components",
+    "prepare": "npm run build:defaults && npm run build:editor && npm run build:cli && npm run build:components",
+    "prepublishOnly": "npm run build:defaults && npm run build:editor && npm run build:cli && npm run build:components",
     "docs:dev": "cd docs && npm run dev",
     "docs:build": "cd docs && npm run build"
   },

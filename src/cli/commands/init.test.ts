@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { runInitCommand } from './init-command';
+import { runInitCommand, writeVscodeSettings } from './init-command';
 import type { InitCommandDeps } from './init-command';
 
 describe('init command', () => {
@@ -20,10 +20,13 @@ describe('init command', () => {
   const mockGetThemePromptChoices = jest.fn((themes: string[]) => themes);
   const mockResolveBundledThemeTokensDir = jest.fn(() => '/pkg/dist/cli/presets/dynamowaves');
 
+  const mockReadJsonSafe = jest.fn(async () => undefined);
+
   const createDeps = (): InitCommandDeps => ({
     pathExists: mockPathExists as InitCommandDeps['pathExists'],
     writeJson: mockWriteJson as InitCommandDeps['writeJson'],
     readJson: mockReadJson as InitCommandDeps['readJson'],
+    readJsonSafe: mockReadJsonSafe as InitCommandDeps['readJsonSafe'],
     ensureDir: mockEnsureDir as InitCommandDeps['ensureDir'],
     prompt: ((questions: unknown) => mockPrompt(questions)) as InitCommandDeps['prompt'],
     getZebkitPackageRoot: mockGetZebkitPackageRoot,
@@ -119,5 +122,95 @@ describe('init command', () => {
     await runInitCommand(createDeps());
 
     expect(mockHandlePromptCancel).toHaveBeenCalledWith('Init');
+  });
+});
+
+describe('writeVscodeSettings', () => {
+  const mockEnsureDir = jest.fn();
+  const mockReadJsonSafe = jest.fn();
+  const mockWriteJson = jest.fn();
+
+  const createVscodeDeps = () => ({
+    ensureDir: mockEnsureDir,
+    readJsonSafe: mockReadJsonSafe,
+    writeJson: mockWriteJson,
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('creates .vscode/settings.json when it does not exist', async () => {
+    mockReadJsonSafe.mockResolvedValue(undefined);
+
+    await writeVscodeSettings('/project', './tokens', createVscodeDeps());
+
+    expect(mockEnsureDir).toHaveBeenCalledWith('/project/.vscode');
+    expect(mockWriteJson).toHaveBeenCalledWith(
+      '/project/.vscode/settings.json',
+      {
+        'json.schemas': [
+          {
+            fileMatch: ['./tokens/**/*.tokens.json'],
+            url: './node_modules/zebkit/dist/editor/tokens.schema.json',
+          },
+        ],
+        'css.customData': ['./node_modules/zebkit/dist/editor/zebkit.css-data.json'],
+      },
+      { spaces: 2 }
+    );
+  });
+
+  it('merges into existing .vscode/settings.json without overwriting unrelated keys', async () => {
+    mockReadJsonSafe.mockResolvedValue({
+      'editor.formatOnSave': true,
+      'editor.defaultFormatter': 'prettier',
+    });
+
+    await writeVscodeSettings('/project', './tokens', createVscodeDeps());
+
+    expect(mockWriteJson).toHaveBeenCalledWith(
+      '/project/.vscode/settings.json',
+      {
+        'editor.formatOnSave': true,
+        'editor.defaultFormatter': 'prettier',
+        'json.schemas': [
+          {
+            fileMatch: ['./tokens/**/*.tokens.json'],
+            url: './node_modules/zebkit/dist/editor/tokens.schema.json',
+          },
+        ],
+        'css.customData': ['./node_modules/zebkit/dist/editor/zebkit.css-data.json'],
+      },
+      { spaces: 2 }
+    );
+  });
+
+  it('does not add duplicate zebkit entries if already present', async () => {
+    mockReadJsonSafe.mockResolvedValue({
+      'json.schemas': [
+        {
+          fileMatch: ['./tokens/**/*.tokens.json'],
+          url: './node_modules/zebkit/dist/editor/tokens.schema.json',
+        },
+      ],
+      'css.customData': ['./node_modules/zebkit/dist/editor/zebkit.css-data.json'],
+    });
+
+    await writeVscodeSettings('/project', './tokens', createVscodeDeps());
+
+    expect(mockWriteJson).toHaveBeenCalledWith(
+      '/project/.vscode/settings.json',
+      {
+        'json.schemas': [
+          {
+            fileMatch: ['./tokens/**/*.tokens.json'],
+            url: './node_modules/zebkit/dist/editor/tokens.schema.json',
+          },
+        ],
+        'css.customData': ['./node_modules/zebkit/dist/editor/zebkit.css-data.json'],
+      },
+      { spaces: 2 }
+    );
   });
 });

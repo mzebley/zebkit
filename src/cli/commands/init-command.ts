@@ -5,6 +5,7 @@ export interface InitCommandDeps {
   pathExists: (path: string) => Promise<boolean>;
   writeJson: (...args: any[]) => Promise<void>;
   readJson: (path: string) => Promise<any>;
+  readJsonSafe: (path: string) => Promise<any>;
   ensureDir: (path: string) => Promise<void>;
   prompt: (...args: any[]) => Promise<any>;
   getZebkitPackageRoot: () => string;
@@ -65,6 +66,56 @@ export async function copyThemeTokens(
   } else {
     console.log('\n./tokens/ is already up to date.');
   }
+}
+
+export async function writeVscodeSettings(
+  projectDir: string,
+  customTokenPath: string,
+  deps: Pick<InitCommandDeps, 'readJsonSafe' | 'writeJson' | 'ensureDir'>
+): Promise<void> {
+  const vscodeDir = path.resolve(projectDir, '.vscode');
+  const settingsPath = path.resolve(vscodeDir, 'settings.json');
+
+  await deps.ensureDir(vscodeDir);
+
+  // Read existing settings if present
+  const existingSettings = (await deps.readJsonSafe(settingsPath)) || {};
+
+  // Merge json.schemas
+  const jsonSchemas = existingSettings['json.schemas'] || [];
+  const tokenSchemaEntry = {
+    fileMatch: [`${customTokenPath}/**/*.tokens.json`],
+    url: './node_modules/zebkit/dist/editor/tokens.schema.json',
+  };
+
+  // Check if entry already exists
+  const schemaExists = jsonSchemas.some(
+    (s: any) =>
+      s.fileMatch &&
+      Array.isArray(s.fileMatch) &&
+      s.fileMatch.includes(`${customTokenPath}/**/*.tokens.json`)
+  );
+
+  if (!schemaExists) {
+    jsonSchemas.push(tokenSchemaEntry);
+  }
+
+  // Merge css.customData
+  const cssCustomData = existingSettings['css.customData'] || [];
+  const zebkitCssData = './node_modules/zebkit/dist/editor/zebkit.css-data.json';
+
+  if (!cssCustomData.includes(zebkitCssData)) {
+    cssCustomData.push(zebkitCssData);
+  }
+
+  // Write merged settings
+  const mergedSettings = {
+    ...existingSettings,
+    'json.schemas': jsonSchemas,
+    'css.customData': cssCustomData,
+  };
+
+  await deps.writeJson(settingsPath, mergedSettings, { spaces: 2 });
 }
 
 export async function runInitCommand(deps: InitCommandDeps) {
@@ -146,6 +197,12 @@ export async function runInitCommand(deps: InitCommandDeps) {
 
     await deps.writeJson(configPath, config, { spaces: 2 });
     console.log('\nCreated zebkit.config.json');
+
+    // Write VS Code settings for editor support
+    const customTokenPath = config.tokens?.customTokenPath || './tokens';
+    await writeVscodeSettings(process.cwd(), customTokenPath, deps);
+    console.log('Configured .vscode/settings.json for editor support');
+
     console.log('\nNext:');
     if (answers.copyTokens) {
       console.log('  1. Edit ./tokens/ to customize design tokens');
