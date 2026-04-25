@@ -71,6 +71,7 @@ export async function copyThemeTokens(
 export async function writeVscodeSettings(
   projectDir: string,
   customTokenPath: string,
+  modules: Array<{ key: string; file: string }>,
   deps: Pick<InitCommandDeps, 'readJsonSafe' | 'writeJson' | 'ensureDir'>
 ): Promise<void> {
   const vscodeDir = path.resolve(projectDir, '.vscode');
@@ -81,22 +82,21 @@ export async function writeVscodeSettings(
   // Read existing settings if present
   const existingSettings = (await deps.readJsonSafe(settingsPath)) || {};
 
-  // Merge json.schemas
-  const jsonSchemas = existingSettings['json.schemas'] || [];
-  const tokenSchemaEntry = {
-    fileMatch: [`${customTokenPath}/**/*.tokens.json`],
-    url: './node_modules/zebkit/dist/editor/tokens.schema.json',
-  };
+  // Merge json.schemas - remove any existing zebkit entries, then add new ones
+  let jsonSchemas = (existingSettings['json.schemas'] || []) as any[];
 
-  // Check if entry already exists
-  const schemaExists = jsonSchemas.some(
-    (s: any) =>
-      s.fileMatch &&
-      Array.isArray(s.fileMatch) &&
-      s.fileMatch.includes(`${customTokenPath}/**/*.tokens.json`)
+  // Remove any existing zebkit schema entries
+  jsonSchemas = jsonSchemas.filter(
+    (s: any) => !s.url || !s.url.includes('zebkit/dist/editor')
   );
 
-  if (!schemaExists) {
+  // Add per-module schema entries
+  for (const module of modules) {
+    const fileMatch = `${customTokenPath}/${module.file}`;
+    const tokenSchemaEntry = {
+      fileMatch: [fileMatch],
+      url: `./node_modules/zebkit/dist/editor/schemas/${module.key}.schema.json`,
+    };
     jsonSchemas.push(tokenSchemaEntry);
   }
 
@@ -200,7 +200,9 @@ export async function runInitCommand(deps: InitCommandDeps) {
 
     // Write VS Code settings for editor support
     const customTokenPath = config.tokens?.customTokenPath || './tokens';
-    await writeVscodeSettings(process.cwd(), customTokenPath, deps);
+    const defaultsManifest = await deps.readJson(path.join(defaultsDir, 'manifest.json'));
+    const modules = defaultsManifest.modules as Array<{ key: string; file: string }>;
+    await writeVscodeSettings(process.cwd(), customTokenPath, modules, deps);
     console.log('Configured .vscode/settings.json for editor support');
 
     console.log('\nNext:');

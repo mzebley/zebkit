@@ -72,6 +72,9 @@ describe('init command', () => {
           canvas: { value: '#fff', type: 'color' },
         };
       }
+      if (target === '/pkg/dist/cli/defaults/manifest.json') {
+        return { modules: [{ key: 'zbk-button', file: 'zbk-button.json' }] };
+      }
       throw new Error(`Unexpected readJson target: ${target}`);
     });
     mockIsPromptCancelError.mockReturnValue(false);
@@ -130,6 +133,11 @@ describe('writeVscodeSettings', () => {
   const mockReadJsonSafe = jest.fn();
   const mockWriteJson = jest.fn();
 
+  const mockModules = [
+    { key: 'zbk-button', file: 'zbk-button.json' },
+    { key: 'zbk-app', file: 'zbk-app.json' },
+  ];
+
   const createVscodeDeps = () => ({
     ensureDir: mockEnsureDir,
     readJsonSafe: mockReadJsonSafe,
@@ -143,7 +151,7 @@ describe('writeVscodeSettings', () => {
   it('creates .vscode/settings.json when it does not exist', async () => {
     mockReadJsonSafe.mockResolvedValue(undefined);
 
-    await writeVscodeSettings('/project', './tokens', createVscodeDeps());
+    await writeVscodeSettings('/project', './tokens', mockModules, createVscodeDeps());
 
     expect(mockEnsureDir).toHaveBeenCalledWith('/project/.vscode');
     expect(mockWriteJson).toHaveBeenCalledWith(
@@ -151,8 +159,12 @@ describe('writeVscodeSettings', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['./tokens/**/*.tokens.json'],
-            url: './node_modules/zebkit/dist/editor/tokens.schema.json',
+            fileMatch: ['./tokens/zbk-button.json'],
+            url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
+          },
+          {
+            fileMatch: ['./tokens/zbk-app.json'],
+            url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
           },
         ],
         'css.customData': ['./node_modules/zebkit/dist/editor/zebkit.css-data.json'],
@@ -167,7 +179,7 @@ describe('writeVscodeSettings', () => {
       'editor.defaultFormatter': 'prettier',
     });
 
-    await writeVscodeSettings('/project', './tokens', createVscodeDeps());
+    await writeVscodeSettings('/project', './tokens', mockModules, createVscodeDeps());
 
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/project/.vscode/settings.json',
@@ -176,8 +188,12 @@ describe('writeVscodeSettings', () => {
         'editor.defaultFormatter': 'prettier',
         'json.schemas': [
           {
-            fileMatch: ['./tokens/**/*.tokens.json'],
-            url: './node_modules/zebkit/dist/editor/tokens.schema.json',
+            fileMatch: ['./tokens/zbk-button.json'],
+            url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
+          },
+          {
+            fileMatch: ['./tokens/zbk-app.json'],
+            url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
           },
         ],
         'css.customData': ['./node_modules/zebkit/dist/editor/zebkit.css-data.json'],
@@ -190,22 +206,30 @@ describe('writeVscodeSettings', () => {
     mockReadJsonSafe.mockResolvedValue({
       'json.schemas': [
         {
-          fileMatch: ['./tokens/**/*.tokens.json'],
-          url: './node_modules/zebkit/dist/editor/tokens.schema.json',
+          fileMatch: ['./tokens/zbk-button.json'],
+          url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
+        },
+        {
+          fileMatch: ['./tokens/zbk-app.json'],
+          url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
         },
       ],
       'css.customData': ['./node_modules/zebkit/dist/editor/zebkit.css-data.json'],
     });
 
-    await writeVscodeSettings('/project', './tokens', createVscodeDeps());
+    await writeVscodeSettings('/project', './tokens', mockModules, createVscodeDeps());
 
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/project/.vscode/settings.json',
       {
         'json.schemas': [
           {
-            fileMatch: ['./tokens/**/*.tokens.json'],
-            url: './node_modules/zebkit/dist/editor/tokens.schema.json',
+            fileMatch: ['./tokens/zbk-button.json'],
+            url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
+          },
+          {
+            fileMatch: ['./tokens/zbk-app.json'],
+            url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
           },
         ],
         'css.customData': ['./node_modules/zebkit/dist/editor/zebkit.css-data.json'],

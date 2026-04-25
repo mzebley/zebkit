@@ -10,6 +10,9 @@ export async function pull(options: { config?: string }) {
     return runPullCommand({
       pathExists: fs.pathExists,
       readJson: fs.readJson,
+      readJsonSafe: async (p: string) => {
+        try { return await fs.readJson(p); } catch { return undefined; }
+      },
       writeJson: fs.writeJson,
       ensureDir: fs.ensureDir,
       readConfig: async () => {

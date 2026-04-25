@@ -1,9 +1,11 @@
 import path from 'path';
 import type { ZebkitConfig } from '../../scripts/config';
+import { writeVscodeSettings } from './init-command';
 
 export interface PullCommandDeps {
   pathExists: (path: string) => Promise<boolean>;
   readJson: (path: string) => Promise<any>;
+  readJsonSafe: (path: string) => Promise<any>;
   writeJson: (path: string, data: any, options?: any) => Promise<void>;
   ensureDir: (path: string) => Promise<void>;
   readConfig: () => Promise<{ config: ZebkitConfig; path: string } | undefined>;
@@ -117,26 +119,28 @@ export async function runPullCommand(deps: PullCommandDeps) {
 
   if (results.length === 0) {
     deps.log('Already up to date.');
-    return;
+  } else {
+    const added = results.filter((r) => r.status === 'added');
+    const updated = results.filter((r) => r.status === 'updated');
+
+    const maxLen = Math.max(...results.map((r) => r.file.length), 0);
+
+    for (const result of added) {
+      const filename = result.file.replace('.json', '');
+      deps.log(`  + ${filename}.json${' '.repeat(Math.max(0, maxLen - result.file.length))} (new)`);
+    }
+
+    for (const result of updated) {
+      const filename = result.file.replace('.json', '');
+      deps.log(`  ~ ${filename}.json${' '.repeat(Math.max(0, maxLen - result.file.length))} (${result.count} new key${result.count === 1 ? '' : 's'} added)`);
+    }
+
+    deps.log('');
+    deps.log(
+      `${added.length} file${added.length === 1 ? '' : 's'} added, ${updated.length} file${updated.length === 1 ? '' : 's'} updated.`
+    );
   }
 
-  const added = results.filter((r) => r.status === 'added');
-  const updated = results.filter((r) => r.status === 'updated');
-
-  const maxLen = Math.max(...results.map((r) => r.file.length), 0);
-
-  for (const result of added) {
-    const filename = result.file.replace('.json', '');
-    deps.log(`  + ${filename}.json${' '.repeat(Math.max(0, maxLen - result.file.length))} (new)`);
-  }
-
-  for (const result of updated) {
-    const filename = result.file.replace('.json', '');
-    deps.log(`  ~ ${filename}.json${' '.repeat(Math.max(0, maxLen - result.file.length))} (${result.count} new key${result.count === 1 ? '' : 's'} added)`);
-  }
-
-  deps.log('');
-  deps.log(
-    `${added.length} file${added.length === 1 ? '' : 's'} added, ${updated.length} file${updated.length === 1 ? '' : 's'} updated.`
-  );
+  await writeVscodeSettings(path.dirname(configPath), customTokenPath, manifest.modules, deps);
+  deps.log('Updated .vscode/settings.json for editor support');
 }

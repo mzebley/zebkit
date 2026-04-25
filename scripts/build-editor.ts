@@ -3,7 +3,7 @@
  * Build editor support artifacts for Zebkit.
  *
  * Generates:
- * 1. dist/editor/tokens.schema.json — JSON Schema for *.tokens.json files
+ * 1. dist/editor/schemas/{key}.schema.json — Per-module JSON Schemas for token files
  * 2. dist/editor/zebkit.css-data.json — VS Code CSS custom data for autocomplete
  */
 
@@ -16,6 +16,7 @@ const __dirname = path.dirname(__filename);
 
 const defaultsDir = path.resolve(__dirname, '../dist/cli/defaults');
 const editorDir = path.resolve(__dirname, '../dist/editor');
+const schemasDir = path.resolve(editorDir, 'schemas');
 
 interface ManifestModule {
   key: string;
@@ -54,46 +55,55 @@ async function extractAllowedTokenTypes(): Promise<string[]> {
 }
 
 /**
- * Generate JSON Schema for token files
+ * Generate per-module JSON Schema for a specific token file
  */
-async function generateTokenSchema(): Promise<object> {
+async function generateModuleSchema(
+  module: ManifestModule,
+  tokenData: TokenData
+): Promise<object> {
   const allowedTokenTypes = await extractAllowedTokenTypes();
 
+  // Build properties for each token key
+  const properties: Record<string, any> = {};
+
+  for (const [tokenName, tokenObj] of Object.entries(tokenData)) {
+    if (tokenName.startsWith('_')) continue; // Skip _key, _layer
+
+    const token = tokenObj as TokenObject;
+    properties[tokenName] = {
+      type: 'object',
+      description: token.description,
+      required: ['value', 'type', 'description'],
+      additionalProperties: false,
+      properties: {
+        value: {
+          type: ['string', 'number'],
+        },
+        type: {
+          const: token.type,
+        },
+        description: {
+          type: 'string',
+        },
+        a11y: {
+          type: ['boolean', 'string'],
+        },
+      },
+    };
+  }
+
+  // Build the module schema
   return {
     $schema: 'http://json-schema.org/draft-07/schema',
-    title: 'Zebkit Token File',
-    description: 'Token definitions for Zebkit design system. Each file contains a single namespace object with token entries.',
+    title: `Zebkit ${module.key} Tokens`,
     type: 'object',
-    maxProperties: 1,
-    additionalProperties: {
-      type: 'object',
-      additionalProperties: {
-        $ref: '#/definitions/TokenObject',
-      },
-    },
-    definitions: {
-      TokenObject: {
+    required: [module.key],
+    additionalProperties: false,
+    properties: {
+      [module.key]: {
         type: 'object',
-        required: ['value', 'type', 'description'],
-        properties: {
-          value: {
-            type: ['string', 'number'],
-            description: 'Token value (string or number)',
-          },
-          type: {
-            enum: allowedTokenTypes,
-            description: 'Token type classification',
-          },
-          description: {
-            type: 'string',
-            description: 'Human-readable token description',
-          },
-          a11y: {
-            type: ['boolean', 'string'],
-            description: 'Accessibility note or flag',
-          },
-        },
         additionalProperties: false,
+        properties,
       },
     },
   };
@@ -177,13 +187,22 @@ async function buildEditor() {
 
   try {
     await fs.ensureDir(editorDir);
+    await fs.ensureDir(schemasDir);
 
-    // Generate and write token schema
-    console.log('Generating tokens.schema.json...');
-    const tokenSchema = await generateTokenSchema();
-    const schemaPath = path.join(editorDir, 'tokens.schema.json');
-    await fs.writeJson(schemaPath, tokenSchema, { spaces: 2 });
-    console.log(`  Written: ${schemaPath}`);
+    // Generate and write per-module schemas
+    console.log('Generating per-module schemas...');
+    const manifestPath = path.join(defaultsDir, 'manifest.json');
+    const manifest = await fs.readJson(manifestPath) as { modules: ManifestModule[] };
+
+    for (const module of manifest.modules) {
+      const tokenFilePath = path.join(defaultsDir, module.file);
+      const tokenData = await fs.readJson(tokenFilePath) as TokenData;
+
+      const moduleSchema = await generateModuleSchema(module, tokenData);
+      const schemaPath = path.join(schemasDir, `${module.key}.schema.json`);
+      await fs.writeJson(schemaPath, moduleSchema, { spaces: 2 });
+      console.log(`  Written: ${schemaPath}`);
+    }
 
     // Generate and write CSS custom data
     console.log('Generating zebkit.css-data.json...');
