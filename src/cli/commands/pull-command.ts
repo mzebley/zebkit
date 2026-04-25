@@ -1,0 +1,142 @@
+import path from 'path';
+import type { ZebkitConfig } from '../../scripts/config';
+
+export interface PullCommandDeps {
+  pathExists: (path: string) => Promise<boolean>;
+  readJson: (path: string) => Promise<any>;
+  writeJson: (path: string, data: any, options?: any) => Promise<void>;
+  ensureDir: (path: string) => Promise<void>;
+  readConfig: () => Promise<{ config: ZebkitConfig; path: string } | undefined>;
+  getZebkitDefaultsDir: () => string;
+  log: (message: string) => void;
+}
+
+async function countNewKeys(
+  defaultTokenData: Record<string, unknown>,
+  projectFilePath: string,
+  deps: Pick<PullCommandDeps, 'pathExists' | 'readJson'>
+): Promise<number> {
+  if (!(await deps.pathExists(projectFilePath))) {
+    return 0;
+  }
+
+  const projectFile = (await deps.readJson(projectFilePath)) as Record<string, any>;
+  const defaultData = { ...defaultTokenData };
+  delete (defaultData as any)._key;
+  delete (defaultData as any)._layer;
+
+  const projectTokens = projectFile[Object.keys(projectFile)[0]] || {};
+  let newKeysCount = 0;
+
+  for (const key of Object.keys(defaultData)) {
+    if (!(key in projectTokens)) {
+      newKeysCount++;
+    }
+  }
+
+  return newKeysCount;
+}
+
+async function mergeTokenFile(
+  defaultTokenData: Record<string, unknown>,
+  projectFilePath: string,
+  moduleKey: string,
+  deps: Pick<PullCommandDeps, 'readJson' | 'writeJson'>
+): Promise<void> {
+  const projectFile = (await deps.readJson(projectFilePath)) as Record<string, any>;
+  const defaultData = { ...defaultTokenData };
+  delete (defaultData as any)._key;
+  delete (defaultData as any)._layer;
+
+  const projectTokens = projectFile[moduleKey] || {};
+
+  for (const [key, value] of Object.entries(defaultData)) {
+    if (!(key in projectTokens)) {
+      projectTokens[key] = value;
+    }
+  }
+
+  projectFile[moduleKey] = projectTokens;
+  await deps.writeJson(projectFilePath, projectFile, { spaces: 2 });
+}
+
+export async function runPullCommand(deps: PullCommandDeps) {
+  deps.log('Syncing tokens...\n');
+
+  const configResult = await deps.readConfig();
+  if (!configResult) {
+    deps.log('No zebkit config found. Run `zebkit init` first.');
+    process.exit(1);
+  }
+
+  const { config, path: configPath } = configResult;
+  const customTokenPath = config.tokens?.customTokenPath;
+
+  if (!customTokenPath) {
+    deps.log('No customTokenPath set in config — nothing to pull into.');
+    process.exit(1);
+  }
+
+  const tokensDir = path.resolve(path.dirname(configPath), customTokenPath);
+  const defaultsDir = deps.getZebkitDefaultsDir();
+  const manifestPath = path.join(defaultsDir, 'manifest.json');
+
+  if (!(await deps.pathExists(manifestPath))) {
+    deps.log(`Manifest not found at ${manifestPath}. Run \`npm run build:defaults\` in zebkit.`);
+    process.exit(1);
+  }
+
+  await deps.ensureDir(tokensDir);
+
+  const manifest = (await deps.readJson(manifestPath)) as {
+    modules: Array<{ key: string; file: string }>;
+  };
+
+  const results: Array<{ file: string; status: 'added' | 'updated'; count?: number }> = [];
+
+  for (const mod of manifest.modules) {
+    const srcFile = path.join(defaultsDir, mod.file);
+    const destFile = path.join(tokensDir, mod.file);
+    const raw = (await deps.readJson(srcFile)) as Record<string, unknown>;
+    const { _key, _layer, ...defaultTokenData } = raw;
+
+    const fileExists = await deps.pathExists(destFile);
+
+    if (!fileExists) {
+      await deps.writeJson(destFile, { [mod.key]: defaultTokenData }, { spaces: 2 });
+      results.push({ file: mod.file, status: 'added' });
+    } else {
+      const newKeysCount = await countNewKeys(defaultTokenData, destFile, deps);
+
+      if (newKeysCount > 0) {
+        await mergeTokenFile(defaultTokenData, destFile, mod.key, deps);
+        results.push({ file: mod.file, status: 'updated', count: newKeysCount });
+      }
+    }
+  }
+
+  if (results.length === 0) {
+    deps.log('Already up to date.');
+    return;
+  }
+
+  const added = results.filter((r) => r.status === 'added');
+  const updated = results.filter((r) => r.status === 'updated');
+
+  const maxLen = Math.max(...results.map((r) => r.file.length), 0);
+
+  for (const result of added) {
+    const filename = result.file.replace('.json', '');
+    deps.log(`  + ${filename}.json${' '.repeat(Math.max(0, maxLen - result.file.length))} (new)`);
+  }
+
+  for (const result of updated) {
+    const filename = result.file.replace('.json', '');
+    deps.log(`  ~ ${filename}.json${' '.repeat(Math.max(0, maxLen - result.file.length))} (${result.count} new key${result.count === 1 ? '' : 's'} added)`);
+  }
+
+  deps.log('');
+  deps.log(
+    `${added.length} file${added.length === 1 ? '' : 's'} added, ${updated.length} file${updated.length === 1 ? '' : 's'} updated.`
+  );
+}

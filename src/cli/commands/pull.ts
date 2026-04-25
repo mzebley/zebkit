@@ -1,0 +1,36 @@
+import path from 'path';
+import fs from 'fs-extra';
+import chalk from 'chalk';
+import { getZebkitDefaultsDir } from '../resolve-package-root.js';
+import { loadZebkitConfig } from '../../scripts/config.js';
+import { runPullCommand } from './pull-command';
+
+export async function pull(options: { config?: string }) {
+  try {
+    return runPullCommand({
+      pathExists: fs.pathExists,
+      readJson: fs.readJson,
+      writeJson: fs.writeJson,
+      ensureDir: fs.ensureDir,
+      readConfig: async () => {
+        if (options.config) {
+          const resolved = path.resolve(options.config);
+          if (!(await fs.pathExists(resolved))) {
+            console.error(chalk.red(`Config file not found at ${resolved}.`));
+            process.exit(1);
+          }
+          const content = await fs.readFile(resolved, 'utf-8');
+          return { config: JSON.parse(content), path: resolved };
+        }
+        return loadZebkitConfig();
+      },
+      getZebkitDefaultsDir,
+      log: (message: string) => console.log(message),
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(chalk.red(`Error: ${error.message}`));
+    }
+    process.exit(1);
+  }
+}
