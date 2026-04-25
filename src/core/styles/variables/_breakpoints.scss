@@ -17,4 +17,7 @@ $breakpoints: (
 );
 
 // Resolved map used by generators — filtered when $active-breakpoints is set.
-$resolved: if($active-breakpoints != null, $active-breakpoints, $breakpoints);
+$resolved: $breakpoints;
+@if $active-breakpoints != null {
+    $resolved: $active-breakpoints;
+}
