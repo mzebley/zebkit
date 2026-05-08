@@ -1,17 +1,51 @@
 #!/usr/bin/env tsx
 /**
  * penpot:pull — Fetches design tokens from a Penpot file and writes them as
- * Zebkit-compatible JSON override files to dist/penpot-pull/.
+ * Zebkit-compatible JSON override files.
  *
- * Two modes:
- *   API mode  (default): calls the Penpot RPC API using PENPOT_ACCESS_TOKEN and
- *                        PENPOT_FILE_ID (or zebkit.config.json penpot.fileId).
- *   File mode (--file):  reads a token JSON file exported manually from Penpot.
+ * The pull command is the return leg of the sync loop: after designers have
+ * edited token values in Penpot, this script brings those edits back into the
+ * Zebkit build pipeline as customTokenPath override files.
  *
- * Usage:
+ * ── Modes ─────────────────────────────────────────────────────────────────────
+ *
+ * API mode (default)
+ *   Calls GET /api/rpc/command/get-file on the Penpot instance to fetch the
+ *   file's token data directly. Requires PENPOT_ACCESS_TOKEN and
+ *   PENPOT_FILE_ID in the environment (or penpot.fileId in zebkit.config.json).
+ *   If the API call fails (e.g. the Penpot instance uses transit+json and
+ *   rejects the application/json Accept header), the error message suggests
+ *   falling back to file mode.
+ *
+ * File mode (--file <path>)
+ *   Reads a token JSON file that was exported manually from Penpot
+ *   (Assets → Design Tokens → Export). Accepts both W3C DTCG format and the
+ *   Tokens Studio format that Penpot currently exports. No authentication is
+ *   required. This is the most reliable path until Penpot's API JSON support
+ *   is confirmed stable.
+ *
+ * ── Output ────────────────────────────────────────────────────────────────────
+ *
+ * One JSON file per module is written to dist/penpot-pull/ (or the path set
+ * via --out or penpot.pullOutputPath in zebkit.config.json). Each file is a
+ * flat TokenInterface map compatible with Zebkit's customTokenPath override
+ * mechanism. After reviewing the diff printed to stdout, point your config at
+ * the output directory:
+ *
+ *   "tokens": { "customTokenPath": "dist/penpot-pull" }
+ *
+ * ── Flags ─────────────────────────────────────────────────────────────────────
+ *
+ *   --file <path>  Read tokens from a locally exported JSON file instead of
+ *                  calling the Penpot API.
+ *
+ *   --out <dir>    Override the output directory (default: dist/penpot-pull).
+ *
+ * ── Usage ─────────────────────────────────────────────────────────────────────
+ *
  *   npm run penpot:pull
  *   npm run penpot:pull -- --file ./exported-tokens.json
- *   npm run penpot:pull -- --out ./my-output-dir
+ *   npm run penpot:pull -- --out ./token-overrides
  */
 
 import path from 'path';
@@ -24,6 +58,7 @@ import { gatherZebkitFiles } from '@token-scripts/gather-files';
 import { buildZebkitTokens } from '@token-scripts/compile-tokens';
 import type { DtcgRoot, TokensStudioRoot } from './types.js';
 
+/** Parses CLI flags from process.argv. */
 function parseArgs(): { filePath: string | undefined; outDir: string | undefined } {
   const args = process.argv.slice(2);
   const fileIdx = args.findIndex((a) => a === '--file');
@@ -33,6 +68,11 @@ function parseArgs(): { filePath: string | undefined; outDir: string | undefined
   return { filePath, outDir };
 }
 
+/**
+ * Reads and parses a locally exported Penpot token file.
+ * Supports any JSON file — DTCG or Tokens Studio format is detected and
+ * normalised downstream in dtcgToZebkit.
+ */
 async function loadFromFile(filePath: string): Promise<DtcgRoot | TokensStudioRoot> {
   const resolved = path.resolve(process.cwd(), filePath);
   if (!(await fs.pathExists(resolved))) {
@@ -41,6 +81,14 @@ async function loadFromFile(filePath: string): Promise<DtcgRoot | TokensStudioRo
   return fs.readJson(resolved) as Promise<DtcgRoot | TokensStudioRoot>;
 }
 
+/**
+ * Fetches token data from the Penpot RPC API.
+ *
+ * Penpot stores imported tokens under file.data.tokens keyed by set name.
+ * Returns undefined (with a helpful message) if the API call fails or if
+ * no tokens are found in the file — pull should degrade gracefully since
+ * the API token format is underdocumented and may change.
+ */
 async function loadFromApi(
   penpotConfig: { instanceUrl?: string; fileId?: string }
 ): Promise<DtcgRoot | TokensStudioRoot | undefined> {
@@ -65,7 +113,6 @@ async function loadFromApi(
     return undefined;
   }
 
-  // Penpot stores tokens in file.data.tokens (keyed by set name)
   const tokens = fileData.data?.tokens;
   if (!tokens || Object.keys(tokens).length === 0) {
     console.warn(
@@ -77,7 +124,8 @@ async function loadFromApi(
     return undefined;
   }
 
-  // Penpot wraps each set as a top-level key; reconstruct a DTCG-compatible root
+  // Penpot wraps each token set as a top-level key inside data.tokens.
+  // The shape is compatible with a DTCG/Tokens Studio root document.
   return tokens as unknown as DtcgRoot | TokensStudioRoot;
 }
 
@@ -110,6 +158,8 @@ async function main() {
   }
 
   // ── Transform to Zebkit ────────────────────────────────────────────────────
+  // dtcgToZebkit auto-detects format (DTCG vs Tokens Studio) and normalises
+  // before converting, so rawTokens can be either format.
   console.log(chalk.cyan('Transforming tokens to Zebkit format…'));
   const modules = dtcgToZebkit(rawTokens);
 
@@ -118,7 +168,10 @@ async function main() {
     process.exit(1);
   }
 
-  // ── Load source tokens for diff ────────────────────────────────────────────
+  // ── Compute diff vs source (best-effort) ──────────────────────────────────
+  // Compile the source tokens to produce a baseline for the diff summary.
+  // If this fails for any reason the pull still succeeds — the diff is purely
+  // informational and is not needed to write the override files.
   let diff: { added: number; changed: number; removed: number } | undefined;
   try {
     const { tokenFiles } = await gatherZebkitFiles(
@@ -135,7 +188,7 @@ async function main() {
     );
     diff = diffTokens(modules, sourceTokens);
   } catch {
-    // Diff is best-effort; don't fail the pull if source tokens can't be loaded
+    // Swallow — diff is best-effort
   }
 
   // ── Write override files ───────────────────────────────────────────────────
@@ -143,8 +196,10 @@ async function main() {
 
   let totalTokens = 0;
   for (const { key, tokens } of modules) {
-    const filePath = path.join(outputPath, `${key}.tokens.json`);
-    await fs.writeJson(filePath, tokens, { spaces: 2 });
+    // Each module is written as its own file so consumers can selectively
+    // apply individual modules via a customTokenPath directory scan.
+    const outFile = path.join(outputPath, `${key}.tokens.json`);
+    await fs.writeJson(outFile, tokens, { spaces: 2 });
     totalTokens += Object.keys(tokens).length;
   }
 

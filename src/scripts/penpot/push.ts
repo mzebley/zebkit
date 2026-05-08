@@ -1,12 +1,26 @@
 #!/usr/bin/env tsx
 /**
  * penpot:push — Compiles all Zebkit tokens and writes a W3C DTCG-compliant
- * JSON file ready to import into Penpot via File → Import tokens.
+ * JSON file ready to import into Penpot via Assets → Design Tokens → Import.
  *
- * Usage:
+ * The script re-uses the standard Zebkit token pipeline (gatherZebkitFiles +
+ * buildZebkitTokens) so it always reflects whatever component selection,
+ * custom overrides, and theme are configured in zebkit.config.json. The
+ * compiled token map is then converted to DTCG format by transform/to-dtcg.ts
+ * and written to dist/penpot-push/zebkit-tokens.tokens.json.
+ *
+ * ── Flags ─────────────────────────────────────────────────────────────────────
+ *
+ *   --dry-run   Print the DTCG JSON to stdout (truncated) without writing any
+ *               files. Useful for verifying the output format before importing.
+ *
+ *   --out <dir> Override the default output directory (dist/penpot-push).
+ *
+ * ── Usage ─────────────────────────────────────────────────────────────────────
+ *
  *   npm run penpot:push
  *   npm run penpot:push -- --dry-run
- *   npm run penpot:push -- --out ./my-output-dir
+ *   npm run penpot:push -- --out ./design-exports
  */
 
 import path from 'path';
@@ -21,6 +35,7 @@ import { zebkitToDtcg, totalTokensCount } from './transform/to-dtcg.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+/** Parses CLI flags from process.argv. */
 function parseArgs(): { dryRun: boolean; outDir: string | undefined } {
   const args = process.argv.slice(2);
   const dryRun = args.includes('--dry-run');
@@ -33,6 +48,8 @@ async function main() {
   const { dryRun, outDir: outDirOverride } = parseArgs();
 
   // ── Load config ────────────────────────────────────────────────────────────
+  // Config is optional; the script works without zebkit.config.json using
+  // sensible defaults (all core tokens, no custom overrides).
   const configResult = await loadZebkitConfig();
   const config = configResult?.config ?? {};
   const penpotConfig = config.penpot ?? {};
@@ -42,6 +59,8 @@ async function main() {
     outDirOverride ??
     path.resolve(process.cwd(), 'dist/penpot-push');
 
+  // Respect component selection from tokens config; default to core-only when
+  // no components are listed and includeAllComponents is not set.
   const selectedComponents: string[] = tokensConfig.selectedComponents ?? [];
 
   // ── Gather token files ─────────────────────────────────────────────────────
@@ -56,6 +75,8 @@ async function main() {
   }
 
   // ── Compile tokens ─────────────────────────────────────────────────────────
+  // exportFile=false suppresses the normal JSON/TS/JS token artifacts; we only
+  // need the in-memory token map to feed into the DTCG transform.
   console.log(chalk.cyan('Compiling tokens…'));
   const { tokens, layers } = await buildZebkitTokens(
     'penpot-push',
@@ -64,7 +85,7 @@ async function main() {
     tokensConfig.customTokenPath,
     [],
     {},
-    false // do not write intermediate files
+    false
   );
 
   if (Object.keys(tokens).length === 0) {
@@ -73,6 +94,8 @@ async function main() {
   }
 
   // ── Transform to DTCG ──────────────────────────────────────────────────────
+  // penpotConfig.skipTypes lets callers exclude additional token types beyond
+  // the built-in skip list (utility, setting, asset).
   console.log(chalk.cyan('Transforming to W3C DTCG format…'));
   const dtcg = zebkitToDtcg(tokens, layers, {
     skipTypes: penpotConfig.skipTypes,
@@ -81,6 +104,7 @@ async function main() {
   const tokenCount = totalTokensCount(dtcg);
   const groupCount = Object.keys(dtcg).filter((k) => k !== '$metadata').length;
 
+  // ── Dry run ────────────────────────────────────────────────────────────────
   if (dryRun) {
     console.log(chalk.yellow('\n──── DRY RUN — DTCG output (truncated) ────'));
     const preview = JSON.stringify(dtcg, null, 2).slice(0, 4000);
