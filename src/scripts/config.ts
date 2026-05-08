@@ -51,9 +51,21 @@ export type ComponentsConfig = {
   jsOutput?: string;
 };
 
+export type PenpotConfig = {
+  /** Penpot instance URL. Defaults to https://design.penpot.app */
+  instanceUrl?: string;
+  /** Target Penpot file UUID. Overrides the PENPOT_FILE_ID env var. */
+  fileId?: string;
+  /** Output path for pulled token override files. Defaults to ./dist/penpot-pull */
+  pullOutputPath?: string;
+  /** Additional Zebkit token types to exclude from the push output. */
+  skipTypes?: string[];
+};
+
 export type ZebkitConfig = {
   tokens?: TokensConfig;
   components?: ComponentsConfig;
+  penpot?: PenpotConfig;
 };
 
 const CONFIG_FILE_NAMES = [

@@ -38,7 +38,9 @@
     "prepare": "npm run build:defaults && npm run build:editor && npm run build:cli && npm run build:components",
     "prepublishOnly": "npm run build:defaults && npm run build:editor && npm run build:cli && npm run build:components",
     "docs:dev": "cd docs && npm run dev",
-    "docs:build": "cd docs && npm run build"
+    "docs:build": "cd docs && npm run build",
+    "penpot:push": "tsx -r tsconfig-paths/register src/scripts/penpot/push.ts",
+    "penpot:pull": "tsx -r tsconfig-paths/register src/scripts/penpot/pull.ts"
   },
   "repository": {
     "type": "git",
