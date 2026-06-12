@@ -1,0 +1,137 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Layout utilities",
+  "key": "layout",
+  "description": "Display, positioning scheme, flexbox alignment/direction, and the visually-hidden accessibility pattern.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "visually-hidden",
+      "description": "Hides content visually while keeping it available to assistive technology.",
+      "guidance": [
+        "Use for screen-reader-only text (icon button labels, skip links at rest, table caption context).",
+        "Never use on focusable elements unless focus reveals them — a focused but invisible element strands keyboard users."
+      ],
+      "a11y": "Core accessibility primitive: content stays in the accessibility tree.",
+      "source": "src/core/styles/utilities/_layout.scss",
+      "properties": ["clip", "clip-path", "height", "overflow", "position", "white-space", "width"],
+      "classes": ["visually-hidden"],
+      "generator": {
+        "declarations": {
+          "visually-hidden": {
+            "clip": "rect(0 0 0 0)",
+            "clip-path": "inset(50%)",
+            "height": "1px",
+            "overflow": "hidden",
+            "position": "absolute",
+            "white-space": "nowrap",
+            "width": "1px"
+          }
+        }
+      }
+    },
+    {
+      "name": "position",
+      "description": "Sets the positioning scheme of an element.",
+      "guidance": [
+        "Pair position-absolute/fixed/sticky with offset utilities (top-*, left-*) from the position partial.",
+        "Prefer position-sticky over position-fixed for in-flow pinned headers — it reserves layout space."
+      ],
+      "source": "src/core/styles/utilities/_layout.scss",
+      "properties": ["position"],
+      "pattern": {
+        "base": "position",
+        "values": ["static", "relative", "fixed", "sticky", "unset", "absolute"]
+      }
+    },
+    {
+      "name": "display",
+      "description": "Sets the display box type of an element.",
+      "guidance": [
+        "display-none removes content from the accessibility tree; use visually-hidden when screen readers should still announce it."
+      ],
+      "source": "src/core/styles/utilities/_layout.scss",
+      "properties": ["display"],
+      "pattern": {
+        "base": "display",
+        "values": ["flex", "inline-flex", "block", "inline-block", "inline", "none"]
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    },
+    {
+      "name": "flex-direction",
+      "description": "Sets the main axis direction of a flex container.",
+      "source": "src/core/styles/utilities/_layout.scss",
+      "properties": ["flex-direction"],
+      "pattern": {
+        "base": "flex-direction",
+        "values": ["row", "row-reverse", "column", "column-reverse"]
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    },
+    {
+      "name": "align-items",
+      "description": "Aligns flex children on the cross axis.",
+      "source": "src/core/styles/utilities/_layout.scss",
+      "properties": ["align-items"],
+      "pattern": {
+        "base": "align-items",
+        "values": ["start", "end", "center", "baseline", "stretch"]
+      },
+      "generator": {
+        "valueMap": {
+          "start": "flex-start",
+          "end": "flex-end"
+        }
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    },
+    {
+      "name": "align-self",
+      "description": "Overrides the container's align-items for a single flex child.",
+      "source": "src/core/styles/utilities/_layout.scss",
+      "properties": ["align-self"],
+      "pattern": {
+        "base": "align-self",
+        "values": ["auto", "start", "end", "center", "baseline", "stretch"]
+      },
+      "generator": {
+        "valueMap": {
+          "start": "flex-start",
+          "end": "flex-end"
+        }
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    },
+    {
+      "name": "justify-content",
+      "description": "Distributes flex children along the main axis.",
+      "source": "src/core/styles/utilities/_layout.scss",
+      "properties": ["justify-content"],
+      "pattern": {
+        "base": "justify-content",
+        "values": ["start", "end", "center", "between", "around", "evenly"]
+      },
+      "generator": {
+        "valueMap": {
+          "start": "flex-start",
+          "end": "flex-end",
+          "between": "space-between",
+          "around": "space-around",
+          "evenly": "space-evenly"
+        }
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    }
+  ]
+}

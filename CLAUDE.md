@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**Read [VISION.md](VISION.md) before making design decisions.** It is the project manifesto: the core beliefs, principles, and anti-goals that every architectural and design choice must trace back to. Its "For AI agents and tooling" section is binding.
+
 ## Build & Development Commands
 
 ```bash

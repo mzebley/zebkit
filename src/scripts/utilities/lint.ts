@@ -46,10 +46,8 @@ const IGNORED_PARTIALS = new Set(["_generators.scss", "_index.scss"]);
 const LEGACY_PARTIALS = new Set([
   "_border.scss",
   "_color.scss",
-  "_cursor.scss",
   "_flex.scss",
   "_font.scss",
-  "_layout.scss",
   "_object.scss",
   "_pointer.scss",
   "_position.scss",
