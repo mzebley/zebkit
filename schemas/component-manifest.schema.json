@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uswds.plus/schemas/component-manifest.schema.json",
+  "title": "USWDS+ Component Manifest",
+  "description": "Canonical, hand-authored contract for one component. Lives beside tokenTemplate.ts / tokenSchema.ts / styles.scss. Validated against code by lint-manifest; consumed by the Figma bridge, the Claude Design skill, docs, editor support, and CMS integrations.",
+  "type": "object",
+  "required": ["name", "key", "status", "semantics", "markup", "tokens"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": { "type": "string", "description": "Human-readable name, e.g. 'Button'." },
+    "key": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "description": "Module + token group key. Must match the module's tokenTemplate export." },
+    "status": { "enum": ["stable", "pilot", "deprecated"] },
+    "semantics": {
+      "type": "object",
+      "required": ["description"],
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string", "description": "What this component IS, in one or two sentences. Written for both humans and the Claude Design skill." },
+        "nativeElement": { "type": "string", "description": "The semantic HTML element at the component's core, e.g. 'button', 'dialog'." },
+        "role": { "type": ["string", "null"], "description": "Required ARIA role, if the native element doesn't supply it." },
+        "guidance": { "type": "array", "items": { "type": "string" }, "description": "Usage rules a design tool or AI must respect ('never use for navigation')." }
+      }
+    },
+    "markup": {
+      "type": "object",
+      "required": ["baseClass"],
+      "additionalProperties": false,
+      "properties": {
+        "baseClass": { "type": "string", "description": "Canonical USWDS-compatible class, e.g. 'usa-button'." },
+        "elementClasses": { "type": "array", "items": { "type": "string" }, "description": "Child-element classes, e.g. 'usa-button-group__item'." },
+        "example": { "type": "string", "description": "Minimal correct HTML." }
+      }
+    },
+    "webComponent": {
+      "type": "object",
+      "required": ["tag", "attributes"],
+      "additionalProperties": false,
+      "description": "Omit entirely for modules with no web component yet. The lint cross-checks every field against the element source; a standard custom-elements.json is generated from this section.",
+      "properties": {
+        "tag": { "type": "string", "pattern": "^[a-z][a-z0-9]*-[a-z0-9-]+$" },
+        "module": { "type": "string", "description": "Package import path, e.g. 'aem-uswds-plus/web-components/button'." },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["type"],
+            "additionalProperties": false,
+            "properties": {
+              "type": { "enum": ["string", "boolean", "enum"] },
+              "values": { "type": "array", "items": { "type": "string" }, "description": "Required when type is 'enum'. Must match the .types.ts union." },
+              "default": { "type": ["string", "boolean"] },
+              "description": { "type": "string" },
+              "classMap": {
+                "type": "object",
+                "additionalProperties": { "type": ["string", "null"] },
+                "description": "enum value -> CSS class applied (null = no class). Must match the element's class map."
+              },
+              "requiredWhen": { "type": "string", "description": "Condition under which this attribute becomes required, e.g. 'icon-only'." },
+              "a11y": { "type": "boolean", "description": "True when the attribute exists for accessibility." }
+            }
+          }
+        },
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "kind": { "enum": ["icon", "content", "actions"] },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "events": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "states": {
+      "type": "array",
+      "items": { "enum": ["default", "hover", "active", "focus", "visited", "disabled", "checked", "error", "expanded", "selected"] },
+      "description": "Interactive states the component styles. Tokens follow the '<token>-<state>' convention for each."
+    },
+    "variants": {
+      "type": "object",
+      "description": "Keyed by variant value (must be a subset of webComponent.attributes.variant.values when present). tokenPrefix declares the convention: tokens for this variant are '<tokenPrefix>-*' keys in the token template. null = variant restyles via existing default tokens only.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tokenPrefix": { "type": ["string", "null"] },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "required": ["group"],
+      "additionalProperties": false,
+      "properties": {
+        "group": { "type": "string", "description": "Token template key this component draws from. Must equal an existing tokenTemplate export (usually = key)." }
+      }
+    },
+    "a11y": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "forwarded": { "type": "array", "items": { "type": "string" }, "description": "ARIA attributes the web component forwards to the native element." },
+        "rules": { "type": "array", "items": { "type": "string" }, "description": "Hard requirements ('icon-only requires an accessible name')." }
+      }
+    },
+    "figma": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "componentSetName": { "type": "string" },
+        "page": { "type": "string" },
+        "variantProperties": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "array"],
+            "description": "Either '@attributes.<name>' to mirror an attribute enum (linted for equality), or an explicit value list for Figma-only axes like 'state'."
+          }
+        },
+        "componentProperties": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["type"],
+            "additionalProperties": false,
+            "properties": {
+              "type": { "enum": ["text", "boolean", "instance-swap"] },
+              "attribute": { "type": "string", "description": "Web-component attribute this Figma property round-trips to." },
+              "default": {}
+            }
+          }
+        },
+        "anatomy": { "type": "array", "items": { "type": "string" }, "description": "Ordered Figma layer names for MCP generation." }
+      }
+    },
+    "handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contentModel": { "enum": ["attribute-or-inline-label", "named-slots", "light-dom-children"] },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

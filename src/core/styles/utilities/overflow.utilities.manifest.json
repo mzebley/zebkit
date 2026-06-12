@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Overflow utilities",
+  "key": "overflow",
+  "description": "Controls how content that exceeds an element's box is handled, on both axes or one.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "overflow",
+      "description": "Sets overflow on both axes.",
+      "guidance": [
+        "Prefer overflow-auto over overflow-scroll so scrollbars only appear when needed.",
+        "overflow-hidden clips content and can hide focus indicators — verify keyboard focus stays visible."
+      ],
+      "source": "src/core/styles/utilities/_overflow.scss",
+      "properties": ["overflow"],
+      "pattern": {
+        "base": "overflow",
+        "values": ["auto", "hidden", "visible", "scroll", "clip"]
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    },
+    {
+      "name": "overflow-x",
+      "description": "Sets overflow on the horizontal axis only.",
+      "source": "src/core/styles/utilities/_overflow.scss",
+      "properties": ["overflow-x"],
+      "pattern": {
+        "base": "overflow-x",
+        "values": ["auto", "hidden", "visible", "scroll", "clip"]
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    },
+    {
+      "name": "overflow-y",
+      "description": "Sets overflow on the vertical axis only.",
+      "source": "src/core/styles/utilities/_overflow.scss",
+      "properties": ["overflow-y"],
+      "pattern": {
+        "base": "overflow-y",
+        "values": ["auto", "hidden", "visible", "scroll", "clip"]
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    }
+  ]
+}

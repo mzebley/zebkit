@@ -1,5 +1,19 @@
+@use 'sass:map';
 @use 'core/styles/variables/breakpoints' as vars;
 @use 'core/styles/variables/prefix' as prefix;
+
+/// Wrap content in a min-width media query for a named breakpoint.
+/// No-ops when the breakpoint is filtered out by $active-breakpoints, so
+/// generated utility partials stay declarative while consumer config still
+/// controls which responsive variants compile.
+/// @param {String} $name - Breakpoint key from vars.$breakpoints
+@mixin from-breakpoint($name) {
+  @if map.has-key(vars.$resolved, $name) {
+    @media (min-width: #{map.get(vars.$resolved, $name)}) {
+      @content;
+    }
+  }
+}
 
 /// Generic utility class generator
 /// Creates classes like .overflow-hidden, .cursor-pointer
