@@ -12,7 +12,7 @@
         "Use 'collapse' on a table cell, row, or column to hide it without the browser having to rerender the entire table.",
         "You can reveal a child element with 'visibility:visible' even if the parent is 'hidden'"
       ],
-      "source": "src/core/styles/utility-classes/visibility.scss.scss",
+      "source": "src/core/styles/utility-classes/visibility.scss",
       "properties": ["visibility"],
       "pattern": {
         "base": "visibility",
@@ -30,7 +30,7 @@
         "Never use on focusable elements unless focus reveals them as a focused but invisible element can strand keyboard users."
       ],
       "a11y": "Core accessibility primitive: content stays in the accessibility tree.",
-      "source": "src/core/styles/utility-classes/visibility.scss.scss",
+      "source": "src/core/styles/utility-classes/visibility.scss",
       "properties": ["clip", "clip-path", "height", "overflow", "position", "white-space", "width"],
       "classes": ["visually-hidden"],
       "generator": {
