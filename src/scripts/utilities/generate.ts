@@ -17,6 +17,7 @@ import {
   type UtilityFamily,
   type UtilityManifest,
 } from "./expand.js";
+import { loadTokenModules, resolvePatternValues } from "./token-source.js";
 
 type SourcePlan = {
   source: string;
@@ -60,12 +61,13 @@ function patternEntries(family: UtilityFamily): PatternEntry[] {
 
   for (const edge of edges) {
     const stem = edge ? `${pattern.base}-${edge}` : pattern.base;
-    for (const value of pattern.values) {
+    for (const value of pattern.values ?? []) {
       const entry = { className: `${stem}-${value}`, edge, value, negative: false };
       entries.push(entry);
       byClass.set(entry.className, entry);
     }
-    for (const value of pattern.negativeValues ?? []) {
+    const negatives = Array.isArray(pattern.negativeValues) ? pattern.negativeValues : [];
+    for (const value of negatives) {
       const entry = { className: `${stem}-neg-${value}`, edge, value, negative: true };
       entries.push(entry);
       byClass.set(entry.className, entry);
@@ -91,7 +93,8 @@ function resolveValue(
   const mappedValue =
     valueMap?.[entry.className] ??
     (entry.negative ? valueMap?.[`neg-${entry.value}`] : undefined) ??
-    valueMap?.[entry.value];
+    valueMap?.[entry.value] ??
+    family.pattern?.literals?.[entry.value];
   if (mappedValue !== undefined) {
     return { css: mappedValue, verbatim: true };
   }
@@ -243,12 +246,14 @@ function renderSourceFile(plan: SourcePlan): string {
 async function main(): Promise<void> {
   const rootDir = process.cwd();
   const manifests = globSync(MANIFEST_GLOB, { cwd: rootDir }).sort();
+  const tokenModules = await loadTokenModules(rootDir);
 
   const bySource = new Map<string, SourcePlan>();
   for (const manifestPath of manifests) {
     const manifest = (await fs.readJson(path.resolve(rootDir, manifestPath))) as UtilityManifest;
     for (const family of manifest.families) {
       family.layer = family.layer ?? manifest.layer;
+      resolvePatternValues(family, tokenModules);
       for (const source of [family.source].flat()) {
         const plan = bySource.get(source) ?? {
           source,

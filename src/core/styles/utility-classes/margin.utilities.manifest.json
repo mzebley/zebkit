@@ -1,0 +1,102 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Margin utilities",
+  "key": "margin",
+  "description": "Dictates spacing outside of the defined border of an element, separating it from neighboring elements.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "margin",
+      "description": "Sets the empty space around an element.",
+      "guidance": [
+        "'block' margin values have no effect on elements with 'inline' display, they must be set to something like 'inline-block'",
+        "Zebkit uses logical margin operators (inline/block) for improved international accessibility. 'block' is vertical, 'inline' is horizontal."
+      ],
+      "source": "src/core/styles/utility-classes/margin.scss",
+      "properties": [
+        "margin",
+        "margin-block",
+        "margin-block-start",
+        "margin-block-end",
+        "margin-inline",
+        "margin-inline-start",
+        "margin-inline-end"
+      ],
+      "tokens": {
+        "group": "spacing",
+        "varPrefix": "spacing",
+        "types": [
+          "spacing",
+          "rootSize"
+        ]
+      },
+      "pattern": {
+        "base": "margin",
+        "edges": [
+          "block",
+          "inline",
+          "block-start",
+          "block-end",
+          "inline-start",
+          "inline-end"
+        ],
+        "negativeValues": true,
+        "literals": {
+          "auto": "auto",
+          "unset": "unset"
+
+        },
+        "exclude": [
+          "page-padding-block",
+          "page-padding-inline",
+          "section-margin-block",
+          "section-margin-inline",
+          "section",
+          "aside",
+          "card",
+          "mobile",
+          "mobile-lg",
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      },
+      "generator": {
+        "edgeProperties": {
+          "": [
+            "margin"
+          ],
+          "block": [
+            "margin-block"
+          ],
+          "inline": [
+            "margin-inline"
+          ],
+          "inline-start": [
+            "margin-inline-start"
+          ],
+          "inline-end": [
+            "margin-inline-end"
+          ],
+          "block-start": [
+            "margin-block-start"
+          ],
+          "block-end": [
+            "margin-block-end"
+          ]
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    }
+  ]
+}

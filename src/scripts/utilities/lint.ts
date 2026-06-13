@@ -28,7 +28,7 @@ import path from "node:path";
 import chalk from "chalk";
 import { globSync } from "glob";
 import Ajv from "ajv/dist/2020.js";
-import { loadTokenModules } from "./token-source.js";
+import { loadTokenModules, resolvePatternValues } from "./token-source.js";
 import { BREAKPOINTS, MANIFEST_GLOB, expandFamily, type UtilityFamily } from "./expand.js";
 
 type Finding = { rule: string; file: string; subject: string; message: string };
@@ -112,6 +112,27 @@ async function main() {
       familyCount++;
       const subject = `${subjectBase}.${family.name}`;
 
+      // Resolve pattern value axes (derive omitted values, mirror
+      // negativeValues: true, apply exclude) in place, so the rest of the lint
+      // and the generator see the same concrete lists. No-op when no tokens.
+      resolvePatternValues(family, tokenModules);
+
+      if (family.pattern) {
+        // A pattern family with no values that cannot be auto-derived emits
+        // nothing — flag the structurally-invalid cases (an unknown tokens.group
+        // is reported separately below, so don't double-flag it here).
+        if (!family.pattern.values && (!family.tokens || family.tokens.edgeInToken)) {
+          findings.push({ rule: "U2", file, subject, message: `pattern.values is required unless the family binds a token group (without edgeInToken) to derive them from.` });
+        } else if (Array.isArray(family.pattern.values) && family.pattern.values.length === 0) {
+          findings.push({ rule: "U2", file, subject, message: `pattern resolves to no values — check tokens.types and pattern.exclude.` });
+        }
+        // negativeValues: true mirrors the positives off the token group, so it
+        // needs the same binding as deriving values.
+        if (family.pattern.negativeValues === true && (!family.tokens || family.tokens.edgeInToken)) {
+          findings.push({ rule: "U2", file, subject, message: `pattern.negativeValues: true requires a token group bound without edgeInToken.` });
+        }
+      }
+
       // U2 — family integrity
       if (familyNames.has(family.name)) {
         findings.push({ rule: "U2", file, subject, message: `Family name '${family.name}' is already declared in ${familyNames.get(family.name)}.` });
@@ -125,21 +146,36 @@ async function main() {
         } else if (family.pattern && !family.tokens.edgeInToken) {
           const valueMap = family.generator?.valueMap ?? {};
           const allowedTypes = family.tokens.types ? new Set(family.tokens.types) : undefined;
-          for (const value of family.pattern.values) {
+          const literals = family.pattern.literals ?? {};
+          for (const value of family.pattern.values ?? []) {
             if (valueMap[value] !== undefined) continue; // valueMap entries are literal CSS, exempt
+            if (literals[value] !== undefined) continue; // literals are non-token by design
             if (!moduleKeys.has(value)) {
               findings.push({ rule: "U2", file, subject, message: `pattern value '${value}' is not a token key in module '${family.tokens.group}'.` });
             } else if (allowedTypes && !allowedTypes.has(moduleKeys.get(value)!)) {
               findings.push({ rule: "U2", file, subject, message: `pattern value '${value}' has type '${moduleKeys.get(value)}'; this family only allows token type(s) [${family.tokens.types!.join(", ")}]. Map it in generator.valueMap to use it as a literal.` });
             }
           }
-          for (const value of family.pattern.negativeValues ?? []) {
+          const negatives = Array.isArray(family.pattern.negativeValues) ? family.pattern.negativeValues : [];
+          for (const value of negatives) {
             const negKey = `neg-${value}`;
             if (valueMap[negKey] !== undefined) continue;
             if (!moduleKeys.has(negKey)) {
               findings.push({ rule: "U2", file, subject, message: `negative value '${value}' has no '${negKey}' token in module '${family.tokens.group}'.` });
             } else if (allowedTypes && !allowedTypes.has(moduleKeys.get(negKey)!)) {
               findings.push({ rule: "U2", file, subject, message: `negative value '${value}' (token '${negKey}') has type '${moduleKeys.get(negKey)}'; this family only allows token type(s) [${family.tokens.types!.join(", ")}].` });
+            }
+          }
+          // exclude entries must name real tokens, else a typo silently removes nothing.
+          for (const value of family.pattern.exclude ?? []) {
+            if (!moduleKeys.has(value)) {
+              findings.push({ rule: "U2", file, subject, message: `exclude value '${value}' is not a token key in module '${family.tokens.group}'.` });
+            }
+          }
+          // A literal that shares a token's name would silently shadow it with verbatim CSS.
+          for (const value of Object.keys(literals)) {
+            if (moduleKeys.has(value)) {
+              findings.push({ rule: "U2", file, subject, message: `literal '${value}' shadows a token of the same name in module '${family.tokens.group}'; rename the literal or drop it.` });
             }
           }
         }
@@ -162,7 +198,8 @@ async function main() {
         const vocab = new Set<string>([
           ...(family.classes ?? []),
           ...(family.pattern?.values ?? []),
-          ...(family.pattern?.negativeValues ?? []).map((v) => `neg-${v}`),
+          ...(Array.isArray(family.pattern?.negativeValues) ? family.pattern!.negativeValues : []).map((v) => `neg-${v}`),
+          ...Object.keys(family.pattern?.literals ?? {}),
           ...Object.keys(family.pattern?.aliases ?? {}),
         ]);
         for (const key of Object.keys(family.valueTiers)) {

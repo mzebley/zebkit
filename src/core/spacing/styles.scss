@@ -17,12 +17,6 @@
   @include spacing-utils.generate-size-media-queries(min-width, spacing-vars.$size-values);
   @include spacing-utils.generate-size-media-queries(max-width, spacing-vars.$size-values);
 
-  // Usage: Generate spacing classes and breakpoint-specific classes
-  @include spacing-utils.generate-spacing-classes(margin, spacing-vars.$spacing-values);
-  @include spacing-utils.generate-spacing-classes(padding, spacing-vars.$spacing-values);
-  @include spacing-utils.generate-spacing-media-queries(margin, spacing-vars.$spacing-values);
-  @include spacing-utils.generate-spacing-media-queries(padding, spacing-vars.$spacing-values);
-
   // Generate positioning classes ( .top-05, .left-5, etc)
   @include position-utils.generate-position-classes(spacing-vars.$spacing-values);
   @include position-utils.generate-position-media-queries(spacing-vars.$spacing-values);

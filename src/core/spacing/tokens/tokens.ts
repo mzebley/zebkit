@@ -21,7 +21,7 @@ const tokens = {
   },
   "neg-15": {
     value: `-15rem`,
-    type: "utility",
+    type: "rootSize",
     description:
       "Extremely large negative spacing (major overlap or pull effects).",
     a11y: true,

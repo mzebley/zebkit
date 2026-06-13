@@ -30,8 +30,22 @@ export type UtilityFamily = {
     base: string;
     edges?: string[];
     edgeRequired?: boolean;
-    values: string[];
-    negativeValues?: string[];
+    // Optional: when omitted and `tokens` is bound (without edgeInToken), the
+    // value list is auto-derived from the token group (see deriveValuesFromTokens
+    // in token-source.ts). When present, it is the source of truth — a limiter
+    // the lint still checks against the token group.
+    values?: string[];
+    // string[] = explicit list; true = mirror every resolved positive value
+    // that has a matching neg-<value> token (resolved in token-source.ts).
+    negativeValues?: string[] | boolean;
+    // Token values to drop from both axes after derivation — lets a family take
+    // the whole group minus a few keys instead of enumerating every wanted one.
+    exclude?: string[];
+    // Extra non-token values mapped to verbatim CSS (e.g. { auto: "auto" }).
+    // Added to the positive axis alongside the token scale; they flow through
+    // edges / edgeProperties / modifiers but skip token resolution and negative
+    // mirroring. Resolved in token-source.ts, emitted verbatim in generate.ts.
+    literals?: Record<string, string>;
     aliases?: Record<string, string>;
   };
   tokens?: {
@@ -87,8 +101,9 @@ export function expandFamily(family: UtilityFamily): Expansion {
 
     for (const edge of edges) {
       const stem = edge ? `${pattern.base}-${edge}` : pattern.base;
-      for (const value of pattern.values) core.add(`${stem}-${value}`);
-      for (const value of pattern.negativeValues ?? []) core.add(`${stem}-neg-${value}`);
+      for (const value of pattern.values ?? []) core.add(`${stem}-${value}`);
+      const negatives = Array.isArray(pattern.negativeValues) ? pattern.negativeValues : [];
+      for (const value of negatives) core.add(`${stem}-neg-${value}`);
     }
 
     for (const [alias, target] of Object.entries(pattern.aliases ?? {})) {

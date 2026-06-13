@@ -64,15 +64,6 @@
     margin-inline-end: var(--zbk-spacing-section-margin-inline);
 }
 
-
-// Usage: Generate spacing classes and breakpoint-specific classes
-@include spacing-utils.generate-spacing-classes(margin, spacing-vars.$semantic-spacing-values);
-@include spacing-utils.generate-spacing-classes(padding, spacing-vars.$semantic-spacing-values);
-@include spacing-utils.generate-spacing-classes(gap, spacing-vars.$semantic-spacing-values, ('':''));
-@include spacing-utils.generate-spacing-media-queries(margin, spacing-vars.$semantic-spacing-values);
-@include spacing-utils.generate-spacing-media-queries(padding, spacing-vars.$semantic-spacing-values);
-@include spacing-utils.generate-spacing-media-queries(gap, spacing-vars.$semantic-spacing-values, ('':''));
-
 // Generate semantic positioning classes ( .top-xs, .left-lg, etc)
 @include position-utils.generate-position-classes(spacing-vars.$semantic-spacing-values);
 @include position-utils.generate-position-media-queries(spacing-vars.$semantic-spacing-values);

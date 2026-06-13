@@ -19,7 +19,7 @@ Hand-authored JSON contracts that are the **single source of truth** for zebkit'
 ## Lint rules
 
 - **U1** — manifest validates against the schema.
-- **U2** — integrity: family names unique across all manifests; `tokens.group` is a real token module key; every `pattern.values` entry is a real token key in that module (and `negativeValues` have `neg-*` tokens); breakpoints and layers are known; `source` files exist; aliases target real classes.
+- **U2** — integrity: family names unique across all manifests; `tokens.group` is a real token module key; every `pattern.values` entry is a real token key in that module (and `negativeValues` have `neg-*` tokens); a pattern family that omits `values` can derive them (bound `tokens`, not `edgeInToken`); breakpoints and layers are known; `source` files exist; aliases target real classes.
 - **U3** — bidirectional diff: every class the grammar predicts exists in the source SCSS, and every class in the SCSS is claimed by a family. `knownExceptions` absorb documented irregularities.
 - **U4** — no class defined in more than one covered file.
 - **U5** — every `src/core/styles/utilities/_*.scss` partial is covered by a manifest (or allowlisted in `LEGACY_PARTIALS`).
@@ -74,8 +74,11 @@ Zebkit prefers **logical edges** (`block`, `inline-start`, ...) over physical (`
 ```
 
 - `group` = the token module's exported `key` (`src/core/spacing/tokens/tokens.ts`). The lint checks every pattern value is a key in that module. Modules that share a `key` are merged into one group (core/spacing + semantic/spacing both export `"spacing"`, so the group is their union).
+- **`pattern.values` is optional when `tokens` is bound.** Omit it and the value list is auto-derived from the whole group (filtered to `tokens.types` when set, `neg-*` keys excluded) — so it can never drift when a token is added. Set `values` only when you want a deliberate **subset/limiter** (e.g. `margin` and `gap` stop well short of the full spacing scale); it's then the source of truth, still lint-checked against the group. Required for keyword (no-`tokens`) families and `edgeInToken` families.
+- **`pattern.exclude: ["page-padding-block", ...]`** drops specific token values from both axes after resolution. Use it to take the whole group *minus a few* keys instead of enumerating every wanted value. Each entry must be a real token key (the lint flags typos).
+- **`pattern.literals: { "auto": "auto" }`** adds non-token values to the positive axis, mapped to verbatim CSS — so one token-driven family can also emit keyword classes (`.margin-auto`, `.margin-inline-auto`, ...) without a second family. They flow through the family's `edges`/`edgeProperties`/modifiers like any value, but skip token resolution and negative mirroring (no `.margin-neg-auto`). Bake in `!important` if needed; a literal may not share a token's name (the lint flags the shadow). This is the clean way to mix hardcoded values into an auto-derived family.
 - `varPrefix` = what follows `--zbk-` in the emitted var: value `md` -> `margin-block: var(--zbk-spacing-md)` (written as `var(--#{prefix.$cssVar}-spacing-md)` in SCSS).
-- `negativeValues: ["5"]` consumes `--zbk-spacing-neg-5` — zebkit's negative tokens are first-class.
+- `negativeValues: ["5"]` consumes `--zbk-spacing-neg-5` — zebkit's negative tokens are first-class. **`negativeValues: true`** auto-mirrors: it emits a negative for every resolved positive value that has a matching, type-allowed `neg-<value>` token (values without one — named sizes, `0` — are skipped). So `margin` can enable negatives in one line, while `padding` just omits it. Requires `tokens` bound without `edgeInToken`.
 - `edgeInToken: true` when the edge is part of the token name (`varPrefix-edge-value`).
 - `types: ["sizing"]` restricts valid values to token keys whose declared `type` is in the list. Use when one group mixes purposes: the spacing group holds both `type: spacing` (margin/padding) and `type: sizing` (width/flex-basis) tokens, so `flex-basis` sets `types: ["sizing"]` to admit `card`/`aside`/`tablet` and have the lint *reject* `section-margin-block`. Values mapped in `valueMap` are literal CSS and exempt from the check.
 - Omit `tokens` entirely for keyword families.

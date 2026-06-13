@@ -93,7 +93,7 @@
         },
         "pattern": {
           "type": "object",
-          "required": ["base", "values"],
+          "required": ["base"],
           "additionalProperties": false,
           "description": "Grammar for scale-driven families. Expands to '<base>[-<edge>][-neg]-<value>' and is diffed against the source SCSS by the lint.",
           "properties": {
@@ -115,12 +115,24 @@
               "type": "array",
               "minItems": 1,
               "items": { "type": "string" },
-              "description": "Value suffixes. With 'tokens', each value V must be a key in the bound token module and resolves to var(--zbk-<tokens.varPrefix>-<V>)."
+              "description": "Value suffixes. With 'tokens', each value V must be a key in the bound token module and resolves to var(--zbk-<tokens.varPrefix>-<V>). OPTIONAL when 'tokens' is bound (without edgeInToken): omit it to auto-derive the full value list from the token group (filtered to tokens.types when set, neg-* keys excluded) so it can never drift from the tokens. When present, it is the source of truth — a deliberate subset/limiter the lint still validates against the group. Required for keyword (no-tokens) and edgeInToken families."
             },
             "negativeValues": {
+              "anyOf": [
+                { "type": "array", "items": { "type": "string" } },
+                { "type": "boolean" }
+              ],
+              "description": "Values also emitted as '<base>[-<edge>]-neg-<value>', consuming the module's 'neg-<value>' tokens (zebkit defines negative spacing as first-class tokens). Set to true to auto-mirror: emit a negative for every resolved positive value that has a matching, type-allowed neg-<value> token (values without one, like named sizes or '0', are skipped). Useful where negatives make sense (margin) and simply omitted where they don't (padding). Requires 'tokens' bound without edgeInToken."
+            },
+            "exclude": {
               "type": "array",
               "items": { "type": "string" },
-              "description": "Values also emitted as '<base>[-<edge>]-neg-<value>', consuming the module's 'neg-<value>' tokens (zebkit defines negative spacing as first-class tokens)."
+              "description": "Token values to drop from this family's value set (both positive and negative), applied after values are resolved/derived. Lets a family take the whole group minus a few keys instead of enumerating every wanted value. Each entry must be a real token key in the bound group (the lint flags typos)."
+            },
+            "literals": {
+              "type": "object",
+              "additionalProperties": { "type": "string" },
+              "description": "Extra non-token values added to the positive axis, mapped to verbatim CSS — e.g. {'auto': 'auto'} yields .margin-auto, .margin-inline-auto, ... using the family's edges, edgeProperties, and responsive modifiers. Lets one token-driven family also emit keyword classes (auto, inherit) without a second family. They skip token resolution and negative mirroring; bake in '!important' if needed. A literal key may not collide with a token name in the bound group (the lint flags it)."
             },
             "aliases": {
               "type": "object",
