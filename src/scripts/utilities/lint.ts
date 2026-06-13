@@ -46,14 +46,9 @@ const IGNORED_PARTIALS = new Set(["_generators.scss", "_index.scss"]);
 const LEGACY_PARTIALS = new Set([
   "_border.scss",
   "_color.scss",
-  "_flex.scss",
   "_font.scss",
-  "_object.scss",
-  "_pointer.scss",
   "_position.scss",
   "_spacing.scss",
-  "_text.scss",
-  "_visibility.scss",
 ]);
 
 /** Extract every class name defined in an SCSS file (escaped ':' prefixes unescaped). */
