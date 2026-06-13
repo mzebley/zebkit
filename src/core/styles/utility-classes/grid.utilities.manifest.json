@@ -1,0 +1,684 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Grid utilities",
+  "key": "grid",
+  "description": "Modifiers and controls for elements rendered in 'grid' layout: track definition, item placement, and alignment. Apply 'display-grid' (from the layout manifest) to the container first, and space tracks with the 'gap' family (also in the layout manifest).",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "grid-template-columns",
+      "description": "Defines the column tracks of a grid container.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-template-columns"
+      ],
+      "guidance": [
+        "grid-cols-{n} creates n equal, content-shrinkable columns via repeat(n, minmax(0, 1fr)); the minmax(0, …) lets tracks shrink below their content so long children can't blow out the layout.",
+        "grid-cols-subgrid adopts the parent grid's column tracks; verify browser support for your target baseline before relying on it.",
+        "Defining columns is purely visual — it does not change DOM order, so confirm the source order still reads logically for keyboard and screen reader users (WCAG 1.3.2)."
+      ],
+      "pattern": {
+        "base": "grid-cols",
+        "values": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "none",
+          "subgrid"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "1": "repeat(1, minmax(0, 1fr))",
+          "2": "repeat(2, minmax(0, 1fr))",
+          "3": "repeat(3, minmax(0, 1fr))",
+          "4": "repeat(4, minmax(0, 1fr))",
+          "5": "repeat(5, minmax(0, 1fr))",
+          "6": "repeat(6, minmax(0, 1fr))",
+          "7": "repeat(7, minmax(0, 1fr))",
+          "8": "repeat(8, minmax(0, 1fr))",
+          "9": "repeat(9, minmax(0, 1fr))",
+          "10": "repeat(10, minmax(0, 1fr))",
+          "11": "repeat(11, minmax(0, 1fr))",
+          "12": "repeat(12, minmax(0, 1fr))",
+          "none": "none",
+          "subgrid": "subgrid"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "grid-template-rows",
+      "description": "Defines the row tracks of a grid container.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-template-rows"
+      ],
+      "guidance": [
+        "grid-rows-{n} creates n equal, content-shrinkable rows via repeat(n, minmax(0, 1fr)).",
+        "Explicit rows are most useful when you need a fixed structure; otherwise let content flow into implicit rows sized by grid-auto-rows.",
+        "grid-rows-subgrid adopts the parent grid's row tracks; verify browser support before relying on it."
+      ],
+      "pattern": {
+        "base": "grid-rows",
+        "values": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "none",
+          "subgrid"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "1": "repeat(1, minmax(0, 1fr))",
+          "2": "repeat(2, minmax(0, 1fr))",
+          "3": "repeat(3, minmax(0, 1fr))",
+          "4": "repeat(4, minmax(0, 1fr))",
+          "5": "repeat(5, minmax(0, 1fr))",
+          "6": "repeat(6, minmax(0, 1fr))",
+          "none": "none",
+          "subgrid": "subgrid"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "grid-auto-flow",
+      "description": "Controls how the auto-placement algorithm fills the grid and whether it back-fills holes (dense).",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-auto-flow"
+      ],
+      "guidance": [
+        "'dense' packing pulls later items forward to fill earlier gaps, so visual order can diverge from DOM/reading/focus order. Use only where sequence carries no meaning, and tab through the result to confirm focus order still makes sense (WCAG 1.3.2, 2.4.3).",
+        "grid-flow-col switches auto-placement to fill down columns first instead of across rows."
+      ],
+      "pattern": {
+        "base": "grid-flow",
+        "values": [
+          "row",
+          "col",
+          "dense",
+          "row-dense",
+          "col-dense"
+        ]
+      },
+      "valueTiers": {
+        "dense": "situational",
+        "row-dense": "situational",
+        "col-dense": "situational"
+      },
+      "generator": {
+        "valueMap": {
+          "row": "row",
+          "col": "column",
+          "dense": "dense",
+          "row-dense": "row dense",
+          "col-dense": "column dense"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "grid-auto-columns",
+      "description": "Sets the size of implicitly-created column tracks.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-auto-columns"
+      ],
+      "guidance": [
+        "Applies to columns the grid creates beyond the explicit grid-template-columns definition."
+      ],
+      "pattern": {
+        "base": "auto-cols",
+        "values": [
+          "auto",
+          "min",
+          "max",
+          "fr"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "auto": "auto",
+          "min": "min-content",
+          "max": "max-content",
+          "fr": "minmax(0, 1fr)"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "grid-auto-rows",
+      "description": "Sets the size of implicitly-created row tracks.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-auto-rows"
+      ],
+      "guidance": [
+        "Applies to rows the grid creates beyond the explicit grid-template-rows definition — the common case when items flow into new rows."
+      ],
+      "pattern": {
+        "base": "auto-rows",
+        "values": [
+          "auto",
+          "min",
+          "max",
+          "fr"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "auto": "auto",
+          "min": "min-content",
+          "max": "max-content",
+          "fr": "minmax(0, 1fr)"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "grid-column",
+      "description": "Sets how many columns a grid item spans, applied to the item itself.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-column"
+      ],
+      "guidance": [
+        "col-span-full stretches an item across every column of the explicit grid (1 / -1).",
+        "Spanning is visual only — it does not move the item in the DOM. If placement implies a meaningful sequence, make sure the source order reflects it (WCAG 1.3.2)."
+      ],
+      "pattern": {
+        "base": "col",
+        "values": [
+          "auto",
+          "span-1",
+          "span-2",
+          "span-3",
+          "span-4",
+          "span-5",
+          "span-6",
+          "span-7",
+          "span-8",
+          "span-9",
+          "span-10",
+          "span-11",
+          "span-12",
+          "span-full"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "auto": "auto",
+          "span-1": "span 1 / span 1",
+          "span-2": "span 2 / span 2",
+          "span-3": "span 3 / span 3",
+          "span-4": "span 4 / span 4",
+          "span-5": "span 5 / span 5",
+          "span-6": "span 6 / span 6",
+          "span-7": "span 7 / span 7",
+          "span-8": "span 8 / span 8",
+          "span-9": "span 9 / span 9",
+          "span-10": "span 10 / span 10",
+          "span-11": "span 11 / span 11",
+          "span-12": "span 12 / span 12",
+          "span-full": "1 / -1"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "grid-column-start",
+      "description": "Sets the grid line where an item's column placement begins.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-column-start"
+      ],
+      "guidance": [
+        "Line numbers are 1-based; line 13 is the trailing edge of a 12-column grid.",
+        "Explicit line placement reorders items visually without changing DOM order — verify the resulting reading and focus order still make sense (WCAG 1.3.2, 2.4.3)."
+      ],
+      "tier": "situational",
+      "pattern": {
+        "base": "col-start",
+        "values": [
+          "auto",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "grid-column-end",
+      "description": "Sets the grid line where an item's column placement ends.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-column-end"
+      ],
+      "guidance": [
+        "Pair with col-start-* to pin an item between two specific column lines.",
+        "Explicit line placement reorders items visually without changing DOM order — verify reading and focus order still make sense (WCAG 1.3.2, 2.4.3)."
+      ],
+      "tier": "situational",
+      "pattern": {
+        "base": "col-end",
+        "values": [
+          "auto",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "grid-row",
+      "description": "Sets how many rows a grid item spans, applied to the item itself.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-row"
+      ],
+      "guidance": [
+        "row-span-full stretches an item across every row of the explicit grid (1 / -1).",
+        "Spanning is visual only and does not change DOM order (WCAG 1.3.2)."
+      ],
+      "pattern": {
+        "base": "row",
+        "values": [
+          "auto",
+          "span-1",
+          "span-2",
+          "span-3",
+          "span-4",
+          "span-5",
+          "span-6",
+          "span-full"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "auto": "auto",
+          "span-1": "span 1 / span 1",
+          "span-2": "span 2 / span 2",
+          "span-3": "span 3 / span 3",
+          "span-4": "span 4 / span 4",
+          "span-5": "span 5 / span 5",
+          "span-6": "span 6 / span 6",
+          "span-full": "1 / -1"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "grid-row-start",
+      "description": "Sets the grid line where an item's row placement begins.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-row-start"
+      ],
+      "guidance": [
+        "Explicit line placement reorders items visually without changing DOM order — verify reading and focus order still make sense (WCAG 1.3.2, 2.4.3)."
+      ],
+      "tier": "situational",
+      "pattern": {
+        "base": "row-start",
+        "values": [
+          "auto",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "grid-row-end",
+      "description": "Sets the grid line where an item's row placement ends.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "grid-row-end"
+      ],
+      "guidance": [
+        "Pair with row-start-* to pin an item between two specific row lines.",
+        "Explicit line placement reorders items visually without changing DOM order — verify reading and focus order still make sense (WCAG 1.3.2, 2.4.3)."
+      ],
+      "tier": "situational",
+      "pattern": {
+        "base": "row-end",
+        "values": [
+          "auto",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "place-content",
+      "description": "Shorthand aligning grid tracks on both axes at once (align-content + justify-content).",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "place-content"
+      ],
+      "guidance": [
+        "Declared before align-content so a more specific align-content-* class can override the block-axis half via the cascade.",
+        "Only has an effect when the grid's total track size is smaller than the container, leaving free space to distribute."
+      ],
+      "pattern": {
+        "base": "place-content",
+        "values": [
+          "start",
+          "end",
+          "center",
+          "between",
+          "around",
+          "evenly",
+          "stretch",
+          "baseline"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "between": "space-between",
+          "around": "space-around",
+          "evenly": "space-evenly"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "place-items",
+      "description": "Shorthand aligning all grid items within their cells on both axes at once (align-items + justify-items).",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "place-items"
+      ],
+      "guidance": [
+        "Declared before justify-items so a more specific justify-items-* class can override the inline-axis half via the cascade."
+      ],
+      "pattern": {
+        "base": "place-items",
+        "values": [
+          "start",
+          "end",
+          "center",
+          "baseline",
+          "stretch"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "place-self",
+      "description": "Shorthand overriding the container's placement for a single grid item on both axes (align-self + justify-self).",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "place-self"
+      ],
+      "guidance": [
+        "Declared before justify-self so a more specific justify-self-* class can override the inline-axis half via the cascade."
+      ],
+      "pattern": {
+        "base": "place-self",
+        "values": [
+          "auto",
+          "start",
+          "end",
+          "center",
+          "stretch"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "align-content",
+      "description": "Distributes grid rows along the block (cross) axis when the container has extra space.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "align-content"
+      ],
+      "guidance": [
+        "Only has an effect when the grid's total row height is smaller than the container.",
+        "Also applies to multi-line flex containers, but this family lives with the grid utilities."
+      ],
+      "pattern": {
+        "base": "align-content",
+        "values": [
+          "start",
+          "end",
+          "center",
+          "between",
+          "around",
+          "evenly",
+          "stretch",
+          "baseline"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "between": "space-between",
+          "around": "space-around",
+          "evenly": "space-evenly"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "justify-items",
+      "description": "Aligns all grid items within their cells along the inline (row) axis.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "justify-items"
+      ],
+      "pattern": {
+        "base": "justify-items",
+        "values": [
+          "start",
+          "end",
+          "center",
+          "stretch"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "justify-self",
+      "description": "Overrides the container's justify-items for a single grid item along the inline (row) axis.",
+      "source": "src/core/styles/utility-classes/grid.scss",
+      "properties": [
+        "justify-self"
+      ],
+      "pattern": {
+        "base": "justify-self",
+        "values": [
+          "auto",
+          "start",
+          "end",
+          "center",
+          "stretch"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    }
+  ]
+}

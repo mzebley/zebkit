@@ -34,6 +34,41 @@
       "modifiers": {
         "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
       }
+    },
+    {
+      "name": "gap",
+      "description": "Sets the gutters between flex or grid tracks: the bare form sets both axes, with logical block (row-gap) and inline (column-gap) edges.",
+      "source": "src/core/styles/utility-classes/layout.scss",
+      "properties": ["gap", "row-gap", "column-gap"],
+      "a11y": "Gap values rescale with the spacing accessibility dial.",
+      "guidance": [
+        "Prefer gap on the flex or grid container over per-child margins — it only adds space between items, never around the outer edges.",
+        "gap-block sets the gutter between rows (row-gap); gap-inline sets the gutter between columns (column-gap)."
+      ],
+      "tokens": {
+        "group": "spacing",
+        "varPrefix": "spacing",
+        "types": ["spacing", "rootSize"]
+      },
+      "pattern": {
+        "base": "gap",
+        "edges": ["block", "inline"],
+        "values": [
+          "0", "1px", "2px", "025", "05", "1", "105", "2", "205",
+          "3", "4", "5", "6", "7", "8", "9", "10",
+          "2xs", "xs", "sm", "md", "lg", "xl", "2xl", "3xl"
+        ]
+      },
+      "generator": {
+        "edgeProperties": {
+          "": ["gap"],
+          "block": ["row-gap"],
+          "inline": ["column-gap"]
+        }
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
     }
   ]
 }
