@@ -12,6 +12,8 @@ export const BREAKPOINTS = [
   "widescreen",
 ];
 
+export type UtilityTier = "recommended" | "situational" | "discouraged";
+
 export type UtilityFamily = {
   name: string;
   description: string;
@@ -21,6 +23,8 @@ export type UtilityFamily = {
   layer?: string;
   important?: boolean;
   a11y?: string;
+  tier?: UtilityTier;
+  valueTiers?: Record<string, UtilityTier>;
   classes?: string[];
   pattern?: {
     base: string;
@@ -34,6 +38,7 @@ export type UtilityFamily = {
     group: string;
     varPrefix: string;
     edgeInToken?: boolean;
+    types?: string[];
   };
   modifiers?: {
     hover?: boolean;

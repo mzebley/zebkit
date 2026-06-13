@@ -214,7 +214,7 @@ If you need to extend utilities, see `_generators.scss` for reusable SCSS mixins
 
 ```scss
 // Import the generator mixins
-@import '@token-scripts/utilities/generators';
+@import '@token-scripts/mixins/generators';
 
 // Create a custom utility class
 @include generate-custom-spacing-utility('gap', 'gap', $spacing-tokens, $breakpoints);

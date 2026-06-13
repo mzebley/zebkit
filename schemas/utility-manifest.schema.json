@@ -77,6 +77,15 @@
           "type": "string",
           "description": "How this family responds to zebkit's accessibility dials, e.g. 'values rescale with the spacing a11y dial'."
         },
+        "tier": {
+          "enum": ["recommended", "situational", "discouraged"],
+          "description": "Default usage tier for AI tooling and docs when choosing from this family. Omit = recommended. 'situational' = valid but needs a specific reason; 'discouraged' = avoid unless there is no alternative (e.g. 'order', whose visual reordering diverges from DOM/focus order). Tiers are advisory metadata — they never change generated CSS, only how tooling ranks choices."
+        },
+        "valueTiers": {
+          "type": "object",
+          "additionalProperties": { "enum": ["recommended", "situational", "discouraged"] },
+          "description": "Per-value overrides of the family tier, keyed by pattern value or class name (e.g. {'vertical-text': 'discouraged'}). Only list values that differ from the family default. The lint checks each key is a real value/class of the family."
+        },
         "classes": {
           "type": "array",
           "items": { "type": "string" },
@@ -133,6 +142,11 @@
             "varPrefix": {
               "type": "string",
               "description": "CSS custom property prefix after --zbk-, e.g. 'spacing' for --zbk-spacing-md."
+            },
+            "types": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Restrict valid pattern values to token keys whose declared `type` is in this list. Use when one token group mixes purposes — e.g. the spacing group holds both `type: spacing` (margin/padding) and `type: sizing` (width/flex-basis) tokens; a flex-basis family sets types: ['sizing'] to admit card/aside/tablet and reject section-margin-block. Values mapped in generator.valueMap are literal CSS and exempt."
             },
             "edgeInToken": {
               "type": "boolean",

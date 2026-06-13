@@ -1,0 +1,405 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Flex utilities",
+  "key": "flex",
+  "description": "Modifiers and controls for elements rendered in 'flex' layout.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "flex-direction",
+      "description": "Sets the main axis direction of a flex container.",
+      "source": "src/core/styles/utility-classes/flex.scss",
+      "properties": [
+        "flex-direction"
+      ],
+      "guidance": [
+        "'reverse' modified directions only visually change the layout order - it does not change the DOM order (impacting keyboard-only and screen reader experiences."
+      ],
+      "pattern": {
+        "base": "flex-direction",
+        "values": [
+          "row",
+          "row-reverse",
+          "column",
+          "column-reverse"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "align-items",
+      "description": "Aligns flex children on the cross axis.",
+      "source": "src/core/styles/utility-classes/flex.scss",
+      "properties": [
+        "align-items"
+      ],
+      "pattern": {
+        "base": "align-items",
+        "values": [
+          "start",
+          "end",
+          "center",
+          "baseline",
+          "stretch"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "start": "flex-start",
+          "end": "flex-end"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "align-self",
+      "description": "Overrides the container's align-items for a single flex child.",
+      "source": "src/core/styles/utility-classes/flex.scss",
+      "properties": [
+        "align-self"
+      ],
+      "pattern": {
+        "base": "align-self",
+        "values": [
+          "auto",
+          "start",
+          "end",
+          "center",
+          "baseline",
+          "stretch"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "start": "flex-start",
+          "end": "flex-end"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "justify-content",
+      "description": "Distributes flex children along the main axis.",
+      "source": "src/core/styles/utility-classes/flex.scss",
+      "properties": [
+        "justify-content"
+      ],
+      "pattern": {
+        "base": "justify-content",
+        "values": [
+          "start",
+          "end",
+          "center",
+          "between",
+          "around",
+          "evenly"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "start": "flex-start",
+          "end": "flex-end",
+          "between": "space-between",
+          "around": "space-around",
+          "evenly": "space-evenly"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "flex-wrap",
+      "description": "Controls whether flex items are forced into a single line or allowed to wrap onto multiple lines.",
+      "source": "src/core/styles/utility-classes/flex.scss",
+      "properties": [
+        "flex-wrap",
+        "flex-flow"
+      ],
+      "guidance": [
+        "Ensure children have a defined size basis (such as flex-basis or width) so the browser knows exactly when it is out of space and needs to trigger a wrap.",
+        "flex-flow allows for a shorthand to combine display-flex and ability to wrap."
+      ],
+      "classes": [
+        "flex-wrap",
+        "flex-nowrap",
+        "flex-wrap-reverse",
+        "flex-flow",
+        "flex-flow-column"
+      ],
+      "generator": {
+        "declarations": {
+          "flex-wrap": {
+            "flex-wrap": "wrap"
+          },
+          "flex-nowrap": {
+            "flex-wrap": "nowrap"
+          },
+          "flex-wrap-reverse": {
+            "flex-wrap": "wrap-reverse"
+          },
+          "flex-flow": {
+            "flex-flow": "row wrap"
+          },
+          "flex-flow-column": {
+            "flex-flow": "column wrap"
+          }
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+  "name": "order",
+  "description": "Overrides the visual position of a flex/grid item without changing its DOM position.",
+  "source": "src/core/styles/utility-classes/flex.scss",
+  "properties": ["order"],
+  "tier": "discouraged",
+  "guidance": [
+    "order changes ONLY visual position — it does not move the element in the DOM, so tab order and screen reader reading order are unaffected (WCAG 1.3.2, 2.4.3). Never use it to convey meaningful sequence visually that isn't reflected in the source.",
+    "Safe uses: purely presentational arrangement where sequence carries no meaning, or responsive reflow where you've verified the resulting focus/reading order still makes sense.",
+    "If the order matters to comprehension or interaction, reorder the DOM instead — or use it, then tab through the result to confirm focus order stays logical."
+  ],
+  "pattern": {
+    "base": "order",
+    "values": ["first", "last", "none", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+  },
+  "generator": {
+    "valueMap": { "first": "-9999", "last": "9999", "none": "0" }
+  },
+  "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+},
+    {
+      "name": "flex",
+      "description": "Shorthand applied to a flex item to simultaneously set its flex-grow, flex-shrink, and flex-basis values",
+      "source": "src/core/styles/utility-classes/flex.scss",
+      "properties": [
+        "flex"
+      ],
+      "guidance": [
+        "<flex-grow> <flex-shrink> <flex-basis>",
+        "flex-basis classes applied to an element in addition to these classes will intentionally overwrite the basis shorthand due to the cascade."
+      ],
+      "classes": [
+        "flex-auto",
+        "flex-initial",
+        "flex-none",
+        "flex-1"
+      ],
+      "generator": {
+        "declarations": {
+          "flex-auto": {
+            "flex": "1 1 auto"
+          },
+          "flex-initial": {
+            "flex": "0 1 auto"
+          },
+          "flex-none": {
+            "flex": "0 0 auto"
+          },
+          "flex-1": {
+            "flex": "1 1 0%"
+          }
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "flex-grow",
+      "description": "Specifies how much a flex item should grow relative to the rest of the flex items inside a container when free space is available.",
+      "source": "src/core/styles/utility-classes/flex.scss",
+      "properties": [
+        "flex-grow"
+      ],
+      "guidance": [
+        "flex-grow-2 does not mean an element will be exactly twice the width of an element with flex-grow-1. Flex-grow distributes only the remaining extra space."
+      ],
+      "pattern": {
+        "base": "flex-grow",
+        "values": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "flex-shrink",
+      "description": "Specifies how much a flex item should contract relative to the rest of the flex items inside a container when the total size of the items are greater than available space.",
+      "source": "src/core/styles/utility-classes/flex.scss",
+      "properties": [
+        "flex-shrink"
+      ],
+      "guidance": [
+        "flex-shrink-0 means an item will never shrink (potentially causing an overflow)."
+      ],
+      "pattern": {
+        "base": "flex-shrink",
+        "values": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "flex-basis",
+      "description": "Sets the initial main size of a flex item before any extra space is distributed or shrinking occurs.",
+      "source": "src/core/styles/utility-classes/flex.scss",
+      "properties": [
+        "flex-basis"
+      ],
+      "guidance": [
+        "Controls width when flex direction is 'row'",
+        "Controls height when flex direction is 'column'",
+        "Takes precedence over applied 'width' or 'height' on flex items.",
+        "A flex child will not shrink below its content size unless it also has min-width-0 (or min-height-0 in a column) — put that fix on the child, not the container.",
+        "Applying a flex-basis class alongside a flex shorthand class (flex-1, flex-auto...) intentionally overrides the shorthand's basis, because this family is emitted after the shorthand in the cascade."
+      ],
+      "tokens": {
+        "group": "spacing",
+        "varPrefix": "spacing",
+        "types": [
+          "sizing",
+          "rootSize"
+        ]
+      },
+      "pattern": {
+        "base": "flex-basis",
+        "values": [
+          "1px",
+          "2px",
+          "025",
+          "05",
+          "1",
+          "105",
+          "2",
+          "205",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "15",
+          "20",
+          "25",
+          "30",
+          "40",
+          "50",
+          "60",
+          "70",
+          "80",
+          "90",
+          "100",
+          "card",
+          "aside",
+          "section",
+          "mobile",
+          "mobile-lg",
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen",
+          "0",
+          "full",
+          "auto",
+          "max-content",
+          "min-content",
+          "fit-content"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "0": "0",
+          "full": "100%",
+          "auto": "auto",
+          "max-content": "max-content",
+          "min-content": "min-content",
+          "fit-content": "fit-content"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    }
+  ]
+}

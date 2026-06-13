@@ -124,14 +124,22 @@ async function main() {
           findings.push({ rule: "U2", file, subject, message: `tokens.group '${family.tokens.group}' is not an existing token module key.` });
         } else if (family.pattern && !family.tokens.edgeInToken) {
           const valueMap = family.generator?.valueMap ?? {};
+          const allowedTypes = family.tokens.types ? new Set(family.tokens.types) : undefined;
           for (const value of family.pattern.values) {
-            if (valueMap[value] === undefined && !moduleKeys.has(value)) {
+            if (valueMap[value] !== undefined) continue; // valueMap entries are literal CSS, exempt
+            if (!moduleKeys.has(value)) {
               findings.push({ rule: "U2", file, subject, message: `pattern value '${value}' is not a token key in module '${family.tokens.group}'.` });
+            } else if (allowedTypes && !allowedTypes.has(moduleKeys.get(value)!)) {
+              findings.push({ rule: "U2", file, subject, message: `pattern value '${value}' has type '${moduleKeys.get(value)}'; this family only allows token type(s) [${family.tokens.types!.join(", ")}]. Map it in generator.valueMap to use it as a literal.` });
             }
           }
           for (const value of family.pattern.negativeValues ?? []) {
-            if (valueMap[`neg-${value}`] === undefined && !moduleKeys.has(`neg-${value}`)) {
-              findings.push({ rule: "U2", file, subject, message: `negative value '${value}' has no 'neg-${value}' token in module '${family.tokens.group}'.` });
+            const negKey = `neg-${value}`;
+            if (valueMap[negKey] !== undefined) continue;
+            if (!moduleKeys.has(negKey)) {
+              findings.push({ rule: "U2", file, subject, message: `negative value '${value}' has no '${negKey}' token in module '${family.tokens.group}'.` });
+            } else if (allowedTypes && !allowedTypes.has(moduleKeys.get(negKey)!)) {
+              findings.push({ rule: "U2", file, subject, message: `negative value '${value}' (token '${negKey}') has type '${moduleKeys.get(negKey)}'; this family only allows token type(s) [${family.tokens.types!.join(", ")}].` });
             }
           }
         }
@@ -146,6 +154,22 @@ async function main() {
       const layer = family.layer ?? manifest.layer;
       if (layer !== undefined && !KNOWN_LAYERS.has(layer)) {
         findings.push({ rule: "U2", file, subject, message: `layer '${layer}' is not a known layer (${[...KNOWN_LAYERS].join(", ")}).` });
+      }
+
+      // valueTiers keys must name a value/class the family actually declares,
+      // otherwise a typo silently tiers nothing.
+      if (family.valueTiers) {
+        const vocab = new Set<string>([
+          ...(family.classes ?? []),
+          ...(family.pattern?.values ?? []),
+          ...(family.pattern?.negativeValues ?? []).map((v) => `neg-${v}`),
+          ...Object.keys(family.pattern?.aliases ?? {}),
+        ]);
+        for (const key of Object.keys(family.valueTiers)) {
+          if (!vocab.has(key)) {
+            findings.push({ rule: "U2", file, subject, message: `valueTiers key '${key}' is not a value or class declared by family '${family.name}'.` });
+          }
+        }
       }
 
       let sourcesOk = true;

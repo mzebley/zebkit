@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Layout utilities",
+  "key": "layout",
+  "description": "Display and positioning scheme of document elements.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "position",
+      "description": "Sets the positioning scheme of an element.",
+      "guidance": [
+        "Pair position-absolute/fixed/sticky with offset utilities (top-*, left-*) from the position partial.",
+        "Prefer position-sticky over position-fixed for in-flow pinned headers — it reserves layout space."
+      ],
+      "source": "src/core/styles/utility-classes/layout.scss",
+      "properties": ["position"],
+      "pattern": {
+        "base": "position",
+        "values": ["static", "relative", "fixed", "sticky", "unset", "absolute"]
+      }
+    },
+    {
+      "name": "display",
+      "description": "Sets the display box type of an element.",
+      "guidance": [
+        "display-none removes content from the accessibility tree; use visually-hidden when screen readers should still announce it."
+      ],
+      "source": "src/core/styles/utility-classes/layout.scss",
+      "properties": ["display"],
+      "pattern": {
+        "base": "display",
+        "values": ["flex", "inline-flex", "block", "inline-block", "inline", "none", "grid", "inline-grid"]
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    }
+  ]
+}

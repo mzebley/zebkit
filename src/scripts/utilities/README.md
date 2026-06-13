@@ -73,10 +73,11 @@ Zebkit prefers **logical edges** (`block`, `inline-start`, ...) over physical (`
 "tokens": { "group": "spacing", "varPrefix": "spacing" }
 ```
 
-- `group` = the token module's exported `key` (`src/core/spacing/tokens/tokens.ts`). The lint checks every pattern value is a key in that module.
+- `group` = the token module's exported `key` (`src/core/spacing/tokens/tokens.ts`). The lint checks every pattern value is a key in that module. Modules that share a `key` are merged into one group (core/spacing + semantic/spacing both export `"spacing"`, so the group is their union).
 - `varPrefix` = what follows `--zbk-` in the emitted var: value `md` -> `margin-block: var(--zbk-spacing-md)` (written as `var(--#{prefix.$cssVar}-spacing-md)` in SCSS).
 - `negativeValues: ["5"]` consumes `--zbk-spacing-neg-5` — zebkit's negative tokens are first-class.
 - `edgeInToken: true` when the edge is part of the token name (`varPrefix-edge-value`).
+- `types: ["sizing"]` restricts valid values to token keys whose declared `type` is in the list. Use when one group mixes purposes: the spacing group holds both `type: spacing` (margin/padding) and `type: sizing` (width/flex-basis) tokens, so `flex-basis` sets `types: ["sizing"]` to admit `card`/`aside`/`tablet` and have the lint *reject* `section-margin-block`. Values mapped in `valueMap` are literal CSS and exempt from the check.
 - Omit `tokens` entirely for keyword families.
 
 ## Value resolution (what the generator emits)
@@ -99,6 +100,26 @@ Property resolution: `family.properties`, unless `generator.edgeProperties` maps
 }
 ```
 
+## Usage tiers (AI/docs guidance)
+
+Tiers are advisory metadata for tooling and the design skill when *choosing* a class — they never change the generated CSS. They encode the "opinionated in guidance, not in deletion" stance from VISION.md: the whole vocabulary ships, but tooling is steered toward the recommended subset.
+
+- `tier` (family-level): `recommended` (the default if omitted) | `situational` (valid, but needs a specific reason) | `discouraged` (avoid unless there's no alternative). `order` is `discouraged` because visual reordering diverges from DOM/focus order.
+- `valueTiers` (per-value override): `{ "vertical-text": "discouraged" }` — only list values that differ from the family default. The lint checks every key is a real value/class of the family, so typos can't silently tier nothing.
+
+```jsonc
+{
+  "name": "cursor",
+  "tier": "recommended",
+  "valueTiers": { "vertical-text": "discouraged", "cell": "situational" },
+  ...
+}
+```
+
+## Family order is cascade order
+
+Families emit in the order they appear in the manifest's `families` array, and all utilities share one `@layer`, so when two classes set the same property the **later family wins** by source order (specificity is equal). This matters for shorthand/longhand pairs: a `flex` shorthand (`flex-auto` = `1 1 auto`) resets grow, shrink, *and* basis, so for `class="flex-1 flex-basis-card"` to mean "grow/shrink from the shorthand, basis from the token," the longhand families must come **after** the shorthand. Rule of thumb: **declare shorthand families before the longhands they can override** (`flex` before `flex-grow`/`flex-shrink`/`flex-basis`), and note the intent in `guidance` so it's not mistaken for an accident.
+
 ## Three family shapes (recipes)
 
 **1. Keyword family, suffix == CSS value** (overflow, cursor): just `pattern` + `properties`, no `tokens`, no `generator`.
@@ -106,7 +127,7 @@ Property resolution: `family.properties`, unless `generator.edgeProperties` maps
 ```jsonc
 {
   "name": "cursor", "description": "...", "properties": ["cursor"],
-  "source": "src/core/styles/utilities/_cursor.scss",
+  "source": "src/core/styles/utilities/_pointer.scss",
   "pattern": { "base": "cursor", "values": ["pointer", "wait", "not-allowed"] }
 }
 ```
@@ -133,7 +154,7 @@ For anything truly bespoke (compound selectors, `[class*=...]` rules), `generato
 
 ## Workflow: migrating a legacy partial
 
-1. Pick a name from `LEGACY_PARTIALS` in `lint.ts`. (Easy: `_cursor.scss`, `_visibility.scss`. Note some classes are emitted from `src/core/styles.scss` rather than the partial itself — for those, the manifest `source` points at the partial, and you delete the `@include` lines from `styles.scss` after generating.)
+1. Pick a name from `LEGACY_PARTIALS` in `lint.ts`. (Easy: `_pointer.scss`, `_visibility.scss`. Note some classes are emitted from `src/core/styles.scss` rather than the partial itself — for those, the manifest `source` points at the partial, and you delete the `@include` lines from `styles.scss` after generating.)
 2. Snapshot current output: `npx sass --load-path=src src/core/styles/utilities/_foo.scss /tmp/before.css`
 3. Author `foo.utilities.manifest.json` next to the partial.
 4. `npm run generate:utilities && npm run lint:utilities` — the lint names every missing/unclaimed class and bad token key; iterate until green.
