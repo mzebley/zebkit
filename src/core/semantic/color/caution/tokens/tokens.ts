@@ -13,122 +13,122 @@ export type CautionTokenSchema = z.infer<typeof tokenSchema>;
 const tokens = {
   // Canvas: base caution surfaces
   "canvas": {
-    value: "{color.dusk-50}",
+    value: "{color.gold-500}",
     type: "color",
     description: "Base caution canvas color for primary surfaces."
   },
   "canvas-soft": {
-    value: "",
+    value: "{color.gold-50}",
     type: "color",
     description: "Soft caution canvas color for lightly tinted surfaces."
   },
   "canvas-muted": {
-    value: "",
+    value: "{color.gold-100}",
     type: "color",
     description: "Muted caution canvas color for low-emphasis surfaces."
   },
   "canvas-strong": {
-    value: "",
+    value: "{color.gold-600}",
     type: "color",
     description: "Strong caution canvas color for high-emphasis surfaces."
   },
 
   // Canvas (inverse): caution surfaces in inverse contexts
   "canvas-inverse": {
-    value: "",
+    value: "{color.gold-400}",
     type: "color",
     description: "Base inverse caution canvas color for surfaces on dark or inverted contexts."
   },
   "canvas-inverse-soft": {
-    value: "",
+    value: "{color.gold-900}",
     type: "color",
     description: "Soft inverse caution canvas color for lightly tinted surfaces in inverse contexts."
   },
   "canvas-inverse-muted": {
-    value: "",
+    value: "{color.gold-800}",
     type: "color",
     description: "Muted inverse caution canvas color for low-emphasis surfaces in inverse contexts."
   },
   "canvas-inverse-strong": {
-    value: "",
+    value: "{color.gold-300}",
     type: "color",
     description: "Strong inverse caution canvas color for high-emphasis surfaces in inverse contexts."
   },
 
   // Ink: caution text and icon colors
   "ink": {
-    value: "",
+    value: "{color.gold-700}",
     type: "color",
     description: "Base caution ink color for text and icons on neutral or light canvases."
   },
   "ink-soft": {
-    value: "",
+    value: "{color.gold-500}",
     type: "color",
     description: "Soft caution ink color for lower-emphasis text and icons."
   },
   "ink-muted": {
-    value: "",
+    value: "{color.gold-400}",
     type: "color",
     description: "Muted caution ink color for subtle or secondary text and icons."
   },
 
   // Ink (inverse): caution text and icon colors on inverse canvases
   "ink-inverse": {
-    value: "",
+    value: "{color.gold-300}",
     type: "color",
     description: "Base inverse caution ink color for text and icons on inverse or dark canvases."
   },
   "ink-inverse-soft": {
-    value: "",
+    value: "{color.gold-400}",
     type: "color",
     description: "Soft inverse caution ink color for lower-emphasis text and icons on inverse canvases."
   },
   "ink-inverse-muted": {
-    value: "",
+    value: "{color.gold-500}",
     type: "color",
     description: "Muted inverse caution ink color for subtle text and icons on inverse canvases."
   },
 
   // Border: caution border, outline, and divider colors
   "border": {
-    value: "",
+    value: "{color.gold-500}",
     type: "color",
     description: "Base caution border color for outlines, strokes, and dividers."
   },
   "border-soft": {
-    value: "",
+    value: "{color.gold-200}",
     type: "color",
     description: "Soft caution border color for low-emphasis outlines and dividers."
   },
   "border-muted": {
-    value: "",
+    value: "{color.gold-300}",
     type: "color",
     description: "Muted caution border color for subtle outlines and dividers."
   },
   "border-strong": {
-    value: "",
+    value: "{color.gold-600}",
     type: "color",
     description: "Strong caution border color for high-emphasis outlines and dividers."
   },
 
   // Border (inverse): caution borders in inverse contexts
   "border-inverse": {
-    value: "",
+    value: "{color.gold-500}",
     type: "color",
     description: "Base inverse caution border color for outlines and dividers on inverse canvases."
   },
   "border-inverse-soft": {
-    value: "",
+    value: "{color.gold-800}",
     type: "color",
     description: "Soft inverse caution border color for low-emphasis outlines on inverse canvases."
   },
   "border-inverse-muted": {
-    value: "",
+    value: "{color.gold-700}",
     type: "color",
     description: "Muted inverse caution border color for subtle outlines on inverse canvases."
   },
   "border-inverse-strong": {
-    value: "",
+    value: "{color.gold-400}",
     type: "color",
     description: "Strong inverse caution border color for high-emphasis outlines on inverse canvases."
   }

@@ -1,4 +1,4 @@
-import { colorFamilySlugs } from './color-families';
+import { colorFamilySlugs, semanticColorFamilySlugs } from './color-families';
 import { utilityManifests } from './utility-manifests';
 
 export interface NavItem {
@@ -39,10 +39,18 @@ export const navigation: NavSection[] = [
   },
   {
     label: 'Color',
-    items: colorFamilySlugs.map((slug) => ({
-      label: slug,
-      link: `/foundations/color/${slug}`
-    }))
+    items: [
+      { label: 'Overview', link: '/foundations/color' },
+      { label: 'Primitive palette', link: '/foundations/color/primitives' },
+      ...colorFamilySlugs.map((slug) => ({
+        label: slug,
+        link: `/foundations/color/${slug}`
+      })),
+      ...semanticColorFamilySlugs.map((slug) => ({
+        label: slug,
+        link: `/foundations/color/${slug}`
+      }))
+    ]
   },
   {
     label: 'Components',
