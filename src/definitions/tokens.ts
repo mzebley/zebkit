@@ -56,6 +56,41 @@ export const tokenObjectSchema = z.object({
 export interface TokenObject extends z.infer<typeof tokenObjectSchema> {}
 
 /**
+ * Build-time generator input (e.g. the fluid type-scale controls). Carries a value,
+ * type, and description like any token, but is consumed during compilation and is
+ * NOT emitted as a CSS custom property.
+ */
+export const settingTokenSchema = z.object({
+  value: z.union([z.string(), z.number()]),
+  type: z.literal('setting'),
+  description: z.string(),
+});
+
+/**
+ * Shape of a build-time setting token.
+ */
+export interface SettingTokenObject extends z.infer<typeof settingTokenSchema> {}
+
+/**
+ * A named step in a generated scale (e.g. font sizes). `index` positions the step in
+ * the fluid scale (base = 0); `value` is present ONLY when a step is pinned to a static
+ * literal (static mode or a per-step override). Fluid steps omit `value` and are derived
+ * from the scale's control settings at build time.
+ */
+export const rootFontSizeStepSchema = z.object({
+  index: z.number().int(),
+  value: z.union([z.string(), z.number()]).optional(),
+  type: z.literal('rootFontSize'),
+  description: z.string(),
+  a11y: z.union([z.boolean(), z.string()]).optional(),
+});
+
+/**
+ * Shape of a generated-scale step token.
+ */
+export interface RootFontSizeStepObject extends z.infer<typeof rootFontSizeStepSchema> {}
+
+/**
  * Map of token keys to token entries.
  */
 export interface TokenInterface {

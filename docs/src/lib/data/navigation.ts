@@ -26,6 +26,14 @@ export const navigation: NavSection[] = [
     ]
   },
   {
+    label: 'Typography',
+    items: [{ label: 'Type scaling', link: '/typography/type-scale' }]
+  },
+  {
+    label: 'Spacing',
+    items: [{ label: 'Fluid spacing & coupling', link: '/spacing/scaling' }]
+  },
+  {
     label: 'Tokens',
     items: [{ label: 'Browse all', link: '/tokens' }]
   },

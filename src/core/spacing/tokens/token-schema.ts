@@ -1,9 +1,10 @@
 import { z } from "zod";
-import { tokenObjectSchema } from "@definitions/tokens";
+import { tokenObjectSchema, settingTokenSchema } from "@definitions/tokens";
 
 export const tokenSchema = z.object({
-  "viewport-modifier": tokenObjectSchema,
-  "max-size-modifer": tokenObjectSchema,
+  // Fluid spacing control (build-time only). Viewport anchors are shared with the
+  // font-size scale; this is the only spacing-specific generator input.
+  "min-scale": settingTokenSchema,
   "neg-15": tokenObjectSchema,
   "neg-10": tokenObjectSchema,
   "neg-9": tokenObjectSchema,

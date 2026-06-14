@@ -18,6 +18,8 @@ import {
   VariantRegistry,
 } from "@token-scripts/compile-variants";
 import { convertTokensToCssVars } from "@token-scripts/token-converter";
+import { resolveTypeScale } from "@token-scripts/build-type-scale";
+import { resolveSpaceScale } from "@token-scripts/build-space-scale";
 import { compileSass, CompileSassOptions } from "@token-scripts/compile-css";
 import {
   loadZebkitConfig,
@@ -367,7 +369,24 @@ export async function runTokenBuild(
     );
 
     const rootSelector = tokensConfig?.rootSelector;
-    const cssVars = convertTokensToCssVars(tokens, { layers, selector: rootSelector });
+    // Resolve the generated font-size and spacing scales (fluid by default; static opt-out)
+    // before emitting CSS vars. Operates on copies so exported artifacts keep their
+    // authorable form; downstream consumers (variants, color/lookup) use original tokens.
+    // Spacing runs first: it reads the shared viewport anchors from the font-size module,
+    // which the type-scale pass then strips.
+    const useStaticTypeScale =
+      tokensConfig?.typeScale?.static === true ||
+      tokensConfig?.typeScale?.fluid === false;
+    const useStaticSpaceScale =
+      tokensConfig?.spaceScale?.static === true ||
+      tokensConfig?.spaceScale?.fluid === false;
+    let cssVarTokens = resolveSpaceScale(tokens, {
+      mode: useStaticSpaceScale ? "static" : "fluid",
+    });
+    cssVarTokens = resolveTypeScale(cssVarTokens, {
+      mode: useStaticTypeScale ? "static" : "fluid",
+    });
+    const cssVars = convertTokensToCssVars(cssVarTokens, { layers, selector: rootSelector });
     const tokenLookupOutputPath = resolveLookupOutputPath(
       tokensConfig?.tokenLookupOutputPath,
       resolvedDestinationPath

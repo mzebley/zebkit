@@ -28,6 +28,32 @@ export type ExtendedTokensConfig = {
   breakpoints?: boolean | ExtendedTokenBreakpoint[];
 };
 
+export type TypeScaleConfig = {
+  /**
+   * Opt out of fluid (Utopia-style) font sizing and emit static font sizes instead.
+   * In static mode each step's authored `value` is used (still wrapped in the a11y
+   * modifier) and its fluid `index` is ignored. Default: false (fluid).
+   */
+  static?: boolean;
+  /**
+   * Alias for `!static`. `fluid: false` is equivalent to `static: true`. When both are
+   * set, static sizing applies if either `static === true` or `fluid === false`.
+   */
+  fluid?: boolean;
+};
+
+export type SpaceScaleConfig = {
+  /**
+   * Opt out of fluid (viewport-interpolated) spacing and emit static spacing instead.
+   * Density (`--zbk-a11y-spacing-modifier`) and text coupling
+   * (`--zbk-spacing-text-coupling`) still apply; only the viewport interpolation is
+   * dropped. Default: false (fluid).
+   */
+  static?: boolean;
+  /** Alias for `!static`. `fluid: false` is equivalent to `static: true`. */
+  fluid?: boolean;
+};
+
 export type TokensConfig = {
   selectedComponents?: string[];
   includeAllComponents?: boolean;
@@ -52,6 +78,10 @@ export type TokensConfig = {
   writeVariantRegistry?: boolean;
   tokenLookupOutputPath?: string;
   extendedTokens?: ExtendedTokensConfig;
+  /** Controls how the font-size scale compiles (fluid by default; static opt-out). */
+  typeScale?: TypeScaleConfig;
+  /** Controls how the spacing scale compiles (fluid by default; static opt-out). */
+  spaceScale?: SpaceScaleConfig;
 };
 
 export type ComponentsConfig = {

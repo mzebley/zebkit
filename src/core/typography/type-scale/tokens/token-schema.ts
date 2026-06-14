@@ -1,18 +1,25 @@
 import { z } from "zod";
-import { tokenObjectSchema } from "@definitions/tokens";
+import { settingTokenSchema, rootFontSizeStepSchema } from "@definitions/tokens";
 
 export const tokenSchema = z.object({
-  "viewport-font-size-modifier": tokenObjectSchema,
-  "max-font-size-modifer": tokenObjectSchema,
-  "3xs": tokenObjectSchema,
-  "2xs": tokenObjectSchema,
-  xs: tokenObjectSchema,
-  sm: tokenObjectSchema,
-  md: tokenObjectSchema,
-  lg: tokenObjectSchema,
-  xl: tokenObjectSchema,
-  "2xl": tokenObjectSchema,
-  "3xl": tokenObjectSchema,
-  "4xl": tokenObjectSchema,
-  "5xl": tokenObjectSchema,
+  // Fluid scale controls (build-time only — never emitted as CSS vars).
+  // The only literals in the type system; the named steps derive from these.
+  "min-viewport": settingTokenSchema,
+  "max-viewport": settingTokenSchema,
+  "min-base": settingTokenSchema,
+  "max-base": settingTokenSchema,
+  "min-ratio": settingTokenSchema,
+  "max-ratio": settingTokenSchema,
+  // Named steps. `md` is the base (index 0); negative indices step down, positive up.
+  "3xs": rootFontSizeStepSchema,
+  "2xs": rootFontSizeStepSchema,
+  xs: rootFontSizeStepSchema,
+  sm: rootFontSizeStepSchema,
+  md: rootFontSizeStepSchema,
+  lg: rootFontSizeStepSchema,
+  xl: rootFontSizeStepSchema,
+  "2xl": rootFontSizeStepSchema,
+  "3xl": rootFontSizeStepSchema,
+  "4xl": rootFontSizeStepSchema,
+  "5xl": rootFontSizeStepSchema,
 });

@@ -10,7 +10,13 @@ const tokens = {
   "spacing-modifier": {
     value: `1`,
     type: "utility",
-    description: "Amount to multiply spacing variables by.",
+    description: "Amount to multiply spacing variables by (independent density dial).",
+  },
+  "spacing-text-coupling": {
+    value: `0.5`,
+    type: "utility",
+    description:
+      "How hard spacing follows body (md) font-size growth: 1 = 1:1, 0 = decoupled. Lets containers grow with text without a separate density bump.",
   },
   "line-height-modifier": {
     value: `1`,

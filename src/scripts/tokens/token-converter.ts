@@ -2,7 +2,6 @@ import chalk from "chalk";
 import {
   AllowedTokenTypes,
   TokenInterface,
-  TokenObject,
   GoogleFontTokenInterface,
   GoogleFontTokenObject,
 } from "@definitions/tokens";
@@ -19,9 +18,6 @@ import { ZEBKIT_PREFIX } from "@config";
  * Converts validated Zebkit tokens into CSS custom properties, handling dot-notation links,
  * responsive typography, and optional accessibility modifiers.
  */
-
-const MAX_MODIFIER = "1.25";
-const VIEWPORT_MODIFIER = ".23vw";
 
 function join(tokenKey: string, key: string): string {
   return [tokenKey, key].filter(Boolean).join("-");
@@ -167,50 +163,6 @@ export function convertDotNotation(
   return value;
 }
 
-function buildRootFontSize(
-  item: TokenObject,
-  cssVariableValue: string,
-  maxSizeModifier?: string | null,
-  viewportModifier?: string | null
-): string {
-  const maxModifier = maxSizeModifier || MAX_MODIFIER;
-  const viewport = viewportModifier || VIEWPORT_MODIFIER;
-  const a11y =
-    "a11y" in item ? `var(${item["a11y"]})` : `var(${a11yMap["fontSize"]})`;
-
-  const minSize = `calc(${cssVariableValue} * ${a11y})`;
-  const maxSize = `calc(${cssVariableValue} * ${maxModifier} * ${a11y})`;
-  const viewportCalculation = `calc((${cssVariableValue} * ${a11y}) + ${viewport})`;
-
-  return `clamp(${minSize}, ${viewportCalculation}, ${maxSize})`;
-}
-
-function buildRootSize(
-  cssVariableValue: string,
-  a11yValue: number | string | boolean | null,
-  maxSizeModifier?: string | null,
-  viewportModifier?: string | null
-): string {
-  const viewport = viewportModifier || VIEWPORT_MODIFIER;
-  const maxModifier = maxSizeModifier || MAX_MODIFIER;
-
-  if (cssVariableValue === "0") {
-    return cssVariableValue;
-  }
-
-  if (typeof a11yValue === "boolean") {
-    a11yValue = a11yMap["spacing"];
-  }
-  if (a11yValue) a11yValue = `var(${a11yValue})`
-  else a11yValue = 1;
-
-  const minSize = `calc(${cssVariableValue} * ${a11yValue})`;
-  const maxSize = `calc(${cssVariableValue} * ${maxModifier} * ${a11yValue})`;
-  const viewportCalculation = `calc((${cssVariableValue} * ${a11yValue}) + ${viewport})`;
-
-  return `clamp(${minSize}, ${viewportCalculation}, ${maxSize})`;
-}
-
 // Options to control where and how CSS variables are emitted.
 export interface CssVarGenerationOptions {
   layers?: Record<string, LayerName>;
@@ -240,6 +192,12 @@ export const convertTokensToCssVars = (
     Object.entries(tokenProperties).forEach(([propertyKey, item]) => {
       const cssVariableKey = join(key, propertyKey);
 
+      // Build-time settings (e.g. fluid type-scale controls) are consumed during
+      // compilation and must never be emitted as CSS variables.
+      if (item && typeof item === "object" && "type" in item && item.type === "setting") {
+        return;
+      }
+
       if (item && typeof item === "object" && "value" in item) {
         let cssVariableValue: string | number = item.value as string | number;
 
@@ -261,40 +219,10 @@ export const convertTokensToCssVars = (
 
         const baseValue = String(cssVariableValue);
 
-        if ("type" in item && item.type === "rootFontSize") {
-          let customMaxSizeModifier: string | null = null;
-          let customViewportModifier: string | null = null;
-          if (tokens[key]) {
-            if (tokens[key]["max-font-size-modifer"]) {
-              customMaxSizeModifier = `var(--${key}-max-font-size-modifer)`;
-            }
-            if (tokens[key]["viewport-font-size-modifier"]) {
-              customViewportModifier = `var(--${key}-viewport-font-size-modifier)`;
-            }
-          }
-          cssVariableValue = buildRootFontSize(
-            item as TokenObject,
-            baseValue,
-            customMaxSizeModifier,
-            customViewportModifier
-          );
-        } else if ("type" in item && item.type === "rootSize") {
-          let customMaxSizeModifier: string | null = null;
-          let customViewportModifier: string | null = null;
-          if (tokens[key]) {
-            if (tokens[key]["max-size-modifer"]) {
-              customMaxSizeModifier = `var(--${key}-max-size-modifer)`;
-            }
-            if (tokens[key]["viewport-modifier"]) {
-              customViewportModifier = `var(--${key}-viewport-modifier)`;
-            }
-          }
-          cssVariableValue = buildRootSize(
-            baseValue,
-            item["a11y"],
-            customMaxSizeModifier,
-            customViewportModifier
-          );
+        if ("type" in item && (item.type === "rootFontSize" || item.type === "rootSize")) {
+          // Pre-resolved by `resolveTypeScale` / `resolveSpaceScale` (fluid clamp or static
+          // value, with a11y modifiers already baked in). Emit the value verbatim.
+          cssVariableValue = baseValue;
         } else if ("a11y" in item && "type" in item) {
           let a11yValue = item["a11y"];
           if (typeof a11yValue === "boolean") {

@@ -1,0 +1,118 @@
+---
+title: Fluid spacing & coupling
+description: How zebkit's spacing scale grows under three independent forces — viewport, body-text size, and density — so containers hold their contents without manual tuning.
+layout: editorial
+section: Spacing
+status: draft
+---
+
+<script lang="ts">
+  import SpaceScaleDemo from '$components/SpaceScaleDemo.svelte';
+</script>
+
+# Fluid spacing & coupling
+
+Spacing in zebkit is generated the same way the [type scale](/typography/type-scale) is —
+fluid by viewport — but it answers to **three independent forces** so that padding, gaps,
+and container sizes behave the way a designer expects without anyone remembering to tune
+them:
+
+```
+spacing = clamp(fluid by viewport)
+        · var(--zbk-a11y-spacing-modifier)              ← density (independent)
+        · (1 + (var(--zbk-a11y-font-size-modifier-md) - 1)
+               · var(--zbk-a11y-spacing-text-coupling)) ← follows BODY text size
+```
+
+The middle line is the interesting one: when reading text scales up — whether from the
+[runtime font dial](/foundations/a11y) or a larger fluid size on a wide screen — spacing
+scales with it, so text doesn't break out of the box it lives in. The box grows to fit.
+
+## Operate it
+
+Push the **body text dial** up and watch the button grow to hold the bigger label. Drop
+**coupling** to 0 and text crowds its padding; raise it toward 1 and spacing tracks text
+exactly. **Density** moves spacing on its own, independent of text size.
+
+<SpaceScaleDemo />
+
+## The three forces
+
+1. **Viewport (fluid).** Each spacing token interpolates between a small-screen and a
+   large-screen size across the same anchors as type (`min-viewport` / `max-viewport`). A
+   token's authored value is its size at the *max* anchor; the min anchor is `value ×
+   min-scale` (default `0.85`). Bigger tokens compress more on mobile — large layout margins
+   shrink on a phone, hairline spacing barely moves.
+2. **Body-text coupling.** Spacing reads the body (`md`) font modifier — *not* a global text
+   scale — so your [non-linear per-step font scaling](/typography/type-scale) is untouched.
+   `--zbk-a11y-spacing-text-coupling` (default `0.5`) sets how hard spacing follows: `1` is
+   1:1, `0` decouples entirely.
+3. **Density.** `--zbk-a11y-spacing-modifier` (default `1`) is an independent breathing-room
+   dial. It changes spacing *without* touching text, so "large text, compact layout" is a
+   valid, coherent combination.
+
+<aside class="editorial-marginalia">
+Coupling deliberately <em>dampens</em>. At a big text bump you usually want spacing to grow
+<em>some</em>, not proportionally — otherwise every gap balloons. Because the strength is a
+plain CSS var, you can set a smaller coupling at larger text levels.
+</aside>
+
+## How a button responds
+
+Real numbers for a button (`font-size: md`, `line-height: 125%`, `padding-block: spacing.05`,
+fixed `min-height: 44px`) at the default coupling tuning:
+
+| scenario | body | text block | pad-block | button height |
+| --- | --- | --- | --- | --- |
+| default @390 (mobile) | 18.1px | 22.6px | 6.8px | 44px (floor) |
+| default @1440 (desktop) | 20px | 25px | 8px | 44px (floor) |
+| large @768 | 21.8px | 29.2px | 8.3px | 45.8px |
+| larger @768 | 34.1px | 47.9px | 9.2px | 66.3px |
+| larger + compact @768 | 34.1px | 47.9px | 7.8px | 63.5px |
+
+Body goes 18→34px and the button grows 44→66px to hold it; padding tracks up but at a
+dampened rate, so the button stays comfortable rather than cartoonish. The 44px tap-target
+floor holds at default sizes and hands off to content once text exceeds it. "Compact" keeps
+the big text but pulls spacing back — the two dials don't fight.
+
+## How to use it
+
+Reference spacing tokens (or the utilities that bind to them) exactly as before — the three
+forces are already baked into every token:
+
+```css
+.card { padding: var(--zbk-spacing-2); gap: var(--zbk-spacing-1); }
+```
+
+```html
+<div class="p-2 gap-1">…</div>
+```
+
+Nothing to wire up. A one-off margin applied through a utility inherits the fluid behavior,
+the text coupling, and the density dial — the same guarantee components get.
+
+## Tuning
+
+- **Coupling strength** — set `--zbk-a11y-spacing-text-coupling` per accessibility level. It
+  derives from whatever `md` is, so you tune one number instead of hand-computing a spacing
+  bump:
+
+  ```css
+  html[data-a11y-font-size='large']  { --zbk-a11y-spacing-text-coupling: 0.83; }
+  html[data-a11y-font-size='larger'] { --zbk-a11y-spacing-text-coupling: 0.31; }
+  ```
+
+- **Fluid range** — re-theme the shared `min-viewport` / `max-viewport`, or adjust spacing's
+  `min-scale`, to change how much spacing compresses on small screens.
+
+## Precision and opting out
+
+Precision tokens (`spacing-1px`, `spacing-2px`, …) and `spacing-0` are emitted **exact** —
+they never scale, since fluidizing a hairline is nonsense. To drop the viewport
+interpolation entirely (density and coupling still apply), opt out in config:
+
+```json
+{ "tokens": { "spaceScale": { "static": true } } }
+```
+
+`fluid: false` is accepted as an alias for `static: true`.

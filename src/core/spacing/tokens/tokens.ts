@@ -6,18 +6,31 @@ export const key = "spacing";
 export const layer: LayerName = "base";
 export type SpacingTokens = z.infer<typeof tokenSchema>;
 
+// Spacing is generated fluid (Utopia-style), like the type scale, and additionally
+// responds to two runtime forces so containers grow with their contents:
+//
+//   spacing = clamp(fluid by viewport)
+//             × var(--zbk-a11y-spacing-modifier)             ← independent density dial
+//             × (1 + (var(--zbk-a11y-font-size-modifier-md) - 1)
+//                    × var(--zbk-a11y-spacing-text-coupling)) ← follows BODY text size
+//
+// Each token's authored `value` is its size at the MAX viewport anchor; the min-anchor
+// size is `value × min-scale`. Viewport anchors are shared with the font-size module
+// (`min-viewport` / `max-viewport`). The text-coupling factor reads the body (`md`) font
+// modifier so that when reading text scales up, padding/min-heights/gaps scale with it —
+// dampened by `--zbk-a11y-spacing-text-coupling` (default 0.5; defined in the a11y token
+// module). Density is independent, so "large text, compact layout" resolves correctly.
+//
+// `resolveSpaceScale` (src/scripts/tokens/build-space-scale.ts) bakes all of this in at
+// build time. Precision px tokens (1px, 2px, …) and `0` are emitted exact — they don't
+// scale. Set `tokens.spaceScale.static: true` to drop the viewport interpolation (density
+// and coupling still apply).
 const tokens = {
-  "viewport-modifier": {
-    value: `1vw`,
-    type: "utility",
+  "min-scale": {
+    value: 0.85,
+    type: "setting",
     description:
-      "Amount of viewport to add to sizing classes (only on screens wider than 40rem)",
-  },
-  "max-size-modifer": {
-    value: `1.25`,
-    type: "utility",
-    description:
-      "Maximum amount the viewport modifier can increase a sizing token by.",
+      "Fraction of a spacing token's authored (max-viewport) value it reaches at the min viewport.",
   },
   "neg-15": {
     value: `-15rem`,

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import type { Frontmatter } from '$lib/types/frontmatter';
+  import Inspector from '$lib/components/Inspector.svelte';
 
   // Content-register layout (instrument / reference). Dense, with a right
   // inspector rail. The app shell is provided by the root +layout.svelte.
@@ -26,8 +27,7 @@
     {#if inspector}
       {@render inspector()}
     {:else}
-      <!-- TODO(Phase 4): mount the live token x-ray Inspector here. -->
-      <p class="reference-inspector-placeholder">Inspector rail — wired in Phase 4.</p>
+      <Inspector />
     {/if}
   </aside>
 </div>
@@ -54,10 +54,6 @@
     color: var(--zbk-app-ink-soft);
     position: sticky;
     top: var(--zbk-spacing-3);
-  }
-
-  .reference-inspector-placeholder {
-    margin: 0;
   }
 
   @media (max-width: 80rem) {

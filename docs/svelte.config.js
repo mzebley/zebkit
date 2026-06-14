@@ -1,6 +1,7 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex } from 'mdsvex';
+import rehypeSlug from 'rehype-slug';
 import path from 'node:path';
 
 const docsRoot = process.cwd().endsWith(`${path.sep}docs`)
@@ -15,6 +16,8 @@ const config = {
     vitePreprocess(),
     mdsvex({
       extensions: ['.md', '.mdx'],
+      // Generate slug ids on headings so in-page anchor links resolve site-wide.
+      rehypePlugins: [rehypeSlug],
       layout: {
         // Registers (brief §3) — selected per page via frontmatter `layout`.
         editorial: layoutPath('src/lib/layouts/EditorialLayout.svelte'),

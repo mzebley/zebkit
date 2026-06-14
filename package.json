@@ -35,6 +35,7 @@
     "build:components": "tsx scripts/build-components.ts",
     "build-scripts": "tsc",
     "build:tokens": "tsx -r tsconfig-paths/register src/scripts/tokens/run.ts",
+    "build:hero-themes": "tsx -r tsconfig-paths/register src/scripts/tokens/build-hero-themes.ts",
     "build:css": "npm run generate:utilities && npm run build:tokens",
     "build:defaults": "tsx -r tsconfig-paths/register scripts/build-defaults.ts",
     "build:editor": "tsx scripts/build-editor.ts",

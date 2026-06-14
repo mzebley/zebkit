@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "sync:tokens": "npm run build:tokens --prefix .. -- --config zebkit.docs.config.json && node ./scripts/copy-tokens.js",
+    "sync:tokens": "npm run build:tokens --prefix .. -- --config zebkit.docs.config.json && npm run build:hero-themes --prefix .. && node ./scripts/copy-tokens.js",
     "predev": "npm run sync:tokens && svelte-kit sync",
     "dev": "vite dev",
     "prestart": "npm run sync:tokens && svelte-kit sync",
@@ -13,13 +13,12 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-  },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.0",
     "@sveltejs/kit": "^2.7.2",
     "@sveltejs/vite-plugin-svelte": "^4.0.4",
     "mdsvex": "^0.11.2",
+    "rehype-slug": "^6.0.0",
     "svelte": "^5.0.0"
   }
 }
