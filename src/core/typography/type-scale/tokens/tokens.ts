@@ -74,6 +74,18 @@ const tokens = {
     description: "Triple extra large font size.",
     a11y: `--${ZEBKIT_PREFIX}-a11y-font-size-modifier-3xl`,
   },
+    "4xl": {
+    value: `4.5rem`,
+    type: "rootFontSize",
+    description: "Quadruple extra large font size.",
+    a11y: `--${ZEBKIT_PREFIX}-a11y-font-size-modifier-4xl`,
+  },
+    "5xl": {
+    value: `5rem`,
+    type: "rootFontSize",
+    description: "Quintuple extra large font size.",
+    a11y: `--${ZEBKIT_PREFIX}-a11y-font-size-modifier-5xl`,
+  },
 } as const satisfies TypeScaleTokens;
 
 export default tokens;

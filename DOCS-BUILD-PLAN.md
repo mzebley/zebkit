@@ -64,7 +64,8 @@ This phase makes the site *look* like the brief. Per §2 of the brief, the look 
 - **Done when:** all three render on the hello page.
 - **Verify:** visual check; computed `font-family` matches.
 
-### T1.2 — The docs base theme = a real zebkit theme config (supersedes the interim `app.css` overrides)
+### T1.2 — The docs base theme = a real zebkit theme config (supersedes the interim `app.css` overrides) — ✓ DONE (Claude)
+> Implemented as a **full theme suite** in `theme/zebkit-docs/`: `font-family` (Newsreader / Instrument Serif / Space Mono), `app` (warm butterfield canvas + dusk ink + hairline dusk borders — fixes the empty-border gap), `accent-primary` → **ember** (warm rust — the single restrained interactive accent; flows to button borders + focus), `accent-secondary` → sea, `brand` → butterfield, `neutral` → stone, `focus` → ember ring, and editorial type scales (`font-size` incl. 5xl=6rem hero display, `line-height`, `text-measure` 3=65ch). `zebkit.docs.config.json` sets `customTokenPath: "./theme/zebkit-docs"` (base stays `default`, filename unchanged). `app.css` stripped to resets; self-hosted fonts removed (Google Fonts via tokens). `editorial.css` measure now token-driven (`text-measure-3`). Status colors / action / button / spacing / a11y intentionally left at zebkit defaults (functional, not part of the neutral-chrome identity). `npm run check` green. See Gaps re: self-hosting.
 > The docs site is itself a zebkit theme — built the way a consumer builds, not by hand-overriding vars. **Core/theme-authoring work, not Haiku-scoped** (`theme/` is at the repo root).
 - **Author** `theme/zebkit-docs/*.tokens.json` with the docs' real token values: font families (display = Instrument Serif, body = Newsreader, mono = Space Mono), warm-neutral `app`/`canvas`/`ink`, etc. Model on the existing `theme/dynamowaves/` set.
 - **Point** `zebkit.docs.config.json` at `theme: "custom"`, `customTokenPath: "./theme/zebkit-docs"`, `customThemeName: "zebkit-docs"`, and emit the compiled CSS into `docs/static/zebkit/`.
@@ -89,7 +90,7 @@ This phase makes the site *look* like the brief. Per §2 of the brief, the look 
 ## Phase 2 — Shell
 
 ### T2.1 — TopBar
-- **File:** `docs/src/lib/components/TopBar.svelte`. Contains: wordmark (mono), Cmd-K trigger (opens an empty palette modal for now — wired in Phase 8), `A11yDials` popover (Task 2.1a), light/dark toggle, and the active **reskin** indicator is NOT here (hero-local).
+- **File:** `docs/src/lib/components/TopBar.svelte`. Contains: wordmark (mono), Cmd-K trigger (opens an empty palette modal for now — wired in Phase 8), `A11yDials` popover (Task 2.1a). The active **reskin** indicator is NOT here (hero-local). **Light/dark toggle is deferred** — zebkit has no dark-mode mechanism yet (the `app` `*-inverse` tokens exist but nothing toggles them); leave a placeholder slot if convenient but do not implement dark theming or invent a mechanism. Log it as a gap, like contrast.
 - **T2.1a `A11yDials.svelte`:** sliders/toggles for fontScale, density, reducedMotion bound to the Task 1.3 store. Keyboard-operable, labelled. **Contrast is intentionally cut for now** — historically high-contrast is its own theme, not a runtime override; it'll be revisited as a `theme/<name>` config (and likely a scoped-theme application) later. Do not build a contrast control; leave the store's `contrast` field inert.
 - **Done when:** dials in the bar reflow the site live.
 - **Verify:** drag fontScale → text scales; tab-navigation reaches every control.
@@ -155,7 +156,8 @@ All catalog pages are **generated from sources of truth**, never hand-written.
 ## Phase C — Core prerequisite: scoped-theme support (zebkit, NOT docs — owned by Mark/Claude)
 > Required before the hero themes (Phase 5). This is a `src/core`/`src/scripts` change in Mark's refactor zone — **do not assign to Haiku.** It also makes "theme a subtree" a real zebkit capability the docs then document.
 
-### TC.1 — `rootSelector` option on the token compiler
+### TC.1 — `rootSelector` option on the token compiler — ✓ DONE (Claude)
+> Implemented: `rootSelector?: string` on `TokensConfig` (`src/scripts/config.ts`), threaded into `convertTokensToCssVars` and the palette-globals block in `build-tokens.ts`. Defaults to `:root` (backward-compatible); primitive color ramps stay global, token layer scopes. Unit test in `src/scripts/tokens/token-converter.test.ts` (+ a `chalk` jest mock so token modules are testable). Smoke-tested end-to-end. `npm run check` green.
 - Add an optional `rootSelector` to `TokensConfig` (`src/scripts/config.ts`). When set, the token compiler emits CSS variables (and the palette-globals block, currently `:root {` in `build-tokens.ts`) under that selector instead of `:root` — e.g. `[data-zbk-theme="brutalist"] { --zbk-…: … }`.
 - Default (unset) = current `:root` behavior; fully backward-compatible.
 - **Done when:** a config with `rootSelector: '[data-zbk-theme="x"]'` produces theme CSS scoped to that selector; existing default builds are byte-unchanged.
@@ -251,8 +253,11 @@ Phase 0 (clean) → 1 (theme) → 2 (shell) → 3 (content) → 4 (generators) �
 ### Gaps found
 _(Agents: append any missing-utility / missing-token findings here instead of hard-coding. Each: what you needed, where, and the closest existing token/utility.)_
 
-- **[Phase 1] Type scale has no display-large step.** zebkit's `--zbk-font-size-*` tops out at `3xl`. The editorial register (magazine h1 / hero display, brief §3–4) wants a larger step. `editorial.css` h1 is currently bound to `--zbk-font-size-3xl` as a stopgap. Consider extending the primitive scale with `4xl`/`5xl` display steps — this is a real design-system gap, not docs-only.
+- ~~**[Phase 1] Type scale has no display-large step.**~~ RESOLVED: Mark added `4xl`/`5xl` to the core type-scale module; the docs theme now sets them (`5xl` = 6rem hero display). Page h1 stays `3xl`; hero uses the larger steps.
 - **[Phase 1] `--zbk-app-border` and `--zbk-app-border-muted` are both empty** in the default theme (no value). Any border bound to them renders colorless. Editorial/instrument surfaces will need a real app-border token value.
 - **[Phase 1] Contrast deferred (not a gap to fix).** The theme store carries an inert `contrast` field; the contrast dial is intentionally cut (see T2.1a). High-contrast will be designed later as its own `theme/<name>` config rather than a runtime modifier — no contrast token is needed for now.
 
 _Note: three broken token references in `editorial.css` (`--zbk-font-size-base`→`-md`, `--zbk-font-size-4xl`→`-3xl`, `--zbk-radius-sm`→`--zbk-border-radius-sm`) were naming bugs (correct tokens existed), fixed during Phase 1 review — not zebkit gaps._
+
+- **[Theme override mechanism] `mergeTokens` is value-only.** The `customTokenPath` override layer only replaces an existing token's `value` — it **ignores new keys** ("Extra key … Ignoring") and **cannot change a token's `type`**. Consequences: (a) extending the type scale (the `4xl`/`5xl` gap above) requires editing the core font-size token module, not a theme override; (b) a theme cannot switch a font token from Google-hosted to self-hosted, because that's a `type` change (`googleFont` → `fontFamily`).
+- **[Fonts] No self-hosted-font path via theming → docs use Google Fonts.** Because of the `type`-change limitation above, the docs base theme keeps the default `googleFont` font tokens and just overrides their values, so zebkit emits Google Fonts `@import`s (Newsreader / Instrument Serif / Space Mono). This replaced Haiku's Phase 1 self-hosted `@font-face` setup (now removed). Mark *preferred* self-hosting — restoring it cleanly would need a small core enhancement (e.g. let a font token declare `selfHosted`/`@font-face` source, or allow `type` overrides in the theme layer). Flagged for a decision; not blocking.

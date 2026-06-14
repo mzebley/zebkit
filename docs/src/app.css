@@ -1,81 +1,14 @@
-/* @font-face declarations for self-hosted fonts */
-@font-face {
-  font-family: 'Instrument Serif';
-  src: url('/fonts/Instrument_Serif/InstrumentSerif-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
+/*
+ * Docs global styles.
+ *
+ * The docs site's entire look (fonts, palette, borders, etc.) is a real zebkit
+ * theme compiled from `theme/zebkit-docs/` via `zebkit.docs.config.json` and loaded
+ * as `/zebkit/zbk-default.min.css` (see app.html). Fonts are loaded by zebkit's own
+ * `@import` of Google Fonts from the font-family tokens — no @font-face here, no
+ * hand-overriding of CSS variables. Keep this file to bare document-level resets only.
+ */
 
-@font-face {
-  font-family: 'Instrument Serif';
-  src: url('/fonts/Instrument_Serif/InstrumentSerif-Italic.ttf') format('truetype');
-  font-weight: normal;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Newsreader';
-  src: url('/fonts/Newsreader/Newsreader-VariableFont_opsz,wght.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Newsreader';
-  src: url('/fonts/Newsreader/Newsreader-Italic-VariableFont_opsz,wght.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Space Mono';
-  src: url('/fonts/Space_Mono/SpaceMono-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Space Mono';
-  src: url('/fonts/Space_Mono/SpaceMono-Italic.ttf') format('truetype');
-  font-weight: normal;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Space Mono';
-  src: url('/fonts/Space_Mono/SpaceMono-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Space Mono';
-  src: url('/fonts/Space_Mono/SpaceMono-BoldItalic.ttf') format('truetype');
-  font-weight: bold;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Atkinson Hyperlegible Next';
-  src: url('/fonts/Atkinson_Hyperlegible_Next/AtkinsonHyperlegibleNext-VariableFont_wght.ttf') format('truetype');
-  font-weight: 400 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Atkinson Hyperlegible Next';
-  src: url('/fonts/Atkinson_Hyperlegible_Next/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.ttf') format('truetype');
-  font-weight: 400 700;
-  font-style: italic;
-}
-
-/* Typography token overrides — docs theme */
 :root {
-  /* Map zebkit typography tokens to self-hosted fonts */
-  --zbk-font-family-primary: 'Newsreader', serif;
-  --zbk-font-family-alt: 'Instrument Serif', serif;
-  --zbk-font-family-monospace: 'Space Mono', monospace;
-
   font-family: var(--zbk-font-family-body);
 }
 

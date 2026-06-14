@@ -36,6 +36,14 @@ export type TokensConfig = {
   theme?: string;
   customTokenPath?: string;
   customThemeName?: string;
+  /**
+   * Optional CSS selector to scope emitted token variables under, instead of `:root`.
+   * e.g. `'[data-zbk-theme="brutalist"]'`. This scopes the token layer
+   * (semantic / alias / component custom properties) so a whole theme can apply to a
+   * subtree rather than the document root. Primitive color ramps emitted by SCSS remain
+   * global. Unset = current `:root` behavior (backward-compatible).
+   */
+  rootSelector?: string;
   exportTokens?: boolean;
   splitMode?: 'combined' | 'per-module';
   outputFormats?: Array<'JSON' | 'TypeScript' | 'JavaScript'>;

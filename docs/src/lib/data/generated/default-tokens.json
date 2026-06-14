@@ -96,314 +96,6 @@
       "description": "Semantic z-index for tooltips (highest)."
     }
   },
-  "zbk-transition": {
-    "duration-default": {
-      "value": "325ms",
-      "type": "transition",
-      "description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "a11y": true
-    },
-    "duration-slow": {
-      "value": "625ms",
-      "type": "transition",
-      "description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "a11y": true
-    },
-    "duration-fast": {
-      "value": "125ms",
-      "type": "transition",
-      "description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "a11y": true
-    },
-    "playful-motion-function-default": {
-      "value": "cubic-bezier(0.38, 1.21, 0.22, 1.00)",
-      "type": "transition",
-      "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate."
-    },
-    "playful-motion-function-slow": {
-      "value": "cubic-bezier(0.39, 1.29, 0.35, 0.98)",
-      "type": "transition",
-      "description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt."
-    },
-    "playful-motion-function-fast": {
-      "value": "cubic-bezier(0.42, 1.67, 0.21, 0.90)",
-      "type": "transition",
-      "description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid."
-    },
-    "playful-motion-duration-default": {
-      "value": "500ms",
-      "type": "transition",
-      "description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
-      "a11y": true
-    },
-    "playful-motion-duration-slow": {
-      "value": "650ms",
-      "type": "transition",
-      "description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
-      "a11y": true
-    },
-    "playful-motion-duration-fast": {
-      "value": "350ms",
-      "type": "transition",
-      "description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
-      "a11y": true
-    },
-    "playful-fx-function-default": {
-      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
-    },
-    "playful-fx-function-slow": {
-      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce."
-    },
-    "playful-fx-function-fast": {
-      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth."
-    },
-    "playful-fx-duration-default": {
-      "value": "200ms",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
-      "a11y": true
-    },
-    "playful-fx-duration-slow": {
-      "value": "300ms",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
-      "a11y": true
-    },
-    "playful-fx-duration-fast": {
-      "value": "150ms",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
-      "a11y": true
-    },
-    "calm-motion-function-default": {
-      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "type": "transition",
-      "description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish."
-    },
-    "calm-motion-function-slow": {
-      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "type": "transition",
-      "description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate."
-    },
-    "calm-motion-function-fast": {
-      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "type": "transition",
-      "description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion."
-    },
-    "calm-motion-duration-default": {
-      "value": "500ms",
-      "type": "transition",
-      "description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
-      "a11y": true
-    },
-    "calm-motion-duration-slow": {
-      "value": "750ms",
-      "type": "transition",
-      "description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
-      "a11y": true
-    },
-    "calm-motion-duration-fast": {
-      "value": "350ms",
-      "type": "transition",
-      "description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
-      "a11y": true
-    },
-    "calm-fx-function-default": {
-      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
-    },
-    "calm-fx-function-slow": {
-      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained."
-    },
-    "calm-fx-function-fast": {
-      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention."
-    },
-    "calm-fx-duration-default": {
-      "value": "200ms",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
-      "a11y": true
-    },
-    "calm-fx-duration-slow": {
-      "value": "300ms",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
-      "a11y": true
-    },
-    "calm-fx-duration-fast": {
-      "value": "150ms",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
-      "a11y": true
-    }
-  },
-  "zbk-opacity": {
-    "0": {
-      "value": 0,
-      "type": "opacity",
-      "description": "Fully transparent (invisible)."
-    },
-    "5": {
-      "value": 0.05,
-      "type": "opacity",
-      "description": "5% opacity - barely visible."
-    },
-    "10": {
-      "value": 0.1,
-      "type": "opacity",
-      "description": "10% opacity - very faint."
-    },
-    "15": {
-      "value": 0.15,
-      "type": "opacity",
-      "description": "15% opacity - faint."
-    },
-    "20": {
-      "value": 0.2,
-      "type": "opacity",
-      "description": "20% opacity - subtle."
-    },
-    "25": {
-      "value": 0.25,
-      "type": "opacity",
-      "description": "25% opacity - quarter visible."
-    },
-    "30": {
-      "value": 0.3,
-      "type": "opacity",
-      "description": "30% opacity - light."
-    },
-    "40": {
-      "value": 0.4,
-      "type": "opacity",
-      "description": "40% opacity - moderate-light."
-    },
-    "50": {
-      "value": 0.5,
-      "type": "opacity",
-      "description": "50% opacity - half visible."
-    },
-    "60": {
-      "value": 0.6,
-      "type": "opacity",
-      "description": "60% opacity - moderate."
-    },
-    "70": {
-      "value": 0.7,
-      "type": "opacity",
-      "description": "70% opacity - mostly visible."
-    },
-    "75": {
-      "value": 0.75,
-      "type": "opacity",
-      "description": "75% opacity - three-quarters visible."
-    },
-    "80": {
-      "value": 0.8,
-      "type": "opacity",
-      "description": "80% opacity - largely visible."
-    },
-    "85": {
-      "value": 0.85,
-      "type": "opacity",
-      "description": "85% opacity - mostly opaque."
-    },
-    "90": {
-      "value": 0.9,
-      "type": "opacity",
-      "description": "90% opacity - nearly opaque."
-    },
-    "95": {
-      "value": 0.95,
-      "type": "opacity",
-      "description": "95% opacity - almost fully opaque."
-    },
-    "100": {
-      "value": 1,
-      "type": "opacity",
-      "description": "Fully opaque (default)."
-    }
-  },
-  "zbk-focus": {
-    "color": {
-      "value": "{color.cyan-600}",
-      "type": "color",
-      "description": "Color of focus outline"
-    },
-    "width": {
-      "value": "{spacing.025}",
-      "type": "sizing",
-      "description": "Width of focus outline"
-    },
-    "offset": {
-      "value": "{spacing.025}",
-      "type": "spacing",
-      "description": "Offset distance of focus outline"
-    }
-  },
-  "zbk-elevation": {
-    "none": {
-      "value": "none",
-      "type": "boxShadow",
-      "description": "No shadow."
-    },
-    "xs": {
-      "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Extra-small shadow for subtle elevation."
-    },
-    "sm": {
-      "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Small shadow for low elevation."
-    },
-    "md": {
-      "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Medium shadow for moderate elevation."
-    },
-    "lg": {
-      "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Large shadow for high elevation."
-    },
-    "xl": {
-      "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Extra-large shadow for very high elevation."
-    },
-    "2xl": {
-      "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
-      "type": "boxShadow",
-      "description": "2XL shadow for maximum elevation."
-    },
-    "inner": {
-      "value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Inner shadow for inset/pressed effect."
-    },
-    "inner-sm": {
-      "value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Small inner shadow."
-    },
-    "inner-lg": {
-      "value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Large inner shadow."
-    }
-  },
   "zbk-spacing": {
     "0": {
       "value": "0px",
@@ -795,6 +487,162 @@
       "description": "Preferred horizontal padding for page."
     }
   },
+  "zbk-opacity": {
+    "0": {
+      "value": 0,
+      "type": "opacity",
+      "description": "Fully transparent (invisible)."
+    },
+    "5": {
+      "value": 0.05,
+      "type": "opacity",
+      "description": "5% opacity - barely visible."
+    },
+    "10": {
+      "value": 0.1,
+      "type": "opacity",
+      "description": "10% opacity - very faint."
+    },
+    "15": {
+      "value": 0.15,
+      "type": "opacity",
+      "description": "15% opacity - faint."
+    },
+    "20": {
+      "value": 0.2,
+      "type": "opacity",
+      "description": "20% opacity - subtle."
+    },
+    "25": {
+      "value": 0.25,
+      "type": "opacity",
+      "description": "25% opacity - quarter visible."
+    },
+    "30": {
+      "value": 0.3,
+      "type": "opacity",
+      "description": "30% opacity - light."
+    },
+    "40": {
+      "value": 0.4,
+      "type": "opacity",
+      "description": "40% opacity - moderate-light."
+    },
+    "50": {
+      "value": 0.5,
+      "type": "opacity",
+      "description": "50% opacity - half visible."
+    },
+    "60": {
+      "value": 0.6,
+      "type": "opacity",
+      "description": "60% opacity - moderate."
+    },
+    "70": {
+      "value": 0.7,
+      "type": "opacity",
+      "description": "70% opacity - mostly visible."
+    },
+    "75": {
+      "value": 0.75,
+      "type": "opacity",
+      "description": "75% opacity - three-quarters visible."
+    },
+    "80": {
+      "value": 0.8,
+      "type": "opacity",
+      "description": "80% opacity - largely visible."
+    },
+    "85": {
+      "value": 0.85,
+      "type": "opacity",
+      "description": "85% opacity - mostly opaque."
+    },
+    "90": {
+      "value": 0.9,
+      "type": "opacity",
+      "description": "90% opacity - nearly opaque."
+    },
+    "95": {
+      "value": 0.95,
+      "type": "opacity",
+      "description": "95% opacity - almost fully opaque."
+    },
+    "100": {
+      "value": 1,
+      "type": "opacity",
+      "description": "Fully opaque (default)."
+    }
+  },
+  "zbk-focus": {
+    "color": {
+      "value": "{accent-primary.600}",
+      "type": "color",
+      "description": "Color of focus outline"
+    },
+    "width": {
+      "value": "{spacing.025}",
+      "type": "sizing",
+      "description": "Width of focus outline"
+    },
+    "offset": {
+      "value": "{spacing.025}",
+      "type": "spacing",
+      "description": "Offset distance of focus outline"
+    }
+  },
+  "zbk-elevation": {
+    "none": {
+      "value": "none",
+      "type": "boxShadow",
+      "description": "No shadow."
+    },
+    "xs": {
+      "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Extra-small shadow for subtle elevation."
+    },
+    "sm": {
+      "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Small shadow for low elevation."
+    },
+    "md": {
+      "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Medium shadow for moderate elevation."
+    },
+    "lg": {
+      "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Large shadow for high elevation."
+    },
+    "xl": {
+      "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Extra-large shadow for very high elevation."
+    },
+    "2xl": {
+      "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+      "type": "boxShadow",
+      "description": "2XL shadow for maximum elevation."
+    },
+    "inner": {
+      "value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Inner shadow for inset/pressed effect."
+    },
+    "inner-sm": {
+      "value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Small inner shadow."
+    },
+    "inner-lg": {
+      "value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Large inner shadow."
+    }
+  },
   "zbk-button": {
     "ink": {
       "value": "{app.ink}",
@@ -1130,6 +978,158 @@
       "description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'"
     }
   },
+  "zbk-transition": {
+    "duration-default": {
+      "value": "325ms",
+      "type": "transition",
+      "description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "a11y": true
+    },
+    "duration-slow": {
+      "value": "625ms",
+      "type": "transition",
+      "description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "a11y": true
+    },
+    "duration-fast": {
+      "value": "125ms",
+      "type": "transition",
+      "description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "a11y": true
+    },
+    "playful-motion-function-default": {
+      "value": "cubic-bezier(0.38, 1.21, 0.22, 1.00)",
+      "type": "transition",
+      "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate."
+    },
+    "playful-motion-function-slow": {
+      "value": "cubic-bezier(0.39, 1.29, 0.35, 0.98)",
+      "type": "transition",
+      "description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt."
+    },
+    "playful-motion-function-fast": {
+      "value": "cubic-bezier(0.42, 1.67, 0.21, 0.90)",
+      "type": "transition",
+      "description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid."
+    },
+    "playful-motion-duration-default": {
+      "value": "500ms",
+      "type": "transition",
+      "description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
+      "a11y": true
+    },
+    "playful-motion-duration-slow": {
+      "value": "650ms",
+      "type": "transition",
+      "description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
+      "a11y": true
+    },
+    "playful-motion-duration-fast": {
+      "value": "350ms",
+      "type": "transition",
+      "description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
+      "a11y": true
+    },
+    "playful-fx-function-default": {
+      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
+    },
+    "playful-fx-function-slow": {
+      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce."
+    },
+    "playful-fx-function-fast": {
+      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth."
+    },
+    "playful-fx-duration-default": {
+      "value": "200ms",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
+      "a11y": true
+    },
+    "playful-fx-duration-slow": {
+      "value": "300ms",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
+      "a11y": true
+    },
+    "playful-fx-duration-fast": {
+      "value": "150ms",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
+      "a11y": true
+    },
+    "calm-motion-function-default": {
+      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "type": "transition",
+      "description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish."
+    },
+    "calm-motion-function-slow": {
+      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "type": "transition",
+      "description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate."
+    },
+    "calm-motion-function-fast": {
+      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "type": "transition",
+      "description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion."
+    },
+    "calm-motion-duration-default": {
+      "value": "500ms",
+      "type": "transition",
+      "description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
+      "a11y": true
+    },
+    "calm-motion-duration-slow": {
+      "value": "750ms",
+      "type": "transition",
+      "description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
+      "a11y": true
+    },
+    "calm-motion-duration-fast": {
+      "value": "350ms",
+      "type": "transition",
+      "description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
+      "a11y": true
+    },
+    "calm-fx-function-default": {
+      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
+    },
+    "calm-fx-function-slow": {
+      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained."
+    },
+    "calm-fx-function-fast": {
+      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention."
+    },
+    "calm-fx-duration-default": {
+      "value": "200ms",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
+      "a11y": true
+    },
+    "calm-fx-duration-slow": {
+      "value": "300ms",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
+      "a11y": true
+    },
+    "calm-fx-duration-fast": {
+      "value": "150ms",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
+      "a11y": true
+    }
+  },
   "zbk-font-size": {
     "viewport-font-size-modifier": {
       "value": ".23vw",
@@ -1148,13 +1148,13 @@
       "a11y": "--zbk-a11y-font-size-modifier-3xs"
     },
     "2xs": {
-      "value": ".82rem",
+      "value": ".8rem",
       "type": "rootFontSize",
       "description": "Second smallest font size.",
       "a11y": "--zbk-a11y-font-size-modifier-2xs"
     },
     "xs": {
-      "value": ".9rem",
+      "value": ".875rem",
       "type": "rootFontSize",
       "description": "Extra small font size.",
       "a11y": "--zbk-a11y-font-size-modifier-xs"
@@ -1172,19 +1172,19 @@
       "a11y": "--zbk-a11y-font-size-modifier-md"
     },
     "lg": {
-      "value": "1.75rem",
+      "value": "1.5rem",
       "type": "rootFontSize",
       "description": "Large font size.",
       "a11y": "--zbk-a11y-font-size-modifier-lg"
     },
     "xl": {
-      "value": "2.125rem",
+      "value": "2rem",
       "type": "rootFontSize",
       "description": "Extra large font size.",
       "a11y": "--zbk-a11y-font-size-modifier-xl"
     },
     "2xl": {
-      "value": "2.6rem",
+      "value": "2.75rem",
       "type": "rootFontSize",
       "description": "Double extra large font size.",
       "a11y": "--zbk-a11y-font-size-modifier-2xl"
@@ -1194,21 +1194,33 @@
       "type": "rootFontSize",
       "description": "Triple extra large font size.",
       "a11y": "--zbk-a11y-font-size-modifier-3xl"
+    },
+    "4xl": {
+      "value": "4.5rem",
+      "type": "rootFontSize",
+      "description": "Quadruple extra large font size.",
+      "a11y": "--zbk-a11y-font-size-modifier-4xl"
+    },
+    "5xl": {
+      "value": "6rem",
+      "type": "rootFontSize",
+      "description": "Quintuple extra large font size.",
+      "a11y": "--zbk-a11y-font-size-modifier-5xl"
     }
   },
   "zbk-text-measure": {
     "1": {
-      "value": "32ch",
+      "value": "34ch",
       "type": "sizing",
       "description": "Cards, sidebars, tight UI."
     },
     "2": {
-      "value": "45ch",
+      "value": "48ch",
       "type": "sizing",
       "description": "Short text blocks, captions."
     },
     "3": {
-      "value": "60ch",
+      "value": "65ch",
       "type": "sizing",
       "description": "Base body content measure."
     },
@@ -1218,41 +1230,9 @@
       "description": "Articles, long-form content."
     },
     "5": {
-      "value": "85ch",
+      "value": "84ch",
       "type": "sizing",
       "description": "Articles, long-form content."
-    }
-  },
-  "zbk-line-height": {
-    "1": {
-      "value": "100%",
-      "type": "lineHeight",
-      "description": "Smallest line height.",
-      "a11y": true
-    },
-    "2": {
-      "value": "125%",
-      "type": "lineHeight",
-      "description": "Smaller line height.",
-      "a11y": true
-    },
-    "3": {
-      "value": "150%",
-      "type": "lineHeight",
-      "description": "Base line height.",
-      "a11y": true
-    },
-    "4": {
-      "value": "180%",
-      "type": "lineHeight",
-      "description": "Larger line height.",
-      "a11y": true
-    },
-    "5": {
-      "value": "200%",
-      "type": "lineHeight",
-      "description": "Largest line height.",
-      "a11y": true
     }
   },
   "zbk-letter-spacing": {
@@ -1287,23 +1267,79 @@
       "a11y": true
     }
   },
+  "zbk-font-weight": {
+    "thin": {
+      "value": "100",
+      "type": "fontWeight",
+      "description": "Lightest font weight.",
+      "a11y": true
+    },
+    "extralight": {
+      "value": "200",
+      "type": "fontWeight",
+      "description": "Lighter font weight.",
+      "a11y": true
+    },
+    "light": {
+      "value": "300",
+      "type": "fontWeight",
+      "description": "Light font weight.",
+      "a11y": true
+    },
+    "normal": {
+      "value": "400",
+      "type": "fontWeight",
+      "description": "Default font weight.",
+      "a11y": true
+    },
+    "medium": {
+      "value": "500",
+      "type": "fontWeight",
+      "description": "Medium font weight.",
+      "a11y": true
+    },
+    "semibold": {
+      "value": "600",
+      "type": "fontWeight",
+      "description": "Semibold font weight.",
+      "a11y": true
+    },
+    "bold": {
+      "value": "700",
+      "type": "fontWeight",
+      "description": "Bold font weight.",
+      "a11y": true
+    },
+    "extrabold": {
+      "value": "800",
+      "type": "fontWeight",
+      "description": "Bolder font weight.",
+      "a11y": true
+    },
+    "black": {
+      "value": "900",
+      "type": "fontWeight",
+      "description": "Boldest font weight.",
+      "a11y": true
+    }
+  },
   "zbk-font-family": {
     "primary": {
-      "value": "\"Atkinson Hyperlegible Next\", sans-serif",
+      "value": "\"Newsreader\", serif",
       "description": "Primary font family for use in the system. Usually used for body content and interface items.",
       "variable": true,
       "weights": "200,800",
       "type": "googleFont"
     },
     "alt": {
-      "value": "\"Merriweather\", serif",
+      "value": "\"Instrument Serif\", serif",
       "description": "Alternate font family for use in the system. Primarily used for headings.",
       "variable": true,
       "weights": "",
       "type": "googleFont"
     },
     "monospace": {
-      "value": "\"Fira Code\", monospace",
+      "value": "\"Space Mono\", monospace",
       "description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
       "variable": false,
       "weights": "",
@@ -1328,6 +1364,38 @@
       "value": "{font-family.monospace}",
       "description": "Font family used within <code> blocks",
       "type": "fontFamily"
+    }
+  },
+  "zbk-line-height": {
+    "1": {
+      "value": "100%",
+      "type": "lineHeight",
+      "description": "Smallest line height.",
+      "a11y": true
+    },
+    "2": {
+      "value": "120%",
+      "type": "lineHeight",
+      "description": "Smaller line height.",
+      "a11y": true
+    },
+    "3": {
+      "value": "150%",
+      "type": "lineHeight",
+      "description": "Base line height.",
+      "a11y": true
+    },
+    "4": {
+      "value": "170%",
+      "type": "lineHeight",
+      "description": "Larger line height.",
+      "a11y": true
+    },
+    "5": {
+      "value": "200%",
+      "type": "lineHeight",
+      "description": "Largest line height.",
+      "a11y": true
     }
   },
   "zbk-border": {
@@ -1385,62 +1453,6 @@
       "value": "{spacing.205}",
       "type": "borderRadius",
       "description": "Largest semantic corner radius."
-    }
-  },
-  "zbk-font-weight": {
-    "thin": {
-      "value": "100",
-      "type": "fontWeight",
-      "description": "Lightest font weight.",
-      "a11y": true
-    },
-    "extralight": {
-      "value": "200",
-      "type": "fontWeight",
-      "description": "Lighter font weight.",
-      "a11y": true
-    },
-    "light": {
-      "value": "300",
-      "type": "fontWeight",
-      "description": "Light font weight.",
-      "a11y": true
-    },
-    "normal": {
-      "value": "400",
-      "type": "fontWeight",
-      "description": "Default font weight.",
-      "a11y": true
-    },
-    "medium": {
-      "value": "500",
-      "type": "fontWeight",
-      "description": "Medium font weight.",
-      "a11y": true
-    },
-    "semibold": {
-      "value": "600",
-      "type": "fontWeight",
-      "description": "Semibold font weight.",
-      "a11y": true
-    },
-    "bold": {
-      "value": "700",
-      "type": "fontWeight",
-      "description": "Bold font weight.",
-      "a11y": true
-    },
-    "extrabold": {
-      "value": "800",
-      "type": "fontWeight",
-      "description": "Bolder font weight.",
-      "a11y": true
-    },
-    "black": {
-      "value": "900",
-      "type": "fontWeight",
-      "description": "Boldest font weight.",
-      "a11y": true
     }
   },
   "zbk-p": {
@@ -1567,61 +1579,61 @@
       "description": "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
-  "zbk-h6": {
+  "zbk-h5": {
     "font-family": {
       "value": "{font-family.heading}",
       "type": "fontFamily",
-      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-size": {
       "value": "{font-size.sm}",
       "type": "fontSize",
-      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
-      "value": "{font-weight.semibold}",
+      "value": "{font-weight.bold}",
       "type": "fontWeight",
-      "description": "Font weight for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Font weight for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "line-height": {
       "value": "{line-height.3}",
       "type": "lineHeight",
-      "description": "Line height for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Line height for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
       "value": "{letter-spacing.normal}",
       "type": "letterSpacing",
-      "description": "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Tracking for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
       "value": "{text-measure.3}",
       "type": "sizing",
-      "description": "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Maximum width for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
       "value": "{spacing.2}",
       "type": "spacing",
-      "description": "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Amount of margin inline start for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
       "value": "{spacing.1}",
       "type": "spacing",
-      "description": "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Amount of margin inline end for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "color": {
       "value": "{app.ink}",
       "type": "color",
-      "description": "Color of H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Color of H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-style": {
-      "value": "none",
+      "value": "italic",
       "type": "fontStyle",
-      "description": "Font style for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Font style for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "text-transform": {
-      "value": "uppercase",
+      "value": "none",
       "type": "textTransform",
-      "description": "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Text transform for H5 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
   "zbk-h4": {
@@ -1852,61 +1864,61 @@
       "description": "Text transform for H1 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
-  "zbk-h5": {
+  "zbk-h6": {
     "font-family": {
       "value": "{font-family.heading}",
       "type": "fontFamily",
-      "description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-size": {
       "value": "{font-size.sm}",
       "type": "fontSize",
-      "description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
-      "value": "{font-weight.bold}",
+      "value": "{font-weight.semibold}",
       "type": "fontWeight",
-      "description": "Font weight for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Font weight for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "line-height": {
       "value": "{line-height.3}",
       "type": "lineHeight",
-      "description": "Line height for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Line height for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
       "value": "{letter-spacing.normal}",
       "type": "letterSpacing",
-      "description": "Tracking for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
       "value": "{text-measure.3}",
       "type": "sizing",
-      "description": "Maximum width for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
       "value": "{spacing.2}",
       "type": "spacing",
-      "description": "Amount of margin inline start for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
       "value": "{spacing.1}",
       "type": "spacing",
-      "description": "Amount of margin inline end for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "color": {
       "value": "{app.ink}",
       "type": "color",
-      "description": "Color of H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Color of H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-style": {
-      "value": "italic",
+      "value": "none",
       "type": "fontStyle",
-      "description": "Font style for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Font style for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "text-transform": {
-      "value": "none",
+      "value": "uppercase",
       "type": "textTransform",
-      "description": "Text transform for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
   "zbk-neutral": {
@@ -2025,114 +2037,114 @@
   },
   "zbk-accent-primary": {
     "50": {
-      "value": "{color.violet-50}",
+      "value": "{color.ember-50}",
       "type": "color",
       "description": "For primary accent surfaces."
     },
     "100": {
-      "value": "{color.violet-100}",
+      "value": "{color.ember-100}",
       "type": "color",
       "description": "For primary accent surfaces."
     },
     "200": {
-      "value": "{color.violet-200}",
+      "value": "{color.ember-200}",
       "type": "color",
       "description": "For primary accent surfaces."
     },
     "300": {
-      "value": "{color.violet-300}",
+      "value": "{color.ember-300}",
       "type": "color",
       "description": "For primary accent surfaces."
     },
     "400": {
-      "value": "{color.violet-400}",
+      "value": "{color.ember-400}",
       "type": "color",
       "description": "For primary accent surfaces."
     },
     "500": {
-      "value": "{color.violet-500}",
+      "value": "{color.ember-500}",
       "type": "color",
       "description": "For primary accent surfaces."
     },
     "600": {
-      "value": "{color.violet-600}",
+      "value": "{color.ember-600}",
       "type": "color",
       "description": "For primary accent surfaces."
     },
     "700": {
-      "value": "{color.violet-700}",
+      "value": "{color.ember-700}",
       "type": "color",
       "description": "For primary accent surfaces."
     },
     "800": {
-      "value": "{color.violet-800}",
+      "value": "{color.ember-800}",
       "type": "color",
       "description": "For primary accent surfaces."
     },
     "900": {
-      "value": "{color.violet-900}",
+      "value": "{color.ember-900}",
       "type": "color",
       "description": "For primary accent surfaces."
     },
     "950": {
-      "value": "{color.violet-950}",
+      "value": "{color.ember-950}",
       "type": "color",
       "description": "For primary accent surfaces."
     }
   },
   "zbk-accent-secondary": {
     "50": {
-      "value": "{color.teal-50}",
+      "value": "{color.sea-50}",
       "type": "color",
       "description": "For secondary accent surfaces."
     },
     "100": {
-      "value": "{color.teal-100}",
+      "value": "{color.sea-100}",
       "type": "color",
       "description": "For secondary accent surfaces."
     },
     "200": {
-      "value": "{color.teal-200}",
+      "value": "{color.sea-200}",
       "type": "color",
       "description": "For secondary accent surfaces."
     },
     "300": {
-      "value": "{color.teal-300}",
+      "value": "{color.sea-300}",
       "type": "color",
       "description": "For secondary accent surfaces."
     },
     "400": {
-      "value": "{color.teal-400}",
+      "value": "{color.sea-400}",
       "type": "color",
       "description": "For secondary accent surfaces."
     },
     "500": {
-      "value": "{color.teal-500}",
+      "value": "{color.sea-500}",
       "type": "color",
       "description": "For secondary accent surfaces."
     },
     "600": {
-      "value": "{color.teal-600}",
+      "value": "{color.sea-600}",
       "type": "color",
       "description": "For secondary accent surfaces."
     },
     "700": {
-      "value": "{color.teal-700}",
+      "value": "{color.sea-700}",
       "type": "color",
       "description": "For secondary accent surfaces."
     },
     "800": {
-      "value": "{color.teal-800}",
+      "value": "{color.sea-800}",
       "type": "color",
       "description": "For secondary accent surfaces."
     },
     "900": {
-      "value": "{color.teal-900}",
+      "value": "{color.sea-900}",
       "type": "color",
       "description": "For secondary accent surfaces."
     },
     "950": {
-      "value": "{color.teal-950}",
+      "value": "{color.sea-950}",
       "type": "color",
       "description": "For secondary accent surfaces."
     }
@@ -2657,42 +2669,42 @@
       "description": "Muted inverse app ink color for subtle text and icons on inverse canvases."
     },
     "border": {
-      "value": "",
+      "value": "{color.dusk-200}",
       "type": "color",
       "description": "Base app border color for outlines, strokes, and dividers."
     },
     "border-soft": {
-      "value": "",
+      "value": "{color.dusk-100}",
       "type": "color",
       "description": "Soft app border color for low-emphasis outlines and dividers."
     },
     "border-muted": {
-      "value": "",
+      "value": "{color.dusk-300}",
       "type": "color",
       "description": "Muted app border color for subtle outlines and dividers."
     },
     "border-strong": {
-      "value": "",
+      "value": "{color.dusk-400}",
       "type": "color",
       "description": "Strong app border color for high-emphasis outlines and dividers."
     },
     "border-inverse": {
-      "value": "",
+      "value": "{color.dusk-700}",
       "type": "color",
       "description": "Base inverse app border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-soft": {
-      "value": "",
+      "value": "{color.dusk-800}",
       "type": "color",
       "description": "Soft inverse app border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-muted": {
-      "value": "",
+      "value": "{color.dusk-600}",
       "type": "color",
       "description": "Muted inverse app border color for subtle outlines on inverse canvases."
     },
     "border-inverse-strong": {
-      "value": "",
+      "value": "{color.dusk-500}",
       "type": "color",
       "description": "Strong inverse app border color for high-emphasis outlines on inverse canvases."
     }

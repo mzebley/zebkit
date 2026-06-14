@@ -45,7 +45,7 @@ const __dirname = path.dirname(__filename);
 
 const ZEBKIT_PREFIX = "zbk";
 
-const PALETTE_GLOBAL_COLORS = `:root {
+const paletteGlobalColors = (selector: string = ":root"): string => `${selector} {
   --zbk-color-global-black: #131313;
   --zbk-color-global-white: #fefefe;
   --zbk-color-global-transparent: transparent;
@@ -366,7 +366,8 @@ export async function runTokenBuild(
       exportTokens
     );
 
-    const cssVars = convertTokensToCssVars(tokens, { layers });
+    const rootSelector = tokensConfig?.rootSelector;
+    const cssVars = convertTokensToCssVars(tokens, { layers, selector: rootSelector });
     const tokenLookupOutputPath = resolveLookupOutputPath(
       tokensConfig?.tokenLookupOutputPath,
       resolvedDestinationPath
@@ -418,7 +419,7 @@ export async function runTokenBuild(
             `@use 'core/colors/palette/${family}' as zbk_smart_palette_${i};\n`
         )
         .join("");
-      finalVariantCss = `${inlineCss}\n${PALETTE_GLOBAL_COLORS}`;
+      finalVariantCss = `${inlineCss}\n${paletteGlobalColors(rootSelector)}`;
     }
 
     const enabledBreakpoints = buildEnabledBreakpointsList(

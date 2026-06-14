@@ -3,7 +3,7 @@
 .editorial-root {
   /* Baseline rhythm: use line-height-3 (150%) as the base vertical unit */
   --editorial-baseline: var(--zbk-line-height-3, 1.5);
-  --editorial-measure: 65ch;
+  --editorial-measure: var(--zbk-text-measure-3);
   --editorial-marginalia-width: 24ch;
   --editorial-gap: var(--zbk-spacing-3);
 
@@ -29,7 +29,7 @@
 }
 
 .editorial-main h1 {
-  /* 3xl is the current top of zebkit's scale; editorial display wants a larger step (see Gaps) */
+  /* Page-level h1 (hero display uses the larger 4xl/5xl steps in the docs theme). */
   font-size: var(--zbk-font-size-3xl);
   font-weight: bold;
 }
