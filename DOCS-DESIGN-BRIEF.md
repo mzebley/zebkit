@@ -18,7 +18,7 @@ A corollary resolves the "what should it even look like" question: zebkit carrie
 
 The docs site's entire appearance is achieved with **a zebkit token set + utility classes only** — no bespoke design language layered on top. The site *is* a consumer of zebkit, themed exactly the way a customer would theme it.
 
-This is the most credible proof possible: the reference site for "no one ever needs to leave the system" is one that **never left the system.** Two consequences are binding:
+Concretely, this is built the way a real consumer builds: the base look is a zebkit **theme config** (`theme/zebkit-docs/` token set compiled via `zebkit.docs.config.json`), not hand-written CSS-variable overrides. The four hero themes are likewise real compiled themes (`theme/zebkit-hero-*`), each scoped to the hero via the token compiler's `rootSelector` option — a capability the docs both *use* and *document*. This is the most credible proof possible: the reference site for "no one ever needs to leave the system" is one that **never left the system.** Two consequences are binding:
 
 - If building a page requires a hard-coded value or a custom class that isn't token-bound, that is a **gap in the utility/token surface** — log it (feeds [project-utility-coverage-tracker]), don't paper over it. The docs build is a continuous exhaustiveness test.
 - The "Reskin" hero (§6) is therefore not a trick. It is literally the same operation that produced the site — swapping one token set for another.
@@ -65,7 +65,8 @@ A **rich, full-bleed** composition of real product UI — app nav, a couple of c
 - Make it complex on purpose. Don't keep it above the fold; let it be a tall, impressive showpiece that rewards scrolling.
 - A **token-diff panel** shows the handful of token values that changed — making "the design is data" literal.
 - Caption: *"Same HTML. Same classes. Only the tokens changed."*
-- **Scope:** hero only for now (the rest of the site stays in its reference theme). Architect it so "reskin the whole site" is a later flip of the same switch.
+- **Mechanism:** each preset is a real compiled zebkit theme scoped via `rootSelector` to `[data-zbk-theme="<name>"]`; switching is just toggling that attribute on the hero root — pure CSS, no JS variable-setting.
+- **Scope:** hero only for now (the rest of the site stays in its reference theme). Because scoping is real, "reskin the whole site" is a later flip of the same switch (point the selector at `:root`).
 
 ### 6.2 Runtime a11y dials — *accessibility you operate*
 Persistent controls in the top chrome: **font scale, contrast, density/spacing, reduced-motion.** Dragging them visibly re-flows *the docs themselves* in real time, because they drive real zebkit a11y tokens. This is the only design-system site where accessibility is a thing you *operate*, not a badge — it proves "accessibility is a runtime property" by making the reader the runtime.

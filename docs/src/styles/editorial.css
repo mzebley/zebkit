@@ -1,0 +1,106 @@
+/* Editorial typographic primitives — marginalia, baseline rhythm, comfortable measure */
+
+.editorial-root {
+  /* Baseline rhythm: use line-height-3 (150%) as the base vertical unit */
+  --editorial-baseline: var(--zbk-line-height-3, 1.5);
+  --editorial-measure: 65ch;
+  --editorial-marginalia-width: 24ch;
+  --editorial-gap: var(--zbk-spacing-3);
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--editorial-gap);
+
+  font-size: var(--zbk-font-size-md);
+  line-height: var(--editorial-baseline);
+}
+
+/* Main editorial column — comfortable measure for reading */
+.editorial-main {
+  max-inline-size: var(--editorial-measure);
+}
+
+/* Editorial headings — use display font (Instrument Serif) */
+.editorial-main :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--zbk-font-family-alt);
+  line-height: var(--zbk-line-height-2, 1.25);
+  margin-block-start: calc(var(--editorial-baseline) * 2);
+  margin-block-end: var(--editorial-gap);
+}
+
+.editorial-main h1 {
+  /* 3xl is the current top of zebkit's scale; editorial display wants a larger step (see Gaps) */
+  font-size: var(--zbk-font-size-3xl);
+  font-weight: bold;
+}
+
+.editorial-main h2 {
+  font-size: var(--zbk-font-size-3xl);
+}
+
+.editorial-main h3 {
+  font-size: var(--zbk-font-size-2xl);
+}
+
+.editorial-main h4,
+.editorial-main h5,
+.editorial-main h6 {
+  font-size: var(--zbk-font-size-lg);
+}
+
+/* Paragraphs and block content — baseline rhythm */
+.editorial-main :is(p, ul, ol, blockquote, pre) {
+  margin-block-start: 0;
+  margin-block-end: var(--editorial-gap);
+}
+
+/* Code blocks — monospace font from tokens */
+.editorial-main code {
+  font-family: var(--zbk-font-family-code);
+  font-size: var(--zbk-font-size-sm);
+}
+
+.editorial-main pre {
+  font-size: var(--zbk-font-size-sm);
+  line-height: var(--zbk-line-height-3);
+  padding: var(--zbk-spacing-2);
+  background: var(--zbk-app-canvas-muted);
+  border-radius: var(--zbk-border-radius-sm);
+  overflow-x: auto;
+}
+
+/* Marginalia (sidenotes) — lighter font weight, smaller size */
+.editorial-marginalia {
+  max-inline-size: var(--editorial-marginalia-width);
+  font-size: var(--zbk-font-size-sm);
+  line-height: var(--zbk-line-height-3);
+  color: var(--zbk-app-ink-soft);
+}
+
+/* Optional drop-cap styling */
+.editorial-drop-cap::first-letter {
+  font-family: var(--zbk-font-family-alt);
+  font-size: var(--zbk-font-size-3xl);
+  font-weight: bold;
+  float: left;
+  line-height: var(--zbk-line-height-1);
+  padding-right: var(--zbk-spacing-1);
+}
+
+/* Responsive: two-column grid on wider screens */
+@media (min-width: 75rem) {
+  .editorial-root {
+    grid-template-columns: 1fr var(--editorial-marginalia-width);
+    grid-template-areas:
+      'main marginalia';
+  }
+
+  .editorial-main {
+    grid-area: main;
+  }
+
+  .editorial-marginalia {
+    grid-area: marginalia;
+    padding-top: var(--editorial-gap);
+  }
+}

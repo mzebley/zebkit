@@ -12,7 +12,7 @@
 2. **Token-bound only.** Never write a hard-coded color/size/radius/font value, even in CSS. Use a zebkit utility class, or bind a zebkit CSS variable (`var(--zbk-…)`). If no utility or token exists for what you need, **stop and log it** in a `### Gaps found` section at the bottom of this file — do not hard-code.
 3. **Sources of truth:** token values come from `static/zebkit/*.json` (synced from the build); utility info comes from `src/core/styles/utility-classes/*.utilities.manifest.json`. Never hand-transcribe values.
 4. **Svelte 5 + runes only** (see cheat-sheet below). Do not mix in Svelte 4 `export let` / `on:click` / stores syntax.
-5. **Checkpoints:** each Phase ends with a checkpoint. At a checkpoint, `npm run build` (in `docs/`) and `npm run check` (repo root) must both pass.
+5. **Checkpoints:** each Phase ends with a checkpoint. At a checkpoint, `npm run build` (in `docs/`) and `npm run check` (repo root) must both pass. **A green build does NOT prove your tokens resolve** — an invalid `var(--zbk-…)` with no fallback is silently dropped, not an error. When you reference zebkit tokens in CSS, verify each name actually exists in `docs/static/zebkit/zbk-default.min.css` (`grep -- "--zbk-foo:"`); don't assume.
 6. **Don't author "for agents" prose** (Phase 7) — build the structure/wiring only and leave content as clearly-marked TODO.
 7. **Stay inside `docs/`.** All your edits live under `docs/` only. If a build failure traces to a file outside `docs/` (e.g. `src/core/**`), **STOP and report it as a blocker** in your summary — do not edit core/library source. That code is mid-refactor and owned by Mark; an out-of-scope "fix" can collide with his work.
 
@@ -64,10 +64,13 @@ This phase makes the site *look* like the brief. Per §2 of the brief, the look 
 - **Done when:** all three render on the hello page.
 - **Verify:** visual check; computed `font-family` matches.
 
-### T1.2 — The docs theme token overrides
-- **File:** `docs/src/app.css` (and a `docs/static/zebkit/` theme layer if cleaner). Map zebkit typography tokens to: display/headings → Fraunces, body/UI → Atkinson Hyperlegible Next, mono → IBM Plex Mono. Set the warm-neutral canvas/ink per brief §5 by remapping zebkit `app`/`canvas`/`ink` alias tokens. **Values come from token remaps, not raw hex** where a token exists.
-- **Done when:** body reads in Atkinson, headings in Fraunces, code/tokens in mono, canvas is warm off-white, ink is warm near-black — all via tokens.
-- **Verify:** a temporary `/styleguide` page shows each.
+### T1.2 — The docs base theme = a real zebkit theme config (supersedes the interim `app.css` overrides)
+> The docs site is itself a zebkit theme — built the way a consumer builds, not by hand-overriding vars. **Core/theme-authoring work, not Haiku-scoped** (`theme/` is at the repo root).
+- **Author** `theme/zebkit-docs/*.tokens.json` with the docs' real token values: font families (display = Instrument Serif, body = Newsreader, mono = Space Mono), warm-neutral `app`/`canvas`/`ink`, etc. Model on the existing `theme/dynamowaves/` set.
+- **Point** `zebkit.docs.config.json` at `theme: "custom"`, `customTokenPath: "./theme/zebkit-docs"`, `customThemeName: "zebkit-docs"`, and emit the compiled CSS into `docs/static/zebkit/`.
+- **Delete** the `:root { --zbk-font-family-…: … }` override block from `docs/src/app.css`. Keep only the `@font-face` declarations (those load the font *files*; the token names the family).
+- **Done when:** the docs look comes entirely from the compiled theme CSS — no manual var overrides remain — and `/styleguide` still renders correctly.
+- **Verify:** `grep -c "font-family-primary" docs/src/app.css` → `0`; computed fonts/colors match on `/styleguide`.
 
 ### T1.3 — Theme + a11y runtime store
 - **File:** `docs/src/lib/stores/theme.svelte.ts`. Export `$state` for: `reskinTheme` (hero only), `fontScale`, `contrast`, `density`, `reducedMotion`. Export functions that apply the a11y dials to `document.documentElement` by setting the relevant zebkit **a11y tokens** (the ones flagged `a11y` in token modules) via `style.setProperty`.
@@ -87,7 +90,7 @@ This phase makes the site *look* like the brief. Per §2 of the brief, the look 
 
 ### T2.1 — TopBar
 - **File:** `docs/src/lib/components/TopBar.svelte`. Contains: wordmark (mono), Cmd-K trigger (opens an empty palette modal for now — wired in Phase 8), `A11yDials` popover (Task 2.1a), light/dark toggle, and the active **reskin** indicator is NOT here (hero-local).
-- **T2.1a `A11yDials.svelte`:** sliders/toggles for fontScale, contrast, density, reducedMotion bound to the Task 1.3 store. Keyboard-operable, labelled.
+- **T2.1a `A11yDials.svelte`:** sliders/toggles for fontScale, density, reducedMotion bound to the Task 1.3 store. Keyboard-operable, labelled. **Contrast is intentionally cut for now** — historically high-contrast is its own theme, not a runtime override; it'll be revisited as a `theme/<name>` config (and likely a scoped-theme application) later. Do not build a contrast control; leave the store's `contrast` field inert.
 - **Done when:** dials in the bar reflow the site live.
 - **Verify:** drag fontScale → text scales; tab-navigation reaches every control.
 
@@ -149,20 +152,32 @@ All catalog pages are **generated from sources of truth**, never hand-written.
 
 ---
 
+## Phase C — Core prerequisite: scoped-theme support (zebkit, NOT docs — owned by Mark/Claude)
+> Required before the hero themes (Phase 5). This is a `src/core`/`src/scripts` change in Mark's refactor zone — **do not assign to Haiku.** It also makes "theme a subtree" a real zebkit capability the docs then document.
+
+### TC.1 — `rootSelector` option on the token compiler
+- Add an optional `rootSelector` to `TokensConfig` (`src/scripts/config.ts`). When set, the token compiler emits CSS variables (and the palette-globals block, currently `:root {` in `build-tokens.ts`) under that selector instead of `:root` — e.g. `[data-zbk-theme="brutalist"] { --zbk-…: … }`.
+- Default (unset) = current `:root` behavior; fully backward-compatible.
+- **Done when:** a config with `rootSelector: '[data-zbk-theme="x"]'` produces theme CSS scoped to that selector; existing default builds are byte-unchanged.
+- **Verify:** add a unit test in `src/scripts/tokens/`; run `npm run check`.
+
+---
+
 ## Phase 5 — The Reskin hero (signature)
 
-### T5.1 — Theme preset token sets
-- **File:** `docs/src/lib/data/reskin-presets.ts`. Define 4–5 named presets (`Swiss`, `Brutalist`, `Terminal`, `Editorial`, + room for more; `Swiss` is the clean/neutral baseline). Each preset is a **map of zebkit token overrides** (`{ '--zbk-…': value }`) covering color, radius, spacing/density, and type. These are real theme deltas, not ad-hoc styles.
-- **Done when:** presets exist as typed data.
-- **Verify:** type-check passes.
+### T5.1 — Hero theme configs (real compiled zebkit themes) — *core/theme-authoring, not Haiku-scoped*
+- Author one theme per preset under `theme/zebkit-hero-<name>/*.tokens.json` (`Swiss`, `Brutalist`, `Terminal`, `Editorial`; `Swiss` = clean baseline). Each is a real token-value set covering color, radius, spacing/density, and type.
+- A config per theme (or one orchestrated build) sets `theme: custom`, `customTokenPath`, and **`rootSelector: '[data-zbk-theme="<name>"]'`** (from TC.1), emitting scoped CSS into `docs/static/zebkit/themes/<name>.css`. The docs token-sync step compiles all of them.
+- **Done when:** each theme's compiled CSS defines its `--zbk-*` vars under its `[data-zbk-theme]` selector only.
+- **Verify:** `grep ':root' docs/static/zebkit/themes/brutalist.css` → none; the scoped selector is present.
 
-### T5.2 — `HeroReskin.svelte`
-- A scoped root element; applies the active preset's token map via `setProperty` on that scope only (hero-local, per brief). Inside it, a **rich composition built only from zebkit components + utilities**: app nav, 2 cards, a form, a small data table, buttons, badges, a type specimen, a chart placeholder.
-- Preset switcher (named chips). A **token-diff panel** listing which token values changed vs. the reference theme. Transition uses zebkit transition tokens; honors `reducedMotion`. **Zero layout shift** between presets (only token values change).
+### T5.2 — `HeroReskin.svelte` (toggles a theme, no JS var-setting)
+- A hero root element with `data-zbk-theme={active}`; the scoped theme CSS files are loaded once, and switching the attribute swaps the whole theme **via pure CSS inheritance** — no `setProperty`. Inside it, a **rich composition built only from zebkit components + utilities**: app nav, 2 cards, a form, a small data table, buttons, badges, a type specimen, a chart placeholder.
+- Preset switcher (named chips). A **token-diff panel** listing which token values changed vs. the base theme (read from the theme token sets). Transitions use zebkit transition tokens; honor `reducedMotion`. **Zero layout shift** between presets.
 - Make it tall and impressive — do **not** constrain to above-the-fold.
 - Caption: "Same HTML. Same classes. Only the tokens changed."
 - **Done when:** clicking presets re-skins the hero with no reflow; diff panel updates.
-- **Verify:** toggle all presets; confirm no layout jump (compare element box rects) and diff panel matches the preset map.
+- **Verify:** toggle all presets; confirm no layout jump (compare element box rects) and that only `data-zbk-theme` changed in the DOM.
 
 ### T5.3 — Mount on Home
 - Home = `EditorialLayout`: manifesto-voice pitch (Fraunces display) + `HeroReskin` as the centerpiece.
@@ -227,9 +242,17 @@ All catalog pages are **generated from sources of truth**, never hand-written.
 ---
 
 ## Build order summary
-Phase 0 (clean) → 1 (theme) → 2 (shell) → 3 (content) → 4 (generators) → 5 (hero) → 6 (components) → 7 (agents skeleton) → 8 (search/polish/ship). Each checkpoint must pass `npm run build` (docs) and `npm run check` (root) before proceeding.
+Phase 0 (clean) → 1 (theme) → 2 (shell) → 3 (content) → 4 (generators) → **C (core: rootSelector — Mark/Claude, before hero)** → 5 (hero) → 6 (components) → 7 (agents skeleton) → 8 (search/polish/ship). Each checkpoint must pass `npm run build` (docs) and `npm run check` (root) before proceeding.
+
+**Labor split:** Haiku handles `docs/`-only tasks (shell, content, generators, component UI, HeroReskin component, search). Tasks marked *core/theme-authoring* (T1.2 theme config, Phase C, T5.1 hero themes) live outside `docs/` and are owned by Mark/Claude.
 
 ---
 
 ### Gaps found
 _(Agents: append any missing-utility / missing-token findings here instead of hard-coding. Each: what you needed, where, and the closest existing token/utility.)_
+
+- **[Phase 1] Type scale has no display-large step.** zebkit's `--zbk-font-size-*` tops out at `3xl`. The editorial register (magazine h1 / hero display, brief §3–4) wants a larger step. `editorial.css` h1 is currently bound to `--zbk-font-size-3xl` as a stopgap. Consider extending the primitive scale with `4xl`/`5xl` display steps — this is a real design-system gap, not docs-only.
+- **[Phase 1] `--zbk-app-border` and `--zbk-app-border-muted` are both empty** in the default theme (no value). Any border bound to them renders colorless. Editorial/instrument surfaces will need a real app-border token value.
+- **[Phase 1] Contrast deferred (not a gap to fix).** The theme store carries an inert `contrast` field; the contrast dial is intentionally cut (see T2.1a). High-contrast will be designed later as its own `theme/<name>` config rather than a runtime modifier — no contrast token is needed for now.
+
+_Note: three broken token references in `editorial.css` (`--zbk-font-size-base`→`-md`, `--zbk-font-size-4xl`→`-3xl`, `--zbk-radius-sm`→`--zbk-border-radius-sm`) were naming bugs (correct tokens existed), fixed during Phase 1 review — not zebkit gaps._
