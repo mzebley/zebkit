@@ -15,7 +15,7 @@
 //       predicts exists; every utility class in the file is claimed by a
 //       family (knownExceptions absorb documented irregularities)
 //   U4  no utility class is defined in more than one covered SCSS file
-//   U5  every src/core/styles/utilities/_*.scss partial is covered by a
+//   U5  every src/core/styles/mixins/_*.scss partial is covered by a
 //       manifest (legacy mixin-driven partials are allowlisted until migrated)
 //
 // knownExceptions and LEGACY_PARTIALS are the debt ledger: shrink them,
@@ -34,7 +34,7 @@ import { BREAKPOINTS, MANIFEST_GLOB, expandFamily, type UtilityFamily } from "./
 type Finding = { rule: string; file: string; subject: string; message: string };
 
 const SCHEMA_PATH = "schemas/utility-manifest.schema.json";
-const UTILITIES_PARTIALS_GLOB = "src/core/styles/utilities/_*.scss";
+const UTILITIES_PARTIALS_GLOB = "src/core/styles/mixins/_*.scss";
 const KNOWN_LAYERS = new Set(["utilities"]);
 
 // Mixin/variable libraries — they define no classes themselves.

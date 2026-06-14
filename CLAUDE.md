@@ -65,7 +65,7 @@ Zebkit includes foundation token modules for common visual properties:
 
 ### Utility Class System
 
-Zebkit generates utility classes via SCSS generators in `src/core/styles/utilities/`:
+Zebkit generates utility classes via SCSS generators in `src/core/styles/mixins/`:
 
 - **Responsive utilities** - Generated utilities support responsive breakpoints via `@media` queries
 - **Token-driven** - All utilities reference design tokens; no hard-coded values

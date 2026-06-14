@@ -1,4 +1,4 @@
-@use 'core/styles/utilities/color' as color-utils;
+@use 'core/styles/mixins/color' as color-utils;
 
 :root {
   @include color-utils.primitiveColor("ember", 16, 78%);

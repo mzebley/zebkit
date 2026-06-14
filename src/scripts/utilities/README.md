@@ -9,7 +9,7 @@ Hand-authored JSON contracts that are the **single source of truth** for zebkit'
 | File | Role |
 |---|---|
 | `schemas/utility-manifest.schema.json` | JSON Schema for manifests. Referenced via `$schema` for editor autocomplete; enforced by lint rule U1. |
-| `src/core/**/*utilities.manifest.json` | The hand-authored manifests (e.g. `src/core/styles/utilities/overflow.utilities.manifest.json`). |
+| `src/core/**/*utilities.manifest.json` | The hand-authored manifests (e.g. `src/core/styles/mixins/overflow.utilities.manifest.json`). |
 | `src/scripts/utilities/expand.ts` | Expands a family's grammar into its full class set. Shared by lint and generate. Also owns the `BREAKPOINTS` list (must match `core/styles/variables/_breakpoints.scss`). |
 | `src/scripts/utilities/generate.ts` | `npm run generate:utilities` — overwrites each family's `source` partial with literal SCSS rules wrapped in `@layer utilities`. |
 | `src/scripts/utilities/lint.ts` | `npm run lint:utilities` — keeps manifests and SCSS honest (runs in `npm run check`). |
@@ -22,7 +22,7 @@ Hand-authored JSON contracts that are the **single source of truth** for zebkit'
 - **U2** — integrity: family names unique across all manifests; `tokens.group` is a real token module key; every `pattern.values` entry is a real token key in that module (and `negativeValues` have `neg-*` tokens); a pattern family that omits `values` can derive them (bound `tokens`, not `edgeInToken`); breakpoints and layers are known; `source` files exist; aliases target real classes.
 - **U3** — bidirectional diff: every class the grammar predicts exists in the source SCSS, and every class in the SCSS is claimed by a family. `knownExceptions` absorb documented irregularities.
 - **U4** — no class defined in more than one covered file.
-- **U5** — every `src/core/styles/utilities/_*.scss` partial is covered by a manifest (or allowlisted in `LEGACY_PARTIALS`).
+- **U5** — every `src/core/styles/mixins/_*.scss` partial is covered by a manifest (or allowlisted in `LEGACY_PARTIALS`).
 
 **Important limitation:** the lint reads SCSS *source text*. It cannot see classes emitted by Sass `@each` loops or mixins. So the workflow is always **author manifest -> generate -> lint**, never "lint the old mixin-driven file." Pre-manifest partials live in `LEGACY_PARTIALS` (in `lint.ts`) until migrated. Shrink that list and `knownExceptions`; never grow them to make a build pass.
 
@@ -130,7 +130,7 @@ Families emit in the order they appear in the manifest's `families` array, and a
 ```jsonc
 {
   "name": "cursor", "description": "...", "properties": ["cursor"],
-  "source": "src/core/styles/utilities/_pointer.scss",
+  "source": "src/core/styles/mixins/_pointer.scss",
   "pattern": { "base": "cursor", "values": ["pointer", "wait", "not-allowed"] }
 }
 ```
@@ -140,7 +140,7 @@ Families emit in the order they appear in the manifest's `families` array, and a
 ```jsonc
 {
   "name": "visibility", "description": "...", "properties": ["visibility"],
-  "source": "src/core/styles/utilities/_visibility.scss",
+  "source": "src/core/styles/mixins/_visibility.scss",
   "classes": ["visible", "invisible"],
   "generator": {
     "declarations": {
@@ -158,7 +158,7 @@ For anything truly bespoke (compound selectors, `[class*=...]` rules), `generato
 ## Workflow: migrating a legacy partial
 
 1. Pick a name from `LEGACY_PARTIALS` in `lint.ts`. (Easy: `_pointer.scss`, `_visibility.scss`. Note some classes are emitted from `src/core/styles.scss` rather than the partial itself — for those, the manifest `source` points at the partial, and you delete the `@include` lines from `styles.scss` after generating.)
-2. Snapshot current output: `npx sass --load-path=src src/core/styles/utilities/_foo.scss /tmp/before.css`
+2. Snapshot current output: `npx sass --load-path=src src/core/styles/mixins/_foo.scss /tmp/before.css`
 3. Author `foo.utilities.manifest.json` next to the partial.
 4. `npm run generate:utilities && npm run lint:utilities` — the lint names every missing/unclaimed class and bad token key; iterate until green.
 5. Compile again to `/tmp/after.css` and compare selectors:
