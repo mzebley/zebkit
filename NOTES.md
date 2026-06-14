@@ -5,6 +5,7 @@ A place to keep track of things I don't want to forget as we build this out.
 ## Bugs
 
 - [ ] Look into how we're handing Google fonts vs self-hosted fonts and associated @font-face CSS code to be sure it's as easy on the end user as possible.
+- [ ] We need to set up a good reset.css style thing that sets things like box-sizing and html root font-size
 
 ## Enhancements
 

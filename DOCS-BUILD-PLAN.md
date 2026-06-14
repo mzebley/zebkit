@@ -105,7 +105,7 @@ This phase makes the site *look* like the brief. Per §2 of the brief, the look 
 - **Done when:** an editorial route and a reference route render visibly different page furniture.
 - **Verify:** visual side-by-side.
 
-> **Checkpoint 2:** navigable shell; two distinct layouts; working a11y dials.
+> **Checkpoint 2:** navigable shell; two distinct layouts; working a11y dials. — ✓ DONE (Claude, 2026-06-13). Note: font-scale dial rewired to per-tier non-linear modifiers (single fallback modifier was a dead token); a11y popover made operable (Esc/click-outside/focus return); contrast dial deferred. Shell ownership corrected in Phase 3.
 
 ---
 
@@ -121,7 +121,7 @@ This phase makes the site *look* like the brief. Per §2 of the brief, the look 
 - **Done when:** both render with correct type hierarchy and layout.
 - **Verify:** visual; `npm run build` still passes.
 
-> **Checkpoint 3:** content authored in markdown lands in the right register automatically.
+> **Checkpoint 3:** content authored in markdown lands in the right register automatically. — ✓ DONE (Claude, 2026-06-13). mdsvex resolves `layout` frontmatter (default editorial); `Frontmatter` type at `docs/src/lib/types/frontmatter.ts`. Shell (TopBar+LeftNav) moved into root `+layout.svelte`; Editorial/Reference are now content-only registers (Phase 2 had bundled the shell, which would double it per-page). Samples: `_sample-editorial`, `_sample-reference`.
 
 ---
 
@@ -149,7 +149,7 @@ All catalog pages are **generated from sources of truth**, never hand-written.
 - **Done when:** a utility page (e.g. margin) renders its real class set + guidance straight from the manifest.
 - **Verify:** class list matches `npm run generate:utilities -- --check` output for that family.
 
-> **Checkpoint 4:** tokens, colors, and utilities are all generated from source and cannot drift.
+> **Checkpoint 4:** tokens, colors, and utilities are all generated from source and cannot drift. — ✓ DONE (Claude, 2026-06-13). `$core` alias added → `../src/core`. T4.1 `TokenTable` (runes/brief), `TokenCatalog` (filterable) at `/tokens` + `/foundations/tokens`. T4.2 `ColorFamily` + dynamic `/foundations/color/[family]` (4 ramps; status groups excluded as non-ramps). T4.3 `UtilityTable` + `/utilities` + `/utilities/[family]` (10 families) from manifests via `$core`; expansion derives token values + literals + neg mirror + edges + hover. **Parity verified byte-exact: margin = 385 base classes, 0 diff vs generated CSS** (core deriver NOT imported — docs isolation kept). `navigation.ts` regenerated from source. Build green; not re-run full root `npm run check` (jest/utilities lint unaffected by docs-only changes).
 
 ---
 

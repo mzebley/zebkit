@@ -12,6 +12,14 @@
   font-family: var(--zbk-font-family-body);
 }
 
+html {
+  font-size: var(--zbk-font-size-md);
+}
+
+html * {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   background: var(--zbk-app-canvas);
