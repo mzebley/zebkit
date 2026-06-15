@@ -49,6 +49,9 @@ for (const [key, value] of Object.entries(lookup as Record<string, string>)) {
   if (!(value in varToPath)) varToPath[value] = key;
 }
 
+/** Every emitted token CSS custom property, sorted — for inspector autocomplete. */
+export const allTokenVars: string[] = Object.keys(varToPath).sort();
+
 // Token paths are always `group.name` with the group/name split at the first dot
 // (groups and names may themselves contain dashes: `accent-primary.600`,
 // `z-index.modal-backdrop`, `color.butterfield-200`).

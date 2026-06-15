@@ -103,13 +103,20 @@
 
         <form class="card form" onsubmit={(e) => e.preventDefault()}>
           <h3 class="font-heading text-xl ink-app">Invite a teammate</h3>
-          <label class="field font-body text-sm ink-app-muted">
+          <label class="field font-body text-sm ink-app-muted" for="reskin-invite-email">
             Email
-            <input class="control font-interface" type="email" placeholder="name@team.dev" />
+            <input
+              id="reskin-invite-email"
+              name="email"
+              class="control font-interface"
+              type="email"
+              autocomplete="email"
+              placeholder="name@team.dev"
+            />
           </label>
-          <label class="field font-body text-sm ink-app-muted">
+          <label class="field font-body text-sm ink-app-muted" for="reskin-invite-role">
             Role
-            <select class="control font-interface">
+            <select id="reskin-invite-role" name="role" class="control font-interface">
               <option>Viewer</option>
               <option>Editor</option>
               <option>Admin</option>
@@ -211,10 +218,20 @@
     grid-template-columns: minmax(0, 1fr);
     gap: var(--zbk-spacing-2);
   }
+  /* The hero's own breakpoint is intentionally wider than the docs' tablet-lg
+     spine: when the nav is still a column it eats ~16rem, so the mini-app +
+     diff panel only fit comfortably past ~60rem of viewport. A container query
+     would be the precise fix (tracked in NOTES) — viewport works until then. */
   @media (min-width: 60rem) {
     .stage-grid {
       grid-template-columns: minmax(0, 1fr) 16rem;
       align-items: start;
+    }
+    /* Sticky only matters when the panel sits beside the mini-app. Stacked, it
+       has nothing to stick past. */
+    .diff-panel {
+      position: sticky;
+      top: var(--zbk-spacing-2);
     }
   }
 
@@ -241,6 +258,7 @@
   .app-nav {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: var(--zbk-spacing-105);
     padding-inline: var(--zbk-spacing-2);
     padding-block: var(--zbk-spacing-1);
@@ -253,6 +271,7 @@
   }
   .app-nav-links {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--zbk-spacing-105);
     margin-inline-start: auto;
   }
@@ -426,8 +445,6 @@
     background: var(--zbk-app-canvas-soft);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-md);
-    position: sticky;
-    top: var(--zbk-spacing-2);
   }
   .diff-title {
     margin: 0;

@@ -1,0 +1,102 @@
+// Zebkit base reset — sensible cross-browser defaults.
+//
+// Lives in the `base` layer (below `components` and `utilities`, above `theme`)
+// so component styles, utility classes, and token-driven values always win.
+// Intentionally token-agnostic: it sets *structural* defaults (box model,
+// element resets) and never declares colors, fonts, or sizes — those are owned
+// by the token system so this file can't fight your theme.
+
+@layer base {
+  // Predictable box model everywhere, inheritable so component-level overrides
+  // of a subtree still cascade as authors expect.
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  // Honor the user's browser font-size preference (don't lock it to a px value),
+  // and stop mobile browsers from inflating text after orientation changes.
+  html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    tab-size: 4;
+    // Suppress the grey/blue tap flash mobile browsers paint over tapped
+    // elements; :active + :focus-visible own real feedback. Inherits to all.
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  // Remove the default margin and let height-based layouts fill the viewport.
+  // line-height/font/color are deliberately left to tokens + components.
+  body {
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  // Headings and paragraphs inherit their typography from tokens; strip the
+  // browser's default margins so spacing is owned by layout/utilities.
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
+  }
+
+  // Media defaults: block-level and never overflow their container.
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  // Form controls should inherit typography rather than fall back to the UA's.
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  // Let textareas grow vertically by default; horizontal resize rarely helps.
+  textarea {
+    resize: vertical;
+  }
+
+  // Avoid orphaned words breaking layout in long strings.
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+
+  // Lists used for navigation/layout shouldn't carry default list affordances;
+  // semantic lists can opt back in via utilities or component styles.
+  ul[role='list'],
+  ol[role='list'] {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Anchors inherit color from tokens/components instead of the UA blue.
+  a {
+    color: inherit;
+  }
+}

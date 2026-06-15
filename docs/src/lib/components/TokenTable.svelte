@@ -8,6 +8,12 @@
     if (!showSwatch || row.type !== 'color') return null;
     return getCssVarForReference(row.value) ?? getCssVarForReference(row.token);
   }
+
+  // The compiled CSS custom property for a row (`zbk-spacing.4` -> `--zbk-spacing-4`),
+  // so the inspector rail can trace it through the strata.
+  function inspectVar(row: TokenRow): string {
+    return `--${row.token.replaceAll('.', '-')}`;
+  }
 </script>
 
 <div class="token-table-scroll">
@@ -24,7 +30,7 @@
       {#each rows as row (row.token)}
         {@const cssVar = swatchVar(row)}
         <tr>
-          <td><code class="tok">{row.token}</code></td>
+          <td><code class="tok" data-inspect-token={inspectVar(row)}>{row.token}</code></td>
           <td><code class="type">{row.type}</code></td>
           <td>
             <div class="value-cell">

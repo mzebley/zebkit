@@ -1,82 +1,65 @@
 <script lang="ts">
   import { theme, setFontScale, setDensity, setReducedMotion } from '$lib/stores/theme.svelte';
 
-  let { open = false }: { open?: boolean } = $props();
+  // Bare a11y control group — just the dials. The vessel (an anchored popover on
+  // wide viewports, an Overlay bottom-sheet on compact) is provided by TopBar,
+  // which also owns the dialog role and dismiss behavior. Keeping this presentation
+  // -agnostic lets the same controls render in either place.
 </script>
 
-<div class="a11y-dials" class:open role="dialog" aria-label="Accessibility controls">
-  <fieldset class="dials-group">
-    <legend class="sr-only">Accessibility controls</legend>
+<fieldset class="dials-group">
+  <legend class="sr-only">Accessibility controls</legend>
 
-    <!-- Font Scale Slider -->
-    <div class="dial-item">
-      <label for="font-scale">Font scale</label>
-      <input
-        id="font-scale"
-        type="range"
-        min="0.8"
-        max="1.5"
-        step="0.05"
-        value={theme.fontScale}
-        oninput={(e) => setFontScale(parseFloat((e.target as HTMLInputElement).value))}
-        aria-label="Font scale: adjust text size"
-      />
-      <output class="value-label">{theme.fontScale.toFixed(2)}x</output>
-    </div>
+  <!-- Font Scale Slider -->
+  <div class="dial-item">
+    <label for="font-scale">Font scale</label>
+    <input
+      id="font-scale"
+      type="range"
+      min="0.8"
+      max="1.5"
+      step="0.05"
+      value={theme.fontScale}
+      oninput={(e) => setFontScale(parseFloat((e.target as HTMLInputElement).value))}
+      aria-label="Font scale: adjust text size"
+    />
+    <output class="value-label">{theme.fontScale.toFixed(2)}x</output>
+  </div>
 
-    <!-- Density Slider -->
-    <div class="dial-item">
-      <label for="density">Density</label>
-      <input
-        id="density"
-        type="range"
-        min="0.8"
-        max="1.3"
-        step="0.05"
-        value={theme.density}
-        oninput={(e) => setDensity(parseFloat((e.target as HTMLInputElement).value))}
-        aria-label="Density: adjust spacing"
-      />
-      <output class="value-label">{theme.density.toFixed(2)}x</output>
-    </div>
+  <!-- Density Slider -->
+  <div class="dial-item">
+    <label for="density">Density</label>
+    <input
+      id="density"
+      type="range"
+      min="0.8"
+      max="1.3"
+      step="0.05"
+      value={theme.density}
+      oninput={(e) => setDensity(parseFloat((e.target as HTMLInputElement).value))}
+      aria-label="Density: adjust spacing"
+    />
+    <output class="value-label">{theme.density.toFixed(2)}x</output>
+  </div>
 
-    <!-- Reduced Motion Toggle -->
-    <div class="dial-item toggle">
-      <label for="reduced-motion">Reduce motion</label>
-      <button
-        id="reduced-motion"
-        type="button"
-        class="toggle-button"
-        class:active={theme.reducedMotion}
-        onclick={() => setReducedMotion(!theme.reducedMotion)}
-        aria-label={`Reduce motion: ${theme.reducedMotion ? 'on' : 'off'}`}
-        aria-pressed={theme.reducedMotion}
-      >
-        {theme.reducedMotion ? 'On' : 'Off'}
-      </button>
-    </div>
-  </fieldset>
-</div>
+  <!-- Reduced Motion Toggle -->
+  <div class="dial-item toggle">
+    <label for="reduced-motion">Reduce motion</label>
+    <button
+      id="reduced-motion"
+      type="button"
+      class="toggle-button"
+      class:active={theme.reducedMotion}
+      onclick={() => setReducedMotion(!theme.reducedMotion)}
+      aria-label={`Reduce motion: ${theme.reducedMotion ? 'on' : 'off'}`}
+      aria-pressed={theme.reducedMotion}
+    >
+      {theme.reducedMotion ? 'On' : 'Off'}
+    </button>
+  </div>
+</fieldset>
 
 <style>
-  .a11y-dials {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: var(--zbk-app-canvas);
-    border: 1px solid var(--zbk-app-border);
-    border-radius: var(--zbk-border-radius-sm);
-    padding: var(--zbk-spacing-2);
-    margin-top: var(--zbk-spacing-1);
-    z-index: var(--zbk-z-index-popover);
-    min-width: 200px;
-  }
-
-  .a11y-dials.open {
-    display: block;
-  }
-
   .dials-group {
     display: flex;
     flex-direction: column;

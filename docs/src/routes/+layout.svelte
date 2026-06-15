@@ -3,6 +3,10 @@
   import '../styles/editorial.css';
   import TopBar from '$lib/components/TopBar.svelte';
   import LeftNav from '$lib/components/LeftNav.svelte';
+  import Overlay from '$lib/components/Overlay.svelte';
+  import CollapsiblePanel from '$lib/components/CollapsiblePanel.svelte';
+  import { viewport } from '$lib/stores/viewport.svelte';
+  import { ui, closeNav, toggleNavCollapsed } from '$lib/stores/ui.svelte';
 
   let { children } = $props();
 </script>
@@ -11,11 +15,28 @@
   App shell. TopBar + LeftNav are the persistent chrome and live here, NOT in the
   register layouts. Per-page register (editorial vs reference) is selected by
   mdsvex frontmatter and wraps only the page *content* inside <main>.
+
+  The nav is a collapsible column on full/reading viewports (CollapsiblePanel —
+  tuck it to a rail, peek on hover/focus) and an off-canvas drawer (summoned by
+  the TopBar hamburger) on compact ones — same LeftNav, different vessel.
 -->
 <div class="app-shell">
   <TopBar />
   <div class="app-body">
-    <LeftNav />
+    {#if viewport.regime === 'compact'}
+      <Overlay open={ui.navOpen} onclose={closeNav} label="Navigation" side="left">
+        <LeftNav fill />
+      </Overlay>
+    {:else}
+      <CollapsiblePanel
+        side="left"
+        collapsed={ui.navCollapsed}
+        onToggle={toggleNavCollapsed}
+        label="Navigation"
+      >
+        <LeftNav fill />
+      </CollapsiblePanel>
+    {/if}
     <main class="app-main">
       {@render children()}
     </main>
@@ -27,6 +48,10 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    /* Contain the collapsed panels' off-canvas peek so it can't add horizontal
+       scroll. The shell wraps all content (no vertical overflow of its own), so
+       clipping is horizontal-only in effect. */
+    overflow-x: clip;
   }
 
   .app-body {
@@ -36,7 +61,13 @@
 
   .app-main {
     flex: 1;
-    overflow-y: auto;
+    /* Clip the inspector rail's off-canvas peek on the x-axis so it can't make
+       the page horizontally scrollable. `overflow-x: clip` computes overflow-y
+       to clip too — which is fine (the shell wraps all content, nothing
+       overflows vertically) — and crucially does NOT make this a scroll
+       container, so the inspector rail's `position: sticky` references the
+       window (like the nav) instead of getting trapped here. */
+    overflow-x: clip;
     padding: var(--zbk-spacing-4) var(--zbk-spacing-5);
   }
 

@@ -47,7 +47,7 @@
     <h3 class="sub">Vocabulary <span class="vcount">{family.baseClasses.length} classes</span></h3>
     <ul class="class-list">
       {#each family.baseClasses as cls (cls)}
-        <li><code>{cls}</code></li>
+        <li><code data-inspect-class={cls}>{cls}</code></li>
       {/each}
     </ul>
     {#if family.responsive.length}

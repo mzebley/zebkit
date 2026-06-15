@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { navigation } from '$lib/data/navigation';
+  import { closeNav } from '$lib/stores/ui.svelte';
 
   interface NavSection {
     label: string;
@@ -11,6 +12,11 @@
     label: string;
     link: string;
   }
+
+  // `fill` is set when the nav rides the compact drawer: it should fill the
+  // drawer panel rather than hold its fixed column width, and shed the column-
+  // only chrome (right border, sticky, viewport-height) the Overlay provides.
+  let { fill = false }: { fill?: boolean } = $props();
 
   let expanded = $state<{ [key: string]: boolean }>({});
 
@@ -30,7 +36,7 @@
   }
 </script>
 
-<nav class="left-nav">
+<nav class="left-nav" class:fill>
   <div class="nav-content">
     {#each navigation as section, idx (section.label)}
       <div class="nav-section">
@@ -52,6 +58,7 @@
                   class="nav-link"
                   class:active={isActive(item.link)}
                   aria-current={isActive(item.link) ? 'page' : undefined}
+                  onclick={closeNav}
                 >
                   {item.label}
                 </a>
@@ -73,6 +80,15 @@
     height: calc(100vh - var(--zbk-spacing-205));
     position: sticky;
     top: var(--zbk-spacing-205);
+  }
+
+  /* Drawer context: fill the Overlay panel and drop the column-only chrome. */
+  .left-nav.fill {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    position: static;
+    border-right: none;
   }
 
   .nav-content {

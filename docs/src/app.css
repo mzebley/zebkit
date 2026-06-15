@@ -14,6 +14,11 @@
 
 html {
   font-size: var(--zbk-font-size-md);
+  /* Kill the grey/blue flash mobile browsers paint over tapped interactive
+     elements — focus-visible + :active states carry the real feedback. Inherits
+     to all descendants. (Also lives in the library reset.scss; this stays until
+     that reset is wired into the docs build.) */
+  -webkit-tap-highlight-color: transparent;
 }
 
 html * {

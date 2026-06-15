@@ -1,159 +1,283 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { theme } from '$lib/stores/theme.svelte';
-  import { resolveChain, type ChainNode } from '$lib/utils/token-chain';
+  import { resolveChain, allTokenVars, type ChainNode } from '$lib/utils/token-chain';
+  import { getClassDeclaration, utilityClassSet } from '$data/utility-manifests';
+  import { viewport } from '$lib/stores/viewport.svelte';
+  import { openInspect, requestInspectPeek, releaseInspectPeek } from '$lib/stores/ui.svelte';
 
-  // Token x-ray. Traces a token's reference chain (component -> alias ->
-  // primitive) and shows the live resolved value, which re-reads when the a11y
-  // dials move — accessibility is something you operate, decisions are data.
+  // Adaptive inspector rail. It scans the page's `[data-inspect-root]` content
+  // and wires up the things worth inspecting:
+  //   - tokens  (`--zbk-*` code, or `[data-inspect-token]`) -> token x-ray
+  //   - classes (utility-class code, or `[data-inspect-class]`) -> class inspector
+  // Hover/focus previews, click/Enter pins. When a page has neither (the
+  // "x-ray doesn't make sense" case), the rail shows an on-this-page contents
+  // list built from the page's headings. Live values re-read when the a11y dials
+  // move — accessibility is something you operate, decisions are data.
 
-  const DEFAULT_TOKEN = '--zbk-app-canvas';
+  type Selection = { kind: 'token'; value: string } | { kind: 'class'; value: string };
+  type Wire = { el: HTMLElement; sel: Selection; off: () => void };
+
   const TOKEN_RE = /^--zbk-[\w-]+$/;
   const COLOR_RE = /^(#|rgb|hsl|hwb|oklch|oklab|lab|lch|color\()/i;
+  const tokenVarSet = new Set(allTokenVars);
 
-  let pinned = $state(DEFAULT_TOKEN);
-  let preview = $state<string | null>(null);
+  let pinned = $state<Selection | null>(null);
+  let preview = $state<Selection | null>(null);
   let query = $state('');
   let queryError = $state(false);
-  let spans: HTMLElement[] = [];
+  let headings = $state<{ id: string; text: string; level: number }[]>([]);
+  let wired = $state<Wire[]>([]);
 
   const active = $derived(preview ?? pinned);
-  const chain = $derived<ChainNode[]>(resolveChain(active));
+  const mode = $derived<'token' | 'class' | 'contents'>(active ? active.kind : 'contents');
+  const hasTokens = $derived(wired.some((w) => w.sel.kind === 'token'));
 
-  // Live computed value per node. Depends on the a11y dials so dragging them
-  // refreshes the trace (spacing/size tokens shift with density/font-scale).
-  const liveValues = $derived.by<Record<string, string>>(() => {
-    void theme.fontScale;
-    void theme.density;
-    void theme.reducedMotion;
-    if (typeof document === 'undefined') return {};
-    const cs = getComputedStyle(document.documentElement);
-    const out: Record<string, string> = {};
-    for (const node of chain) out[node.cssVar] = cs.getPropertyValue(node.cssVar).trim();
-    return out;
-  });
-
-  const resolvedValue = $derived(chain.length ? (liveValues[chain[chain.length - 1].cssVar] ?? '') : '');
-  const isColor = $derived(COLOR_RE.test(resolvedValue));
-
-  function computedValueFor(cssVar: string): string {
+  function computedValue(cssVar: string): string {
     if (typeof document === 'undefined') return '';
     return getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim();
   }
 
-  function pin(token: string) {
-    pinned = token;
+  // --- token mode ---
+  const chain = $derived<ChainNode[]>(active?.kind === 'token' ? resolveChain(active.value) : []);
+  const tokenLive = $derived.by<Record<string, string>>(() => {
+    void theme.fontScale;
+    void theme.density;
+    void theme.reducedMotion;
+    const out: Record<string, string> = {};
+    for (const node of chain) out[node.cssVar] = computedValue(node.cssVar);
+    return out;
+  });
+  const tokenResolved = $derived(chain.length ? (tokenLive[chain[chain.length - 1].cssVar] ?? '') : '');
+  const tokenIsColor = $derived(COLOR_RE.test(tokenResolved));
+
+  // --- class mode ---
+  const classInfo = $derived(active?.kind === 'class' ? getClassDeclaration(active.value) : null);
+  const classVarLive = $derived.by<Record<string, string>>(() => {
+    void theme.fontScale;
+    void theme.density;
+    void theme.reducedMotion;
+    const out: Record<string, string> = {};
+    if (!classInfo) return out;
+    for (const d of classInfo.declarations) for (const v of d.vars) out[v] = computedValue(v);
+    return out;
+  });
+  // Distinct token vars referenced by the active class, in declaration order.
+  const classVars = $derived(
+    classInfo ? [...new Set(classInfo.declarations.flatMap((d) => d.vars))] : []
+  );
+
+  function pin(sel: Selection) {
+    pinned = sel;
     preview = null;
+  }
+
+  // A pin the *user* initiated (click, Enter, or the trace box) — distinct from
+  // the initial auto-seed. Below the 'full' regime the rail lives in a drawer or
+  // sheet, so a deliberate pin raises it; on 'full' the rail is always visible.
+  function userPin(sel: Selection) {
+    pin(sel);
+    if (viewport.regime !== 'full') openInspect();
+  }
+
+  function normalizeToken(value: string): string {
+    return value.startsWith('--') ? value : `--zbk-${value.replace(/^zbk-/, '')}`;
   }
 
   function trace() {
     const value = query.trim();
     if (!value) return;
-    const token = value.startsWith('--') ? value : `--zbk-${value.replace(/^zbk-/, '')}`;
-    if (!TOKEN_RE.test(token) || !computedValueFor(token)) {
+    const token = normalizeToken(value);
+    if (!TOKEN_RE.test(token) || !computedValue(token)) {
       queryError = true;
       return;
     }
     queryError = false;
-    pin(token);
+    userPin({ kind: 'token', value: token });
   }
 
-  // Wire up the article's token spans: hover to preview, click/Enter to pin.
-  onMount(() => {
-    const article = document.querySelector('.reference-article');
-    if (!article) return;
+  // Trace immediately when the field holds an exact token — covers picking from
+  // the autocomplete list as well as finishing typing a full name.
+  function onQueryInput() {
+    queryError = false;
+    const token = normalizeToken(query.trim());
+    if (tokenVarSet.has(token)) userPin({ kind: 'token', value: token });
+  }
 
-    const handlers: Array<() => void> = [];
-    const codes = Array.from(article.querySelectorAll('code')) as HTMLElement[];
+  function sameSel(a: Selection | null, b: Selection | null): boolean {
+    return !!a && !!b && a.kind === b.kind && a.value === b.value;
+  }
 
-    for (const code of codes) {
-      const text = (code.textContent ?? '').trim();
-      if (!TOKEN_RE.test(text)) continue;
-
-      code.classList.add('xray-token');
-      code.tabIndex = 0;
-      code.setAttribute('role', 'button');
-      code.setAttribute('aria-label', `Inspect token ${text}`);
-
-      const onEnter = () => (preview = text);
-      const onLeave = () => (preview = null);
-      const onClick = () => pin(text);
-      const onKey = (event: KeyboardEvent) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          pin(text);
-        }
-      };
-
-      code.addEventListener('mouseenter', onEnter);
-      code.addEventListener('mouseleave', onLeave);
-      code.addEventListener('focus', onEnter);
-      code.addEventListener('blur', onLeave);
-      code.addEventListener('click', onClick);
-      code.addEventListener('keydown', onKey);
-
-      spans.push(code);
-      handlers.push(() => {
-        code.removeEventListener('mouseenter', onEnter);
-        code.removeEventListener('mouseleave', onLeave);
-        code.removeEventListener('focus', onEnter);
-        code.removeEventListener('blur', onLeave);
-        code.removeEventListener('click', onClick);
-        code.removeEventListener('keydown', onKey);
-      });
+  // Classify an element as an inspectable token or class, or null. Explicit
+  // data attributes win; otherwise a bare <code> is matched by its text.
+  function selectionFor(el: HTMLElement): Selection | null {
+    const tokenAttr = el.getAttribute('data-inspect-token');
+    if (tokenAttr) return { kind: 'token', value: tokenAttr };
+    const classAttr = el.getAttribute('data-inspect-class');
+    if (classAttr) return { kind: 'class', value: classAttr };
+    if (el.tagName === 'CODE') {
+      const text = (el.textContent ?? '').trim();
+      if (TOKEN_RE.test(text)) return { kind: 'token', value: text };
+      if (utilityClassSet.has(text)) return { kind: 'class', value: text };
     }
+    return null;
+  }
 
-    // Seed the rail from the first token in the prose, if any.
-    if (spans.length) pin((spans[0].textContent ?? '').trim());
+  function attach(el: HTMLElement, sel: Selection): () => void {
+    el.classList.add('inspect-target', sel.kind === 'token' ? 'inspect-token' : 'inspect-class');
+    el.tabIndex = 0;
+    el.setAttribute('role', 'button');
+    el.setAttribute('aria-label', `Inspect ${sel.kind} ${sel.value}`);
+
+    // The collapsed rail peeks only for the *selected* (pinned) affordance —
+    // never on a casual hover of an unselected one (that would be a noisy,
+    // surprising trigger for mouse and keyboard alike). So: a pin (click/Enter)
+    // selects it and raises the peek; thereafter hovering/focusing that same
+    // selection re-raises it and leaving releases it. Preview still updates for
+    // every affordance — that drives the expanded rail's hover x-ray.
+    const onEnter = () => {
+      preview = sel;
+      if (sameSel(sel, pinned)) requestInspectPeek();
+    };
+    const onLeave = () => {
+      preview = null;
+      releaseInspectPeek();
+    };
+    const onClick = () => {
+      userPin(sel);
+      requestInspectPeek();
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        userPin(sel);
+        requestInspectPeek();
+      }
+    };
+
+    el.addEventListener('mouseenter', onEnter);
+    el.addEventListener('mouseleave', onLeave);
+    el.addEventListener('focus', onEnter);
+    el.addEventListener('blur', onLeave);
+    el.addEventListener('click', onClick);
+    el.addEventListener('keydown', onKey);
 
     return () => {
-      for (const off of handlers) off();
-      spans = [];
+      el.removeEventListener('mouseenter', onEnter);
+      el.removeEventListener('mouseleave', onLeave);
+      el.removeEventListener('focus', onEnter);
+      el.removeEventListener('blur', onLeave);
+      el.removeEventListener('click', onClick);
+      el.removeEventListener('keydown', onKey);
+    };
+  }
+
+  // (Re)wire the content root. Idempotent: keeps still-present wires, drops
+  // removed ones, and adds new ones — so it survives the catalog/utility filters
+  // mutating the DOM. Also refreshes the on-this-page heading list.
+  function rewire(root: Element) {
+    const live = wired.filter((w) => {
+      if (root.contains(w.el)) return true;
+      w.off();
+      return false;
+    });
+    const known = new Set(live.map((w) => w.el));
+
+    const candidates = new Set<HTMLElement>();
+    root.querySelectorAll<HTMLElement>('[data-inspect-token],[data-inspect-class],code').forEach((el) =>
+      candidates.add(el)
+    );
+
+    for (const el of candidates) {
+      if (known.has(el)) continue;
+      const sel = selectionFor(el);
+      if (!sel) continue;
+      live.push({ el, sel, off: attach(el, sel) });
+    }
+
+    wired = live;
+
+    if (!pinned) {
+      const seed = wired.find((w) => w.sel.kind === 'token') ?? wired[0];
+      if (seed) pin(seed.sel);
+    }
+
+    headings = Array.from(root.querySelectorAll<HTMLElement>('h1, h2, h3'))
+      .filter((h) => h.id)
+      .map((h) => ({ id: h.id, text: (h.textContent ?? '').trim(), level: Number(h.tagName[1]) }));
+  }
+
+  onMount(() => {
+    const root = document.querySelector('[data-inspect-root]');
+    if (!root) return;
+
+    rewire(root);
+    const observer = new MutationObserver(() => rewire(root));
+    observer.observe(root, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      for (const w of wired) w.off();
+      wired = [];
     };
   });
 
-  // Mark the span matching the active token so prose and rail stay in sync.
+  // Keep the active prose affordance highlighted in sync with the rail.
   $effect(() => {
-    for (const code of spans) {
-      code.classList.toggle('xray-active', (code.textContent ?? '').trim() === active);
-    }
+    for (const w of wired) w.el.classList.toggle('inspect-active', sameSel(w.sel, active));
   });
 </script>
 
-<div class="xray">
-  <h2 class="xray-title">Token x-ray</h2>
-  <p class="xray-hint">Hover any <code>--zbk-</code> token in the page to trace it through the strata.</p>
+<div class="rail">
+  {#if mode === 'token'}
+    <h2 class="rail-title">Token x-ray</h2>
+    <p class="rail-hint">Hover any <code>--zbk-</code> token in the page to trace it through the strata.</p>
+  {:else if mode === 'class'}
+    <h2 class="rail-title">Class inspector</h2>
+    <p class="rail-hint">The CSS a utility class applies, with the tokens it resolves to.</p>
+  {:else}
+    <h2 class="rail-title">On this page</h2>
+    <p class="rail-hint">Nothing to inspect here — jump to a section instead.</p>
+  {/if}
 
   <form
-    class="xray-search"
+    class="rail-search"
     onsubmit={(e) => {
       e.preventDefault();
       trace();
     }}
   >
-    <label class="xray-search-label" for="xray-input">Trace a token</label>
+    <label class="rail-search-label" for="xray-input">Trace a token</label>
     <input
       id="xray-input"
-      class="xray-input"
+      class="rail-input"
       class:error={queryError}
-      type="text"
+      type="search"
       placeholder="--zbk-button-canvas"
+      list="token-options"
       bind:value={query}
-      oninput={() => (queryError = false)}
+      oninput={onQueryInput}
       aria-invalid={queryError}
       autocomplete="off"
+      autocapitalize="off"
+      autocorrect="off"
       spellcheck="false"
     />
-    {#if queryError}<span class="xray-error" role="alert">Unknown token.</span>{/if}
+    <datalist id="token-options">
+      {#each allTokenVars as v (v)}
+        <option value={v}></option>
+      {/each}
+    </datalist>
+    {#if queryError}<span class="rail-error" role="alert">Unknown token.</span>{/if}
   </form>
 
-  {#if chain.length}
-    <p class="xray-active-token" aria-live="polite">
-      <code>{active}</code>{#if preview}<span class="xray-tag">preview</span>{/if}
+  {#if mode === 'token' && chain.length}
+    <p class="rail-active" aria-live="polite">
+      <code>{active?.value}</code>{#if preview}<span class="rail-tag">preview</span>{/if}
     </p>
 
     <ol class="xray-chain">
-      {#each chain as node, i (node.cssVar)}
+      {#each chain as node (node.cssVar)}
         <li class="xray-node">
           <span class="xray-stratum xray-stratum-{node.stratum}">{node.stratum}</span>
           <code class="xray-var">{node.cssVar}</code>
@@ -164,24 +288,61 @@
       {/each}
     </ol>
 
-    <div class="xray-resolved">
-      <span class="xray-resolved-label">Resolved</span>
-      {#if isColor}<span class="xray-swatch" style:background={resolvedValue}></span>{/if}
-      <code class="xray-resolved-value">{resolvedValue || 'see source'}</code>
+    <div class="resolved">
+      <span class="resolved-label">Resolved</span>
+      {#if tokenIsColor}<span class="swatch" style:background={tokenResolved}></span>{/if}
+      <code class="resolved-value">{tokenResolved || 'see source'}</code>
     </div>
+  {:else if mode === 'class' && classInfo}
+    <p class="rail-active" aria-live="polite">
+      <code>{active?.value}</code>{#if preview}<span class="rail-tag">preview</span>{/if}
+    </p>
+
+    <pre class="class-css"><code>.{active?.value} {'{'}
+{#each classInfo.declarations as d (d.property)}  {d.property}: {d.value};
+{/each}{'}'}</code></pre>
+
+    {#if classVars.length}
+      <div class="class-tokens">
+        <span class="resolved-label">Resolves to</span>
+        <ul class="token-values">
+          {#each classVars as v (v)}
+            <li class="token-value">
+              {#if COLOR_RE.test(classVarLive[v] ?? '')}<span class="swatch" style:background={classVarLive[v]}></span>{/if}
+              <code class="xray-var">{v}</code>
+              <code class="resolved-value">{classVarLive[v] || 'see source'}</code>
+            </li>
+          {/each}
+        </ul>
+      </div>
+    {/if}
+
+    <p class="class-meta">
+      from <a href="/utilities/{classInfo.manifestKey}">{classInfo.family}</a>
+      {#if classInfo.responsive.length}· responsive{/if}
+      {#if classInfo.hover}· hover{/if}
+    </p>
+  {:else if headings.length}
+    <nav class="contents" aria-label="On this page">
+      <ul>
+        {#each headings as h (h.id)}
+          <li class="toc-l{h.level}"><a href="#{h.id}">{h.text}</a></li>
+        {/each}
+      </ul>
+    </nav>
   {:else}
-    <p class="xray-empty">No token selected.</p>
+    <p class="rail-empty">Nothing to inspect on this page.</p>
   {/if}
 </div>
 
 <style>
-  .xray {
+  .rail {
     display: flex;
     flex-direction: column;
     gap: var(--zbk-spacing-2);
   }
 
-  .xray-title {
+  .rail-title {
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-2xs);
     text-transform: uppercase;
@@ -190,7 +351,7 @@
     margin: 0;
   }
 
-  .xray-hint {
+  .rail-hint {
     margin: 0;
     font-family: var(--zbk-font-family-body, inherit);
     font-size: var(--zbk-font-size-xs);
@@ -198,24 +359,24 @@
     line-height: var(--zbk-line-height-2, 1.4);
   }
 
-  .xray-hint code {
+  .rail-hint code {
     font-family: var(--zbk-font-family-code);
   }
 
-  .xray-search {
+  .rail-search {
     display: flex;
     flex-direction: column;
     gap: var(--zbk-spacing-05);
   }
 
-  .xray-search-label {
+  .rail-search-label {
     font-size: var(--zbk-font-size-2xs);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--zbk-app-ink-muted);
   }
 
-  .xray-input {
+  .rail-input {
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-xs);
     color: var(--zbk-app-ink);
@@ -223,36 +384,46 @@
     border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-xs);
     padding: var(--zbk-spacing-05) var(--zbk-spacing-1);
+    /* type=search keeps Safari's password/contact autofill off this field;
+       strip the search-input chrome so it still reads as a plain box. */
+    appearance: none;
+    -webkit-appearance: none;
   }
 
-  .xray-input:focus-visible {
+  .rail-input::-webkit-search-cancel-button,
+  .rail-input::-webkit-search-decoration {
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .rail-input:focus-visible {
     outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
     outline-offset: var(--zbk-focus-offset);
   }
 
-  .xray-input.error {
+  .rail-input.error {
     border-color: var(--zbk-critical-border-strong);
   }
 
-  .xray-error {
+  .rail-error {
     font-size: var(--zbk-font-size-2xs);
     color: var(--zbk-critical-ink);
   }
 
-  .xray-active-token {
+  .rail-active {
     margin: 0;
     display: flex;
     align-items: center;
     gap: var(--zbk-spacing-05);
   }
 
-  .xray-active-token code {
+  .rail-active code {
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-xs);
     color: var(--zbk-app-ink);
   }
 
-  .xray-tag {
+  .rail-tag {
     font-size: var(--zbk-font-size-2xs);
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -262,12 +433,11 @@
   .xray-chain {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 var(--zbk-spacing-1);
     display: flex;
     flex-direction: column;
     gap: var(--zbk-spacing-1);
     border-left: var(--zbk-border-width-xs) solid var(--zbk-app-border);
-    padding-left: var(--zbk-spacing-1);
   }
 
   .xray-node {
@@ -312,7 +482,7 @@
     padding-left: var(--zbk-spacing-1);
   }
 
-  .xray-resolved {
+  .resolved {
     display: flex;
     align-items: center;
     gap: var(--zbk-spacing-05);
@@ -320,14 +490,14 @@
     border-top: var(--zbk-border-width-xs) solid var(--zbk-app-border);
   }
 
-  .xray-resolved-label {
+  .resolved-label {
     font-size: var(--zbk-font-size-2xs);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--zbk-app-ink-muted);
   }
 
-  .xray-swatch {
+  .swatch {
     width: 1rem;
     height: 1rem;
     border-radius: var(--zbk-border-radius-xs);
@@ -335,33 +505,118 @@
     flex: none;
   }
 
-  .xray-resolved-value {
+  .resolved-value {
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-xs);
     color: var(--zbk-app-ink);
     word-break: break-all;
   }
 
-  .xray-empty {
+  /* class mode */
+  .class-css {
+    margin: 0;
+    padding: var(--zbk-spacing-1);
+    overflow-x: auto;
+    background: var(--zbk-app-canvas-soft);
+    border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
+    border-radius: var(--zbk-border-radius-xs);
+  }
+
+  .class-css code {
+    font-family: var(--zbk-font-family-code);
+    font-size: var(--zbk-font-size-xs);
+    color: var(--zbk-app-ink);
+    white-space: pre;
+  }
+
+  .class-tokens {
+    display: flex;
+    flex-direction: column;
+    gap: var(--zbk-spacing-05);
+    padding-top: var(--zbk-spacing-1);
+    border-top: var(--zbk-border-width-xs) solid var(--zbk-app-border);
+  }
+
+  .token-values {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--zbk-spacing-05);
+  }
+
+  .token-value {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--zbk-spacing-05);
+  }
+
+  .class-meta {
+    margin: 0;
+    font-size: var(--zbk-font-size-2xs);
+    color: var(--zbk-app-ink-soft);
+  }
+
+  .class-meta a {
+    color: var(--zbk-accent-primary-600);
+    text-decoration: none;
+  }
+
+  .class-meta a:hover {
+    text-decoration: underline;
+  }
+
+  /* contents mode */
+  .contents ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--zbk-spacing-05);
+    border-left: var(--zbk-border-width-xs) solid var(--zbk-app-border);
+  }
+
+  .contents li {
+    padding-left: var(--zbk-spacing-1);
+  }
+
+  .contents .toc-l3 {
+    padding-left: var(--zbk-spacing-3);
+  }
+
+  .contents a {
+    color: var(--zbk-app-ink-soft);
+    text-decoration: none;
+    font-size: var(--zbk-font-size-xs);
+  }
+
+  .contents a:hover {
+    color: var(--zbk-accent-primary-600);
+  }
+
+  .rail-empty {
     margin: 0;
     font-size: var(--zbk-font-size-xs);
     color: var(--zbk-app-ink-soft);
   }
 
-  /* Token spans in the prose become inspectable affordances. Scoped styles
-     don't reach the article DOM, so these are declared :global. */
-  :global(.reference-article code.xray-token) {
+  /* Inspectable affordances in the content. Scoped styles don't reach the
+     article DOM, so these are declared :global, anchored to the inspect root. */
+  :global([data-inspect-root] .inspect-target) {
     cursor: pointer;
     text-decoration: underline dotted;
     text-underline-offset: 0.2em;
   }
 
-  :global(.reference-article code.xray-token:hover),
-  :global(.reference-article code.xray-token.xray-active) {
+  :global([data-inspect-root] .inspect-target:hover),
+  :global([data-inspect-root] .inspect-target.inspect-active) {
     color: var(--zbk-accent-primary-600);
   }
 
-  :global(.reference-article code.xray-token:focus-visible) {
+  :global([data-inspect-root] .inspect-target:focus-visible) {
     outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
     outline-offset: var(--zbk-focus-offset);
   }
