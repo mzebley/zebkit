@@ -1,6 +1,6 @@
 // A11y state — drives zebkit a11y tokens
 export const theme = $state({
-  reskinTheme: 'swiss',
+  reskinTheme: 'apple',
   fontScale: 1,
   contrast: 'normal' as 'normal' | 'high',
   density: 1,

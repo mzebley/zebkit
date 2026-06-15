@@ -96,314 +96,6 @@
       "description": "Semantic z-index for tooltips (highest)."
     }
   },
-  "zbk-transition": {
-    "duration-default": {
-      "value": "325ms",
-      "type": "transition",
-      "description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "a11y": true
-    },
-    "duration-slow": {
-      "value": "625ms",
-      "type": "transition",
-      "description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "a11y": true
-    },
-    "duration-fast": {
-      "value": "125ms",
-      "type": "transition",
-      "description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "a11y": true
-    },
-    "playful-motion-function-default": {
-      "value": "cubic-bezier(0.38, 1.21, 0.22, 1.00)",
-      "type": "transition",
-      "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate."
-    },
-    "playful-motion-function-slow": {
-      "value": "cubic-bezier(0.39, 1.29, 0.35, 0.98)",
-      "type": "transition",
-      "description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt."
-    },
-    "playful-motion-function-fast": {
-      "value": "cubic-bezier(0.42, 1.67, 0.21, 0.90)",
-      "type": "transition",
-      "description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid."
-    },
-    "playful-motion-duration-default": {
-      "value": "500ms",
-      "type": "transition",
-      "description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
-      "a11y": true
-    },
-    "playful-motion-duration-slow": {
-      "value": "650ms",
-      "type": "transition",
-      "description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
-      "a11y": true
-    },
-    "playful-motion-duration-fast": {
-      "value": "350ms",
-      "type": "transition",
-      "description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
-      "a11y": true
-    },
-    "playful-fx-function-default": {
-      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
-    },
-    "playful-fx-function-slow": {
-      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce."
-    },
-    "playful-fx-function-fast": {
-      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth."
-    },
-    "playful-fx-duration-default": {
-      "value": "200ms",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
-      "a11y": true
-    },
-    "playful-fx-duration-slow": {
-      "value": "300ms",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
-      "a11y": true
-    },
-    "playful-fx-duration-fast": {
-      "value": "150ms",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
-      "a11y": true
-    },
-    "calm-motion-function-default": {
-      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "type": "transition",
-      "description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish."
-    },
-    "calm-motion-function-slow": {
-      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "type": "transition",
-      "description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate."
-    },
-    "calm-motion-function-fast": {
-      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "type": "transition",
-      "description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion."
-    },
-    "calm-motion-duration-default": {
-      "value": "500ms",
-      "type": "transition",
-      "description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
-      "a11y": true
-    },
-    "calm-motion-duration-slow": {
-      "value": "750ms",
-      "type": "transition",
-      "description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
-      "a11y": true
-    },
-    "calm-motion-duration-fast": {
-      "value": "350ms",
-      "type": "transition",
-      "description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
-      "a11y": true
-    },
-    "calm-fx-function-default": {
-      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
-    },
-    "calm-fx-function-slow": {
-      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained."
-    },
-    "calm-fx-function-fast": {
-      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention."
-    },
-    "calm-fx-duration-default": {
-      "value": "200ms",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
-      "a11y": true
-    },
-    "calm-fx-duration-slow": {
-      "value": "300ms",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
-      "a11y": true
-    },
-    "calm-fx-duration-fast": {
-      "value": "150ms",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
-      "a11y": true
-    }
-  },
-  "zbk-focus": {
-    "color": {
-      "value": "{accent-primary.600}",
-      "type": "color",
-      "description": "Color of focus outline"
-    },
-    "width": {
-      "value": "{spacing.025}",
-      "type": "sizing",
-      "description": "Width of focus outline"
-    },
-    "offset": {
-      "value": "{spacing.025}",
-      "type": "spacing",
-      "description": "Offset distance of focus outline"
-    }
-  },
-  "zbk-opacity": {
-    "0": {
-      "value": 0,
-      "type": "opacity",
-      "description": "Fully transparent (invisible)."
-    },
-    "5": {
-      "value": 0.05,
-      "type": "opacity",
-      "description": "5% opacity - barely visible."
-    },
-    "10": {
-      "value": 0.1,
-      "type": "opacity",
-      "description": "10% opacity - very faint."
-    },
-    "15": {
-      "value": 0.15,
-      "type": "opacity",
-      "description": "15% opacity - faint."
-    },
-    "20": {
-      "value": 0.2,
-      "type": "opacity",
-      "description": "20% opacity - subtle."
-    },
-    "25": {
-      "value": 0.25,
-      "type": "opacity",
-      "description": "25% opacity - quarter visible."
-    },
-    "30": {
-      "value": 0.3,
-      "type": "opacity",
-      "description": "30% opacity - light."
-    },
-    "40": {
-      "value": 0.4,
-      "type": "opacity",
-      "description": "40% opacity - moderate-light."
-    },
-    "50": {
-      "value": 0.5,
-      "type": "opacity",
-      "description": "50% opacity - half visible."
-    },
-    "60": {
-      "value": 0.6,
-      "type": "opacity",
-      "description": "60% opacity - moderate."
-    },
-    "70": {
-      "value": 0.7,
-      "type": "opacity",
-      "description": "70% opacity - mostly visible."
-    },
-    "75": {
-      "value": 0.75,
-      "type": "opacity",
-      "description": "75% opacity - three-quarters visible."
-    },
-    "80": {
-      "value": 0.8,
-      "type": "opacity",
-      "description": "80% opacity - largely visible."
-    },
-    "85": {
-      "value": 0.85,
-      "type": "opacity",
-      "description": "85% opacity - mostly opaque."
-    },
-    "90": {
-      "value": 0.9,
-      "type": "opacity",
-      "description": "90% opacity - nearly opaque."
-    },
-    "95": {
-      "value": 0.95,
-      "type": "opacity",
-      "description": "95% opacity - almost fully opaque."
-    },
-    "100": {
-      "value": 1,
-      "type": "opacity",
-      "description": "Fully opaque (default)."
-    }
-  },
-  "zbk-elevation": {
-    "none": {
-      "value": "none",
-      "type": "boxShadow",
-      "description": "No shadow."
-    },
-    "xs": {
-      "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Extra-small shadow for subtle elevation."
-    },
-    "sm": {
-      "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Small shadow for low elevation."
-    },
-    "md": {
-      "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Medium shadow for moderate elevation."
-    },
-    "lg": {
-      "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Large shadow for high elevation."
-    },
-    "xl": {
-      "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Extra-large shadow for very high elevation."
-    },
-    "2xl": {
-      "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
-      "type": "boxShadow",
-      "description": "2XL shadow for maximum elevation."
-    },
-    "inner": {
-      "value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Inner shadow for inset/pressed effect."
-    },
-    "inner-sm": {
-      "value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Small inner shadow."
-    },
-    "inner-lg": {
-      "value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Large inner shadow."
-    }
-  },
   "zbk-spacing": {
     "0": {
       "value": "0px",
@@ -790,6 +482,314 @@
       "description": "Preferred horizontal padding for page."
     }
   },
+  "zbk-opacity": {
+    "0": {
+      "value": 0,
+      "type": "opacity",
+      "description": "Fully transparent (invisible)."
+    },
+    "5": {
+      "value": 0.05,
+      "type": "opacity",
+      "description": "5% opacity - barely visible."
+    },
+    "10": {
+      "value": 0.1,
+      "type": "opacity",
+      "description": "10% opacity - very faint."
+    },
+    "15": {
+      "value": 0.15,
+      "type": "opacity",
+      "description": "15% opacity - faint."
+    },
+    "20": {
+      "value": 0.2,
+      "type": "opacity",
+      "description": "20% opacity - subtle."
+    },
+    "25": {
+      "value": 0.25,
+      "type": "opacity",
+      "description": "25% opacity - quarter visible."
+    },
+    "30": {
+      "value": 0.3,
+      "type": "opacity",
+      "description": "30% opacity - light."
+    },
+    "40": {
+      "value": 0.4,
+      "type": "opacity",
+      "description": "40% opacity - moderate-light."
+    },
+    "50": {
+      "value": 0.5,
+      "type": "opacity",
+      "description": "50% opacity - half visible."
+    },
+    "60": {
+      "value": 0.6,
+      "type": "opacity",
+      "description": "60% opacity - moderate."
+    },
+    "70": {
+      "value": 0.7,
+      "type": "opacity",
+      "description": "70% opacity - mostly visible."
+    },
+    "75": {
+      "value": 0.75,
+      "type": "opacity",
+      "description": "75% opacity - three-quarters visible."
+    },
+    "80": {
+      "value": 0.8,
+      "type": "opacity",
+      "description": "80% opacity - largely visible."
+    },
+    "85": {
+      "value": 0.85,
+      "type": "opacity",
+      "description": "85% opacity - mostly opaque."
+    },
+    "90": {
+      "value": 0.9,
+      "type": "opacity",
+      "description": "90% opacity - nearly opaque."
+    },
+    "95": {
+      "value": 0.95,
+      "type": "opacity",
+      "description": "95% opacity - almost fully opaque."
+    },
+    "100": {
+      "value": 1,
+      "type": "opacity",
+      "description": "Fully opaque (default)."
+    }
+  },
+  "zbk-focus": {
+    "color": {
+      "value": "{accent-primary.600}",
+      "type": "color",
+      "description": "Color of focus outline"
+    },
+    "width": {
+      "value": "{spacing.025}",
+      "type": "sizing",
+      "description": "Width of focus outline"
+    },
+    "offset": {
+      "value": "{spacing.025}",
+      "type": "spacing",
+      "description": "Offset distance of focus outline"
+    }
+  },
+  "zbk-transition": {
+    "duration-default": {
+      "value": "325ms",
+      "type": "transition",
+      "description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "a11y": true
+    },
+    "duration-slow": {
+      "value": "625ms",
+      "type": "transition",
+      "description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "a11y": true
+    },
+    "duration-fast": {
+      "value": "125ms",
+      "type": "transition",
+      "description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "a11y": true
+    },
+    "playful-motion-function-default": {
+      "value": "cubic-bezier(0.38, 1.21, 0.22, 1.00)",
+      "type": "transition",
+      "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate."
+    },
+    "playful-motion-function-slow": {
+      "value": "cubic-bezier(0.39, 1.29, 0.35, 0.98)",
+      "type": "transition",
+      "description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt."
+    },
+    "playful-motion-function-fast": {
+      "value": "cubic-bezier(0.42, 1.67, 0.21, 0.90)",
+      "type": "transition",
+      "description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid."
+    },
+    "playful-motion-duration-default": {
+      "value": "500ms",
+      "type": "transition",
+      "description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
+      "a11y": true
+    },
+    "playful-motion-duration-slow": {
+      "value": "650ms",
+      "type": "transition",
+      "description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
+      "a11y": true
+    },
+    "playful-motion-duration-fast": {
+      "value": "350ms",
+      "type": "transition",
+      "description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
+      "a11y": true
+    },
+    "playful-fx-function-default": {
+      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
+    },
+    "playful-fx-function-slow": {
+      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce."
+    },
+    "playful-fx-function-fast": {
+      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth."
+    },
+    "playful-fx-duration-default": {
+      "value": "200ms",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
+      "a11y": true
+    },
+    "playful-fx-duration-slow": {
+      "value": "300ms",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
+      "a11y": true
+    },
+    "playful-fx-duration-fast": {
+      "value": "150ms",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
+      "a11y": true
+    },
+    "calm-motion-function-default": {
+      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "type": "transition",
+      "description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish."
+    },
+    "calm-motion-function-slow": {
+      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "type": "transition",
+      "description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate."
+    },
+    "calm-motion-function-fast": {
+      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "type": "transition",
+      "description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion."
+    },
+    "calm-motion-duration-default": {
+      "value": "500ms",
+      "type": "transition",
+      "description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
+      "a11y": true
+    },
+    "calm-motion-duration-slow": {
+      "value": "750ms",
+      "type": "transition",
+      "description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
+      "a11y": true
+    },
+    "calm-motion-duration-fast": {
+      "value": "350ms",
+      "type": "transition",
+      "description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
+      "a11y": true
+    },
+    "calm-fx-function-default": {
+      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
+    },
+    "calm-fx-function-slow": {
+      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained."
+    },
+    "calm-fx-function-fast": {
+      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention."
+    },
+    "calm-fx-duration-default": {
+      "value": "200ms",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
+      "a11y": true
+    },
+    "calm-fx-duration-slow": {
+      "value": "300ms",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
+      "a11y": true
+    },
+    "calm-fx-duration-fast": {
+      "value": "150ms",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
+      "a11y": true
+    }
+  },
+  "zbk-elevation": {
+    "none": {
+      "value": "none",
+      "type": "boxShadow",
+      "description": "No shadow."
+    },
+    "xs": {
+      "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Extra-small shadow for subtle elevation."
+    },
+    "sm": {
+      "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Small shadow for low elevation."
+    },
+    "md": {
+      "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Medium shadow for moderate elevation."
+    },
+    "lg": {
+      "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Large shadow for high elevation."
+    },
+    "xl": {
+      "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Extra-large shadow for very high elevation."
+    },
+    "2xl": {
+      "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+      "type": "boxShadow",
+      "description": "2XL shadow for maximum elevation."
+    },
+    "inner": {
+      "value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Inner shadow for inset/pressed effect."
+    },
+    "inner-sm": {
+      "value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Small inner shadow."
+    },
+    "inner-lg": {
+      "value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Large inner shadow."
+    }
+  },
   "zbk-button": {
     "ink": {
       "value": "{app.ink}",
@@ -1098,228 +1098,6 @@
       "description": "Visual opacity of button."
     }
   },
-  "zbk-a11y": {
-    "spacing-modifier": {
-      "value": "1",
-      "type": "utility",
-      "description": "Amount to multiply spacing variables by (independent density dial)."
-    },
-    "spacing-text-coupling": {
-      "value": "0.5",
-      "type": "utility",
-      "description": "How hard spacing follows body (md) font-size growth: 1 = 1:1, 0 = decoupled. Lets containers grow with text without a separate density bump."
-    },
-    "line-height-modifier": {
-      "value": "1",
-      "type": "utility",
-      "description": "Amount to multiply line height variables by."
-    },
-    "letter-spacing-modifier": {
-      "value": "1",
-      "type": "utility",
-      "description": "Amount to multiply letter spacing variables by."
-    },
-    "fallback-font-size-modifier": {
-      "value": "1",
-      "type": "utility",
-      "description": "Fallback amount to multiply font size variables by in the event their specific modifier isn't set."
-    },
-    "transition-duration-modifier": {
-      "value": "1",
-      "type": "utility",
-      "description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'"
-    }
-  },
-  "zbk-text-measure": {
-    "1": {
-      "value": "34ch",
-      "type": "sizing",
-      "description": "Cards, sidebars, tight UI."
-    },
-    "2": {
-      "value": "48ch",
-      "type": "sizing",
-      "description": "Short text blocks, captions."
-    },
-    "3": {
-      "value": "65ch",
-      "type": "sizing",
-      "description": "Base body content measure."
-    },
-    "4": {
-      "value": "72ch",
-      "type": "sizing",
-      "description": "Articles, long-form content."
-    },
-    "5": {
-      "value": "84ch",
-      "type": "sizing",
-      "description": "Articles, long-form content."
-    }
-  },
-  "zbk-line-height": {
-    "1": {
-      "value": "100%",
-      "type": "lineHeight",
-      "description": "Smallest line height.",
-      "a11y": true
-    },
-    "2": {
-      "value": "120%",
-      "type": "lineHeight",
-      "description": "Smaller line height.",
-      "a11y": true
-    },
-    "3": {
-      "value": "150%",
-      "type": "lineHeight",
-      "description": "Base line height.",
-      "a11y": true
-    },
-    "4": {
-      "value": "170%",
-      "type": "lineHeight",
-      "description": "Larger line height.",
-      "a11y": true
-    },
-    "5": {
-      "value": "200%",
-      "type": "lineHeight",
-      "description": "Largest line height.",
-      "a11y": true
-    }
-  },
-  "zbk-font-weight": {
-    "thin": {
-      "value": "100",
-      "type": "fontWeight",
-      "description": "Lightest font weight.",
-      "a11y": true
-    },
-    "extralight": {
-      "value": "200",
-      "type": "fontWeight",
-      "description": "Lighter font weight.",
-      "a11y": true
-    },
-    "light": {
-      "value": "300",
-      "type": "fontWeight",
-      "description": "Light font weight.",
-      "a11y": true
-    },
-    "normal": {
-      "value": "400",
-      "type": "fontWeight",
-      "description": "Default font weight.",
-      "a11y": true
-    },
-    "medium": {
-      "value": "500",
-      "type": "fontWeight",
-      "description": "Medium font weight.",
-      "a11y": true
-    },
-    "semibold": {
-      "value": "600",
-      "type": "fontWeight",
-      "description": "Semibold font weight.",
-      "a11y": true
-    },
-    "bold": {
-      "value": "700",
-      "type": "fontWeight",
-      "description": "Bold font weight.",
-      "a11y": true
-    },
-    "extrabold": {
-      "value": "800",
-      "type": "fontWeight",
-      "description": "Bolder font weight.",
-      "a11y": true
-    },
-    "black": {
-      "value": "900",
-      "type": "fontWeight",
-      "description": "Boldest font weight.",
-      "a11y": true
-    }
-  },
-  "zbk-letter-spacing": {
-    "tighter": {
-      "value": "-.05rem",
-      "type": "letterSpacing",
-      "description": "",
-      "a11y": true
-    },
-    "tight": {
-      "value": "-.025rem",
-      "type": "letterSpacing",
-      "description": "",
-      "a11y": true
-    },
-    "normal": {
-      "value": "0rem",
-      "type": "letterSpacing",
-      "description": "",
-      "a11y": true
-    },
-    "wide": {
-      "value": ".025rem",
-      "type": "letterSpacing",
-      "description": "",
-      "a11y": true
-    },
-    "wider": {
-      "value": ".05rem",
-      "type": "letterSpacing",
-      "description": "",
-      "a11y": true
-    }
-  },
-  "zbk-font-family": {
-    "primary": {
-      "value": "\"Newsreader\", serif",
-      "description": "Primary font family for use in the system. Usually used for body content and interface items.",
-      "variable": true,
-      "weights": "200,800",
-      "type": "googleFont"
-    },
-    "alt": {
-      "value": "\"Instrument Serif\", serif",
-      "description": "Alternate font family for use in the system. Primarily used for headings.",
-      "variable": true,
-      "weights": "",
-      "type": "googleFont"
-    },
-    "monospace": {
-      "value": "\"Space Mono\", monospace",
-      "description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
-      "variable": false,
-      "weights": "",
-      "type": "googleFont"
-    },
-    "interface": {
-      "value": "{font-family.primary}",
-      "description": "Font family used for things like buttons or input fields.",
-      "type": "fontFamily"
-    },
-    "heading": {
-      "value": "{font-family.alt}",
-      "description": "Font family used for heading elements.",
-      "type": "fontFamily"
-    },
-    "body": {
-      "value": "{font-family.primary}",
-      "description": "Font family used for <p>, <li>, etc.",
-      "type": "fontFamily"
-    },
-    "code": {
-      "value": "{font-family.monospace}",
-      "description": "Font family used within <code> blocks",
-      "type": "fontFamily"
-    }
-  },
   "zbk-font-size": {
     "min-viewport": {
       "value": "360px",
@@ -1416,6 +1194,228 @@
       "type": "rootFontSize",
       "description": "Quintuple extra large font size.",
       "a11y": "--zbk-a11y-font-size-modifier-5xl"
+    }
+  },
+  "zbk-text-measure": {
+    "1": {
+      "value": "34ch",
+      "type": "sizing",
+      "description": "Cards, sidebars, tight UI."
+    },
+    "2": {
+      "value": "48ch",
+      "type": "sizing",
+      "description": "Short text blocks, captions."
+    },
+    "3": {
+      "value": "65ch",
+      "type": "sizing",
+      "description": "Base body content measure."
+    },
+    "4": {
+      "value": "72ch",
+      "type": "sizing",
+      "description": "Articles, long-form content."
+    },
+    "5": {
+      "value": "84ch",
+      "type": "sizing",
+      "description": "Articles, long-form content."
+    }
+  },
+  "zbk-line-height": {
+    "1": {
+      "value": "100%",
+      "type": "lineHeight",
+      "description": "Smallest line height.",
+      "a11y": true
+    },
+    "2": {
+      "value": "120%",
+      "type": "lineHeight",
+      "description": "Smaller line height.",
+      "a11y": true
+    },
+    "3": {
+      "value": "150%",
+      "type": "lineHeight",
+      "description": "Base line height.",
+      "a11y": true
+    },
+    "4": {
+      "value": "170%",
+      "type": "lineHeight",
+      "description": "Larger line height.",
+      "a11y": true
+    },
+    "5": {
+      "value": "200%",
+      "type": "lineHeight",
+      "description": "Largest line height.",
+      "a11y": true
+    }
+  },
+  "zbk-letter-spacing": {
+    "tighter": {
+      "value": "-.05rem",
+      "type": "letterSpacing",
+      "description": "",
+      "a11y": true
+    },
+    "tight": {
+      "value": "-.025rem",
+      "type": "letterSpacing",
+      "description": "",
+      "a11y": true
+    },
+    "normal": {
+      "value": "0rem",
+      "type": "letterSpacing",
+      "description": "",
+      "a11y": true
+    },
+    "wide": {
+      "value": ".025rem",
+      "type": "letterSpacing",
+      "description": "",
+      "a11y": true
+    },
+    "wider": {
+      "value": ".05rem",
+      "type": "letterSpacing",
+      "description": "",
+      "a11y": true
+    }
+  },
+  "zbk-font-weight": {
+    "thin": {
+      "value": "100",
+      "type": "fontWeight",
+      "description": "Lightest font weight.",
+      "a11y": true
+    },
+    "extralight": {
+      "value": "200",
+      "type": "fontWeight",
+      "description": "Lighter font weight.",
+      "a11y": true
+    },
+    "light": {
+      "value": "300",
+      "type": "fontWeight",
+      "description": "Light font weight.",
+      "a11y": true
+    },
+    "normal": {
+      "value": "400",
+      "type": "fontWeight",
+      "description": "Default font weight.",
+      "a11y": true
+    },
+    "medium": {
+      "value": "500",
+      "type": "fontWeight",
+      "description": "Medium font weight.",
+      "a11y": true
+    },
+    "semibold": {
+      "value": "600",
+      "type": "fontWeight",
+      "description": "Semibold font weight.",
+      "a11y": true
+    },
+    "bold": {
+      "value": "700",
+      "type": "fontWeight",
+      "description": "Bold font weight.",
+      "a11y": true
+    },
+    "extrabold": {
+      "value": "800",
+      "type": "fontWeight",
+      "description": "Bolder font weight.",
+      "a11y": true
+    },
+    "black": {
+      "value": "900",
+      "type": "fontWeight",
+      "description": "Boldest font weight.",
+      "a11y": true
+    }
+  },
+  "zbk-a11y": {
+    "spacing-modifier": {
+      "value": "1",
+      "type": "utility",
+      "description": "Amount to multiply spacing variables by (independent density dial)."
+    },
+    "spacing-text-coupling": {
+      "value": "0.5",
+      "type": "utility",
+      "description": "How hard spacing follows body (md) font-size growth: 1 = 1:1, 0 = decoupled. Lets containers grow with text without a separate density bump."
+    },
+    "line-height-modifier": {
+      "value": "1",
+      "type": "utility",
+      "description": "Amount to multiply line height variables by."
+    },
+    "letter-spacing-modifier": {
+      "value": "1",
+      "type": "utility",
+      "description": "Amount to multiply letter spacing variables by."
+    },
+    "fallback-font-size-modifier": {
+      "value": "1",
+      "type": "utility",
+      "description": "Fallback amount to multiply font size variables by in the event their specific modifier isn't set."
+    },
+    "transition-duration-modifier": {
+      "value": "1",
+      "type": "utility",
+      "description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'"
+    }
+  },
+  "zbk-font-family": {
+    "primary": {
+      "value": "\"Newsreader\", serif",
+      "description": "Primary font family for use in the system. Usually used for body content and interface items.",
+      "variable": true,
+      "weights": "200,800",
+      "type": "googleFont"
+    },
+    "alt": {
+      "value": "\"Instrument Serif\", serif",
+      "description": "Alternate font family for use in the system. Primarily used for headings.",
+      "variable": true,
+      "weights": "",
+      "type": "googleFont"
+    },
+    "monospace": {
+      "value": "\"Space Mono\", monospace",
+      "description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
+      "variable": false,
+      "weights": "",
+      "type": "googleFont"
+    },
+    "interface": {
+      "value": "{font-family.primary}",
+      "description": "Font family used for things like buttons or input fields.",
+      "type": "fontFamily"
+    },
+    "heading": {
+      "value": "{font-family.alt}",
+      "description": "Font family used for heading elements.",
+      "type": "fontFamily"
+    },
+    "body": {
+      "value": "{font-family.primary}",
+      "description": "Font family used for <p>, <li>, etc.",
+      "type": "fontFamily"
+    },
+    "code": {
+      "value": "{font-family.monospace}",
+      "description": "Font family used within <code> blocks",
+      "type": "fontFamily"
     }
   },
   "zbk-p": {
@@ -1540,6 +1540,63 @@
       "value": "uppercase",
       "type": "textTransform",
       "description": "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container."
+    }
+  },
+  "zbk-border": {
+    "width-xs": {
+      "value": "{spacing.1px}",
+      "type": "borderWidth",
+      "description": "Smallest semantic border width."
+    },
+    "width-sm": {
+      "value": "{spacing.2px}",
+      "type": "borderWidth",
+      "description": "Small semantic border width."
+    },
+    "width-md": {
+      "value": "{spacing.025}",
+      "type": "borderWidth",
+      "description": "Base semantic border width."
+    },
+    "width-lg": {
+      "value": "{spacing.05}",
+      "type": "borderWidth",
+      "description": "Larger semantic border width."
+    },
+    "width-xl": {
+      "value": "{spacing.1}",
+      "type": "borderWidth",
+      "description": "Largest semantic border width."
+    },
+    "style": {
+      "value": "solid",
+      "type": "borderStyle",
+      "description": "Standarized border style for project."
+    },
+    "radius-xs": {
+      "value": "{spacing.2px}",
+      "type": "borderRadius",
+      "description": "Smallest semantic corner radius."
+    },
+    "radius-sm": {
+      "value": "{spacing.025}",
+      "type": "borderRadius",
+      "description": "Small semantic corner radius."
+    },
+    "radius-md": {
+      "value": "{spacing.05}",
+      "type": "borderRadius",
+      "description": "Base semantic corner radius."
+    },
+    "radius-lg": {
+      "value": "{spacing.105}",
+      "type": "borderRadius",
+      "description": "Larger semantic corner radius."
+    },
+    "radius-xl": {
+      "value": "{spacing.205}",
+      "type": "borderRadius",
+      "description": "Largest semantic corner radius."
     }
   },
   "zbk-h6": {
@@ -1713,63 +1770,6 @@
       "description": "Text transform for H3 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
-  "zbk-h4": {
-    "font-family": {
-      "value": "{font-family.heading}",
-      "type": "fontFamily",
-      "description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-size": {
-      "value": "{font-size.md}",
-      "type": "fontSize",
-      "description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-weight": {
-      "value": "{font-weight.semibold}",
-      "type": "fontWeight",
-      "description": "Font weight for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "line-height": {
-      "value": "{line-height.3}",
-      "type": "lineHeight",
-      "description": "Line height for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "letter-spacing": {
-      "value": "{letter-spacing.normal}",
-      "type": "letterSpacing",
-      "description": "Tracking for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "measure": {
-      "value": "{text-measure.3}",
-      "type": "sizing",
-      "description": "Maximum width for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-before": {
-      "value": "{spacing.3}",
-      "type": "spacing",
-      "description": "Amount of margin inline start for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-after": {
-      "value": "{spacing.105}",
-      "type": "spacing",
-      "description": "Amount of margin inline end for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "color": {
-      "value": "{app.ink}",
-      "type": "color",
-      "description": "Color of H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-style": {
-      "value": "none",
-      "type": "fontStyle",
-      "description": "Font style for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "text-transform": {
-      "value": "none",
-      "type": "textTransform",
-      "description": "Text transform for H4 elements with .prose applied directly or that are a child of a .prose container."
-    }
-  },
   "zbk-h2": {
     "font-family": {
       "value": "{font-family.heading}",
@@ -1825,63 +1825,6 @@
       "value": "none",
       "type": "textTransform",
       "description": "Text transform for H2 elements with .prose applied directly or that are a child of a .prose container."
-    }
-  },
-  "zbk-border": {
-    "width-xs": {
-      "value": "{spacing.1px}",
-      "type": "borderWidth",
-      "description": "Smallest semantic border width."
-    },
-    "width-sm": {
-      "value": "{spacing.2px}",
-      "type": "borderWidth",
-      "description": "Small semantic border width."
-    },
-    "width-md": {
-      "value": "{spacing.025}",
-      "type": "borderWidth",
-      "description": "Base semantic border width."
-    },
-    "width-lg": {
-      "value": "{spacing.05}",
-      "type": "borderWidth",
-      "description": "Larger semantic border width."
-    },
-    "width-xl": {
-      "value": "{spacing.1}",
-      "type": "borderWidth",
-      "description": "Largest semantic border width."
-    },
-    "style": {
-      "value": "solid",
-      "type": "borderStyle",
-      "description": "Standarized border style for project."
-    },
-    "radius-xs": {
-      "value": "{spacing.2px}",
-      "type": "borderRadius",
-      "description": "Smallest semantic corner radius."
-    },
-    "radius-sm": {
-      "value": "{spacing.025}",
-      "type": "borderRadius",
-      "description": "Small semantic corner radius."
-    },
-    "radius-md": {
-      "value": "{spacing.05}",
-      "type": "borderRadius",
-      "description": "Base semantic corner radius."
-    },
-    "radius-lg": {
-      "value": "{spacing.105}",
-      "type": "borderRadius",
-      "description": "Larger semantic corner radius."
-    },
-    "radius-xl": {
-      "value": "{spacing.205}",
-      "type": "borderRadius",
-      "description": "Largest semantic corner radius."
     }
   },
   "zbk-h1": {
@@ -2053,6 +1996,63 @@
       "value": "{color.butterfield-950}",
       "type": "color",
       "description": "For primary branded surfaces."
+    }
+  },
+  "zbk-h4": {
+    "font-family": {
+      "value": "{font-family.heading}",
+      "type": "fontFamily",
+      "description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-size": {
+      "value": "{font-size.md}",
+      "type": "fontSize",
+      "description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-weight": {
+      "value": "{font-weight.semibold}",
+      "type": "fontWeight",
+      "description": "Font weight for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "line-height": {
+      "value": "{line-height.3}",
+      "type": "lineHeight",
+      "description": "Line height for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "letter-spacing": {
+      "value": "{letter-spacing.normal}",
+      "type": "letterSpacing",
+      "description": "Tracking for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "measure": {
+      "value": "{text-measure.3}",
+      "type": "sizing",
+      "description": "Maximum width for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-before": {
+      "value": "{spacing.3}",
+      "type": "spacing",
+      "description": "Amount of margin inline start for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-after": {
+      "value": "{spacing.105}",
+      "type": "spacing",
+      "description": "Amount of margin inline end for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "color": {
+      "value": "{app.ink}",
+      "type": "color",
+      "description": "Color of H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-style": {
+      "value": "none",
+      "type": "fontStyle",
+      "description": "Font style for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "text-transform": {
+      "value": "none",
+      "type": "textTransform",
+      "description": "Text transform for H4 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
   "zbk-accent-secondary": {
@@ -2505,116 +2505,116 @@
       "description": "Strong inverse disabled border color for high-emphasis outlines on inverse canvases."
     }
   },
-  "zbk-caution": {
+  "zbk-critical": {
     "canvas": {
-      "value": "{color.gold-500}",
+      "value": "{color.red-500}",
       "type": "color",
-      "description": "Base caution canvas color for primary surfaces."
+      "description": "Base critical canvas color for primary surfaces."
     },
     "canvas-soft": {
-      "value": "{color.gold-50}",
+      "value": "{color.red-50}",
       "type": "color",
-      "description": "Soft caution canvas color for lightly tinted surfaces."
+      "description": "Soft critical canvas color for lightly tinted surfaces."
     },
     "canvas-muted": {
-      "value": "{color.gold-100}",
+      "value": "{color.red-100}",
       "type": "color",
-      "description": "Muted caution canvas color for low-emphasis surfaces."
+      "description": "Muted critical canvas color for low-emphasis surfaces."
     },
     "canvas-strong": {
-      "value": "{color.gold-600}",
+      "value": "{color.red-600}",
       "type": "color",
-      "description": "Strong caution canvas color for high-emphasis surfaces."
+      "description": "Strong critical canvas color for high-emphasis surfaces."
     },
     "canvas-inverse": {
-      "value": "{color.gold-400}",
+      "value": "{color.red-400}",
       "type": "color",
-      "description": "Base inverse caution canvas color for surfaces on dark or inverted contexts."
+      "description": "Base inverse critical canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-soft": {
-      "value": "{color.gold-900}",
+      "value": "{color.red-900}",
       "type": "color",
-      "description": "Soft inverse caution canvas color for lightly tinted surfaces in inverse contexts."
+      "description": "Soft inverse critical canvas color for lightly tinted surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
-      "value": "{color.gold-800}",
+      "value": "{color.red-800}",
       "type": "color",
-      "description": "Muted inverse caution canvas color for low-emphasis surfaces in inverse contexts."
+      "description": "Muted inverse critical canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-strong": {
-      "value": "{color.gold-300}",
+      "value": "{color.red-300}",
       "type": "color",
-      "description": "Strong inverse caution canvas color for high-emphasis surfaces in inverse contexts."
+      "description": "Strong inverse critical canvas color for high-emphasis surfaces in inverse contexts."
     },
     "ink": {
-      "value": "{color.gold-700}",
+      "value": "{color.red-700}",
       "type": "color",
-      "description": "Base caution ink color for text and icons on neutral or light canvases."
+      "description": "Base critical ink color for text and icons on neutral or light canvases."
     },
     "ink-soft": {
-      "value": "{color.gold-500}",
+      "value": "{color.red-500}",
       "type": "color",
-      "description": "Soft caution ink color for lower-emphasis text and icons."
+      "description": "Soft critical ink color for lower-emphasis text and icons."
     },
     "ink-muted": {
-      "value": "{color.gold-400}",
+      "value": "{color.red-400}",
       "type": "color",
-      "description": "Muted caution ink color for subtle or secondary text and icons."
+      "description": "Muted critical ink color for subtle or secondary text and icons."
     },
     "ink-inverse": {
-      "value": "{color.gold-300}",
+      "value": "{color.red-300}",
       "type": "color",
-      "description": "Base inverse caution ink color for text and icons on inverse or dark canvases."
+      "description": "Base inverse critical ink color for text and icons on inverse or dark canvases."
     },
     "ink-inverse-soft": {
-      "value": "{color.gold-400}",
+      "value": "{color.red-400}",
       "type": "color",
-      "description": "Soft inverse caution ink color for lower-emphasis text and icons on inverse canvases."
+      "description": "Soft inverse critical ink color for lower-emphasis text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
-      "value": "{color.gold-500}",
+      "value": "{color.red-500}",
       "type": "color",
-      "description": "Muted inverse caution ink color for subtle text and icons on inverse canvases."
+      "description": "Muted inverse critical ink color for subtle text and icons on inverse canvases."
     },
     "border": {
-      "value": "{color.gold-500}",
+      "value": "{color.red-500}",
       "type": "color",
-      "description": "Base caution border color for outlines, strokes, and dividers."
+      "description": "Base critical border color for outlines, strokes, and dividers."
     },
     "border-soft": {
-      "value": "{color.gold-200}",
+      "value": "{color.red-200}",
       "type": "color",
-      "description": "Soft caution border color for low-emphasis outlines and dividers."
+      "description": "Soft critical border color for low-emphasis outlines and dividers."
     },
     "border-muted": {
-      "value": "{color.gold-300}",
+      "value": "{color.red-300}",
       "type": "color",
-      "description": "Muted caution border color for subtle outlines and dividers."
+      "description": "Muted critical border color for subtle outlines and dividers."
     },
     "border-strong": {
-      "value": "{color.gold-600}",
+      "value": "{color.red-600}",
       "type": "color",
-      "description": "Strong caution border color for high-emphasis outlines and dividers."
+      "description": "Strong critical border color for high-emphasis outlines and dividers."
     },
     "border-inverse": {
-      "value": "{color.gold-500}",
+      "value": "{color.red-500}",
       "type": "color",
-      "description": "Base inverse caution border color for outlines and dividers on inverse canvases."
+      "description": "Base inverse critical border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-soft": {
-      "value": "{color.gold-800}",
+      "value": "{color.red-800}",
       "type": "color",
-      "description": "Soft inverse caution border color for low-emphasis outlines on inverse canvases."
+      "description": "Soft inverse critical border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-muted": {
-      "value": "{color.gold-700}",
+      "value": "{color.red-700}",
       "type": "color",
-      "description": "Muted inverse caution border color for subtle outlines on inverse canvases."
+      "description": "Muted inverse critical border color for subtle outlines on inverse canvases."
     },
     "border-inverse-strong": {
-      "value": "{color.gold-400}",
+      "value": "{color.red-400}",
       "type": "color",
-      "description": "Strong inverse caution border color for high-emphasis outlines on inverse canvases."
+      "description": "Strong inverse critical border color for high-emphasis outlines on inverse canvases."
     }
   },
   "zbk-app": {
@@ -2841,116 +2841,116 @@
       "description": "Strong inverse action border color for high-emphasis outlines on inverse canvases."
     }
   },
-  "zbk-critical": {
+  "zbk-caution": {
     "canvas": {
-      "value": "{color.red-500}",
+      "value": "{color.gold-500}",
       "type": "color",
-      "description": "Base critical canvas color for primary surfaces."
+      "description": "Base caution canvas color for primary surfaces."
     },
     "canvas-soft": {
-      "value": "{color.red-50}",
+      "value": "{color.gold-50}",
       "type": "color",
-      "description": "Soft critical canvas color for lightly tinted surfaces."
+      "description": "Soft caution canvas color for lightly tinted surfaces."
     },
     "canvas-muted": {
-      "value": "{color.red-100}",
+      "value": "{color.gold-100}",
       "type": "color",
-      "description": "Muted critical canvas color for low-emphasis surfaces."
+      "description": "Muted caution canvas color for low-emphasis surfaces."
     },
     "canvas-strong": {
-      "value": "{color.red-600}",
+      "value": "{color.gold-600}",
       "type": "color",
-      "description": "Strong critical canvas color for high-emphasis surfaces."
+      "description": "Strong caution canvas color for high-emphasis surfaces."
     },
     "canvas-inverse": {
-      "value": "{color.red-400}",
+      "value": "{color.gold-400}",
       "type": "color",
-      "description": "Base inverse critical canvas color for surfaces on dark or inverted contexts."
+      "description": "Base inverse caution canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-soft": {
-      "value": "{color.red-900}",
+      "value": "{color.gold-900}",
       "type": "color",
-      "description": "Soft inverse critical canvas color for lightly tinted surfaces in inverse contexts."
+      "description": "Soft inverse caution canvas color for lightly tinted surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
-      "value": "{color.red-800}",
+      "value": "{color.gold-800}",
       "type": "color",
-      "description": "Muted inverse critical canvas color for low-emphasis surfaces in inverse contexts."
+      "description": "Muted inverse caution canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-strong": {
-      "value": "{color.red-300}",
+      "value": "{color.gold-300}",
       "type": "color",
-      "description": "Strong inverse critical canvas color for high-emphasis surfaces in inverse contexts."
+      "description": "Strong inverse caution canvas color for high-emphasis surfaces in inverse contexts."
     },
     "ink": {
-      "value": "{color.red-700}",
+      "value": "{color.gold-700}",
       "type": "color",
-      "description": "Base critical ink color for text and icons on neutral or light canvases."
+      "description": "Base caution ink color for text and icons on neutral or light canvases."
     },
     "ink-soft": {
-      "value": "{color.red-500}",
+      "value": "{color.gold-500}",
       "type": "color",
-      "description": "Soft critical ink color for lower-emphasis text and icons."
+      "description": "Soft caution ink color for lower-emphasis text and icons."
     },
     "ink-muted": {
-      "value": "{color.red-400}",
+      "value": "{color.gold-400}",
       "type": "color",
-      "description": "Muted critical ink color for subtle or secondary text and icons."
+      "description": "Muted caution ink color for subtle or secondary text and icons."
     },
     "ink-inverse": {
-      "value": "{color.red-300}",
+      "value": "{color.gold-300}",
       "type": "color",
-      "description": "Base inverse critical ink color for text and icons on inverse or dark canvases."
+      "description": "Base inverse caution ink color for text and icons on inverse or dark canvases."
     },
     "ink-inverse-soft": {
-      "value": "{color.red-400}",
+      "value": "{color.gold-400}",
       "type": "color",
-      "description": "Soft inverse critical ink color for lower-emphasis text and icons on inverse canvases."
+      "description": "Soft inverse caution ink color for lower-emphasis text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
-      "value": "{color.red-500}",
+      "value": "{color.gold-500}",
       "type": "color",
-      "description": "Muted inverse critical ink color for subtle text and icons on inverse canvases."
+      "description": "Muted inverse caution ink color for subtle text and icons on inverse canvases."
     },
     "border": {
-      "value": "{color.red-500}",
+      "value": "{color.gold-500}",
       "type": "color",
-      "description": "Base critical border color for outlines, strokes, and dividers."
+      "description": "Base caution border color for outlines, strokes, and dividers."
     },
     "border-soft": {
-      "value": "{color.red-200}",
+      "value": "{color.gold-200}",
       "type": "color",
-      "description": "Soft critical border color for low-emphasis outlines and dividers."
+      "description": "Soft caution border color for low-emphasis outlines and dividers."
     },
     "border-muted": {
-      "value": "{color.red-300}",
+      "value": "{color.gold-300}",
       "type": "color",
-      "description": "Muted critical border color for subtle outlines and dividers."
+      "description": "Muted caution border color for subtle outlines and dividers."
     },
     "border-strong": {
-      "value": "{color.red-600}",
+      "value": "{color.gold-600}",
       "type": "color",
-      "description": "Strong critical border color for high-emphasis outlines and dividers."
+      "description": "Strong caution border color for high-emphasis outlines and dividers."
     },
     "border-inverse": {
-      "value": "{color.red-500}",
+      "value": "{color.gold-500}",
       "type": "color",
-      "description": "Base inverse critical border color for outlines and dividers on inverse canvases."
+      "description": "Base inverse caution border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-soft": {
-      "value": "{color.red-800}",
+      "value": "{color.gold-800}",
       "type": "color",
-      "description": "Soft inverse critical border color for low-emphasis outlines on inverse canvases."
+      "description": "Soft inverse caution border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-muted": {
-      "value": "{color.red-700}",
+      "value": "{color.gold-700}",
       "type": "color",
-      "description": "Muted inverse critical border color for subtle outlines on inverse canvases."
+      "description": "Muted inverse caution border color for subtle outlines on inverse canvases."
     },
     "border-inverse-strong": {
-      "value": "{color.red-400}",
+      "value": "{color.gold-400}",
       "type": "color",
-      "description": "Strong inverse critical border color for high-emphasis outlines on inverse canvases."
+      "description": "Strong inverse caution border color for high-emphasis outlines on inverse canvases."
     }
   }
 }

@@ -6,20 +6,31 @@
   // Hero-local reskin state lives on the shared store (scaffolded there), but only
   // this component reads it — switching never touches the rest of the page.
   let active = $derived(theme.reskinTheme as HeroThemeName);
+  let activeTheme = $derived(heroThemes.find((t) => t.name === active) ?? heroThemes[0]);
   let diff = $derived(diffFor(active));
 
   function select(name: HeroThemeName) {
     theme.reskinTheme = name;
   }
 
-  // Sample data for the mini-app table — static, identical across presets so the
-  // only thing that ever changes is the tokens.
-  const rows = [
-    { id: 'ZBK-418', owner: 'Avery', status: 'Shipped', load: 92 },
-    { id: 'ZBK-377', owner: 'Mateo', status: 'Review', load: 61 },
-    { id: 'ZBK-209', owner: 'Priya', status: 'Blocked', load: 34 }
+  // Wayfinding cards — mock the section index of a design-system docs home.
+  // Static and identical across presets so the only thing that changes is tokens.
+  const sections = [
+    { label: 'Layout', href: '/foundations/layers', blurb: 'Grid, stack, and spacing primitives.', kind: 'layout' },
+    { label: 'Typography', href: '/typography', blurb: 'Type scale, families, and measure.', kind: 'type' },
+    { label: 'Color', href: '/foundations/color', blurb: 'Semantic palettes and contrast pairs.', kind: 'color' },
+    { label: 'Icons', href: '/foundations/icons', blurb: 'The icon set and sizing tokens.', kind: 'icons' },
+    { label: 'Components', href: '/components', blurb: 'Accessible, token-driven elements.', kind: 'components' },
+    { label: 'Spacing', href: '/spacing', blurb: 'The size-based spacing scale.', kind: 'spacing' }
   ];
-  const bars = [38, 64, 52, 81, 47, 73, 90];
+
+  // "Next steps" — real wayfinding into the zebkit docs (some routes are aspirational).
+  const nextSteps = [
+    { label: 'Get started', href: '/foundations/why-tokens' },
+    { label: 'Design tokens', href: '/foundations/tokens' },
+    { label: 'Browse components', href: '/components/button' },
+    { label: 'Accessibility', href: '/foundations/a11y' }
+  ];
 </script>
 
 <svelte:head>
@@ -46,126 +57,121 @@
     {/each}
   </div>
 
-  <div class="stage-grid">
-    <!-- The themed subtree: one HTML tree, re-skinned purely by the data attribute -->
-    <div class="reskin" data-zbk-theme={active}>
-      <!-- App chrome -->
-      <header class="app-nav">
-        <span class="font-code text-bold text-uppercase wordmark">zebkit/os</span>
-        <nav class="app-nav-links font-interface text-sm">
-          <span class="nav-link is-current">Overview</span>
-          <span class="nav-link">Activity</span>
-          <span class="nav-link">Settings</span>
-        </nav>
-        <zbk-button size="sm">New</zbk-button>
-      </header>
+  <!-- The themed subtree: one HTML tree, re-skinned purely by the data attribute -->
+  <div class="reskin" data-zbk-theme={active}>
+    <!-- Site header -->
+    <header class="site-nav">
+      <span class="font-code text-bold text-uppercase wordmark">zebkit/ds</span>
+      <nav class="site-nav-links font-interface text-sm" aria-label="Primary">
+        <span class="nav-link is-current">Docs</span>
+        <span class="nav-link">Components</span>
+        <span class="nav-link">Foundations</span>
+        <span class="nav-link">GitHub</span>
+      </nav>
+      <a
+        class="influence-link font-interface text-sm text-bold"
+        href={activeTheme.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Influenced by ${activeTheme.source} — opens the ${activeTheme.source} design system in a new tab`}
+      >
+        Influenced by {activeTheme.source}<span class="influence-arrow" aria-hidden="true">↗</span>
+      </a>
+    </header>
 
-      <!-- Type specimen + lede -->
-      <div class="specimen prose padding-inline-2 padding-block-2">
-        <p class="font-code text-uppercase text-2xs eyebrow ink-accent-primary-600">{active} preset</p>
-        <h2 class="font-heading display ink-app">Same&nbsp;HTML.<br />New&nbsp;skin.</h2>
-        <p class="font-body text-lg ink-app-muted lede">
-          Every surface below is one fixed markup tree. Switch the preset and only the
-          design tokens change — colors, type, radius — never the structure.
-        </p>
-        <div class="cta-row">
-          <zbk-button size="md">Get started</zbk-button>
-          <zbk-button size="md" variant="outline">Read the docs</zbk-button>
-        </div>
-      </div>
-
-      <!-- Cards + form -->
-      <div class="panel-grid">
-        <article class="card">
-          <div class="card-head">
-            <h3 class="font-heading text-xl ink-app">Throughput</h3>
-            <span class="badge badge-accent font-code text-2xs text-uppercase">live</span>
-          </div>
-          <p class="font-body text-sm ink-app-muted">Requests handled this cycle, by region.</p>
-          <div class="chart" aria-hidden="true">
-            {#each bars as h, i (i)}
-              <div class="bar canvas-accent-primary-500" style={`height:${h}%`}></div>
-            {/each}
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-head">
-            <h3 class="font-heading text-xl ink-app">Status</h3>
-            <span class="badge badge-secondary font-code text-2xs text-uppercase">3 open</span>
-          </div>
-          <ul class="stat-list font-body text-sm ink-app">
-            <li><span>Uptime</span><strong class="ink-accent-primary-700">99.98%</strong></li>
-            <li><span>p95 latency</span><strong class="ink-accent-primary-700">112ms</strong></li>
-            <li><span>Error rate</span><strong class="ink-accent-primary-700">0.04%</strong></li>
-          </ul>
-        </article>
-
-        <form class="card form" onsubmit={(e) => e.preventDefault()}>
-          <h3 class="font-heading text-xl ink-app">Invite a teammate</h3>
-          <label class="field font-body text-sm ink-app-muted" for="reskin-invite-email">
-            Email
-            <input
-              id="reskin-invite-email"
-              name="email"
-              class="control font-interface"
-              type="email"
-              autocomplete="email"
-              placeholder="name@team.dev"
-            />
-          </label>
-          <label class="field font-body text-sm ink-app-muted" for="reskin-invite-role">
-            Role
-            <select id="reskin-invite-role" name="role" class="control font-interface">
-              <option>Viewer</option>
-              <option>Editor</option>
-              <option>Admin</option>
-            </select>
-          </label>
-          <zbk-button size="md">Send invite</zbk-button>
-        </form>
-      </div>
-
-      <!-- Data table -->
-      <div class="card table-card">
-        <table class="data-table font-body text-sm ink-app">
-          <thead class="font-code text-2xs text-uppercase ink-app-muted">
-            <tr><th>Build</th><th>Owner</th><th>Status</th><th>Load</th></tr>
-          </thead>
-          <tbody>
-            {#each rows as r (r.id)}
-              <tr>
-                <td class="font-code">{r.id}</td>
-                <td>{r.owner}</td>
-                <td><span class="badge badge-outline font-code text-2xs text-uppercase">{r.status}</span></td>
-                <td>
-                  <div class="meter" aria-hidden="true">
-                    <div class="meter-fill canvas-accent-primary-600" style={`inline-size:${r.load}%`}></div>
-                  </div>
-                </td>
-              </tr>
-            {/each}
-          </tbody>
-        </table>
+    <!-- Intro / lede -->
+    <div class="intro">
+      <p class="font-code text-uppercase text-2xs eyebrow ink-accent-primary-600">{active} preset</p>
+      <h2 class="font-heading display ink-app">A design system,<br />in your tokens.</h2>
+      <p class="font-body text-lg ink-app-muted lede">
+        Everything below is one fixed markup tree — the same landing page a real design
+        system would ship. Switch the preset and only the design tokens change: colors,
+        type, radius. Never the structure.
+      </p>
+      <div class="cta-row">
+        <zbk-button size="md">Get started</zbk-button>
+        <zbk-button size="md" variant="outline">Read the docs</zbk-button>
       </div>
     </div>
 
-    <!-- Token-diff panel -->
-    <aside class="diff-panel" aria-live="polite">
+    <!-- Section index cards -->
+    <section class="sections" aria-label="Explore the system">
+      <h3 class="font-code text-uppercase text-sm section-heading ink-app-muted">Explore the system</h3>
+      <div class="section-grid">
+        {#each sections as s (s.label)}
+          <a class="section-card" href={s.href}>
+            <!-- Decorative, token-driven thumbnail. Not an image: it re-skins with the
+                 preset (accent ramp, radius, type) and is hidden from assistive tech. -->
+            <span class="thumb thumb-{s.kind}" aria-hidden="true">
+              {#if s.kind === 'layout'}
+                <span class="m-layout"><i class="m-col"></i><span class="m-stack"><i></i><i></i><i></i></span></span>
+              {:else if s.kind === 'type'}
+                <span class="m-type font-heading">Aa</span>
+              {:else if s.kind === 'color'}
+                <span class="m-swatches">
+                  <i style="background:var(--zbk-accent-primary-200)"></i>
+                  <i style="background:var(--zbk-accent-primary-400)"></i>
+                  <i style="background:var(--zbk-accent-primary-500)"></i>
+                  <i style="background:var(--zbk-accent-primary-600)"></i>
+                  <i style="background:var(--zbk-accent-primary-800)"></i>
+                </span>
+              {:else if s.kind === 'icons'}
+                <span class="m-icons"><i class="m-circle"></i><i class="m-square"></i><i class="m-tri"></i></span>
+              {:else if s.kind === 'components'}
+                <span class="m-components"><span class="m-btn">Button</span><i class="m-field"></i></span>
+              {:else if s.kind === 'spacing'}
+                <span class="m-spacing"><i style="inline-size:35%"></i><i style="inline-size:60%"></i><i style="inline-size:85%"></i></span>
+              {/if}
+            </span>
+            <span class="section-card-body">
+              <span class="section-card-title font-heading text-xl ink-app">{s.label}</span>
+              <span class="section-card-blurb font-body text-sm ink-app-muted">{s.blurb}</span>
+              <span class="section-card-go font-code text-2xs text-uppercase ink-accent-primary-700" aria-hidden="true">Explore →</span>
+            </span>
+          </a>
+        {/each}
+      </div>
+    </section>
+
+    <!-- Accent band — a deliberately inverted surface to show the action color in full -->
+    <section class="accent-band">
+      <p class="font-code text-uppercase text-2xs accent-eyebrow">Accessible by default</p>
+      <h3 class="font-heading text-2xl accent-headline">Contrast, focus, and motion are baked into the tokens.</h3>
+      <p class="font-body text-md accent-lede">
+        This band paints from the action color instead of the page canvas — and its text
+        pairs with it automatically, in every preset.
+      </p>
+      <a class="accent-cta font-interface text-bold" href="/foundations/a11y">See the a11y model →</a>
+    </section>
+
+    <!-- Next steps -->
+    <section class="next-steps">
+      <h3 class="font-heading text-xl ink-app next-steps-heading">Next steps</h3>
+      <div class="next-grid">
+        {#each nextSteps as step (step.label)}
+          <a class="next-link font-interface text-bold" href={step.href}>{step.label}</a>
+        {/each}
+      </div>
+    </section>
+  </div>
+
+  <!-- Token-diff strip — the proof that only tokens changed, not the HTML -->
+  <aside class="diff-strip" aria-live="polite">
+    <div class="diff-lead">
       <h3 class="font-code text-uppercase text-sm diff-title">Tokens changed</h3>
       <p class="font-body text-2xs diff-sub">
         vs. the zebkit base — <strong>{diff.totalChanged}</strong> values
       </p>
-      <dl class="diff-list font-body text-sm">
-        {#each diff.rows as row (row.label)}
-          <div class="diff-row">
-            <dt>{row.label}</dt>
-            <dd class="font-code">{row.value}</dd>
-          </div>
-        {/each}
-      </dl>
-    </aside>
-  </div>
+    </div>
+    <dl class="diff-list font-body text-sm">
+      {#each diff.rows as row (row.label)}
+        <div class="diff-row">
+          <dt>{row.label}</dt>
+          <dd class="font-code">{row.value}</dd>
+        </div>
+      {/each}
+    </dl>
+  </aside>
 
   <p class="reskin-caption font-body text-sm">
     Same HTML. Same classes. Only the tokens changed.
@@ -203,7 +209,6 @@
   .chip:hover {
     color: var(--zbk-app-ink);
     border-color: var(--zbk-action-canvas-soft);
-    /* background: var(--zbk-action-canvas-muted); */
   }
   .chip.is-active {
     background: var(--zbk-action-canvas-muted);
@@ -213,28 +218,6 @@
   .chip:focus-visible {
     outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
     outline-offset: var(--zbk-focus-offset);
-  }
-
-  .stage-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--zbk-spacing-2);
-  }
-  /* The hero's own breakpoint is intentionally wider than the docs' tablet-lg
-     spine: when the nav is still a column it eats ~16rem, so the mini-app +
-     diff panel only fit comfortably past ~60rem of viewport. A container query
-     would be the precise fix (tracked in NOTES) — viewport works until then. */
-  @media (min-width: 60rem) {
-    .stage-grid {
-      grid-template-columns: minmax(0, 1fr) 16rem;
-      align-items: start;
-    }
-    /* Sticky only matters when the panel sits beside the mini-app. Stacked, it
-       has nothing to stick past. */
-    .diff-panel {
-      position: sticky;
-      top: var(--zbk-spacing-2);
-    }
   }
 
   /* ── The themed subtree ────────────────────────────────────────────────── */
@@ -257,7 +240,8 @@
       border-color var(--zbk-transition-duration-default);
   }
 
-  .app-nav {
+  /* Site header */
+  .site-nav {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -271,7 +255,7 @@
     color: var(--zbk-accent-primary-600);
     letter-spacing: var(--zbk-letter-spacing-wide);
   }
-  .app-nav-links {
+  .site-nav-links {
     display: flex;
     flex-wrap: wrap;
     gap: var(--zbk-spacing-105);
@@ -283,11 +267,42 @@
   .nav-link.is-current {
     color: var(--zbk-app-ink);
   }
+  .influence-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zbk-spacing-05);
+    padding-inline: var(--zbk-spacing-105);
+    padding-block: var(--zbk-spacing-05);
+    color: var(--zbk-action-ink-inverse);
+    background: var(--zbk-action-canvas);
+    border: var(--zbk-border-width-sm) solid var(--zbk-action-canvas);
+    border-radius: var(--zbk-border-radius-sm);
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color var(--zbk-transition-duration-fast),
+      border-color var(--zbk-transition-duration-fast),
+      color var(--zbk-transition-duration-fast);
+  }
+  .influence-link:hover {
+    background: var(--zbk-action-canvas-strong);
+    border-color: var(--zbk-action-canvas-strong);
+  }
+  .influence-link:focus-visible {
+    outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
+    outline-offset: var(--zbk-focus-offset);
+  }
+  .influence-arrow {
+    font-size: 0.85em;
+  }
 
-  .specimen {
+  /* Intro */
+  .intro {
     display: flex;
     flex-direction: column;
     gap: var(--zbk-spacing-1);
+    padding-inline: var(--zbk-spacing-2);
+    padding-block: var(--zbk-spacing-3);
   }
   .eyebrow {
     letter-spacing: var(--zbk-letter-spacing-wider);
@@ -307,144 +322,277 @@
     margin-block-start: var(--zbk-spacing-05);
   }
 
-  .panel-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: var(--zbk-spacing-1);
-    padding: var(--zbk-spacing-2);
-    padding-block-start: 0;
-  }
-
-  .card {
+  /* Section index */
+  .sections {
     display: flex;
     flex-direction: column;
+    gap: var(--zbk-spacing-105);
+    padding-inline: var(--zbk-spacing-2);
+    padding-block-end: var(--zbk-spacing-3);
+  }
+  .section-heading {
+    margin: 0;
+    letter-spacing: var(--zbk-letter-spacing-wide);
+  }
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
     gap: var(--zbk-spacing-1);
-    padding: var(--zbk-spacing-105);
+  }
+  .section-card {
+    display: flex;
+    flex-direction: column;
     background: var(--zbk-app-canvas-soft);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-md);
+    overflow: clip;
+    text-decoration: none;
+    transition:
+      background-color var(--zbk-transition-duration-fast),
+      border-color var(--zbk-transition-duration-fast),
+      transform var(--zbk-transition-duration-fast);
   }
-  .card-head {
+  .section-card:hover {
+    border-color: var(--zbk-accent-primary-600);
+    background: var(--zbk-app-canvas-muted);
+  }
+  .section-card:focus-visible {
+    outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
+    outline-offset: var(--zbk-focus-offset);
+  }
+  .section-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--zbk-spacing-05);
+    padding: var(--zbk-spacing-105);
+  }
+  .section-card-title {
+    margin: 0;
+  }
+  .section-card-go {
+    margin-block-start: var(--zbk-spacing-025);
+    letter-spacing: var(--zbk-letter-spacing-wide);
+  }
+
+  /* Decorative thumbnails — pure token-driven CSS, so they re-skin with the preset
+     (brand accent ramp, corner radius, display type) instead of freezing like images. */
+  .thumb {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--zbk-spacing-1);
-  }
-  .card-head h3 {
-    margin: 0;
+    justify-content: center;
+    aspect-ratio: 16 / 9;
+    padding: var(--zbk-spacing-105);
+    background: var(--zbk-accent-primary-100);
+    color: var(--zbk-accent-primary-700);
+    border-block-end: var(--zbk-border-width-sm) solid var(--zbk-app-border);
+    overflow: clip;
+    pointer-events: none;
   }
 
-  .chart {
+  /* Layout — a sidebar column beside stacked content rows. */
+  .m-layout {
     display: flex;
-    align-items: flex-end;
     gap: var(--zbk-spacing-05);
-    block-size: 5rem;
+    inline-size: 72%;
+    block-size: 62%;
   }
-  .bar {
-    flex: 1;
+  .m-col {
+    inline-size: 26%;
+    background: currentColor;
     border-radius: var(--zbk-border-radius-xs);
-    min-block-size: 2px;
   }
-
-  .stat-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .m-stack {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: var(--zbk-spacing-05);
   }
-  .stat-list li {
-    display: flex;
-    justify-content: space-between;
-    padding-block: var(--zbk-spacing-025);
-    border-block-end: var(--zbk-border-width-xs) solid var(--zbk-app-border-soft);
+  .m-stack i {
+    flex: 1;
+    background: currentColor;
+    opacity: 0.5;
+    border-radius: var(--zbk-border-radius-xs);
   }
 
-  .form {
-    gap: var(--zbk-spacing-105);
+  /* Typography — a display-type specimen in the preset's heading family. */
+  .m-type {
+    font-size: 2.75rem;
+    font-weight: 700;
+    line-height: 1;
   }
-  .field {
+
+  /* Color — a slice of the brand accent ramp. */
+  .m-swatches {
     display: flex;
-    flex-direction: column;
     gap: var(--zbk-spacing-025);
   }
-  .control {
-    padding-inline: var(--zbk-spacing-1);
+  .m-swatches i {
+    inline-size: 1.1rem;
+    block-size: 2.4rem;
+    border-radius: var(--zbk-border-radius-xs);
+  }
+
+  /* Icons — primitive shapes; the square picks up the preset's corner radius. */
+  .m-icons {
+    display: flex;
+    align-items: center;
+    gap: var(--zbk-spacing-105);
+  }
+  .m-circle,
+  .m-square {
+    inline-size: 1.6rem;
+    block-size: 1.6rem;
+    border: var(--zbk-border-width-md) solid currentColor;
+  }
+  .m-circle {
+    border-radius: 50%;
+  }
+  .m-square {
+    border-radius: var(--zbk-border-radius-sm);
+  }
+  .m-tri {
+    inline-size: 0;
+    block-size: 0;
+    border-inline: 0.9rem solid transparent;
+    border-block-end: 1.6rem solid currentColor;
+  }
+
+  /* Components — a filled button (brand action color + radius) over a field. */
+  .m-components {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--zbk-spacing-075, var(--zbk-spacing-05));
+    inline-size: 74%;
+  }
+  .m-btn {
+    padding-inline: var(--zbk-spacing-105);
     padding-block: var(--zbk-spacing-05);
+    background: var(--zbk-action-canvas);
+    color: var(--zbk-action-ink-inverse);
+    border-radius: var(--zbk-border-radius-sm);
+    font-size: var(--zbk-font-size-2xs, 0.75rem);
+    white-space: nowrap;
+  }
+  .m-field {
+    inline-size: 100%;
+    block-size: 1.4rem;
     background: var(--zbk-app-canvas);
-    color: var(--zbk-app-ink);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-sm);
   }
-  .control:focus-visible {
-    outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
-    outline-offset: var(--zbk-focus-offset);
-    border-color: var(--zbk-accent-primary-600);
-  }
 
-  .table-card {
-    margin-inline: var(--zbk-spacing-2);
-    margin-block-end: var(--zbk-spacing-2);
-    padding: 0;
-    overflow: clip;
-  }
-  .data-table {
-    inline-size: 100%;
-    border-collapse: collapse;
-  }
-  .data-table th,
-  .data-table td {
-    text-align: start;
-    padding-inline: var(--zbk-spacing-105);
-    padding-block: var(--zbk-spacing-075, var(--zbk-spacing-05));
-    border-block-end: var(--zbk-border-width-xs) solid var(--zbk-app-border-soft);
-  }
-  .data-table thead th {
-    background: var(--zbk-app-canvas-muted);
-    letter-spacing: var(--zbk-letter-spacing-wide);
-  }
-  .meter {
-    inline-size: 6rem;
-    block-size: 0.5rem;
-    background: var(--zbk-app-canvas-muted);
-    border-radius: var(--zbk-border-radius-xs);
-    overflow: clip;
-  }
-  .meter-fill {
-    block-size: 100%;
-  }
-
-  .badge {
-    align-self: center;
-    padding-inline: var(--zbk-spacing-05);
-    padding-block: var(--zbk-spacing-025);
-    border-radius: var(--zbk-border-radius-xs);
-    letter-spacing: var(--zbk-letter-spacing-wide);
-    white-space: nowrap;
-  }
-  .badge-accent {
-    background: var(--zbk-accent-primary-100);
-    color: var(--zbk-accent-primary-800);
-  }
-  .badge-secondary {
-    background: var(--zbk-accent-secondary-100);
-    color: var(--zbk-accent-secondary-800);
-  }
-  .badge-outline {
-    border: var(--zbk-border-width-xs) solid var(--zbk-app-border-strong);
-    color: var(--zbk-app-ink-muted);
-  }
-
-  /* ── Diff panel (stage chrome) ─────────────────────────────────────────── */
-  .diff-panel {
+  /* Spacing — bars on the size scale. */
+  .m-spacing {
     display: flex;
     flex-direction: column;
     gap: var(--zbk-spacing-05);
-    padding: var(--zbk-spacing-105);
+    inline-size: 76%;
+  }
+  .m-spacing i {
+    block-size: 0.55rem;
+    background: currentColor;
+    border-radius: var(--zbk-border-radius-xs);
+  }
+
+  /* Accent band — inverts the surface using the action (primary) color pair, the
+     one combination guaranteed to stay contrast-safe across every preset. */
+  .accent-band {
+    display: flex;
+    flex-direction: column;
+    gap: var(--zbk-spacing-1);
+    padding-inline: var(--zbk-spacing-2);
+    padding-block: var(--zbk-spacing-3);
+    background: var(--zbk-action-canvas);
+    color: var(--zbk-action-ink-inverse);
+  }
+  .accent-eyebrow {
+    margin: 0;
+    color: var(--zbk-action-ink-inverse-muted);
+    letter-spacing: var(--zbk-letter-spacing-wider);
+  }
+  .accent-headline {
+    margin: 0;
+    max-inline-size: var(--zbk-text-measure-2);
+  }
+  .accent-lede {
+    margin: 0;
+    max-inline-size: var(--zbk-text-measure-2);
+    color: var(--zbk-action-ink-inverse-soft);
+  }
+  .accent-cta {
+    align-self: start;
+    margin-block-start: var(--zbk-spacing-05);
+    padding-inline: var(--zbk-spacing-105);
+    padding-block: var(--zbk-spacing-075, var(--zbk-spacing-05));
+    color: var(--zbk-action-ink-inverse);
+    border: var(--zbk-border-width-sm) solid var(--zbk-action-ink-inverse);
+    border-radius: var(--zbk-border-radius-sm);
+    text-decoration: none;
+  }
+  .accent-cta:hover {
+    background: var(--zbk-action-ink-inverse);
+    color: var(--zbk-action-canvas);
+  }
+  .accent-cta:focus-visible {
+    outline: var(--zbk-focus-width) solid var(--zbk-action-ink-inverse);
+    outline-offset: var(--zbk-focus-offset);
+  }
+
+  /* Next steps */
+  .next-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--zbk-spacing-105);
+    padding-inline: var(--zbk-spacing-2);
+    padding-block: var(--zbk-spacing-3);
+  }
+  .next-steps-heading {
+    margin: 0;
+  }
+  .next-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zbk-spacing-1);
+  }
+  .next-link {
+    padding-inline: var(--zbk-spacing-105);
+    padding-block: var(--zbk-spacing-075, var(--zbk-spacing-05));
+    color: var(--zbk-action-ink-inverse);
+    background: var(--zbk-action-canvas);
+    border: var(--zbk-border-width-sm) solid var(--zbk-action-canvas);
+    border-radius: var(--zbk-border-radius-sm);
+    text-decoration: none;
+    transition:
+      background-color var(--zbk-transition-duration-fast),
+      color var(--zbk-transition-duration-fast),
+      border-color var(--zbk-transition-duration-fast);
+  }
+  .next-link:hover {
+    background: var(--zbk-action-canvas-strong);
+    border-color: var(--zbk-action-canvas-strong);
+  }
+  .next-link:focus-visible {
+    outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
+    outline-offset: var(--zbk-focus-offset);
+  }
+
+  /* ── Diff strip (stage chrome) ─────────────────────────────────────────── */
+  .diff-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--zbk-spacing-1) var(--zbk-spacing-3);
+    padding: var(--zbk-spacing-105) var(--zbk-spacing-2);
     background: var(--zbk-app-canvas-soft);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-md);
+  }
+  .diff-lead {
+    display: flex;
+    flex-direction: column;
+    gap: var(--zbk-spacing-025);
+    flex: 0 0 auto;
   }
   .diff-title {
     margin: 0;
@@ -458,15 +606,15 @@
   .diff-list {
     margin: 0;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    gap: var(--zbk-spacing-1) var(--zbk-spacing-2);
+    flex: 1 1 auto;
   }
   .diff-row {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--zbk-spacing-1);
-    padding-block: var(--zbk-spacing-05);
-    border-block-end: var(--zbk-border-width-xs) solid var(--zbk-app-border-soft);
+    flex-direction: column;
+    gap: var(--zbk-spacing-025);
+    min-inline-size: 7rem;
   }
   .diff-row dt {
     color: var(--zbk-app-ink-muted);
@@ -474,7 +622,6 @@
   .diff-row dd {
     margin: 0;
     color: var(--zbk-accent-primary-700);
-    text-align: end;
   }
 
   .reskin-caption {
@@ -486,7 +633,8 @@
   @media (prefers-reduced-motion: reduce) {
     .chip,
     .reskin,
-    .reskin * {
+    .reskin *,
+    .section-card {
       transition: none;
     }
   }

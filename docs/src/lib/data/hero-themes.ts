@@ -5,20 +5,30 @@
 // metadata (labels, ordering) and derives a small set of headline diff rows.
 import rawDiffs from './generated/hero-themes.json';
 
-export type HeroThemeName = 'swiss' | 'brutalist' | 'terminal' | 'editorial';
+export type HeroThemeName = 'apple' | 'material' | 'atlassian' | 'carbon' | 'base';
 
 export interface HeroTheme {
   name: HeroThemeName;
   label: string;
   blurb: string;
+  /** Proper name of the real design system this preset nods to. */
+  source: string;
+  /** The real design system's homepage — opened from the hero header. */
+  href: string;
 }
 
-/** Order = the switcher chip order. Swiss is the clean baseline. */
+/**
+ * Each preset reskins the same markup to evoke a well-known design system.
+ * `name` = the theme key / `data-zbk-theme` value; `label` is the cheeky chip
+ * caption; `source`/`href` point at the real system. Order = the switcher chip
+ * order; Apple is the clean baseline.
+ */
 export const heroThemes: HeroTheme[] = [
-  { name: 'swiss', label: 'Confluenced', blurb: 'International typographic — grotesque, red, hairline grid.' },
-  { name: 'brutalist', label: 'Carbon copy', blurb: 'Raw concrete — black ink, acid yellow, zero radius.' },
-  { name: 'terminal', label: 'Materialist', blurb: 'Phosphor CRT — dark canvas, green-on-black mono.' },
-  { name: 'editorial', label: 'Uberesque', blurb: 'Literary print — warm paper, wine accent, serif display.' }
+  { name: 'apple', label: "Cupertino'd", blurb: 'Calm minimalism — off-white canvas, SF system type, system blue.', source: 'Apple', href: 'https://developer.apple.com/design/human-interface-guidelines/' },
+  { name: 'material', label: 'Materialist', blurb: 'Phosphor CRT — dark canvas, green-on-black mono.', source: 'Material', href: 'https://m3.material.io/' },
+  { name: 'atlassian', label: 'Confluenced', blurb: 'International typographic — grotesque, red, hairline grid.', source: 'Atlassian', href: 'https://atlassian.design/' },
+  { name: 'carbon', label: 'Carbon copy', blurb: 'Raw concrete — black ink, acid yellow, zero radius.', source: 'Carbon', href: 'https://carbondesignsystem.com/' },
+  { name: 'base', label: 'Uberesque', blurb: 'Literary print — warm paper, wine accent, serif display.', source: 'Base', href: 'https://base.uber.com/' }
 ];
 
 const diffs = rawDiffs as Record<HeroThemeName, Record<string, string>>;
