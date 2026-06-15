@@ -15,10 +15,10 @@ export interface HeroTheme {
 
 /** Order = the switcher chip order. Swiss is the clean baseline. */
 export const heroThemes: HeroTheme[] = [
-  { name: 'swiss', label: 'Swiss', blurb: 'International typographic — grotesque, red, hairline grid.' },
-  { name: 'brutalist', label: 'Brutalist', blurb: 'Raw concrete — black ink, acid yellow, zero radius.' },
-  { name: 'terminal', label: 'Terminal', blurb: 'Phosphor CRT — dark canvas, green-on-black mono.' },
-  { name: 'editorial', label: 'Editorial', blurb: 'Literary print — warm paper, wine accent, serif display.' }
+  { name: 'swiss', label: 'Confluenced', blurb: 'International typographic — grotesque, red, hairline grid.' },
+  { name: 'brutalist', label: 'Carbon copy', blurb: 'Raw concrete — black ink, acid yellow, zero radius.' },
+  { name: 'terminal', label: 'Materialist', blurb: 'Phosphor CRT — dark canvas, green-on-black mono.' },
+  { name: 'editorial', label: 'Uberesque', blurb: 'Literary print — warm paper, wine accent, serif display.' }
 ];
 
 const diffs = rawDiffs as Record<HeroThemeName, Record<string, string>>;
@@ -53,6 +53,7 @@ export function diffFor(name: HeroThemeName): { rows: DiffRow[]; totalChanged: n
     { label: 'Secondary accent', value: family(d['accent-secondary-600']) },
     { label: 'Display type', value: fontName(d['font-family-alt']) },
     { label: 'Body type', value: fontName(d['font-family-primary']) },
+    { label: 'Monospaced type', value: fontName(d['font-family-monospace']) },
     { label: 'Radius (md)', value: d['border-radius-md'] ?? '—' }
   ];
   return { rows, totalChanged: Object.keys(d).length };

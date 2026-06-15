@@ -13,6 +13,7 @@
 
   font-size: var(--zbk-font-size-md);
   line-height: var(--editorial-baseline);
+  min-height: 100dvh;
 }
 
 /* Main editorial column — comfortable measure for reading */
@@ -28,7 +29,7 @@
 
 .editorial-main h1 {
   /* Page-level h1 (hero display uses the larger 4xl/5xl steps in the docs theme). */
-  font-size: var(--zbk-font-size-3xl);
+  font-size: var(--zbk-font-size-5xl);
   font-weight: bold;
 }
 

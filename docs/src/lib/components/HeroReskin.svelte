@@ -30,13 +30,13 @@
 
 <ZebkitLoader />
 
-<section class="reskin-stage" aria-label="Reskin demo — change the tokens, keep the HTML">
+<section class="reskin-stage" aria-label="Reskin demo — change the tokens, keep the HTML" id="reskin-playground">
   <!-- Preset switcher -->
   <div class="switcher" role="group" aria-label="Theme preset">
     {#each heroThemes as t (t.name)}
       <button
         type="button"
-        class="chip font-code text-uppercase text-sm"
+        class="chip font-code text-xs"
         class:is-active={active === t.name}
         aria-pressed={active === t.name}
         onclick={() => select(t.name)}
@@ -61,7 +61,7 @@
       </header>
 
       <!-- Type specimen + lede -->
-      <div class="specimen padding-inline-2 padding-block-2">
+      <div class="specimen prose padding-inline-2 padding-block-2">
         <p class="font-code text-uppercase text-2xs eyebrow ink-accent-primary-600">{active} preset</p>
         <h2 class="font-heading display ink-app">Same&nbsp;HTML.<br />New&nbsp;skin.</h2>
         <p class="font-body text-lg ink-app-muted lede">
@@ -178,6 +178,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--zbk-spacing-2);
+    padding-block-start: var(--zbk-spacing-4);
   }
 
   .switcher {
@@ -186,14 +187,14 @@
     gap: var(--zbk-spacing-05);
   }
   .chip {
-    padding-block: var(--zbk-spacing-05);
-    padding-inline: var(--zbk-spacing-105);
+    padding-block: var(--zbk-spacing-025);
+    padding-inline: var(--zbk-spacing-1);
     background: transparent;
-    color: var(--zbk-app-ink-muted);
+    color: var(--zbk-app-ink);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
+    background: var(--zbk-app-canvas);
     border-radius: var(--zbk-border-radius-sm);
     cursor: pointer;
-    letter-spacing: var(--zbk-letter-spacing-wide);
     transition:
       background-color var(--zbk-transition-duration-fast),
       color var(--zbk-transition-duration-fast),
@@ -201,12 +202,13 @@
   }
   .chip:hover {
     color: var(--zbk-app-ink);
-    border-color: var(--zbk-app-ink-muted);
+    border-color: var(--zbk-action-canvas-soft);
+    /* background: var(--zbk-action-canvas-muted); */
   }
   .chip.is-active {
-    background: var(--zbk-accent-primary-600);
-    color: var(--zbk-accent-primary-50);
-    border-color: var(--zbk-accent-primary-600);
+    background: var(--zbk-action-canvas-muted);
+    color: var(--zbk-app-ink);
+    border-color: var(--zbk-action-canvas);
   }
   .chip:focus-visible {
     outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
@@ -293,8 +295,6 @@
   }
   .display {
     margin: 0;
-    font-size: clamp(2.25rem, 1.2rem + 4vw, 4rem);
-    line-height: var(--zbk-line-height-1);
   }
   .lede {
     margin: 0;

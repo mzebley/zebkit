@@ -28,6 +28,10 @@
     // out; when false it retracts (after the same hide-delay). Lets hosted
     // content — e.g. the inspector's tokens — summon the rail on hover/focus.
     peekRequest?: boolean;
+    // Render the in-panel collapse/expand toggle in the header. Pass false when
+    // an external control owns the toggle (e.g. the nav's lives in the TopBar);
+    // the collapsed peek-handle stays either way.
+    showToggle?: boolean;
     children: Snippet;
   };
 
@@ -38,6 +42,7 @@
     label,
     width = 'var(--zbk-spacing-card)',
     peekRequest = false,
+    showToggle = true,
     children,
   }: Props = $props();
 
@@ -136,19 +141,21 @@
     onfocusin={collapsed ? show : undefined}
     onfocusout={collapsed ? onPanelFocusOut : undefined}
   >
-    <div class="cp-header">
-      <button
-        bind:this={toggleEl}
-        type="button"
-        class="cp-toggle"
-        onclick={handleToggle}
-        aria-label={collapsed ? `Expand ${label}` : `Collapse ${label}`}
-        aria-expanded={!collapsed}
-        title={collapsed ? `Expand ${label}` : `Collapse ${label}`}
-      >
-        <span aria-hidden="true">{toggleGlyph}</span>
-      </button>
-    </div>
+    {#if showToggle}
+      <div class="cp-header">
+        <button
+          bind:this={toggleEl}
+          type="button"
+          class="cp-toggle"
+          onclick={handleToggle}
+          aria-label={collapsed ? `Expand ${label}` : `Collapse ${label}`}
+          aria-expanded={!collapsed}
+          title={collapsed ? `Expand ${label}` : `Collapse ${label}`}
+        >
+          <span aria-hidden="true">{toggleGlyph}</span>
+        </button>
+      </div>
+    {/if}
     <div class="cp-content">
       {@render children()}
     </div>

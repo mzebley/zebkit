@@ -113,9 +113,12 @@ export async function buildZebkitTokens(
         const tokenKey = `${ZEBKIT_PREFIX}-${moduleKey}`;
 
         if (validateTokenExport(tokensExport, tokenSchema)) {
-          // Merge modules that share the same logical key (e.g., primitive + semantic spacing)
+          // Merge modules that share the same logical key (e.g., primitive + semantic spacing).
+          // Copy the imported export rather than aliasing it: token modules are ES singletons
+          // cached for the process lifetime, so mutating one (below, or via overrides) would
+          // leak keys into later builds in the same process (e.g. the hero-themes loop).
           if (!tokens[tokenKey]) {
-            tokens[tokenKey] = tokensExport;
+            tokens[tokenKey] = { ...tokensExport };
             tokenSchemas[tokenKey] = tokenSchema;
             layers[tokenKey] = moduleLayer;
           } else {

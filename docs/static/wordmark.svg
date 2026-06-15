@@ -1,21 +1,5 @@
-<script lang="ts">
-  import EditorialLayout from '$lib/layouts/EditorialLayout.svelte';
-  import HeroReskin from '$lib/components/HeroReskin.svelte';
-</script>
-
-<div class="home text-wrap-pretty">
-  <EditorialLayout
-    title="Change everything. Rewrite nothing."
-    description="Zebkit is a token-driven, accessibility-first web component library. The HTML is the contract; the tokens are the design."
-  >
-    <p class="eyebrow">A token-driven, accessibility-first component library</p>
-    <h1>Change everything.<br />Rewrite nothing.</h1>
-    <p class="lede">
-      In zebkit the markup is a contract and the tokens are the design. Re-skin an entire
-      product — color, type, density, radius — without touching a line of HTML. The demo
-      below is one fixed component tree, repainted entirely by swapping token sets.
-    </p>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 13.35 72.337 35.1" data-asc="0.957" aria-hidden="true" role="img" class="watermark">
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 13.35 72.337 35.1" data-asc="0.957" width="139.89999389648438" height="35.10000228881836">
   <g fill="currentColor">
     <g transform="translate(0, 0)">
       <path d="M 0 47.85 L 0 45.05 L 13.25 25.9 L 9.25 25.9 C 8.05 25.9 6.983333333333333 26.06 6.05 26.38 C 5.116666666666667 26.693333333333335 4.3500000000000005 27.256666666666668 3.75 28.07 C 3.15 28.89 2.7 30.066666666666666 2.4 31.6 L 0.9 31.6 L 1.45 24.35 L 20.65 24.35 L 20.65 26.5 L 7.4 46.25 L 11.85 46.25 C 13.65 46.25 15.05 46.06666666666667 16.05 45.7 C 17.05 45.333333333333336 17.833333333333332 44.666666666666664 18.4 43.7 C 18.966666666666665 42.733333333333334 19.466666666666665 41.36666666666667 19.9 39.6 L 21.4 39.6 L 20.85 47.85 L 0 47.85 Z"/>
@@ -28,62 +12,3 @@
     </g>
   </g>
 </svg>
-  <a class="font-code text-sm" href="#reskin-playground"><span>Take it for a spin</span><i class="ri-corner-right-down-line text-md"></i></a>
-  </EditorialLayout>
-
-  <!-- Centerpiece: the same HTML, re-skinned by tokens alone. -->
-  <HeroReskin />
-</div>
-
-<style>
-  .home {
-    display: flex;
-    flex-direction: column;
-    gap: var(--zbk-spacing-4);
-  }
-
-  .eyebrow {
-    margin: 0 0 var(--zbk-spacing-1);
-    font-family: var(--zbk-font-family-code);
-    text-transform: uppercase;
-    letter-spacing: var(--zbk-letter-spacing-wider);
-    font-size: var(--zbk-font-size-sm);
-    color: var(--zbk-accent-primary-700);
-  }
-
-  .lede {
-    color: var(--zbk-app-ink-muted);
-    font-size: var(--zbk-font-size-lg);
-    margin-block-start: var(--zbk-spacing-105);
-  }
-
-  .watermark {
-    width: var(--zbk-spacing-tablet-lg);
-    max-width: 90vw;
-    position:fixed;
-    opacity:.375;
-    z-index:-1;
-    touch-action: none;
-    pointer-events: none;
-    bottom:0;
-    right:0;
-    color: var(--zbk-neutral-100);
-  }
-
-  a {
-    text-decoration: none;
-    color: var(--zbk-action-ink);
-    margin-top:auto;
-    display:flex;
-    align-items: flex-end;
-    gap:var(--zbk-spacing-025);
-    > span {
-     text-decoration: underline dotted var(--zbk-action-ink-muted) 3px;
-     text-underline-offset: var(--zbk-spacing-05);
-    }
-
-    > i {
-      line-height: 1;
-    }
-  }
-</style>

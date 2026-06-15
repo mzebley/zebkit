@@ -4,7 +4,13 @@
   import Overlay from '$lib/components/Overlay.svelte';
   import CollapsiblePanel from '$lib/components/CollapsiblePanel.svelte';
   import { viewport } from '$lib/stores/viewport.svelte';
-  import { ui, closeInspect, toggleInspectCollapsed } from '$lib/stores/ui.svelte';
+  import {
+    ui,
+    closeInspect,
+    toggleInspectCollapsed,
+    registerInspector,
+    unregisterInspector,
+  } from '$lib/stores/ui.svelte';
 
   // The two-column "instrument" register: dense content on the left, an
   // inspector rail on the right. The rail's vessel adapts to the viewport regime:
@@ -25,10 +31,12 @@
   let { children, inspector }: Props = $props();
 
   // Tell the TopBar an inspector exists on this page while the shell is mounted.
+  // Count-based (register/unregister) so overlapping mount/unmount during client
+  // navigation can't latch the flag off — see the store for the rationale.
   $effect(() => {
-    ui.inspectAvailable = true;
+    registerInspector();
     return () => {
-      ui.inspectAvailable = false;
+      unregisterInspector();
     };
   });
 </script>
@@ -53,6 +61,7 @@
       onToggle={toggleInspectCollapsed}
       label="Inspector"
       peekRequest={ui.inspectPeek}
+      showToggle={false}
     >
       <div class="rail-vessel">
         {@render rail()}

@@ -85,6 +85,24 @@ export function closeInspect() {
   ui.inspectOpen = false;
 }
 
+// Whether any mounted instrument shell exposes an inspector — driven by a count,
+// not a bare boolean. During SvelteKit client navigation the incoming page's
+// shell can mount before the outgoing one unmounts; a shared boolean would latch
+// to whichever effect ran last (dropping the TopBar's inspector control), while
+// a counter nets out to the right value regardless of order. The same guards
+// against an HMR re-eval double-firing the registration.
+let inspectShellCount = 0;
+
+export function registerInspector() {
+  inspectShellCount += 1;
+  ui.inspectAvailable = inspectShellCount > 0;
+}
+
+export function unregisterInspector() {
+  inspectShellCount = Math.max(0, inspectShellCount - 1);
+  ui.inspectAvailable = inspectShellCount > 0;
+}
+
 // Peek control for the collapsed inspector rail. The content's inspectable
 // affordances raise/release these as you hover/focus/leave them; the rail's
 // CollapsiblePanel translates the flag into its own show/hide (with the same

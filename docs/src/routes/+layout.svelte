@@ -33,6 +33,7 @@
         collapsed={ui.navCollapsed}
         onToggle={toggleNavCollapsed}
         label="Navigation"
+        showToggle={false}
       >
         <LeftNav fill />
       </CollapsiblePanel>
@@ -68,18 +69,18 @@
        container, so the inspector rail's `position: sticky` references the
        window (like the nav) instead of getting trapped here. */
     overflow-x: clip;
-    padding: var(--zbk-spacing-4) var(--zbk-spacing-5);
+    padding: var(--zbk-spacing-3) var(--zbk-spacing-4);
   }
 
   @media (max-width: 64rem) {
     .app-main {
-      padding: var(--zbk-spacing-3) var(--zbk-spacing-4);
+      padding: var(--zbk-spacing-2) var(--zbk-spacing-3);
     }
   }
 
   @media (max-width: 48rem) {
     .app-main {
-      padding: var(--zbk-spacing-2) var(--zbk-spacing-3);
+      padding: var(--zbk-spacing-2) var(--zbk-spacing-1);
     }
   }
 </style>
