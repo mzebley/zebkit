@@ -1,4 +1,4 @@
-import { compiledTokens } from '../data/compiled-tokens';
+import { compiledTokens, type CompiledToken } from '../data/compiled-tokens';
 import lookup from '../data/generated/token-lookup.json';
 
 // Token x-ray resolver: walks a token's reference chain through the three strata
@@ -70,7 +70,7 @@ function stratumFor(group: string): Stratum {
   return 'primitive';
 }
 
-function lookupEntry(path: string): { value: string | number } | undefined {
+function lookupEntry(path: string): CompiledToken | undefined {
   const [group, name] = splitPath(path);
   return compiledTokens[`${ZBK}${group}`]?.[name];
 }
@@ -115,7 +115,7 @@ export function resolveChain(input: string): ChainNode[] {
       break;
     }
 
-    const raw = String(entry.value);
+    const raw = String(entry.value ?? '');
     const ref = isReference(raw) ? raw.slice(1, -1) : null;
     nodes.push({ path, cssVar, stratum: stratumFor(group), raw, ref });
     path = ref;
