@@ -1,14 +1,23 @@
 {
   "primary": {
-    "value": "\"JetBrains Mono\", monospace",
-    "description": "Primary family (body + interface)."
+    "value": "\"Roboto\", sans-serif",
+    "description": "Primary family (body + interface) — Roboto, the Material typeface.",
+    "variable": false,
+    "weights": "400,500,700",
+    "type": "googleFont"
   },
   "alt": {
-    "value": "\"JetBrains Mono\", monospace",
-    "description": "Display / heading family."
+    "value": "\"Roboto\", sans-serif",
+    "description": "Display / heading family — Material uses Roboto across the type scale.",
+    "variable": false,
+    "weights": "400,500,700",
+    "type": "googleFont"
   },
   "monospace": {
-    "value": "\"JetBrains Mono\", monospace",
-    "description": "Monospace family (code, labels, values)."
+    "value": "\"Roboto Mono\", monospace",
+    "description": "Monospace family (code, labels, values) — Roboto Mono.",
+    "variable": false,
+    "weights": "400,500",
+    "type": "googleFont"
   }
 }

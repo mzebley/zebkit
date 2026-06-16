@@ -5,53 +5,53 @@
     "description": "Smallest semantic border width."
   },
   "width-sm": {
-    "value": "{spacing.2px}",
+    "value": "{spacing.1px}",
     "type": "borderWidth",
-    "description": "Small semantic border width."
+    "description": "Small semantic border width — ADS components use crisp 1px rules."
   },
   "width-md": {
-    "value": "{spacing.025}",
+    "value": "{spacing.1px}",
     "type": "borderWidth",
     "description": "Base semantic border width."
   },
   "width-lg": {
-    "value": "{spacing.05}",
+    "value": "{spacing.2px}",
     "type": "borderWidth",
-    "description": "Larger semantic border width."
+    "description": "Larger semantic border width — ADS focus/selected emphasis."
   },
   "width-xl": {
-    "value": "{spacing.1}",
+    "value": "{spacing.2px}",
     "type": "borderWidth",
     "description": "Largest semantic border width."
   },
   "style": {
     "value": "solid",
     "type": "borderStyle",
-    "description": "Standarized border style for project."
+    "description": "Standardized border style for the theme."
   },
   "radius-xs": {
     "value": "{spacing.2px}",
     "type": "borderRadius",
-    "description": "Smallest semantic corner radius."
+    "description": "Corner radius (xs) — 2px."
   },
   "radius-sm": {
-    "value": "{spacing.025}",
+    "value": "0.1875rem",
     "type": "borderRadius",
-    "description": "Small semantic corner radius."
+    "description": "Corner radius (sm) — ADS classic 3px component radius."
   },
   "radius-md": {
-    "value": ".25rem",
+    "value": "0.25rem",
     "type": "borderRadius",
-    "description": "Base semantic corner radius."
+    "description": "Corner radius (md) — ADS border.radius (4px)."
   },
   "radius-lg": {
-    "value": "{spacing.1}",
+    "value": "{spacing.05}",
     "type": "borderRadius",
-    "description": "Larger semantic corner radius."
+    "description": "Corner radius (lg) — ADS border.radius.200 (8px)."
   },
   "radius-xl": {
-    "value": "{spacing.205}",
+    "value": "0.75rem",
     "type": "borderRadius",
-    "description": "Largest semantic corner radius."
+    "description": "Corner radius (xl) — ADS border.radius.300 (12px)."
   }
 }

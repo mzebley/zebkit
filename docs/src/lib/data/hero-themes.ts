@@ -5,7 +5,7 @@
 // metadata (labels, ordering) and derives a small set of headline diff rows.
 import rawDiffs from './generated/hero-themes.json';
 
-export type HeroThemeName = 'apple' | 'material' | 'atlassian' | 'carbon' | 'base';
+export type HeroThemeName = 'apple' | 'material' | 'atlassian' | 'carbon' | 'uber';
 
 export interface HeroTheme {
   name: HeroThemeName;
@@ -25,10 +25,10 @@ export interface HeroTheme {
  */
 export const heroThemes: HeroTheme[] = [
   { name: 'apple', label: "Cupertino'd", blurb: 'Calm minimalism — off-white canvas, SF system type, system blue.', source: 'Apple', href: 'https://developer.apple.com/design/human-interface-guidelines/' },
-  { name: 'material', label: 'Materialist', blurb: 'Phosphor CRT — dark canvas, green-on-black mono.', source: 'Material', href: 'https://m3.material.io/' },
-  { name: 'atlassian', label: 'Confluenced', blurb: 'International typographic — grotesque, red, hairline grid.', source: 'Atlassian', href: 'https://atlassian.design/' },
-  { name: 'carbon', label: 'Carbon copy', blurb: 'Raw concrete — black ink, acid yellow, zero radius.', source: 'Carbon', href: 'https://carbondesignsystem.com/' },
-  { name: 'base', label: 'Uberesque', blurb: 'Literary print — warm paper, wine accent, serif display.', source: 'Base', href: 'https://base.uber.com/' }
+  { name: 'material', label: 'Materialist', blurb: 'Material You — lilac primary, soft rounded shapes, pill buttons, Roboto.', source: 'Material', href: 'https://m3.material.io/' },
+  { name: 'atlassian', label: 'Confluenced', blurb: 'Workspace blue — Atlassian blue, Inter UI, crisp 4px corners.', source: 'Atlassian', href: 'https://atlassian.design/' },
+  { name: 'carbon', label: 'Carbon copy', blurb: 'Industrial grid — IBM Plex, electric blue, razor-sharp corners.', source: 'Carbon', href: 'https://carbondesignsystem.com/' },
+  { name: 'uber', label: 'Uberesque', blurb: 'Monochrome motion — black buttons, Base Blue accent, Manrope display.', source: 'Base', href: 'https://base.uber.com/' }
 ];
 
 const diffs = rawDiffs as Record<HeroThemeName, Record<string, string>>;

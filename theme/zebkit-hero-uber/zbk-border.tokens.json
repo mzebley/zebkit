@@ -1,27 +1,57 @@
 {
+  "width-xs": {
+    "value": "{spacing.1px}",
+    "type": "borderWidth",
+    "description": "Smallest semantic border width."
+  },
+  "width-sm": {
+    "value": "{spacing.1px}",
+    "type": "borderWidth",
+    "description": "Small semantic border width."
+  },
+  "width-md": {
+    "value": "{spacing.1px}",
+    "type": "borderWidth",
+    "description": "Base semantic border width — Base uses crisp 1px rules."
+  },
+  "width-lg": {
+    "value": "{spacing.2px}",
+    "type": "borderWidth",
+    "description": "Larger semantic border width."
+  },
+  "width-xl": {
+    "value": "{spacing.2px}",
+    "type": "borderWidth",
+    "description": "Largest semantic border width."
+  },
+  "style": {
+    "value": "solid",
+    "type": "borderStyle",
+    "description": "Standardized border style for the theme."
+  },
   "radius-xs": {
-    "value": "{spacing.025}",
+    "value": "{spacing.2px}",
     "type": "borderRadius",
-    "description": "Corner radius (xs)."
+    "description": "Corner radius (xs) — Base radius 50 (2px)."
   },
   "radius-sm": {
-    "value": "{spacing.05}",
+    "value": "{spacing.025}",
     "type": "borderRadius",
-    "description": "Corner radius (sm)."
+    "description": "Corner radius (sm) — Base radius 100 (4px)."
   },
   "radius-md": {
-    "value": "{spacing.105}",
+    "value": "{spacing.05}",
     "type": "borderRadius",
-    "description": "Corner radius (md)."
+    "description": "Corner radius (md) — Base radius 200 (8px)."
   },
   "radius-lg": {
-    "value": "{spacing.205}",
+    "value": ".75rem",
     "type": "borderRadius",
-    "description": "Corner radius (lg)."
+    "description": "Corner radius (lg) — Base radius 300 (12px)."
   },
   "radius-xl": {
-    "value": "{spacing.3}",
+    "value": "{spacing.1}",
     "type": "borderRadius",
-    "description": "Corner radius (xl)."
+    "description": "Corner radius (xl) — Base radius 400 (16px)."
   }
 }

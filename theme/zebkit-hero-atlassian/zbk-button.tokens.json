@@ -1,16 +1,16 @@
 {
   "ink": {
-    "value": "{app.ink}",
+    "value": "{color.global-white}",
     "type": "color",
-    "description": "Default button label color."
+    "description": "Default button label color — white on the ADS primary button."
   },
   "ink-hover": {
-    "value": "{app.ink}",
+    "value": "{color.global-white}",
     "type": "color",
     "description": "Label color when hovered."
   },
   "ink-active": {
-    "value": "{app.ink}",
+    "value": "{color.global-white}",
     "type": "color",
     "description": "Label color when active or pressed."
   },
@@ -20,19 +20,19 @@
     "description": "Label color for disabled buttons."
   },
   "canvas": {
-    "value": "#ffab00",
+    "value": "{action.canvas}",
     "type": "color",
-    "description": "Default button background."
+    "description": "Default button background — Atlassian blue (primary)."
   },
   "canvas-hover": {
-    "value": "#ff991f",
+    "value": "{action.canvas-muted}",
     "type": "color",
-    "description": "Background for hover state."
+    "description": "Background for hover state — ADS button-primary-hovered."
   },
   "canvas-active": {
-    "value": "#ff8b00",
+    "value": "{action.canvas-soft}",
     "type": "color",
-    "description": "Background for active/pressed state."
+    "description": "Background for active/pressed state — ADS button-primary-pressed."
   },
   "canvas-disabled": {
     "value": "{disabled.canvas}",
@@ -40,17 +40,17 @@
     "description": "Background for disabled buttons."
   },
   "border-color": {
-    "value": "{accent-primary.500}",
+    "value": "{action.canvas}",
     "type": "color",
     "description": "Default button border color."
   },
   "border-color-hover": {
-    "value": "{accent-primary.600}",
+    "value": "{action.canvas-muted}",
     "type": "color",
     "description": "Border color on hover."
   },
   "border-color-selected": {
-    "value": "{accent-primary.500}",
+    "value": "{action.canvas-soft}",
     "type": "color",
     "description": "Border color when the button is selected/active."
   },
@@ -62,42 +62,42 @@
   "border-width": {
     "value": "0px",
     "type": "borderWidth",
-    "description": "Base border width."
+    "description": "Base border width — ADS primary button is borderless."
   },
   "border-style": {
     "value": "{border.style}",
     "type": "borderStyle",
-    "description": "Border style (solid, dashed, etc) for standard buttons."
+    "description": "Border style for standard buttons."
   },
   "border-radius": {
     "value": "{border.radius-md}",
     "type": "borderRadius",
-    "description": "Corner radius for standard buttons."
+    "description": "Corner radius — ADS button radius (4px)."
   },
   "font-family": {
-    "value": "{font-family.primary}",
+    "value": "{font-family.interface}",
     "type": "fontFamily",
     "description": "Font family for button labels."
   },
   "font-size": {
-    "value": "{font-size.md}",
+    "value": "{font-size.sm}",
     "type": "fontSize",
-    "description": "Base font size for button labels."
+    "description": "Base font size for button labels — ADS button label (14px)."
   },
   "font-weight": {
     "value": "{font-weight.medium}",
     "type": "fontWeight",
-    "description": "Font weight for button labels."
+    "description": "Font weight for button labels — ADS Medium (500)."
   },
   "line-height": {
-    "value": "1.25rem",
+    "value": "1.4285714286",
     "type": "lineHeight",
-    "description": "Base line height for buttons."
+    "description": "Base line height for buttons — ADS (20/14)."
   },
   "letter-spacing": {
-    "value": "{tracking.normal}",
+    "value": "0",
     "type": "letterSpacing",
-    "description": "Letter spacing for button labels."
+    "description": "Letter spacing for button labels — ADS neutral tracking."
   },
   "text-transform": {
     "value": "none",
@@ -115,114 +115,44 @@
     "description": "Text alignment for button content."
   },
   "padding-inline": {
-    "value": "{spacing.1}",
+    "value": "0.75rem",
     "type": "spacing",
-    "description": "Inline (horizontal) padding for standard buttons."
+    "description": "Inline (horizontal) padding for standard buttons — ADS 12px gutter."
   },
   "padding-block": {
-    "value": "0px",
+    "value": "{spacing.025}",
     "type": "spacing",
-    "description": "Block (vertical) padding for standard buttons."
-  },
-  "padding-inline-start": {
-    "value": "{button.padding-inline}",
-    "type": "spacing",
-    "description": "Inline-start padding override when needed."
-  },
-  "padding-inline-end": {
-    "value": "{button.padding-inline}",
-    "type": "spacing",
-    "description": "Inline-end padding override when needed."
-  },
-  "padding-block-start": {
-    "value": "{button.padding-block}",
-    "type": "spacing",
-    "description": "Block-start padding override when needed."
-  },
-  "padding-block-end": {
-    "value": "{button.padding-block}",
-    "type": "spacing",
-    "description": "Block-end padding override when needed."
-  },
-  "margin-inline": {
-    "value": "0",
-    "type": "spacing",
-    "description": "Inline margin for standalone buttons."
-  },
-  "margin-block": {
-    "value": "0",
-    "type": "spacing",
-    "description": "Block margin for standalone buttons."
-  },
-  "margin-inline-start": {
-    "value": "{button.margin-inline}",
-    "type": "spacing",
-    "description": "Inline-start margin override when needed."
-  },
-  "margin-inline-end": {
-    "value": "{button.margin-inline}",
-    "type": "spacing",
-    "description": "Inline-end margin override when needed."
-  },
-  "margin-block-start": {
-    "value": "{button.margin-block}",
-    "type": "spacing",
-    "description": "Block-start margin override when needed."
-  },
-  "margin-block-end": {
-    "value": "{button.margin-block}",
-    "type": "spacing",
-    "description": "Block-end margin override when needed."
+    "description": "Block (vertical) padding (min-height drives the 32px ADS target)."
   },
   "gap": {
-    "value": "{button.padding-block}",
+    "value": "{spacing.025}",
     "type": "spacing",
-    "description": "Gap between button icon and label."
+    "description": "Gap between button icon and label — ADS 4px."
   },
   "group-gap": {
-    "value": "{spacing.105}",
+    "value": "{spacing.025}",
     "type": "spacing",
     "description": "Gap between buttons when rendered in a group."
   },
-  "display": {
-    "value": "inline-flex",
-    "type": "display",
-    "description": "Display mode for buttons."
+  "justify-content": {
+    "value": "center",
+    "type": "flex",
+    "description": "Main axis alignment for button contents."
   },
-  "width": {
-    "value": "auto",
+  "min-height": {
+    "value": "32px",
     "type": "sizing",
-    "description": "Default button width."
+    "description": "Minimum height — ADS default button is compact (32px)."
   },
   "min-width": {
     "value": "44px",
     "type": "sizing",
     "description": "Minimum button width."
   },
-  "max-width": {
-    "value": "none",
-    "type": "sizing",
-    "description": "Maximum button width."
-  },
-  "height": {
-    "value": "auto",
-    "type": "sizing",
-    "description": "Default button height."
-  },
-  "min-height": {
-    "value": "40px",
-    "type": "sizing",
-    "description": "Minimum height to ensure tappable area."
-  },
-  "max-height": {
-    "value": "none",
-    "type": "sizing",
-    "description": "Maximum button height."
-  },
   "icon-size": {
-    "value": "1.125rem",
+    "value": "1rem",
     "type": "sizing",
-    "description": "Default icon size within buttons."
+    "description": "Default icon size within buttons — ADS 16px icon."
   },
   "focus-color": {
     "value": "{focus.color}",
@@ -242,67 +172,22 @@
   "box-shadow": {
     "value": "none",
     "type": "boxShadow",
-    "description": "Default box shadow for buttons."
+    "description": "Default box shadow — ADS buttons are flat."
   },
   "box-shadow-hover": {
     "value": "none",
     "type": "boxShadow",
     "description": "Box shadow on hover."
   },
-  "box-shadow-active": {
-    "value": "none",
-    "type": "boxShadow",
-    "description": "Box shadow when active/pressed."
-  },
-  "box-shadow-focus": {
-    "value": "none",
-    "type": "boxShadow",
-    "description": "Box shadow in focus state (in addition to outline)."
-  },
-  "cursor": {
-    "value": "pointer",
-    "type": "utility",
-    "description": "Cursor style when hovering over buttons."
-  },
-  "flex-direction": {
-    "value": "row",
-    "type": "flex",
-    "description": "Direction of icon and label layout."
-  },
-  "justify-content": {
-    "value": "center",
-    "type": "flex",
-    "description": "Main axis alignment for button contents."
-  },
-  "align-items": {
-    "value": "center",
-    "type": "flex",
-    "description": "Cross axis alignment for button contents."
-  },
   "transition-duration": {
-    "value": "150ms",
+    "value": "100ms",
     "type": "transition",
-    "description": "Duration for hover/active transitions.",
+    "description": "Duration for hover/active transitions — ADS quick motion.",
     "a11y": true
   },
   "transition-timing-function": {
-    "value": "ease-out",
+    "value": "ease-in-out",
     "type": "transition",
     "description": "Timing function for button transitions."
-  },
-  "transition-property": {
-    "value": "background-color, color, border-color, box-shadow, transform, outline",
-    "type": "transition",
-    "description": "CSS properties that should animate on interaction."
-  },
-  "transition-delay": {
-    "value": "0",
-    "type": "transition",
-    "description": "Delay before CSS properties run through their animate on interaction."
-  },
-  "opacity": {
-    "value": 1,
-    "type": "opacity",
-    "description": "Visual opacity of button."
   }
 }

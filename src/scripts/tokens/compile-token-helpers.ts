@@ -96,6 +96,22 @@ export function mergeTokens(
         value: overrideValue,
       };
 
+      // Allow overrides to carry Google-font import metadata. A theme may swap to a
+      // family whose weight axis differs from the base font's (e.g. a static family
+      // needs discrete `weights` and `variable: false`, not the base family's variable
+      // range), and the emitted @import must follow the override, not the base. All
+      // other metadata (type, a11y, etc.) stays base-controlled. The schema parse below
+      // validates the merged result.
+      if (
+        typeof customValue === 'object' &&
+        customValue !== null &&
+        !Array.isArray(customValue)
+      ) {
+        const meta = customValue as Record<string, unknown>;
+        if ('variable' in meta) (nextToken as Record<string, unknown>).variable = meta.variable;
+        if ('weights' in meta) (nextToken as Record<string, unknown>).weights = meta.weights;
+      }
+
       if (subSchema) {
         (subSchema as ZodSchema).parse(nextToken);
       }

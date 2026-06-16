@@ -34,7 +34,7 @@ const DIFF_OUTPUT = path.join(
 );
 
 /** Preset name → its `theme/zebkit-hero-<name>` override directory. */
-const HERO_THEMES = ["apple", "material", "atlassian", "carbon", "base"] as const;
+const HERO_THEMES = ["apple", "material", "atlassian", "carbon", "uber"] as const;
 
 /**
  * Reads a preset's override `*.tokens.json` files and flattens them into a

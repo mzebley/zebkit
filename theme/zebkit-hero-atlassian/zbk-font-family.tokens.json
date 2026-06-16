@@ -1,14 +1,23 @@
 {
   "primary": {
     "value": "\"Inter\", sans-serif",
-    "description": "Primary family (body + interface)."
+    "description": "Primary family (body + interface) — Inter, a stand-in for Atlassian's Charlie Sans.",
+    "variable": true,
+    "weights": "400,700",
+    "type": "googleFont"
   },
   "alt": {
     "value": "\"Inter\", sans-serif",
-    "description": "Display / heading family."
+    "description": "Display / heading family — Inter (ADS uses one family across the scale).",
+    "variable": true,
+    "weights": "400,700",
+    "type": "googleFont"
   },
   "monospace": {
     "value": "\"JetBrains Mono\", monospace",
-    "description": "Monospace family (code, labels, values)."
+    "description": "Monospace family (code, labels, values).",
+    "variable": true,
+    "weights": "400,500",
+    "type": "googleFont"
   }
 }
