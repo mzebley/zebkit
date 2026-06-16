@@ -5,7 +5,7 @@
 // metadata (labels, ordering) and derives a small set of headline diff rows.
 import rawDiffs from './generated/hero-themes.json';
 
-export type HeroThemeName = 'apple' | 'material' | 'atlassian' | 'carbon' | 'uber';
+export type HeroThemeName = 'apple' | 'material' | 'atlassian' | 'carbon' | 'uber' | 'fluent';
 
 export interface HeroTheme {
   name: HeroThemeName;
@@ -28,7 +28,8 @@ export const heroThemes: HeroTheme[] = [
   { name: 'material', label: 'Materialist', blurb: 'Material You — lilac primary, soft rounded shapes, pill buttons, Roboto.', source: 'Material', href: 'https://m3.material.io/' },
   { name: 'atlassian', label: 'Confluenced', blurb: 'Workspace blue — Atlassian blue, Inter UI, crisp 4px corners.', source: 'Atlassian', href: 'https://atlassian.design/' },
   { name: 'carbon', label: 'Carbon copy', blurb: 'Industrial grid — IBM Plex, electric blue, razor-sharp corners.', source: 'Carbon', href: 'https://carbondesignsystem.com/' },
-  { name: 'uber', label: 'Uberesque', blurb: 'Monochrome motion — black buttons, Base Blue accent, Manrope display.', source: 'Base', href: 'https://base.uber.com/' }
+  { name: 'uber', label: 'Uberesque', blurb: 'Monochrome motion — black buttons, Base Blue accent, Manrope display.', source: 'Base', href: 'https://base.uber.com/' },
+  { name: 'fluent', label: 'Redmond\'d', blurb: 'Acrylic calm — Fluent 2 brand blue, Segoe-style sans, soft 4px corners.', source: 'Fluent', href: 'https://fluent2.microsoft.design/' }
 ];
 
 const diffs = rawDiffs as Record<HeroThemeName, Record<string, string>>;
