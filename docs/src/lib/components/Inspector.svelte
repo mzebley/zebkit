@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { theme } from '$lib/stores/theme.svelte';
-  import { resolveChain, allTokenVars, type ChainNode } from '$lib/utils/token-chain';
+  import { resolveChain, allTokenVars, buildTimeVarNote, type ChainNode } from '$lib/utils/token-chain';
   import { getClassDeclaration, utilityClassSet } from '$data/utility-manifests';
   import { viewport } from '$lib/stores/viewport.svelte';
   import { openInspect, requestInspectPeek, releaseInspectPeek } from '$lib/stores/ui.svelte';
@@ -50,6 +50,11 @@
   });
   const tokenResolved = $derived(chain.length ? (tokenLive[chain[chain.length - 1].cssVar] ?? '') : '');
   const tokenIsColor = $derived(COLOR_RE.test(tokenResolved));
+  // Build-time tokens (e.g. breakpoints) aren't emitted as CSS vars by default, so
+  // they resolve empty here — surface a note explaining that rather than a blank.
+  const tokenNote = $derived(
+    chain.length && !tokenResolved ? buildTimeVarNote(chain[chain.length - 1].cssVar) : null
+  );
 
   // --- class mode ---
   const classInfo = $derived(active?.kind === 'class' ? getClassDeclaration(active.value) : null);
@@ -291,8 +296,11 @@
     <div class="resolved">
       <span class="resolved-label">Resolved</span>
       {#if tokenIsColor}<span class="swatch" style:background={tokenResolved}></span>{/if}
-      <code class="resolved-value">{tokenResolved || 'see source'}</code>
+      <code class="resolved-value">{tokenResolved || (tokenNote ? 'not emitted' : 'see source')}</code>
     </div>
+    {#if tokenNote}
+      <p class="resolved-note">{tokenNote}</p>
+    {/if}
   {:else if mode === 'class' && classInfo}
     <p class="rail-active" aria-live="polite">
       <code>{active?.value}</code>{#if preview}<span class="rail-tag">preview</span>{/if}
@@ -510,6 +518,13 @@
     font-size: var(--zbk-font-size-xs);
     color: var(--zbk-app-ink);
     word-break: break-all;
+  }
+
+  .resolved-note {
+    margin: var(--zbk-spacing-05) 0 0;
+    font-size: var(--zbk-font-size-2xs);
+    line-height: 1.4;
+    color: var(--zbk-app-ink-muted);
   }
 
   /* class mode */

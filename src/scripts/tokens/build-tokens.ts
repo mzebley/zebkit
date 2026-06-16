@@ -35,9 +35,9 @@ import {
   resolveSourceThemeOverridePath,
 } from "../theme-presets";
 import {
-  buildEnabledBreakpointsList,
   buildTokenLookup,
   extractReferencedColorFamilies,
+  resolveActiveBreakpointMap,
   resolveLookupOutputPath,
   slugifyFileSegment,
 } from './build-helpers';
@@ -386,6 +386,22 @@ export async function runTokenBuild(
     cssVarTokens = resolveTypeScale(cssVarTokens, {
       mode: useStaticTypeScale ? "static" : "fluid",
     });
+    // Breakpoints feed the SCSS responsive system at build time; only surface them
+    // as `--zbk-breakpoint-*` custom properties when explicitly opted in. Either
+    // way, drop disabled (null-valued) entries so they never emit a `null` var.
+    const breakpointKey = `${ZEBKIT_PREFIX}-breakpoint`;
+    if (cssVarTokens[breakpointKey]) {
+      if (tokensConfig?.extendedTokens?.emitBreakpointVars === true) {
+        const enabledOnly: TokenInterface = {};
+        for (const [name, entry] of Object.entries(cssVarTokens[breakpointKey])) {
+          if ((entry as { value?: unknown })?.value != null) enabledOnly[name] = entry;
+        }
+        cssVarTokens = { ...cssVarTokens, [breakpointKey]: enabledOnly };
+      } else {
+        cssVarTokens = { ...cssVarTokens };
+        delete cssVarTokens[breakpointKey];
+      }
+    }
     const cssVars = convertTokensToCssVars(cssVarTokens, { layers, selector: rootSelector });
     const tokenLookupOutputPath = resolveLookupOutputPath(
       tokensConfig?.tokenLookupOutputPath,
@@ -441,7 +457,8 @@ export async function runTokenBuild(
       finalVariantCss = `${inlineCss}\n${paletteGlobalColors(rootSelector)}`;
     }
 
-    const enabledBreakpoints = buildEnabledBreakpointsList(
+    const activeBreakpoints = resolveActiveBreakpointMap(
+      tokens,
       tokensConfig?.extendedTokens?.breakpoints
     );
 
@@ -456,7 +473,7 @@ export async function runTokenBuild(
       },
       variantCss: finalVariantCss,
       zebkitPackageRoot,
-      enabledBreakpoints,
+      activeBreakpoints,
       additionalModuleUses,
     };
 

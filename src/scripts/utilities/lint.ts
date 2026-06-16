@@ -28,7 +28,11 @@ import path from "node:path";
 import chalk from "chalk";
 import { globSync } from "glob";
 import Ajv from "ajv/dist/2020.js";
-import { loadTokenModules, resolvePatternValues } from "./token-source.js";
+import {
+  breakpointKeysFromModules,
+  loadTokenModules,
+  resolvePatternValues,
+} from "./token-source.js";
 import { BREAKPOINTS, MANIFEST_GLOB, expandFamily, type UtilityFamily } from "./expand.js";
 
 type Finding = { rule: string; file: string; subject: string; message: string };
@@ -76,7 +80,7 @@ async function main() {
   const validate = ajv.compile<any>(await fs.readJson(path.resolve(rootDir, SCHEMA_PATH)));
 
   const tokenModules = await loadTokenModules(rootDir);
-  const breakpointKeys = new Set(BREAKPOINTS);
+  const breakpointKeys = new Set(breakpointKeysFromModules(tokenModules, BREAKPOINTS));
 
   const manifestFiles = globSync(MANIFEST_GLOB, { cwd: rootDir }).sort();
   if (manifestFiles.length === 0) {
@@ -178,7 +182,7 @@ async function main() {
 
       for (const breakpoint of family.modifiers?.responsive ?? []) {
         if (!breakpointKeys.has(breakpoint)) {
-          findings.push({ rule: "U2", file, subject, message: `responsive modifier '${breakpoint}' is not a known breakpoint (${BREAKPOINTS.join(", ")}).` });
+          findings.push({ rule: "U2", file, subject, message: `responsive modifier '${breakpoint}' is not a known breakpoint (${[...breakpointKeys].join(", ")}).` });
         }
       }
 

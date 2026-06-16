@@ -17,7 +17,11 @@ import {
   type UtilityFamily,
   type UtilityManifest,
 } from "./expand.js";
-import { loadTokenModules, resolvePatternValues } from "./token-source.js";
+import {
+  breakpointKeysFromModules,
+  loadTokenModules,
+  resolvePatternValues,
+} from "./token-source.js";
 
 type SourcePlan = {
   source: string;
@@ -213,7 +217,7 @@ function indent(value: string, spaces: number): string {
     .join("\n");
 }
 
-function renderSourceFile(plan: SourcePlan): string {
+function renderSourceFile(plan: SourcePlan, breakpoints: string[]): string {
   const manifestList = Array.from(plan.manifestPaths).sort().join(", ");
   const layer = plan.families[0]?.layer ?? "utilities";
 
@@ -221,7 +225,7 @@ function renderSourceFile(plan: SourcePlan): string {
     .map((family) => renderFamilyRules(family).trim())
     .filter(Boolean);
 
-  for (const breakpoint of BREAKPOINTS) {
+  for (const breakpoint of breakpoints) {
     const rulesForBreakpoint = plan.families
       .filter((family) => (family.modifiers?.responsive ?? []).includes(breakpoint))
       .map((family) => renderFamilyRules(family, breakpoint).trim())
@@ -247,6 +251,7 @@ async function main(): Promise<void> {
   const rootDir = process.cwd();
   const manifests = globSync(MANIFEST_GLOB, { cwd: rootDir }).sort();
   const tokenModules = await loadTokenModules(rootDir);
+  const breakpoints = breakpointKeysFromModules(tokenModules, BREAKPOINTS);
 
   const bySource = new Map<string, SourcePlan>();
   for (const manifestPath of manifests) {
@@ -277,7 +282,7 @@ async function main(): Promise<void> {
   const drifted: string[] = [];
 
   for (const plan of plans) {
-    const output = renderSourceFile(plan);
+    const output = renderSourceFile(plan, breakpoints);
     const outputPath = path.resolve(rootDir, plan.source);
 
     if (checkOnly) {

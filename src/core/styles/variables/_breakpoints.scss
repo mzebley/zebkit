@@ -1,11 +1,18 @@
+// SOURCE OF TRUTH: the breakpoint token module (src/core/breakpoint). The token
+// build injects the active, config-filtered scale here via
+//   @use 'core/styles/variables/breakpoints' with ($active-breakpoints: (...))
+// so $resolved below comes from the tokens. The map under $breakpoints is only a
+// fallback for standalone Sass compilation that bypasses the token pipeline; keep
+// it in sync with the token defaults.
 $breakpoint-tablet: 40rem !default;
 $breakpoint-tablet-lg: 50rem !default;
 $breakpoint-desktop: 70rem !default;
 $breakpoint-desktop-lg: 80rem !default;
 $breakpoint-widescreen: 100rem !default;
 
-// When set via @use with(), only the specified breakpoints are compiled into responsive utilities.
-// null (default) = include all breakpoints.
+// Set via @use with() by the token build. An explicit map (including the empty
+// map `()`, meaning "no responsive utilities") takes over from the fallback below.
+// null = bypassed build; fall back to the $breakpoints map.
 $active-breakpoints: null !default;
 
 $breakpoints: (
@@ -16,7 +23,7 @@ $breakpoints: (
     'widescreen': $breakpoint-widescreen
 );
 
-// Resolved map used by generators — filtered when $active-breakpoints is set.
+// Resolved map used by generators — the injected token scale when present.
 $resolved: $breakpoints;
 @if $active-breakpoints != null {
     $resolved: $active-breakpoints;

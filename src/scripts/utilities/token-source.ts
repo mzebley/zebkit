@@ -34,6 +34,22 @@ export async function loadTokenModules(rootDir: string): Promise<TokenModuleMap>
 }
 
 /**
+ * The breakpoint scale keys, in token order, derived from the breakpoint token
+ * module (src/core/breakpoint) — the single source of truth for the responsive
+ * variant axis. Generated partials carry the full grammar; per-build disabling
+ * happens at compile time via SCSS `$active-breakpoints`, so all keys are
+ * included here. Falls back to `fallback` when the module is unavailable.
+ */
+export function breakpointKeysFromModules(
+  modules: TokenModuleMap,
+  fallback: readonly string[] = []
+): string[] {
+  const group = modules.get("breakpoint");
+  if (!group || group.size === 0) return [...fallback];
+  return [...group.keys()];
+}
+
+/**
  * Resolve a pattern family's value axes in place against its bound token group,
  * so the lint and the generator both work from the same concrete lists:
  *

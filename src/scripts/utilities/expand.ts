@@ -3,7 +3,9 @@
 
 export const MANIFEST_GLOB = "src/core/**/*utilities.manifest.json";
 
-// Must match the $breakpoints map in core/styles/variables/_breakpoints.scss.
+// Fallback breakpoint axis, used only if the breakpoint token module can't be
+// loaded. The source of truth is the breakpoint token module (src/core/breakpoint);
+// generate.ts and lint.ts derive the list via breakpointKeysFromModules().
 export const BREAKPOINTS = [
   "tablet",
   "tablet-lg",

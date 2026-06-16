@@ -52,6 +52,25 @@ for (const [key, value] of Object.entries(lookup as Record<string, string>)) {
 /** Every emitted token CSS custom property, sorted — for inspector autocomplete. */
 export const allTokenVars: string[] = Object.keys(varToPath).sort();
 
+// Groups whose tokens are consumed at build time and are NOT emitted as CSS
+// custom properties by default — `breakpoint` feeds SCSS `@media` queries, which
+// can't read `var()`. The docs build keeps these vars off, so the x-ray notes
+// their conditional nature instead of resolving an empty computed value.
+const BUILD_TIME_GROUPS = new Set(['breakpoint']);
+
+/**
+ * If `cssVar` belongs to a build-time-only group, return a note explaining that
+ * it isn't emitted by default (and what enables it); otherwise null.
+ */
+export function buildTimeVarNote(cssVar: string): string | null {
+  const path = varToPath[cssVar];
+  const group = path
+    ? splitPath(path)[0]
+    : cssVar.replace(/^--zbk-/, '').split('-')[0];
+  if (!BUILD_TIME_GROUPS.has(group)) return null;
+  return `Build-time token — not emitted as a CSS variable by default. Set extendedTokens.emitBreakpointVars to emit ${cssVar}.`;
+}
+
 // Token paths are always `group.name` with the group/name split at the first dot
 // (groups and names may themselves contain dashes: `accent-primary.600`,
 // `z-index.modal-backdrop`, `color.butterfield-200`).

@@ -20,12 +20,20 @@ export type ExtendedTokensConfig = {
    */
   colors?: 'all' | 'smart';
   /**
-   * Controls which responsive breakpoint utility classes are generated.
-   * true or absent = all 5 breakpoints (default).
+   * Controls which responsive breakpoint utility classes are generated. This is
+   * a per-build filter over the breakpoints enabled in the breakpoint token
+   * module (src/core/breakpoint); naming a token-disabled breakpoint is an error.
+   * true or absent = all enabled breakpoints (default).
    * false = no responsive utility classes.
    * string[] = only the named breakpoints.
    */
   breakpoints?: boolean | ExtendedTokenBreakpoint[];
+  /**
+   * Emit the breakpoint scale as `--zbk-breakpoint-*` CSS custom properties.
+   * Off by default: `@media`/`@container` conditions cannot read `var()`, so
+   * these vars are only useful to JS (e.g. reading the active scale at runtime).
+   */
+  emitBreakpointVars?: boolean;
 };
 
 export type TypeScaleConfig = {

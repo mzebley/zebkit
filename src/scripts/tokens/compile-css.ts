@@ -17,20 +17,16 @@ export interface SassVariable {
   modify?: boolean;
 }
 
-const BREAKPOINT_WIDTHS: Record<string, string> = {
-  tablet: '40rem',
-  'tablet-lg': '50rem',
-  desktop: '70rem',
-  'desktop-lg': '80rem',
-  widescreen: '100rem',
-};
-
-function buildBreakpointsUse(enabled: string[] | false | undefined): string {
-  if (enabled === undefined) return '';
+// Inject the token-derived active breakpoints as the SCSS `$active-breakpoints`
+// map (key -> width). An empty map compiles no responsive utilities. This is the
+// single source of truth for which breakpoints compile; the SCSS defaults in
+// _breakpoints.scss are only a standalone-compilation fallback.
+function buildBreakpointsUse(activeBreakpoints: Record<string, string>): string {
+  const entries = Object.entries(activeBreakpoints);
   const map =
-    enabled === false
+    entries.length === 0
       ? '()'
-      : `(${enabled.map((bp) => `'${bp}': ${BREAKPOINT_WIDTHS[bp]}`).join(', ')})`;
+      : `(${entries.map(([bp, width]) => `'${bp}': ${width}`).join(', ')})`;
   return `@use 'core/styles/variables/breakpoints' with ($active-breakpoints: ${map});\n`;
 }
 
@@ -56,12 +52,11 @@ export interface CompileSassOptions {
    */
   zebkitPackageRoot?: string;
   /**
-   * Controls which responsive breakpoints are compiled into utility classes.
-   * undefined = all breakpoints (default behavior).
-   * false = no responsive utility classes.
-   * string[] = only the named breakpoints.
+   * Active breakpoints as a `key -> width` map, injected into SCSS as
+   * `$active-breakpoints`. Token-derived and config-filtered by the caller.
+   * An empty map compiles no responsive utility classes. Defaults to `{}`.
    */
-  enabledBreakpoints?: string[] | false;
+  activeBreakpoints?: Record<string, string>;
   /**
    * Additional @use statements to prepend before the gathered stylesheet modules.
    * Used for smart color filtering to include only referenced palette families.
@@ -80,7 +75,7 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
     utilityStylesheetPatterns = ['utilities', 'utility', 'color'],
     variantCss = '',
     zebkitPackageRoot,
-    enabledBreakpoints,
+    activeBreakpoints = {},
     additionalModuleUses = '',
   } = options;
 
@@ -135,7 +130,7 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
       moduleUses += `@use '${importPath}' as zbk_module_${index};\n`;
     });
 
-    const breakpointsUse = buildBreakpointsUse(enabledBreakpoints);
+    const breakpointsUse = buildBreakpointsUse(activeBreakpoints);
     const sassCode = variableDefinitions + breakpointsUse + additionalModuleUses + moduleUses;
 
     const includePaths = [
