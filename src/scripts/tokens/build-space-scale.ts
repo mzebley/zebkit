@@ -15,9 +15,11 @@ import type { TokenInterface, TokenObject } from "@definitions/tokens";
  *   × (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) · var(--zbk-a11y-spacing-text-coupling))
  *                                                                    (follows body text size)
  *
- * Precision px tokens and `0` are emitted exact (no scaling). Semantic spacing aliases are
- * `type: "spacing"` with `{…}` references and pass through untouched — they resolve to the
- * primitive var, which already carries the fluid + coupling behavior.
+ * Precision px tokens skip the viewport interpolation (fluidizing a 1px hairline is nonsense)
+ * but still get the density + coupling multiplier — every spacing token, rem or px, honors the
+ * runtime a11y dials. Only `0` is emitted exact (scaling zero is pointless). Semantic spacing
+ * aliases are `type: "spacing"` with `{…}` references and pass through untouched — they resolve
+ * to the primitive var, which already carries the fluid + coupling behavior.
  *
  * Viewport anchors are read from the font-size module so type and space share one
  * responsive rhythm; run this BEFORE `resolveTypeScale` strips those settings (or it falls
@@ -114,8 +116,13 @@ function resolveValue(
 
   const v = String(raw).trim();
   if (v === "0" || v === "0px") return "0";
-  // Precision/non-rem values stay exact — fluidizing a 1px hairline is nonsense.
-  if (!v.endsWith("rem")) return v;
+  // Precision/non-rem values skip the viewport interpolation — fluidizing a 1px hairline
+  // is nonsense — but they STILL get the a11y multiplier. Every spacing token (rem or px)
+  // honors the runtime density + text-coupling dials; that the unit happens to be px must
+  // not opt it out of the end user's accessibility controls.
+  if (!v.endsWith("rem")) {
+    return `calc(${v}${multiplier()})`;
+  }
 
   const baseRem = parseFloat(v);
   if (mode === "static") {

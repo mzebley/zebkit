@@ -1,12 +1,14 @@
 <script lang="ts">
-  import { theme } from '$lib/stores/theme.svelte';
-  import { heroThemes, diffFor, type HeroThemeName } from '$data/hero-themes';
-  import ZebkitLoader from '$components/ZebkitLoader.svelte';
+  import { theme } from "$lib/stores/theme.svelte";
+  import { heroThemes, diffFor, type HeroThemeName } from "$data/hero-themes";
+  import ZebkitLoader from "$components/ZebkitLoader.svelte";
 
   // Hero-local reskin state lives on the shared store (scaffolded there), but only
   // this component reads it — switching never touches the rest of the page.
   let active = $derived(theme.reskinTheme as HeroThemeName);
-  let activeTheme = $derived(heroThemes.find((t) => t.name === active) ?? heroThemes[0]);
+  let activeTheme = $derived(
+    heroThemes.find((t) => t.name === active) ?? heroThemes[0],
+  );
   let diff = $derived(diffFor(active));
 
   function select(name: HeroThemeName) {
@@ -16,20 +18,50 @@
   // Wayfinding cards — mock the section index of a design-system docs home.
   // Static and identical across presets so the only thing that changes is tokens.
   const sections = [
-    { label: 'Layout', href: '/foundations/layers', blurb: 'Grid, stack, and spacing primitives.', kind: 'layout' },
-    { label: 'Typography', href: '/typography', blurb: 'Type scale, families, and measure.', kind: 'type' },
-    { label: 'Color', href: '/foundations/color', blurb: 'Semantic palettes and contrast pairs.', kind: 'color' },
-    { label: 'Icons', href: '/foundations/icons', blurb: 'The icon set and sizing tokens.', kind: 'icons' },
-    { label: 'Components', href: '/components', blurb: 'Accessible, token-driven elements.', kind: 'components' },
-    { label: 'Spacing', href: '/spacing', blurb: 'The size-based spacing scale.', kind: 'spacing' }
+    {
+      label: "Layout",
+      href: "/foundations/layers",
+      blurb: "Grid, stack, and spacing primitives.",
+      kind: "layout",
+    },
+    {
+      label: "Typography",
+      href: "/typography",
+      blurb: "Type scale, families, and measure.",
+      kind: "type",
+    },
+    {
+      label: "Color",
+      href: "/foundations/color",
+      blurb: "Semantic palettes and contrast pairs.",
+      kind: "color",
+    },
+    {
+      label: "Icons",
+      href: "/foundations/icons",
+      blurb: "The icon set and sizing tokens.",
+      kind: "icons",
+    },
+    {
+      label: "Components",
+      href: "/components",
+      blurb: "Accessible, token-driven elements.",
+      kind: "components",
+    },
+    {
+      label: "Spacing",
+      href: "/spacing",
+      blurb: "The size-based spacing scale.",
+      kind: "spacing",
+    },
   ];
 
   // "Next steps" — real wayfinding into the zebkit docs (some routes are aspirational).
   const nextSteps = [
-    { label: 'Get started', href: '/foundations/why-tokens' },
-    { label: 'Design tokens', href: '/foundations/tokens' },
-    { label: 'Browse components', href: '/components/button' },
-    { label: 'Accessibility', href: '/foundations/a11y' }
+    { label: "Get started", href: "/foundations/why-tokens" },
+    { label: "Design tokens", href: "/foundations/tokens" },
+    { label: "Browse components", href: "/components/button" },
+    { label: "Accessibility", href: "/foundations/a11y" },
   ];
 </script>
 
@@ -41,7 +73,11 @@
 
 <ZebkitLoader />
 
-<section class="reskin-stage" aria-label="Reskin demo — change the tokens, keep the HTML" id="reskin-playground">
+<section
+  class="reskin-stage"
+  aria-label="Reskin demo — change the tokens, keep the HTML"
+  id="reskin-playground"
+>
   <!-- Preset switcher -->
   <div class="switcher" role="group" aria-label="Theme preset">
     {#each heroThemes as t (t.name)}
@@ -58,56 +94,89 @@
   </div>
 
   <!-- The themed subtree: one HTML tree, re-skinned purely by the data attribute -->
-  <div class="reskin" data-zbk-theme={active}>
+  <div class="reskin canvas-app ink-app" data-zbk-theme={active}>
     <!-- Site header -->
     <header class="site-nav">
-      <span class="font-code text-bold text-uppercase wordmark">zebkit/ds</span>
-      <nav class="site-nav-links font-interface text-sm" aria-label="Primary">
+      <span class="wordmark">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 13.35 72.337 35.1"
+          data-asc="0.957"
+        >
+          <g fill="currentColor">
+            <g transform="translate(0, 0)">
+              <path
+                d="M 0 47.85 L 0 45.05 L 13.25 25.9 L 9.25 25.9 C 8.05 25.9 6.983333333333333 26.06 6.05 26.38 C 5.116666666666667 26.693333333333335 4.3500000000000005 27.256666666666668 3.75 28.07 C 3.15 28.89 2.7 30.066666666666666 2.4 31.6 L 0.9 31.6 L 1.45 24.35 L 20.65 24.35 L 20.65 26.5 L 7.4 46.25 L 11.85 46.25 C 13.65 46.25 15.05 46.06666666666667 16.05 45.7 C 17.05 45.333333333333336 17.833333333333332 44.666666666666664 18.4 43.7 C 18.966666666666665 42.733333333333334 19.466666666666665 41.36666666666667 19.9 39.6 L 21.4 39.6 L 20.85 47.85 L 0 47.85 Z"
+              />
+              <g transform="matrix(1, 0, 0, 1, -23, 0)">
+                <path
+                  d="M 67.25 47.85 L 67.25 46.2 C 68.183 46.2 68.883 46.133 69.35 46 C 69.817 45.867 70.117 45.623 70.25 45.27 C 70.383 44.923 70.45 44.4 70.45 43.7 L 70.45 18.2 C 70.45 17.433 70.357 16.917 70.17 16.65 C 69.99 16.383 69.6 16.25 69 16.25 L 67.35 16.25 L 67.35 14.6 L 75.4 13.35 L 77.55 13.35 L 77.55 35.413 L 83.4 29.45 C 84.533 28.283 85.11 27.407 85.13 26.82 C 85.143 26.24 84.8 25.95 84.1 25.95 L 82.85 25.95 L 82.85 24.3 L 93.2 24.35 L 93.2 26 L 92.8 26 C 91.333 26 90.007 26.41 88.82 27.23 C 87.64 28.043 86.35 29.15 84.95 30.55 L 83.206 32.257 L 90 41.75 C 90.733 42.783 91.373 43.623 91.92 44.27 C 92.473 44.923 92.973 45.41 93.42 45.73 C 93.873 46.043 94.283 46.2 94.65 46.2 L 95.15 46.2 L 95.15 47.85 L 82.6 47.85 L 82.6 46.2 L 83.3 46.2 C 83.6 46.2 83.823 46.16 83.97 46.08 C 84.123 45.993 84.2 45.867 84.2 45.7 C 84.2 45.533 84.093 45.277 83.88 44.93 C 83.66 44.577 83.417 44.2 83.15 43.8 L 78.534 36.831 L 77.55 37.794 L 77.55 43.699 C 77.55 44.399 77.6 44.922 77.7 45.269 C 77.8 45.622 78.04 45.866 78.42 45.999 C 78.807 46.132 79.417 46.199 80.25 46.199 L 80.25 47.849 L 67.25 47.85 Z"
+                />
+              </g>
+              <g transform="matrix(1, 0, 0, 1, -30, 0)">
+                <path
+                  d="M 64.15 48.45 C 63.017 48.45 61.993 48.343 61.08 48.13 C 60.16 47.91 59.31 47.633 58.53 47.3 C 57.843 47.009 57.15 46.692 56.453 46.35 L 56.45 46.35 L 55 47.85 L 52.6 47.85 L 52.6 18.25 C 52.6 17.417 52.5 16.877 52.3 16.63 C 52.1 16.377 51.633 16.25 50.9 16.25 L 49.5 16.25 L 49.5 14.55 L 57.45 13.35 L 59.65 13.35 L 59.65 26.394 C 60.01 26.083 60.387 25.792 60.78 25.52 C 61.527 25.007 62.393 24.59 63.38 24.27 C 64.36 23.957 65.483 23.8 66.75 23.8 C 69.717 23.8 72.05 24.783 73.75 26.75 C 75.45 28.717 76.3 31.633 76.3 35.5 C 76.3 38.367 75.81 40.757 74.83 42.67 C 73.843 44.59 72.45 46.033 70.65 47 Z M 59.83 44.88 C 60.343 45.393 60.927 45.817 61.58 46.15 C 62.227 46.483 62.933 46.65 63.7 46.65 C 65.467 46.65 66.767 45.857 67.6 44.27 C 68.433 42.69 68.85 40.083 68.85 36.45 C 68.85 33.317 68.45 30.893 67.65 29.18 C 66.85 27.46 65.567 26.6 63.8 26.6 C 63.033 26.6 62.333 26.8 61.7 27.2 C 61.067 27.6 60.493 28.057 59.98 28.57 C 59.868 28.682 59.758 28.792 59.65 28.9 L 59.65 44.696 C 59.709 44.758 59.769 44.819 59.83 44.88 Z"
+                />
+              </g>
+            </g>
+          </g>
+        </svg>
+      </span>
+      <nav class="site-nav-links" aria-label="Primary">
         <span class="nav-link is-current">Docs</span>
         <span class="nav-link">Components</span>
         <span class="nav-link">Foundations</span>
         <span class="nav-link">GitHub</span>
       </nav>
       <a
-        class="influence-link font-interface text-sm text-bold"
+        class="influence-link"
         href={activeTheme.href}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Influenced by ${activeTheme.source} — opens the ${activeTheme.source} design system in a new tab`}
       >
-        Influenced by {activeTheme.source}<span class="influence-arrow" aria-hidden="true">↗</span>
+        <span>Influenced by {activeTheme.source}</span>
+        <i class="influence-icon ri-arrow-left-s-line" aria-hidden="true"></i>
       </a>
     </header>
 
     <!-- Intro / lede -->
-    <div class="intro">
-      <p class="font-code text-uppercase text-2xs eyebrow ink-accent-primary-600">{active} preset</p>
-      <h2 class="font-heading display ink-app">A design system,<br />in your tokens.</h2>
-      <p class="font-body text-lg ink-app-muted lede">
-        Everything below is one fixed markup tree — the same landing page a real design
-        system would ship. Switch the preset and only the design tokens change: colors,
-        type, radius. Never the structure.
+    <div class="intro prose">
+      <h1>Their design system,<br /> your tokens.</h1>
+      <p class="lede">
+        Everything below is one fixed markup tree — the same sort of landing
+        page any traditional design system would ship. Switch the preset and
+        only the design tokens driving the UI decisions are changed, the
+        structure and semantic HTML remain constant.
       </p>
       <div class="cta-row">
-        <zbk-button size="md">Get started</zbk-button>
-        <zbk-button size="md" variant="outline">Read the docs</zbk-button>
+        <zbk-button>Get started</zbk-button>
+        <zbk-button variant="outline">Read the docs</zbk-button>
       </div>
     </div>
 
     <!-- Section index cards -->
     <section class="sections" aria-label="Explore the system">
-      <h3 class="font-code text-uppercase text-sm section-heading ink-app-muted">Explore the system</h3>
+      <h3
+        class="font-code text-uppercase text-sm section-heading ink-app-muted"
+      >
+        Explore the system
+      </h3>
       <div class="section-grid">
         {#each sections as s (s.label)}
           <a class="section-card" href={s.href}>
             <!-- Decorative, token-driven thumbnail. Not an image: it re-skins with the
                  preset (accent ramp, radius, type) and is hidden from assistive tech. -->
             <span class="thumb thumb-{s.kind}" aria-hidden="true">
-              {#if s.kind === 'layout'}
-                <span class="m-layout"><i class="m-col"></i><span class="m-stack"><i></i><i></i><i></i></span></span>
-              {:else if s.kind === 'type'}
+              {#if s.kind === "layout"}
+                <span class="m-layout"
+                  ><i class="m-col"></i><span class="m-stack"
+                    ><i></i><i></i><i></i></span
+                  ></span
+                >
+              {:else if s.kind === "type"}
                 <span class="m-type font-heading">Aa</span>
-              {:else if s.kind === 'color'}
+              {:else if s.kind === "color"}
                 <span class="m-swatches">
                   <i style="background:var(--zbk-accent-primary-200)"></i>
                   <i style="background:var(--zbk-accent-primary-400)"></i>
@@ -115,18 +184,35 @@
                   <i style="background:var(--zbk-accent-primary-600)"></i>
                   <i style="background:var(--zbk-accent-primary-800)"></i>
                 </span>
-              {:else if s.kind === 'icons'}
-                <span class="m-icons"><i class="m-circle"></i><i class="m-square"></i><i class="m-tri"></i></span>
-              {:else if s.kind === 'components'}
-                <span class="m-components"><span class="m-btn">Button</span><i class="m-field"></i></span>
-              {:else if s.kind === 'spacing'}
-                <span class="m-spacing"><i style="inline-size:35%"></i><i style="inline-size:60%"></i><i style="inline-size:85%"></i></span>
+              {:else if s.kind === "icons"}
+                <span class="m-icons"
+                  ><i class="m-circle"></i><i class="m-square"></i><i
+                    class="m-tri"
+                  ></i></span
+                >
+              {:else if s.kind === "components"}
+                <span class="m-components"
+                  ><span class="m-btn">Button</span><i class="m-field"
+                  ></i></span
+                >
+              {:else if s.kind === "spacing"}
+                <span class="m-spacing"
+                  ><i style="inline-size:35%"></i><i style="inline-size:60%"
+                  ></i><i style="inline-size:85%"></i></span
+                >
               {/if}
             </span>
             <span class="section-card-body">
-              <span class="section-card-title font-heading text-xl ink-app">{s.label}</span>
-              <span class="section-card-blurb font-body text-sm ink-app-muted">{s.blurb}</span>
-              <span class="section-card-go font-code text-2xs text-uppercase ink-accent-primary-700" aria-hidden="true">Explore →</span>
+              <span class="section-card-title font-heading text-xl ink-app"
+                >{s.label}</span
+              >
+              <span class="section-card-blurb font-body text-sm ink-app-muted"
+                >{s.blurb}</span
+              >
+              <span
+                class="section-card-go font-code text-2xs text-uppercase ink-accent-primary-700"
+                aria-hidden="true">Explore →</span
+              >
             </span>
           </a>
         {/each}
@@ -135,21 +221,31 @@
 
     <!-- Accent band — a deliberately inverted surface to show the action color in full -->
     <section class="accent-band">
-      <p class="font-code text-uppercase text-2xs accent-eyebrow">Accessible by default</p>
-      <h3 class="font-heading text-2xl accent-headline">Contrast, focus, and motion are baked into the tokens.</h3>
-      <p class="font-body text-md accent-lede">
-        This band paints from the action color instead of the page canvas — and its text
-        pairs with it automatically, in every preset.
+      <p class="font-code text-uppercase text-2xs accent-eyebrow">
+        Accessible by default
       </p>
-      <a class="accent-cta font-interface text-bold" href="/foundations/a11y">See the a11y model →</a>
+      <h3 class="font-heading text-2xl accent-headline">
+        Contrast, focus, and motion are baked into the tokens.
+      </h3>
+      <p class="font-body text-md accent-lede">
+        This band paints from the action color instead of the page canvas — and
+        its text pairs with it automatically, in every preset.
+      </p>
+      <a class="accent-cta font-interface text-bold" href="/foundations/a11y"
+        >See the a11y model →</a
+      >
     </section>
 
     <!-- Next steps -->
     <section class="next-steps">
-      <h3 class="font-heading text-xl ink-app next-steps-heading">Next steps</h3>
+      <h3 class="font-heading text-xl ink-app next-steps-heading">
+        Next steps
+      </h3>
       <div class="next-grid">
         {#each nextSteps as step (step.label)}
-          <a class="next-link font-interface text-bold" href={step.href}>{step.label}</a>
+          <a class="next-link font-interface text-bold" href={step.href}
+            >{step.label}</a
+          >
         {/each}
       </div>
     </section>
@@ -158,7 +254,9 @@
   <!-- Token-diff strip — the proof that only tokens changed, not the HTML -->
   <aside class="diff-strip" aria-live="polite">
     <div class="diff-lead">
-      <h3 class="font-code text-uppercase text-sm diff-title">Tokens changed</h3>
+      <h3 class="font-code text-uppercase text-sm diff-title">
+        Tokens changed
+      </h3>
       <p class="font-body text-2xs diff-sub">
         vs. the zebkit base — <strong>{diff.totalChanged}</strong> values
       </p>
@@ -183,7 +281,7 @@
   .reskin-stage {
     display: flex;
     flex-direction: column;
-    gap: var(--zbk-spacing-2);
+    gap: var(--zbk-spacing-105);
     padding-block-start: var(--zbk-spacing-4);
   }
 
@@ -223,17 +321,9 @@
   /* ── The themed subtree ────────────────────────────────────────────────── */
   .reskin {
     /* Every paint inside binds a token, so flipping data-zbk-theme repaints all of it. */
-    background: var(--zbk-app-canvas);
-    color: var(--zbk-app-ink);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-lg);
     overflow: clip;
-    transition:
-      background-color var(--zbk-transition-duration-default),
-      color var(--zbk-transition-duration-default),
-      border-color var(--zbk-transition-duration-default);
-  }
-  .reskin * {
     transition:
       background-color var(--zbk-transition-duration-default),
       color var(--zbk-transition-duration-default),
@@ -244,81 +334,189 @@
   .site-nav {
     display: flex;
     align-items: center;
+    justify-content: var(--nav-justify);
     flex-wrap: wrap;
-    gap: var(--zbk-spacing-105);
-    padding-inline: var(--zbk-spacing-2);
-    padding-block: var(--zbk-spacing-1);
-    background: var(--zbk-app-canvas-soft);
-    border-block-end: var(--zbk-border-width-sm) solid var(--zbk-app-border);
+    gap: var(--nav-gap);
+    padding-inline: var(--nav-padding-inline);
+    padding-block: var(--nav-padding-block);
+    background: var(--nav-canvas);
+    border-block-end: var(--nav-border-width) solid var(--zbk-app-border);
+    max-height: var(--nav-max-height);
+    position: var(--nav-position);
+    top: var(--nav-top);
+    font-size: var(--nav-font-size);
+    font-family: var(--nav-font-family);
+    font-weight: var(--nav-font-weight);
+    backdrop-filter: var(--nav-backdrop-filter);
+    z-index: 1;
+  }
+
+  [data-zbk-theme="apple"] {
+    --nav-max-height: 44px;
+    --nav-position: sticky;
+    --nav-padding-block: 0;
+    --nav-padding-inline: 22px;
+    --nav-top: var(--zbk-spacing-205);
+    --nav-justify: center;
+    --nav-font-size: var(--zbk-font-size-sm);
+    --nav-font-family: var(--zbk-font-family-primary);
+    --nav-font-weight: 400;
+    --nav-ink: rgba(0, 0, 0, 0.8);
+    --nav-ink-current: currentColor;
+    --nav-canvas: rgba(250, 250, 252, 0.8);
+    --nav-backdrop-filter: saturate(180%) blur(20px);
+    --nav-border-width: 0px;
+    --nav-gap: var(--zbk-spacing-2);
+    --nav-link-gap: var(--zbk-spacing-2);
+
+    --wordmark-height: 12px;
+    --wordmark-ink: currentColor;
   }
   .wordmark {
-    color: var(--zbk-accent-primary-600);
-    letter-spacing: var(--zbk-letter-spacing-wide);
+    color: var(--wordmark-ink);
+    svg {
+      height: var(--wordmark-height);
+    }
   }
   .site-nav-links {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--zbk-spacing-105);
-    margin-inline-start: auto;
+    gap: var(--nav-link-gap);
   }
   .nav-link {
-    color: var(--zbk-app-ink-muted);
+    color: var(--nav-ink);
+    cursor: pointer;
   }
   .nav-link.is-current {
-    color: var(--zbk-app-ink);
+    color: var(--nav-ink-current);
   }
   .influence-link {
     display: inline-flex;
     align-items: center;
-    gap: var(--zbk-spacing-05);
-    padding-inline: var(--zbk-spacing-105);
-    padding-block: var(--zbk-spacing-05);
-    color: var(--zbk-action-ink-inverse);
-    background: var(--zbk-action-canvas);
-    border: var(--zbk-border-width-sm) solid var(--zbk-action-canvas);
-    border-radius: var(--zbk-border-radius-sm);
+    gap: var(--influence-link-gap);
+    padding-inline: var(--influence-link-padding-inline);
+    padding-block: var(--influence-link-padding-block);
+    color: var(--influence-link-ink);
+    background: var(--influence-link-canvas);
+    border: var(--influence-link-border-width) solid
+      var(--influence-link-border-color);
+    border-radius: var(--influence-link-border-radius);
     text-decoration: none;
     white-space: nowrap;
+    font-size: var(--influence-link-font-size);
+    font-family: var(--influence-link-font-family);
+    font-weight: var(--influence-link-font-weight);
+    line-height: var(--influence-link-line-height);
+    letter-spacing: var(--influence-link-letter-spacing);
     transition:
       background-color var(--zbk-transition-duration-fast),
       border-color var(--zbk-transition-duration-fast),
       color var(--zbk-transition-duration-fast);
   }
+
+  .influence-link > span {
+    text-decoration: var(--influence-link-text-decoration);
+  }
+
   .influence-link:hover {
-    background: var(--zbk-action-canvas-strong);
-    border-color: var(--zbk-action-canvas-strong);
+    color: var(--influence-link-ink-hover);
+    background: var(--influence-link-canvas-hover);
+    border-color: var(--influence-link-border-color-hover);
+    
+  }
+
+  .influence-link:hover > span {
+    text-decoration: var(--influence-link-text-decoration-hover);
   }
   .influence-link:focus-visible {
     outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
     outline-offset: var(--zbk-focus-offset);
   }
-  .influence-arrow {
-    font-size: 0.85em;
+  .influence-icon {
+    font-size: var(--influence-link-icon-size);
+    line-height: 0;
+  }
+
+  .influence-icon:before {
+    content: var(--influence-link-icon-content);
+  }
+
+  [data-zbk-theme="apple"] {
+    --influence-link-gap: 0.24em;
+    --influence-link-padding-block: var(--zbk-spacing-05);
+    --influence-link-padding-inline: var(--zbk-spacing-05);
+    --influence-link-ink: var(--zbk-action-ink);
+    --influence-link-ink-hover: var(--zbk-action-ink);
+    --influence-link-canvas: transparent;
+    --influence-link-canvas-hover: transparent;
+    --influence-link-border-radius: 0px;
+    --influence-link-border-width: 0px;
+    --influence-link-border-color: transparent;
+    --influence-link-border-color-hover: transparent;
+    --influence-link-text-decoration: none;
+    --influence-link-text-decoration-hover: underline;
+    --influence-link-icon-size: var(--zbk-font-size-lg);
+    --influence-link-icon-content: "\ea6e";
+    --influence-link-font-size: var(--zbk-font-size-md);
+    --influence-link-font-family: var(--zbk-font-family-primary);
+    --influence-link-font-weight: 400;
+    --influence-link-line-height: 1.4705882353;
+    --influence-link-letter-spacing: -0.022em;
   }
 
   /* Intro */
   .intro {
     display: flex;
     flex-direction: column;
-    gap: var(--zbk-spacing-1);
-    padding-inline: var(--zbk-spacing-2);
-    padding-block: var(--zbk-spacing-3);
+    align-items: var(--intro-align, flex-start);
+    padding-inline: var(--intro-padding-inline);
+    padding-block: var(--intro-padding-block);
+    background: var(--intro-canvas);
   }
-  .eyebrow {
-    letter-spacing: var(--zbk-letter-spacing-wider);
-    margin: 0;
+
+  .intro h1 {
+    text-align: var(--intro-h1-align);
+  }
+
+  .lede {
+    margin-block: var(--lede-margin-block-start) var(--lede-margin-block-end);
+    font-size: var(--lede-font-size);
+    max-inline-size: var(--lede-measure);
+    text-align: var(--lede-align);
+    line-height: var(--lede-line-height);
+    font-weight: var(--lede-font-weight);
+    width: 100%;
+  }
+
+  [data-zbk-theme="apple"] {
+    --intro-align: center;
+    --intro-h1-align: center;
+    --intro-padding-block: 56px;
+    --intro-padding-inline: 17px;
+    --intro-canvas: var(--zbk-app-canvas);
+
+    --lede-align: center;
+    --lede-font-size: var(--zbk-font-size-lg);
+    --lede-measure: 64ch;
+    --lede-margin-block-start: 1em;
+    --lede-margin-block-end: 17px;
+    --lede-line-height: 1.1428571429;
+    --lede-font-weight: 300;
+
+    .zbk-button--outline {
+      --zbk-button-border-width: var(--zbk-border-width-xs);
+      --zbk-button-canvas: transparent;
+      --zbk-button-ink: var(--zbk-action-ink);
+    }
   }
   .display {
     margin: 0;
   }
-  .lede {
-    margin: 0;
-    max-inline-size: var(--zbk-text-measure-2);
-  }
+
   .cta-row {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--zbk-spacing-1);
+    gap: var(--zbk-button-group-gap);
     margin-block-start: var(--zbk-spacing-05);
   }
 
@@ -344,7 +542,7 @@
     flex-direction: column;
     background: var(--zbk-app-canvas-soft);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
-    border-radius: var(--zbk-border-radius-md);
+    border-radius: var(--zbk-border-radius-lg);
     overflow: clip;
     text-decoration: none;
     transition:

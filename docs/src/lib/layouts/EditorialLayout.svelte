@@ -19,7 +19,7 @@
 </svelte:head>
 
 <article class="editorial-root">
-  <div class="editorial-main">
+  <div class="editorial-main prose">
     {@render children?.()}
   </div>
   {#if marginalia}

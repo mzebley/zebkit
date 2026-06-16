@@ -24,13 +24,11 @@
 /* Editorial headings — use display font (Instrument Serif) */
 .editorial-main :is(h1, h2, h3, h4, h5, h6) {
   font-family: var(--zbk-font-family-alt);
-  line-height: var(--zbk-line-height-2, 1.25);
 }
 
 .editorial-main h1 {
   /* Page-level h1 (hero display uses the larger 4xl/5xl steps in the docs theme). */
   font-size: var(--zbk-font-size-5xl);
-  font-weight: bold;
 }
 
 .editorial-main h2 {

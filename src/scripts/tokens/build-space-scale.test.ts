@@ -54,10 +54,21 @@ describe("resolveSpaceScale", () => {
     expect(v).toContain("-1.7rem");
   });
 
-  it("emits zero and precision px exact, with no scaling", () => {
+  it("emits zero exact (scaling zero is pointless)", () => {
     const out = resolveSpaceScale(makeTokens());
     expect(out[SPACING]["0"].value).toBe("0");
-    expect(out[SPACING]["1px"].value).toBe("1px");
+  });
+
+  it("scales precision px with the a11y multiplier but no viewport interpolation", () => {
+    const out = resolveSpaceScale(makeTokens());
+    const v = out[SPACING]["1px"].value as string;
+    // no fluid interpolation for a hairline...
+    expect(v).not.toContain("clamp(");
+    expect(v).not.toContain("vw");
+    // ...but the px value still honors the runtime a11y dials
+    expect(v).toBe(
+      "calc(1px * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling)))"
+    );
   });
 
   it("passes semantic aliases ({…} references, type spacing) through untouched", () => {

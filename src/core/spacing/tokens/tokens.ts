@@ -22,9 +22,10 @@ export type SpacingTokens = z.infer<typeof tokenSchema>;
 // module). Density is independent, so "large text, compact layout" resolves correctly.
 //
 // `resolveSpaceScale` (src/scripts/tokens/build-space-scale.ts) bakes all of this in at
-// build time. Precision px tokens (1px, 2px, …) and `0` are emitted exact — they don't
-// scale. Set `tokens.spaceScale.static: true` to drop the viewport interpolation (density
-// and coupling still apply).
+// build time. Precision px tokens (1px, 2px, …) skip the viewport interpolation but still get
+// the density + coupling multiplier — every spacing token honors the runtime a11y dials. Only
+// `0` is emitted exact. Set `tokens.spaceScale.static: true` to drop the viewport interpolation
+// (density and coupling still apply).
 const tokens = {
   "min-scale": {
     value: 0.85,

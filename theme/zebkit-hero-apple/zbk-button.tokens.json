@@ -20,17 +20,17 @@
     "description": "Label color for disabled buttons."
   },
   "canvas": {
-    "value": "{accent-primary.500}",
+    "value": "{action.canvas}",
     "type": "color",
     "description": "Default button background — system blue."
   },
   "canvas-hover": {
-    "value": "{accent-primary.600}",
+    "value": "{action.canvas-muted}",
     "type": "color",
     "description": "Background for hover state."
   },
   "canvas-active": {
-    "value": "{accent-primary.700}",
+    "value": "{action.canvas-soft}",
     "type": "color",
     "description": "Background for active/pressed state."
   },
@@ -70,7 +70,7 @@
     "description": "Border style (solid, dashed, etc) for standard buttons."
   },
   "border-radius": {
-    "value": "{border.radius-md}",
+    "value": "{border.radius-xl}",
     "type": "borderRadius",
     "description": "Corner radius for standard buttons."
   },
@@ -85,17 +85,17 @@
     "description": "Base font size for button labels."
   },
   "font-weight": {
-    "value": "{font-weight.medium}",
+    "value": "{font-weight.light}",
     "type": "fontWeight",
     "description": "Font weight for button labels."
   },
   "line-height": {
-    "value": "1.25rem",
+    "value": "1.64805882",
     "type": "lineHeight",
     "description": "Base line height for buttons."
   },
   "letter-spacing": {
-    "value": "{tracking.normal}",
+    "value": "-.022em",
     "type": "letterSpacing",
     "description": "Letter spacing for button labels."
   },
@@ -115,12 +115,12 @@
     "description": "Text alignment for button content."
   },
   "padding-inline": {
-    "value": "{spacing.105}",
+    "value": "{spacing.1}",
     "type": "spacing",
     "description": "Inline (horizontal) padding for standard buttons."
   },
   "padding-block": {
-    "value": "0px",
+    "value": "{spacing.05}",
     "type": "spacing",
     "description": "Block (vertical) padding for standard buttons."
   },
@@ -180,7 +180,7 @@
     "description": "Gap between button icon and label."
   },
   "group-gap": {
-    "value": "{spacing.105}",
+    "value": "17px",
     "type": "spacing",
     "description": "Gap between buttons when rendered in a group."
   },
@@ -210,7 +210,7 @@
     "description": "Default button height."
   },
   "min-height": {
-    "value": "44px",
+    "value": "none",
     "type": "sizing",
     "description": "Minimum height to ensure tappable area."
   },
@@ -280,7 +280,7 @@
     "description": "Cross axis alignment for button contents."
   },
   "transition-duration": {
-    "value": "150ms",
+    "value": "0ms",
     "type": "transition",
     "description": "Duration for hover/active transitions.",
     "a11y": true
