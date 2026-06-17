@@ -14,9 +14,14 @@ export type SpacingTokens = z.infer<typeof tokenSchema>;
 //             × (1 + (var(--zbk-a11y-font-size-modifier-md) - 1)
 //                    × var(--zbk-a11y-spacing-text-coupling)) ← follows BODY text size
 //
-// Each token's authored `value` is its size at the MAX viewport anchor; the min-anchor
-// size is `value × min-scale`. Viewport anchors are shared with the font-size module
-// (`min-viewport` / `max-viewport`). The text-coupling factor reads the body (`md`) font
+// Each token's authored `value` is its size at the MIN (mobile) viewport anchor — a
+// guaranteed floor that never shrinks below what was authored. The max-anchor size is
+// `value × growth`, where `growth` is derived per-token from a continuous log curve by floor
+// magnitude: micro spacing (≤ ~0.5rem) stays flat, large layout spacing blooms toward the
+// `max-scale` ceiling on wide screens. Classification is automatic — no tiers to maintain —
+// and a token can set its own `growth` to override the curve. Viewport anchors are shared
+// with the font-size module (`min-viewport` / `max-viewport`). The text-coupling factor reads
+// the body (`md`) font
 // modifier so that when reading text scales up, padding/min-heights/gaps scale with it —
 // dampened by `--zbk-a11y-spacing-text-coupling` (default 0.5; defined in the a11y token
 // module). Density is independent, so "large text, compact layout" resolves correctly.
@@ -27,11 +32,11 @@ export type SpacingTokens = z.infer<typeof tokenSchema>;
 // `0` is emitted exact. Set `tokens.spaceScale.static: true` to drop the viewport interpolation
 // (density and coupling still apply).
 const tokens = {
-  "min-scale": {
-    value: 0.85,
+  "max-scale": {
+    value: 1.25,
     type: "setting",
     description:
-      "Fraction of a spacing token's authored (max-viewport) value it reaches at the min viewport.",
+      "Growth ceiling: how much the largest layout spacing tokens bloom from their authored (min-viewport) floor to the max viewport. Per-token growth ramps up to this on a log curve by floor magnitude; micro spacing stays flat.",
   },
   "neg-15": {
     value: `-15rem`,

@@ -27,5 +27,5 @@ A place to keep track of things I don't want to forget as we build this out.
 
 - [ ] Add schema for zebkit config JSON files
 - [ ] Make right panel "trace a token" search box support actual fuzzy search
-- [ ] shouls spacing get smaller for tinier viewports or larger for bigger ones? Currently gets tinier and currently thinking it should be reversed.
+- [x] should spacing get smaller for tinier viewports or larger for bigger ones? Currently gets tinier and currently thinking it should be reversed.
 

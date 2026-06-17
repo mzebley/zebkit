@@ -6,9 +6,13 @@ import type { TokenInterface, TokenObject } from "@definitions/tokens";
  * Resolves the spacing scale into emittable tokens — the spacing counterpart to
  * `resolveTypeScale`.
  *
- * Each spacing primitive (`type: "rootSize"`) carries its size at the MAX viewport anchor
- * as `value`; this pass derives the min-anchor size (`value × min-scale`), fits a fluid
- * `clamp()` across the anchors shared with the font scale, and multiplies in two runtime
+ * Each spacing primitive (`type: "rootSize"`) carries its size at the MIN (mobile) viewport
+ * anchor as `value` — a guaranteed floor that never shrinks below what was authored; this pass
+ * derives the max-anchor size (`value × growth`) and fits a fluid `clamp()` across the anchors
+ * shared with the font scale. `growth` is per-token: a continuous log curve (see `curveGrowth`)
+ * positions each floor by magnitude so micro gaps stay flat while large layout spacing blooms
+ * toward the `max-scale` ceiling — no manual tiering, classification emerges from the rem value.
+ * A token may pin its own `growth` to bypass the curve. The result is multiplied by two runtime
  * forces:
  *
  *   × var(--zbk-a11y-spacing-modifier)                               (independent density)
@@ -30,7 +34,20 @@ import type { TokenInterface, TokenObject } from "@definitions/tokens";
 const ROOT_PX = 16;
 const DEFAULT_MIN_VIEWPORT_PX = 360;
 const DEFAULT_MAX_VIEWPORT_PX = 1240;
-const DEFAULT_MIN_SCALE = 0.85;
+const DEFAULT_MAX_SCALE = 1.25;
+
+// Continuous growth-curve anchors (rem). These are deliberately HIDDEN builder constants,
+// NOT token settings: the whole point of the curve is that an author sets a single
+// `max-scale` ceiling (how much the largest layout tokens bloom on wide screens) and never
+// has to reason about per-token curve shape. A token's growth is derived from its floor
+// magnitude on a log curve between these anchors — floors at/below MICRO stay flat (no
+// viewport growth; their authored value is already the right size for touch/micro gaps),
+// floors at/above MACRO reach the full `max-scale`. The anchors are FIXED absolute sizes
+// (never derived from the token set) so adding a new spacing token can never re-curve its
+// neighbors. If author control over the curve shape is ever needed, promote these to
+// optional `micro-anchor` / `macro-anchor` settings.
+const MICRO_ANCHOR_REM = 0.5;
+const MACRO_ANCHOR_REM = 16;
 
 const SPACING_KEY = `${ZEBKIT_PREFIX}-spacing`;
 const FONT_SIZE_KEY = `${ZEBKIT_PREFIX}-font-size`;
@@ -49,7 +66,7 @@ export interface ResolveSpaceScaleOptions {
 interface SpaceControls {
   minViewportPx: number;
   maxViewportPx: number;
-  minScale: number;
+  maxScale: number;
 }
 
 function r(n: number): number {
@@ -68,12 +85,12 @@ function readControls(tokens: Record<string, TokenInterface>): SpaceControls {
   const spacing = tokens[SPACING_KEY];
   const minVp = font?.["min-viewport"]?.value;
   const maxVp = font?.["max-viewport"]?.value;
-  const minScale = spacing?.["min-scale"]?.value;
+  const maxScale = spacing?.["max-scale"]?.value;
 
   return {
     minViewportPx: minVp != null ? toPx(minVp) : DEFAULT_MIN_VIEWPORT_PX,
     maxViewportPx: maxVp != null ? toPx(maxVp) : DEFAULT_MAX_VIEWPORT_PX,
-    minScale: minScale != null ? Number(minScale) : DEFAULT_MIN_SCALE,
+    maxScale: maxScale != null ? Number(maxScale) : DEFAULT_MAX_SCALE,
   };
 }
 
@@ -85,9 +102,36 @@ function multiplier(): string {
   );
 }
 
-function buildFluidValue(baseRem: number, c: SpaceControls): string {
-  const minRem = baseRem * c.minScale;
-  const maxRem = baseRem;
+/**
+ * Per-token growth multiplier from the continuous log curve. The authored floor's magnitude
+ * positions it between MICRO and MACRO anchors; micro floors stay flat (×1), macro floors
+ * reach the full `max-scale` ceiling, everything between rides a smooth log ramp. `|floor|`
+ * is used so negative tokens grow like their positive twin.
+ */
+function curveGrowth(floorRem: number, maxScale: number): number {
+  const mag = Math.abs(floorRem);
+  if (mag <= MICRO_ANCHOR_REM) return 1;
+  const t = Math.min(
+    1,
+    (Math.log(mag) - Math.log(MICRO_ANCHOR_REM)) /
+      (Math.log(MACRO_ANCHOR_REM) - Math.log(MICRO_ANCHOR_REM))
+  );
+  return 1 + (maxScale - 1) * t;
+}
+
+/**
+ * Builds the fluid `clamp()` for one spacing token. `baseRem` is the authored mobile floor;
+ * the max anchor is `floor × growth`, where growth is the per-token curve value unless an
+ * explicit `growthOverride` pins it.
+ */
+function buildFluidValue(
+  baseRem: number,
+  c: SpaceControls,
+  growthOverride?: number
+): string {
+  const growth = growthOverride ?? curveGrowth(baseRem, c.maxScale);
+  const minRem = baseRem;
+  const maxRem = baseRem * growth;
   const minW = c.minViewportPx / ROOT_PX;
   const maxW = c.maxViewportPx / ROOT_PX;
 
@@ -95,8 +139,10 @@ function buildFluidValue(baseRem: number, c: SpaceControls): string {
   const hi = Math.max(minRem, maxRem);
   const m = multiplier();
 
-  if (maxW === minW) {
-    return `calc(${r(maxRem)}rem${m})`;
+  // Flat token (micro floor → growth 1, or a degenerate viewport range): no interpolation
+  // to emit, so collapse to a single calc instead of a same-bounds clamp.
+  if (maxRem === minRem || maxW === minW) {
+    return `calc(${r(minRem)}rem${m})`;
   }
 
   const slope = (maxRem - minRem) / (maxW - minW);
@@ -110,7 +156,8 @@ function buildFluidValue(baseRem: number, c: SpaceControls): string {
 function resolveValue(
   raw: string | number,
   c: SpaceControls,
-  mode: SpaceScaleMode
+  mode: SpaceScaleMode,
+  growthOverride?: number
 ): string {
   if (typeof raw === "string" && raw.trim().startsWith("{")) return String(raw);
 
@@ -128,7 +175,7 @@ function resolveValue(
   if (mode === "static") {
     return `calc(${r(baseRem)}rem${multiplier()})`;
   }
-  return buildFluidValue(baseRem, c);
+  return buildFluidValue(baseRem, c, growthOverride);
 }
 
 /**
@@ -144,26 +191,35 @@ export function resolveSpaceScale(
   if (!module) return tokens;
 
   const controls = readControls(tokens);
-  if (!Number.isFinite(controls.minScale) || controls.minScale <= 0) {
+  if (!Number.isFinite(controls.maxScale) || controls.maxScale <= 0) {
     console.warn(
       chalk.yellow(
-        `Spacing min-scale is invalid (${controls.minScale}); falling back to ${DEFAULT_MIN_SCALE}.`
+        `Spacing max-scale is invalid (${controls.maxScale}); falling back to ${DEFAULT_MAX_SCALE}.`
       )
     );
-    controls.minScale = DEFAULT_MIN_SCALE;
+    controls.maxScale = DEFAULT_MAX_SCALE;
   }
 
   const resolvedModule: TokenInterface = {};
   for (const [name, entry] of Object.entries(module)) {
     // Strip the build-time control — it must not become a CSS variable.
-    if (name === "min-scale") continue;
+    if (name === "max-scale") continue;
 
     if (!entry || entry.type !== "rootSize" || !("value" in entry)) {
       resolvedModule[name] = entry;
       continue;
     }
 
-    const value = resolveValue(entry.value as string | number, controls, mode);
+    // Optional per-token escape hatch: `growth` pins this token's max-anchor multiplier,
+    // bypassing the curve. Absent on every normal token (the curve handles them) and
+    // consumed here — it is not re-emitted, so it never leaks to a CSS variable.
+    const growthOverride = (entry as { growth?: number }).growth;
+    const value = resolveValue(
+      entry.value as string | number,
+      controls,
+      mode,
+      growthOverride
+    );
     resolvedModule[name] = {
       value,
       type: "rootSize",

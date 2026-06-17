@@ -40,9 +40,11 @@ exactly. **Density** moves spacing on its own, independent of text size.
 
 1. **Viewport (fluid).** Each spacing token interpolates between a small-screen and a
    large-screen size across the same anchors as type (`min-viewport` / `max-viewport`). A
-   token's authored value is its size at the *max* anchor; the min anchor is `value ×
-   min-scale` (default `0.85`). Bigger tokens compress more on mobile — large layout margins
-   shrink on a phone, hairline spacing barely moves.
+   token's authored value is its **mobile floor** — the smallest it ever gets — and it grows
+   *up* toward the max anchor by a per-token amount set on a log curve (capped at `max-scale`,
+   default `1.25`). Micro spacing stays flat; large layout spacing blooms on wide screens, and
+   nothing ever shrinks below what you authored. The full model — and how to think about it
+   when editing tokens — is in [dynamic spacing growth](/spacing/dynamic-scaling).
 2. **Body-text coupling.** Spacing reads the body (`md`) font modifier — *not* a global text
    scale — so your [non-linear per-step font scaling](/typography/type-scale) is untouched.
    `--zbk-a11y-spacing-text-coupling` (default `0.5`) sets how hard spacing follows: `1` is
@@ -64,16 +66,18 @@ fixed `min-height: 44px`) at the default coupling tuning:
 
 | scenario | body | text block | pad-block | button height |
 | --- | --- | --- | --- | --- |
-| default @390 (mobile) | 18.1px | 22.6px | 6.8px | 44px (floor) |
+| default @390 (mobile) | 18.1px | 22.6px | 8px | 44px (floor) |
 | default @1440 (desktop) | 20px | 25px | 8px | 44px (floor) |
-| large @768 | 21.8px | 29.2px | 8.3px | 45.8px |
-| larger @768 | 34.1px | 47.9px | 9.2px | 66.3px |
-| larger + compact @768 | 34.1px | 47.9px | 7.8px | 63.5px |
+| large @768 | 21.8px | 29.2px | 9.0px | 47.2px |
+| larger @768 | 34.1px | 47.9px | 10px | 67.9px |
+| larger + compact @768 | 34.1px | 47.9px | 8.5px | 64.9px |
 
-Body goes 18→34px and the button grows 44→66px to hold it; padding tracks up but at a
-dampened rate, so the button stays comfortable rather than cartoonish. The 44px tap-target
-floor holds at default sizes and hands off to content once text exceeds it. "Compact" keeps
-the big text but pulls spacing back — the two dials don't fight.
+`spacing.05` (0.5rem) is a micro token, so it sits at its **floor** and holds steady across
+viewports — it no longer shrinks on a phone. Body goes 18→34px and the button grows 44→68px
+to hold it; padding still tracks up with text but at a dampened rate, so the button stays
+comfortable rather than cartoonish. The 44px tap-target floor holds at default sizes and
+hands off to content once text exceeds it. "Compact" keeps the big text but pulls spacing
+back — the two dials don't fight.
 
 ## How to use it
 
@@ -102,8 +106,9 @@ the text coupling, and the density dial — the same guarantee components get.
   html[data-a11y-font-size='larger'] { --zbk-a11y-spacing-text-coupling: 0.31; }
   ```
 
-- **Fluid range** — re-theme the shared `min-viewport` / `max-viewport`, or adjust spacing's
-  `min-scale`, to change how much spacing compresses on small screens.
+- **Growth range** — re-theme the shared `min-viewport` / `max-viewport`, or adjust spacing's
+  `max-scale` (default `1.25`), to change how much large spacing blooms on wide screens.
+  Authored values are the mobile floor, so this only ever adds room above them.
 
 ## Precision and opting out
 

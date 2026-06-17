@@ -142,10 +142,10 @@
     "description": "Base-plus spacing.",
     "a11y": true
   },
-  "min-scale": {
-    "value": 0.85,
+  "max-scale": {
+    "value": 1.25,
     "type": "setting",
-    "description": "Fraction of a spacing token's authored (max-viewport) value it reaches at the min viewport."
+    "description": "Growth ceiling: how much the largest layout spacing tokens bloom from their authored (min-viewport) floor to the max viewport. Per-token growth ramps up to this on a log curve by floor magnitude; micro spacing stays flat."
   },
   "neg-15": {
     "value": "-15rem",

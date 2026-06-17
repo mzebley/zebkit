@@ -1,0 +1,133 @@
+---
+title: Dynamic spacing growth
+description: Why zebkit authors spacing as a mobile floor that grows upward, how the per-token log curve decides growth from magnitude, and how to think about it when setting or editing spacing tokens.
+layout: editorial
+section: Spacing
+status: draft
+---
+
+# Dynamic spacing growth
+
+Spacing in zebkit is **mobile-first by construction**. The value you author for a token is the
+size it has on the smallest screen — a floor it never drops below — and it grows *upward* from
+there on wider viewports. Bigger screens add room; they never take it away.
+
+This is the inverse of the usual fluid setup, where you author a comfortable desktop size and
+let it shrink on phones. We flipped it on purpose, for one reason above all: **accessibility**.
+The number you type is a guarantee, not a ceiling. Nothing automatically gets *smaller* than
+what you decided was the minimum, so a layout can't quietly compress below a usable size on the
+exact devices where space is tightest.
+
+<aside class="editorial-marginalia">
+This mirrors how the <a href="/typography/type-scale">type scale</a> already works: an
+independently authored small-screen size that grows up. Spacing was the odd one out; now type
+and space share the same mental model.
+</aside>
+
+## The flip, concretely
+
+The authored value moves from the desktop end to the mobile end of the range:
+
+```
+old:  authored value = desktop ceiling, shrink to mobile  (value × 0.85)
+new:  authored value = mobile floor,    grow to desktop   (value × growth)
+```
+
+So `--zbk-spacing-2` is `2rem` on a phone and grows from there — `2rem` is the promise, not the
+peak.
+
+## How much each token grows: the curve
+
+Here's the part that does the work. Not every token *should* grow the same amount, and you
+should never have to hand-classify them. A 0.5rem gap between a label and its input wants to
+stay put — growing it does nothing good and can hurt touch ergonomics. An 8rem section margin,
+on the other hand, looks cramped on a wide canvas and genuinely wants to bloom.
+
+So **growth is derived per-token from the token's own magnitude**, on a log curve:
+
+- **Micro spacing** (≤ ~0.5rem) — gaps, control padding, touch separation — stays **flat**. The
+  authored size is already right; it doesn't grow.
+- **Large layout spacing** (≥ ~16rem) — page gutters, hero whitespace — grows to the full
+  ceiling.
+- **Everything between** rides a smooth ramp.
+
+With the default `max-scale` of `1.25`:
+
+| floor | growth | renders (mobile → desktop) |
+| --- | --- | --- |
+| 0.25rem | ×1.00 | 0.25 → 0.25 (flat) |
+| 0.5rem | ×1.00 | 0.5 → 0.5 (flat) |
+| 1rem | ×1.05 | 1 → 1.05 |
+| 2rem | ×1.10 | 2 → 2.2 |
+| 4rem | ×1.15 | 4 → 4.6 |
+| 8rem | ×1.20 | 8 → 9.6 |
+| 16rem+ | ×1.25 | 16 → 20 |
+
+The classification is **emergent from the rem value** — there is no tier registry to maintain.
+Add a new `12` token tomorrow and it lands at the right growth automatically, because the curve
+reads its magnitude. Nothing to remember, nothing to update.
+
+<aside class="editorial-marginalia">
+The curve is anchored to <em>fixed</em> sizes (0.5rem and 16rem), not to the smallest and
+largest tokens that happen to exist. That's deliberate: adding a giant new token can never
+re-curve the tokens around it.
+</aside>
+
+### Why a log curve
+
+Spacing is perceived on a ratio scale — the jump from 1rem to 2rem reads like the jump from
+4rem to 8rem. A log curve spaces growth evenly across that perceptual ladder, so the ramp feels
+natural at every step instead of bunching up at one end. (Negative tokens grow by magnitude, so
+`neg-8` blooms the same as `8`.)
+
+## One knob: `max-scale`
+
+You tune the whole system with a single number — the ceiling the largest tokens reach:
+
+```jsonc
+// zbk-spacing.tokens.json
+"max-scale": { "value": 1.25, "type": "setting" }
+```
+
+Raise it and big layout spacing bleeds out more on wide screens; lower it toward `1.0` and the
+whole scale flattens toward "no growth, pure floor." Micro spacing is protected either way — it
+sits near the bottom of the curve regardless — so you can be generous with the ceiling without
+blowing out small gaps.
+
+## The escape hatch: per-token `growth`
+
+The curve is right almost always. For the rare token that needs to defy its magnitude, pin its
+growth and skip the curve:
+
+```jsonc
+"hero-gap": {
+  "value": "6rem",
+  "type": "rootSize",
+  "growth": 1.4,        // blooms harder than its 6rem magnitude would suggest
+  "description": "..."
+}
+```
+
+`growth` is optional and absent on every normal token — so token files stay clean and you're not
+maintaining a parallel map of overrides. It's consumed at build time and never emitted as a CSS
+variable.
+
+## How to think about it when authoring tokens
+
+A few rules of thumb:
+
+- **Author for the phone.** The value you write is the small-screen size. Pick what feels right
+  at the tightest width; the system adds desktop breathing room for you.
+- **The number is a floor, not a target.** `spacing-4` will render *larger* than 4rem on a wide
+  screen. If you need an exact fixed size, that's a precision token (`spacing-1px`, …) or a
+  one-off, not the fluid scale.
+- **Don't reach for `growth` first.** If a mid-size token feels like it grows too much or too
+  little, the honest fix is usually `max-scale` (affects the whole system coherently) or
+  choosing a different rung on the ladder — not a per-token override.
+- **Trust the magnitude.** You don't tag tokens as "micro" or "macro." Put the right rem value
+  in and the curve classifies it. The named ladder (`1` = 1rem, `2` = 2rem, …) *is* the
+  classification.
+
+This page covers how a token's value scales with the **viewport**. That growth then stacks with
+two runtime forces — body-text coupling and a density dial — covered in
+[fluid spacing & coupling](/spacing/scaling).

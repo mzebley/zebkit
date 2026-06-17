@@ -34,7 +34,10 @@ export const navigation: NavSection[] = [
   },
   {
     label: 'Spacing',
-    items: [{ label: 'Fluid spacing & coupling', link: '/spacing/scaling' }]
+    items: [
+      { label: 'Dynamic spacing growth', link: '/spacing/dynamic-scaling' },
+      { label: 'Fluid spacing & coupling', link: '/spacing/scaling' }
+    ]
   },
   {
     label: 'Tokens',
