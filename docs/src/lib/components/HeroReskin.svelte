@@ -67,7 +67,7 @@
 
 <svelte:head>
   {#each heroThemes as t (t.name)}
-    <link rel="stylesheet" href={`/zebkit/themes/${t.name}.css`} />
+    <link rel="stylesheet" href={`/zebkit/themes/zbk-${t.name}.css`} />
   {/each}
 </svelte:head>
 

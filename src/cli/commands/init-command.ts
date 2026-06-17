@@ -180,13 +180,13 @@ export async function runInitCommand(deps: InitCommandDeps) {
       tokens: {
         destinationPath: answers.destinationPath,
         assetFilePath: answers.assetFilePath,
-        theme: answers.theme,
-        customThemeName: answers.projectName,
+        basePreset: answers.theme,
+        themeName: answers.projectName,
       },
     };
 
     if (answers.copyTokens) {
-      config.tokens!.customTokenPath = './tokens';
+      config.tokens!.tokenPath = './tokens';
       const selectedThemeDir = deps.resolveBundledThemeTokensDir(
         answers.theme,
         defaultsDir,
@@ -199,7 +199,7 @@ export async function runInitCommand(deps: InitCommandDeps) {
     console.log('\nCreated zebkit.config.json');
 
     // Write VS Code settings for editor support
-    const customTokenPath = config.tokens?.customTokenPath || './tokens';
+    const customTokenPath = config.tokens?.tokenPath || './tokens';
     const defaultsManifest = await deps.readJson(path.join(defaultsDir, 'manifest.json'));
     const modules = defaultsManifest.modules as Array<{ key: string; file: string }>;
     await writeVscodeSettings(process.cwd(), customTokenPath, modules, deps);

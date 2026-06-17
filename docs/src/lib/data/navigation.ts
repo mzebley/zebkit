@@ -22,6 +22,7 @@ export const navigation: NavSection[] = [
       { label: 'Tokens — the strata', link: '/foundations/tokens' },
       { label: 'Why tokens', link: '/foundations/why-tokens' },
       { label: 'Layers', link: '/foundations/layers' },
+      { label: 'Overlay themes', link: '/foundations/theming' },
       { label: 'A11y as runtime', link: '/foundations/a11y' }
     ]
   },

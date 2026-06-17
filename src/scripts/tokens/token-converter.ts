@@ -166,6 +166,13 @@ export interface CssVarGenerationOptions {
   fontStrategy?: FontStrategy;
   /** Base path that bare local `@font-face` `src` filenames resolve against. Defaults to `/assets/`. */
   assetFilePath?: string;
+  /**
+   * Token set used to validate `{x.y}` references, when it differs from the tokens being
+   * emitted. Overlay (minimal) builds emit only a changed subset but must still resolve
+   * references against the full merged theme (e.g. `{font-family.body}` → `var(...)`).
+   * Defaults to the emitted `tokens`.
+   */
+  referenceTokens?: { [key: string]: TokenInterface };
 }
 
 /** Structured `<head>` requirements for `link`/`preload` font strategies, used to write the
@@ -197,7 +204,10 @@ export const convertTokensToCssVars = (
     defaultLayer = DEFAULT_LAYER,
     fontStrategy = "import",
     assetFilePath,
+    referenceTokens,
   } = options;
+  // References resolve against the full theme when emitting a subset; otherwise the emitted set.
+  const refTokens = (referenceTokens ?? tokens) as Record<string, TokenInterface>;
   const perLayer: Record<LayerName, string> = {
     theme: "",
     base: "",
@@ -236,7 +246,7 @@ export const convertTokensToCssVars = (
             rawValue,
             "fontFamily",
             ZEBKIT_PREFIX,
-            tokens as Record<string, TokenInterface>
+            refTokens
           );
         } else {
           cssVariableValue = applyFallback(rawValue, norm.fallback);
@@ -272,7 +282,7 @@ export const convertTokensToCssVars = (
           String(item.value),
           item.type as AllowedTokenTypes,
           ZEBKIT_PREFIX,
-          tokens as Record<string, TokenInterface>
+          refTokens
         );
 
         const baseValue = String(cssVariableValue);

@@ -53,8 +53,8 @@ Point your config at the folder and rebuild:
 ```json
 {
   "tokens": {
-    "customTokenPath": "./tokens",
-    "customThemeName": "my-project"
+    "tokenPath": "./tokens",
+    "themeName": "my-project"
   }
 }
 ```
@@ -102,13 +102,20 @@ Full `zebkit.config.json` shape:
 {
   "tokens": {
     "destinationPath": "./dist",
-    "theme": "default",
-    "customTokenPath": "./tokens",
-    "customThemeName": "my-project",
+    "basePreset": "default",
+    "tokenPath": "./tokens",
+    "themeName": "my-project",
     "extendedTokens": {
       "colors": "smart",
       "breakpoints": ["tablet", "desktop"]
-    }
+    },
+    "overlays": [
+      {
+        "themeName": "dark",
+        "tokenPath": "./tokens-dark",
+        "rootSelector": "[data-zbk-theme=\"dark\"]"
+      }
+    ]
   }
 }
 ```
@@ -116,11 +123,24 @@ Full `zebkit.config.json` shape:
 | Field | Default | Description |
 |---|---|---|
 | `destinationPath` | `./dist` | Where to write compiled CSS |
-| `theme` | `default` | Base theme. Run `zebkit init` to see available presets. |
-| `customTokenPath` | — | Path to a JSON override file or folder |
-| `customThemeName` | theme name | Used in the output filename |
+| `basePreset` | `default` | Base preset to start from. Run `zebkit init` to see available presets. |
+| `tokenPath` | — | Path to a JSON override file or folder |
+| `themeName` | preset name | Used in the output filename |
+| `overlays` | — | Scoped overlay themes — each redeclares only the tokens it changes. See below. |
 | `extendedTokens.colors` | `"all"` | `"smart"` trims unused primitive color palettes from the output |
 | `extendedTokens.breakpoints` | all | Array of breakpoints to include, `false` for none |
+
+### Overlay themes
+
+An overlay emits a tiny, selector-scoped stylesheet (`zbk-<themeName>.css`) that redeclares **only** the tokens its `tokenPath` overrides — no palettes, utilities, or reset, since those already ship in the base CSS. Load the base CSS plus the overlay, then toggle the selector (e.g. `data-zbk-theme="dark"`) to re-skin via the cascade.
+
+| Overlay field | Default | Description |
+|---|---|---|
+| `tokenPath` | — (required) | Override file or folder; only its tokens are emitted |
+| `themeName` | — (required) | Output filename `zbk-<themeName>.css` |
+| `rootSelector` | `[data-zbk-theme="<themeName>"]` | Selector to scope the overlay under (must not be `:root`) |
+| `destinationPath` | base `destinationPath` | Output directory |
+| `fonts.strategy` | base `fonts.strategy` | Google Fonts delivery strategy for this overlay |
 
 ---
 

@@ -29,7 +29,7 @@ describe('pull command', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockReadConfig.mockResolvedValue({
-      config: { tokens: { customTokenPath: './tokens' } },
+      config: { tokens: { tokenPath: './tokens' } },
       path: '/workspace/project/zebkit.config.json',
     });
     mockGetZebkitDefaultsDir.mockReturnValue('/pkg/dist/cli/defaults');

@@ -29,6 +29,47 @@ describe('convertTokensToCssVars — selector scoping (rootSelector)', () => {
   });
 });
 
+describe('convertTokensToCssVars — referenceTokens (minimal overlay emission)', () => {
+  it('emits only the passed subset but resolves references against referenceTokens', () => {
+    const emitted = {
+      'zbk-h1': {
+        color: { value: '{app.ink}', type: 'color', description: 'h1 color' },
+      },
+    } as unknown as { [key: string]: TokenInterface };
+    const full = {
+      ...emitted,
+      'zbk-app': {
+        ink: { value: '#111111', type: 'color', description: 'ink' },
+      },
+    } as unknown as { [key: string]: TokenInterface };
+
+    const { css } = convertTokensToCssVars(emitted, {
+      selector: '[data-zbk-theme="dark"]',
+      referenceTokens: full,
+    });
+
+    // Reference resolves to a var() (not "undefined") even though zbk-app is not emitted.
+    expect(css).toContain('--zbk-h1-color: var(--zbk-app-ink);');
+    expect(css).not.toContain('undefined');
+    // Only the subset is emitted — the referenced module's own vars are absent.
+    expect(css).not.toContain('--zbk-app-ink:');
+  });
+
+  it('emits "undefined" when a reference is unresolvable in the subset alone', () => {
+    const emitted = {
+      'zbk-h1': {
+        color: { value: '{app.ink}', type: 'color', description: 'h1 color' },
+      },
+    } as unknown as { [key: string]: TokenInterface };
+
+    // No referenceTokens → validation fails against the subset → "undefined".
+    const { css } = convertTokensToCssVars(emitted, {
+      selector: '[data-zbk-theme="dark"]',
+    });
+    expect(css).toContain('--zbk-h1-color: undefined;');
+  });
+});
+
 describe('convertTokensToCssVars — font tokens', () => {
   const fontTokens = (
     props: Record<string, unknown>

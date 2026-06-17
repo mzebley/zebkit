@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap');
+@layer theme, base, components, utilities;
+
+@layer theme {
+[data-zbk-theme="uber"] {
+--zbk-font-family-primary: "Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+--zbk-font-family-alt: "Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+--zbk-font-family-monospace: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+--zbk-font-family-interface: var(--zbk-font-family-primary);
+--zbk-font-family-heading: var(--zbk-font-family-alt);
+--zbk-font-family-body: var(--zbk-font-family-primary);
+--zbk-font-family-code: var(--zbk-font-family-monospace);
+}
+[data-zbk-theme="uber"] {
+--zbk-h1-font-family: var(--zbk-font-family-heading);
+--zbk-h1-font-size: var(--zbk-font-size-3xl);
+--zbk-h1-font-weight: var(--zbk-font-weight-bold);
+--zbk-h1-line-height: 1.08;
+--zbk-h1-letter-spacing: -0.02em;
+--zbk-h1-measure: var(--zbk-text-measure-3);
+--zbk-h1-spacing-before: 0.67em;
+--zbk-h1-spacing-after: 0.67em;
+--zbk-h1-color: var(--zbk-app-ink);
+--zbk-h1-font-style: none;
+--zbk-h1-text-transform: none;
+}
+[data-zbk-theme="uber"] {
+--zbk-accent-secondary-50: #f6f6f6;
+--zbk-accent-secondary-100: #eeeeee;
+--zbk-accent-secondary-200: #e2e2e2;
+--zbk-accent-secondary-300: #cbcbcb;
+--zbk-accent-secondary-400: #afafaf;
+--zbk-accent-secondary-500: #757575;
+--zbk-accent-secondary-600: #6b6b6b;
+--zbk-accent-secondary-700: #545454;
+--zbk-accent-secondary-800: #333333;
+--zbk-accent-secondary-900: #1a1a1a;
+--zbk-accent-secondary-950: #000000;
+}
+[data-zbk-theme="uber"] {
+--zbk-accent-primary-50: #eff3fe;
+--zbk-accent-primary-100: #d0ddfd;
+--zbk-accent-primary-200: #a1bbfb;
+--zbk-accent-primary-300: #7299f7;
+--zbk-accent-primary-400: #4884f4;
+--zbk-accent-primary-500: #276ef1;
+--zbk-accent-primary-600: #1e54b7;
+--zbk-accent-primary-700: #174291;
+--zbk-accent-primary-800: #0f2c61;
+--zbk-accent-primary-900: #081730;
+--zbk-accent-primary-950: #040b18;
+}
+}
+
+@layer base {
+[data-zbk-theme="uber"] {
+--zbk-focus-color: var(--zbk-accent-primary-500);
+--zbk-focus-width: var(--zbk-spacing-2px);
+--zbk-focus-offset: var(--zbk-spacing-025);
+}
+[data-zbk-theme="uber"] {
+--zbk-button-ink: var(--zbk-color-global-white);
+--zbk-button-ink-hover: var(--zbk-color-global-white);
+--zbk-button-ink-active: var(--zbk-color-global-white);
+--zbk-button-ink-disabled: var(--zbk-disabled-ink);
+--zbk-button-canvas: var(--zbk-action-canvas);
+--zbk-button-canvas-hover: var(--zbk-action-canvas-muted);
+--zbk-button-canvas-active: var(--zbk-action-canvas-soft);
+--zbk-button-canvas-disabled: var(--zbk-disabled-canvas);
+--zbk-button-border-color: var(--zbk-action-canvas);
+--zbk-button-border-color-hover: var(--zbk-action-canvas-muted);
+--zbk-button-border-color-selected: var(--zbk-action-canvas-soft);
+--zbk-button-border-color-disabled: var(--zbk-disabled-border);
+--zbk-button-border-width: 0px;
+--zbk-button-border-style: var(--zbk-border-style);
+--zbk-button-border-radius: var(--zbk-border-radius-md);
+--zbk-button-font-family: var(--zbk-font-family-interface);
+--zbk-button-font-size: var(--zbk-font-size-md);
+--zbk-button-font-weight: var(--zbk-font-weight-medium);
+--zbk-button-line-height: 1.5;
+--zbk-button-letter-spacing: 0;
+--zbk-button-text-transform: none;
+--zbk-button-text-decoration: none;
+--zbk-button-text-align: center;
+--zbk-button-padding-inline: var(--zbk-spacing-1);
+--zbk-button-padding-block: var(--zbk-spacing-05);
+--zbk-button-padding-inline-start: var(--zbk-button-padding-inline);
+--zbk-button-padding-inline-end: var(--zbk-button-padding-inline);
+--zbk-button-padding-block-start: var(--zbk-button-padding-block);
+--zbk-button-padding-block-end: var(--zbk-button-padding-block);
+--zbk-button-gap: var(--zbk-spacing-05);
+--zbk-button-group-gap: var(--zbk-spacing-05);
+--zbk-button-min-width: 44px;
+--zbk-button-min-height: 48px;
+--zbk-button-icon-size: 1.25rem;
+--zbk-button-focus-color: var(--zbk-focus-color);
+--zbk-button-focus-width: var(--zbk-focus-width);
+--zbk-button-focus-offset: var(--zbk-focus-offset);
+--zbk-button-box-shadow: none;
+--zbk-button-box-shadow-hover: none;
+--zbk-button-justify-content: center;
+--zbk-button-transition-duration: calc(150ms * var(--zbk-a11y-transition-duration-modifier));
+--zbk-button-transition-timing-function: ease-in-out;
+}
+[data-zbk-theme="uber"] {
+--zbk-font-size-3xs: calc(0.75rem * var(--zbk-a11y-font-size-modifier-3xs));
+--zbk-font-size-2xs: calc(0.8125rem * var(--zbk-a11y-font-size-modifier-2xs));
+--zbk-font-size-xs: calc(0.875rem * var(--zbk-a11y-font-size-modifier-xs));
+--zbk-font-size-sm: calc(0.9375rem * var(--zbk-a11y-font-size-modifier-sm));
+--zbk-font-size-md: calc(1rem * var(--zbk-a11y-font-size-modifier-md));
+--zbk-font-size-lg: calc(1.25rem * var(--zbk-a11y-font-size-modifier-lg));
+--zbk-font-size-xl: calc(1.5rem * var(--zbk-a11y-font-size-modifier-xl));
+--zbk-font-size-2xl: calc(2.25rem * var(--zbk-a11y-font-size-modifier-2xl));
+--zbk-font-size-3xl: calc(3.25rem * var(--zbk-a11y-font-size-modifier-3xl));
+--zbk-font-size-4xl: calc(4.25rem * var(--zbk-a11y-font-size-modifier-4xl));
+--zbk-font-size-5xl: calc(6rem * var(--zbk-a11y-font-size-modifier-5xl));
+}
+[data-zbk-theme="uber"] {
+--zbk-border-width-xs: var(--zbk-spacing-1px);
+--zbk-border-width-sm: var(--zbk-spacing-1px);
+--zbk-border-width-md: var(--zbk-spacing-1px);
+--zbk-border-width-lg: var(--zbk-spacing-2px);
+--zbk-border-width-xl: var(--zbk-spacing-2px);
+--zbk-border-style: solid;
+--zbk-border-radius-xs: var(--zbk-spacing-2px);
+--zbk-border-radius-sm: var(--zbk-spacing-025);
+--zbk-border-radius-md: var(--zbk-spacing-05);
+--zbk-border-radius-lg: .75rem;
+--zbk-border-radius-xl: var(--zbk-spacing-1);
+}
+[data-zbk-theme="uber"] {
+--zbk-p-font-family: var(--zbk-font-family-body);
+--zbk-p-font-size: var(--zbk-font-size-md);
+--zbk-p-font-weight: var(--zbk-font-weight-normal);
+--zbk-p-line-height: 1.5;
+--zbk-p-letter-spacing: 0;
+--zbk-p-measure: var(--zbk-text-measure-4);
+--zbk-p-spacing-before: 1em;
+--zbk-p-spacing-after: 1em;
+--zbk-p-color: var(--zbk-app-ink);
+--zbk-p-font-style: none;
+--zbk-p-text-transform: none;
+}
+[data-zbk-theme="uber"] {
+--zbk-list-font-family: var(--zbk-font-family-heading);
+--zbk-list-font-size: var(--zbk-font-size-sm);
+--zbk-list-color: var(--zbk-app-ink);
+}
+[data-zbk-theme="uber"] {
+--zbk-h6-font-family: var(--zbk-font-family-heading);
+--zbk-h6-font-size: var(--zbk-font-size-sm);
+--zbk-h6-color: var(--zbk-app-ink);
+}
+[data-zbk-theme="uber"] {
+--zbk-h5-font-family: var(--zbk-font-family-heading);
+--zbk-h5-font-size: var(--zbk-font-size-sm);
+--zbk-h5-color: var(--zbk-app-ink);
+}
+[data-zbk-theme="uber"] {
+--zbk-h4-font-family: var(--zbk-font-family-heading);
+--zbk-h4-font-size: var(--zbk-font-size-md);
+--zbk-h4-color: var(--zbk-app-ink);
+}
+[data-zbk-theme="uber"] {
+--zbk-h3-font-family: var(--zbk-font-family-heading);
+--zbk-h3-font-size: var(--zbk-font-size-xl);
+--zbk-h3-font-weight: var(--zbk-font-weight-semibold);
+--zbk-h3-line-height: 1.25;
+--zbk-h3-letter-spacing: -0.01em;
+--zbk-h3-measure: var(--zbk-text-measure-3);
+--zbk-h3-spacing-before: 1em;
+--zbk-h3-spacing-after: 1em;
+--zbk-h3-color: var(--zbk-app-ink);
+--zbk-h3-font-style: none;
+--zbk-h3-text-transform: none;
+}
+[data-zbk-theme="uber"] {
+--zbk-h2-font-family: var(--zbk-font-family-heading);
+--zbk-h2-font-size: var(--zbk-font-size-2xl);
+--zbk-h2-font-weight: var(--zbk-font-weight-bold);
+--zbk-h2-line-height: 1.1666666667;
+--zbk-h2-letter-spacing: -0.015em;
+--zbk-h2-measure: var(--zbk-text-measure-3);
+--zbk-h2-spacing-before: 0.83em;
+--zbk-h2-spacing-after: 0.83em;
+--zbk-h2-color: var(--zbk-app-ink);
+--zbk-h2-font-style: none;
+--zbk-h2-text-transform: none;
+}
+[data-zbk-theme="uber"] {
+--zbk-app-canvas: #ffffff;
+--zbk-app-canvas-soft: #f6f6f6;
+--zbk-app-canvas-muted: #eeeeee;
+--zbk-app-canvas-strong: #e2e2e2;
+--zbk-app-ink: #000000;
+--zbk-app-ink-soft: #545454;
+--zbk-app-ink-muted: #757575;
+--zbk-app-border: #e2e2e2;
+--zbk-app-border-soft: #eeeeee;
+--zbk-app-border-muted: #cbcbcb;
+--zbk-app-border-strong: #afafaf;
+}
+[data-zbk-theme="uber"] {
+--zbk-action-canvas: #000000;
+--zbk-action-canvas-soft: #404040;
+--zbk-action-canvas-muted: #272727;
+--zbk-action-ink: #276ef1;
+--zbk-action-ink-soft: #1e54b7;
+--zbk-action-ink-muted: #4884f4;
+}
+}
+

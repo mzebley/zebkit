@@ -72,10 +72,10 @@ export async function runPullCommand(deps: PullCommandDeps) {
   }
 
   const { config, path: configPath } = configResult;
-  const customTokenPath = config.tokens?.customTokenPath;
+  const customTokenPath = config.tokens?.tokenPath;
 
   if (!customTokenPath) {
-    deps.log('No customTokenPath set in config — nothing to pull into.');
+    deps.log('No tokenPath set in config — nothing to pull into.');
     process.exit(1);
   }
 

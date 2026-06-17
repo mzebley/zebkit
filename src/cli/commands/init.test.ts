@@ -97,9 +97,9 @@ describe('init command', () => {
         tokens: {
           destinationPath: './dist',
           assetFilePath: '/',
-          theme: 'dynamowaves',
-          customThemeName: 'my-app',
-          customTokenPath: './tokens',
+          basePreset: 'dynamowaves',
+          themeName: 'my-app',
+          tokenPath: './tokens',
         },
       },
       { spaces: 2 }

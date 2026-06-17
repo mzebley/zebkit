@@ -26,9 +26,9 @@ describe('build smoke tests', () => {
         includeAllComponents: true,
         destinationPath,
         assetFilePath: '/assets/',
-        theme: 'default',
-        customTokenPath: CUSTOM_THEME_PATH,
-        customThemeName: themeName,
+        basePreset: 'default',
+        tokenPath: CUSTOM_THEME_PATH,
+        themeName: themeName,
         exportTokens: false,
         writeVariantRegistry: false,
         splitMode: 'per-module',
@@ -62,6 +62,91 @@ describe('build smoke tests', () => {
     }
   });
 
+  it('emits a scoped overlay with the transitive closure of an overridden token', async () => {
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-overlay-build-'));
+    const destinationPath = path.join(tmpDir, 'dist');
+    const configPath = path.join(tmpDir, 'zebkit.config.json');
+    const overlayDir = path.join(tmpDir, 'overlay');
+
+    // Override only the leaf `font-family.alt`. The base aliases `heading -> {font-family.alt}`
+    // and `h1.font-family -> {font-family.heading}`, declared at :root, would NOT pick this up
+    // (custom properties inherit their substituted value). The overlay must re-emit that whole
+    // chain under its selector so it re-resolves in-scope.
+    await fs.ensureDir(overlayDir);
+    await fs.writeJson(
+      path.join(overlayDir, 'zbk-font-family.tokens.json'),
+      {
+        'zbk-font-family': {
+          alt: {
+            value: '"Inter"',
+            type: 'fontFamily',
+            source: 'system',
+            fallback: 'sans',
+          },
+        },
+      },
+      { spaces: 2 }
+    );
+
+    const config = {
+      tokens: {
+        includeAllComponents: true,
+        destinationPath,
+        assetFilePath: '/assets/',
+        basePreset: 'default',
+        themeName: 'overlay-base',
+        exportTokens: false,
+        writeVariantRegistry: false,
+        overlays: [
+          {
+            themeName: 'dark',
+            tokenPath: overlayDir,
+          },
+        ],
+      },
+    };
+
+    await fs.writeJson(configPath, config, { spaces: 2 });
+
+    try {
+      await execFileAsync(
+        'npm',
+        ['run', 'build:tokens', '--', '--config', configPath],
+        {
+          cwd: PROJECT_ROOT,
+          env: { ...process.env, CI: 'true', FORCE_COLOR: '0' },
+        }
+      );
+
+      // Base CSS still emitted at :root.
+      const basePath = path.join(destinationPath, 'zbk-overlay-base.min.css');
+      expect(await fs.pathExists(basePath)).toBe(true);
+
+      // Overlay file emitted and scoped.
+      const overlayPath = path.join(destinationPath, 'zbk-dark.css');
+      expect(await fs.pathExists(overlayPath)).toBe(true);
+      const overlayCss = await fs.readFile(overlayPath, 'utf8');
+
+      expect(overlayCss).toContain('[data-zbk-theme="dark"]');
+      expect(overlayCss).not.toContain(':root');
+      expect(overlayCss).not.toContain('undefined');
+
+      // The overridden leaf is emitted.
+      expect(overlayCss).toContain('--zbk-font-family-alt: "Inter"');
+      // Closure: the dependent alias is re-emitted so it re-resolves in-scope…
+      expect(overlayCss).toContain('--zbk-font-family-heading: var(--zbk-font-family-alt);');
+      // …as is the component token that depends on the alias.
+      expect(overlayCss).toContain('--zbk-h1-font-family: var(--zbk-font-family-heading);');
+
+      // Still minimal: an unrelated token that does not reference the override is absent.
+      expect(overlayCss).not.toContain('--zbk-z-index-');
+      // No utility classes / primitive ramps leak into the overlay.
+      expect(overlayCss).not.toContain('.zbk-');
+    } finally {
+      await fs.remove(tmpDir);
+    }
+  });
+
   it('applies project overrides when building through the bundled CLI', async () => {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-bundled-build-'));
     const destinationPath = path.join(tmpDir, 'dist');
@@ -86,9 +171,9 @@ describe('build smoke tests', () => {
         includeAllComponents: false,
         destinationPath,
         assetFilePath: '/assets/',
-        theme: 'default',
-        customTokenPath: overrideDir,
-        customThemeName: 'bundled-test',
+        basePreset: 'default',
+        tokenPath: overrideDir,
+        themeName: 'bundled-test',
         exportTokens: false,
         writeVariantRegistry: false,
       },

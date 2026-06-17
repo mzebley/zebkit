@@ -32,7 +32,8 @@ export function isVariantOverrideFile(filePath: string): boolean {
 export function mergeOverrideObject(
   overrideData: Record<string, any>,
   tokens: Record<string, TokenInterface>,
-  tokenSchemas: Record<string, ZodSchema>
+  tokenSchemas: Record<string, ZodSchema>,
+  touched?: Record<string, Set<string>>
 ) {
   const validKeys = Object.keys(tokens);
   for (const key of Object.keys(overrideData)) {
@@ -42,9 +43,10 @@ export function mergeOverrideObject(
     }
 
     const tokenSchema = tokenSchemas[key];
+    const keyTouched = touched ? (touched[key] ??= new Set<string>()) : undefined;
 
     try {
-      const mergedTokens = mergeTokens(tokens[key], overrideData[key], tokenSchema, key);
+      const mergedTokens = mergeTokens(tokens[key], overrideData[key], tokenSchema, key, keyTouched);
       tokens[key] = mergedTokens;
     } catch {
       console.warn(`Custom tokens for '${key}' are invalid. Using default tokens.`);
@@ -56,7 +58,8 @@ export function mergeTokens(
   defaultTokens: TokenInterface,
   customTokens: Record<string, any>,
   schema: ZodSchema | undefined,
-  keyPath: string
+  keyPath: string,
+  touched?: Set<string>
 ): TokenInterface {
   const merged: TokenInterface = { ...defaultTokens };
 
@@ -115,6 +118,7 @@ export function mergeTokens(
         (subSchema as ZodSchema).parse(nextToken);
       }
       merged[key] = nextToken;
+      touched?.add(key);
     } catch {
       console.warn(`Invalid value for '${keyPath}.${key}'. Using default value.`);
       merged[key] = defaultTokens[key];

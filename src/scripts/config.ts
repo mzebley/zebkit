@@ -75,22 +75,46 @@ export type SpaceScaleConfig = {
   fluid?: boolean;
 };
 
+/**
+ * A scoped, minimal overlay theme built on top of the base theme. An overlay
+ * redeclares ONLY the tokens its `tokenPath` overrides, scoped under `rootSelector`,
+ * with no primitive palettes / utility classes / reset (those already exist globally
+ * from the base CSS). Toggling the selector — e.g. `[data-zbk-theme="dark"]` — re-skins
+ * the subtree via the cascade. See `tokens.overlays`.
+ */
+export type OverlayThemeConfig = {
+  /** Override token file or folder. Only the tokens it touches are emitted. Required. */
+  tokenPath: string;
+  /** Output theme name; drives the emitted `zbk-<themeName>.css` filename. Required. */
+  themeName: string;
+  /**
+   * CSS selector to scope the overlay's vars under. Omitted/blank defaults to
+   * `[data-zbk-theme="<themeName>"]`. Must never resolve to `:root` — that would
+   * clobber the base theme.
+   */
+  rootSelector?: string;
+  /** Output directory. Omitted = the parent (base) theme's `destinationPath`. */
+  destinationPath?: string;
+  /** Google Fonts delivery strategy. Omitted = the parent (base) theme's strategy. */
+  fonts?: FontsConfig;
+};
+
 export type TokensConfig = {
   selectedComponents?: string[];
   includeAllComponents?: boolean;
   destinationPath?: string;
   assetFilePath?: string;
-  theme?: string;
-  customTokenPath?: string;
-  customThemeName?: string;
+  /** Built-in base preset to start from (e.g. `'default'`). The base theme is always emitted at `:root`. */
+  basePreset?: string;
+  /** Override token file or folder layered on top of the base preset. */
+  tokenPath?: string;
+  /** Output name for the base theme; drives the emitted `zbk-<themeName>.css` filename. */
+  themeName?: string;
   /**
-   * Optional CSS selector to scope emitted token variables under, instead of `:root`.
-   * e.g. `'[data-zbk-theme="brutalist"]'`. This scopes the token layer
-   * (semantic / alias / component custom properties) so a whole theme can apply to a
-   * subtree rather than the document root. Primitive color ramps emitted by SCSS remain
-   * global. Unset = default `:root` behavior.
+   * Scoped, minimal overlay themes emitted alongside the base. Each redeclares only the
+   * tokens it overrides, under its own selector. Config-only (not promptable).
    */
-  rootSelector?: string;
+  overlays?: OverlayThemeConfig[];
   exportTokens?: boolean;
   splitMode?: 'combined' | 'per-module';
   outputFormats?: Array<'JSON' | 'TypeScript' | 'JavaScript'>;
@@ -116,6 +140,49 @@ export type ZebkitConfig = {
   tokens?: TokensConfig;
   components?: ComponentsConfig;
 };
+
+/**
+ * Resolves an overlay's effective selector, defaulting to `[data-zbk-theme="<themeName>"]`
+ * when omitted or blank.
+ */
+export function resolveOverlayRootSelector(overlay: OverlayThemeConfig): string {
+  const explicit = overlay.rootSelector?.trim();
+  return explicit && explicit.length > 0
+    ? explicit
+    : `[data-zbk-theme="${overlay.themeName}"]`;
+}
+
+/**
+ * Validates the `overlays` array, throwing on any misconfiguration. Each overlay must name a
+ * `themeName` and `tokenPath`, and its resolved selector must never be `:root` (which would
+ * overwrite the base theme rather than overlay it).
+ */
+export function validateOverlays(overlays: OverlayThemeConfig[] | undefined): void {
+  if (!overlays) return;
+  if (!Array.isArray(overlays)) {
+    throw new Error('`tokens.overlays` must be an array of overlay theme objects.');
+  }
+  const seenNames = new Set<string>();
+  overlays.forEach((overlay, index) => {
+    const at = `tokens.overlays[${index}]`;
+    if (!overlay.themeName?.trim()) {
+      throw new Error(`${at}: \`themeName\` is required.`);
+    }
+    if (!overlay.tokenPath?.trim()) {
+      throw new Error(`${at} ("${overlay.themeName}"): \`tokenPath\` is required.`);
+    }
+    if (seenNames.has(overlay.themeName)) {
+      throw new Error(`${at}: duplicate overlay \`themeName\` "${overlay.themeName}".`);
+    }
+    seenNames.add(overlay.themeName);
+    const selector = resolveOverlayRootSelector(overlay);
+    if (selector === ':root' || selector === 'html' || selector === '*') {
+      throw new Error(
+        `${at} ("${overlay.themeName}"): \`rootSelector\` resolves to "${selector}", which would clobber the base theme. Use a scoped selector.`
+      );
+    }
+  });
+}
 
 const CONFIG_FILE_NAMES = [
   'zebkit.config.json',
@@ -154,6 +221,7 @@ export async function loadZebkitConfig(): Promise<
       if (await fs.pathExists(resolved)) {
         const fileContents = await fs.readFile(resolved, 'utf-8');
         const parsed = JSON.parse(fileContents) as ZebkitConfig;
+        validateOverlays(parsed.tokens?.overlays);
         return { config: parsed, path: resolved };
       }
 
