@@ -1,47 +1,81 @@
 # Typography: Font Family Tokens
 
-The Zebkit font-family token module supports two flavors of tokens:
+Every font token uses `type: "fontFamily"`, discriminated by a `source`. The full guide lives
+on the doc site (Typography → Fonts); this is the in-repo summary.
 
-1) **Google Font tokens** (`type: "googleFont"`):  
-   - Shape: `{ value, description, variable: boolean, weights?: string, type: "googleFont" }`  
-   - `value` is the font family name (e.g., `"Open Sans", sans-serif`).  
-   - `variable: true` signals a variable font; `weights` are parsed into a range (e.g., `wght@300..700`).  
-   - `variable: false` treats `weights` as a list (e.g., `wght@300;400;700`).  
-   - During the token → CSS conversion, Zebkit emits a Google Fonts `@import` at the very top of the compiled CSS for each unique family, and still emits a CSS variable for the token value.
+## Two tiers
 
-2) **Regular font-family tokens** (`type: "fontFamily"`):  
-   - Use this when you rely on system fonts or self-hosted fonts already available in your project.  
-   - The `value` is applied directly as the CSS `font-family` value, and no external import is generated.
+- **Source families** name a concrete font + how it loads: `primary`, `alt`, `monospace`, and
+  the built-in `system-sans` / `system-serif` / `system-mono` stacks.
+- **Role aliases** reference a source family: `interface`, `heading`, `body`, `code`.
+
+## The `source` field
+
+- `system` (default) — plain CSS variable, no network. Uses the platform font.
+- `google` — emits a Google Fonts request (per the configured strategy).
+- `local` — emits `@font-face` rules from the token's `faces`.
+
+## Fallbacks
+
+Set `fallback: "sans" | "serif" | "mono"` to append a full industry-standard stack after the
+family (see `src/definitions/font-fallbacks.ts` — the single source of truth, also used by the
+`system-*` tokens). Author the bare family name; the build pads it. Aliases (`{...}` references)
+never get a fallback appended.
 
 ## Examples
 
 ```ts
-// Google font token
-{
-  value: `"Inter", sans-serif`,
+// Google — variable font (weight RANGE) with italics
+primary: {
+  value: '"Inter"',
+  type: "fontFamily",
+  source: "google",
+  fallback: "sans",
+  weights: "200..800",
+  styles: ["normal", "italic"],
   description: "Primary UI font",
-  variable: true,
-  weights: "300,700",
-  type: "googleFont",
 }
 
-// Regular font-family token
-{
-  value: `"Helvetica Neue", Arial, sans-serif`,
-  description: "System font stack",
+// Google — static font (discrete weight LIST)
+mono: {
+  value: '"Fira Code"',
   type: "fontFamily",
+  source: "google",
+  fallback: "mono",
+  weights: [400, 500, 700],
+  description: "Code font",
 }
+
+// Self-hosted
+brand: {
+  value: '"Brand Sans"',
+  type: "fontFamily",
+  source: "local",
+  fallback: "sans",
+  display: "swap",
+  faces: [{ src: "BrandSans-var.woff2", weight: "100 900", style: "normal" }],
+  description: "Brand font",
+}
+
+// System stack — zero network
+sans: { value: "{font-family.system-sans}", type: "fontFamily", description: "..." }
 ```
 
-## How imports are generated
-- Google font tokens are collected during token conversion and produce a single `@import url('https://fonts.googleapis.com/css2?...')` per unique family/weights block at the **top** of the bundled CSS.
-- Regular `fontFamily` tokens do not trigger imports; you are responsible for ensuring the font files are available (system or self-hosted).
+- **`weights`**: array = static list; range string (`"200..800"`) = variable font.
+- **`faces[]`** (local only): `{ src, weight?, style?, display?, format?, unicodeRange? }`. Bare
+  `src` resolves against `assetFilePath` (default `/assets/`); `/`, `http(s)://`, `//`, `.` are
+  verbatim. `format()` is inferred from the extension.
 
-## Usage guidance
-- Prefer `googleFont` when you want Zebkit to manage fetching from Google Fonts automatically.
-- Prefer `fontFamily` when:
-  - You want to use system stacks,
-  - You already bundle/self-host fonts,
-  - You need full control over loading strategy (e.g., `@font-face` elsewhere).
+## Loading strategy (Google Fonts)
 
-Both token types end up as CSS custom properties (e.g., `--zbk-font-family-primary`) that you can reference in your components or themes. Keep `token-schema.ts` and `tokens.ts` in sync to ensure validation passes.
+Set in your zebkit config: `tokens.fonts.strategy`.
+
+- `import` (default) — render-blocking `@import` at the top of the CSS. No HTML changes, but the
+  slowest option.
+- `link` / `preload` — no `@import`; writes a sidecar `zbk-<theme>.fonts.html` with
+  `preconnect` + stylesheet (and preload) tags to paste into `<head>`. **Prefer for production.**
+- `manual` — emits nothing remote.
+
+Local `@font-face` rules are emitted regardless of strategy.
+
+Keep `token-schema.ts` and `tokens.ts` in sync.

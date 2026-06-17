@@ -248,162 +248,6 @@
       "a11y": true
     }
   },
-  "zbk-opacity": {
-    "0": {
-      "value": 0,
-      "type": "opacity",
-      "description": "Fully transparent (invisible)."
-    },
-    "5": {
-      "value": 0.05,
-      "type": "opacity",
-      "description": "5% opacity - barely visible."
-    },
-    "10": {
-      "value": 0.1,
-      "type": "opacity",
-      "description": "10% opacity - very faint."
-    },
-    "15": {
-      "value": 0.15,
-      "type": "opacity",
-      "description": "15% opacity - faint."
-    },
-    "20": {
-      "value": 0.2,
-      "type": "opacity",
-      "description": "20% opacity - subtle."
-    },
-    "25": {
-      "value": 0.25,
-      "type": "opacity",
-      "description": "25% opacity - quarter visible."
-    },
-    "30": {
-      "value": 0.3,
-      "type": "opacity",
-      "description": "30% opacity - light."
-    },
-    "40": {
-      "value": 0.4,
-      "type": "opacity",
-      "description": "40% opacity - moderate-light."
-    },
-    "50": {
-      "value": 0.5,
-      "type": "opacity",
-      "description": "50% opacity - half visible."
-    },
-    "60": {
-      "value": 0.6,
-      "type": "opacity",
-      "description": "60% opacity - moderate."
-    },
-    "70": {
-      "value": 0.7,
-      "type": "opacity",
-      "description": "70% opacity - mostly visible."
-    },
-    "75": {
-      "value": 0.75,
-      "type": "opacity",
-      "description": "75% opacity - three-quarters visible."
-    },
-    "80": {
-      "value": 0.8,
-      "type": "opacity",
-      "description": "80% opacity - largely visible."
-    },
-    "85": {
-      "value": 0.85,
-      "type": "opacity",
-      "description": "85% opacity - mostly opaque."
-    },
-    "90": {
-      "value": 0.9,
-      "type": "opacity",
-      "description": "90% opacity - nearly opaque."
-    },
-    "95": {
-      "value": 0.95,
-      "type": "opacity",
-      "description": "95% opacity - almost fully opaque."
-    },
-    "100": {
-      "value": 1,
-      "type": "opacity",
-      "description": "Fully opaque (default)."
-    }
-  },
-  "zbk-elevation": {
-    "none": {
-      "value": "none",
-      "type": "boxShadow",
-      "description": "No shadow."
-    },
-    "xs": {
-      "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Extra-small shadow for subtle elevation."
-    },
-    "sm": {
-      "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Small shadow for low elevation."
-    },
-    "md": {
-      "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Medium shadow for moderate elevation."
-    },
-    "lg": {
-      "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Large shadow for high elevation."
-    },
-    "xl": {
-      "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Extra-large shadow for very high elevation."
-    },
-    "2xl": {
-      "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
-      "type": "boxShadow",
-      "description": "2XL shadow for maximum elevation."
-    },
-    "inner": {
-      "value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Inner shadow for inset/pressed effect."
-    },
-    "inner-sm": {
-      "value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Small inner shadow."
-    },
-    "inner-lg": {
-      "value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Large inner shadow."
-    }
-  },
-  "zbk-focus": {
-    "color": {
-      "value": "{accent-primary.600}",
-      "type": "color",
-      "description": "Color of focus outline"
-    },
-    "width": {
-      "value": "{spacing.025}",
-      "type": "sizing",
-      "description": "Width of focus outline"
-    },
-    "offset": {
-      "value": "{spacing.025}",
-      "type": "spacing",
-      "description": "Offset distance of focus outline"
-    }
-  },
   "zbk-spacing": {
     "0": {
       "value": "0px",
@@ -790,6 +634,145 @@
       "description": "Preferred horizontal padding for page."
     }
   },
+  "zbk-opacity": {
+    "0": {
+      "value": 0,
+      "type": "opacity",
+      "description": "Fully transparent (invisible)."
+    },
+    "5": {
+      "value": 0.05,
+      "type": "opacity",
+      "description": "5% opacity - barely visible."
+    },
+    "10": {
+      "value": 0.1,
+      "type": "opacity",
+      "description": "10% opacity - very faint."
+    },
+    "15": {
+      "value": 0.15,
+      "type": "opacity",
+      "description": "15% opacity - faint."
+    },
+    "20": {
+      "value": 0.2,
+      "type": "opacity",
+      "description": "20% opacity - subtle."
+    },
+    "25": {
+      "value": 0.25,
+      "type": "opacity",
+      "description": "25% opacity - quarter visible."
+    },
+    "30": {
+      "value": 0.3,
+      "type": "opacity",
+      "description": "30% opacity - light."
+    },
+    "40": {
+      "value": 0.4,
+      "type": "opacity",
+      "description": "40% opacity - moderate-light."
+    },
+    "50": {
+      "value": 0.5,
+      "type": "opacity",
+      "description": "50% opacity - half visible."
+    },
+    "60": {
+      "value": 0.6,
+      "type": "opacity",
+      "description": "60% opacity - moderate."
+    },
+    "70": {
+      "value": 0.7,
+      "type": "opacity",
+      "description": "70% opacity - mostly visible."
+    },
+    "75": {
+      "value": 0.75,
+      "type": "opacity",
+      "description": "75% opacity - three-quarters visible."
+    },
+    "80": {
+      "value": 0.8,
+      "type": "opacity",
+      "description": "80% opacity - largely visible."
+    },
+    "85": {
+      "value": 0.85,
+      "type": "opacity",
+      "description": "85% opacity - mostly opaque."
+    },
+    "90": {
+      "value": 0.9,
+      "type": "opacity",
+      "description": "90% opacity - nearly opaque."
+    },
+    "95": {
+      "value": 0.95,
+      "type": "opacity",
+      "description": "95% opacity - almost fully opaque."
+    },
+    "100": {
+      "value": 1,
+      "type": "opacity",
+      "description": "Fully opaque (default)."
+    }
+  },
+  "zbk-elevation": {
+    "none": {
+      "value": "none",
+      "type": "boxShadow",
+      "description": "No shadow."
+    },
+    "xs": {
+      "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Extra-small shadow for subtle elevation."
+    },
+    "sm": {
+      "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Small shadow for low elevation."
+    },
+    "md": {
+      "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Medium shadow for moderate elevation."
+    },
+    "lg": {
+      "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Large shadow for high elevation."
+    },
+    "xl": {
+      "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Extra-large shadow for very high elevation."
+    },
+    "2xl": {
+      "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+      "type": "boxShadow",
+      "description": "2XL shadow for maximum elevation."
+    },
+    "inner": {
+      "value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Inner shadow for inset/pressed effect."
+    },
+    "inner-sm": {
+      "value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Small inner shadow."
+    },
+    "inner-lg": {
+      "value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Large inner shadow."
+    }
+  },
   "zbk-button": {
     "ink": {
       "value": "{app.ink}",
@@ -1098,6 +1081,50 @@
       "description": "Visual opacity of button."
     }
   },
+  "zbk-focus": {
+    "color": {
+      "value": "{accent-primary.600}",
+      "type": "color",
+      "description": "Color of focus outline"
+    },
+    "width": {
+      "value": "{spacing.025}",
+      "type": "sizing",
+      "description": "Width of focus outline"
+    },
+    "offset": {
+      "value": "{spacing.025}",
+      "type": "spacing",
+      "description": "Offset distance of focus outline"
+    }
+  },
+  "zbk-breakpoint": {
+    "tablet": {
+      "value": "40rem",
+      "type": "dimension",
+      "description": "Small tablets and large phones in landscape (640px)."
+    },
+    "tablet-lg": {
+      "value": "50rem",
+      "type": "dimension",
+      "description": "Large tablets (800px)."
+    },
+    "desktop": {
+      "value": "70rem",
+      "type": "dimension",
+      "description": "Small desktops and laptops (1120px)."
+    },
+    "desktop-lg": {
+      "value": "80rem",
+      "type": "dimension",
+      "description": "Large desktops (1280px)."
+    },
+    "widescreen": {
+      "value": "100rem",
+      "type": "dimension",
+      "description": "Widescreen and ultra-wide displays (1600px)."
+    }
+  },
   "zbk-a11y": {
     "spacing-modifier": {
       "value": "1",
@@ -1228,6 +1255,160 @@
       "a11y": "--zbk-a11y-font-size-modifier-5xl"
     }
   },
+  "zbk-letter-spacing": {
+    "tighter": {
+      "value": "-.05rem",
+      "type": "letterSpacing",
+      "description": "",
+      "a11y": true
+    },
+    "tight": {
+      "value": "-.025rem",
+      "type": "letterSpacing",
+      "description": "",
+      "a11y": true
+    },
+    "normal": {
+      "value": "0rem",
+      "type": "letterSpacing",
+      "description": "",
+      "a11y": true
+    },
+    "wide": {
+      "value": ".025rem",
+      "type": "letterSpacing",
+      "description": "",
+      "a11y": true
+    },
+    "wider": {
+      "value": ".05rem",
+      "type": "letterSpacing",
+      "description": "",
+      "a11y": true
+    }
+  },
+  "zbk-font-weight": {
+    "thin": {
+      "value": "100",
+      "type": "fontWeight",
+      "description": "Lightest font weight.",
+      "a11y": true
+    },
+    "extralight": {
+      "value": "200",
+      "type": "fontWeight",
+      "description": "Lighter font weight.",
+      "a11y": true
+    },
+    "light": {
+      "value": "300",
+      "type": "fontWeight",
+      "description": "Light font weight.",
+      "a11y": true
+    },
+    "normal": {
+      "value": "400",
+      "type": "fontWeight",
+      "description": "Default font weight.",
+      "a11y": true
+    },
+    "medium": {
+      "value": "500",
+      "type": "fontWeight",
+      "description": "Medium font weight.",
+      "a11y": true
+    },
+    "semibold": {
+      "value": "600",
+      "type": "fontWeight",
+      "description": "Semibold font weight.",
+      "a11y": true
+    },
+    "bold": {
+      "value": "700",
+      "type": "fontWeight",
+      "description": "Bold font weight.",
+      "a11y": true
+    },
+    "extrabold": {
+      "value": "800",
+      "type": "fontWeight",
+      "description": "Bolder font weight.",
+      "a11y": true
+    },
+    "black": {
+      "value": "900",
+      "type": "fontWeight",
+      "description": "Boldest font weight.",
+      "a11y": true
+    }
+  },
+  "zbk-font-family": {
+    "primary": {
+      "value": "\"Newsreader\"",
+      "description": "Primary font family for use in the system. Usually used for body content and interface items.",
+      "type": "fontFamily",
+      "source": "google",
+      "fallback": "serif",
+      "weights": "200..800"
+    },
+    "alt": {
+      "value": "\"Instrument Serif\"",
+      "description": "Alternate font family for use in the system. Primarily used for headings.",
+      "type": "fontFamily",
+      "source": "google",
+      "fallback": "serif"
+    },
+    "monospace": {
+      "value": "\"Space Mono\"",
+      "description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
+      "type": "fontFamily",
+      "source": "google",
+      "fallback": "mono",
+      "weights": [
+        400,
+        700
+      ]
+    },
+    "system-sans": {
+      "value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
+      "description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
+      "type": "fontFamily",
+      "source": "system"
+    },
+    "system-serif": {
+      "value": "ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif",
+      "description": "System serif stack. Zero network cost.",
+      "type": "fontFamily",
+      "source": "system"
+    },
+    "system-mono": {
+      "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+      "description": "System monospace stack. Zero network cost.",
+      "type": "fontFamily",
+      "source": "system"
+    },
+    "interface": {
+      "value": "{font-family.primary}",
+      "description": "Font family used for things like buttons or input fields.",
+      "type": "fontFamily"
+    },
+    "heading": {
+      "value": "{font-family.alt}",
+      "description": "Font family used for heading elements.",
+      "type": "fontFamily"
+    },
+    "body": {
+      "value": "{font-family.primary}",
+      "description": "Font family used for <p>, <li>, etc.",
+      "type": "fontFamily"
+    },
+    "code": {
+      "value": "{font-family.monospace}",
+      "description": "Font family used within <code> blocks",
+      "type": "fontFamily"
+    }
+  },
   "zbk-text-measure": {
     "1": {
       "value": "34ch",
@@ -1284,164 +1465,6 @@
       "value": "200%",
       "type": "lineHeight",
       "description": "Largest line height.",
-      "a11y": true
-    }
-  },
-  "zbk-letter-spacing": {
-    "tighter": {
-      "value": "-.05rem",
-      "type": "letterSpacing",
-      "description": "",
-      "a11y": true
-    },
-    "tight": {
-      "value": "-.025rem",
-      "type": "letterSpacing",
-      "description": "",
-      "a11y": true
-    },
-    "normal": {
-      "value": "0rem",
-      "type": "letterSpacing",
-      "description": "",
-      "a11y": true
-    },
-    "wide": {
-      "value": ".025rem",
-      "type": "letterSpacing",
-      "description": "",
-      "a11y": true
-    },
-    "wider": {
-      "value": ".05rem",
-      "type": "letterSpacing",
-      "description": "",
-      "a11y": true
-    }
-  },
-  "zbk-breakpoint": {
-    "tablet": {
-      "value": "40rem",
-      "type": "dimension",
-      "description": "Small tablets and large phones in landscape (640px)."
-    },
-    "tablet-lg": {
-      "value": "50rem",
-      "type": "dimension",
-      "description": "Large tablets (800px)."
-    },
-    "desktop": {
-      "value": "70rem",
-      "type": "dimension",
-      "description": "Small desktops and laptops (1120px)."
-    },
-    "desktop-lg": {
-      "value": "80rem",
-      "type": "dimension",
-      "description": "Large desktops (1280px)."
-    },
-    "widescreen": {
-      "value": "100rem",
-      "type": "dimension",
-      "description": "Widescreen and ultra-wide displays (1600px)."
-    }
-  },
-  "zbk-font-family": {
-    "primary": {
-      "value": "\"Newsreader\", serif",
-      "description": "Primary font family for use in the system. Usually used for body content and interface items.",
-      "variable": true,
-      "weights": "200,800",
-      "type": "googleFont"
-    },
-    "alt": {
-      "value": "\"Instrument Serif\", serif",
-      "description": "Alternate font family for use in the system. Primarily used for headings.",
-      "variable": true,
-      "weights": "",
-      "type": "googleFont"
-    },
-    "monospace": {
-      "value": "\"Space Mono\", monospace",
-      "description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
-      "variable": false,
-      "weights": "",
-      "type": "googleFont"
-    },
-    "interface": {
-      "value": "{font-family.primary}",
-      "description": "Font family used for things like buttons or input fields.",
-      "type": "fontFamily"
-    },
-    "heading": {
-      "value": "{font-family.alt}",
-      "description": "Font family used for heading elements.",
-      "type": "fontFamily"
-    },
-    "body": {
-      "value": "{font-family.primary}",
-      "description": "Font family used for <p>, <li>, etc.",
-      "type": "fontFamily"
-    },
-    "code": {
-      "value": "{font-family.monospace}",
-      "description": "Font family used within <code> blocks",
-      "type": "fontFamily"
-    }
-  },
-  "zbk-font-weight": {
-    "thin": {
-      "value": "100",
-      "type": "fontWeight",
-      "description": "Lightest font weight.",
-      "a11y": true
-    },
-    "extralight": {
-      "value": "200",
-      "type": "fontWeight",
-      "description": "Lighter font weight.",
-      "a11y": true
-    },
-    "light": {
-      "value": "300",
-      "type": "fontWeight",
-      "description": "Light font weight.",
-      "a11y": true
-    },
-    "normal": {
-      "value": "400",
-      "type": "fontWeight",
-      "description": "Default font weight.",
-      "a11y": true
-    },
-    "medium": {
-      "value": "500",
-      "type": "fontWeight",
-      "description": "Medium font weight.",
-      "a11y": true
-    },
-    "semibold": {
-      "value": "600",
-      "type": "fontWeight",
-      "description": "Semibold font weight.",
-      "a11y": true
-    },
-    "bold": {
-      "value": "700",
-      "type": "fontWeight",
-      "description": "Bold font weight.",
-      "a11y": true
-    },
-    "extrabold": {
-      "value": "800",
-      "type": "fontWeight",
-      "description": "Bolder font weight.",
-      "a11y": true
-    },
-    "black": {
-      "value": "900",
-      "type": "fontWeight",
-      "description": "Boldest font weight.",
       "a11y": true
     }
   },
@@ -1502,470 +1525,61 @@
       "description": "Largest semantic corner radius."
     }
   },
-  "zbk-p": {
-    "font-family": {
-      "value": "{font-family.body}",
-      "type": "fontFamily",
-      "description": "Font size for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-size": {
-      "value": "{font-size.md}",
-      "type": "fontSize",
-      "description": "Font size for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-weight": {
-      "value": "{font-weight.normal}",
-      "type": "fontWeight",
-      "description": "Font weight for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "line-height": {
-      "value": "{line-height.3}",
-      "type": "lineHeight",
-      "description": "Line height for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "letter-spacing": {
-      "value": "{letter-spacing.normal}",
-      "type": "letterSpacing",
-      "description": "Tracking for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "measure": {
-      "value": "{text-measure.4}",
-      "type": "sizing",
-      "description": "Maximum width for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-before": {
-      "value": "{spacing.0}",
-      "type": "spacing",
-      "description": "Amount of margin inline start for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-after": {
-      "value": "{spacing.2}",
-      "type": "spacing",
-      "description": "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "color": {
-      "value": "{app.ink}",
+  "zbk-brand": {
+    "50": {
+      "value": "{color.butterfield-50}",
       "type": "color",
-      "description": "Color of P elements with .prose applied directly or that are a child of a .prose container."
+      "description": "For primary branded surfaces."
     },
-    "font-style": {
-      "value": "none",
-      "type": "fontStyle",
-      "description": "Font style for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "text-transform": {
-      "value": "none",
-      "type": "textTransform",
-      "description": "Text transform for P elements with .prose applied directly or that are a child of a .prose container."
-    }
-  },
-  "zbk-list": {
-    "font-family": {
-      "value": "{font-family.heading}",
-      "type": "fontFamily",
-      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-size": {
-      "value": "{font-size.sm}",
-      "type": "fontSize",
-      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-weight": {
-      "value": "{font-weight.semibold}",
-      "type": "fontWeight",
-      "description": "Font weight for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "line-height": {
-      "value": "{line-height.3}",
-      "type": "lineHeight",
-      "description": "Line height for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "letter-spacing": {
-      "value": "{letter-spacing.normal}",
-      "type": "letterSpacing",
-      "description": "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "measure": {
-      "value": "{text-measure.3}",
-      "type": "sizing",
-      "description": "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-before": {
-      "value": "{spacing.2}",
-      "type": "spacing",
-      "description": "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-after": {
-      "value": "{spacing.1}",
-      "type": "spacing",
-      "description": "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "padding-block-start": {
-      "value": "{spacing.105}",
-      "type": "spacing",
-      "description": "Amount of spacing before list items."
-    },
-    "padding-block-end": {
-      "value": "{spacing.0}",
-      "type": "spacing",
-      "description": "Amount of spacing after list items."
-    },
-    "color": {
-      "value": "{app.ink}",
+    "100": {
+      "value": "{color.butterfield-100}",
       "type": "color",
-      "description": "Color of H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "For primary branded surfaces."
     },
-    "font-style": {
-      "value": "none",
-      "type": "fontStyle",
-      "description": "Font style for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "text-transform": {
-      "value": "uppercase",
-      "type": "textTransform",
-      "description": "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container."
-    }
-  },
-  "zbk-h6": {
-    "font-family": {
-      "value": "{font-family.heading}",
-      "type": "fontFamily",
-      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-size": {
-      "value": "{font-size.sm}",
-      "type": "fontSize",
-      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-weight": {
-      "value": "{font-weight.semibold}",
-      "type": "fontWeight",
-      "description": "Font weight for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "line-height": {
-      "value": "{line-height.3}",
-      "type": "lineHeight",
-      "description": "Line height for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "letter-spacing": {
-      "value": "{letter-spacing.normal}",
-      "type": "letterSpacing",
-      "description": "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "measure": {
-      "value": "{text-measure.3}",
-      "type": "sizing",
-      "description": "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-before": {
-      "value": "{spacing.2}",
-      "type": "spacing",
-      "description": "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-after": {
-      "value": "{spacing.1}",
-      "type": "spacing",
-      "description": "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "color": {
-      "value": "{app.ink}",
+    "200": {
+      "value": "{color.butterfield-200}",
       "type": "color",
-      "description": "Color of H6 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "For primary branded surfaces."
     },
-    "font-style": {
-      "value": "none",
-      "type": "fontStyle",
-      "description": "Font style for H6 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "text-transform": {
-      "value": "uppercase",
-      "type": "textTransform",
-      "description": "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container."
-    }
-  },
-  "zbk-h4": {
-    "font-family": {
-      "value": "{font-family.heading}",
-      "type": "fontFamily",
-      "description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-size": {
-      "value": "{font-size.md}",
-      "type": "fontSize",
-      "description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-weight": {
-      "value": "{font-weight.semibold}",
-      "type": "fontWeight",
-      "description": "Font weight for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "line-height": {
-      "value": "{line-height.3}",
-      "type": "lineHeight",
-      "description": "Line height for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "letter-spacing": {
-      "value": "{letter-spacing.normal}",
-      "type": "letterSpacing",
-      "description": "Tracking for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "measure": {
-      "value": "{text-measure.3}",
-      "type": "sizing",
-      "description": "Maximum width for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-before": {
-      "value": "{spacing.3}",
-      "type": "spacing",
-      "description": "Amount of margin inline start for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-after": {
-      "value": "{spacing.105}",
-      "type": "spacing",
-      "description": "Amount of margin inline end for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "color": {
-      "value": "{app.ink}",
+    "300": {
+      "value": "{color.butterfield-300}",
       "type": "color",
-      "description": "Color of H4 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "For primary branded surfaces."
     },
-    "font-style": {
-      "value": "none",
-      "type": "fontStyle",
-      "description": "Font style for H4 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "text-transform": {
-      "value": "none",
-      "type": "textTransform",
-      "description": "Text transform for H4 elements with .prose applied directly or that are a child of a .prose container."
-    }
-  },
-  "zbk-h3": {
-    "font-family": {
-      "value": "{font-family.heading}",
-      "type": "fontFamily",
-      "description": "Font size for H3 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-size": {
-      "value": "{font-size.lg}",
-      "type": "fontSize",
-      "description": "Font size for H3 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-weight": {
-      "value": "{font-weight.semibold}",
-      "type": "fontWeight",
-      "description": "Font weight for H3 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "line-height": {
-      "value": "{line-height.3}",
-      "type": "lineHeight",
-      "description": "Line height for H3 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "letter-spacing": {
-      "value": "{letter-spacing.normal}",
-      "type": "letterSpacing",
-      "description": "Tracking for H3 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "measure": {
-      "value": "{text-measure.3}",
-      "type": "sizing",
-      "description": "Maximum width for H3 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-before": {
-      "value": "{spacing.3}",
-      "type": "spacing",
-      "description": "Amount of margin inline start for H3 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-after": {
-      "value": "{spacing.2}",
-      "type": "spacing",
-      "description": "Amount of margin inline end for H3 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "color": {
-      "value": "{app.ink}",
+    "400": {
+      "value": "{color.butterfield-400}",
       "type": "color",
-      "description": "Color of H3 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "For primary branded surfaces."
     },
-    "font-style": {
-      "value": "none",
-      "type": "fontStyle",
-      "description": "Font style for H3 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "text-transform": {
-      "value": "none",
-      "type": "textTransform",
-      "description": "Text transform for H3 elements with .prose applied directly or that are a child of a .prose container."
-    }
-  },
-  "zbk-h2": {
-    "font-family": {
-      "value": "{font-family.heading}",
-      "type": "fontFamily",
-      "description": "Font size for H2 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-size": {
-      "value": "{font-size.xl}",
-      "type": "fontSize",
-      "description": "Font size for H2 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-weight": {
-      "value": "{font-weight.bold}",
-      "type": "fontWeight",
-      "description": "Font weight for H2 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "line-height": {
-      "value": "{line-height.3}",
-      "type": "lineHeight",
-      "description": "Line height for H2 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "letter-spacing": {
-      "value": "{letter-spacing.normal}",
-      "type": "letterSpacing",
-      "description": "Tracking for H2 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "measure": {
-      "value": "{text-measure.3}",
-      "type": "sizing",
-      "description": "Maximum width for H2 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-before": {
-      "value": "{spacing.3}",
-      "type": "spacing",
-      "description": "Amount of margin inline start for H2 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-after": {
-      "value": "{spacing.2}",
-      "type": "spacing",
-      "description": "Amount of margin inline end for H2 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "color": {
-      "value": "{app.ink}",
+    "500": {
+      "value": "{color.butterfield-500}",
       "type": "color",
-      "description": "Color of H2 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "For primary branded surfaces."
     },
-    "font-style": {
-      "value": "none",
-      "type": "fontStyle",
-      "description": "Font style for H2 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "text-transform": {
-      "value": "none",
-      "type": "textTransform",
-      "description": "Text transform for H2 elements with .prose applied directly or that are a child of a .prose container."
-    }
-  },
-  "zbk-h1": {
-    "font-family": {
-      "value": "{font-family.heading}",
-      "type": "fontFamily",
-      "description": "Font size for H1 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-size": {
-      "value": "{font-size.2xl}",
-      "type": "fontSize",
-      "description": "Font size for H1 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-weight": {
-      "value": "{font-weight.bold}",
-      "type": "fontWeight",
-      "description": "Font weight for H1 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "line-height": {
-      "value": "{line-height.2}",
-      "type": "lineHeight",
-      "description": "Line height for H1 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "letter-spacing": {
-      "value": "{letter-spacing.normal}",
-      "type": "letterSpacing",
-      "description": "Tracking for H1 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "measure": {
-      "value": "{text-measure.3}",
-      "type": "sizing",
-      "description": "Maximum width for H1 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-before": {
-      "value": "{spacing.0}",
-      "type": "spacing",
-      "description": "Amount of margin inline start for H1 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-after": {
-      "value": "{spacing.205}",
-      "type": "spacing",
-      "description": "Amount of margin inline end for H1 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "color": {
-      "value": "{app.ink}",
+    "600": {
+      "value": "{color.butterfield-600}",
       "type": "color",
-      "description": "Color of H1 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "For primary branded surfaces."
     },
-    "font-style": {
-      "value": "none",
-      "type": "fontStyle",
-      "description": "Font style for H1 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "text-transform": {
-      "value": "none",
-      "type": "textTransform",
-      "description": "Text transform for H1 elements with .prose applied directly or that are a child of a .prose container."
-    }
-  },
-  "zbk-h5": {
-    "font-family": {
-      "value": "{font-family.heading}",
-      "type": "fontFamily",
-      "description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-size": {
-      "value": "{font-size.sm}",
-      "type": "fontSize",
-      "description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-weight": {
-      "value": "{font-weight.bold}",
-      "type": "fontWeight",
-      "description": "Font weight for H5 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "line-height": {
-      "value": "{line-height.3}",
-      "type": "lineHeight",
-      "description": "Line height for H5 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "letter-spacing": {
-      "value": "{letter-spacing.normal}",
-      "type": "letterSpacing",
-      "description": "Tracking for H5 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "measure": {
-      "value": "{text-measure.3}",
-      "type": "sizing",
-      "description": "Maximum width for H5 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-before": {
-      "value": "{spacing.2}",
-      "type": "spacing",
-      "description": "Amount of margin inline start for H5 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "spacing-after": {
-      "value": "{spacing.1}",
-      "type": "spacing",
-      "description": "Amount of margin inline end for H5 elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "color": {
-      "value": "{app.ink}",
+    "700": {
+      "value": "{color.butterfield-700}",
       "type": "color",
-      "description": "Color of H5 elements with .prose applied directly or that are a child of a .prose container."
+      "description": "For primary branded surfaces."
     },
-    "font-style": {
-      "value": "italic",
-      "type": "fontStyle",
-      "description": "Font style for H5 elements with .prose applied directly or that are a child of a .prose container."
+    "800": {
+      "value": "{color.butterfield-800}",
+      "type": "color",
+      "description": "For primary branded surfaces."
     },
-    "text-transform": {
-      "value": "none",
-      "type": "textTransform",
-      "description": "Text transform for H5 elements with .prose applied directly or that are a child of a .prose container."
+    "900": {
+      "value": "{color.butterfield-900}",
+      "type": "color",
+      "description": "For primary branded surfaces."
+    },
+    "950": {
+      "value": "{color.butterfield-950}",
+      "type": "color",
+      "description": "For primary branded surfaces."
     }
   },
   "zbk-neutral": {
@@ -2023,63 +1637,6 @@
       "value": "{color.stone-950}",
       "type": "color",
       "description": "For neutral surfaces."
-    }
-  },
-  "zbk-brand": {
-    "50": {
-      "value": "{color.butterfield-50}",
-      "type": "color",
-      "description": "For primary branded surfaces."
-    },
-    "100": {
-      "value": "{color.butterfield-100}",
-      "type": "color",
-      "description": "For primary branded surfaces."
-    },
-    "200": {
-      "value": "{color.butterfield-200}",
-      "type": "color",
-      "description": "For primary branded surfaces."
-    },
-    "300": {
-      "value": "{color.butterfield-300}",
-      "type": "color",
-      "description": "For primary branded surfaces."
-    },
-    "400": {
-      "value": "{color.butterfield-400}",
-      "type": "color",
-      "description": "For primary branded surfaces."
-    },
-    "500": {
-      "value": "{color.butterfield-500}",
-      "type": "color",
-      "description": "For primary branded surfaces."
-    },
-    "600": {
-      "value": "{color.butterfield-600}",
-      "type": "color",
-      "description": "For primary branded surfaces."
-    },
-    "700": {
-      "value": "{color.butterfield-700}",
-      "type": "color",
-      "description": "For primary branded surfaces."
-    },
-    "800": {
-      "value": "{color.butterfield-800}",
-      "type": "color",
-      "description": "For primary branded surfaces."
-    },
-    "900": {
-      "value": "{color.butterfield-900}",
-      "type": "color",
-      "description": "For primary branded surfaces."
-    },
-    "950": {
-      "value": "{color.butterfield-950}",
-      "type": "color",
-      "description": "For primary branded surfaces."
     }
   },
   "zbk-accent-primary": {
@@ -2196,6 +1753,472 @@
       "description": "For secondary accent surfaces."
     }
   },
+  "zbk-p": {
+    "font-family": {
+      "value": "{font-family.body}",
+      "type": "fontFamily",
+      "description": "Font size for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-size": {
+      "value": "{font-size.md}",
+      "type": "fontSize",
+      "description": "Font size for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-weight": {
+      "value": "{font-weight.normal}",
+      "type": "fontWeight",
+      "description": "Font weight for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "line-height": {
+      "value": "{line-height.3}",
+      "type": "lineHeight",
+      "description": "Line height for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "letter-spacing": {
+      "value": "{letter-spacing.normal}",
+      "type": "letterSpacing",
+      "description": "Tracking for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "measure": {
+      "value": "{text-measure.4}",
+      "type": "sizing",
+      "description": "Maximum width for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-before": {
+      "value": "{spacing.0}",
+      "type": "spacing",
+      "description": "Amount of margin inline start for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-after": {
+      "value": "{spacing.2}",
+      "type": "spacing",
+      "description": "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "color": {
+      "value": "{app.ink}",
+      "type": "color",
+      "description": "Color of P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-style": {
+      "value": "none",
+      "type": "fontStyle",
+      "description": "Font style for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "text-transform": {
+      "value": "none",
+      "type": "textTransform",
+      "description": "Text transform for P elements with .prose applied directly or that are a child of a .prose container."
+    }
+  },
+  "zbk-h6": {
+    "font-family": {
+      "value": "{font-family.heading}",
+      "type": "fontFamily",
+      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-size": {
+      "value": "{font-size.sm}",
+      "type": "fontSize",
+      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-weight": {
+      "value": "{font-weight.semibold}",
+      "type": "fontWeight",
+      "description": "Font weight for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "line-height": {
+      "value": "{line-height.3}",
+      "type": "lineHeight",
+      "description": "Line height for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "letter-spacing": {
+      "value": "{letter-spacing.normal}",
+      "type": "letterSpacing",
+      "description": "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "measure": {
+      "value": "{text-measure.3}",
+      "type": "sizing",
+      "description": "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-before": {
+      "value": "{spacing.2}",
+      "type": "spacing",
+      "description": "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-after": {
+      "value": "{spacing.1}",
+      "type": "spacing",
+      "description": "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "color": {
+      "value": "{app.ink}",
+      "type": "color",
+      "description": "Color of H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-style": {
+      "value": "none",
+      "type": "fontStyle",
+      "description": "Font style for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "text-transform": {
+      "value": "uppercase",
+      "type": "textTransform",
+      "description": "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container."
+    }
+  },
+  "zbk-list": {
+    "font-family": {
+      "value": "{font-family.heading}",
+      "type": "fontFamily",
+      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-size": {
+      "value": "{font-size.sm}",
+      "type": "fontSize",
+      "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-weight": {
+      "value": "{font-weight.semibold}",
+      "type": "fontWeight",
+      "description": "Font weight for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "line-height": {
+      "value": "{line-height.3}",
+      "type": "lineHeight",
+      "description": "Line height for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "letter-spacing": {
+      "value": "{letter-spacing.normal}",
+      "type": "letterSpacing",
+      "description": "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "measure": {
+      "value": "{text-measure.3}",
+      "type": "sizing",
+      "description": "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-before": {
+      "value": "{spacing.2}",
+      "type": "spacing",
+      "description": "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-after": {
+      "value": "{spacing.1}",
+      "type": "spacing",
+      "description": "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "padding-block-start": {
+      "value": "{spacing.105}",
+      "type": "spacing",
+      "description": "Amount of spacing before list items."
+    },
+    "padding-block-end": {
+      "value": "{spacing.0}",
+      "type": "spacing",
+      "description": "Amount of spacing after list items."
+    },
+    "color": {
+      "value": "{app.ink}",
+      "type": "color",
+      "description": "Color of H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-style": {
+      "value": "none",
+      "type": "fontStyle",
+      "description": "Font style for H6 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "text-transform": {
+      "value": "uppercase",
+      "type": "textTransform",
+      "description": "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container."
+    }
+  },
+  "zbk-h4": {
+    "font-family": {
+      "value": "{font-family.heading}",
+      "type": "fontFamily",
+      "description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-size": {
+      "value": "{font-size.md}",
+      "type": "fontSize",
+      "description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-weight": {
+      "value": "{font-weight.semibold}",
+      "type": "fontWeight",
+      "description": "Font weight for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "line-height": {
+      "value": "{line-height.3}",
+      "type": "lineHeight",
+      "description": "Line height for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "letter-spacing": {
+      "value": "{letter-spacing.normal}",
+      "type": "letterSpacing",
+      "description": "Tracking for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "measure": {
+      "value": "{text-measure.3}",
+      "type": "sizing",
+      "description": "Maximum width for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-before": {
+      "value": "{spacing.3}",
+      "type": "spacing",
+      "description": "Amount of margin inline start for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-after": {
+      "value": "{spacing.105}",
+      "type": "spacing",
+      "description": "Amount of margin inline end for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "color": {
+      "value": "{app.ink}",
+      "type": "color",
+      "description": "Color of H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-style": {
+      "value": "none",
+      "type": "fontStyle",
+      "description": "Font style for H4 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "text-transform": {
+      "value": "none",
+      "type": "textTransform",
+      "description": "Text transform for H4 elements with .prose applied directly or that are a child of a .prose container."
+    }
+  },
+  "zbk-h5": {
+    "font-family": {
+      "value": "{font-family.heading}",
+      "type": "fontFamily",
+      "description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-size": {
+      "value": "{font-size.sm}",
+      "type": "fontSize",
+      "description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-weight": {
+      "value": "{font-weight.bold}",
+      "type": "fontWeight",
+      "description": "Font weight for H5 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "line-height": {
+      "value": "{line-height.3}",
+      "type": "lineHeight",
+      "description": "Line height for H5 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "letter-spacing": {
+      "value": "{letter-spacing.normal}",
+      "type": "letterSpacing",
+      "description": "Tracking for H5 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "measure": {
+      "value": "{text-measure.3}",
+      "type": "sizing",
+      "description": "Maximum width for H5 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-before": {
+      "value": "{spacing.2}",
+      "type": "spacing",
+      "description": "Amount of margin inline start for H5 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-after": {
+      "value": "{spacing.1}",
+      "type": "spacing",
+      "description": "Amount of margin inline end for H5 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "color": {
+      "value": "{app.ink}",
+      "type": "color",
+      "description": "Color of H5 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-style": {
+      "value": "italic",
+      "type": "fontStyle",
+      "description": "Font style for H5 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "text-transform": {
+      "value": "none",
+      "type": "textTransform",
+      "description": "Text transform for H5 elements with .prose applied directly or that are a child of a .prose container."
+    }
+  },
+  "zbk-h2": {
+    "font-family": {
+      "value": "{font-family.heading}",
+      "type": "fontFamily",
+      "description": "Font size for H2 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-size": {
+      "value": "{font-size.xl}",
+      "type": "fontSize",
+      "description": "Font size for H2 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-weight": {
+      "value": "{font-weight.bold}",
+      "type": "fontWeight",
+      "description": "Font weight for H2 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "line-height": {
+      "value": "{line-height.3}",
+      "type": "lineHeight",
+      "description": "Line height for H2 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "letter-spacing": {
+      "value": "{letter-spacing.normal}",
+      "type": "letterSpacing",
+      "description": "Tracking for H2 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "measure": {
+      "value": "{text-measure.3}",
+      "type": "sizing",
+      "description": "Maximum width for H2 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-before": {
+      "value": "{spacing.3}",
+      "type": "spacing",
+      "description": "Amount of margin inline start for H2 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-after": {
+      "value": "{spacing.2}",
+      "type": "spacing",
+      "description": "Amount of margin inline end for H2 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "color": {
+      "value": "{app.ink}",
+      "type": "color",
+      "description": "Color of H2 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-style": {
+      "value": "none",
+      "type": "fontStyle",
+      "description": "Font style for H2 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "text-transform": {
+      "value": "none",
+      "type": "textTransform",
+      "description": "Text transform for H2 elements with .prose applied directly or that are a child of a .prose container."
+    }
+  },
+  "zbk-h3": {
+    "font-family": {
+      "value": "{font-family.heading}",
+      "type": "fontFamily",
+      "description": "Font size for H3 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-size": {
+      "value": "{font-size.lg}",
+      "type": "fontSize",
+      "description": "Font size for H3 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-weight": {
+      "value": "{font-weight.semibold}",
+      "type": "fontWeight",
+      "description": "Font weight for H3 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "line-height": {
+      "value": "{line-height.3}",
+      "type": "lineHeight",
+      "description": "Line height for H3 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "letter-spacing": {
+      "value": "{letter-spacing.normal}",
+      "type": "letterSpacing",
+      "description": "Tracking for H3 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "measure": {
+      "value": "{text-measure.3}",
+      "type": "sizing",
+      "description": "Maximum width for H3 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-before": {
+      "value": "{spacing.3}",
+      "type": "spacing",
+      "description": "Amount of margin inline start for H3 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-after": {
+      "value": "{spacing.2}",
+      "type": "spacing",
+      "description": "Amount of margin inline end for H3 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "color": {
+      "value": "{app.ink}",
+      "type": "color",
+      "description": "Color of H3 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-style": {
+      "value": "none",
+      "type": "fontStyle",
+      "description": "Font style for H3 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "text-transform": {
+      "value": "none",
+      "type": "textTransform",
+      "description": "Text transform for H3 elements with .prose applied directly or that are a child of a .prose container."
+    }
+  },
+  "zbk-h1": {
+    "font-family": {
+      "value": "{font-family.heading}",
+      "type": "fontFamily",
+      "description": "Font size for H1 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-size": {
+      "value": "{font-size.2xl}",
+      "type": "fontSize",
+      "description": "Font size for H1 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-weight": {
+      "value": "{font-weight.bold}",
+      "type": "fontWeight",
+      "description": "Font weight for H1 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "line-height": {
+      "value": "{line-height.2}",
+      "type": "lineHeight",
+      "description": "Line height for H1 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "letter-spacing": {
+      "value": "{letter-spacing.normal}",
+      "type": "letterSpacing",
+      "description": "Tracking for H1 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "measure": {
+      "value": "{text-measure.3}",
+      "type": "sizing",
+      "description": "Maximum width for H1 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-before": {
+      "value": "{spacing.0}",
+      "type": "spacing",
+      "description": "Amount of margin inline start for H1 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-after": {
+      "value": "{spacing.205}",
+      "type": "spacing",
+      "description": "Amount of margin inline end for H1 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "color": {
+      "value": "{app.ink}",
+      "type": "color",
+      "description": "Color of H1 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-style": {
+      "value": "none",
+      "type": "fontStyle",
+      "description": "Font style for H1 elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "text-transform": {
+      "value": "none",
+      "type": "textTransform",
+      "description": "Text transform for H1 elements with .prose applied directly or that are a child of a .prose container."
+    }
+  },
   "zbk-positive": {
     "canvas": {
       "value": "{color.green-500}",
@@ -2308,340 +2331,116 @@
       "description": "Strong inverse positive border color for high-emphasis outlines on inverse canvases."
     }
   },
-  "zbk-info": {
+  "zbk-caution": {
     "canvas": {
-      "value": "{color.cyan-500}",
+      "value": "{color.gold-500}",
       "type": "color",
-      "description": "Base info canvas color for primary surfaces."
+      "description": "Base caution canvas color for primary surfaces."
     },
     "canvas-soft": {
-      "value": "{color.cyan-50}",
+      "value": "{color.gold-50}",
       "type": "color",
-      "description": "Soft info canvas color for lightly tinted surfaces."
+      "description": "Soft caution canvas color for lightly tinted surfaces."
     },
     "canvas-muted": {
-      "value": "{color.cyan-100}",
+      "value": "{color.gold-100}",
       "type": "color",
-      "description": "Muted info canvas color for low-emphasis surfaces."
+      "description": "Muted caution canvas color for low-emphasis surfaces."
     },
     "canvas-strong": {
-      "value": "{color.cyan-600}",
+      "value": "{color.gold-600}",
       "type": "color",
-      "description": "Strong info canvas color for high-emphasis surfaces."
+      "description": "Strong caution canvas color for high-emphasis surfaces."
     },
     "canvas-inverse": {
-      "value": "{color.cyan-400}",
+      "value": "{color.gold-400}",
       "type": "color",
-      "description": "Base inverse info canvas color for surfaces on dark or inverted contexts."
+      "description": "Base inverse caution canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-soft": {
-      "value": "{color.cyan-900}",
+      "value": "{color.gold-900}",
       "type": "color",
-      "description": "Soft inverse info canvas color for lightly tinted surfaces in inverse contexts."
+      "description": "Soft inverse caution canvas color for lightly tinted surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
-      "value": "{color.cyan-800}",
+      "value": "{color.gold-800}",
       "type": "color",
-      "description": "Muted inverse info canvas color for low-emphasis surfaces in inverse contexts."
+      "description": "Muted inverse caution canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-strong": {
-      "value": "{color.cyan-300}",
+      "value": "{color.gold-300}",
       "type": "color",
-      "description": "Strong inverse info canvas color for high-emphasis surfaces in inverse contexts."
+      "description": "Strong inverse caution canvas color for high-emphasis surfaces in inverse contexts."
     },
     "ink": {
-      "value": "{color.cyan-700}",
+      "value": "{color.gold-700}",
       "type": "color",
-      "description": "Base info ink color for text and icons on neutral or light canvases."
+      "description": "Base caution ink color for text and icons on neutral or light canvases."
     },
     "ink-soft": {
-      "value": "{color.cyan-500}",
+      "value": "{color.gold-500}",
       "type": "color",
-      "description": "Soft info ink color for lower-emphasis text and icons."
+      "description": "Soft caution ink color for lower-emphasis text and icons."
     },
     "ink-muted": {
-      "value": "{color.cyan-400}",
+      "value": "{color.gold-400}",
       "type": "color",
-      "description": "Muted info ink color for subtle or secondary text and icons."
+      "description": "Muted caution ink color for subtle or secondary text and icons."
     },
     "ink-inverse": {
-      "value": "{color.cyan-300}",
+      "value": "{color.gold-300}",
       "type": "color",
-      "description": "Base inverse info ink color for text and icons on inverse or dark canvases."
+      "description": "Base inverse caution ink color for text and icons on inverse or dark canvases."
     },
     "ink-inverse-soft": {
-      "value": "{color.cyan-400}",
+      "value": "{color.gold-400}",
       "type": "color",
-      "description": "Soft inverse info ink color for lower-emphasis text and icons on inverse canvases."
+      "description": "Soft inverse caution ink color for lower-emphasis text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
-      "value": "{color.cyan-500}",
+      "value": "{color.gold-500}",
       "type": "color",
-      "description": "Muted inverse info ink color for subtle text and icons on inverse canvases."
+      "description": "Muted inverse caution ink color for subtle text and icons on inverse canvases."
     },
     "border": {
-      "value": "{color.cyan-500}",
+      "value": "{color.gold-500}",
       "type": "color",
-      "description": "Base info border color for outlines, strokes, and dividers."
+      "description": "Base caution border color for outlines, strokes, and dividers."
     },
     "border-soft": {
-      "value": "{color.cyan-200}",
+      "value": "{color.gold-200}",
       "type": "color",
-      "description": "Soft info border color for low-emphasis outlines and dividers."
+      "description": "Soft caution border color for low-emphasis outlines and dividers."
     },
     "border-muted": {
-      "value": "{color.cyan-300}",
+      "value": "{color.gold-300}",
       "type": "color",
-      "description": "Muted info border color for subtle outlines and dividers."
+      "description": "Muted caution border color for subtle outlines and dividers."
     },
     "border-strong": {
-      "value": "{color.cyan-600}",
+      "value": "{color.gold-600}",
       "type": "color",
-      "description": "Strong info border color for high-emphasis outlines and dividers."
+      "description": "Strong caution border color for high-emphasis outlines and dividers."
     },
     "border-inverse": {
-      "value": "{color.cyan-500}",
+      "value": "{color.gold-500}",
       "type": "color",
-      "description": "Base inverse info border color for outlines and dividers on inverse canvases."
+      "description": "Base inverse caution border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-soft": {
-      "value": "{color.cyan-800}",
+      "value": "{color.gold-800}",
       "type": "color",
-      "description": "Soft inverse info border color for low-emphasis outlines on inverse canvases."
+      "description": "Soft inverse caution border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-muted": {
-      "value": "{color.cyan-700}",
+      "value": "{color.gold-700}",
       "type": "color",
-      "description": "Muted inverse info border color for subtle outlines on inverse canvases."
+      "description": "Muted inverse caution border color for subtle outlines on inverse canvases."
     },
     "border-inverse-strong": {
-      "value": "{color.cyan-400}",
+      "value": "{color.gold-400}",
       "type": "color",
-      "description": "Strong inverse info border color for high-emphasis outlines on inverse canvases."
-    }
-  },
-  "zbk-disabled": {
-    "canvas": {
-      "value": "{color.charcoal-400}",
-      "type": "color",
-      "description": "Base disabled canvas color for primary surfaces."
-    },
-    "canvas-soft": {
-      "value": "{color.charcoal-50}",
-      "type": "color",
-      "description": "Soft disabled canvas color for lightly tinted surfaces."
-    },
-    "canvas-muted": {
-      "value": "{color.charcoal-200}",
-      "type": "color",
-      "description": "Muted disabled canvas color for low-emphasis surfaces."
-    },
-    "canvas-strong": {
-      "value": "{color.charcoal-800}",
-      "type": "color",
-      "description": "Strong disabled canvas color for high-emphasis surfaces."
-    },
-    "canvas-inverse": {
-      "value": "{color.charcoal-800}",
-      "type": "color",
-      "description": "Base inverse disabled canvas color for surfaces on dark or inverted contexts."
-    },
-    "canvas-inverse-soft": {
-      "value": "{color.charcoal-950}",
-      "type": "color",
-      "description": "Soft inverse disabled canvas color for lightly tinted surfaces in inverse contexts."
-    },
-    "canvas-inverse-muted": {
-      "value": "{color.charcoal-900}",
-      "type": "color",
-      "description": "Muted inverse disabled canvas color for low-emphasis surfaces in inverse contexts."
-    },
-    "canvas-inverse-strong": {
-      "value": "{color.charcoal-200}",
-      "type": "color",
-      "description": "Strong inverse disabled canvas color for high-emphasis surfaces in inverse contexts."
-    },
-    "ink": {
-      "value": "{color.charcoal-800}",
-      "type": "color",
-      "description": "Base disabled ink color for text and icons on neutral or light canvases."
-    },
-    "ink-soft": {
-      "value": "{color.charcoal-400}",
-      "type": "color",
-      "description": "Soft disabled ink color for lower-emphasis text and icons."
-    },
-    "ink-muted": {
-      "value": "{color.charcoal-600}",
-      "type": "color",
-      "description": "Muted disabled ink color for subtle or secondary text and icons."
-    },
-    "ink-inverse": {
-      "value": "{color.charcoal-200}",
-      "type": "color",
-      "description": "Base inverse disabled ink color for text and icons on inverse or dark canvases."
-    },
-    "ink-inverse-soft": {
-      "value": "{color.charcoal-500}",
-      "type": "color",
-      "description": "Soft inverse disabled ink color for lower-emphasis text and icons on inverse canvases."
-    },
-    "ink-inverse-muted": {
-      "value": "{color.charcoal-800}",
-      "type": "color",
-      "description": "Muted inverse disabled ink color for subtle text and icons on inverse canvases."
-    },
-    "border": {
-      "value": "{disabled.ink}",
-      "type": "color",
-      "description": "Base disabled border color for outlines, strokes, and dividers."
-    },
-    "border-soft": {
-      "value": "{disabled.ink-soft}",
-      "type": "color",
-      "description": "Soft disabled border color for low-emphasis outlines and dividers."
-    },
-    "border-muted": {
-      "value": "{disabled.ink-muted}",
-      "type": "color",
-      "description": "Muted disabled border color for subtle outlines and dividers."
-    },
-    "border-strong": {
-      "value": "{disabled.ink}",
-      "type": "color",
-      "description": "Strong disabled border color for high-emphasis outlines and dividers."
-    },
-    "border-inverse": {
-      "value": "{disabled.ink-inverse}",
-      "type": "color",
-      "description": "Base inverse disabled border color for outlines and dividers on inverse canvases."
-    },
-    "border-inverse-soft": {
-      "value": "{disabled.ink-inverse-soft}",
-      "type": "color",
-      "description": "Soft inverse disabled border color for low-emphasis outlines on inverse canvases."
-    },
-    "border-inverse-muted": {
-      "value": "{disabled.ink-inverse-muted}",
-      "type": "color",
-      "description": "Muted inverse disabled border color for subtle outlines on inverse canvases."
-    },
-    "border-inverse-strong": {
-      "value": "{disabled.ink-inverse}",
-      "type": "color",
-      "description": "Strong inverse disabled border color for high-emphasis outlines on inverse canvases."
-    }
-  },
-  "zbk-critical": {
-    "canvas": {
-      "value": "{color.red-500}",
-      "type": "color",
-      "description": "Base critical canvas color for primary surfaces."
-    },
-    "canvas-soft": {
-      "value": "{color.red-50}",
-      "type": "color",
-      "description": "Soft critical canvas color for lightly tinted surfaces."
-    },
-    "canvas-muted": {
-      "value": "{color.red-100}",
-      "type": "color",
-      "description": "Muted critical canvas color for low-emphasis surfaces."
-    },
-    "canvas-strong": {
-      "value": "{color.red-600}",
-      "type": "color",
-      "description": "Strong critical canvas color for high-emphasis surfaces."
-    },
-    "canvas-inverse": {
-      "value": "{color.red-400}",
-      "type": "color",
-      "description": "Base inverse critical canvas color for surfaces on dark or inverted contexts."
-    },
-    "canvas-inverse-soft": {
-      "value": "{color.red-900}",
-      "type": "color",
-      "description": "Soft inverse critical canvas color for lightly tinted surfaces in inverse contexts."
-    },
-    "canvas-inverse-muted": {
-      "value": "{color.red-800}",
-      "type": "color",
-      "description": "Muted inverse critical canvas color for low-emphasis surfaces in inverse contexts."
-    },
-    "canvas-inverse-strong": {
-      "value": "{color.red-300}",
-      "type": "color",
-      "description": "Strong inverse critical canvas color for high-emphasis surfaces in inverse contexts."
-    },
-    "ink": {
-      "value": "{color.red-700}",
-      "type": "color",
-      "description": "Base critical ink color for text and icons on neutral or light canvases."
-    },
-    "ink-soft": {
-      "value": "{color.red-500}",
-      "type": "color",
-      "description": "Soft critical ink color for lower-emphasis text and icons."
-    },
-    "ink-muted": {
-      "value": "{color.red-400}",
-      "type": "color",
-      "description": "Muted critical ink color for subtle or secondary text and icons."
-    },
-    "ink-inverse": {
-      "value": "{color.red-300}",
-      "type": "color",
-      "description": "Base inverse critical ink color for text and icons on inverse or dark canvases."
-    },
-    "ink-inverse-soft": {
-      "value": "{color.red-400}",
-      "type": "color",
-      "description": "Soft inverse critical ink color for lower-emphasis text and icons on inverse canvases."
-    },
-    "ink-inverse-muted": {
-      "value": "{color.red-500}",
-      "type": "color",
-      "description": "Muted inverse critical ink color for subtle text and icons on inverse canvases."
-    },
-    "border": {
-      "value": "{color.red-500}",
-      "type": "color",
-      "description": "Base critical border color for outlines, strokes, and dividers."
-    },
-    "border-soft": {
-      "value": "{color.red-200}",
-      "type": "color",
-      "description": "Soft critical border color for low-emphasis outlines and dividers."
-    },
-    "border-muted": {
-      "value": "{color.red-300}",
-      "type": "color",
-      "description": "Muted critical border color for subtle outlines and dividers."
-    },
-    "border-strong": {
-      "value": "{color.red-600}",
-      "type": "color",
-      "description": "Strong critical border color for high-emphasis outlines and dividers."
-    },
-    "border-inverse": {
-      "value": "{color.red-500}",
-      "type": "color",
-      "description": "Base inverse critical border color for outlines and dividers on inverse canvases."
-    },
-    "border-inverse-soft": {
-      "value": "{color.red-800}",
-      "type": "color",
-      "description": "Soft inverse critical border color for low-emphasis outlines on inverse canvases."
-    },
-    "border-inverse-muted": {
-      "value": "{color.red-700}",
-      "type": "color",
-      "description": "Muted inverse critical border color for subtle outlines on inverse canvases."
-    },
-    "border-inverse-strong": {
-      "value": "{color.red-400}",
-      "type": "color",
-      "description": "Strong inverse critical border color for high-emphasis outlines on inverse canvases."
+      "description": "Strong inverse caution border color for high-emphasis outlines on inverse canvases."
     }
   },
   "zbk-app": {
@@ -2756,6 +2555,230 @@
       "description": "Strong inverse app border color for high-emphasis outlines on inverse canvases."
     }
   },
+  "zbk-critical": {
+    "canvas": {
+      "value": "{color.red-500}",
+      "type": "color",
+      "description": "Base critical canvas color for primary surfaces."
+    },
+    "canvas-soft": {
+      "value": "{color.red-50}",
+      "type": "color",
+      "description": "Soft critical canvas color for lightly tinted surfaces."
+    },
+    "canvas-muted": {
+      "value": "{color.red-100}",
+      "type": "color",
+      "description": "Muted critical canvas color for low-emphasis surfaces."
+    },
+    "canvas-strong": {
+      "value": "{color.red-600}",
+      "type": "color",
+      "description": "Strong critical canvas color for high-emphasis surfaces."
+    },
+    "canvas-inverse": {
+      "value": "{color.red-400}",
+      "type": "color",
+      "description": "Base inverse critical canvas color for surfaces on dark or inverted contexts."
+    },
+    "canvas-inverse-soft": {
+      "value": "{color.red-900}",
+      "type": "color",
+      "description": "Soft inverse critical canvas color for lightly tinted surfaces in inverse contexts."
+    },
+    "canvas-inverse-muted": {
+      "value": "{color.red-800}",
+      "type": "color",
+      "description": "Muted inverse critical canvas color for low-emphasis surfaces in inverse contexts."
+    },
+    "canvas-inverse-strong": {
+      "value": "{color.red-300}",
+      "type": "color",
+      "description": "Strong inverse critical canvas color for high-emphasis surfaces in inverse contexts."
+    },
+    "ink": {
+      "value": "{color.red-700}",
+      "type": "color",
+      "description": "Base critical ink color for text and icons on neutral or light canvases."
+    },
+    "ink-soft": {
+      "value": "{color.red-500}",
+      "type": "color",
+      "description": "Soft critical ink color for lower-emphasis text and icons."
+    },
+    "ink-muted": {
+      "value": "{color.red-400}",
+      "type": "color",
+      "description": "Muted critical ink color for subtle or secondary text and icons."
+    },
+    "ink-inverse": {
+      "value": "{color.red-300}",
+      "type": "color",
+      "description": "Base inverse critical ink color for text and icons on inverse or dark canvases."
+    },
+    "ink-inverse-soft": {
+      "value": "{color.red-400}",
+      "type": "color",
+      "description": "Soft inverse critical ink color for lower-emphasis text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{color.red-500}",
+      "type": "color",
+      "description": "Muted inverse critical ink color for subtle text and icons on inverse canvases."
+    },
+    "border": {
+      "value": "{color.red-500}",
+      "type": "color",
+      "description": "Base critical border color for outlines, strokes, and dividers."
+    },
+    "border-soft": {
+      "value": "{color.red-200}",
+      "type": "color",
+      "description": "Soft critical border color for low-emphasis outlines and dividers."
+    },
+    "border-muted": {
+      "value": "{color.red-300}",
+      "type": "color",
+      "description": "Muted critical border color for subtle outlines and dividers."
+    },
+    "border-strong": {
+      "value": "{color.red-600}",
+      "type": "color",
+      "description": "Strong critical border color for high-emphasis outlines and dividers."
+    },
+    "border-inverse": {
+      "value": "{color.red-500}",
+      "type": "color",
+      "description": "Base inverse critical border color for outlines and dividers on inverse canvases."
+    },
+    "border-inverse-soft": {
+      "value": "{color.red-800}",
+      "type": "color",
+      "description": "Soft inverse critical border color for low-emphasis outlines on inverse canvases."
+    },
+    "border-inverse-muted": {
+      "value": "{color.red-700}",
+      "type": "color",
+      "description": "Muted inverse critical border color for subtle outlines on inverse canvases."
+    },
+    "border-inverse-strong": {
+      "value": "{color.red-400}",
+      "type": "color",
+      "description": "Strong inverse critical border color for high-emphasis outlines on inverse canvases."
+    }
+  },
+  "zbk-disabled": {
+    "canvas": {
+      "value": "{color.charcoal-400}",
+      "type": "color",
+      "description": "Base disabled canvas color for primary surfaces."
+    },
+    "canvas-soft": {
+      "value": "{color.charcoal-50}",
+      "type": "color",
+      "description": "Soft disabled canvas color for lightly tinted surfaces."
+    },
+    "canvas-muted": {
+      "value": "{color.charcoal-200}",
+      "type": "color",
+      "description": "Muted disabled canvas color for low-emphasis surfaces."
+    },
+    "canvas-strong": {
+      "value": "{color.charcoal-800}",
+      "type": "color",
+      "description": "Strong disabled canvas color for high-emphasis surfaces."
+    },
+    "canvas-inverse": {
+      "value": "{color.charcoal-800}",
+      "type": "color",
+      "description": "Base inverse disabled canvas color for surfaces on dark or inverted contexts."
+    },
+    "canvas-inverse-soft": {
+      "value": "{color.charcoal-950}",
+      "type": "color",
+      "description": "Soft inverse disabled canvas color for lightly tinted surfaces in inverse contexts."
+    },
+    "canvas-inverse-muted": {
+      "value": "{color.charcoal-900}",
+      "type": "color",
+      "description": "Muted inverse disabled canvas color for low-emphasis surfaces in inverse contexts."
+    },
+    "canvas-inverse-strong": {
+      "value": "{color.charcoal-200}",
+      "type": "color",
+      "description": "Strong inverse disabled canvas color for high-emphasis surfaces in inverse contexts."
+    },
+    "ink": {
+      "value": "{color.charcoal-800}",
+      "type": "color",
+      "description": "Base disabled ink color for text and icons on neutral or light canvases."
+    },
+    "ink-soft": {
+      "value": "{color.charcoal-400}",
+      "type": "color",
+      "description": "Soft disabled ink color for lower-emphasis text and icons."
+    },
+    "ink-muted": {
+      "value": "{color.charcoal-600}",
+      "type": "color",
+      "description": "Muted disabled ink color for subtle or secondary text and icons."
+    },
+    "ink-inverse": {
+      "value": "{color.charcoal-200}",
+      "type": "color",
+      "description": "Base inverse disabled ink color for text and icons on inverse or dark canvases."
+    },
+    "ink-inverse-soft": {
+      "value": "{color.charcoal-500}",
+      "type": "color",
+      "description": "Soft inverse disabled ink color for lower-emphasis text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{color.charcoal-800}",
+      "type": "color",
+      "description": "Muted inverse disabled ink color for subtle text and icons on inverse canvases."
+    },
+    "border": {
+      "value": "{disabled.ink}",
+      "type": "color",
+      "description": "Base disabled border color for outlines, strokes, and dividers."
+    },
+    "border-soft": {
+      "value": "{disabled.ink-soft}",
+      "type": "color",
+      "description": "Soft disabled border color for low-emphasis outlines and dividers."
+    },
+    "border-muted": {
+      "value": "{disabled.ink-muted}",
+      "type": "color",
+      "description": "Muted disabled border color for subtle outlines and dividers."
+    },
+    "border-strong": {
+      "value": "{disabled.ink}",
+      "type": "color",
+      "description": "Strong disabled border color for high-emphasis outlines and dividers."
+    },
+    "border-inverse": {
+      "value": "{disabled.ink-inverse}",
+      "type": "color",
+      "description": "Base inverse disabled border color for outlines and dividers on inverse canvases."
+    },
+    "border-inverse-soft": {
+      "value": "{disabled.ink-inverse-soft}",
+      "type": "color",
+      "description": "Soft inverse disabled border color for low-emphasis outlines on inverse canvases."
+    },
+    "border-inverse-muted": {
+      "value": "{disabled.ink-inverse-muted}",
+      "type": "color",
+      "description": "Muted inverse disabled border color for subtle outlines on inverse canvases."
+    },
+    "border-inverse-strong": {
+      "value": "{disabled.ink-inverse}",
+      "type": "color",
+      "description": "Strong inverse disabled border color for high-emphasis outlines on inverse canvases."
+    }
+  },
   "zbk-action": {
     "canvas": {
       "value": "{color.ember-400}",
@@ -2868,116 +2891,116 @@
       "description": "Strong inverse action border color for high-emphasis outlines on inverse canvases."
     }
   },
-  "zbk-caution": {
+  "zbk-info": {
     "canvas": {
-      "value": "{color.gold-500}",
+      "value": "{color.cyan-500}",
       "type": "color",
-      "description": "Base caution canvas color for primary surfaces."
+      "description": "Base info canvas color for primary surfaces."
     },
     "canvas-soft": {
-      "value": "{color.gold-50}",
+      "value": "{color.cyan-50}",
       "type": "color",
-      "description": "Soft caution canvas color for lightly tinted surfaces."
+      "description": "Soft info canvas color for lightly tinted surfaces."
     },
     "canvas-muted": {
-      "value": "{color.gold-100}",
+      "value": "{color.cyan-100}",
       "type": "color",
-      "description": "Muted caution canvas color for low-emphasis surfaces."
+      "description": "Muted info canvas color for low-emphasis surfaces."
     },
     "canvas-strong": {
-      "value": "{color.gold-600}",
+      "value": "{color.cyan-600}",
       "type": "color",
-      "description": "Strong caution canvas color for high-emphasis surfaces."
+      "description": "Strong info canvas color for high-emphasis surfaces."
     },
     "canvas-inverse": {
-      "value": "{color.gold-400}",
+      "value": "{color.cyan-400}",
       "type": "color",
-      "description": "Base inverse caution canvas color for surfaces on dark or inverted contexts."
+      "description": "Base inverse info canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-soft": {
-      "value": "{color.gold-900}",
+      "value": "{color.cyan-900}",
       "type": "color",
-      "description": "Soft inverse caution canvas color for lightly tinted surfaces in inverse contexts."
+      "description": "Soft inverse info canvas color for lightly tinted surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
-      "value": "{color.gold-800}",
+      "value": "{color.cyan-800}",
       "type": "color",
-      "description": "Muted inverse caution canvas color for low-emphasis surfaces in inverse contexts."
+      "description": "Muted inverse info canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-strong": {
-      "value": "{color.gold-300}",
+      "value": "{color.cyan-300}",
       "type": "color",
-      "description": "Strong inverse caution canvas color for high-emphasis surfaces in inverse contexts."
+      "description": "Strong inverse info canvas color for high-emphasis surfaces in inverse contexts."
     },
     "ink": {
-      "value": "{color.gold-700}",
+      "value": "{color.cyan-700}",
       "type": "color",
-      "description": "Base caution ink color for text and icons on neutral or light canvases."
+      "description": "Base info ink color for text and icons on neutral or light canvases."
     },
     "ink-soft": {
-      "value": "{color.gold-500}",
+      "value": "{color.cyan-500}",
       "type": "color",
-      "description": "Soft caution ink color for lower-emphasis text and icons."
+      "description": "Soft info ink color for lower-emphasis text and icons."
     },
     "ink-muted": {
-      "value": "{color.gold-400}",
+      "value": "{color.cyan-400}",
       "type": "color",
-      "description": "Muted caution ink color for subtle or secondary text and icons."
+      "description": "Muted info ink color for subtle or secondary text and icons."
     },
     "ink-inverse": {
-      "value": "{color.gold-300}",
+      "value": "{color.cyan-300}",
       "type": "color",
-      "description": "Base inverse caution ink color for text and icons on inverse or dark canvases."
+      "description": "Base inverse info ink color for text and icons on inverse or dark canvases."
     },
     "ink-inverse-soft": {
-      "value": "{color.gold-400}",
+      "value": "{color.cyan-400}",
       "type": "color",
-      "description": "Soft inverse caution ink color for lower-emphasis text and icons on inverse canvases."
+      "description": "Soft inverse info ink color for lower-emphasis text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
-      "value": "{color.gold-500}",
+      "value": "{color.cyan-500}",
       "type": "color",
-      "description": "Muted inverse caution ink color for subtle text and icons on inverse canvases."
+      "description": "Muted inverse info ink color for subtle text and icons on inverse canvases."
     },
     "border": {
-      "value": "{color.gold-500}",
+      "value": "{color.cyan-500}",
       "type": "color",
-      "description": "Base caution border color for outlines, strokes, and dividers."
+      "description": "Base info border color for outlines, strokes, and dividers."
     },
     "border-soft": {
-      "value": "{color.gold-200}",
+      "value": "{color.cyan-200}",
       "type": "color",
-      "description": "Soft caution border color for low-emphasis outlines and dividers."
+      "description": "Soft info border color for low-emphasis outlines and dividers."
     },
     "border-muted": {
-      "value": "{color.gold-300}",
+      "value": "{color.cyan-300}",
       "type": "color",
-      "description": "Muted caution border color for subtle outlines and dividers."
+      "description": "Muted info border color for subtle outlines and dividers."
     },
     "border-strong": {
-      "value": "{color.gold-600}",
+      "value": "{color.cyan-600}",
       "type": "color",
-      "description": "Strong caution border color for high-emphasis outlines and dividers."
+      "description": "Strong info border color for high-emphasis outlines and dividers."
     },
     "border-inverse": {
-      "value": "{color.gold-500}",
+      "value": "{color.cyan-500}",
       "type": "color",
-      "description": "Base inverse caution border color for outlines and dividers on inverse canvases."
+      "description": "Base inverse info border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-soft": {
-      "value": "{color.gold-800}",
+      "value": "{color.cyan-800}",
       "type": "color",
-      "description": "Soft inverse caution border color for low-emphasis outlines on inverse canvases."
+      "description": "Soft inverse info border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-muted": {
-      "value": "{color.gold-700}",
+      "value": "{color.cyan-700}",
       "type": "color",
-      "description": "Muted inverse caution border color for subtle outlines on inverse canvases."
+      "description": "Muted inverse info border color for subtle outlines on inverse canvases."
     },
     "border-inverse-strong": {
-      "value": "{color.gold-400}",
+      "value": "{color.cyan-400}",
       "type": "color",
-      "description": "Strong inverse caution border color for high-emphasis outlines on inverse canvases."
+      "description": "Strong inverse info border color for high-emphasis outlines on inverse canvases."
     }
   }
 }

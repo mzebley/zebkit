@@ -50,6 +50,19 @@ export type TypeScaleConfig = {
   fluid?: boolean;
 };
 
+export type FontsConfig = {
+  /**
+   * How Google Fonts are delivered:
+   * - 'import' (default): emit a render-blocking `@import` at the top of the compiled CSS.
+   *   Zero HTML changes, but the slowest strategy (request chain, no preconnect/preload).
+   * - 'link' / 'preload': emit NO `@import`; instead write a sidecar `zbk-<theme>.fonts.html`
+   *   with `<link rel="preconnect">` + stylesheet (and preload) tags to paste into `<head>`.
+   * - 'manual': emit nothing remote; you wire up font loading yourself.
+   * Local (`source: "local"`) `@font-face` rules are emitted regardless of strategy.
+   */
+  strategy?: 'import' | 'link' | 'preload' | 'manual';
+};
+
 export type SpaceScaleConfig = {
   /**
    * Opt out of fluid (viewport-interpolated) spacing and emit static spacing instead.
@@ -75,7 +88,7 @@ export type TokensConfig = {
    * e.g. `'[data-zbk-theme="brutalist"]'`. This scopes the token layer
    * (semantic / alias / component custom properties) so a whole theme can apply to a
    * subtree rather than the document root. Primitive color ramps emitted by SCSS remain
-   * global. Unset = current `:root` behavior (backward-compatible).
+   * global. Unset = default `:root` behavior.
    */
   rootSelector?: string;
   exportTokens?: boolean;
@@ -90,6 +103,8 @@ export type TokensConfig = {
   typeScale?: TypeScaleConfig;
   /** Controls how the spacing scale compiles (fluid by default; static opt-out). */
   spaceScale?: SpaceScaleConfig;
+  /** Controls how fonts are loaded (Google Fonts delivery strategy). */
+  fonts?: FontsConfig;
 };
 
 export type ComponentsConfig = {

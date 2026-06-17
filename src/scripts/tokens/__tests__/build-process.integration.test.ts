@@ -26,7 +26,7 @@ describe('build smoke tests', () => {
         includeAllComponents: true,
         destinationPath,
         assetFilePath: '/assets/',
-        theme: 'custom',
+        theme: 'default',
         customTokenPath: CUSTOM_THEME_PATH,
         customThemeName: themeName,
         exportTokens: false,

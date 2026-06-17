@@ -88,7 +88,8 @@ async function buildHeroTheme(
   // Resolve the fluid spacing + font-size scales so generated steps reach the converter
   // fully formed (space first; it reads the shared anchors type-scale then strips).
   const selector = `[data-zbk-theme="${name}"]`;
-  const css = convertTokensToCssVars(
+  // Default `import` strategy: embedded preview CSS self-loads its Google Fonts.
+  const { css } = convertTokensToCssVars(
     resolveTypeScale(resolveSpaceScale(tokens)),
     { layers, selector }
   );

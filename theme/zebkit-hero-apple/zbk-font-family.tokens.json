@@ -1,14 +1,26 @@
 {
   "primary": {
-    "value": "\"Inter\", sans-serif",
-    "description": "Primary family (body + interface)."
+    "value": "\"Inter\"",
+    "description": "Primary family (body + interface).",
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "sans",
+    "weights": "400..700"
   },
   "alt": {
-    "value": "\"Inter\", sans-serif",
-    "description": "Display / heading family."
+    "value": "\"Inter\"",
+    "description": "Display / heading family.",
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "sans",
+    "weights": "400..700"
   },
   "monospace": {
-    "value": "\"JetBrains Mono\", monospace",
-    "description": "Monospace family (code, labels, values)."
+    "value": "\"JetBrains Mono\"",
+    "description": "Monospace family (code, labels, values).",
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "mono",
+    "weights": "400..700"
   }
 }

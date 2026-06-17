@@ -2,9 +2,14 @@ import chalk from "chalk";
 import {
   AllowedTokenTypes,
   TokenInterface,
-  GoogleFontTokenInterface,
-  GoogleFontTokenObject,
+  FontSource,
+  FontFallback,
+  FontFaceObject,
 } from "@definitions/tokens";
+import {
+  FONT_FALLBACK_STACKS,
+  FontFallbackCategory,
+} from "@definitions/font-fallbacks";
 import { a11yMap } from "@definitions/a11y-map";
 import { paletteMap } from "@definitions/palette-map";
 import {
@@ -23,27 +28,11 @@ function join(tokenKey: string, key: string): string {
   return [tokenKey, key].filter(Boolean).join("-");
 }
 
-function tokenTypesCompatibleLoose(
-  type1: AllowedTokenTypes | string,
-  type2: AllowedTokenTypes | string
-): boolean {
-  if (
-    (type1 === "fontFamily" && type2 === "googleFont") ||
-    (type2 === "fontFamily" && type1 === "googleFont")
-  ) {
-    return true;
-  }
-  return areTokensTypesCompatible(
-    type1 as AllowedTokenTypes,
-    type2 as AllowedTokenTypes
-  );
-}
-
 function validateCssReferencesExist(
   value: string,
   type: AllowedTokenTypes | string,
   globalPrefix: string,
-  availableTokens: { [key: string]: TokenInterface | GoogleFontTokenInterface }
+  availableTokens: { [key: string]: TokenInterface }
 ): boolean {
   const tokenPath = value.slice(1, -1).split(".");
   const parent = tokenPath[0] as string;
@@ -55,7 +44,7 @@ function validateCssReferencesExist(
     if (availableTokens[`${globalPrefix}-${parent}`].hasOwnProperty(child)) {
       const tokenType =
         availableTokens[`${globalPrefix}-${parent}`][child].type;
-      if (tokenTypesCompatibleLoose(type, tokenType)) {
+      if (areTokensTypesCompatible(type as AllowedTokenTypes, tokenType as AllowedTokenTypes)) {
         valid = true;
       } else {
         invalidType = true;
@@ -93,7 +82,7 @@ function validateCssReferencesExist(
   if (!valid && !invalidType && tokenAliasMap.hasOwnProperty(parent)) {
     if (typeof tokenAliasMap[parent] === "string") {
       const tokenType = tokenAliasMap[parent] as AllowedTokenTypes;
-      if (tokenTypesCompatibleLoose(type, tokenType)) {
+      if (areTokensTypesCompatible(type as AllowedTokenTypes, tokenType as AllowedTokenTypes)) {
         valid = true;
       } else {
         invalidType = true;
@@ -111,7 +100,7 @@ function validateCssReferencesExist(
       const tokenType = (
         tokenAliasMap[parent] as Record<string, AllowedTokenTypes>
       )[child];
-      if (tokenTypesCompatibleLoose(type, tokenType)) {
+      if (areTokensTypesCompatible(type as AllowedTokenTypes, tokenType as AllowedTokenTypes)) {
         valid = true;
       } else {
         invalidType = true;
@@ -142,7 +131,7 @@ export function convertDotNotation(
   value: string,
   type: AllowedTokenTypes | string,
   globalPrefix: string,
-  availableTokens: { [key: string]: TokenInterface | GoogleFontTokenInterface },
+  availableTokens: { [key: string]: TokenInterface },
   byPass = false
 ): string {
   if (
@@ -163,21 +152,52 @@ export function convertDotNotation(
   return value;
 }
 
+/** How Google Fonts are delivered. `import` (default) emits a render-blocking `@import` in the
+ * CSS; `link`/`preload` emit nothing in CSS and surface a head snippet via `fontHead`; `manual`
+ * emits nothing remote (the consumer wires fonts up themselves). */
+export type FontStrategy = "import" | "link" | "preload" | "manual";
+
 // Options to control where and how CSS variables are emitted.
 export interface CssVarGenerationOptions {
   layers?: Record<string, LayerName>;
   selector?: string;
   defaultLayer?: LayerName;
+  /** Google Fonts delivery strategy. Defaults to `import`. */
+  fontStrategy?: FontStrategy;
+  /** Base path that bare local `@font-face` `src` filenames resolve against. Defaults to `/assets/`. */
+  assetFilePath?: string;
+}
+
+/** Structured `<head>` requirements for `link`/`preload` font strategies, used to write the
+ * sidecar HTML snippet. Empty when the strategy is `import` or `manual`. */
+export interface FontHeadRequirements {
+  preconnect: string[];
+  stylesheets: string[];
+  preloads: string[];
+}
+
+export interface CssVarConversionResult {
+  css: string;
+  fontImports: string[];
+  fontFaces: string[];
+  fontHead: FontHeadRequirements;
 }
 
 /**
- * Converts validated token maps into a CSS custom properties string.
+ * Converts validated token maps into CSS custom properties, plus the font loading artifacts
+ * (Google `@import`s, `@font-face` blocks, and head requirements) derived from font tokens.
  */
 export const convertTokensToCssVars = (
-  tokens: { [key: string]: TokenInterface | GoogleFontTokenInterface },
+  tokens: { [key: string]: TokenInterface },
   options: CssVarGenerationOptions = {}
-): string => {
-  const { layers = {}, selector = ":root", defaultLayer = DEFAULT_LAYER } = options;
+): CssVarConversionResult => {
+  const {
+    layers = {},
+    selector = ":root",
+    defaultLayer = DEFAULT_LAYER,
+    fontStrategy = "import",
+    assetFilePath,
+  } = options;
   const perLayer: Record<LayerName, string> = {
     theme: "",
     base: "",
@@ -185,6 +205,10 @@ export const convertTokensToCssVars = (
     utilities: "",
   };
   const fontImports: Set<string> = new Set();
+  const fontFaces: Set<string> = new Set();
+  const headPreconnect: Set<string> = new Set();
+  const headStylesheets: Set<string> = new Set();
+  const headPreloads: Set<string> = new Set();
 
   Object.entries(tokens).forEach(([key, tokenProperties]) => {
     const layer = layers[key] ?? defaultLayer;
@@ -198,24 +222,58 @@ export const convertTokensToCssVars = (
         return;
       }
 
-      if (item && typeof item === "object" && "value" in item) {
-        let cssVariableValue: string | number = item.value as string | number;
+      // Font-family tokens get bespoke handling: normalize the shape, append the fallback stack,
+      // and emit the relevant loading artifact (Google request or `@font-face`) based on `source`.
+      if (isFontToken(item)) {
+        const norm = normalizeFontToken(item as Record<string, unknown>);
+        const rawValue = norm.value;
+        const isReference = rawValue.startsWith("{") && rawValue.endsWith("}");
 
-        if ("type" in item && item.type === "googleFont") {
-          const importString = buildGoogleFontImport(
-            item as GoogleFontTokenObject
-          );
-          if (importString) {
-            fontImports.add(importString);
-          }
-        } else {
+        let cssVariableValue: string;
+        if (isReference) {
+          // Pure alias — resolve to a var(); never append a fallback (the target carries its own).
           cssVariableValue = convertDotNotation(
-            String(item.value),
-            item.type as AllowedTokenTypes,
+            rawValue,
+            "fontFamily",
             ZEBKIT_PREFIX,
             tokens as Record<string, TokenInterface>
           );
+        } else {
+          cssVariableValue = applyFallback(rawValue, norm.fallback);
+          if (norm.source === "google") {
+            const url = buildGoogleFontUrl(norm);
+            if (url) {
+              const href = `${url}&display=swap`;
+              if (fontStrategy === "import") {
+                fontImports.add(`@import url('${href}');`);
+              } else if (fontStrategy === "link" || fontStrategy === "preload") {
+                headPreconnect.add("https://fonts.googleapis.com");
+                headPreconnect.add("https://fonts.gstatic.com");
+                headStylesheets.add(href);
+                if (fontStrategy === "preload") headPreloads.add(href);
+              }
+              // `manual`: emit nothing remote.
+            }
+          } else if (norm.source === "local") {
+            for (const block of buildFontFaceBlocks(norm, assetFilePath)) {
+              fontFaces.add(block);
+            }
+          }
         }
+
+        currentStyles += `--${cssVariableKey}: ${cssVariableValue};\n`;
+        return;
+      }
+
+      if (item && typeof item === "object" && "value" in item) {
+        let cssVariableValue: string | number = item.value as string | number;
+
+        cssVariableValue = convertDotNotation(
+          String(item.value),
+          item.type as AllowedTokenTypes,
+          ZEBKIT_PREFIX,
+          tokens as Record<string, TokenInterface>
+        );
 
         const baseValue = String(cssVariableValue);
 
@@ -242,8 +300,12 @@ export const convertTokensToCssVars = (
     perLayer[layer] += currentStyles;
   });
 
-  const imports = Array.from(fontImports).join("\n");
-  let css = imports ? `${imports}\n` : "";
+  const importLines = Array.from(fontImports);
+  const faceBlocks = Array.from(fontFaces);
+
+  let css = "";
+  if (importLines.length) css += `${importLines.join("\n")}\n`;
+  if (faceBlocks.length) css += `${faceBlocks.join("\n")}\n`;
   css += "@layer theme, base, components, utilities;\n\n";
 
   for (const layer of LAYER_ORDER) {
@@ -252,36 +314,148 @@ export const convertTokensToCssVars = (
     css += `@layer ${layer} {\n${body}}\n\n`;
   }
 
-  return css;
+  return {
+    css,
+    fontImports: importLines,
+    fontFaces: faceBlocks,
+    fontHead: {
+      preconnect: Array.from(headPreconnect),
+      stylesheets: Array.from(headStylesheets),
+      preloads: Array.from(headPreloads),
+    },
+  };
 };
 
-function buildGoogleFontImport(item: GoogleFontTokenObject): string | null {
-  const family = String(item.value || "")
+/** Normalized font token, source-agnostic, used by the converter's font handling. */
+interface NormalizedFontToken {
+  value: string;
+  source: FontSource;
+  fallback?: FontFallback;
+  weights?: string | Array<string | number>;
+  styles?: Array<"normal" | "italic">;
+  faces?: FontFaceObject[];
+  display?: string;
+}
+
+function isFontToken(item: unknown): boolean {
+  return (
+    !!item &&
+    typeof item === "object" &&
+    "type" in item &&
+    (item as { type?: unknown }).type === "fontFamily"
+  );
+}
+
+/** Reads a font token's fields into a source-agnostic shape, defaulting `source` to `system`. */
+function normalizeFontToken(item: Record<string, unknown>): NormalizedFontToken {
+  return {
+    value: String(item.value ?? ""),
+    source: (item.source as FontSource) ?? "system",
+    fallback: item.fallback as FontFallback | undefined,
+    weights: item.weights as NormalizedFontToken["weights"],
+    styles: item.styles as NormalizedFontToken["styles"],
+    faces: item.faces as FontFaceObject[] | undefined,
+    display: item.display as string | undefined,
+  };
+}
+
+/** First family in a value, stripped of quotes and fallbacks (e.g. `"Inter", sans` -> `Inter`). */
+function familyName(value: string): string {
+  return String(value || "")
     .split(",")[0]
     .replace(/['"]/g, "")
     .trim();
+}
+
+/** Appends the canonical fallback stack for a category to a concrete family value. */
+function applyFallback(value: string, fallback?: FontFallback): string {
+  if (!fallback) return value;
+  const stack = FONT_FALLBACK_STACKS[fallback as FontFallbackCategory];
+  return stack ? `${value}, ${stack}` : value;
+}
+
+/** Weight tokens for the css2 axis: a range string stays a single token, an array is preserved. */
+function normalizeWeightTokens(weights: NormalizedFontToken["weights"]): string[] {
+  if (Array.isArray(weights)) {
+    return weights.map((w) => String(w).trim()).filter(Boolean);
+  }
+  if (typeof weights === "string" && weights.trim()) {
+    return [weights.trim()];
+  }
+  return [];
+}
+
+/** Builds the Google Fonts css2 URL (without `&display=swap`) for a normalized token. */
+function buildGoogleFontUrl(norm: NormalizedFontToken): string | null {
+  const family = familyName(norm.value);
   if (!family) return null;
 
-  let url = `family=${family.replace(/\s+/g, "+")}`;
-  const weights = (item.weights || "").trim();
-  if (weights) {
-    const cleaned = weights
-      .split(",")
-      .map((w) => w.trim())
-      .filter(Boolean);
-    if (cleaned.length) {
-      if (item.variable) {
-        // Variable font range: first..last or single value
-        if (cleaned.length === 1) {
-          url += `:wght@${cleaned[0]}`;
-        } else {
-          url += `:wght@${cleaned[0]}..${cleaned[cleaned.length - 1]}`;
-        }
-      } else {
-        url += `:wght@${cleaned.join(";")}`;
-      }
+  const fam = family.replace(/\s+/g, "+");
+  const italic = Array.isArray(norm.styles) && norm.styles.includes("italic");
+  const weightTokens = normalizeWeightTokens(norm.weights);
+
+  let axis = "";
+  if (weightTokens.length) {
+    if (italic) {
+      // ital-major ordering: all upright weights, then all italics.
+      const tuples = [
+        ...weightTokens.map((w) => `0,${w}`),
+        ...weightTokens.map((w) => `1,${w}`),
+      ];
+      axis = `:ital,wght@${tuples.join(";")}`;
+    } else {
+      axis = `:wght@${weightTokens.join(";")}`;
     }
+  } else if (italic) {
+    axis = `:ital@0;1`;
   }
 
-  return `@import url('https://fonts.googleapis.com/css2?${url}&display=swap');\n`;
+  return `https://fonts.googleapis.com/css2?family=${fam}${axis}`;
+}
+
+const FONT_FORMAT_BY_EXT: Record<string, string> = {
+  woff2: "woff2",
+  woff: "woff",
+  ttf: "truetype",
+  otf: "opentype",
+  eot: "embedded-opentype",
+  svg: "svg",
+};
+
+function inferFontFormat(src: string): string | undefined {
+  const ext = src.split("?")[0].split(".").pop()?.toLowerCase();
+  return ext ? FONT_FORMAT_BY_EXT[ext] : undefined;
+}
+
+/** Bare filenames resolve against `assetFilePath`; `/`, `http(s)://`, `//`, and `.` are verbatim. */
+function resolveFontSrc(src: string, assetFilePath?: string): string {
+  if (/^(https?:)?\/\//.test(src) || src.startsWith("/") || src.startsWith(".")) {
+    return src;
+  }
+  const base = assetFilePath ?? "/assets/";
+  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
+  return `${normalizedBase}${src}`;
+}
+
+/** Builds one `@font-face` block per face for a local (self-hosted) font token. */
+function buildFontFaceBlocks(
+  norm: NormalizedFontToken,
+  assetFilePath?: string
+): string[] {
+  const family = familyName(norm.value);
+  if (!family || !Array.isArray(norm.faces)) return [];
+
+  return norm.faces.map((face) => {
+    const url = resolveFontSrc(face.src, assetFilePath);
+    const format = face.format ?? inferFontFormat(face.src);
+    const srcLine = format ? `url("${url}") format("${format}")` : `url("${url}")`;
+
+    const lines = [`  font-family: "${family}";`, `  src: ${srcLine};`];
+    if (face.weight != null) lines.push(`  font-weight: ${face.weight};`);
+    if (face.style) lines.push(`  font-style: ${face.style};`);
+    lines.push(`  font-display: ${face.display ?? norm.display ?? "swap"};`);
+    if (face.unicodeRange) lines.push(`  unicode-range: ${face.unicodeRange};`);
+
+    return `@font-face {\n${lines.join("\n")}\n}`;
+  });
 }

@@ -341,8 +341,9 @@
     padding-block: var(--nav-padding-block);
     background: var(--nav-canvas);
     border-block-end: var(--nav-border-width) solid var(--zbk-app-border);
-    max-height: var(--nav-max-height);
+    min-height: var(--nav-min-height);
     position: var(--nav-position);
+    /* TODO: Spacing tokens no longer in sync with base zebkit, need to do some js to grab the navbar height, watch it for resizes in case of a11y changes, and set that to the top positioning of this element so it sticks to the right place  */
     top: var(--nav-top);
     font-size: var(--nav-font-size);
     font-family: var(--nav-font-family);
@@ -352,10 +353,10 @@
   }
 
   [data-zbk-theme="apple"] {
-    --nav-max-height: 44px;
+    --nav-min-height: var(--zbk-spacing-3);
     --nav-position: sticky;
     --nav-padding-block: 0;
-    --nav-padding-inline: 22px;
+    --nav-padding-inline: var(--zbk-spacing-2);
     --nav-top: var(--zbk-spacing-205);
     --nav-justify: center;
     --nav-font-size: var(--zbk-font-size-sm);
@@ -369,7 +370,7 @@
     --nav-gap: var(--zbk-spacing-2);
     --nav-link-gap: var(--zbk-spacing-2);
 
-    --wordmark-height: 12px;
+    --wordmark-height: var(--zbk-spacing-1);
     --wordmark-ink: currentColor;
   }
   .wordmark {
@@ -442,7 +443,7 @@
   }
 
   [data-zbk-theme="apple"] {
-    --influence-link-gap: 0.24em;
+    --influence-link-gap: var(--zbk-spacing-0);
     --influence-link-padding-block: var(--zbk-spacing-05);
     --influence-link-padding-inline: var(--zbk-spacing-05);
     --influence-link-ink: var(--zbk-action-ink);
@@ -455,13 +456,13 @@
     --influence-link-border-color-hover: transparent;
     --influence-link-text-decoration: none;
     --influence-link-text-decoration-hover: underline;
-    --influence-link-icon-size: var(--zbk-font-size-lg);
+    --influence-link-icon-size: var(--zbk-font-size-md);
     --influence-link-icon-content: "\ea6e";
-    --influence-link-font-size: var(--zbk-font-size-md);
+    --influence-link-font-size: var(--zbk-font-size-sm);
     --influence-link-font-family: var(--zbk-font-family-primary);
     --influence-link-font-weight: 400;
-    --influence-link-line-height: 1.4705882353;
-    --influence-link-letter-spacing: -0.022em;
+    --influence-link-line-height: var(--zbk-line-height-4);
+    --influence-link-letter-spacing: var(--zbk-letter-spacing-tighter);
   }
 
   /* Intro */
@@ -491,16 +492,16 @@
   [data-zbk-theme="apple"] {
     --intro-align: center;
     --intro-h1-align: center;
-    --intro-padding-block: 56px;
-    --intro-padding-inline: 17px;
+    --intro-padding-block: var(--zbk-spacing-6);
+    --intro-padding-inline: var(--zbk-spacing-3);
     --intro-canvas: var(--zbk-app-canvas);
 
     --lede-align: center;
     --lede-font-size: var(--zbk-font-size-lg);
     --lede-measure: 64ch;
-    --lede-margin-block-start: 1em;
-    --lede-margin-block-end: 17px;
-    --lede-line-height: 1.1428571429;
+    --lede-margin-block-start: var(--zbk-spacing-105);
+    --lede-margin-block-end: var(--zbk-spacing-105);
+    --lede-line-height: var(--zbk-line-height-3);
     --lede-font-weight: 300;
 
     .zbk-button--outline {
@@ -517,7 +518,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--zbk-button-group-gap);
-    margin-block-start: var(--zbk-spacing-05);
+    margin-block-start: var(--zbk-spacing-105);
   }
 
   /* Section index */

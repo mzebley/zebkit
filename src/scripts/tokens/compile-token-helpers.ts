@@ -96,20 +96,19 @@ export function mergeTokens(
         value: overrideValue,
       };
 
-      // Allow overrides to carry Google-font import metadata. A theme may swap to a
-      // family whose weight axis differs from the base font's (e.g. a static family
-      // needs discrete `weights` and `variable: false`, not the base family's variable
-      // range), and the emitted @import must follow the override, not the base. All
-      // other metadata (type, a11y, etc.) stays base-controlled. The schema parse below
-      // validates the merged result.
+      // Allow overrides to carry font metadata. A theme may swap to a family whose loading
+      // differs from the base font's (a different `source`, weight axis, fallback category, or
+      // self-hosted `faces`), and the emitted import/@font-face must follow the override, not the
+      // base. Type and a11y stay base-controlled. The schema parse below validates the result.
       if (
         typeof customValue === 'object' &&
         customValue !== null &&
         !Array.isArray(customValue)
       ) {
         const meta = customValue as Record<string, unknown>;
-        if ('variable' in meta) (nextToken as Record<string, unknown>).variable = meta.variable;
-        if ('weights' in meta) (nextToken as Record<string, unknown>).weights = meta.weights;
+        for (const field of ['source', 'fallback', 'weights', 'styles', 'faces', 'display']) {
+          if (field in meta) (nextToken as Record<string, unknown>)[field] = meta[field];
+        }
       }
 
       if (subSchema) {

@@ -27,7 +27,10 @@ export const navigation: NavSection[] = [
   },
   {
     label: 'Typography',
-    items: [{ label: 'Type scaling', link: '/typography/type-scale' }]
+    items: [
+      { label: 'Type scaling', link: '/typography/type-scale' },
+      { label: 'Fonts', link: '/typography/fonts' }
+    ]
   },
   {
     label: 'Spacing',

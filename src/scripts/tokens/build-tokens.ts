@@ -17,7 +17,10 @@ import {
   buildZebkitVariants,
   VariantRegistry,
 } from "@token-scripts/compile-variants";
-import { convertTokensToCssVars } from "@token-scripts/token-converter";
+import {
+  convertTokensToCssVars,
+  FontHeadRequirements,
+} from "@token-scripts/token-converter";
 import { resolveTypeScale } from "@token-scripts/build-type-scale";
 import { resolveSpaceScale } from "@token-scripts/build-space-scale";
 import { compileSass, CompileSassOptions } from "@token-scripts/compile-css";
@@ -167,18 +170,7 @@ export async function runTokenBuild(
       ? destinationPath
       : path.resolve(process.cwd(), destinationPath);
 
-    const configuredTheme =
-      tokensConfig?.theme === "custom"
-        ? DEFAULT_THEME_NAME
-        : tokensConfig?.theme ?? DEFAULT_THEME_NAME;
-
-    if (tokensConfig?.theme === "custom") {
-      console.warn(
-        chalk.yellow(
-          'Config value "theme": "custom" is deprecated. Using "default" as the base theme and applying customTokenPath as an override layer.'
-        )
-      );
-    }
+    const configuredTheme = tokensConfig?.theme ?? DEFAULT_THEME_NAME;
 
     const themeAnswers = tokensConfig
       ? {
@@ -402,7 +394,13 @@ export async function runTokenBuild(
         delete cssVarTokens[breakpointKey];
       }
     }
-    const cssVars = convertTokensToCssVars(cssVarTokens, { layers, selector: rootSelector });
+    const fontStrategy = tokensConfig?.fonts?.strategy ?? "import";
+    const { css: cssVars, fontHead } = convertTokensToCssVars(cssVarTokens, {
+      layers,
+      selector: rootSelector,
+      fontStrategy,
+      assetFilePath,
+    });
     const tokenLookupOutputPath = resolveLookupOutputPath(
       tokensConfig?.tokenLookupOutputPath,
       resolvedDestinationPath
@@ -479,6 +477,20 @@ export async function runTokenBuild(
 
     await compileSass(sassOptions);
 
+    // For non-import strategies, write the sidecar `<head>` snippet (preconnect + stylesheet/
+    // preload tags) the consumer pastes into their document head.
+    if (
+      (fontStrategy === "link" || fontStrategy === "preload") &&
+      (fontHead.stylesheets.length > 0 || fontHead.preloads.length > 0)
+    ) {
+      const snippetPath = path.join(
+        resolvedDestinationPath,
+        `zbk-${themeName.toLowerCase()}.fonts.html`
+      );
+      await fs.writeFile(snippetPath, buildFontHeadHtml(fontHead));
+      console.log(chalk.green(`Font head snippet written to ${snippetPath}`));
+    }
+
     if (writeTokenLookupFlag) {
       const lookupMap = buildTokenLookup(tokens);
       await writeTokenLookupFile(tokenLookupOutputPath, lookupMap);
@@ -502,6 +514,27 @@ export async function runTokenBuild(
       process.exit(1);
     }
   }
+}
+
+/**
+ * Builds the sidecar `<head>` HTML snippet for `link`/`preload` font strategies. Google's
+ * gstatic preconnect requires `crossorigin`; preloads precede the stylesheet links.
+ */
+function buildFontHeadHtml(fontHead: FontHeadRequirements): string {
+  const lines: string[] = [
+    "<!-- Zebkit font tags. Paste into your document <head>, before your stylesheet. -->",
+  ];
+  for (const origin of fontHead.preconnect) {
+    const crossorigin = origin.includes("gstatic") ? " crossorigin" : "";
+    lines.push(`<link rel="preconnect" href="${origin}"${crossorigin}>`);
+  }
+  for (const href of fontHead.preloads) {
+    lines.push(`<link rel="preload" as="style" href="${href}">`);
+  }
+  for (const href of fontHead.stylesheets) {
+    lines.push(`<link rel="stylesheet" href="${href}">`);
+  }
+  return `${lines.join("\n")}\n`;
 }
 
 async function writeTokenLookupFile(

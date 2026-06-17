@@ -1,23 +1,26 @@
 {
   "primary": {
-    "value": "\"IBM Plex Sans\", sans-serif",
+    "value": "\"IBM Plex Sans\"",
     "description": "Primary family (body + interface) — IBM Plex Sans.",
-    "variable": false,
-    "weights": "300,400,600",
-    "type": "googleFont"
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "sans",
+    "weights": [300, 400, 600]
   },
   "alt": {
-    "value": "\"IBM Plex Sans\", sans-serif",
+    "value": "\"IBM Plex Sans\"",
     "description": "Display / heading family — Carbon uses Plex Sans for headings.",
-    "variable": false,
-    "weights": "300,400,600",
-    "type": "googleFont"
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "sans",
+    "weights": [300, 400, 600]
   },
   "monospace": {
-    "value": "\"IBM Plex Mono\", monospace",
+    "value": "\"IBM Plex Mono\"",
     "description": "Monospace family (code, labels, values) — IBM Plex Mono.",
-    "variable": false,
-    "weights": "400,500",
-    "type": "googleFont"
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "mono",
+    "weights": [400, 500]
   }
 }

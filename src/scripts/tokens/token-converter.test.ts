@@ -13,18 +13,147 @@ describe('convertTokensToCssVars — selector scoping (rootSelector)', () => {
   } as unknown as { [key: string]: TokenInterface };
 
   it('defaults to :root when no selector is given', () => {
-    const css = convertTokensToCssVars(tokens);
+    const { css } = convertTokensToCssVars(tokens);
     expect(css).toContain(':root {');
     expect(css).toContain('--zbk-app-canvas: #ffffff;');
   });
 
   it('emits variables under a custom selector when one is provided', () => {
-    const css = convertTokensToCssVars(tokens, {
+    const { css } = convertTokensToCssVars(tokens, {
       selector: '[data-zbk-theme="brutalist"]',
     });
     expect(css).toContain('[data-zbk-theme="brutalist"] {');
     expect(css).toContain('--zbk-app-canvas: #ffffff;');
     // Scoped output must not leak token vars onto :root.
     expect(css).not.toContain(':root {');
+  });
+});
+
+describe('convertTokensToCssVars — font tokens', () => {
+  const fontTokens = (
+    props: Record<string, unknown>
+  ): { [key: string]: TokenInterface } =>
+    ({
+      'zbk-font-family': { primary: { description: 'primary', ...props } },
+    } as unknown as { [key: string]: TokenInterface });
+
+  it('appends the canonical fallback stack to a concrete value', () => {
+    const { css } = convertTokensToCssVars(
+      fontTokens({ value: '"Inter"', type: 'fontFamily', source: 'system', fallback: 'sans' })
+    );
+    expect(css).toContain('--zbk-font-family-primary: "Inter", ui-sans-serif, system-ui');
+  });
+
+  it('does not append a fallback to a reference value', () => {
+    const { css } = convertTokensToCssVars({
+      'zbk-font-family': {
+        primary: { value: '"Inter"', type: 'fontFamily', source: 'system' },
+        body: {
+          value: '{font-family.primary}',
+          type: 'fontFamily',
+          fallback: 'sans',
+          description: 'body',
+        },
+      },
+    } as unknown as { [key: string]: TokenInterface });
+    expect(css).toContain('--zbk-font-family-body: var(--zbk-font-family-primary);');
+    expect(css).not.toContain('--zbk-font-family-body: var(--zbk-font-family-primary), ui-sans-serif');
+  });
+
+  it('system source emits a plain var with no @import or @font-face', () => {
+    const result = convertTokensToCssVars(
+      fontTokens({
+        value: 'ui-sans-serif, system-ui, sans-serif',
+        type: 'fontFamily',
+        source: 'system',
+      })
+    );
+    expect(result.css).not.toContain('@import');
+    expect(result.css).not.toContain('@font-face');
+    expect(result.fontImports).toHaveLength(0);
+  });
+
+  it('google variable range builds a wght@min..max css2 URL (import strategy)', () => {
+    const result = convertTokensToCssVars(
+      fontTokens({
+        value: '"Inter"',
+        type: 'fontFamily',
+        source: 'google',
+        weights: '200..800',
+      })
+    );
+    expect(result.fontImports[0]).toContain(
+      "https://fonts.googleapis.com/css2?family=Inter:wght@200..800&display=swap"
+    );
+  });
+
+  it('google static array builds a semicolon-joined wght list', () => {
+    const result = convertTokensToCssVars(
+      fontTokens({
+        value: '"Fira Code"',
+        type: 'fontFamily',
+        source: 'google',
+        weights: [400, 500, 700],
+      })
+    );
+    expect(result.fontImports[0]).toContain('family=Fira+Code:wght@400;500;700');
+  });
+
+  it('google italic composes the ital axis combinatorially with weights', () => {
+    const result = convertTokensToCssVars(
+      fontTokens({
+        value: '"Inter"',
+        type: 'fontFamily',
+        source: 'google',
+        weights: [400, 700],
+        styles: ['normal', 'italic'],
+      })
+    );
+    expect(result.fontImports[0]).toContain('family=Inter:ital,wght@0,400;0,700;1,400;1,700');
+  });
+
+  it('link strategy emits no @import and populates fontHead', () => {
+    const result = convertTokensToCssVars(
+      fontTokens({
+        value: '"Inter"',
+        type: 'fontFamily',
+        source: 'google',
+        weights: '200..800',
+      }),
+      { fontStrategy: 'link' }
+    );
+    expect(result.css).not.toContain('@import');
+    expect(result.fontImports).toHaveLength(0);
+    expect(result.fontHead.preconnect).toContain('https://fonts.gstatic.com');
+    expect(result.fontHead.stylesheets[0]).toContain('css2?family=Inter:wght@200..800');
+  });
+
+  it('local source emits @font-face, resolving bare src against assetFilePath', () => {
+    const result = convertTokensToCssVars(
+      fontTokens({
+        value: '"Brand Sans"',
+        type: 'fontFamily',
+        source: 'local',
+        faces: [{ src: 'BrandSans.woff2', weight: '100 900', style: 'normal' }],
+      }),
+      { assetFilePath: '/fonts/' }
+    );
+    expect(result.fontFaces[0]).toContain('font-family: "Brand Sans";');
+    expect(result.fontFaces[0]).toContain('src: url("/fonts/BrandSans.woff2") format("woff2");');
+    expect(result.fontFaces[0]).toContain('font-weight: 100 900;');
+    expect(result.css).toContain('@font-face {');
+  });
+
+  it('local source uses verbatim src for absolute/remote URLs', () => {
+    const result = convertTokensToCssVars(
+      fontTokens({
+        value: '"Brand Sans"',
+        type: 'fontFamily',
+        source: 'local',
+        faces: [{ src: 'https://cdn.example/BrandSans.woff2' }],
+      }),
+      { assetFilePath: '/fonts/' }
+    );
+    expect(result.fontFaces[0]).toContain('url("https://cdn.example/BrandSans.woff2")');
   });
 });

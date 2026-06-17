@@ -1,23 +1,26 @@
 {
   "primary": {
-    "value": "\"Roboto\", sans-serif",
+    "value": "\"Roboto\"",
     "description": "Primary family (body + interface) — Roboto, the Material typeface.",
-    "variable": false,
-    "weights": "400,500,700",
-    "type": "googleFont"
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "sans",
+    "weights": [400, 500, 700]
   },
   "alt": {
-    "value": "\"Roboto\", sans-serif",
+    "value": "\"Roboto\"",
     "description": "Display / heading family — Material uses Roboto across the type scale.",
-    "variable": false,
-    "weights": "400,500,700",
-    "type": "googleFont"
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "sans",
+    "weights": [400, 500, 700]
   },
   "monospace": {
-    "value": "\"Roboto Mono\", monospace",
+    "value": "\"Roboto Mono\"",
     "description": "Monospace family (code, labels, values) — Roboto Mono.",
-    "variable": false,
-    "weights": "400,500",
-    "type": "googleFont"
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "mono",
+    "weights": [400, 500]
   }
 }

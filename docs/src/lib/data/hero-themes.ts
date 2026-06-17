@@ -26,10 +26,10 @@ export interface HeroTheme {
 export const heroThemes: HeroTheme[] = [
   { name: 'apple', label: "Cupertino'd", blurb: 'Calm minimalism — off-white canvas, SF system type, system blue.', source: 'Apple', href: 'https://developer.apple.com/design/human-interface-guidelines/' },
   { name: 'material', label: 'Materialist', blurb: 'Material You — lilac primary, soft rounded shapes, pill buttons, Roboto.', source: 'Material', href: 'https://m3.material.io/' },
+  { name: 'fluent', label: 'Fluently', blurb: 'Acrylic calm — Fluent 2 brand blue, Segoe-style sans, soft 4px corners.', source: 'Fluent', href: 'https://fluent2.microsoft.design/' },
   { name: 'atlassian', label: 'Confluenced', blurb: 'Workspace blue — Atlassian blue, Inter UI, crisp 4px corners.', source: 'Atlassian', href: 'https://atlassian.design/' },
   { name: 'carbon', label: 'Carbon copy', blurb: 'Industrial grid — IBM Plex, electric blue, razor-sharp corners.', source: 'Carbon', href: 'https://carbondesignsystem.com/' },
-  { name: 'uber', label: 'Uberesque', blurb: 'Monochrome motion — black buttons, Base Blue accent, Manrope display.', source: 'Base', href: 'https://base.uber.com/' },
-  { name: 'fluent', label: 'Redmond\'d', blurb: 'Acrylic calm — Fluent 2 brand blue, Segoe-style sans, soft 4px corners.', source: 'Fluent', href: 'https://fluent2.microsoft.design/' }
+  { name: 'uber', label: 'Uberesque', blurb: 'Monochrome motion — black buttons, Base Blue accent, Manrope display.', source: 'Base', href: 'https://base.uber.com/' }
 ];
 
 const diffs = rawDiffs as Record<HeroThemeName, Record<string, string>>;

@@ -85,6 +85,7 @@ Zebkit generates utility classes via SCSS generators in `src/core/styles/mixins/
 - **Tokens over hard-coded values**: Every visual decision is a token; direct values only in primitives
 - **Composable HTML**: Components use light DOM with progressive enhancement
 - **Deterministic overrides**: Re-theming happens through tokens, not component internals
+- **Pre-release, no back-compat**: The project has not shipped. When updating an existing feature, change it cleanly — do NOT add backward-compatibility shims, legacy fallbacks, deprecation paths, or dual-format support. Migrate callers/data to the new shape instead.
 
 ## Component Authoring
 

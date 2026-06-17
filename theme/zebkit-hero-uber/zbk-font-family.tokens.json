@@ -1,23 +1,26 @@
 {
   "primary": {
-    "value": "\"Manrope\", sans-serif",
+    "value": "\"Manrope\"",
     "description": "Primary family (body + interface) — Manrope, a geometric stand-in for Uber Move.",
-    "variable": true,
-    "weights": "400,800",
-    "type": "googleFont"
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "sans",
+    "weights": "400..800"
   },
   "alt": {
-    "value": "\"Manrope\", sans-serif",
+    "value": "\"Manrope\"",
     "description": "Display / heading family — Manrope at heavier weights for Uber's bold headlines.",
-    "variable": true,
-    "weights": "400,800",
-    "type": "googleFont"
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "sans",
+    "weights": "400..800"
   },
   "monospace": {
-    "value": "\"JetBrains Mono\", monospace",
+    "value": "\"JetBrains Mono\"",
     "description": "Monospace family (code, labels, values).",
-    "variable": true,
-    "weights": "400,700",
-    "type": "googleFont"
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "mono",
+    "weights": "400..700"
   }
 }
