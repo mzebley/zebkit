@@ -13,7 +13,7 @@
 
   font-size: var(--zbk-font-size-md);
   line-height: var(--editorial-baseline);
-  min-height: 100dvh;
+  min-height: calc(100dvh - var(--zbk-spacing-205));
 }
 
 /* Main editorial column — comfortable measure for reading */
@@ -26,29 +26,9 @@
   font-family: var(--zbk-font-family-alt);
 }
 
-.editorial-main h1 {
+h1.display {
   /* Page-level h1 (hero display uses the larger 4xl/5xl steps in the docs theme). */
   font-size: var(--zbk-font-size-5xl);
-}
-
-.editorial-main h2 {
-  font-size: var(--zbk-font-size-3xl);
-}
-
-.editorial-main h3 {
-  font-size: var(--zbk-font-size-2xl);
-}
-
-.editorial-main h4,
-.editorial-main h5,
-.editorial-main h6 {
-  font-size: var(--zbk-font-size-lg);
-}
-
-/* Paragraphs and block content — baseline rhythm */
-.editorial-main :is(p, ul, ol, blockquote, pre) {
-  margin-block-start: 0;
-  margin-block-end: var(--editorial-gap);
 }
 
 /* Code blocks — monospace font from tokens */

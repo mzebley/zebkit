@@ -6,15 +6,31 @@ export interface NavItem {
   link: string;
 }
 
-export interface NavSection {
+// A section is either a collapsible group (`items`) or a direct link (`link`).
+// Use the direct-link form for top-level destinations that don't warrant an
+// accordion (Home, single-page sections).
+export interface NavGroup {
   label: string;
   items: NavItem[];
+  link?: never;
 }
+
+export interface NavLink {
+  label: string;
+  link: string;
+  items?: never;
+}
+
+export type NavSection = NavGroup | NavLink;
 
 export const navigation: NavSection[] = [
   {
     label: 'Home',
-    items: [{ label: 'Home', link: '/' }]
+    link: '/'
+  },
+  {
+    label: 'CLI',
+    link: '/cli'
   },
   {
     label: 'Foundations',
@@ -42,7 +58,7 @@ export const navigation: NavSection[] = [
   },
   {
     label: 'Tokens',
-    items: [{ label: 'Browse all', link: '/tokens' }]
+    link: '/tokens'
   },
   {
     label: 'Color',
@@ -79,6 +95,6 @@ export const navigation: NavSection[] = [
   },
   {
     label: 'For Agents',
-    items: [{ label: 'Machine-readable', link: '/agents' }]
+    link: '/agents'
   }
 ];

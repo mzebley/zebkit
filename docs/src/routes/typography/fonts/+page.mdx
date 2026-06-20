@@ -113,6 +113,12 @@ you paste in once. Configure it in your zebkit config:
 { "tokens": { "fonts": { "strategy": "link" } } }
 ```
 
+Or set it from the [CLI](/cli#get-and-set-single-values):
+
+```bash
+zebkit config set tokens.fonts.strategy link
+```
+
 | `strategy`          | Output                                                            |
 | ------------------- | ---------------------------------------------------------------- |
 | `import` *(default)*| Render-blocking `@import` in the CSS. No HTML changes needed.    |

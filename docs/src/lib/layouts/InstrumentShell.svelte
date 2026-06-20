@@ -62,6 +62,7 @@
       label="Inspector"
       peekRequest={ui.inspectPeek}
       showToggle={false}
+      width='var(--zbk-spacing-card)'
     >
       <div class="rail-vessel">
         {@render rail()}

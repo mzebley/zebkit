@@ -21,6 +21,24 @@
     "source": "google",
     "fallback": "mono"
   },
+  "system-sans": {
+    "value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
+    "description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
+    "type": "fontFamily",
+    "source": "system"
+  },
+  "system-serif": {
+    "value": "ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif",
+    "description": "System serif stack. Zero network cost.",
+    "type": "fontFamily",
+    "source": "system"
+  },
+  "system-mono": {
+    "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+    "description": "System monospace stack. Zero network cost.",
+    "type": "fontFamily",
+    "source": "system"
+  },
   "interface": {
     "value": "{font-family.primary}",
     "description": "Font family used for things like buttons or input fields.",

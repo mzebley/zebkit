@@ -14,7 +14,7 @@ const tokens = {
       "Font size for P elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-size": {
-    value: `{font-size.md}`,
+    value: `{font-size.sm}`,
     type: "fontSize",
     description:
       "Font size for P elements with .prose applied directly or that are a child of a .prose container.",
@@ -50,7 +50,7 @@ const tokens = {
       "Amount of margin inline start for P elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-after": {
-    value: `{spacing.2}`,
+    value: `{spacing.05}`,
     type: "spacing",
     description:
       "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container.",

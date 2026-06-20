@@ -149,6 +149,8 @@ so the runtime dial keeps working — they just don't respond to the viewport.
 }
 ```
 
+Or from the [CLI](/cli#get-and-set-single-values): `zebkit config set tokens.typeScale.static true`.
+
 `fluid: false` is accepted as an alias for `static: true`. In static mode each step's `index`
 is ignored and its authored `value` is used — so add a `value` to each step you want to pin:
 

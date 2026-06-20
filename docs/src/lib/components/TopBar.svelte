@@ -329,7 +329,7 @@
     border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-sm);
     padding: var(--zbk-spacing-2);
-    margin-top: var(--zbk-spacing-1);
+    margin-top: var(--zbk-spacing-05);
     z-index: var(--zbk-z-index-popover);
     min-width: 200px;
   }
@@ -372,11 +372,10 @@
   }
 
   .dials-trigger:hover {
-    background: var(--zbk-app-canvas-muted);
+    background: var(--zbk-action-canvas-muted);
   }
 
   .dials-trigger[aria-expanded="true"] {
-    background: var(--zbk-accent-primary-800);
-    color: var(--zbk-accent-primary-50);
+    background: var(--zbk-action-canvas-soft);
   }
 </style>

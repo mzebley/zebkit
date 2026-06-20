@@ -184,12 +184,7 @@ export function validateOverlays(overlays: OverlayThemeConfig[] | undefined): vo
   });
 }
 
-const CONFIG_FILE_NAMES = [
-  'zebkit.config.json',
-  'zebkit-config.json',
-  // Common misspelling seen in requests.
-  'zekit.config.json',
-];
+const CONFIG_FILE_NAMES = ['zebkit.config.json'];
 
 function parseConfigPathFromArgs(): string | undefined {
   const args = process.argv.slice(2);

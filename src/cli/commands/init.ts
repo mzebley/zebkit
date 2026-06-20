@@ -18,7 +18,7 @@ import {
   runInitCommand,
 } from './init-command';
 
-export async function init() {
+export async function init(options: { quick?: boolean } = {}) {
   return runInitCommand({
     pathExists: fs.pathExists,
     writeJson: fs.writeJson,
@@ -39,6 +39,6 @@ export async function init() {
     resolveBundledThemeTokensDir,
     handlePromptCancel,
     isPromptCancelError,
-  });
+  }, { quick: options.quick });
 }
 export { copyThemeTokens, getDefaultProjectName };

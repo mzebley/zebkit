@@ -40,7 +40,7 @@
     collapsed,
     onToggle,
     label,
-    width = 'var(--zbk-spacing-card)',
+    width = 'var(--zbk-spacing-10)',
     peekRequest = false,
     showToggle = true,
     children,
@@ -173,6 +173,7 @@
     background: var(--zbk-app-canvas);
     transition: width var(--zbk-transition-duration-default, 180ms)
       var(--zbk-transition-timing-function, ease);
+      z-index: 9;
   }
 
   .cp-left {
@@ -183,7 +184,8 @@
   }
 
   .cp.collapsed {
-    width: var(--zbk-spacing-2);
+    width: var(--zbk-spacing-1);
+    background: var(--zbk-app-canvas);
   }
 
   /* ── Collapsed handle: thin hover/focus target with a centered grip ─────── */
@@ -199,6 +201,7 @@
     background: transparent;
     cursor: pointer;
     padding: 0;
+    opacity:.66;
   }
   .cp-handle:hover .cp-grip,
   .cp-handle:focus-visible .cp-grip {
@@ -213,7 +216,7 @@
     height: var(--zbk-spacing-4);
     max-height: 40%;
     border-radius: var(--zbk-border-radius-pill, 999px);
-    background: var(--zbk-app-border-strong, var(--zbk-app-ink-muted));
+    background: var(--zbk-action-ink-soft);
     transition: background-color var(--zbk-transition-duration-fast, 120ms)
       var(--zbk-transition-timing-function, ease);
   }
@@ -225,7 +228,7 @@
     flex-direction: column;
     height: 100%;
     width: var(--cp-width);
-    background: var(--zbk-app-canvas);
+    /* background: var(--zbk-app-canvas); */
   }
   .cp-content {
     flex: 1;
@@ -289,6 +292,7 @@
       transform var(--zbk-transition-duration-default, 180ms)
         var(--zbk-transition-timing-function, ease),
       visibility 0s linear var(--zbk-transition-duration-default, 180ms);
+    background: var(--zbk-app-canvas);
   }
   .cp.collapsed.cp-left .cp-panel {
     left: 0;

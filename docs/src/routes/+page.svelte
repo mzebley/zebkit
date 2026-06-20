@@ -9,7 +9,7 @@
     description="Zebkit is a token-driven, accessibility-first design system. Traditional design systems make you trade consistency for their look-and-feel. Zebkit keeps the consistency and hands the design opinions back to you."
   >
     <p class="eyebrow">A token-driven, accessibility-first design system</p>
-    <h1>Change everything.<br />Rewrite nothing.</h1>
+    <h1 class="display">Change everything.<br />Rewrite nothing.</h1>
     <p class="lede">
       Traditional design systems make you pay for their consistency by enforcing
       their look-and-feel. Zebkit keeps the consistency and hands the opinion
@@ -17,8 +17,7 @@
     </p>
     <p class="sub">
       Every visual decision in zebkit is a token, and every token is data you
-      can swap. Change the tokens and the whole product takes on <em>your</em>
-      look: same HTML, same behavior, new <em>everything</em>.
+      can swap. Change the tokens and the whole product takes on <strong><em>your look</em></strong>: same HTML, same behavior, <strong><em>new everything</em></strong>.
     </p>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -46,11 +45,12 @@
         </g>
       </g>
     </svg>
-    <a class="font-code text-sm" href="#reskin-playground"
+    <div class="margin-block-start-2">
+      <a class="font-code text-sm" href="#reskin-playground"
       ><span>Take it for a spin</span><i
         class="ri-corner-right-down-line text-md"
-      ></i></a
-    >
+      ></i></a>
+    </div>
   </EditorialLayout>
 
   <!-- Centerpiece: the same HTML, re-skinned by tokens alone. -->
@@ -61,32 +61,25 @@
   .home {
     display: flex;
     flex-direction: column;
-    gap: var(--zbk-spacing-4);
   }
 
   .eyebrow {
-    margin: 0 0 var(--zbk-spacing-1);
+    margin: 0 0 var(--zbk-spacing-05);
     font-family: var(--zbk-font-family-code);
     text-transform: uppercase;
-    letter-spacing: var(--zbk-letter-spacing-wider);
-    font-size: var(--zbk-font-size-sm);
+    letter-spacing: var(--zbk-letter-spacing-tight);
+    font-size: var(--zbk-font-size-xs);
     color: var(--zbk-accent-primary-700);
   }
 
   .lede {
     color: var(--zbk-app-ink-muted);
-    font-size: var(--zbk-font-size-lg);
-    margin-block: var(--zbk-spacing-105) var(--zbk-spacing-05);
+    font-size: var(--zbk-font-size-md);
+    max-width: 50ch;
   }
 
   .sub {
-    color: var(--zbk-app-ink-muted);
-    font-size: var(--zbk-font-size-sm);
-    margin-block-start: 0;
     max-width: 60ch;
-    em {
-      font-weight: bold;
-    }
   }
 
   .watermark {

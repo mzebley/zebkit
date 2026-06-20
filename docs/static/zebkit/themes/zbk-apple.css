@@ -51,6 +51,30 @@
 --zbk-accent-secondary-800: #232256;
 --zbk-accent-secondary-900: #12112b;
 --zbk-accent-secondary-950: #090815;
+--zbk-accent-secondary-canvas: var(--zbk-accent-secondary-500);
+--zbk-accent-secondary-canvas-subtle: var(--zbk-accent-secondary-50);
+--zbk-accent-secondary-canvas-muted: var(--zbk-accent-secondary-100);
+--zbk-accent-secondary-canvas-emphasis: var(--zbk-accent-secondary-600);
+--zbk-accent-secondary-canvas-inverse: var(--zbk-accent-secondary-400);
+--zbk-accent-secondary-canvas-inverse-subtle: var(--zbk-accent-secondary-900);
+--zbk-accent-secondary-canvas-inverse-muted: var(--zbk-accent-secondary-800);
+--zbk-accent-secondary-canvas-inverse-emphasis: var(--zbk-accent-secondary-300);
+--zbk-accent-secondary-ink: var(--zbk-accent-secondary-700);
+--zbk-accent-secondary-ink-subtle: var(--zbk-accent-secondary-400);
+--zbk-accent-secondary-ink-muted: var(--zbk-accent-secondary-500);
+--zbk-accent-secondary-ink-emphasis: var(--zbk-accent-secondary-800);
+--zbk-accent-secondary-ink-inverse: var(--zbk-accent-secondary-300);
+--zbk-accent-secondary-ink-inverse-subtle: var(--zbk-accent-secondary-500);
+--zbk-accent-secondary-ink-inverse-muted: var(--zbk-accent-secondary-400);
+--zbk-accent-secondary-ink-inverse-emphasis: var(--zbk-accent-secondary-200);
+--zbk-accent-secondary-border: var(--zbk-accent-secondary-500);
+--zbk-accent-secondary-border-subtle: var(--zbk-accent-secondary-200);
+--zbk-accent-secondary-border-muted: var(--zbk-accent-secondary-300);
+--zbk-accent-secondary-border-emphasis: var(--zbk-accent-secondary-600);
+--zbk-accent-secondary-border-inverse: var(--zbk-accent-secondary-500);
+--zbk-accent-secondary-border-inverse-subtle: var(--zbk-accent-secondary-800);
+--zbk-accent-secondary-border-inverse-muted: var(--zbk-accent-secondary-700);
+--zbk-accent-secondary-border-inverse-emphasis: var(--zbk-accent-secondary-400);
 }
 [data-zbk-theme="apple"] {
 --zbk-accent-primary-50: #e6f2ff;
@@ -64,6 +88,30 @@
 --zbk-accent-primary-800: #003166;
 --zbk-accent-primary-900: #001833;
 --zbk-accent-primary-950: #000c1a;
+--zbk-accent-primary-canvas: var(--zbk-accent-primary-500);
+--zbk-accent-primary-canvas-subtle: var(--zbk-accent-primary-50);
+--zbk-accent-primary-canvas-muted: var(--zbk-accent-primary-100);
+--zbk-accent-primary-canvas-emphasis: var(--zbk-accent-primary-600);
+--zbk-accent-primary-canvas-inverse: var(--zbk-accent-primary-400);
+--zbk-accent-primary-canvas-inverse-subtle: var(--zbk-accent-primary-900);
+--zbk-accent-primary-canvas-inverse-muted: var(--zbk-accent-primary-800);
+--zbk-accent-primary-canvas-inverse-emphasis: var(--zbk-accent-primary-300);
+--zbk-accent-primary-ink: var(--zbk-accent-primary-700);
+--zbk-accent-primary-ink-subtle: var(--zbk-accent-primary-400);
+--zbk-accent-primary-ink-muted: var(--zbk-accent-primary-500);
+--zbk-accent-primary-ink-emphasis: var(--zbk-accent-primary-800);
+--zbk-accent-primary-ink-inverse: var(--zbk-accent-primary-300);
+--zbk-accent-primary-ink-inverse-subtle: var(--zbk-accent-primary-500);
+--zbk-accent-primary-ink-inverse-muted: var(--zbk-accent-primary-400);
+--zbk-accent-primary-ink-inverse-emphasis: var(--zbk-accent-primary-200);
+--zbk-accent-primary-border: var(--zbk-accent-primary-500);
+--zbk-accent-primary-border-subtle: var(--zbk-accent-primary-200);
+--zbk-accent-primary-border-muted: var(--zbk-accent-primary-300);
+--zbk-accent-primary-border-emphasis: var(--zbk-accent-primary-600);
+--zbk-accent-primary-border-inverse: var(--zbk-accent-primary-500);
+--zbk-accent-primary-border-inverse-subtle: var(--zbk-accent-primary-800);
+--zbk-accent-primary-border-inverse-muted: var(--zbk-accent-primary-700);
+--zbk-accent-primary-border-inverse-emphasis: var(--zbk-accent-primary-400);
 }
 }
 
@@ -149,7 +197,7 @@
 --zbk-button-ink-disabled: var(--zbk-disabled-ink);
 --zbk-button-canvas: var(--zbk-action-canvas);
 --zbk-button-canvas-hover: var(--zbk-action-canvas-muted);
---zbk-button-canvas-active: var(--zbk-action-canvas-soft);
+--zbk-button-canvas-active: var(--zbk-action-canvas-subtle);
 --zbk-button-canvas-disabled: var(--zbk-disabled-canvas);
 --zbk-button-border-color: var(--zbk-accent-primary-500);
 --zbk-button-border-color-hover: var(--zbk-accent-primary-600);
@@ -219,32 +267,6 @@
 --zbk-font-size-5xl: calc(80px * var(--zbk-a11y-font-size-modifier-5xl));
 }
 [data-zbk-theme="apple"] {
---zbk-border-width-xs: var(--zbk-spacing-1px);
---zbk-border-width-sm: var(--zbk-spacing-1px);
---zbk-border-width-md: 18px;
---zbk-border-width-lg: 28px;
---zbk-border-width-xl: 980px;
---zbk-border-style: solid;
---zbk-border-radius-xs: var(--zbk-spacing-025);
---zbk-border-radius-sm: .375rem;
---zbk-border-radius-md: .75rem;
---zbk-border-radius-lg: 1.125rem;
---zbk-border-radius-xl: 1.5rem;
-}
-[data-zbk-theme="apple"] {
---zbk-p-font-family: var(--zbk-font-family-body);
---zbk-p-font-size: var(--zbk-font-size-md);
---zbk-p-font-weight: var(--zbk-font-weight-normal);
---zbk-p-line-height: var(--zbk-line-height-4);
---zbk-p-letter-spacing: var(--zbk-letter-spacing-tighter);
---zbk-p-measure: 88ch;
---zbk-p-spacing-before: 1em;
---zbk-p-spacing-after: 1em;
---zbk-p-color: var(--zbk-app-ink);
---zbk-p-font-style: none;
---zbk-p-text-transform: none;
-}
-[data-zbk-theme="apple"] {
 --zbk-list-font-family: var(--zbk-font-family-heading);
 --zbk-list-font-size: var(--zbk-font-size-sm);
 --zbk-list-line-height: var(--zbk-line-height-3);
@@ -309,41 +331,67 @@
 --zbk-h2-text-transform: none;
 }
 [data-zbk-theme="apple"] {
+--zbk-border-width-xs: var(--zbk-spacing-1px);
+--zbk-border-width-sm: var(--zbk-spacing-1px);
+--zbk-border-width-md: 18px;
+--zbk-border-width-lg: 28px;
+--zbk-border-width-xl: 980px;
+--zbk-border-style: solid;
+--zbk-border-radius-xs: var(--zbk-spacing-025);
+--zbk-border-radius-sm: .375rem;
+--zbk-border-radius-md: .75rem;
+--zbk-border-radius-lg: 1.125rem;
+--zbk-border-radius-xl: 1.5rem;
+}
+[data-zbk-theme="apple"] {
+--zbk-p-font-family: var(--zbk-font-family-body);
+--zbk-p-font-size: var(--zbk-font-size-md);
+--zbk-p-font-weight: var(--zbk-font-weight-normal);
+--zbk-p-line-height: var(--zbk-line-height-4);
+--zbk-p-letter-spacing: var(--zbk-letter-spacing-tighter);
+--zbk-p-measure: 88ch;
+--zbk-p-spacing-before: 1em;
+--zbk-p-spacing-after: 1em;
+--zbk-p-color: var(--zbk-app-ink);
+--zbk-p-font-style: none;
+--zbk-p-text-transform: none;
+}
+[data-zbk-theme="apple"] {
 --zbk-app-canvas: rgb(255,255,255);
---zbk-app-canvas-soft: #fafafa;
+--zbk-app-canvas-subtle: #fafafa;
 --zbk-app-canvas-muted: rgb(245, 245, 247);
---zbk-app-canvas-strong: #e8e8ed;
+--zbk-app-canvas-emphasis: #e8e8ed;
 --zbk-app-ink: rgb(29,29,31);
---zbk-app-ink-soft: #6e6e73;
+--zbk-app-ink-subtle: #6e6e73;
 --zbk-app-ink-muted: rgba(0, 0, 0, 0.56);
 --zbk-app-border: rgb(210,210,215);
---zbk-app-border-soft: #e8e8ed;
+--zbk-app-border-subtle: #e8e8ed;
 --zbk-app-border-muted: #d2d2d7;
---zbk-app-border-strong: #86868b;
+--zbk-app-border-emphasis: #86868b;
 }
 [data-zbk-theme="apple"] {
 --zbk-action-canvas: rgb(0, 113, 227);
---zbk-action-canvas-soft: #0076DF;
+--zbk-action-canvas-subtle: #0076DF;
 --zbk-action-canvas-muted: #006EDB;
---zbk-action-canvas-strong: ;
+--zbk-action-canvas-emphasis: ;
 --zbk-action-canvas-inverse: ;
---zbk-action-canvas-inverse-soft: ;
+--zbk-action-canvas-inverse-subtle: ;
 --zbk-action-canvas-inverse-muted: ;
---zbk-action-canvas-inverse-strong: ;
+--zbk-action-canvas-inverse-emphasis: ;
 --zbk-action-ink: rgb(0, 113, 227);
---zbk-action-ink-soft: var(--zbk-color-ember-400);
+--zbk-action-ink-subtle: var(--zbk-color-ember-400);
 --zbk-action-ink-muted: var(--zbk-color-ember-300);
 --zbk-action-ink-inverse: ;
---zbk-action-ink-inverse-soft: ;
+--zbk-action-ink-inverse-subtle: ;
 --zbk-action-ink-inverse-muted: ;
 --zbk-action-border: ;
---zbk-action-border-soft: ;
+--zbk-action-border-subtle: ;
 --zbk-action-border-muted: ;
---zbk-action-border-strong: ;
+--zbk-action-border-emphasis: ;
 --zbk-action-border-inverse: ;
---zbk-action-border-inverse-soft: ;
+--zbk-action-border-inverse-subtle: ;
 --zbk-action-border-inverse-muted: ;
---zbk-action-border-inverse-strong: ;
+--zbk-action-border-inverse-emphasis: ;
 }
 }
 

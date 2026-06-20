@@ -26,10 +26,10 @@ $color-roles: ('ink': color,
   'canvas': background-color,
   'border': border-color, 'fill': fill) !default;
 
-$color-intensity: 'soft',
+$color-intensity: 'subtle',
 'muted',
 'base',
-'strong'
+'emphasis'
  !default;
 
 $color-variants: 'inverse',
@@ -179,7 +179,7 @@ $color-states: ('base': null,
     'ink': color,
     'border': border-color),
   $variants: (null, inverse),
-  $intensities: (null, soft, muted, strong),
+  $intensities: (null, subtle, muted, emphasis),
   $states: $color-states) {
 
   @each $role,

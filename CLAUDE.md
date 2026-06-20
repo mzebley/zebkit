@@ -16,7 +16,7 @@ npm run docs:dev            # Run docs dev server (Astro)
 npm run docs:build          # Build static docs
 ```
 
-**Configuration**: Token/component builds can skip prompts via `zebkit.config.json` (also accepts `zebkit-config.json` or `zekit.config.json`), or pass `--config path/to/config.json`.
+**Configuration**: Token/component builds can skip prompts via `zebkit.config.json`, or pass `--config path/to/config.json`.
 
 ## Architecture Overview
 

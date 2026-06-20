@@ -1,99 +1,154 @@
 {
-  "zbk-z-index": {
-    "0": {
-      "value": 0,
-      "type": "zIndex",
-      "description": "Base stacking level."
+  "zbk-transition": {
+    "duration-default": {
+      "value": "325ms",
+      "type": "transition",
+      "description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "a11y": true
     },
-    "10": {
-      "value": 10,
-      "type": "zIndex",
-      "description": "Low elevation stacking."
+    "duration-slow": {
+      "value": "625ms",
+      "type": "transition",
+      "description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "a11y": true
     },
-    "20": {
-      "value": 20,
-      "type": "zIndex",
-      "description": "Slight elevation stacking."
+    "duration-fast": {
+      "value": "125ms",
+      "type": "transition",
+      "description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "a11y": true
     },
-    "30": {
-      "value": 30,
-      "type": "zIndex",
-      "description": "Medium-low elevation stacking."
+    "playful-motion-function-default": {
+      "value": "cubic-bezier(0.38, 1.21, 0.22, 1.00)",
+      "type": "transition",
+      "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate."
     },
-    "40": {
-      "value": 40,
-      "type": "zIndex",
-      "description": "Medium elevation stacking."
+    "playful-motion-function-slow": {
+      "value": "cubic-bezier(0.39, 1.29, 0.35, 0.98)",
+      "type": "transition",
+      "description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt."
     },
-    "50": {
-      "value": 50,
-      "type": "zIndex",
-      "description": "Medium-high elevation stacking."
+    "playful-motion-function-fast": {
+      "value": "cubic-bezier(0.42, 1.67, 0.21, 0.90)",
+      "type": "transition",
+      "description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid."
     },
-    "60": {
-      "value": 60,
-      "type": "zIndex",
-      "description": "High elevation stacking."
+    "playful-motion-duration-default": {
+      "value": "500ms",
+      "type": "transition",
+      "description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
+      "a11y": true
     },
-    "70": {
-      "value": 70,
-      "type": "zIndex",
-      "description": "Higher elevation stacking."
+    "playful-motion-duration-slow": {
+      "value": "650ms",
+      "type": "transition",
+      "description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
+      "a11y": true
     },
-    "80": {
-      "value": 80,
-      "type": "zIndex",
-      "description": "Very high elevation stacking."
+    "playful-motion-duration-fast": {
+      "value": "350ms",
+      "type": "transition",
+      "description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
+      "a11y": true
     },
-    "90": {
-      "value": 90,
-      "type": "zIndex",
-      "description": "Near-top elevation stacking."
+    "playful-fx-function-default": {
+      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
     },
-    "100": {
-      "value": 100,
-      "type": "zIndex",
-      "description": "Top-level elevation stacking."
+    "playful-fx-function-slow": {
+      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce."
     },
-    "auto": {
-      "value": "auto",
-      "type": "zIndex",
-      "description": "Auto z-index, lets browser determine stacking."
+    "playful-fx-function-fast": {
+      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth."
     },
-    "dropdown": {
-      "value": 1000,
-      "type": "zIndex",
-      "description": "Semantic z-index for dropdown menus."
+    "playful-fx-duration-default": {
+      "value": "200ms",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
+      "a11y": true
     },
-    "sticky": {
-      "value": 1020,
-      "type": "zIndex",
-      "description": "Semantic z-index for sticky positioned elements."
+    "playful-fx-duration-slow": {
+      "value": "300ms",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
+      "a11y": true
     },
-    "fixed": {
-      "value": 1030,
-      "type": "zIndex",
-      "description": "Semantic z-index for fixed positioned elements."
+    "playful-fx-duration-fast": {
+      "value": "150ms",
+      "type": "transition",
+      "description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
+      "a11y": true
     },
-    "modal-backdrop": {
-      "value": 1040,
-      "type": "zIndex",
-      "description": "Semantic z-index for modal backdrops/overlays."
+    "calm-motion-function-default": {
+      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "type": "transition",
+      "description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish."
     },
-    "modal": {
-      "value": 1050,
-      "type": "zIndex",
-      "description": "Semantic z-index for modal dialogs."
+    "calm-motion-function-slow": {
+      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "type": "transition",
+      "description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate."
     },
-    "popover": {
-      "value": 1060,
-      "type": "zIndex",
-      "description": "Semantic z-index for popovers."
+    "calm-motion-function-fast": {
+      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "type": "transition",
+      "description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion."
     },
-    "tooltip": {
-      "value": 1070,
-      "type": "zIndex",
-      "description": "Semantic z-index for tooltips (highest)."
+    "calm-motion-duration-default": {
+      "value": "500ms",
+      "type": "transition",
+      "description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
+      "a11y": true
+    },
+    "calm-motion-duration-slow": {
+      "value": "750ms",
+      "type": "transition",
+      "description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
+      "a11y": true
+    },
+    "calm-motion-duration-fast": {
+      "value": "350ms",
+      "type": "transition",
+      "description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
+      "a11y": true
+    },
+    "calm-fx-function-default": {
+      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
+    },
+    "calm-fx-function-slow": {
+      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained."
+    },
+    "calm-fx-function-fast": {
+      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention."
+    },
+    "calm-fx-duration-default": {
+      "value": "200ms",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
+      "a11y": true
+    },
+    "calm-fx-duration-slow": {
+      "value": "300ms",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
+      "a11y": true
+    },
+    "calm-fx-duration-fast": {
+      "value": "150ms",
+      "type": "transition",
+      "description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
+      "a11y": true
     }
   },
   "zbk-spacing": {
@@ -482,6 +537,155 @@
       "description": "Preferred horizontal padding for page."
     }
   },
+  "zbk-z-index": {
+    "0": {
+      "value": 0,
+      "type": "zIndex",
+      "description": "Base stacking level."
+    },
+    "10": {
+      "value": 10,
+      "type": "zIndex",
+      "description": "Low elevation stacking."
+    },
+    "20": {
+      "value": 20,
+      "type": "zIndex",
+      "description": "Slight elevation stacking."
+    },
+    "30": {
+      "value": 30,
+      "type": "zIndex",
+      "description": "Medium-low elevation stacking."
+    },
+    "40": {
+      "value": 40,
+      "type": "zIndex",
+      "description": "Medium elevation stacking."
+    },
+    "50": {
+      "value": 50,
+      "type": "zIndex",
+      "description": "Medium-high elevation stacking."
+    },
+    "60": {
+      "value": 60,
+      "type": "zIndex",
+      "description": "High elevation stacking."
+    },
+    "70": {
+      "value": 70,
+      "type": "zIndex",
+      "description": "Higher elevation stacking."
+    },
+    "80": {
+      "value": 80,
+      "type": "zIndex",
+      "description": "Very high elevation stacking."
+    },
+    "90": {
+      "value": 90,
+      "type": "zIndex",
+      "description": "Near-top elevation stacking."
+    },
+    "100": {
+      "value": 100,
+      "type": "zIndex",
+      "description": "Top-level elevation stacking."
+    },
+    "auto": {
+      "value": "auto",
+      "type": "zIndex",
+      "description": "Auto z-index, lets browser determine stacking."
+    },
+    "dropdown": {
+      "value": 1000,
+      "type": "zIndex",
+      "description": "Semantic z-index for dropdown menus."
+    },
+    "sticky": {
+      "value": 1020,
+      "type": "zIndex",
+      "description": "Semantic z-index for sticky positioned elements."
+    },
+    "fixed": {
+      "value": 1030,
+      "type": "zIndex",
+      "description": "Semantic z-index for fixed positioned elements."
+    },
+    "modal-backdrop": {
+      "value": 1040,
+      "type": "zIndex",
+      "description": "Semantic z-index for modal backdrops/overlays."
+    },
+    "modal": {
+      "value": 1050,
+      "type": "zIndex",
+      "description": "Semantic z-index for modal dialogs."
+    },
+    "popover": {
+      "value": 1060,
+      "type": "zIndex",
+      "description": "Semantic z-index for popovers."
+    },
+    "tooltip": {
+      "value": 1070,
+      "type": "zIndex",
+      "description": "Semantic z-index for tooltips (highest)."
+    }
+  },
+  "zbk-elevation": {
+    "none": {
+      "value": "none",
+      "type": "boxShadow",
+      "description": "No shadow."
+    },
+    "xs": {
+      "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Extra-small shadow for subtle elevation."
+    },
+    "sm": {
+      "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Small shadow for low elevation."
+    },
+    "md": {
+      "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Medium shadow for moderate elevation."
+    },
+    "lg": {
+      "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Large shadow for high elevation."
+    },
+    "xl": {
+      "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Extra-large shadow for very high elevation."
+    },
+    "2xl": {
+      "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+      "type": "boxShadow",
+      "description": "2XL shadow for maximum elevation."
+    },
+    "inner": {
+      "value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Inner shadow for inset/pressed effect."
+    },
+    "inner-sm": {
+      "value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "type": "boxShadow",
+      "description": "Small inner shadow."
+    },
+    "inner-lg": {
+      "value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
+      "type": "boxShadow",
+      "description": "Large inner shadow."
+    }
+  },
   "zbk-opacity": {
     "0": {
       "value": 0,
@@ -569,158 +773,6 @@
       "description": "Fully opaque (default)."
     }
   },
-  "zbk-transition": {
-    "duration-default": {
-      "value": "325ms",
-      "type": "transition",
-      "description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "a11y": true
-    },
-    "duration-slow": {
-      "value": "625ms",
-      "type": "transition",
-      "description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "a11y": true
-    },
-    "duration-fast": {
-      "value": "125ms",
-      "type": "transition",
-      "description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "a11y": true
-    },
-    "playful-motion-function-default": {
-      "value": "cubic-bezier(0.38, 1.21, 0.22, 1.00)",
-      "type": "transition",
-      "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate."
-    },
-    "playful-motion-function-slow": {
-      "value": "cubic-bezier(0.39, 1.29, 0.35, 0.98)",
-      "type": "transition",
-      "description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt."
-    },
-    "playful-motion-function-fast": {
-      "value": "cubic-bezier(0.42, 1.67, 0.21, 0.90)",
-      "type": "transition",
-      "description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid."
-    },
-    "playful-motion-duration-default": {
-      "value": "500ms",
-      "type": "transition",
-      "description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
-      "a11y": true
-    },
-    "playful-motion-duration-slow": {
-      "value": "650ms",
-      "type": "transition",
-      "description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
-      "a11y": true
-    },
-    "playful-motion-duration-fast": {
-      "value": "350ms",
-      "type": "transition",
-      "description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
-      "a11y": true
-    },
-    "playful-fx-function-default": {
-      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
-    },
-    "playful-fx-function-slow": {
-      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce."
-    },
-    "playful-fx-function-fast": {
-      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth."
-    },
-    "playful-fx-duration-default": {
-      "value": "200ms",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
-      "a11y": true
-    },
-    "playful-fx-duration-slow": {
-      "value": "300ms",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
-      "a11y": true
-    },
-    "playful-fx-duration-fast": {
-      "value": "150ms",
-      "type": "transition",
-      "description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
-      "a11y": true
-    },
-    "calm-motion-function-default": {
-      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "type": "transition",
-      "description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish."
-    },
-    "calm-motion-function-slow": {
-      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "type": "transition",
-      "description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate."
-    },
-    "calm-motion-function-fast": {
-      "value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "type": "transition",
-      "description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion."
-    },
-    "calm-motion-duration-default": {
-      "value": "500ms",
-      "type": "transition",
-      "description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
-      "a11y": true
-    },
-    "calm-motion-duration-slow": {
-      "value": "750ms",
-      "type": "transition",
-      "description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
-      "a11y": true
-    },
-    "calm-motion-duration-fast": {
-      "value": "350ms",
-      "type": "transition",
-      "description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
-      "a11y": true
-    },
-    "calm-fx-function-default": {
-      "value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
-    },
-    "calm-fx-function-slow": {
-      "value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained."
-    },
-    "calm-fx-function-fast": {
-      "value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention."
-    },
-    "calm-fx-duration-default": {
-      "value": "200ms",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
-      "a11y": true
-    },
-    "calm-fx-duration-slow": {
-      "value": "300ms",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
-      "a11y": true
-    },
-    "calm-fx-duration-fast": {
-      "value": "150ms",
-      "type": "transition",
-      "description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
-      "a11y": true
-    }
-  },
   "zbk-focus": {
     "color": {
       "value": "{accent-primary.600}",
@@ -738,56 +790,63 @@
       "description": "Offset distance of focus outline"
     }
   },
-  "zbk-elevation": {
-    "none": {
-      "value": "none",
-      "type": "boxShadow",
-      "description": "No shadow."
+  "zbk-breakpoint": {
+    "tablet": {
+      "value": "40rem",
+      "type": "dimension",
+      "description": "Small tablets and large phones in landscape (640px)."
     },
-    "xs": {
-      "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Extra-small shadow for subtle elevation."
+    "tablet-lg": {
+      "value": "50rem",
+      "type": "dimension",
+      "description": "Large tablets (800px)."
     },
-    "sm": {
-      "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Small shadow for low elevation."
+    "desktop": {
+      "value": "70rem",
+      "type": "dimension",
+      "description": "Small desktops and laptops (1120px)."
     },
-    "md": {
-      "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Medium shadow for moderate elevation."
+    "desktop-lg": {
+      "value": "80rem",
+      "type": "dimension",
+      "description": "Large desktops (1280px)."
     },
-    "lg": {
-      "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Large shadow for high elevation."
+    "widescreen": {
+      "value": "100rem",
+      "type": "dimension",
+      "description": "Widescreen and ultra-wide displays (1600px)."
+    }
+  },
+  "zbk-a11y": {
+    "spacing-modifier": {
+      "value": "1",
+      "type": "utility",
+      "description": "Amount to multiply spacing variables by (independent density dial)."
     },
-    "xl": {
-      "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Extra-large shadow for very high elevation."
+    "spacing-text-coupling": {
+      "value": "0.5",
+      "type": "utility",
+      "description": "How hard spacing follows body (md) font-size growth: 1 = 1:1, 0 = decoupled. Lets containers grow with text without a separate density bump."
     },
-    "2xl": {
-      "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
-      "type": "boxShadow",
-      "description": "2XL shadow for maximum elevation."
+    "line-height-modifier": {
+      "value": "1",
+      "type": "utility",
+      "description": "Amount to multiply line height variables by."
     },
-    "inner": {
-      "value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Inner shadow for inset/pressed effect."
+    "letter-spacing-modifier": {
+      "value": "1",
+      "type": "utility",
+      "description": "Amount to multiply letter spacing variables by."
     },
-    "inner-sm": {
-      "value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "type": "boxShadow",
-      "description": "Small inner shadow."
+    "fallback-font-size-modifier": {
+      "value": "1",
+      "type": "utility",
+      "description": "Fallback amount to multiply font size variables by in the event their specific modifier isn't set."
     },
-    "inner-lg": {
-      "value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
-      "type": "boxShadow",
-      "description": "Large inner shadow."
+    "transition-duration-modifier": {
+      "value": "1",
+      "type": "utility",
+      "description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'"
     }
   },
   "zbk-button": {
@@ -1098,92 +1157,6 @@
       "description": "Visual opacity of button."
     }
   },
-  "zbk-breakpoint": {
-    "tablet": {
-      "value": "40rem",
-      "type": "dimension",
-      "description": "Small tablets and large phones in landscape (640px)."
-    },
-    "tablet-lg": {
-      "value": "50rem",
-      "type": "dimension",
-      "description": "Large tablets (800px)."
-    },
-    "desktop": {
-      "value": "70rem",
-      "type": "dimension",
-      "description": "Small desktops and laptops (1120px)."
-    },
-    "desktop-lg": {
-      "value": "80rem",
-      "type": "dimension",
-      "description": "Large desktops (1280px)."
-    },
-    "widescreen": {
-      "value": "100rem",
-      "type": "dimension",
-      "description": "Widescreen and ultra-wide displays (1600px)."
-    }
-  },
-  "zbk-a11y": {
-    "spacing-modifier": {
-      "value": "1",
-      "type": "utility",
-      "description": "Amount to multiply spacing variables by (independent density dial)."
-    },
-    "spacing-text-coupling": {
-      "value": "0.5",
-      "type": "utility",
-      "description": "How hard spacing follows body (md) font-size growth: 1 = 1:1, 0 = decoupled. Lets containers grow with text without a separate density bump."
-    },
-    "line-height-modifier": {
-      "value": "1",
-      "type": "utility",
-      "description": "Amount to multiply line height variables by."
-    },
-    "letter-spacing-modifier": {
-      "value": "1",
-      "type": "utility",
-      "description": "Amount to multiply letter spacing variables by."
-    },
-    "fallback-font-size-modifier": {
-      "value": "1",
-      "type": "utility",
-      "description": "Fallback amount to multiply font size variables by in the event their specific modifier isn't set."
-    },
-    "transition-duration-modifier": {
-      "value": "1",
-      "type": "utility",
-      "description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'"
-    }
-  },
-  "zbk-text-measure": {
-    "1": {
-      "value": "34ch",
-      "type": "sizing",
-      "description": "Cards, sidebars, tight UI."
-    },
-    "2": {
-      "value": "48ch",
-      "type": "sizing",
-      "description": "Short text blocks, captions."
-    },
-    "3": {
-      "value": "65ch",
-      "type": "sizing",
-      "description": "Base body content measure."
-    },
-    "4": {
-      "value": "72ch",
-      "type": "sizing",
-      "description": "Articles, long-form content."
-    },
-    "5": {
-      "value": "84ch",
-      "type": "sizing",
-      "description": "Articles, long-form content."
-    }
-  },
   "zbk-font-size": {
     "min-viewport": {
       "value": "360px",
@@ -1314,6 +1287,33 @@
       "a11y": true
     }
   },
+  "zbk-text-measure": {
+    "1": {
+      "value": "34ch",
+      "type": "sizing",
+      "description": "Cards, sidebars, tight UI."
+    },
+    "2": {
+      "value": "48ch",
+      "type": "sizing",
+      "description": "Short text blocks, captions."
+    },
+    "3": {
+      "value": "65ch",
+      "type": "sizing",
+      "description": "Base body content measure."
+    },
+    "4": {
+      "value": "72ch",
+      "type": "sizing",
+      "description": "Articles, long-form content."
+    },
+    "5": {
+      "value": "84ch",
+      "type": "sizing",
+      "description": "Articles, long-form content."
+    }
+  },
   "zbk-letter-spacing": {
     "tighter": {
       "value": "-.05rem",
@@ -1343,62 +1343,6 @@
       "value": ".05rem",
       "type": "letterSpacing",
       "description": "",
-      "a11y": true
-    }
-  },
-  "zbk-font-weight": {
-    "thin": {
-      "value": "100",
-      "type": "fontWeight",
-      "description": "Lightest font weight.",
-      "a11y": true
-    },
-    "extralight": {
-      "value": "200",
-      "type": "fontWeight",
-      "description": "Lighter font weight.",
-      "a11y": true
-    },
-    "light": {
-      "value": "300",
-      "type": "fontWeight",
-      "description": "Light font weight.",
-      "a11y": true
-    },
-    "normal": {
-      "value": "400",
-      "type": "fontWeight",
-      "description": "Default font weight.",
-      "a11y": true
-    },
-    "medium": {
-      "value": "500",
-      "type": "fontWeight",
-      "description": "Medium font weight.",
-      "a11y": true
-    },
-    "semibold": {
-      "value": "600",
-      "type": "fontWeight",
-      "description": "Semibold font weight.",
-      "a11y": true
-    },
-    "bold": {
-      "value": "700",
-      "type": "fontWeight",
-      "description": "Bold font weight.",
-      "a11y": true
-    },
-    "extrabold": {
-      "value": "800",
-      "type": "fontWeight",
-      "description": "Bolder font weight.",
-      "a11y": true
-    },
-    "black": {
-      "value": "900",
-      "type": "fontWeight",
-      "description": "Boldest font weight.",
       "a11y": true
     }
   },
@@ -1468,118 +1412,60 @@
       "type": "fontFamily"
     }
   },
-  "zbk-border": {
-    "width-xs": {
-      "value": "{spacing.1px}",
-      "type": "borderWidth",
-      "description": "Smallest semantic border width."
-    },
-    "width-sm": {
-      "value": "{spacing.2px}",
-      "type": "borderWidth",
-      "description": "Small semantic border width."
-    },
-    "width-md": {
-      "value": "{spacing.025}",
-      "type": "borderWidth",
-      "description": "Base semantic border width."
-    },
-    "width-lg": {
-      "value": "{spacing.05}",
-      "type": "borderWidth",
-      "description": "Larger semantic border width."
-    },
-    "width-xl": {
-      "value": "{spacing.1}",
-      "type": "borderWidth",
-      "description": "Largest semantic border width."
-    },
-    "style": {
-      "value": "solid",
-      "type": "borderStyle",
-      "description": "Standarized border style for project."
-    },
-    "radius-xs": {
-      "value": "{spacing.2px}",
-      "type": "borderRadius",
-      "description": "Smallest semantic corner radius."
-    },
-    "radius-sm": {
-      "value": "{spacing.025}",
-      "type": "borderRadius",
-      "description": "Small semantic corner radius."
-    },
-    "radius-md": {
-      "value": "{spacing.05}",
-      "type": "borderRadius",
-      "description": "Base semantic corner radius."
-    },
-    "radius-lg": {
-      "value": "{spacing.105}",
-      "type": "borderRadius",
-      "description": "Larger semantic corner radius."
-    },
-    "radius-xl": {
-      "value": "{spacing.205}",
-      "type": "borderRadius",
-      "description": "Largest semantic corner radius."
-    }
-  },
-  "zbk-p": {
-    "font-family": {
-      "value": "{font-family.body}",
-      "type": "fontFamily",
-      "description": "Font size for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-size": {
-      "value": "{font-size.md}",
-      "type": "fontSize",
-      "description": "Font size for P elements with .prose applied directly or that are a child of a .prose container."
-    },
-    "font-weight": {
-      "value": "{font-weight.normal}",
+  "zbk-font-weight": {
+    "thin": {
+      "value": "100",
       "type": "fontWeight",
-      "description": "Font weight for P elements with .prose applied directly or that are a child of a .prose container."
+      "description": "Lightest font weight.",
+      "a11y": true
     },
-    "line-height": {
-      "value": "{line-height.3}",
-      "type": "lineHeight",
-      "description": "Line height for P elements with .prose applied directly or that are a child of a .prose container."
+    "extralight": {
+      "value": "200",
+      "type": "fontWeight",
+      "description": "Lighter font weight.",
+      "a11y": true
     },
-    "letter-spacing": {
-      "value": "{letter-spacing.normal}",
-      "type": "letterSpacing",
-      "description": "Tracking for P elements with .prose applied directly or that are a child of a .prose container."
+    "light": {
+      "value": "300",
+      "type": "fontWeight",
+      "description": "Light font weight.",
+      "a11y": true
     },
-    "measure": {
-      "value": "{text-measure.4}",
-      "type": "sizing",
-      "description": "Maximum width for P elements with .prose applied directly or that are a child of a .prose container."
+    "normal": {
+      "value": "400",
+      "type": "fontWeight",
+      "description": "Default font weight.",
+      "a11y": true
     },
-    "spacing-before": {
-      "value": "{spacing.0}",
-      "type": "spacing",
-      "description": "Amount of margin inline start for P elements with .prose applied directly or that are a child of a .prose container."
+    "medium": {
+      "value": "500",
+      "type": "fontWeight",
+      "description": "Medium font weight.",
+      "a11y": true
     },
-    "spacing-after": {
-      "value": "{spacing.2}",
-      "type": "spacing",
-      "description": "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container."
+    "semibold": {
+      "value": "600",
+      "type": "fontWeight",
+      "description": "Semibold font weight.",
+      "a11y": true
     },
-    "color": {
-      "value": "{app.ink}",
-      "type": "color",
-      "description": "Color of P elements with .prose applied directly or that are a child of a .prose container."
+    "bold": {
+      "value": "700",
+      "type": "fontWeight",
+      "description": "Bold font weight.",
+      "a11y": true
     },
-    "font-style": {
-      "value": "none",
-      "type": "fontStyle",
-      "description": "Font style for P elements with .prose applied directly or that are a child of a .prose container."
+    "extrabold": {
+      "value": "800",
+      "type": "fontWeight",
+      "description": "Bolder font weight.",
+      "a11y": true
     },
-    "text-transform": {
-      "value": "none",
-      "type": "textTransform",
-      "description": "Text transform for P elements with .prose applied directly or that are a child of a .prose container."
+    "black": {
+      "value": "900",
+      "type": "fontWeight",
+      "description": "Boldest font weight.",
+      "a11y": true
     }
   },
   "zbk-list": {
@@ -1941,7 +1827,7 @@
       "description": "Font size for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-size": {
-      "value": "{font-size.2xl}",
+      "value": "{font-size.3xl}",
       "type": "fontSize",
       "description": "Font size for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -1971,7 +1857,7 @@
       "description": "Amount of margin inline start for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
-      "value": "{spacing.205}",
+      "value": "{spacing.1}",
       "type": "spacing",
       "description": "Amount of margin inline end for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -1989,6 +1875,120 @@
       "value": "none",
       "type": "textTransform",
       "description": "Text transform for H1 elements with .prose applied directly or that are a child of a .prose container."
+    }
+  },
+  "zbk-border": {
+    "width-xs": {
+      "value": "{spacing.1px}",
+      "type": "borderWidth",
+      "description": "Smallest semantic border width."
+    },
+    "width-sm": {
+      "value": "{spacing.2px}",
+      "type": "borderWidth",
+      "description": "Small semantic border width."
+    },
+    "width-md": {
+      "value": "{spacing.025}",
+      "type": "borderWidth",
+      "description": "Base semantic border width."
+    },
+    "width-lg": {
+      "value": "{spacing.05}",
+      "type": "borderWidth",
+      "description": "Larger semantic border width."
+    },
+    "width-xl": {
+      "value": "{spacing.1}",
+      "type": "borderWidth",
+      "description": "Largest semantic border width."
+    },
+    "style": {
+      "value": "solid",
+      "type": "borderStyle",
+      "description": "Standarized border style for project."
+    },
+    "radius-xs": {
+      "value": "{spacing.2px}",
+      "type": "borderRadius",
+      "description": "Smallest semantic corner radius."
+    },
+    "radius-sm": {
+      "value": "{spacing.025}",
+      "type": "borderRadius",
+      "description": "Small semantic corner radius."
+    },
+    "radius-md": {
+      "value": "{spacing.05}",
+      "type": "borderRadius",
+      "description": "Base semantic corner radius."
+    },
+    "radius-lg": {
+      "value": "{spacing.105}",
+      "type": "borderRadius",
+      "description": "Larger semantic corner radius."
+    },
+    "radius-xl": {
+      "value": "{spacing.205}",
+      "type": "borderRadius",
+      "description": "Largest semantic corner radius."
+    }
+  },
+  "zbk-p": {
+    "font-family": {
+      "value": "{font-family.body}",
+      "type": "fontFamily",
+      "description": "Font size for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-size": {
+      "value": "{font-size.sm}",
+      "type": "fontSize",
+      "description": "Font size for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-weight": {
+      "value": "{font-weight.normal}",
+      "type": "fontWeight",
+      "description": "Font weight for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "line-height": {
+      "value": "{line-height.3}",
+      "type": "lineHeight",
+      "description": "Line height for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "letter-spacing": {
+      "value": "{letter-spacing.normal}",
+      "type": "letterSpacing",
+      "description": "Tracking for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "measure": {
+      "value": "{text-measure.4}",
+      "type": "sizing",
+      "description": "Maximum width for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-before": {
+      "value": "{spacing.0}",
+      "type": "spacing",
+      "description": "Amount of margin inline start for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "spacing-after": {
+      "value": "{spacing.05}",
+      "type": "spacing",
+      "description": "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "color": {
+      "value": "{app.ink}",
+      "type": "color",
+      "description": "Color of P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "font-style": {
+      "value": "none",
+      "type": "fontStyle",
+      "description": "Font style for P elements with .prose applied directly or that are a child of a .prose container."
+    },
+    "text-transform": {
+      "value": "none",
+      "type": "textTransform",
+      "description": "Text transform for P elements with .prose applied directly or that are a child of a .prose container."
     }
   },
   "zbk-neutral": {
@@ -2103,6 +2103,126 @@
       "value": "{color.butterfield-950}",
       "type": "color",
       "description": "For primary branded surfaces."
+    },
+    "canvas": {
+      "value": "{brand.500}",
+      "type": "color",
+      "description": "Base brand canvas color for primary branded surfaces."
+    },
+    "canvas-subtle": {
+      "value": "{brand.50}",
+      "type": "color",
+      "description": "Subtle brand canvas color for the least-prominent, lightly tinted surfaces."
+    },
+    "canvas-muted": {
+      "value": "{brand.100}",
+      "type": "color",
+      "description": "Muted brand canvas color for low-emphasis, recessed surfaces."
+    },
+    "canvas-emphasis": {
+      "value": "{brand.600}",
+      "type": "color",
+      "description": "Emphasis brand canvas color for high-prominence surfaces."
+    },
+    "canvas-inverse": {
+      "value": "{brand.400}",
+      "type": "color",
+      "description": "Base inverse brand canvas color for surfaces on dark or inverted contexts."
+    },
+    "canvas-inverse-subtle": {
+      "value": "{brand.900}",
+      "type": "color",
+      "description": "Subtle inverse brand canvas color for the least-prominent surfaces in inverse contexts."
+    },
+    "canvas-inverse-muted": {
+      "value": "{brand.800}",
+      "type": "color",
+      "description": "Muted inverse brand canvas color for low-emphasis surfaces in inverse contexts."
+    },
+    "canvas-inverse-emphasis": {
+      "value": "{brand.300}",
+      "type": "color",
+      "description": "Emphasis inverse brand canvas color for high-prominence surfaces in inverse contexts."
+    },
+    "ink": {
+      "value": "{brand.700}",
+      "type": "color",
+      "description": "Base brand ink color (the brand hue) for body text and icons on neutral or light canvases."
+    },
+    "ink-subtle": {
+      "value": "{brand.400}",
+      "type": "color",
+      "description": "Subtle brand ink color for the least-prominent, tertiary text and icons."
+    },
+    "ink-muted": {
+      "value": "{brand.500}",
+      "type": "color",
+      "description": "Muted brand ink color for secondary text and icons."
+    },
+    "ink-emphasis": {
+      "value": "{brand.800}",
+      "type": "color",
+      "description": "Emphasis brand ink color for high-prominence text and icons."
+    },
+    "ink-inverse": {
+      "value": "{brand.300}",
+      "type": "color",
+      "description": "Base inverse brand ink color for body text and icons on inverse or dark canvases."
+    },
+    "ink-inverse-subtle": {
+      "value": "{brand.500}",
+      "type": "color",
+      "description": "Subtle inverse brand ink color for the least-prominent text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{brand.400}",
+      "type": "color",
+      "description": "Muted inverse brand ink color for secondary text and icons on inverse canvases."
+    },
+    "ink-inverse-emphasis": {
+      "value": "{brand.200}",
+      "type": "color",
+      "description": "Emphasis inverse brand ink color for high-prominence text on inverse canvases."
+    },
+    "border": {
+      "value": "{brand.500}",
+      "type": "color",
+      "description": "Base brand border color for outlines, strokes, and dividers."
+    },
+    "border-subtle": {
+      "value": "{brand.200}",
+      "type": "color",
+      "description": "Subtle brand border color for the least-prominent outlines and dividers."
+    },
+    "border-muted": {
+      "value": "{brand.300}",
+      "type": "color",
+      "description": "Muted brand border color for low-emphasis outlines and dividers."
+    },
+    "border-emphasis": {
+      "value": "{brand.600}",
+      "type": "color",
+      "description": "Emphasis brand border color for high-prominence outlines and dividers."
+    },
+    "border-inverse": {
+      "value": "{brand.500}",
+      "type": "color",
+      "description": "Base inverse brand border color for outlines and dividers on inverse canvases."
+    },
+    "border-inverse-subtle": {
+      "value": "{brand.800}",
+      "type": "color",
+      "description": "Subtle inverse brand border color for the least-prominent outlines on inverse canvases."
+    },
+    "border-inverse-muted": {
+      "value": "{brand.700}",
+      "type": "color",
+      "description": "Muted inverse brand border color for low-emphasis outlines on inverse canvases."
+    },
+    "border-inverse-emphasis": {
+      "value": "{brand.400}",
+      "type": "color",
+      "description": "Emphasis inverse brand border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-accent-secondary": {
@@ -2160,6 +2280,126 @@
       "value": "{color.lavenderfield-950}",
       "type": "color",
       "description": "For secondary accent surfaces."
+    },
+    "canvas": {
+      "value": "{accent-secondary.500}",
+      "type": "color",
+      "description": "Base secondary-accent canvas color for secondary accent surfaces."
+    },
+    "canvas-subtle": {
+      "value": "{accent-secondary.50}",
+      "type": "color",
+      "description": "Subtle secondary-accent canvas color for the least-prominent, lightly tinted surfaces."
+    },
+    "canvas-muted": {
+      "value": "{accent-secondary.100}",
+      "type": "color",
+      "description": "Muted secondary-accent canvas color for low-emphasis, recessed surfaces."
+    },
+    "canvas-emphasis": {
+      "value": "{accent-secondary.600}",
+      "type": "color",
+      "description": "Emphasis secondary-accent canvas color for high-prominence surfaces."
+    },
+    "canvas-inverse": {
+      "value": "{accent-secondary.400}",
+      "type": "color",
+      "description": "Base inverse secondary-accent canvas color for surfaces on dark or inverted contexts."
+    },
+    "canvas-inverse-subtle": {
+      "value": "{accent-secondary.900}",
+      "type": "color",
+      "description": "Subtle inverse secondary-accent canvas color for the least-prominent surfaces in inverse contexts."
+    },
+    "canvas-inverse-muted": {
+      "value": "{accent-secondary.800}",
+      "type": "color",
+      "description": "Muted inverse secondary-accent canvas color for low-emphasis surfaces in inverse contexts."
+    },
+    "canvas-inverse-emphasis": {
+      "value": "{accent-secondary.300}",
+      "type": "color",
+      "description": "Emphasis inverse secondary-accent canvas color for high-prominence surfaces in inverse contexts."
+    },
+    "ink": {
+      "value": "{accent-secondary.700}",
+      "type": "color",
+      "description": "Base secondary-accent ink color (the accent hue) for body text and icons on neutral or light canvases."
+    },
+    "ink-subtle": {
+      "value": "{accent-secondary.400}",
+      "type": "color",
+      "description": "Subtle secondary-accent ink color for the least-prominent, tertiary text and icons."
+    },
+    "ink-muted": {
+      "value": "{accent-secondary.500}",
+      "type": "color",
+      "description": "Muted secondary-accent ink color for secondary text and icons."
+    },
+    "ink-emphasis": {
+      "value": "{accent-secondary.800}",
+      "type": "color",
+      "description": "Emphasis secondary-accent ink color for high-prominence text and icons."
+    },
+    "ink-inverse": {
+      "value": "{accent-secondary.300}",
+      "type": "color",
+      "description": "Base inverse secondary-accent ink color for body text and icons on inverse or dark canvases."
+    },
+    "ink-inverse-subtle": {
+      "value": "{accent-secondary.500}",
+      "type": "color",
+      "description": "Subtle inverse secondary-accent ink color for the least-prominent text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{accent-secondary.400}",
+      "type": "color",
+      "description": "Muted inverse secondary-accent ink color for secondary text and icons on inverse canvases."
+    },
+    "ink-inverse-emphasis": {
+      "value": "{accent-secondary.200}",
+      "type": "color",
+      "description": "Emphasis inverse secondary-accent ink color for high-prominence text on inverse canvases."
+    },
+    "border": {
+      "value": "{accent-secondary.500}",
+      "type": "color",
+      "description": "Base secondary-accent border color for outlines, strokes, and dividers."
+    },
+    "border-subtle": {
+      "value": "{accent-secondary.200}",
+      "type": "color",
+      "description": "Subtle secondary-accent border color for the least-prominent outlines and dividers."
+    },
+    "border-muted": {
+      "value": "{accent-secondary.300}",
+      "type": "color",
+      "description": "Muted secondary-accent border color for low-emphasis outlines and dividers."
+    },
+    "border-emphasis": {
+      "value": "{accent-secondary.600}",
+      "type": "color",
+      "description": "Emphasis secondary-accent border color for high-prominence outlines and dividers."
+    },
+    "border-inverse": {
+      "value": "{accent-secondary.500}",
+      "type": "color",
+      "description": "Base inverse secondary-accent border color for outlines and dividers on inverse canvases."
+    },
+    "border-inverse-subtle": {
+      "value": "{accent-secondary.800}",
+      "type": "color",
+      "description": "Subtle inverse secondary-accent border color for the least-prominent outlines on inverse canvases."
+    },
+    "border-inverse-muted": {
+      "value": "{accent-secondary.700}",
+      "type": "color",
+      "description": "Muted inverse secondary-accent border color for low-emphasis outlines on inverse canvases."
+    },
+    "border-inverse-emphasis": {
+      "value": "{accent-secondary.400}",
+      "type": "color",
+      "description": "Emphasis inverse secondary-accent border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-accent-primary": {
@@ -2217,6 +2457,126 @@
       "value": "{color.mint-950}",
       "type": "color",
       "description": "For primary accent surfaces."
+    },
+    "canvas": {
+      "value": "{accent-primary.500}",
+      "type": "color",
+      "description": "Base primary-accent canvas color for primary accent surfaces."
+    },
+    "canvas-subtle": {
+      "value": "{accent-primary.50}",
+      "type": "color",
+      "description": "Subtle primary-accent canvas color for the least-prominent, lightly tinted surfaces."
+    },
+    "canvas-muted": {
+      "value": "{accent-primary.100}",
+      "type": "color",
+      "description": "Muted primary-accent canvas color for low-emphasis, recessed surfaces."
+    },
+    "canvas-emphasis": {
+      "value": "{accent-primary.600}",
+      "type": "color",
+      "description": "Emphasis primary-accent canvas color for high-prominence surfaces."
+    },
+    "canvas-inverse": {
+      "value": "{accent-primary.400}",
+      "type": "color",
+      "description": "Base inverse primary-accent canvas color for surfaces on dark or inverted contexts."
+    },
+    "canvas-inverse-subtle": {
+      "value": "{accent-primary.900}",
+      "type": "color",
+      "description": "Subtle inverse primary-accent canvas color for the least-prominent surfaces in inverse contexts."
+    },
+    "canvas-inverse-muted": {
+      "value": "{accent-primary.800}",
+      "type": "color",
+      "description": "Muted inverse primary-accent canvas color for low-emphasis surfaces in inverse contexts."
+    },
+    "canvas-inverse-emphasis": {
+      "value": "{accent-primary.300}",
+      "type": "color",
+      "description": "Emphasis inverse primary-accent canvas color for high-prominence surfaces in inverse contexts."
+    },
+    "ink": {
+      "value": "{accent-primary.700}",
+      "type": "color",
+      "description": "Base primary-accent ink color (the accent hue) for body text and icons on neutral or light canvases."
+    },
+    "ink-subtle": {
+      "value": "{accent-primary.400}",
+      "type": "color",
+      "description": "Subtle primary-accent ink color for the least-prominent, tertiary text and icons."
+    },
+    "ink-muted": {
+      "value": "{accent-primary.500}",
+      "type": "color",
+      "description": "Muted primary-accent ink color for secondary text and icons."
+    },
+    "ink-emphasis": {
+      "value": "{accent-primary.800}",
+      "type": "color",
+      "description": "Emphasis primary-accent ink color for high-prominence text and icons."
+    },
+    "ink-inverse": {
+      "value": "{accent-primary.300}",
+      "type": "color",
+      "description": "Base inverse primary-accent ink color for body text and icons on inverse or dark canvases."
+    },
+    "ink-inverse-subtle": {
+      "value": "{accent-primary.500}",
+      "type": "color",
+      "description": "Subtle inverse primary-accent ink color for the least-prominent text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{accent-primary.400}",
+      "type": "color",
+      "description": "Muted inverse primary-accent ink color for secondary text and icons on inverse canvases."
+    },
+    "ink-inverse-emphasis": {
+      "value": "{accent-primary.200}",
+      "type": "color",
+      "description": "Emphasis inverse primary-accent ink color for high-prominence text on inverse canvases."
+    },
+    "border": {
+      "value": "{accent-primary.500}",
+      "type": "color",
+      "description": "Base primary-accent border color for outlines, strokes, and dividers."
+    },
+    "border-subtle": {
+      "value": "{accent-primary.200}",
+      "type": "color",
+      "description": "Subtle primary-accent border color for the least-prominent outlines and dividers."
+    },
+    "border-muted": {
+      "value": "{accent-primary.300}",
+      "type": "color",
+      "description": "Muted primary-accent border color for low-emphasis outlines and dividers."
+    },
+    "border-emphasis": {
+      "value": "{accent-primary.600}",
+      "type": "color",
+      "description": "Emphasis primary-accent border color for high-prominence outlines and dividers."
+    },
+    "border-inverse": {
+      "value": "{accent-primary.500}",
+      "type": "color",
+      "description": "Base inverse primary-accent border color for outlines and dividers on inverse canvases."
+    },
+    "border-inverse-subtle": {
+      "value": "{accent-primary.800}",
+      "type": "color",
+      "description": "Subtle inverse primary-accent border color for the least-prominent outlines on inverse canvases."
+    },
+    "border-inverse-muted": {
+      "value": "{accent-primary.700}",
+      "type": "color",
+      "description": "Muted inverse primary-accent border color for low-emphasis outlines on inverse canvases."
+    },
+    "border-inverse-emphasis": {
+      "value": "{accent-primary.400}",
+      "type": "color",
+      "description": "Emphasis inverse primary-accent border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-positive": {
@@ -2225,222 +2585,120 @@
       "type": "color",
       "description": "Base positive canvas color for primary surfaces."
     },
-    "canvas-soft": {
+    "canvas-subtle": {
       "value": "{color.green-50}",
       "type": "color",
-      "description": "Soft positive canvas color for lightly tinted surfaces."
+      "description": "Subtle positive canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "value": "{color.green-100}",
       "type": "color",
-      "description": "Muted positive canvas color for low-emphasis surfaces."
+      "description": "Muted positive canvas color for low-emphasis, recessed surfaces."
     },
-    "canvas-strong": {
+    "canvas-emphasis": {
       "value": "{color.green-600}",
       "type": "color",
-      "description": "Strong positive canvas color for high-emphasis surfaces."
+      "description": "Emphasis positive canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "value": "{color.green-400}",
       "type": "color",
       "description": "Base inverse positive canvas color for surfaces on dark or inverted contexts."
     },
-    "canvas-inverse-soft": {
+    "canvas-inverse-subtle": {
       "value": "{color.green-900}",
       "type": "color",
-      "description": "Soft inverse positive canvas color for lightly tinted surfaces in inverse contexts."
+      "description": "Subtle inverse positive canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "value": "{color.green-800}",
       "type": "color",
       "description": "Muted inverse positive canvas color for low-emphasis surfaces in inverse contexts."
     },
-    "canvas-inverse-strong": {
+    "canvas-inverse-emphasis": {
       "value": "{color.green-300}",
       "type": "color",
-      "description": "Strong inverse positive canvas color for high-emphasis surfaces in inverse contexts."
+      "description": "Emphasis inverse positive canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "value": "{color.green-700}",
       "type": "color",
-      "description": "Base positive ink color for text and icons on neutral or light canvases."
+      "description": "Base positive ink color for body text and icons on neutral or light canvases."
     },
-    "ink-soft": {
-      "value": "{color.green-500}",
-      "type": "color",
-      "description": "Soft positive ink color for lower-emphasis text and icons."
-    },
-    "ink-muted": {
+    "ink-subtle": {
       "value": "{color.green-400}",
       "type": "color",
-      "description": "Muted positive ink color for subtle or secondary text and icons."
+      "description": "Subtle positive ink color for the least-prominent, tertiary text and icons."
+    },
+    "ink-muted": {
+      "value": "{color.green-500}",
+      "type": "color",
+      "description": "Muted positive ink color for secondary text and icons."
+    },
+    "ink-emphasis": {
+      "value": "{color.green-800}",
+      "type": "color",
+      "description": "Emphasis positive ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "value": "{color.green-300}",
       "type": "color",
-      "description": "Base inverse positive ink color for text and icons on inverse or dark canvases."
+      "description": "Base inverse positive ink color for body text and icons on inverse or dark canvases."
     },
-    "ink-inverse-soft": {
-      "value": "{color.green-400}",
-      "type": "color",
-      "description": "Soft inverse positive ink color for lower-emphasis text and icons on inverse canvases."
-    },
-    "ink-inverse-muted": {
+    "ink-inverse-subtle": {
       "value": "{color.green-500}",
       "type": "color",
-      "description": "Muted inverse positive ink color for subtle text and icons on inverse canvases."
+      "description": "Subtle inverse positive ink color for the least-prominent text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{color.green-400}",
+      "type": "color",
+      "description": "Muted inverse positive ink color for secondary text and icons on inverse canvases."
+    },
+    "ink-inverse-emphasis": {
+      "value": "{color.green-200}",
+      "type": "color",
+      "description": "Emphasis inverse positive ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "value": "{color.green-500}",
       "type": "color",
       "description": "Base positive border color for outlines, strokes, and dividers."
     },
-    "border-soft": {
+    "border-subtle": {
       "value": "{color.green-200}",
       "type": "color",
-      "description": "Soft positive border color for low-emphasis outlines and dividers."
+      "description": "Subtle positive border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "value": "{color.green-300}",
       "type": "color",
-      "description": "Muted positive border color for subtle outlines and dividers."
+      "description": "Muted positive border color for low-emphasis outlines and dividers."
     },
-    "border-strong": {
+    "border-emphasis": {
       "value": "{color.green-600}",
       "type": "color",
-      "description": "Strong positive border color for high-emphasis outlines and dividers."
+      "description": "Emphasis positive border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "value": "{color.green-500}",
       "type": "color",
       "description": "Base inverse positive border color for outlines and dividers on inverse canvases."
     },
-    "border-inverse-soft": {
+    "border-inverse-subtle": {
       "value": "{color.green-800}",
       "type": "color",
-      "description": "Soft inverse positive border color for low-emphasis outlines on inverse canvases."
+      "description": "Subtle inverse positive border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "value": "{color.green-700}",
       "type": "color",
-      "description": "Muted inverse positive border color for subtle outlines on inverse canvases."
+      "description": "Muted inverse positive border color for low-emphasis outlines on inverse canvases."
     },
-    "border-inverse-strong": {
+    "border-inverse-emphasis": {
       "value": "{color.green-400}",
       "type": "color",
-      "description": "Strong inverse positive border color for high-emphasis outlines on inverse canvases."
-    }
-  },
-  "zbk-info": {
-    "canvas": {
-      "value": "{color.cyan-500}",
-      "type": "color",
-      "description": "Base info canvas color for primary surfaces."
-    },
-    "canvas-soft": {
-      "value": "{color.cyan-50}",
-      "type": "color",
-      "description": "Soft info canvas color for lightly tinted surfaces."
-    },
-    "canvas-muted": {
-      "value": "{color.cyan-100}",
-      "type": "color",
-      "description": "Muted info canvas color for low-emphasis surfaces."
-    },
-    "canvas-strong": {
-      "value": "{color.cyan-600}",
-      "type": "color",
-      "description": "Strong info canvas color for high-emphasis surfaces."
-    },
-    "canvas-inverse": {
-      "value": "{color.cyan-400}",
-      "type": "color",
-      "description": "Base inverse info canvas color for surfaces on dark or inverted contexts."
-    },
-    "canvas-inverse-soft": {
-      "value": "{color.cyan-900}",
-      "type": "color",
-      "description": "Soft inverse info canvas color for lightly tinted surfaces in inverse contexts."
-    },
-    "canvas-inverse-muted": {
-      "value": "{color.cyan-800}",
-      "type": "color",
-      "description": "Muted inverse info canvas color for low-emphasis surfaces in inverse contexts."
-    },
-    "canvas-inverse-strong": {
-      "value": "{color.cyan-300}",
-      "type": "color",
-      "description": "Strong inverse info canvas color for high-emphasis surfaces in inverse contexts."
-    },
-    "ink": {
-      "value": "{color.cyan-700}",
-      "type": "color",
-      "description": "Base info ink color for text and icons on neutral or light canvases."
-    },
-    "ink-soft": {
-      "value": "{color.cyan-500}",
-      "type": "color",
-      "description": "Soft info ink color for lower-emphasis text and icons."
-    },
-    "ink-muted": {
-      "value": "{color.cyan-400}",
-      "type": "color",
-      "description": "Muted info ink color for subtle or secondary text and icons."
-    },
-    "ink-inverse": {
-      "value": "{color.cyan-300}",
-      "type": "color",
-      "description": "Base inverse info ink color for text and icons on inverse or dark canvases."
-    },
-    "ink-inverse-soft": {
-      "value": "{color.cyan-400}",
-      "type": "color",
-      "description": "Soft inverse info ink color for lower-emphasis text and icons on inverse canvases."
-    },
-    "ink-inverse-muted": {
-      "value": "{color.cyan-500}",
-      "type": "color",
-      "description": "Muted inverse info ink color for subtle text and icons on inverse canvases."
-    },
-    "border": {
-      "value": "{color.cyan-500}",
-      "type": "color",
-      "description": "Base info border color for outlines, strokes, and dividers."
-    },
-    "border-soft": {
-      "value": "{color.cyan-200}",
-      "type": "color",
-      "description": "Soft info border color for low-emphasis outlines and dividers."
-    },
-    "border-muted": {
-      "value": "{color.cyan-300}",
-      "type": "color",
-      "description": "Muted info border color for subtle outlines and dividers."
-    },
-    "border-strong": {
-      "value": "{color.cyan-600}",
-      "type": "color",
-      "description": "Strong info border color for high-emphasis outlines and dividers."
-    },
-    "border-inverse": {
-      "value": "{color.cyan-500}",
-      "type": "color",
-      "description": "Base inverse info border color for outlines and dividers on inverse canvases."
-    },
-    "border-inverse-soft": {
-      "value": "{color.cyan-800}",
-      "type": "color",
-      "description": "Soft inverse info border color for low-emphasis outlines on inverse canvases."
-    },
-    "border-inverse-muted": {
-      "value": "{color.cyan-700}",
-      "type": "color",
-      "description": "Muted inverse info border color for subtle outlines on inverse canvases."
-    },
-    "border-inverse-strong": {
-      "value": "{color.cyan-400}",
-      "type": "color",
-      "description": "Strong inverse info border color for high-emphasis outlines on inverse canvases."
+      "description": "Emphasis inverse positive border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-disabled": {
@@ -2449,110 +2707,242 @@
       "type": "color",
       "description": "Base disabled canvas color for primary surfaces."
     },
-    "canvas-soft": {
+    "canvas-subtle": {
       "value": "{color.charcoal-50}",
       "type": "color",
-      "description": "Soft disabled canvas color for lightly tinted surfaces."
+      "description": "Subtle disabled canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "value": "{color.charcoal-200}",
       "type": "color",
-      "description": "Muted disabled canvas color for low-emphasis surfaces."
+      "description": "Muted disabled canvas color for low-emphasis, recessed surfaces."
     },
-    "canvas-strong": {
+    "canvas-emphasis": {
       "value": "{color.charcoal-800}",
       "type": "color",
-      "description": "Strong disabled canvas color for high-emphasis surfaces."
+      "description": "Emphasis disabled canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "value": "{color.charcoal-800}",
       "type": "color",
       "description": "Base inverse disabled canvas color for surfaces on dark or inverted contexts."
     },
-    "canvas-inverse-soft": {
+    "canvas-inverse-subtle": {
       "value": "{color.charcoal-950}",
       "type": "color",
-      "description": "Soft inverse disabled canvas color for lightly tinted surfaces in inverse contexts."
+      "description": "Subtle inverse disabled canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "value": "{color.charcoal-900}",
       "type": "color",
       "description": "Muted inverse disabled canvas color for low-emphasis surfaces in inverse contexts."
     },
-    "canvas-inverse-strong": {
+    "canvas-inverse-emphasis": {
       "value": "{color.charcoal-200}",
       "type": "color",
-      "description": "Strong inverse disabled canvas color for high-emphasis surfaces in inverse contexts."
+      "description": "Emphasis inverse disabled canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "value": "{color.charcoal-800}",
       "type": "color",
-      "description": "Base disabled ink color for text and icons on neutral or light canvases."
+      "description": "Base disabled ink color for body text and icons on neutral or light canvases."
     },
-    "ink-soft": {
+    "ink-subtle": {
       "value": "{color.charcoal-400}",
       "type": "color",
-      "description": "Soft disabled ink color for lower-emphasis text and icons."
+      "description": "Subtle disabled ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "value": "{color.charcoal-600}",
       "type": "color",
-      "description": "Muted disabled ink color for subtle or secondary text and icons."
+      "description": "Muted disabled ink color for secondary text and icons."
+    },
+    "ink-emphasis": {
+      "value": "{color.charcoal-900}",
+      "type": "color",
+      "description": "Emphasis disabled ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "value": "{color.charcoal-200}",
       "type": "color",
-      "description": "Base inverse disabled ink color for text and icons on inverse or dark canvases."
+      "description": "Base inverse disabled ink color for body text and icons on inverse or dark canvases."
     },
-    "ink-inverse-soft": {
-      "value": "{color.charcoal-500}",
-      "type": "color",
-      "description": "Soft inverse disabled ink color for lower-emphasis text and icons on inverse canvases."
-    },
-    "ink-inverse-muted": {
+    "ink-inverse-subtle": {
       "value": "{color.charcoal-800}",
       "type": "color",
-      "description": "Muted inverse disabled ink color for subtle text and icons on inverse canvases."
+      "description": "Subtle inverse disabled ink color for the least-prominent text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{color.charcoal-500}",
+      "type": "color",
+      "description": "Muted inverse disabled ink color for secondary text and icons on inverse canvases."
+    },
+    "ink-inverse-emphasis": {
+      "value": "{color.charcoal-100}",
+      "type": "color",
+      "description": "Emphasis inverse disabled ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "value": "{disabled.ink}",
       "type": "color",
       "description": "Base disabled border color for outlines, strokes, and dividers."
     },
-    "border-soft": {
-      "value": "{disabled.ink-soft}",
+    "border-subtle": {
+      "value": "{disabled.ink-subtle}",
       "type": "color",
-      "description": "Soft disabled border color for low-emphasis outlines and dividers."
+      "description": "Subtle disabled border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "value": "{disabled.ink-muted}",
       "type": "color",
-      "description": "Muted disabled border color for subtle outlines and dividers."
+      "description": "Muted disabled border color for low-emphasis outlines and dividers."
     },
-    "border-strong": {
-      "value": "{disabled.ink}",
+    "border-emphasis": {
+      "value": "{disabled.ink-emphasis}",
       "type": "color",
-      "description": "Strong disabled border color for high-emphasis outlines and dividers."
+      "description": "Emphasis disabled border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "value": "{disabled.ink-inverse}",
       "type": "color",
       "description": "Base inverse disabled border color for outlines and dividers on inverse canvases."
     },
-    "border-inverse-soft": {
-      "value": "{disabled.ink-inverse-soft}",
+    "border-inverse-subtle": {
+      "value": "{disabled.ink-inverse-subtle}",
       "type": "color",
-      "description": "Soft inverse disabled border color for low-emphasis outlines on inverse canvases."
+      "description": "Subtle inverse disabled border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "value": "{disabled.ink-inverse-muted}",
       "type": "color",
-      "description": "Muted inverse disabled border color for subtle outlines on inverse canvases."
+      "description": "Muted inverse disabled border color for low-emphasis outlines on inverse canvases."
     },
-    "border-inverse-strong": {
-      "value": "{disabled.ink-inverse}",
+    "border-inverse-emphasis": {
+      "value": "{disabled.ink-inverse-emphasis}",
       "type": "color",
-      "description": "Strong inverse disabled border color for high-emphasis outlines on inverse canvases."
+      "description": "Emphasis inverse disabled border color for high-prominence outlines on inverse canvases."
+    }
+  },
+  "zbk-info": {
+    "canvas": {
+      "value": "{color.cyan-500}",
+      "type": "color",
+      "description": "Base info canvas color for primary surfaces."
+    },
+    "canvas-subtle": {
+      "value": "{color.cyan-50}",
+      "type": "color",
+      "description": "Subtle info canvas color for the least-prominent, lightly tinted surfaces."
+    },
+    "canvas-muted": {
+      "value": "{color.cyan-100}",
+      "type": "color",
+      "description": "Muted info canvas color for low-emphasis, recessed surfaces."
+    },
+    "canvas-emphasis": {
+      "value": "{color.cyan-600}",
+      "type": "color",
+      "description": "Emphasis info canvas color for high-prominence surfaces."
+    },
+    "canvas-inverse": {
+      "value": "{color.cyan-400}",
+      "type": "color",
+      "description": "Base inverse info canvas color for surfaces on dark or inverted contexts."
+    },
+    "canvas-inverse-subtle": {
+      "value": "{color.cyan-900}",
+      "type": "color",
+      "description": "Subtle inverse info canvas color for the least-prominent surfaces in inverse contexts."
+    },
+    "canvas-inverse-muted": {
+      "value": "{color.cyan-800}",
+      "type": "color",
+      "description": "Muted inverse info canvas color for low-emphasis surfaces in inverse contexts."
+    },
+    "canvas-inverse-emphasis": {
+      "value": "{color.cyan-300}",
+      "type": "color",
+      "description": "Emphasis inverse info canvas color for high-prominence surfaces in inverse contexts."
+    },
+    "ink": {
+      "value": "{color.cyan-700}",
+      "type": "color",
+      "description": "Base info ink color for body text and icons on neutral or light canvases."
+    },
+    "ink-subtle": {
+      "value": "{color.cyan-400}",
+      "type": "color",
+      "description": "Subtle info ink color for the least-prominent, tertiary text and icons."
+    },
+    "ink-muted": {
+      "value": "{color.cyan-500}",
+      "type": "color",
+      "description": "Muted info ink color for secondary text and icons."
+    },
+    "ink-emphasis": {
+      "value": "{color.cyan-800}",
+      "type": "color",
+      "description": "Emphasis info ink color for high-prominence text and icons."
+    },
+    "ink-inverse": {
+      "value": "{color.cyan-300}",
+      "type": "color",
+      "description": "Base inverse info ink color for body text and icons on inverse or dark canvases."
+    },
+    "ink-inverse-subtle": {
+      "value": "{color.cyan-500}",
+      "type": "color",
+      "description": "Subtle inverse info ink color for the least-prominent text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{color.cyan-400}",
+      "type": "color",
+      "description": "Muted inverse info ink color for secondary text and icons on inverse canvases."
+    },
+    "ink-inverse-emphasis": {
+      "value": "{color.cyan-200}",
+      "type": "color",
+      "description": "Emphasis inverse info ink color for high-prominence text on inverse canvases."
+    },
+    "border": {
+      "value": "{color.cyan-500}",
+      "type": "color",
+      "description": "Base info border color for outlines, strokes, and dividers."
+    },
+    "border-subtle": {
+      "value": "{color.cyan-200}",
+      "type": "color",
+      "description": "Subtle info border color for the least-prominent outlines and dividers."
+    },
+    "border-muted": {
+      "value": "{color.cyan-300}",
+      "type": "color",
+      "description": "Muted info border color for low-emphasis outlines and dividers."
+    },
+    "border-emphasis": {
+      "value": "{color.cyan-600}",
+      "type": "color",
+      "description": "Emphasis info border color for high-prominence outlines and dividers."
+    },
+    "border-inverse": {
+      "value": "{color.cyan-500}",
+      "type": "color",
+      "description": "Base inverse info border color for outlines and dividers on inverse canvases."
+    },
+    "border-inverse-subtle": {
+      "value": "{color.cyan-800}",
+      "type": "color",
+      "description": "Subtle inverse info border color for the least-prominent outlines on inverse canvases."
+    },
+    "border-inverse-muted": {
+      "value": "{color.cyan-700}",
+      "type": "color",
+      "description": "Muted inverse info border color for low-emphasis outlines on inverse canvases."
+    },
+    "border-inverse-emphasis": {
+      "value": "{color.cyan-400}",
+      "type": "color",
+      "description": "Emphasis inverse info border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-critical": {
@@ -2561,334 +2951,120 @@
       "type": "color",
       "description": "Base critical canvas color for primary surfaces."
     },
-    "canvas-soft": {
+    "canvas-subtle": {
       "value": "{color.red-50}",
       "type": "color",
-      "description": "Soft critical canvas color for lightly tinted surfaces."
+      "description": "Subtle critical canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "value": "{color.red-100}",
       "type": "color",
-      "description": "Muted critical canvas color for low-emphasis surfaces."
+      "description": "Muted critical canvas color for low-emphasis, recessed surfaces."
     },
-    "canvas-strong": {
+    "canvas-emphasis": {
       "value": "{color.red-600}",
       "type": "color",
-      "description": "Strong critical canvas color for high-emphasis surfaces."
+      "description": "Emphasis critical canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "value": "{color.red-400}",
       "type": "color",
       "description": "Base inverse critical canvas color for surfaces on dark or inverted contexts."
     },
-    "canvas-inverse-soft": {
+    "canvas-inverse-subtle": {
       "value": "{color.red-900}",
       "type": "color",
-      "description": "Soft inverse critical canvas color for lightly tinted surfaces in inverse contexts."
+      "description": "Subtle inverse critical canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "value": "{color.red-800}",
       "type": "color",
       "description": "Muted inverse critical canvas color for low-emphasis surfaces in inverse contexts."
     },
-    "canvas-inverse-strong": {
+    "canvas-inverse-emphasis": {
       "value": "{color.red-300}",
       "type": "color",
-      "description": "Strong inverse critical canvas color for high-emphasis surfaces in inverse contexts."
+      "description": "Emphasis inverse critical canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "value": "{color.red-700}",
       "type": "color",
-      "description": "Base critical ink color for text and icons on neutral or light canvases."
+      "description": "Base critical ink color for body text and icons on neutral or light canvases."
     },
-    "ink-soft": {
-      "value": "{color.red-500}",
-      "type": "color",
-      "description": "Soft critical ink color for lower-emphasis text and icons."
-    },
-    "ink-muted": {
+    "ink-subtle": {
       "value": "{color.red-400}",
       "type": "color",
-      "description": "Muted critical ink color for subtle or secondary text and icons."
+      "description": "Subtle critical ink color for the least-prominent, tertiary text and icons."
+    },
+    "ink-muted": {
+      "value": "{color.red-500}",
+      "type": "color",
+      "description": "Muted critical ink color for secondary text and icons."
+    },
+    "ink-emphasis": {
+      "value": "{color.red-800}",
+      "type": "color",
+      "description": "Emphasis critical ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "value": "{color.red-300}",
       "type": "color",
-      "description": "Base inverse critical ink color for text and icons on inverse or dark canvases."
+      "description": "Base inverse critical ink color for body text and icons on inverse or dark canvases."
     },
-    "ink-inverse-soft": {
-      "value": "{color.red-400}",
-      "type": "color",
-      "description": "Soft inverse critical ink color for lower-emphasis text and icons on inverse canvases."
-    },
-    "ink-inverse-muted": {
+    "ink-inverse-subtle": {
       "value": "{color.red-500}",
       "type": "color",
-      "description": "Muted inverse critical ink color for subtle text and icons on inverse canvases."
+      "description": "Subtle inverse critical ink color for the least-prominent text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{color.red-400}",
+      "type": "color",
+      "description": "Muted inverse critical ink color for secondary text and icons on inverse canvases."
+    },
+    "ink-inverse-emphasis": {
+      "value": "{color.red-200}",
+      "type": "color",
+      "description": "Emphasis inverse critical ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "value": "{color.red-500}",
       "type": "color",
       "description": "Base critical border color for outlines, strokes, and dividers."
     },
-    "border-soft": {
+    "border-subtle": {
       "value": "{color.red-200}",
       "type": "color",
-      "description": "Soft critical border color for low-emphasis outlines and dividers."
+      "description": "Subtle critical border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "value": "{color.red-300}",
       "type": "color",
-      "description": "Muted critical border color for subtle outlines and dividers."
+      "description": "Muted critical border color for low-emphasis outlines and dividers."
     },
-    "border-strong": {
+    "border-emphasis": {
       "value": "{color.red-600}",
       "type": "color",
-      "description": "Strong critical border color for high-emphasis outlines and dividers."
+      "description": "Emphasis critical border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "value": "{color.red-500}",
       "type": "color",
       "description": "Base inverse critical border color for outlines and dividers on inverse canvases."
     },
-    "border-inverse-soft": {
+    "border-inverse-subtle": {
       "value": "{color.red-800}",
       "type": "color",
-      "description": "Soft inverse critical border color for low-emphasis outlines on inverse canvases."
+      "description": "Subtle inverse critical border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "value": "{color.red-700}",
       "type": "color",
-      "description": "Muted inverse critical border color for subtle outlines on inverse canvases."
+      "description": "Muted inverse critical border color for low-emphasis outlines on inverse canvases."
     },
-    "border-inverse-strong": {
+    "border-inverse-emphasis": {
       "value": "{color.red-400}",
       "type": "color",
-      "description": "Strong inverse critical border color for high-emphasis outlines on inverse canvases."
-    }
-  },
-  "zbk-app": {
-    "canvas": {
-      "value": "{color.butterfield-50}",
-      "type": "color",
-      "description": "Base app canvas color for primary surfaces."
-    },
-    "canvas-soft": {
-      "value": "{color.global-white}",
-      "type": "color",
-      "description": "Soft app canvas color for lightly tinted surfaces."
-    },
-    "canvas-muted": {
-      "value": "{color.butterfield-100}",
-      "type": "color",
-      "description": "Muted app canvas color for low-emphasis surfaces."
-    },
-    "canvas-strong": {
-      "value": "{color.dusk-900}",
-      "type": "color",
-      "description": "Strong app canvas color for high-emphasis surfaces."
-    },
-    "canvas-inverse": {
-      "value": "{color.dusk-950}",
-      "type": "color",
-      "description": "Base inverse app canvas color for surfaces on dark or inverted contexts."
-    },
-    "canvas-inverse-soft": {
-      "value": "{color.dusk-900}",
-      "type": "color",
-      "description": "Soft inverse app canvas color for lightly tinted surfaces in inverse contexts."
-    },
-    "canvas-inverse-muted": {
-      "value": "{color.dusk-700}",
-      "type": "color",
-      "description": "Muted inverse app canvas color for low-emphasis surfaces in inverse contexts."
-    },
-    "canvas-inverse-strong": {
-      "value": "{color.dusk-200}",
-      "type": "color",
-      "description": "Strong inverse app canvas color for high-emphasis surfaces in inverse contexts."
-    },
-    "ink": {
-      "value": "{color.dusk-950}",
-      "type": "color",
-      "description": "Base app ink color for text and icons on neutral or light canvases."
-    },
-    "ink-soft": {
-      "value": "{color.dusk-600}",
-      "type": "color",
-      "description": "Soft app ink color for lower-emphasis text and icons."
-    },
-    "ink-muted": {
-      "value": "{color.dusk-800}",
-      "type": "color",
-      "description": "Muted app ink color for subtle or secondary text and icons."
-    },
-    "ink-inverse": {
-      "value": "{color.dusk-200}",
-      "type": "color",
-      "description": "Base inverse app ink color for text and icons on inverse or dark canvases."
-    },
-    "ink-inverse-soft": {
-      "value": "{color.dusk-50}",
-      "type": "color",
-      "description": "Soft inverse app ink color for lower-emphasis text and icons on inverse canvases."
-    },
-    "ink-inverse-muted": {
-      "value": "{color.dusk-400}",
-      "type": "color",
-      "description": "Muted inverse app ink color for subtle text and icons on inverse canvases."
-    },
-    "border": {
-      "value": "{color.dusk-200}",
-      "type": "color",
-      "description": "Base app border color for outlines, strokes, and dividers."
-    },
-    "border-soft": {
-      "value": "{color.dusk-100}",
-      "type": "color",
-      "description": "Soft app border color for low-emphasis outlines and dividers."
-    },
-    "border-muted": {
-      "value": "{color.dusk-300}",
-      "type": "color",
-      "description": "Muted app border color for subtle outlines and dividers."
-    },
-    "border-strong": {
-      "value": "{color.dusk-400}",
-      "type": "color",
-      "description": "Strong app border color for high-emphasis outlines and dividers."
-    },
-    "border-inverse": {
-      "value": "{color.dusk-700}",
-      "type": "color",
-      "description": "Base inverse app border color for outlines and dividers on inverse canvases."
-    },
-    "border-inverse-soft": {
-      "value": "{color.dusk-800}",
-      "type": "color",
-      "description": "Soft inverse app border color for low-emphasis outlines on inverse canvases."
-    },
-    "border-inverse-muted": {
-      "value": "{color.dusk-600}",
-      "type": "color",
-      "description": "Muted inverse app border color for subtle outlines on inverse canvases."
-    },
-    "border-inverse-strong": {
-      "value": "{color.dusk-500}",
-      "type": "color",
-      "description": "Strong inverse app border color for high-emphasis outlines on inverse canvases."
-    }
-  },
-  "zbk-action": {
-    "canvas": {
-      "value": "{color.ember-400}",
-      "type": "color",
-      "description": "Base action canvas color for primary surfaces."
-    },
-    "canvas-soft": {
-      "value": "{color.ember-200}",
-      "type": "color",
-      "description": "Soft action canvas color for lightly tinted surfaces."
-    },
-    "canvas-muted": {
-      "value": "{color.ember-100}",
-      "type": "color",
-      "description": "Muted action canvas color for low-emphasis surfaces."
-    },
-    "canvas-strong": {
-      "value": "",
-      "type": "color",
-      "description": "Strong action canvas color for high-emphasis surfaces."
-    },
-    "canvas-inverse": {
-      "value": "",
-      "type": "color",
-      "description": "Base inverse action canvas color for surfaces on dark or inverted contexts."
-    },
-    "canvas-inverse-soft": {
-      "value": "",
-      "type": "color",
-      "description": "Soft inverse action canvas color for lightly tinted surfaces in inverse contexts."
-    },
-    "canvas-inverse-muted": {
-      "value": "",
-      "type": "color",
-      "description": "Muted inverse action canvas color for low-emphasis surfaces in inverse contexts."
-    },
-    "canvas-inverse-strong": {
-      "value": "",
-      "type": "color",
-      "description": "Strong inverse action canvas color for high-emphasis surfaces in inverse contexts."
-    },
-    "ink": {
-      "value": "{color.ember-600}",
-      "type": "color",
-      "description": "Base action ink color for text and icons on neutral or light canvases."
-    },
-    "ink-soft": {
-      "value": "{color.ember-400}",
-      "type": "color",
-      "description": "Soft action ink color for lower-emphasis text and icons."
-    },
-    "ink-muted": {
-      "value": "{color.ember-300}",
-      "type": "color",
-      "description": "Muted action ink color for subtle or secondary text and icons."
-    },
-    "ink-inverse": {
-      "value": "",
-      "type": "color",
-      "description": "Base inverse action ink color for text and icons on inverse or dark canvases."
-    },
-    "ink-inverse-soft": {
-      "value": "",
-      "type": "color",
-      "description": "Soft inverse action ink color for lower-emphasis text and icons on inverse canvases."
-    },
-    "ink-inverse-muted": {
-      "value": "",
-      "type": "color",
-      "description": "Muted inverse action ink color for subtle text and icons on inverse canvases."
-    },
-    "border": {
-      "value": "",
-      "type": "color",
-      "description": "Base action border color for outlines, strokes, and dividers."
-    },
-    "border-soft": {
-      "value": "",
-      "type": "color",
-      "description": "Soft action border color for low-emphasis outlines and dividers."
-    },
-    "border-muted": {
-      "value": "",
-      "type": "color",
-      "description": "Muted action border color for subtle outlines and dividers."
-    },
-    "border-strong": {
-      "value": "",
-      "type": "color",
-      "description": "Strong action border color for high-emphasis outlines and dividers."
-    },
-    "border-inverse": {
-      "value": "",
-      "type": "color",
-      "description": "Base inverse action border color for outlines and dividers on inverse canvases."
-    },
-    "border-inverse-soft": {
-      "value": "",
-      "type": "color",
-      "description": "Soft inverse action border color for low-emphasis outlines on inverse canvases."
-    },
-    "border-inverse-muted": {
-      "value": "",
-      "type": "color",
-      "description": "Muted inverse action border color for subtle outlines on inverse canvases."
-    },
-    "border-inverse-strong": {
-      "value": "",
-      "type": "color",
-      "description": "Strong inverse action border color for high-emphasis outlines on inverse canvases."
+      "description": "Emphasis inverse critical border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-caution": {
@@ -2897,110 +3073,364 @@
       "type": "color",
       "description": "Base caution canvas color for primary surfaces."
     },
-    "canvas-soft": {
+    "canvas-subtle": {
       "value": "{color.gold-50}",
       "type": "color",
-      "description": "Soft caution canvas color for lightly tinted surfaces."
+      "description": "Subtle caution canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "value": "{color.gold-100}",
       "type": "color",
-      "description": "Muted caution canvas color for low-emphasis surfaces."
+      "description": "Muted caution canvas color for low-emphasis, recessed surfaces."
     },
-    "canvas-strong": {
+    "canvas-emphasis": {
       "value": "{color.gold-600}",
       "type": "color",
-      "description": "Strong caution canvas color for high-emphasis surfaces."
+      "description": "Emphasis caution canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "value": "{color.gold-400}",
       "type": "color",
       "description": "Base inverse caution canvas color for surfaces on dark or inverted contexts."
     },
-    "canvas-inverse-soft": {
+    "canvas-inverse-subtle": {
       "value": "{color.gold-900}",
       "type": "color",
-      "description": "Soft inverse caution canvas color for lightly tinted surfaces in inverse contexts."
+      "description": "Subtle inverse caution canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "value": "{color.gold-800}",
       "type": "color",
       "description": "Muted inverse caution canvas color for low-emphasis surfaces in inverse contexts."
     },
-    "canvas-inverse-strong": {
+    "canvas-inverse-emphasis": {
       "value": "{color.gold-300}",
       "type": "color",
-      "description": "Strong inverse caution canvas color for high-emphasis surfaces in inverse contexts."
+      "description": "Emphasis inverse caution canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "value": "{color.gold-700}",
       "type": "color",
-      "description": "Base caution ink color for text and icons on neutral or light canvases."
+      "description": "Base caution ink color for body text and icons on neutral or light canvases."
     },
-    "ink-soft": {
-      "value": "{color.gold-500}",
-      "type": "color",
-      "description": "Soft caution ink color for lower-emphasis text and icons."
-    },
-    "ink-muted": {
+    "ink-subtle": {
       "value": "{color.gold-400}",
       "type": "color",
-      "description": "Muted caution ink color for subtle or secondary text and icons."
+      "description": "Subtle caution ink color for the least-prominent, tertiary text and icons."
+    },
+    "ink-muted": {
+      "value": "{color.gold-500}",
+      "type": "color",
+      "description": "Muted caution ink color for secondary text and icons."
+    },
+    "ink-emphasis": {
+      "value": "{color.gold-800}",
+      "type": "color",
+      "description": "Emphasis caution ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "value": "{color.gold-300}",
       "type": "color",
-      "description": "Base inverse caution ink color for text and icons on inverse or dark canvases."
+      "description": "Base inverse caution ink color for body text and icons on inverse or dark canvases."
     },
-    "ink-inverse-soft": {
-      "value": "{color.gold-400}",
-      "type": "color",
-      "description": "Soft inverse caution ink color for lower-emphasis text and icons on inverse canvases."
-    },
-    "ink-inverse-muted": {
+    "ink-inverse-subtle": {
       "value": "{color.gold-500}",
       "type": "color",
-      "description": "Muted inverse caution ink color for subtle text and icons on inverse canvases."
+      "description": "Subtle inverse caution ink color for the least-prominent text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{color.gold-400}",
+      "type": "color",
+      "description": "Muted inverse caution ink color for secondary text and icons on inverse canvases."
+    },
+    "ink-inverse-emphasis": {
+      "value": "{color.gold-200}",
+      "type": "color",
+      "description": "Emphasis inverse caution ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "value": "{color.gold-500}",
       "type": "color",
       "description": "Base caution border color for outlines, strokes, and dividers."
     },
-    "border-soft": {
+    "border-subtle": {
       "value": "{color.gold-200}",
       "type": "color",
-      "description": "Soft caution border color for low-emphasis outlines and dividers."
+      "description": "Subtle caution border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "value": "{color.gold-300}",
       "type": "color",
-      "description": "Muted caution border color for subtle outlines and dividers."
+      "description": "Muted caution border color for low-emphasis outlines and dividers."
     },
-    "border-strong": {
+    "border-emphasis": {
       "value": "{color.gold-600}",
       "type": "color",
-      "description": "Strong caution border color for high-emphasis outlines and dividers."
+      "description": "Emphasis caution border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "value": "{color.gold-500}",
       "type": "color",
       "description": "Base inverse caution border color for outlines and dividers on inverse canvases."
     },
-    "border-inverse-soft": {
+    "border-inverse-subtle": {
       "value": "{color.gold-800}",
       "type": "color",
-      "description": "Soft inverse caution border color for low-emphasis outlines on inverse canvases."
+      "description": "Subtle inverse caution border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "value": "{color.gold-700}",
       "type": "color",
-      "description": "Muted inverse caution border color for subtle outlines on inverse canvases."
+      "description": "Muted inverse caution border color for low-emphasis outlines on inverse canvases."
     },
-    "border-inverse-strong": {
+    "border-inverse-emphasis": {
       "value": "{color.gold-400}",
       "type": "color",
-      "description": "Strong inverse caution border color for high-emphasis outlines on inverse canvases."
+      "description": "Emphasis inverse caution border color for high-prominence outlines on inverse canvases."
+    }
+  },
+  "zbk-app": {
+    "canvas": {
+      "value": "{color.butterfield-50}",
+      "type": "color",
+      "description": "Base app canvas color for primary surfaces."
+    },
+    "canvas-subtle": {
+      "value": "{color.global-white}",
+      "type": "color",
+      "description": "Subtle app canvas color for the least-prominent, lightly tinted surfaces."
+    },
+    "canvas-muted": {
+      "value": "{color.butterfield-100}",
+      "type": "color",
+      "description": "Muted app canvas color for low-emphasis, recessed surfaces."
+    },
+    "canvas-emphasis": {
+      "value": "{color.dusk-900}",
+      "type": "color",
+      "description": "Emphasis app canvas color for high-prominence surfaces."
+    },
+    "canvas-inverse": {
+      "value": "{color.dusk-950}",
+      "type": "color",
+      "description": "Base inverse app canvas color for surfaces on dark or inverted contexts."
+    },
+    "canvas-inverse-subtle": {
+      "value": "{color.dusk-900}",
+      "type": "color",
+      "description": "Subtle inverse app canvas color for the least-prominent surfaces in inverse contexts."
+    },
+    "canvas-inverse-muted": {
+      "value": "{color.dusk-700}",
+      "type": "color",
+      "description": "Muted inverse app canvas color for low-emphasis surfaces in inverse contexts."
+    },
+    "canvas-inverse-emphasis": {
+      "value": "{color.dusk-200}",
+      "type": "color",
+      "description": "Emphasis inverse app canvas color for high-prominence surfaces in inverse contexts."
+    },
+    "ink": {
+      "value": "{color.dusk-950}",
+      "type": "color",
+      "description": "Base app ink color for body text and icons on neutral or light canvases."
+    },
+    "ink-subtle": {
+      "value": "{color.dusk-600}",
+      "type": "color",
+      "description": "Subtle app ink color for the least-prominent, tertiary text and icons."
+    },
+    "ink-muted": {
+      "value": "{color.dusk-800}",
+      "type": "color",
+      "description": "Muted app ink color for secondary text and icons."
+    },
+    "ink-emphasis": {
+      "value": "{color.dusk-950}",
+      "type": "color",
+      "description": "Emphasis app ink color for high-prominence text such as headings."
+    },
+    "ink-inverse": {
+      "value": "{color.dusk-200}",
+      "type": "color",
+      "description": "Base inverse app ink color for body text and icons on inverse or dark canvases."
+    },
+    "ink-inverse-subtle": {
+      "value": "{color.dusk-500}",
+      "type": "color",
+      "description": "Subtle inverse app ink color for the least-prominent text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "{color.dusk-400}",
+      "type": "color",
+      "description": "Muted inverse app ink color for secondary text and icons on inverse canvases."
+    },
+    "ink-inverse-emphasis": {
+      "value": "{color.dusk-50}",
+      "type": "color",
+      "description": "Emphasis inverse app ink color for high-prominence text on inverse canvases."
+    },
+    "border": {
+      "value": "{color.dusk-200}",
+      "type": "color",
+      "description": "Base app border color for outlines, strokes, and dividers."
+    },
+    "border-subtle": {
+      "value": "{color.dusk-100}",
+      "type": "color",
+      "description": "Subtle app border color for the least-prominent outlines and dividers."
+    },
+    "border-muted": {
+      "value": "{color.dusk-300}",
+      "type": "color",
+      "description": "Muted app border color for low-emphasis outlines and dividers."
+    },
+    "border-emphasis": {
+      "value": "{color.dusk-400}",
+      "type": "color",
+      "description": "Emphasis app border color for high-prominence outlines and dividers."
+    },
+    "border-inverse": {
+      "value": "{color.dusk-700}",
+      "type": "color",
+      "description": "Base inverse app border color for outlines and dividers on inverse canvases."
+    },
+    "border-inverse-subtle": {
+      "value": "{color.dusk-800}",
+      "type": "color",
+      "description": "Subtle inverse app border color for the least-prominent outlines on inverse canvases."
+    },
+    "border-inverse-muted": {
+      "value": "{color.dusk-600}",
+      "type": "color",
+      "description": "Muted inverse app border color for low-emphasis outlines on inverse canvases."
+    },
+    "border-inverse-emphasis": {
+      "value": "{color.dusk-500}",
+      "type": "color",
+      "description": "Emphasis inverse app border color for high-prominence outlines on inverse canvases."
+    }
+  },
+  "zbk-action": {
+    "canvas": {
+      "value": "{color.ember-400}",
+      "type": "color",
+      "description": "Base action canvas color for primary surfaces."
+    },
+    "canvas-subtle": {
+      "value": "{color.ember-200}",
+      "type": "color",
+      "description": "Subtle action canvas color for the least-prominent, lightly tinted surfaces."
+    },
+    "canvas-muted": {
+      "value": "{color.ember-100}",
+      "type": "color",
+      "description": "Muted action canvas color for low-emphasis, recessed surfaces."
+    },
+    "canvas-emphasis": {
+      "value": "",
+      "type": "color",
+      "description": "Emphasis action canvas color for high-prominence surfaces."
+    },
+    "canvas-inverse": {
+      "value": "",
+      "type": "color",
+      "description": "Base inverse action canvas color for surfaces on dark or inverted contexts."
+    },
+    "canvas-inverse-subtle": {
+      "value": "",
+      "type": "color",
+      "description": "Subtle inverse action canvas color for the least-prominent surfaces in inverse contexts."
+    },
+    "canvas-inverse-muted": {
+      "value": "",
+      "type": "color",
+      "description": "Muted inverse action canvas color for low-emphasis surfaces in inverse contexts."
+    },
+    "canvas-inverse-emphasis": {
+      "value": "",
+      "type": "color",
+      "description": "Emphasis inverse action canvas color for high-prominence surfaces in inverse contexts."
+    },
+    "ink": {
+      "value": "{color.ember-600}",
+      "type": "color",
+      "description": "Base action ink color for body text and icons on neutral or light canvases."
+    },
+    "ink-subtle": {
+      "value": "{color.ember-400}",
+      "type": "color",
+      "description": "Subtle action ink color for the least-prominent, tertiary text and icons."
+    },
+    "ink-muted": {
+      "value": "{color.ember-300}",
+      "type": "color",
+      "description": "Muted action ink color for secondary text and icons."
+    },
+    "ink-emphasis": {
+      "value": "{color.blue-800}",
+      "type": "color",
+      "description": "Emphasis action ink color for high-prominence text and icons."
+    },
+    "ink-inverse": {
+      "value": "",
+      "type": "color",
+      "description": "Base inverse action ink color for body text and icons on inverse or dark canvases."
+    },
+    "ink-inverse-subtle": {
+      "value": "",
+      "type": "color",
+      "description": "Subtle inverse action ink color for the least-prominent text and icons on inverse canvases."
+    },
+    "ink-inverse-muted": {
+      "value": "",
+      "type": "color",
+      "description": "Muted inverse action ink color for secondary text and icons on inverse canvases."
+    },
+    "ink-inverse-emphasis": {
+      "value": "{color.blue-200}",
+      "type": "color",
+      "description": "Emphasis inverse action ink color for high-prominence text on inverse canvases."
+    },
+    "border": {
+      "value": "",
+      "type": "color",
+      "description": "Base action border color for outlines, strokes, and dividers."
+    },
+    "border-subtle": {
+      "value": "",
+      "type": "color",
+      "description": "Subtle action border color for the least-prominent outlines and dividers."
+    },
+    "border-muted": {
+      "value": "",
+      "type": "color",
+      "description": "Muted action border color for low-emphasis outlines and dividers."
+    },
+    "border-emphasis": {
+      "value": "",
+      "type": "color",
+      "description": "Emphasis action border color for high-prominence outlines and dividers."
+    },
+    "border-inverse": {
+      "value": "",
+      "type": "color",
+      "description": "Base inverse action border color for outlines and dividers on inverse canvases."
+    },
+    "border-inverse-subtle": {
+      "value": "",
+      "type": "color",
+      "description": "Subtle inverse action border color for the least-prominent outlines on inverse canvases."
+    },
+    "border-inverse-muted": {
+      "value": "",
+      "type": "color",
+      "description": "Muted inverse action border color for low-emphasis outlines on inverse canvases."
+    },
+    "border-inverse-emphasis": {
+      "value": "",
+      "type": "color",
+      "description": "Emphasis inverse action border color for high-prominence outlines on inverse canvases."
     }
   }
 }

@@ -1,5 +1,11 @@
 import path from 'path';
 import type { ZebkitConfig } from '../../scripts/config';
+import {
+  applyOptionValues,
+  buildQuestions,
+  type OptionTier,
+  type PromptContext,
+} from '../config-options';
 
 export interface InitCommandDeps {
   pathExists: (path: string) => Promise<boolean>;
@@ -118,14 +124,26 @@ export async function writeVscodeSettings(
   await deps.writeJson(settingsPath, mergedSettings, { spaces: 2 });
 }
 
-export async function runInitCommand(deps: InitCommandDeps) {
+export interface RunInitOptions {
+  /** Fast path: only the quick-tier prompts (output dir, asset path, theme, name). */
+  quick?: boolean;
+}
+
+export async function runInitCommand(
+  deps: InitCommandDeps,
+  options: RunInitOptions = {}
+) {
   try {
     const configPath = path.resolve(process.cwd(), 'zebkit.config.json');
     const packageRoot = deps.getZebkitPackageRoot();
     const defaultsDir = deps.getZebkitDefaultsDir();
-    const builtInThemes = deps.getThemePromptChoices(
+    const themeChoices = deps.getThemePromptChoices(
       await deps.getBuiltInThemeNames(packageRoot)
     );
+    const ctx: PromptContext = {
+      themeChoices,
+      defaultProjectName: getDefaultProjectName(process.cwd()),
+    };
 
     if (await deps.pathExists(configPath)) {
       const { overwrite } = await deps.prompt([
@@ -142,53 +160,38 @@ export async function runInitCommand(deps: InitCommandDeps) {
       }
     }
 
-    const answers = await deps.prompt([
-      {
-        type: 'input',
-        name: 'destinationPath',
-        message: 'Output directory for compiled CSS:',
-        default: './dist',
-      },
-      {
-        type: 'input',
-        name: 'assetFilePath',
-        message: 'Asset URL path (used for CSS asset references):',
-        default: '/',
-      },
-      {
-        type: 'list',
-        name: 'theme',
-        message: 'Starting theme:',
-        choices: builtInThemes,
-        default: 'default',
-      },
-      {
-        type: 'input',
-        name: 'projectName',
-        message: 'Project name (used for output filename):',
-        default: getDefaultProjectName(process.cwd()),
-      },
-      {
+    const tiers: OptionTier[] = options.quick ? ['quick'] : ['quick', 'standard'];
+    const questions: any[] = buildQuestions(tiers, {}, ctx);
+    questions.push({
+      type: 'confirm',
+      name: 'copyTokens',
+      message: 'Copy default token files to ./tokens/ for customization?',
+      default: true,
+    });
+    if (!options.quick) {
+      questions.push({
         type: 'confirm',
-        name: 'copyTokens',
-        message: 'Copy default token files to ./tokens/ for customization?',
-        default: true,
-      },
-    ]);
+        name: 'configureAdvanced',
+        message: 'Configure token export / advanced options?',
+        default: false,
+      });
+    }
 
-    const config: ZebkitConfig = {
-      tokens: {
-        destinationPath: answers.destinationPath,
-        assetFilePath: answers.assetFilePath,
-        basePreset: answers.theme,
-        themeName: answers.projectName,
-      },
-    };
+    let answers = await deps.prompt(questions);
+
+    if (!options.quick && answers.configureAdvanced) {
+      const advancedAnswers = await deps.prompt(buildQuestions(['advanced'], {}, ctx));
+      answers = { ...answers, ...advancedAnswers };
+    }
+
+    // Write a complete, self-documenting token config (defaults are not omitted).
+    const config: ZebkitConfig = { tokens: {} };
+    applyOptionValues(config, answers, ctx);
 
     if (answers.copyTokens) {
       config.tokens!.tokenPath = './tokens';
       const selectedThemeDir = deps.resolveBundledThemeTokensDir(
-        answers.theme,
+        answers.basePreset,
         defaultsDir,
         packageRoot
       );

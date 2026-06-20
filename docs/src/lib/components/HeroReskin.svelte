@@ -15,6 +15,31 @@
     theme.reskinTheme = name;
   }
 
+  // The reskinned subtree. Its `apple` preset header is `position: sticky`, so it
+  // must pin just below the real docs TopBar. The TopBar's height isn't a constant
+  // we can hardcode: the a11y dials (font scale / density) rescale rem-based spacing,
+  // so its rendered height drifts. Measure it live and feed it to `--nav-top`.
+  let reskinEl = $state<HTMLDivElement>();
+
+  $effect(() => {
+    const topBar = document.querySelector<HTMLElement>(".top-bar");
+    if (!reskinEl || !topBar) return;
+
+    const sync = () => {
+      reskinEl!.style.setProperty(
+        "--nav-top",
+        `${topBar.getBoundingClientRect().height}px`,
+      );
+    };
+
+    sync();
+    // Catches font-scale / density dial changes, viewport reflow, and any future
+    // chrome that grows the TopBar — all of which change its rendered height.
+    const ro = new ResizeObserver(sync);
+    ro.observe(topBar);
+    return () => ro.disconnect();
+  });
+
   // Wayfinding cards — mock the section index of a design-system docs home.
   // Static and identical across presets so the only thing that changes is tokens.
   const sections = [
@@ -94,7 +119,11 @@
   </div>
 
   <!-- The themed subtree: one HTML tree, re-skinned purely by the data attribute -->
-  <div class="reskin canvas-app ink-app" data-zbk-theme={active}>
+  <div
+    class="reskin canvas-app ink-app"
+    data-zbk-theme={active}
+    bind:this={reskinEl}
+  >
     <!-- Site header -->
     <header class="site-nav">
       <span class="wordmark">
@@ -281,8 +310,8 @@
   .reskin-stage {
     display: flex;
     flex-direction: column;
-    gap: var(--zbk-spacing-105);
-    padding-block-start: var(--zbk-spacing-4);
+    gap: var(--zbk-spacing-05);
+    padding-block-start: var(--zbk-spacing-3);
   }
 
   .switcher {
@@ -343,7 +372,9 @@
     border-block-end: var(--nav-border-width) solid var(--zbk-app-border);
     min-height: var(--nav-min-height);
     position: var(--nav-position);
-    /* TODO: Spacing tokens no longer in sync with base zebkit, need to do some js to grab the navbar height, watch it for resizes in case of a11y changes, and set that to the top positioning of this element so it sticks to the right place  */
+    /* `--nav-top` is measured from the live docs TopBar height in HeroReskin's
+       script (a ResizeObserver keeps it synced through a11y dial changes), with
+       the token below as the pre-hydration / SSR fallback. */
     top: var(--nav-top);
     font-size: var(--nav-font-size);
     font-family: var(--nav-font-family);

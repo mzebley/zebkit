@@ -22,7 +22,9 @@ token <em>values</em>, not a bespoke stylesheet. An overlay is the diff.
 ## The shape
 
 Overlays live in an `overlays` array under `tokens` in your config. The base theme is always
-emitted at `:root`; each overlay carries its own scope.
+emitted at `:root`; each overlay carries its own scope. You can hand-edit this array, or manage
+it interactively with `zebkit overlay-theme` (see the [CLI reference](/cli#overlay-theme)) —
+which can also scaffold an overlay's starter token files for you.
 
 ```json
 {

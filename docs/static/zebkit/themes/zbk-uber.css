@@ -37,6 +37,30 @@
 --zbk-accent-secondary-800: #333333;
 --zbk-accent-secondary-900: #1a1a1a;
 --zbk-accent-secondary-950: #000000;
+--zbk-accent-secondary-canvas: var(--zbk-accent-secondary-500);
+--zbk-accent-secondary-canvas-subtle: var(--zbk-accent-secondary-50);
+--zbk-accent-secondary-canvas-muted: var(--zbk-accent-secondary-100);
+--zbk-accent-secondary-canvas-emphasis: var(--zbk-accent-secondary-600);
+--zbk-accent-secondary-canvas-inverse: var(--zbk-accent-secondary-400);
+--zbk-accent-secondary-canvas-inverse-subtle: var(--zbk-accent-secondary-900);
+--zbk-accent-secondary-canvas-inverse-muted: var(--zbk-accent-secondary-800);
+--zbk-accent-secondary-canvas-inverse-emphasis: var(--zbk-accent-secondary-300);
+--zbk-accent-secondary-ink: var(--zbk-accent-secondary-700);
+--zbk-accent-secondary-ink-subtle: var(--zbk-accent-secondary-400);
+--zbk-accent-secondary-ink-muted: var(--zbk-accent-secondary-500);
+--zbk-accent-secondary-ink-emphasis: var(--zbk-accent-secondary-800);
+--zbk-accent-secondary-ink-inverse: var(--zbk-accent-secondary-300);
+--zbk-accent-secondary-ink-inverse-subtle: var(--zbk-accent-secondary-500);
+--zbk-accent-secondary-ink-inverse-muted: var(--zbk-accent-secondary-400);
+--zbk-accent-secondary-ink-inverse-emphasis: var(--zbk-accent-secondary-200);
+--zbk-accent-secondary-border: var(--zbk-accent-secondary-500);
+--zbk-accent-secondary-border-subtle: var(--zbk-accent-secondary-200);
+--zbk-accent-secondary-border-muted: var(--zbk-accent-secondary-300);
+--zbk-accent-secondary-border-emphasis: var(--zbk-accent-secondary-600);
+--zbk-accent-secondary-border-inverse: var(--zbk-accent-secondary-500);
+--zbk-accent-secondary-border-inverse-subtle: var(--zbk-accent-secondary-800);
+--zbk-accent-secondary-border-inverse-muted: var(--zbk-accent-secondary-700);
+--zbk-accent-secondary-border-inverse-emphasis: var(--zbk-accent-secondary-400);
 }
 [data-zbk-theme="uber"] {
 --zbk-accent-primary-50: #eff3fe;
@@ -50,6 +74,30 @@
 --zbk-accent-primary-800: #0f2c61;
 --zbk-accent-primary-900: #081730;
 --zbk-accent-primary-950: #040b18;
+--zbk-accent-primary-canvas: var(--zbk-accent-primary-500);
+--zbk-accent-primary-canvas-subtle: var(--zbk-accent-primary-50);
+--zbk-accent-primary-canvas-muted: var(--zbk-accent-primary-100);
+--zbk-accent-primary-canvas-emphasis: var(--zbk-accent-primary-600);
+--zbk-accent-primary-canvas-inverse: var(--zbk-accent-primary-400);
+--zbk-accent-primary-canvas-inverse-subtle: var(--zbk-accent-primary-900);
+--zbk-accent-primary-canvas-inverse-muted: var(--zbk-accent-primary-800);
+--zbk-accent-primary-canvas-inverse-emphasis: var(--zbk-accent-primary-300);
+--zbk-accent-primary-ink: var(--zbk-accent-primary-700);
+--zbk-accent-primary-ink-subtle: var(--zbk-accent-primary-400);
+--zbk-accent-primary-ink-muted: var(--zbk-accent-primary-500);
+--zbk-accent-primary-ink-emphasis: var(--zbk-accent-primary-800);
+--zbk-accent-primary-ink-inverse: var(--zbk-accent-primary-300);
+--zbk-accent-primary-ink-inverse-subtle: var(--zbk-accent-primary-500);
+--zbk-accent-primary-ink-inverse-muted: var(--zbk-accent-primary-400);
+--zbk-accent-primary-ink-inverse-emphasis: var(--zbk-accent-primary-200);
+--zbk-accent-primary-border: var(--zbk-accent-primary-500);
+--zbk-accent-primary-border-subtle: var(--zbk-accent-primary-200);
+--zbk-accent-primary-border-muted: var(--zbk-accent-primary-300);
+--zbk-accent-primary-border-emphasis: var(--zbk-accent-primary-600);
+--zbk-accent-primary-border-inverse: var(--zbk-accent-primary-500);
+--zbk-accent-primary-border-inverse-subtle: var(--zbk-accent-primary-800);
+--zbk-accent-primary-border-inverse-muted: var(--zbk-accent-primary-700);
+--zbk-accent-primary-border-inverse-emphasis: var(--zbk-accent-primary-400);
 }
 }
 
@@ -66,11 +114,11 @@
 --zbk-button-ink-disabled: var(--zbk-disabled-ink);
 --zbk-button-canvas: var(--zbk-action-canvas);
 --zbk-button-canvas-hover: var(--zbk-action-canvas-muted);
---zbk-button-canvas-active: var(--zbk-action-canvas-soft);
+--zbk-button-canvas-active: var(--zbk-action-canvas-subtle);
 --zbk-button-canvas-disabled: var(--zbk-disabled-canvas);
 --zbk-button-border-color: var(--zbk-action-canvas);
 --zbk-button-border-color-hover: var(--zbk-action-canvas-muted);
---zbk-button-border-color-selected: var(--zbk-action-canvas-soft);
+--zbk-button-border-color-selected: var(--zbk-action-canvas-subtle);
 --zbk-button-border-color-disabled: var(--zbk-disabled-border);
 --zbk-button-border-width: 0px;
 --zbk-button-border-style: var(--zbk-border-style);
@@ -115,32 +163,6 @@
 --zbk-font-size-3xl: calc(3.25rem * var(--zbk-a11y-font-size-modifier-3xl));
 --zbk-font-size-4xl: calc(4.25rem * var(--zbk-a11y-font-size-modifier-4xl));
 --zbk-font-size-5xl: calc(6rem * var(--zbk-a11y-font-size-modifier-5xl));
-}
-[data-zbk-theme="uber"] {
---zbk-border-width-xs: var(--zbk-spacing-1px);
---zbk-border-width-sm: var(--zbk-spacing-1px);
---zbk-border-width-md: var(--zbk-spacing-1px);
---zbk-border-width-lg: var(--zbk-spacing-2px);
---zbk-border-width-xl: var(--zbk-spacing-2px);
---zbk-border-style: solid;
---zbk-border-radius-xs: var(--zbk-spacing-2px);
---zbk-border-radius-sm: var(--zbk-spacing-025);
---zbk-border-radius-md: var(--zbk-spacing-05);
---zbk-border-radius-lg: .75rem;
---zbk-border-radius-xl: var(--zbk-spacing-1);
-}
-[data-zbk-theme="uber"] {
---zbk-p-font-family: var(--zbk-font-family-body);
---zbk-p-font-size: var(--zbk-font-size-md);
---zbk-p-font-weight: var(--zbk-font-weight-normal);
---zbk-p-line-height: 1.5;
---zbk-p-letter-spacing: 0;
---zbk-p-measure: var(--zbk-text-measure-4);
---zbk-p-spacing-before: 1em;
---zbk-p-spacing-after: 1em;
---zbk-p-color: var(--zbk-app-ink);
---zbk-p-font-style: none;
---zbk-p-text-transform: none;
 }
 [data-zbk-theme="uber"] {
 --zbk-list-font-family: var(--zbk-font-family-heading);
@@ -189,24 +211,50 @@
 --zbk-h2-text-transform: none;
 }
 [data-zbk-theme="uber"] {
+--zbk-border-width-xs: var(--zbk-spacing-1px);
+--zbk-border-width-sm: var(--zbk-spacing-1px);
+--zbk-border-width-md: var(--zbk-spacing-1px);
+--zbk-border-width-lg: var(--zbk-spacing-2px);
+--zbk-border-width-xl: var(--zbk-spacing-2px);
+--zbk-border-style: solid;
+--zbk-border-radius-xs: var(--zbk-spacing-2px);
+--zbk-border-radius-sm: var(--zbk-spacing-025);
+--zbk-border-radius-md: var(--zbk-spacing-05);
+--zbk-border-radius-lg: .75rem;
+--zbk-border-radius-xl: var(--zbk-spacing-1);
+}
+[data-zbk-theme="uber"] {
+--zbk-p-font-family: var(--zbk-font-family-body);
+--zbk-p-font-size: var(--zbk-font-size-md);
+--zbk-p-font-weight: var(--zbk-font-weight-normal);
+--zbk-p-line-height: 1.5;
+--zbk-p-letter-spacing: 0;
+--zbk-p-measure: var(--zbk-text-measure-4);
+--zbk-p-spacing-before: 1em;
+--zbk-p-spacing-after: 1em;
+--zbk-p-color: var(--zbk-app-ink);
+--zbk-p-font-style: none;
+--zbk-p-text-transform: none;
+}
+[data-zbk-theme="uber"] {
 --zbk-app-canvas: #ffffff;
---zbk-app-canvas-soft: #f6f6f6;
+--zbk-app-canvas-subtle: #f6f6f6;
 --zbk-app-canvas-muted: #eeeeee;
---zbk-app-canvas-strong: #e2e2e2;
+--zbk-app-canvas-emphasis: #e2e2e2;
 --zbk-app-ink: #000000;
---zbk-app-ink-soft: #545454;
+--zbk-app-ink-subtle: #545454;
 --zbk-app-ink-muted: #757575;
 --zbk-app-border: #e2e2e2;
---zbk-app-border-soft: #eeeeee;
+--zbk-app-border-subtle: #eeeeee;
 --zbk-app-border-muted: #cbcbcb;
---zbk-app-border-strong: #afafaf;
+--zbk-app-border-emphasis: #afafaf;
 }
 [data-zbk-theme="uber"] {
 --zbk-action-canvas: #000000;
---zbk-action-canvas-soft: #404040;
+--zbk-action-canvas-subtle: #404040;
 --zbk-action-canvas-muted: #272727;
 --zbk-action-ink: #276ef1;
---zbk-action-ink-soft: #1e54b7;
+--zbk-action-ink-subtle: #1e54b7;
 --zbk-action-ink-muted: #4884f4;
 }
 }

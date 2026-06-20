@@ -14,7 +14,7 @@ const tokens = {
       "Font size for H1 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-size": {
-    value: `{font-size.2xl}`,
+    value: `{font-size.3xl}`,
     type: "fontSize",
     description:
       "Font size for H1 elements with .prose applied directly or that are a child of a .prose container.",
@@ -50,7 +50,7 @@ const tokens = {
       "Amount of margin inline start for H1 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-after": {
-    value: `{spacing.205}`,
+    value: `{spacing.1}`,
     type: "spacing",
     description:
       "Amount of margin inline end for H1 elements with .prose applied directly or that are a child of a .prose container.",
