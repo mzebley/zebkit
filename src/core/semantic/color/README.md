@@ -34,8 +34,8 @@ Colors in zebkit are organized along three main axes:
    - `ink` – foregrounds / text / icons  
    - `border` – outlines, dividers, strokes  
 
-3. **Variant & intensity** – _how the color is applied in context_  
-   - **Intensity**: `soft`, `muted`, (base), `strong`  
+3. **Variant & prominence** – _how the color is applied in context_  
+   - **Prominence**: `subtle`, `muted`, (base), `emphasis` — a single axis describing how much the color stands out against its canvas (`subtle` recedes, `emphasis` advances)  
    - **Variant**: base and `inverse`  
      - `inverse` colors are used on inverted/dark surfaces
 
@@ -51,7 +51,7 @@ Put together, a single token name can be read like a sentence:
 All color tokens follow a consistent string pattern:
 
 ```txt
-[family]-[role](-[variant])?(-[intensity])?
+[family]-[role](-[variant])?(-[prominence])?
 ```
 
 Where:
@@ -70,19 +70,19 @@ Where:
   - `_none_` → default mode
   - `inverse` → for use on inverse/dark contexts
 
-- **intensity** (optional)
-  - `_none_` → base intensity
-  - `soft`   → gentler, more washed out
-  - `muted`  → low‑emphasis, low contrast
-  - `strong` → more saturated/contrasty
+- **prominence** (optional)
+  - `_none_`   → base
+  - `subtle`   → least prominent; recedes toward the surface
+  - `muted`    → low‑emphasis, low contrast
+  - `emphasis` → most prominent; advances with the most contrast
 
 Examples:
 
 - `brand-canvas` → base brand background
-- `brand-canvas-soft` → lightly tinted brand surface
-- `brand-canvas-inverse-strong` → strong brand background in an inverse context
+- `brand-canvas-subtle` → least-prominent, lightly tinted brand surface
+- `brand-canvas-inverse-emphasis` → high-prominence brand background in an inverse context
 - `brand-ink-muted` → lower‑emphasis brand text/icon color
-- `brand-border-inverse-soft` → soft brand border on an inverse/dark surface
+- `brand-border-inverse-subtle` → least-prominent brand border on an inverse/dark surface
 
 ---
 
@@ -109,8 +109,10 @@ Every family implements the same three **roles**:
 Each role has:
 
 - a base token
-- three **intensity** variants: `soft`, `muted`, `strong`
-- four **inverse** variants: `inverse`, `inverse-soft`, `inverse-muted`, `inverse-strong`
+- three **prominence** variants: `subtle`, `muted`, `emphasis`
+- four **inverse** variants: `inverse`, `inverse-subtle`, `inverse-muted`, `inverse-emphasis`
+
+> **Prominence is one axis, not a pairing.** Matching suffixes (`ink-emphasis` / `canvas-emphasis`) mark the same prominence level on each role's own scale — they are **not** meant to be combined. A high-prominence ink belongs on a base/subtle canvas; high-prominence (e.g. dark) canvases pair with `ink-inverse-*`. Never place `ink-emphasis` on `canvas-emphasis`.
 
 ---
 
@@ -121,29 +123,29 @@ The brand family tokens are defined using the shared `slots` list:
 ```ts
 const slots = [
   "canvas",
-  "canvas-soft",
+  "canvas-subtle",
   "canvas-muted",
-  "canvas-strong",
+  "canvas-emphasis",
   "canvas-inverse",
-  "canvas-inverse-soft",
+  "canvas-inverse-subtle",
   "canvas-inverse-muted",
-  "canvas-inverse-strong",
+  "canvas-inverse-emphasis",
   "ink",
-  "ink-soft",
+  "ink-subtle",
   "ink-muted",
-  "ink-strong",
+  "ink-emphasis",
   "ink-inverse",
-  "ink-inverse-soft",
+  "ink-inverse-subtle",
   "ink-inverse-muted",
-  "ink-inverse-strong",
+  "ink-inverse-emphasis",
   "border",
-  "border-soft",
+  "border-subtle",
   "border-muted",
-  "border-strong",
+  "border-emphasis",
   "border-inverse",
-  "border-inverse-soft",
+  "border-inverse-subtle",
   "border-inverse-muted",
-  "border-inverse-strong",
+  "border-inverse-emphasis",
 ] as const;
 ```
 
@@ -151,31 +153,31 @@ For the **brand** family, these slots become fully‑prefixed token keys:
 
 ```txt
 brand-canvas
-brand-canvas-soft
+brand-canvas-subtle
 brand-canvas-muted
-brand-canvas-strong
+brand-canvas-emphasis
 brand-canvas-inverse
-brand-canvas-inverse-soft
+brand-canvas-inverse-subtle
 brand-canvas-inverse-muted
-brand-canvas-inverse-strong
+brand-canvas-inverse-emphasis
 
 brand-ink
-brand-ink-soft
+brand-ink-subtle
 brand-ink-muted
-brand-ink-strong
+brand-ink-emphasis
 brand-ink-inverse
-brand-ink-inverse-soft
+brand-ink-inverse-subtle
 brand-ink-inverse-muted
-brand-ink-inverse-strong
+brand-ink-inverse-emphasis
 
 brand-border
-brand-border-soft
+brand-border-subtle
 brand-border-muted
-brand-border-strong
+brand-border-emphasis
 brand-border-inverse
-brand-border-inverse-soft
+brand-border-inverse-subtle
 brand-border-inverse-muted
-brand-border-inverse-strong
+brand-border-inverse-emphasis
 ```
 
 Each of these keys maps to a `tokenObject`.
@@ -186,9 +188,9 @@ Each of these keys maps to a `tokenObject`.
 
 Components should **not** hard‑code primitives or scale steps. Instead, they lean on semantic tokens from the appropriate family, e.g.:
 
-- button backgrounds → `brand-canvas`, `brand-canvas-strong`, `brand-canvas-soft`
+- button backgrounds → `brand-canvas`, `brand-canvas-emphasis`, `brand-canvas-subtle`
 - button text → `brand-ink`
-- button borders → `brand-border-muted` or `brand-border-strong`
+- button borders → `brand-border-muted` or `brand-border-emphasis`
 - inverse buttons / dark sections → `brand-ink-inverse-*`, `brand-canvas-inverse-*`
 
 Because the families all share the same structure, swapping palettes (e.g. using `accent-primary-*` instead of `brand-*`) should be possible without changing component logic—only token wiring.
@@ -218,12 +220,12 @@ Planned extensions on top of this foundation:
 
 - **App‑level families** (`app-*`):
   - map global surfaces/ink/borders to the appropriate family tokens
-  - e.g. `app-canvas` → `brand-canvas-soft`, `app-ink` → `neutral-ink-strong`
+  - e.g. `app-canvas` → `brand-canvas-subtle`, `app-ink` → `neutral-ink-emphasis`
 - **Status families** (`status-success-*`, `status-warning-*`, etc.):
-  - follow the same `canvas` / `ink` / `border` + `inverse` + intensity pattern
+  - follow the same `canvas` / `ink` / `border` + `inverse` + prominence pattern
 
 The key idea is that we keep **one mental model**:
 
-> family → role → variant → intensity
+> family → role → variant → prominence
 
 and reuse it everywhere, so the system remains predictable as it grows.

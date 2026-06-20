@@ -1,10 +1,21 @@
 <script lang="ts">
+  import InstrumentShell from './InstrumentShell.svelte';
   import DefaultLayout from './DefaultLayout.svelte';
 
-  export let title: string = '';
-  export let description: string = '';
+  // Component pages are an instrument register: they document tokens and utility
+  // classes, so they get the inspector rail. The narrative prose styling still
+  // comes from DefaultLayout, which renders inside the shell's content column.
+  interface Props {
+    title?: string;
+    description?: string;
+    children?: any;
+  }
+
+  let { title = '', description = '', children }: Props = $props();
 </script>
 
-<DefaultLayout {title} {description}>
-  <slot />
-</DefaultLayout>
+<InstrumentShell>
+  <DefaultLayout {title} {description}>
+    {@render children?.()}
+  </DefaultLayout>
+</InstrumentShell>

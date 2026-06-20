@@ -1,5 +1,5 @@
-@use 'core/styles/utilities/spacing' as spacing-utils;
-@use 'core/styles/utilities/position' as position-utils;
+@use 'core/styles/mixins/spacing' as spacing-utils;
+@use 'core/styles/mixins/position' as position-utils;
 @use 'core/styles/variables/spacing' as spacing-vars;
 
 // Generate min/max height/width utility classes
@@ -63,15 +63,6 @@
 .section-margin-inline-end {
     margin-inline-end: var(--zbk-spacing-section-margin-inline);
 }
-
-
-// Usage: Generate spacing classes and breakpoint-specific classes
-@include spacing-utils.generate-spacing-classes(margin, spacing-vars.$semantic-spacing-values);
-@include spacing-utils.generate-spacing-classes(padding, spacing-vars.$semantic-spacing-values);
-@include spacing-utils.generate-spacing-classes(gap, spacing-vars.$semantic-spacing-values, ('':''));
-@include spacing-utils.generate-spacing-media-queries(margin, spacing-vars.$semantic-spacing-values);
-@include spacing-utils.generate-spacing-media-queries(padding, spacing-vars.$semantic-spacing-values);
-@include spacing-utils.generate-spacing-media-queries(gap, spacing-vars.$semantic-spacing-values, ('':''));
 
 // Generate semantic positioning classes ( .top-xs, .left-lg, etc)
 @include position-utils.generate-position-classes(spacing-vars.$semantic-spacing-values);

@@ -114,7 +114,7 @@ export const buttonTokenGroups = buttonTokenBlueprint.map(({ title, tokens }) =>
   tokens: tokens.map(({ token, ...control }) => ({
     ...control,
     property: cssVar(token),
-    description: control.description ?? describe(token) ?? '',
+    description: describe(token) ?? '',
   })),
 }));
 

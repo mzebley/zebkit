@@ -1,3 +1,5 @@
+import type { CompiledToken } from '../data/compiled-tokens';
+
 export interface TokenRow {
   token: string;
   type: string;
@@ -5,12 +7,7 @@ export interface TokenRow {
   description: string;
 }
 
-export interface CompiledToken {
-  value: string | number;
-  type: string;
-  description: string;
-}
-
+export type { CompiledToken };
 export type CompiledTokenMap = Record<string, CompiledToken>;
 
 export function buildTokenRows(
@@ -22,7 +19,7 @@ export function buildTokenRows(
   return Object.entries(tokens).map(([name, token]) => ({
     token: `${tokenKey}.${name}`,
     type: token.type,
-    value: token.value,
+    value: token.value ?? token.index ?? '',
     description: token.description,
   }));
 }

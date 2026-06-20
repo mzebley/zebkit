@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zebkit.markzebley.com/schemas/utility-manifest.schema.json",
+  "title": "Zebkit Utility Class Manifest",
+  "description": "Canonical, hand-authored contract for a group of utility-class families. Encodes the grammar (base x edges x values expanded against token scales) rather than enumerating classes, except for keyword families whose values are hardcoded CSS keywords by design. generate:utilities renders each family's source SCSS partial from this contract; lint:utilities keeps the round trip honest. Consumed by docs and editor support.",
+  "type": "object",
+  "required": ["name", "key", "description", "families"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name, e.g. 'Spacing utilities'."
+    },
+    "key": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Manifest key, unique across utility manifests. Usually the owning token module key."
+    },
+    "description": {
+      "type": "string",
+      "description": "What this group of utilities is for, written for both humans and tooling."
+    },
+    "layer": {
+      "type": "string",
+      "description": "CSS @layer the generated rules are wrapped in (default for all families; a family can override). Zebkit currently emits all utilities into 'utilities'."
+    },
+    "families": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/family" }
+    }
+  },
+  "$defs": {
+    "family": {
+      "type": "object",
+      "required": ["name", "description", "source", "properties"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "description": "Family key, e.g. 'margin', 'overflow-x'. Unique across all utility manifests."
+        },
+        "description": {
+          "type": "string",
+          "description": "What the family does, in one or two sentences."
+        },
+        "guidance": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Usage rules a design tool or AI must respect ('prefer gap on the parent over per-child margins')."
+        },
+        "source": {
+          "anyOf": [
+            { "type": "string" },
+            { "type": "array", "minItems": 1, "items": { "type": "string" } }
+          ],
+          "description": "Repo-root-relative SCSS file(s) generated for / linted against this family. The lint diffs the family against the union of these files."
+        },
+        "properties": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "CSS properties the classes set, e.g. ['margin-block', 'margin-inline']."
+        },
+        "layer": {
+          "type": "string",
+          "description": "Overrides the manifest-level layer for this family."
+        },
+        "important": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the rules use !important. Zebkit relies on @layer ordering instead; avoid unless a family genuinely needs it."
+        },
+        "a11y": {
+          "type": "string",
+          "description": "How this family responds to zebkit's accessibility dials, e.g. 'values rescale with the spacing a11y dial'."
+        },
+        "tier": {
+          "enum": ["recommended", "situational", "discouraged"],
+          "description": "Default usage tier for AI tooling and docs when choosing from this family. Omit = recommended. 'situational' = valid but needs a specific reason; 'discouraged' = avoid unless there is no alternative (e.g. 'order', whose visual reordering diverges from DOM/focus order). Tiers are advisory metadata — they never change generated CSS, only how tooling ranks choices."
+        },
+        "valueTiers": {
+          "type": "object",
+          "additionalProperties": { "enum": ["recommended", "situational", "discouraged"] },
+          "description": "Per-value overrides of the family tier, keyed by pattern value or class name (e.g. {'vertical-text': 'discouraged'}). Only list values that differ from the family default. The lint checks each key is a real value/class of the family."
+        },
+        "classes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Explicit class list for keyword families whose values are hardcoded CSS keywords (display-flex, position-sticky). Mutually exclusive with 'pattern'."
+        },
+        "pattern": {
+          "type": "object",
+          "required": ["base"],
+          "additionalProperties": false,
+          "description": "Grammar for scale-driven families. Expands to '<base>[-<edge>][-neg]-<value>' and is diffed against the source SCSS by the lint.",
+          "properties": {
+            "base": {
+              "type": "string",
+              "description": "Class stem, e.g. 'margin', 'gap', 'overflow'."
+            },
+            "edges": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Optional edge/axis segment values; zebkit prefers logical edges, e.g. ['block','inline','block-start','inline-end']. The edgeless form is always included unless edgeRequired is true."
+            },
+            "edgeRequired": {
+              "type": "boolean",
+              "default": false,
+              "description": "True when the bare '<base>-<value>' form does not exist."
+            },
+            "values": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string" },
+              "description": "Value suffixes. With 'tokens', each value V must be a key in the bound token module and resolves to var(--zbk-<tokens.varPrefix>-<V>). OPTIONAL when 'tokens' is bound (without edgeInToken): omit it to auto-derive the full value list from the token group (filtered to tokens.types when set, neg-* keys excluded) so it can never drift from the tokens. When present, it is the source of truth — a deliberate subset/limiter the lint still validates against the group. Required for keyword (no-tokens) and edgeInToken families."
+            },
+            "negativeValues": {
+              "anyOf": [
+                { "type": "array", "items": { "type": "string" } },
+                { "type": "boolean" }
+              ],
+              "description": "Values also emitted as '<base>[-<edge>]-neg-<value>', consuming the module's 'neg-<value>' tokens (zebkit defines negative spacing as first-class tokens). Set to true to auto-mirror: emit a negative for every resolved positive value that has a matching, type-allowed neg-<value> token (values without one, like named sizes or '0', are skipped). Useful where negatives make sense (margin) and simply omitted where they don't (padding). Requires 'tokens' bound without edgeInToken."
+            },
+            "exclude": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Token values to drop from this family's value set (both positive and negative), applied after values are resolved/derived. Lets a family take the whole group minus a few keys instead of enumerating every wanted value. Each entry must be a real token key in the bound group (the lint flags typos)."
+            },
+            "literals": {
+              "type": "object",
+              "additionalProperties": { "type": "string" },
+              "description": "Extra non-token values added to the positive axis, mapped to verbatim CSS — e.g. {'auto': 'auto'} yields .margin-auto, .margin-inline-auto, ... using the family's edges, edgeProperties, and responsive modifiers. Lets one token-driven family also emit keyword classes (auto, inherit) without a second family. They skip token resolution and negative mirroring; bake in '!important' if needed. A literal key may not collide with a token name in the bound group (the lint flags it)."
+            },
+            "aliases": {
+              "type": "object",
+              "additionalProperties": { "type": "string" },
+              "description": "Full alias class -> full canonical class, e.g. {'gap-sm': 'gap-05'}. Aliases share the canonical rule."
+            }
+          }
+        },
+        "tokens": {
+          "type": "object",
+          "required": ["group", "varPrefix"],
+          "additionalProperties": false,
+          "description": "Token binding for value axes. Omit for keyword families.",
+          "properties": {
+            "group": {
+              "type": "string",
+              "description": "Token module key the values draw from (the module's exported `key`), e.g. 'spacing'. The lint checks each pattern value is a real key in that module."
+            },
+            "varPrefix": {
+              "type": "string",
+              "description": "CSS custom property prefix after --zbk-, e.g. 'spacing' for --zbk-spacing-md."
+            },
+            "types": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Restrict valid pattern values to token keys whose declared `type` is in this list. Use when one token group mixes purposes — e.g. the spacing group holds both `type: spacing` (margin/padding) and `type: sizing` (width/flex-basis) tokens; a flex-basis family sets types: ['sizing'] to admit card/aside/tablet and reject section-margin-block. Values mapped in generator.valueMap are literal CSS and exempt."
+            },
+            "edgeInToken": {
+              "type": "boolean",
+              "default": false,
+              "description": "True when the edge segment is part of the token name: '<varPrefix>-<edge>-<value>' rather than '<varPrefix>-<value>'."
+            }
+          }
+        },
+        "modifiers": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Prefix axes that multiply the family's classes. Declare only what should exist.",
+          "properties": {
+            "hover": {
+              "type": "boolean",
+              "default": false,
+              "description": "True when every class also exists as 'hover:<class>:hover'."
+            },
+            "responsive": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Breakpoint prefixes under which every class is re-emitted, e.g. ['tablet','desktop'] for 'tablet:margin-md'. Must be keys of the $breakpoints map in core/styles/variables/_breakpoints.scss."
+            }
+          }
+        },
+        "knownExceptions": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Documented irregularities: classes the grammar predicts but the SCSS lacks, or vice versa. Full class names including any modifier prefix. Shrink these; never grow them to make a build pass.",
+          "properties": {
+            "extra": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Classes present in the SCSS beyond the declared grammar."
+            },
+            "missing": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Classes the grammar predicts that the SCSS does not emit."
+            }
+          }
+        },
+        "generator": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Optional rendering directives used by generate:utilities to emit utility SCSS from this family contract.",
+          "properties": {
+            "edgeProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "description": "Maps edge key to declaration properties. Use '' for the edgeless form."
+            },
+            "valueMap": {
+              "type": "object",
+              "additionalProperties": { "type": "string" },
+              "description": "Verbatim final CSS values. Keyed by value suffix, neg-<value>, or full class name (for aliases that consume their own alias var)."
+            },
+            "declarations": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": { "type": "string" }
+              },
+              "description": "Explicit class -> declaration map for keyword (classes) families."
+            },
+            "rawScss": {
+              "type": "string",
+              "description": "Verbatim SCSS block emitted for classes that need bespoke rule shapes."
+            },
+            "staticScss": {
+              "type": "string",
+              "description": "Verbatim SCSS emitted once with the base rules and never replicated under breakpoint prefixes."
+            }
+          }
+        }
+      },
+      "oneOf": [
+        { "required": ["classes"], "not": { "required": ["pattern"] } },
+        { "required": ["pattern"], "not": { "required": ["classes"] } }
+      ]
+    }
+  }
+}

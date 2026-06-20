@@ -1,0 +1,193 @@
+{
+  "ink": {
+    "value": "{color.global-white}",
+    "type": "color",
+    "description": "Default button label color — M3 on-primary."
+  },
+  "ink-hover": {
+    "value": "{color.global-white}",
+    "type": "color",
+    "description": "Label color when hovered."
+  },
+  "ink-active": {
+    "value": "{color.global-white}",
+    "type": "color",
+    "description": "Label color when active or pressed."
+  },
+  "ink-disabled": {
+    "value": "{disabled.ink}",
+    "type": "color",
+    "description": "Label color for disabled buttons."
+  },
+  "canvas": {
+    "value": "{action.canvas}",
+    "type": "color",
+    "description": "Default button background — M3 filled button (primary)."
+  },
+  "canvas-hover": {
+    "value": "{action.canvas-muted}",
+    "type": "color",
+    "description": "Background for hover state — M3 8% state layer."
+  },
+  "canvas-active": {
+    "value": "{action.canvas-subtle}",
+    "type": "color",
+    "description": "Background for active/pressed state — M3 12% state layer."
+  },
+  "canvas-disabled": {
+    "value": "{disabled.canvas}",
+    "type": "color",
+    "description": "Background for disabled buttons."
+  },
+  "border-color": {
+    "value": "{action.canvas}",
+    "type": "color",
+    "description": "Default button border color."
+  },
+  "border-color-hover": {
+    "value": "{action.canvas-muted}",
+    "type": "color",
+    "description": "Border color on hover."
+  },
+  "border-color-selected": {
+    "value": "{action.canvas-subtle}",
+    "type": "color",
+    "description": "Border color when the button is selected/active."
+  },
+  "border-color-disabled": {
+    "value": "{disabled.border}",
+    "type": "color",
+    "description": "Border color for disabled buttons."
+  },
+  "border-width": {
+    "value": "0px",
+    "type": "borderWidth",
+    "description": "Base border width — M3 filled button is borderless."
+  },
+  "border-style": {
+    "value": "{border.style}",
+    "type": "borderStyle",
+    "description": "Border style for standard buttons."
+  },
+  "border-radius": {
+    "value": "100px",
+    "type": "borderRadius",
+    "description": "Corner radius — M3 buttons use the full (pill) shape."
+  },
+  "font-family": {
+    "value": "{font-family.interface}",
+    "type": "fontFamily",
+    "description": "Font family for button labels."
+  },
+  "font-size": {
+    "value": "{font-size.xs}",
+    "type": "fontSize",
+    "description": "Base font size for button labels — M3 label-large (14px)."
+  },
+  "font-weight": {
+    "value": "{font-weight.medium}",
+    "type": "fontWeight",
+    "description": "Font weight for button labels — M3 label-large (Medium 500)."
+  },
+  "line-height": {
+    "value": "1.4285714286",
+    "type": "lineHeight",
+    "description": "Base line height for buttons — M3 label-large (20/14)."
+  },
+  "letter-spacing": {
+    "value": "0.1px",
+    "type": "letterSpacing",
+    "description": "Letter spacing for button labels — M3 label-large tracking."
+  },
+  "text-transform": {
+    "value": "none",
+    "type": "textTransform",
+    "description": "Text transform — M3 dropped uppercase button labels."
+  },
+  "text-decoration": {
+    "value": "none",
+    "type": "textDecoration",
+    "description": "Text decoration for button labels."
+  },
+  "text-align": {
+    "value": "center",
+    "type": "textAlignment",
+    "description": "Text alignment for button content."
+  },
+  "padding-inline": {
+    "value": "{spacing.105}",
+    "type": "spacing",
+    "description": "Inline (horizontal) padding for standard buttons — M3 24px gutter."
+  },
+  "padding-block": {
+    "value": "{spacing.05}",
+    "type": "spacing",
+    "description": "Block (vertical) padding (min-height drives the 40px M3 target)."
+  },
+  "gap": {
+    "value": "{spacing.05}",
+    "type": "spacing",
+    "description": "Gap between button icon and label — M3 8px."
+  },
+  "group-gap": {
+    "value": "{spacing.05}",
+    "type": "spacing",
+    "description": "Gap between buttons when rendered in a group."
+  },
+  "justify-content": {
+    "value": "center",
+    "type": "flex",
+    "description": "Main axis alignment for button contents."
+  },
+  "min-height": {
+    "value": "40px",
+    "type": "sizing",
+    "description": "Minimum height — M3 button height (40px)."
+  },
+  "min-width": {
+    "value": "44px",
+    "type": "sizing",
+    "description": "Minimum button width."
+  },
+  "icon-size": {
+    "value": "1.125rem",
+    "type": "sizing",
+    "description": "Default icon size within buttons — M3 18px icon."
+  },
+  "focus-color": {
+    "value": "{focus.color}",
+    "type": "color",
+    "description": "Outline color for focus state."
+  },
+  "focus-width": {
+    "value": "{focus.width}",
+    "type": "borderWidth",
+    "description": "Outline width for focus state."
+  },
+  "focus-offset": {
+    "value": "{focus.offset}",
+    "type": "spacing",
+    "description": "Outline offset for focus state."
+  },
+  "box-shadow": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Default box shadow — M3 filled button rests at elevation 0."
+  },
+  "box-shadow-hover": {
+    "value": "{elevation.sm}",
+    "type": "boxShadow",
+    "description": "Box shadow on hover — M3 filled button lifts to elevation 1."
+  },
+  "transition-duration": {
+    "value": "150ms",
+    "type": "transition",
+    "description": "Duration for hover/active transitions — M3 short motion.",
+    "a11y": true
+  },
+  "transition-timing-function": {
+    "value": "cubic-bezier(0.2, 0, 0, 1)",
+    "type": "transition",
+    "description": "Timing function — M3 standard easing."
+  }
+}

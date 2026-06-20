@@ -1,31 +1,86 @@
 <script lang="ts">
   import '../app.css';
-  import ZebkitLoader from '$components/ZebkitLoader.svelte';
-  import Header from '$components/Header.svelte';
-  import Sidebar from '$components/Sidebar.svelte';
-  import { page } from '$app/stores';
+  import '../styles/editorial.css';
+  import TopBar from '$lib/components/TopBar.svelte';
+  import LeftNav from '$lib/components/LeftNav.svelte';
+  import Overlay from '$lib/components/Overlay.svelte';
+  import CollapsiblePanel from '$lib/components/CollapsiblePanel.svelte';
+  import { viewport } from '$lib/stores/viewport.svelte';
+  import { ui, closeNav, toggleNavCollapsed } from '$lib/stores/ui.svelte';
 
-  export let data: { navigation: Array<{
-    label: string;
-    collapsed?: boolean;
-    items: Array<{ label: string; link: string }>;
-  }> };
+  let { children } = $props();
 </script>
 
-<ZebkitLoader />
+<!--
+  App shell. TopBar + LeftNav are the persistent chrome and live here, NOT in the
+  register layouts. Per-page register (editorial vs reference) is selected by
+  mdsvex frontmatter and wraps only the page *content* inside <main>.
 
-<div class="display-flex flex-direction-column min-height-100 canvas-app ink-app">
-  <Header currentPath={$page.url.pathname} />
-
-  <div class="display-flex flex-direction-column flex-grow-1 tablet:flex-direction-row">
-    <Sidebar
-      navigation={data.navigation}
-      currentPath={$page.url.pathname}
-      class="width-full tablet:width-10 flex-shrink-0"
-    />
-
-    <main class="flex-grow-1 padding-inline-1 padding-block-2 width-full">
-      <slot />
+  The nav is a collapsible column on full/reading viewports (CollapsiblePanel —
+  tuck it to a rail, peek on hover/focus) and an off-canvas drawer (summoned by
+  the TopBar hamburger) on compact ones — same LeftNav, different vessel.
+-->
+<div class="app-shell">
+  <TopBar />
+  <div class="app-body">
+    {#if viewport.regime === 'compact'}
+      <Overlay open={ui.navOpen} onclose={closeNav} label="Navigation" side="left">
+        <LeftNav fill />
+      </Overlay>
+    {:else}
+      <CollapsiblePanel
+        side="left"
+        collapsed={ui.navCollapsed}
+        onToggle={toggleNavCollapsed}
+        label="Navigation"
+        showToggle={false}
+      >
+        <LeftNav fill />
+      </CollapsiblePanel>
+    {/if}
+    <main class="app-main">
+      {@render children()}
     </main>
   </div>
 </div>
+
+<style>
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Contain the collapsed panels' off-canvas peek so it can't add horizontal
+       scroll. The shell wraps all content (no vertical overflow of its own), so
+       clipping is horizontal-only in effect. */
+    overflow-x: clip;
+  }
+
+  .app-body {
+    display: flex;
+    flex: 1;
+  }
+
+  .app-main {
+    flex: 1;
+    /* Clip the inspector rail's off-canvas peek on the x-axis so it can't make
+       the page horizontally scrollable. `overflow-x: clip` computes overflow-y
+       to clip too — which is fine (the shell wraps all content, nothing
+       overflows vertically) — and crucially does NOT make this a scroll
+       container, so the inspector rail's `position: sticky` references the
+       window (like the nav) instead of getting trapped here. */
+    overflow-x: clip;
+    padding: var(--zbk-spacing-3) var(--zbk-spacing-4);
+  }
+
+  @media (max-width: 64rem) {
+    .app-main {
+      padding: var(--zbk-spacing-2) var(--zbk-spacing-3);
+    }
+  }
+
+  @media (max-width: 48rem) {
+    .app-main {
+      padding: var(--zbk-spacing-2) var(--zbk-spacing-1);
+    }
+  }
+</style>

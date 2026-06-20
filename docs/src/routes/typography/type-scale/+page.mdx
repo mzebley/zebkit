@@ -1,0 +1,176 @@
+---
+title: Type scaling
+description: How zebkit generates a fluid, accessible type scale from six control tokens — and how to use, tune, or opt out of it.
+layout: editorial
+section: Typography
+status: draft
+---
+
+<script lang="ts">
+  import TypeScaleDemo from '$components/TypeScaleDemo.svelte';
+</script>
+
+# Type scaling
+
+Zebkit's font sizes are **generated, not hand-picked.** The entire scale — eleven named
+steps from `3xs` to `5xl` — is derived at build time from six control values. Each step
+fluidly interpolates between a small-screen size and a large-screen size, so type grows
+with the viewport without a single media query, and the whole scale still answers to the
+runtime accessibility dial.
+
+<aside class="editorial-marginalia">
+This is the premise from <a href="/foundations/tokens">the strata</a> taken to its
+conclusion: the type scale isn't a list of values, it's a <em>function</em> of six
+primitives. Redesigning it is a six-number diff.
+</aside>
+
+## Operate it
+
+Drag the sliders. The first simulates a viewport width; the second is the end-user's
+accessibility font-size modifier, multiplying through every size at once.
+
+<TypeScaleDemo />
+
+## Where it comes from
+
+The method is [Utopia](https://utopia.fyi)'s fluid-type approach, rebuilt as a token
+generator. Two ideas do the work:
+
+- **Each step has its own slope.** Rather than adding one shared viewport increment to every
+  size, every step interpolates between its own min and max. Big type gains more per pixel of
+  viewport than body type does, so the hierarchy *fans out* on large screens instead of
+  flattening.
+- **The ratio itself is fluid.** The scale uses a tighter ratio at the small anchor (a minor
+  third, `1.2`) and a more dramatic one at the large anchor (a major third, `1.25`). Adjacent
+  steps sit exactly `1.2×` apart at 360px and exactly `1.25×` apart at 1240px.
+
+## How it's built
+
+Six control settings live in the `font-size` token module. They are the only literals in
+the type system:
+
+| Control | Default | Role |
+| --- | --- | --- |
+| `min-viewport` | `360px` | lower anchor |
+| `max-viewport` | `1240px` | upper anchor |
+| `min-base` | `1.125rem` | base (`md`) size at the lower anchor |
+| `max-base` | `1.25rem` | base (`md`) size at the upper anchor |
+| `min-ratio` | `1.2` | scale ratio at the lower anchor |
+| `max-ratio` | `1.25` | scale ratio at the upper anchor |
+
+Every named step carries an `index` (its position on the scale; `md` is `0`) instead of a
+literal value. At build time the generator computes, for each step, its size at both anchors
+(`base × ratioⁿ`), fits a line between them, and emits a `clamp()` — with the per-step
+accessibility modifier baked into every term so the runtime dial keeps working:
+
+```css
+--zbk-font-size-md: clamp(
+  calc(1.125rem * var(--zbk-a11y-font-size-modifier-md)),
+  calc((1.0739rem + 0.2273vw) * var(--zbk-a11y-font-size-modifier-md)),
+  calc(1.25rem  * var(--zbk-a11y-font-size-modifier-md))
+);
+```
+
+These settings are build-time only — they're consumed during compilation and never emitted
+as CSS variables. What ships is the eleven resolved `--zbk-font-size-*` properties.
+
+## The default scale
+
+Generated from the defaults above (accessibility modifier omitted for readability):
+
+| Token | @360px | @1240px | Generated `clamp()` |
+| --- | --- | --- | --- |
+| `5xl` | 53.7px | 76.3px | `clamp(3.3592rem, 2.7828rem + 2.5621vw, 4.7684rem)` |
+| `4xl` | 44.8px | 61.0px | `clamp(2.7994rem, 2.384rem + 1.8461vw, 3.8147rem)` |
+| `3xl` | 37.3px | 48.8px | `clamp(2.3328rem, 2.0387rem + 1.3072vw, 3.0518rem)` |
+| `2xl` | 31.1px | 39.1px | `clamp(1.944rem, 1.7405rem + 0.9044vw, 2.4414rem)` |
+| `xl` | 25.9px | 31.3px | `clamp(1.62rem, 1.4837rem + 0.6057vw, 1.9531rem)` |
+| `lg` | 21.6px | 25.0px | `clamp(1.35rem, 1.2631rem + 0.3864vw, 1.5625rem)` |
+| `md` | 18.0px | 20.0px | `clamp(1.125rem, 1.0739rem + 0.2273vw, 1.25rem)` |
+| `sm` | 15.0px | 16.0px | `clamp(0.9375rem, 0.9119rem + 0.1136vw, 1rem)` |
+| `xs` | 12.5px | 12.8px | `clamp(0.7813rem, 0.7736rem + 0.0341vw, 0.8rem)` |
+| `2xs` | 10.4px | 10.2px | `clamp(0.64rem, 0.6556rem − 0.0201vw, 0.651rem)` |
+| `3xs` | 8.7px | 8.2px | `clamp(0.512rem, 0.555rem − 0.0555vw, 0.5425rem)` |
+
+<aside class="editorial-marginalia">
+Notice the two smallest steps <em>shrink</em> as the viewport grows — and the bounds are
+ordered so the smaller value is the floor. See <a href="#a-quirk-worth-knowing">the quirk</a>
+below; it's intentional, not a bug.
+</aside>
+
+## How to use it
+
+You almost never touch the scale directly — you reference the named steps, and they stay
+fluid automatically. The token names are the stable contract; the values float beneath them.
+
+```css
+.lede {
+  font-size: var(--zbk-font-size-lg);
+}
+```
+
+```html
+<!-- Or via type utilities, which bind to the same tokens -->
+<h1 class="text-3xl">Feature heading</h1>
+<p class="text-md">Body copy that scales with the viewport.</p>
+```
+
+Because the sizes are tokens, every consumer — components, utilities, your own CSS — inherits
+the fluid behavior and the accessibility dial for free. There is nothing to wire up.
+
+## Tuning the scale
+
+Re-skinning the type scale means changing the six controls, not the eleven steps. Override
+them like any other token (in a theme override file or your custom token path):
+
+```json
+{
+  "zbk-font-size": {
+    "min-base": { "value": "1rem" },
+    "max-base": { "value": "1.125rem" },
+    "max-ratio": { "value": 1.333 }
+  }
+}
+```
+
+That single change re-derives all eleven steps in lockstep.
+
+## Opting out: static sizes
+
+If you want pixel-pinned control instead of fluid sizing, opt out in your zebkit config and
+give the steps explicit values. Static sizes are still wrapped in the accessibility modifier,
+so the runtime dial keeps working — they just don't respond to the viewport.
+
+```json
+{
+  "tokens": {
+    "typeScale": { "static": true }
+  }
+}
+```
+
+Or from the [CLI](/cli#get-and-set-single-values): `zebkit config set tokens.typeScale.static true`.
+
+`fluid: false` is accepted as an alias for `static: true`. In static mode each step's `index`
+is ignored and its authored `value` is used — so add a `value` to each step you want to pin:
+
+```json
+{
+  "zbk-font-size": {
+    "md": { "value": "1.125rem" }
+  }
+}
+```
+
+You can also pin a *single* step while the rest stay fluid: give just that step a `value` and
+leave the config in its default fluid mode. The override wins for that step only.
+
+## A quirk worth knowing
+
+Because `min-ratio` is smaller than `max-ratio`, the scale fans out from the base in **both**
+directions — which means steps below `md` invert: their small-viewport size is slightly
+larger than their large-viewport size, so sub-body text shrinks a touch as the screen grows
+(`3xs` goes 8.7px → 8.2px). The clamp bounds are ordered by magnitude so this interpolates
+smoothly rather than locking up. The deltas are sub-pixel, and a reader who needs larger text
+has the accessibility dial — so we let it stand as designed. If you'd rather small text never
+shrink, pin those steps with static values as shown above.

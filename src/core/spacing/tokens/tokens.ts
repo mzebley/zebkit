@@ -6,22 +6,41 @@ export const key = "spacing";
 export const layer: LayerName = "base";
 export type SpacingTokens = z.infer<typeof tokenSchema>;
 
+// Spacing is generated fluid (Utopia-style), like the type scale, and additionally
+// responds to two runtime forces so containers grow with their contents:
+//
+//   spacing = clamp(fluid by viewport)
+//             × var(--zbk-a11y-spacing-modifier)             ← independent density dial
+//             × (1 + (var(--zbk-a11y-font-size-modifier-md) - 1)
+//                    × var(--zbk-a11y-spacing-text-coupling)) ← follows BODY text size
+//
+// Each token's authored `value` is its size at the MIN (mobile) viewport anchor — a
+// guaranteed floor that never shrinks below what was authored. The max-anchor size is
+// `value × growth`, where `growth` is derived per-token from a continuous log curve by floor
+// magnitude: micro spacing (≤ ~0.5rem) stays flat, large layout spacing blooms toward the
+// `max-scale` ceiling on wide screens. Classification is automatic — no tiers to maintain —
+// and a token can set its own `growth` to override the curve. Viewport anchors are shared
+// with the font-size module (`min-viewport` / `max-viewport`). The text-coupling factor reads
+// the body (`md`) font
+// modifier so that when reading text scales up, padding/min-heights/gaps scale with it —
+// dampened by `--zbk-a11y-spacing-text-coupling` (default 0.5; defined in the a11y token
+// module). Density is independent, so "large text, compact layout" resolves correctly.
+//
+// `resolveSpaceScale` (src/scripts/tokens/build-space-scale.ts) bakes all of this in at
+// build time. Precision px tokens (1px, 2px, …) skip the viewport interpolation but still get
+// the density + coupling multiplier — every spacing token honors the runtime a11y dials. Only
+// `0` is emitted exact. Set `tokens.spaceScale.static: true` to drop the viewport interpolation
+// (density and coupling still apply).
 const tokens = {
-  "viewport-modifier": {
-    value: `1vw`,
-    type: "utility",
+  "max-scale": {
+    value: 1.25,
+    type: "setting",
     description:
-      "Amount of viewport to add to sizing classes (only on screens wider than 40rem)",
-  },
-  "max-size-modifer": {
-    value: `1.25`,
-    type: "utility",
-    description:
-      "Maximum amount the viewport modifier can increase a sizing token by.",
+      "Growth ceiling: how much the largest layout spacing tokens bloom from their authored (min-viewport) floor to the max viewport. Per-token growth ramps up to this on a log curve by floor magnitude; micro spacing stays flat.",
   },
   "neg-15": {
     value: `-15rem`,
-    type: "utility",
+    type: "rootSize",
     description:
       "Extremely large negative spacing (major overlap or pull effects).",
     a11y: true,

@@ -1,18 +1,23 @@
 {
   "primary": {
-    "value": "'Nunito', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+    "value": "\"Nunito\"",
     "description": "Primary font family for use in the system. Usually used for body content and interface items.",
-    "type": "fontFamily"
+    "type": "fontFamily",
+    "source": "system",
+    "fallback": "sans"
   },
   "alt": {
-    "value": "'Outfit', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+    "value": "\"Outfit\"",
     "description": "Alternate font family for use in the system. Primarily used for headings.",
-    "type": "fontFamily"
+    "type": "fontFamily",
+    "source": "system",
+    "fallback": "sans"
   },
   "monospace": {
     "value": "monospace",
     "description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
-    "type": "fontFamily"
+    "type": "fontFamily",
+    "source": "system"
   },
   "interface": {
     "value": "{font-family.primary}",

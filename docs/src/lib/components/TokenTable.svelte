@@ -2,61 +2,117 @@
   import type { TokenRow } from '$utils/token-docs';
   import { getCssVarForReference } from '$utils/token-lookup';
 
-  export let rows: TokenRow[] = [];
-  export let showColorSwatches: boolean = true;
+  let { rows = [], showSwatch = true }: { rows?: TokenRow[]; showSwatch?: boolean } = $props();
 
-  let className: string = '';
-  export { className as class };
+  function swatchVar(row: TokenRow): string | null {
+    if (!showSwatch || row.type !== 'color') return null;
+    return getCssVarForReference(row.value) ?? getCssVarForReference(row.token);
+  }
+
+  // The compiled CSS custom property for a row (`zbk-spacing.4` -> `--zbk-spacing-4`),
+  // so the inspector rail can trace it through the strata.
+  function inspectVar(row: TokenRow): string {
+    return `--${row.token.replaceAll('.', '-')}`;
+  }
 </script>
 
-<div class="overflow-x-auto {className}">
-  <table class="w-full border-collapse canvas-app-soft rounded-lg overflow-hidden">
-    <thead class="canvas-app-muted">
+<div class="token-table-scroll">
+  <table class="token-table">
+    <thead>
       <tr>
-        <th class="text-left p-3 font-semibold text-sm ink-app-strong border-b border-app-muted">
-          Token
-        </th>
-        <th class="text-left p-3 font-semibold text-sm ink-app-strong border-b border-app-muted">
-          Type
-        </th>
-        <th class="text-left p-3 font-semibold text-sm ink-app-strong border-b border-app-muted">
-          Value
-        </th>
-        <th class="text-left p-3 font-semibold text-sm ink-app-strong border-b border-app-muted">
-          Description
-        </th>
+        <th>Token</th>
+        <th>Type</th>
+        <th>Value</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
-      {#each rows as { token, type, value, description }}
-        {@const cssVar = showColorSwatches && type === 'color'
-          ? getCssVarForReference(value) ?? getCssVarForReference(token)
-          : null}
-        <tr class="hover:canvas-app-muted transition-colors">
-          <td class="p-3 border-b border-app-muted">
-            <code class="text-sm font-mono ink-app-strong">{token}</code>
-          </td>
-          <td class="p-3 border-b border-app-muted">
-            <code class="text-sm font-mono ink-app-muted">{type}</code>
-          </td>
-          <td class="p-3 border-b border-app-muted">
-            <div class="flex items-center gap-2">
+      {#each rows as row (row.token)}
+        {@const cssVar = swatchVar(row)}
+        <tr>
+          <td><code class="tok" data-inspect-token={inspectVar(row)}>{row.token}</code></td>
+          <td><code class="type">{row.type}</code></td>
+          <td>
+            <div class="value-cell">
               {#if cssVar}
-                <span
-                  class="w-6 h-6 rounded border border-app-muted inline-block flex-shrink-0"
-                  style="background: var({cssVar})"
-                  aria-hidden="true"
-                  title="Preview of {cssVar}"
-                ></span>
+                <span class="swatch" style="background: var({cssVar})" aria-hidden="true" title={cssVar}></span>
               {/if}
-              <code class="text-sm font-mono ink-app">{String(value)}</code>
+              <code class="val">{String(row.value)}</code>
             </div>
           </td>
-          <td class="p-3 border-b border-app-muted text-sm ink-app">
-            {description}
-          </td>
+          <td class="desc">{row.description}</td>
         </tr>
       {/each}
     </tbody>
   </table>
 </div>
+
+<style>
+  .token-table-scroll {
+    overflow-x: auto;
+  }
+
+  .token-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--zbk-font-size-sm);
+  }
+
+  th {
+    text-align: left;
+    font-family: var(--zbk-font-family-body);
+    font-weight: var(--zbk-font-weight-semibold);
+    font-size: var(--zbk-font-size-xs);
+    color: var(--zbk-app-ink-soft);
+    padding: var(--zbk-spacing-1) var(--zbk-spacing-2);
+    border-bottom: var(--zbk-border-width-xs) solid var(--zbk-app-border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: var(--zbk-spacing-1) var(--zbk-spacing-2);
+    border-bottom: var(--zbk-border-width-xs) solid var(--zbk-app-border-muted);
+    vertical-align: top;
+  }
+
+  tbody tr:hover {
+    background: var(--zbk-app-canvas-muted);
+  }
+
+  code {
+    font-family: var(--zbk-font-family-code);
+    font-size: var(--zbk-font-size-xs);
+  }
+
+  .tok {
+    color: var(--zbk-app-ink);
+  }
+
+  .type {
+    color: var(--zbk-app-ink-soft);
+  }
+
+  .value-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--zbk-spacing-1);
+  }
+
+  .swatch {
+    width: var(--zbk-spacing-2);
+    height: var(--zbk-spacing-2);
+    border-radius: var(--zbk-border-radius-xs);
+    border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
+    flex-shrink: 0;
+  }
+
+  .val {
+    color: var(--zbk-app-ink);
+  }
+
+  .desc {
+    color: var(--zbk-app-ink-soft);
+    font-size: var(--zbk-font-size-xs);
+    max-width: 40ch;
+  }
+</style>

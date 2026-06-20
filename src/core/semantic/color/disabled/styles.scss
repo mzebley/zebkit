@@ -1,4 +1,4 @@
-@use 'core/styles/utilities/color' as color-utils;
+@use 'core/styles/mixins/color' as color-utils;
 
 @layer utilities {
   @include color-utils.generate-semantic-color-utilities(('disabled'));

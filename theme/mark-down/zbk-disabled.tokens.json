@@ -4,7 +4,7 @@
     "type": "color",
     "description": "Base disabled canvas color for primary surfaces."
   },
-  "canvas-soft": {
+  "canvas-subtle": {
     "value": "{color.charcoal-50}",
     "type": "color",
     "description": "Soft disabled canvas color for lightly tinted surfaces."
@@ -14,7 +14,7 @@
     "type": "color",
     "description": "Muted disabled canvas color for low-emphasis surfaces."
   },
-  "canvas-strong": {
+  "canvas-emphasis": {
     "value": "{color.charcoal-800}",
     "type": "color",
     "description": "Strong disabled canvas color for high-emphasis surfaces."
@@ -24,7 +24,7 @@
     "type": "color",
     "description": "Base inverse disabled canvas color for surfaces on dark or inverted contexts."
   },
-  "canvas-inverse-soft": {
+  "canvas-inverse-subtle": {
     "value": "{color.charcoal-950}",
     "type": "color",
     "description": "Soft inverse disabled canvas color for lightly tinted surfaces in inverse contexts."
@@ -34,7 +34,7 @@
     "type": "color",
     "description": "Muted inverse disabled canvas color for low-emphasis surfaces in inverse contexts."
   },
-  "canvas-inverse-strong": {
+  "canvas-inverse-emphasis": {
     "value": "{color.charcoal-200}",
     "type": "color",
     "description": "Strong inverse disabled canvas color for high-emphasis surfaces in inverse contexts."
@@ -44,7 +44,7 @@
     "type": "color",
     "description": "Base disabled ink color for text and icons on neutral or light canvases."
   },
-  "ink-soft": {
+  "ink-subtle": {
     "value": "{color.charcoal-400}",
     "type": "color",
     "description": "Soft disabled ink color for lower-emphasis text and icons."
@@ -59,7 +59,7 @@
     "type": "color",
     "description": "Base inverse disabled ink color for text and icons on inverse or dark canvases."
   },
-  "ink-inverse-soft": {
+  "ink-inverse-subtle": {
     "value": "{color.charcoal-500}",
     "type": "color",
     "description": "Soft inverse disabled ink color for lower-emphasis text and icons on inverse canvases."
@@ -74,8 +74,8 @@
     "type": "color",
     "description": "Base disabled border color for outlines, strokes, and dividers."
   },
-  "border-soft": {
-    "value": "{disabled.ink-soft}",
+  "border-subtle": {
+    "value": "{disabled.ink-subtle}",
     "type": "color",
     "description": "Soft disabled border color for low-emphasis outlines and dividers."
   },
@@ -84,7 +84,7 @@
     "type": "color",
     "description": "Muted disabled border color for subtle outlines and dividers."
   },
-  "border-strong": {
+  "border-emphasis": {
     "value": "{disabled.ink}",
     "type": "color",
     "description": "Strong disabled border color for high-emphasis outlines and dividers."
@@ -94,8 +94,8 @@
     "type": "color",
     "description": "Base inverse disabled border color for outlines and dividers on inverse canvases."
   },
-  "border-inverse-soft": {
-    "value": "{disabled.ink-inverse-soft}",
+  "border-inverse-subtle": {
+    "value": "{disabled.ink-inverse-subtle}",
     "type": "color",
     "description": "Soft inverse disabled border color for low-emphasis outlines on inverse canvases."
   },
@@ -104,7 +104,7 @@
     "type": "color",
     "description": "Muted inverse disabled border color for subtle outlines on inverse canvases."
   },
-  "border-inverse-strong": {
+  "border-inverse-emphasis": {
     "value": "{disabled.ink-inverse}",
     "type": "color",
     "description": "Strong inverse disabled border color for high-emphasis outlines on inverse canvases."

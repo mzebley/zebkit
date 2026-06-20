@@ -1,5 +1,3 @@
-@use './styles/utilities/index' as utilities;
-
-@layer utilities {
-  @include utilities.emit-layout-utilities();
-}
+// Utility classes are emitted by the generated partials in core/styles/mixins/
+// (auto-included by the build's styles/**/*.scss glob). See
+// src/scripts/utilities/README.md for the manifest workflow.

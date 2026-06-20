@@ -14,7 +14,7 @@ const tokens = {
       "Font size for P elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-size": {
-    value: `{font-size.md}`,
+    value: `{font-size.sm}`,
     type: "fontSize",
     description:
       "Font size for P elements with .prose applied directly or that are a child of a .prose container.",
@@ -26,7 +26,7 @@ const tokens = {
       "Font weight for P elements with .prose applied directly or that are a child of a .prose container.",
   },
   "line-height": {
-    value: `{line-height.4}`,
+    value: `{line-height.3}`,
     type: "lineHeight",
     description:
       "Line height for P elements with .prose applied directly or that are a child of a .prose container.",
@@ -44,13 +44,13 @@ const tokens = {
       "Maximum width for P elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-before": {
-    value: `{spacing.2}`,
+    value: `{spacing.0}`,
     type: "spacing",
     description:
       "Amount of margin inline start for P elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-after": {
-    value: `{spacing.1}`,
+    value: `{spacing.05}`,
     type: "spacing",
     description:
       "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container.",

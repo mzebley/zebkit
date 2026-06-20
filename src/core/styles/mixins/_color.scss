@@ -1,0 +1,261 @@
+// Primitive color mixin
+// Usage:
+//   @include primitiveColor(red, 0, 80%);
+@use 'core/styles/variables/prefix'as prefix;
+@use 'sass:list';
+@use 'sass:meta';
+
+@mixin primitiveColor($name, $hue, $saturation) {
+  --#{prefix.$cssVar}-color-#{$name}-hue: #{$hue};
+  --#{prefix.$cssVar}-color-#{$name}-saturation: #{$saturation};
+  --#{prefix.$cssVar}-color-#{$name}-50: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 98%);
+  --#{prefix.$cssVar}-color-#{$name}-100: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 93%);
+  --#{prefix.$cssVar}-color-#{$name}-200: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 87%);
+  --#{prefix.$cssVar}-color-#{$name}-300: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 78%);
+  --#{prefix.$cssVar}-color-#{$name}-400: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 69%);
+  --#{prefix.$cssVar}-color-#{$name}-500: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 58%);
+  --#{prefix.$cssVar}-color-#{$name}-600: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 48%);
+  --#{prefix.$cssVar}-color-#{$name}-700: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 36%);
+  --#{prefix.$cssVar}-color-#{$name}-800: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 26%);
+  --#{prefix.$cssVar}-color-#{$name}-900: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 18%);
+  --#{prefix.$cssVar}-color-#{$name}-950: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 10%);
+}
+
+// Which roles we support and what CSS property they map to.
+$color-roles: ('ink': color,
+  'canvas': background-color,
+  'border': border-color, 'fill': fill) !default;
+
+$color-intensity: 'subtle',
+'muted',
+'base',
+'emphasis'
+ !default;
+
+$color-variants: 'inverse',
+'base',
+ !default;
+
+// Steps we expose (should match your primitive palette).
+$color-steps: (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950) !default;
+
+// States:
+// - key: prefix in the class name (e.g. "focus" → focus:ink-stone-800)
+// - value: pseudo-class to apply.
+$color-states: ('base': null,
+  'focus': ':is(:focus-visible, :focus-within)',
+  'hover': ':hover',
+  'active': ':active',
+  'disabled': ':is(:disabled, [aria-disabled="true"])'
+) !default;
+
+
+// Helper: builds the var() reference for a given primitive family + step.
+@function primitive-color-var($family, $step) {
+  @return var(--#{prefix.$cssVar}-color-#{$family}-#{$step});
+}
+
+// Main generator.
+// $families: list of color family names (e.g. red, stone, merlot, etc.)
+@mixin generate-color-utilities($families,
+  $roles: $color-roles,
+  $steps: $color-steps,
+  $states: $color-states) {
+
+  @each $role,
+  $property in $roles {
+    @each $family in $families {
+      @each $step in $steps {
+
+        // Base (no state prefix)
+        .#{$role}-#{$family}-#{$step} {
+          #{$property}: primitive-color-var($family, $step);
+        }
+
+        // State-prefixed variants (focus:, hover:, etc.)
+        @each $state-name,
+        $pseudo in $states {
+          @if $state-name !='base' {
+            @if $state-name=='hover' {
+              @media (hover: hover) and (pointer: fine) {
+                .#{$state-name}\:#{$role}-#{$family}-#{$step}#{$pseudo} {
+                  #{$property}: primitive-color-var($family, $step);
+                }
+              }
+            }
+
+            @else if $pseudo==null {
+              [class~="#{$state-name}:#{$role}-#{$family}-#{$step}"] {
+                #{$property}: primitive-color-var($family, $step);
+              }
+            }
+
+            @else {
+              [class~="#{$state-name}:#{$role}-#{$family}-#{$step}"]#{$pseudo} {
+                #{$property}: primitive-color-var($family, $step);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Helper: builds var() for semantic color family/role with optional variant/intensity.
+@function semantic-color-var($family, $role, $variant: null, $intensity: null) {
+  $segments: ();
+  $segments: list.append($segments, $family);
+  $segments: list.append($segments, $role);
+
+  @if $variant {
+    $segments: list.append($segments, $variant);
+  }
+
+  @if $intensity {
+    $segments: list.append($segments, $intensity);
+  }
+
+  $joined: "";
+
+  @each $segment in $segments {
+    @if $joined == "" {
+      $joined: "#{$segment}";
+    } @else {
+      $joined: "#{$joined}-#{$segment}";
+    }
+  }
+
+  @return var(--#{prefix.$cssVar}-#{$joined});
+}
+
+// Helper: builds class suffix for semantic utilities (role-family-intensity?-variant?).
+@function semantic-color-class($role, $family, $intensity: null, $variant: null) {
+  $segments: ();
+  $segments: list.append($segments, $role);
+  $segments: list.append($segments, $family);
+
+  @if $intensity {
+    $segments: list.append($segments, $intensity);
+  }
+
+  @if $variant {
+    $segments: list.append($segments, $variant);
+  }
+
+  $joined: "";
+
+  @each $segment in $segments {
+    @if $joined == "" {
+      $joined: "#{$segment}";
+    } @else {
+      $joined: "#{$joined}-#{$segment}";
+    }
+  }
+
+  @return $joined;
+}
+
+// Apply a value to one or more properties.
+@mixin semantic-color-declaration($properties, $value) {
+  @if meta.type-of($properties)=='list' {
+    @each $prop in $properties {
+      #{$prop}: $value;
+    }
+  }
+
+  @else {
+    #{$properties}: $value;
+  }
+}
+
+/**
+ * Generates semantic color utility classes from family tokens (e.g., brand, accent-primary).
+ * Class naming: .canvas-brand-muted, .hover\:ink-brand-inverse, .canvas-brand-strong-inverse
+ * Maps roles to the right CSS properties and respects state prefixes.
+ */
+@mixin generate-semantic-color-utilities($families,
+  $role-properties: ('canvas': (background-color, background),
+    'ink': color,
+    'border': border-color),
+  $variants: (null, inverse),
+  $intensities: (null, subtle, muted, emphasis),
+  $states: $color-states) {
+
+  @each $role,
+  $properties in $role-properties {
+    @each $family in $families {
+      @each $variant in $variants {
+        @each $intensity in $intensities {
+          $var-ref: semantic-color-var($family, $role, $variant, $intensity);
+          $class-name: semantic-color-class($role, $family, $intensity, $variant);
+
+          @each $state-name,
+          $pseudo in $states {
+            @if $state-name=='base' {
+              .#{$class-name} {
+                @include semantic-color-declaration($properties, $var-ref);
+              }
+            }
+
+            @else if $state-name=='hover' {
+              @media (hover: hover) and (pointer: fine) {
+                .#{$state-name}\:#{$class-name}#{$pseudo} {
+                  @include semantic-color-declaration($properties, $var-ref);
+                }
+              }
+            }
+
+            @else {
+              [class~="#{$state-name}\:#{$class-name}"]#{$pseudo} {
+                @include semantic-color-declaration($properties, $var-ref);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+// ---------- Semi-semantic color utilities (brand, primary & secondary accents) ----------
+
+@mixin generate-semi-semantic-color-classes($name, $roles: $color-roles, $steps: $color-steps, $states: $color-states) {
+  @each $step in $steps {
+
+    @each $role,
+    $property in $roles {
+
+      .#{$role}-#{$name}-#{$step} {
+        #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
+      }
+
+      // State-prefixed variants (focus:, hover:, etc.)
+      @each $state-name,
+      $pseudo in $states {
+        @if $state-name !='base' {
+          @if $state-name=='hover' {
+            @media (hover: hover) and (pointer: fine) {
+              .#{$state-name}\:#{$role}-#{$name}-#{$step}#{$pseudo} {
+                #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
+              }
+            }
+          }
+
+          @else if $pseudo==null {
+            [class~="#{$state-name}:#{$role}-#{$name}-#{$step}"] {
+              #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
+            }
+          }
+
+          @else {
+            [class~="#{$state-name}:#{$role}-#{$name}-#{$step}"]#{$pseudo} {
+              #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
+            }
+          }
+        }
+      }
+    }
+  }
+}

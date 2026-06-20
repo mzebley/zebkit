@@ -1,6 +1,11 @@
 <script lang="ts">
-  export let title: string = '';
-  export let description: string = '';
+  interface Props {
+    title?: string;
+    description?: string;
+    children?: any;
+  }
+
+  let { title = '', description = '', children }: Props = $props();
 </script>
 
 <svelte:head>
@@ -19,7 +24,7 @@
   {/if}
 
   <div class="prose-zebkit">
-    <slot />
+    {@render children?.()}
   </div>
 </article>
 

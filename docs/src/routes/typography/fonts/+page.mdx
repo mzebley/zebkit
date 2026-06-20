@@ -1,0 +1,179 @@
+---
+title: Fonts
+description: How zebkit loads font families — system, Google, and self-hosted — through tokens, with automatic fallback stacks and a configurable loading strategy.
+layout: editorial
+section: Typography
+status: draft
+---
+
+# Fonts
+
+A font in zebkit is a **token**, not a stylesheet `<link>` you wire up by hand. You declare
+*what* family you want and *where it loads from*, and the build emits the right CSS — a
+fallback-padded `font-family` variable, plus a Google Fonts request or `@font-face` rules as
+needed. Three sources cover every case: the OS's own fonts, Google Fonts, and files you host
+yourself.
+
+<aside class="editorial-marginalia">
+Same premise as the rest of <a href="/foundations/tokens">the strata</a>: the loading
+mechanics are a <em>function</em> of the token, not something you maintain separately. Swap a
+family by editing one token; the imports and faces follow.
+</aside>
+
+## Two tiers
+
+The font module is organized like the rest of the system — primitives feeding semantics:
+
+- **Source families** name a concrete font and how it loads: `primary`, `alt`, `monospace`,
+  and the built-in `system-sans` / `system-serif` / `system-mono` stacks.
+- **Role aliases** point at a source family by reference: `interface`, `heading`, `body`,
+  `code`. These carry no loading concern — they just forward to a source family, so re-skinning
+  a role is a one-line reference change.
+
+```ts
+// source family
+primary: { value: '"Inter"', type: "fontFamily", source: "google", fallback: "sans",
+           weights: "200..800", description: "..." }
+
+// role alias — pure reference
+body:    { value: "{font-family.primary}", type: "fontFamily", description: "..." }
+```
+
+Every token compiles to a custom property (`--zbk-font-family-primary`,
+`--zbk-font-family-body`, …) you reference from CSS, components, or utilities.
+
+## The `source` field
+
+| `source`   | What the build does                                              |
+| ---------- | --------------------------------------------------------------- |
+| `system`   | Emits a plain variable. Zero network — uses the platform font.  |
+| `google`   | Emits a Google Fonts request (per the [strategy](#loading-strategy)). |
+| `local`    | Emits `@font-face` rules from the token's `faces`.              |
+
+`source` defaults to `system` when omitted.
+
+## Fallbacks come for free
+
+Set `fallback: "sans" | "serif" | "mono"` and the build appends a full, industry-standard
+fallback stack after your family. Author the bare family name — don't hand-type fallbacks.
+
+```ts
+primary: { value: '"Inter"', type: "fontFamily", source: "google", fallback: "sans", weights: "200..800" }
+```
+
+```css
+/* compiles to */
+--zbk-font-family-primary: "Inter", ui-sans-serif, system-ui, -apple-system,
+  BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji";
+```
+
+The same stacks back the `system-*` source tokens, so a system family and a fallback chain are
+never out of sync. Aliases never get a fallback appended — they inherit the target's stack.
+
+## System fonts
+
+The fastest font is the one already installed. Reference a built-in stack and ship nothing:
+
+```css
+.chrome { font-family: var(--zbk-font-family-system-sans); }
+```
+
+`system-sans`, `system-serif`, and `system-mono` are always present and cost zero requests.
+
+## Google Fonts
+
+Declare the family, the weights, and (optionally) italics:
+
+```ts
+// variable font — a weight RANGE
+primary: { value: '"Inter"', type: "fontFamily", source: "google",
+           fallback: "sans", weights: "200..800", styles: ["normal", "italic"] }
+
+// static font — a discrete LIST of weights
+mono: { value: '"Fira Code"', type: "fontFamily", source: "google",
+        fallback: "mono", weights: [400, 500, 700] }
+```
+
+- **`weights` shape carries the intent.** A range string (`"200..800"`) is a variable font; an
+  array (`[400, 500, 700]`) is a discrete static list. No separate boolean.
+- **`styles: ["normal", "italic"]`** adds the italic axis; the build composes the css2 `ital`
+  axis against your weights automatically.
+
+### Loading strategy
+
+By default zebkit emits an `@import` at the top of the compiled CSS. That works with zero HTML
+changes, but `@import` is the **slowest** way to load Google Fonts — it's render-blocking and
+chains requests (your CSS → Google's CSS → the font files), with no `preconnect` or `preload`.
+
+Because a CSS build can't edit your `<head>`, the faster strategies write a **sidecar snippet**
+you paste in once. Configure it in your zebkit config:
+
+```json
+{ "tokens": { "fonts": { "strategy": "link" } } }
+```
+
+Or set it from the [CLI](/cli#get-and-set-single-values):
+
+```bash
+zebkit config set tokens.fonts.strategy link
+```
+
+| `strategy`          | Output                                                            |
+| ------------------- | ---------------------------------------------------------------- |
+| `import` *(default)*| Render-blocking `@import` in the CSS. No HTML changes needed.    |
+| `link`              | No `@import`. Writes `zbk-<theme>.fonts.html` with `preconnect` + stylesheet links. |
+| `preload`           | Same as `link`, plus `<link rel="preload" as="style">` tags.     |
+| `manual`            | Emits nothing remote — you wire up font loading yourself.        |
+
+The generated `zbk-<theme>.fonts.html`:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@200..800&display=swap">
+```
+
+Drop those into your document `<head>`, before the zebkit stylesheet. **Prefer `link` or
+`preload` for production** — `import` is best reserved for quick prototypes.
+
+## Self-hosted fonts
+
+Set `source: "local"` and list one `face` per file. The build generates the `@font-face` rules
+for you:
+
+```ts
+brand: {
+  value: '"Brand Sans"',
+  type: "fontFamily",
+  source: "local",
+  fallback: "sans",
+  display: "swap",
+  faces: [
+    { src: "BrandSans-var.woff2", weight: "100 900", style: "normal" },
+    { src: "BrandSans-italic.woff2", weight: "100 900", style: "italic" },
+  ],
+}
+```
+
+```css
+/* compiles to */
+@font-face {
+  font-family: "Brand Sans";
+  src: url("/assets/BrandSans-var.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+```
+
+- **`src` resolution.** A bare filename resolves against your configured `assetFilePath`
+  (default `/assets/`). Anything starting with `/`, `http(s)://`, `//`, or `.` is used
+  verbatim — your escape hatch for CDNs or custom paths.
+- **`format()` is inferred** from the extension (`.woff2`, `.woff`, `.ttf`, `.otf`); override
+  with `format` on the face if needed.
+- **`font-display`** comes from the face, then the token's `display`, defaulting to `swap`.
+- `weight`, `style`, and `unicodeRange` map straight through to the `@font-face` descriptors.
+
+Local `@font-face` rules are emitted regardless of the Google `strategy` setting — the strategy
+only governs remote (Google) loading.

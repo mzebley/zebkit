@@ -1,0 +1,131 @@
+---
+title: Overlay themes
+description: Ship a base theme once, then layer minimal, selector-scoped overrides — dark mode, high-contrast, per-brand reskins — that redeclare only the tokens they change and let the cascade do the rest.
+layout: editorial
+section: Foundations
+status: draft
+---
+
+# Overlay themes
+
+A theme switch shouldn't mean shipping a second copy of your whole stylesheet. An **overlay**
+is a tiny, selector-scoped file that redeclares **only** the tokens it changes — no primitive
+palettes, no utility classes, no reset. The base CSS already defines everything globally; the
+overlay just overrides a handful of `--zbk-*` values under a more specific selector, and the
+cascade re-skins the subtree.
+
+<aside class="editorial-marginalia">
+Same premise as the rest of <a href="/foundations/tokens">the strata</a>: a theme is a set of
+token <em>values</em>, not a bespoke stylesheet. An overlay is the diff.
+</aside>
+
+## The shape
+
+Overlays live in an `overlays` array under `tokens` in your config. The base theme is always
+emitted at `:root`; each overlay carries its own scope. You can hand-edit this array, or manage
+it interactively with `zebkit overlay-theme` (see the [CLI reference](/cli#overlay-theme)) —
+which can also scaffold an overlay's starter token files for you.
+
+```json
+{
+  "tokens": {
+    "basePreset": "default",
+    "tokenPath": "./tokens",
+    "themeName": "acme",
+    "overlays": [
+      {
+        "themeName": "dark",
+        "tokenPath": "./tokens-dark"
+      },
+      {
+        "themeName": "hc",
+        "tokenPath": "./tokens-high-contrast",
+        "rootSelector": "[data-zbk-theme=\"hc\"], .high-contrast"
+      }
+    ]
+  }
+}
+```
+
+| Field | Default | Description |
+|---|---|---|
+| `tokenPath` | — (required) | Override file or folder; **only its tokens are emitted** |
+| `themeName` | — (required) | Output filename `zbk-<themeName>.css` |
+| `rootSelector` | `[data-zbk-theme="<themeName>"]` | Scope selector — **must not be `:root`** |
+| `destinationPath` | base `destinationPath` | Where to write the file |
+| `fonts.strategy` | base `fonts.strategy` | Google Fonts delivery for this overlay |
+
+## Using it
+
+Load the base CSS, then the overlay, then toggle the selector:
+
+```html
+<link rel="stylesheet" href="/zebkit/zbk-acme.min.css" />
+<link rel="stylesheet" href="/zebkit/zbk-dark.css" />
+
+<body data-zbk-theme="dark">
+  <!-- every --zbk-* the overlay redeclares now wins, scoped here -->
+</body>
+```
+
+The overlay declares what it overrides (plus any tokens that reference it — see below). Given a
+`tokens-dark/zbk-app.tokens.json` that changes two app colors, the emitted file is roughly:
+
+```css
+@layer theme, base, components, utilities;
+
+@layer base {
+  [data-zbk-theme="dark"] {
+    --zbk-app-canvas: #0b0b0c;
+    --zbk-app-ink: #f5f5f7;
+  }
+}
+```
+
+Everything unrelated — spacing, type scale, untouched components — keeps inheriting from `:root`.
+Toggling `data-zbk-theme` off reverts to the base with zero specificity fights.
+
+## What gets emitted
+
+An overlay emits the token you changed **plus its dependents** — every token that references it,
+directly or through an alias chain. This isn't bloat; it's required by how CSS variables work.
+
+A custom property inherits its *already-substituted* value. The base declares, at `:root`:
+
+```css
+--zbk-font-family-heading: var(--zbk-font-family-alt);   /* alias */
+--zbk-h1-font-family: var(--zbk-font-family-heading);    /* component */
+```
+
+If your overlay only redeclares the leaf `--zbk-font-family-alt`, those two are still locked to
+the base value they computed at `:root` — they never re-read your override. So the build walks
+the reference graph and re-emits the whole chain under your selector, where it resolves correctly:
+
+```css
+[data-zbk-theme="dark"] {
+  --zbk-font-family-alt: "Inter", sans-serif;        /* your override */
+  --zbk-font-family-heading: var(--zbk-font-family-alt);   /* re-resolves here */
+  --zbk-h1-font-family: var(--zbk-font-family-heading);    /* and here */
+}
+```
+
+It's still per-token minimal — unrelated tokens stay out — but a leaf with many dependents (a
+core color, say) pulls its dependents in. Override the *semantic* token (`heading`) instead of
+the *leaf* (`alt`) when you want a tighter overlay.
+
+<aside class="editorial-marginalia">
+References resolve to <code>var(--zbk-…)</code> against the full merged theme during the build,
+so values you don't override still point at the base. That same full-context compute is why
+fluid type/space overrides come out as correct <code>clamp()</code> values — the viewport
+anchors are present.
+</aside>
+
+## Notes
+
+- **Never scope to `:root`.** An overlay at `:root` would overwrite the base instead of
+  layering on it — the build rejects it.
+- **Color-only overlays are the sweet spot** (dark mode, high contrast, brand accents). You
+  *can* override font-size or spacing in an overlay and the fluid scales resolve correctly,
+  but those are rarely what a theme switch needs to change.
+- **One config, many themes.** Every overlay builds from the same base context in a single
+  `zebkit build`, so they can't drift from the base they extend.

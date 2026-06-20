@@ -17,10 +17,17 @@ import {
   buildZebkitVariants,
   VariantRegistry,
 } from "@token-scripts/compile-variants";
-import { convertTokensToCssVars } from "@token-scripts/token-converter";
+import {
+  convertTokensToCssVars,
+  FontHeadRequirements,
+} from "@token-scripts/token-converter";
+import { resolveTypeScale } from "@token-scripts/build-type-scale";
+import { resolveSpaceScale } from "@token-scripts/build-space-scale";
 import { compileSass, CompileSassOptions } from "@token-scripts/compile-css";
 import {
   loadZebkitConfig,
+  OverlayThemeConfig,
+  resolveOverlayRootSelector,
   TokensConfig,
   ZebkitConfig,
 } from "../config";
@@ -33,9 +40,9 @@ import {
   resolveSourceThemeOverridePath,
 } from "../theme-presets";
 import {
-  buildEnabledBreakpointsList,
   buildTokenLookup,
   extractReferencedColorFamilies,
+  resolveActiveBreakpointMap,
   resolveLookupOutputPath,
   slugifyFileSegment,
 } from './build-helpers';
@@ -45,7 +52,7 @@ const __dirname = path.dirname(__filename);
 
 const ZEBKIT_PREFIX = "zbk";
 
-const PALETTE_GLOBAL_COLORS = `:root {
+const paletteGlobalColors = (selector: string = ":root"): string => `${selector} {
   --zbk-color-global-black: #131313;
   --zbk-color-global-white: #fefefe;
   --zbk-color-global-transparent: transparent;
@@ -165,24 +172,13 @@ export async function runTokenBuild(
       ? destinationPath
       : path.resolve(process.cwd(), destinationPath);
 
-    const configuredTheme =
-      tokensConfig?.theme === "custom"
-        ? DEFAULT_THEME_NAME
-        : tokensConfig?.theme ?? DEFAULT_THEME_NAME;
-
-    if (tokensConfig?.theme === "custom") {
-      console.warn(
-        chalk.yellow(
-          'Config value "theme": "custom" is deprecated. Using "default" as the base theme and applying customTokenPath as an override layer.'
-        )
-      );
-    }
+    const configuredTheme = tokensConfig?.basePreset ?? DEFAULT_THEME_NAME;
 
     const themeAnswers = tokensConfig
       ? {
           theme: configuredTheme,
-          customTokenPath: tokensConfig.customTokenPath,
-          customThemeName: tokensConfig.customThemeName,
+          customTokenPath: tokensConfig.tokenPath,
+          customThemeName: tokensConfig.themeName,
         }
       : await inquirer.prompt([
           {
@@ -366,7 +362,47 @@ export async function runTokenBuild(
       exportTokens
     );
 
-    const cssVars = convertTokensToCssVars(tokens, { layers });
+    // The base theme always emits at `:root`; overlays (built later) carry their own
+    // scoped selectors.
+    // Resolve the generated font-size and spacing scales (fluid by default; static opt-out)
+    // before emitting CSS vars. Operates on copies so exported artifacts keep their
+    // authorable form; downstream consumers (variants, color/lookup) use original tokens.
+    // Spacing runs first: it reads the shared viewport anchors from the font-size module,
+    // which the type-scale pass then strips.
+    const useStaticTypeScale =
+      tokensConfig?.typeScale?.static === true ||
+      tokensConfig?.typeScale?.fluid === false;
+    const useStaticSpaceScale =
+      tokensConfig?.spaceScale?.static === true ||
+      tokensConfig?.spaceScale?.fluid === false;
+    let cssVarTokens = resolveSpaceScale(tokens, {
+      mode: useStaticSpaceScale ? "static" : "fluid",
+    });
+    cssVarTokens = resolveTypeScale(cssVarTokens, {
+      mode: useStaticTypeScale ? "static" : "fluid",
+    });
+    // Breakpoints feed the SCSS responsive system at build time; only surface them
+    // as `--zbk-breakpoint-*` custom properties when explicitly opted in. Either
+    // way, drop disabled (null-valued) entries so they never emit a `null` var.
+    const breakpointKey = `${ZEBKIT_PREFIX}-breakpoint`;
+    if (cssVarTokens[breakpointKey]) {
+      if (tokensConfig?.extendedTokens?.emitBreakpointVars === true) {
+        const enabledOnly: TokenInterface = {};
+        for (const [name, entry] of Object.entries(cssVarTokens[breakpointKey])) {
+          if ((entry as { value?: unknown })?.value != null) enabledOnly[name] = entry;
+        }
+        cssVarTokens = { ...cssVarTokens, [breakpointKey]: enabledOnly };
+      } else {
+        cssVarTokens = { ...cssVarTokens };
+        delete cssVarTokens[breakpointKey];
+      }
+    }
+    const fontStrategy = tokensConfig?.fonts?.strategy ?? "import";
+    const { css: cssVars, fontHead } = convertTokensToCssVars(cssVarTokens, {
+      layers,
+      fontStrategy,
+      assetFilePath,
+    });
     const tokenLookupOutputPath = resolveLookupOutputPath(
       tokensConfig?.tokenLookupOutputPath,
       resolvedDestinationPath
@@ -418,10 +454,11 @@ export async function runTokenBuild(
             `@use 'core/colors/palette/${family}' as zbk_smart_palette_${i};\n`
         )
         .join("");
-      finalVariantCss = `${inlineCss}\n${PALETTE_GLOBAL_COLORS}`;
+      finalVariantCss = `${inlineCss}\n${paletteGlobalColors()}`;
     }
 
-    const enabledBreakpoints = buildEnabledBreakpointsList(
+    const activeBreakpoints = resolveActiveBreakpointMap(
+      tokens,
       tokensConfig?.extendedTokens?.breakpoints
     );
 
@@ -436,11 +473,25 @@ export async function runTokenBuild(
       },
       variantCss: finalVariantCss,
       zebkitPackageRoot,
-      enabledBreakpoints,
+      activeBreakpoints,
       additionalModuleUses,
     };
 
     await compileSass(sassOptions);
+
+    // For non-import strategies, write the sidecar `<head>` snippet (preconnect + stylesheet/
+    // preload tags) the consumer pastes into their document head.
+    if (
+      (fontStrategy === "link" || fontStrategy === "preload") &&
+      (fontHead.stylesheets.length > 0 || fontHead.preloads.length > 0)
+    ) {
+      const snippetPath = path.join(
+        resolvedDestinationPath,
+        `zbk-${themeName.toLowerCase()}.fonts.html`
+      );
+      await fs.writeFile(snippetPath, buildFontHeadHtml(fontHead));
+      console.log(chalk.green(`Font head snippet written to ${snippetPath}`));
+    }
 
     if (writeTokenLookupFlag) {
       const lookupMap = buildTokenLookup(tokens);
@@ -456,6 +507,30 @@ export async function runTokenBuild(
         ...allowedTokenTypes.options,
       ]);
     }
+
+    // Scoped overlay themes. Each is a minimal, selector-scoped stylesheet that redeclares
+    // ONLY the tokens its `tokenPath` overrides — no palettes, utilities, reset, or variants
+    // (those already exist globally from the base CSS above). Built on the full base context
+    // so fluid type/space anchors and token references resolve correctly, then filtered down
+    // to the overlay's own changed tokens before emission.
+    const overlays = tokensConfig?.overlays ?? [];
+    if (overlays.length > 0) {
+      const overlayContextPaths = [
+        ...overridePaths,
+        ...(customTokenPath ? [customTokenPath] : []),
+      ];
+      for (const overlay of overlays) {
+        await buildOverlayCss(overlay, {
+          baseTokenFiles: files.tokenFiles,
+          contextOverridePaths: overlayContextPaths,
+          parentDestination: resolvedDestinationPath,
+          parentFontStrategy: fontStrategy,
+          assetFilePath,
+          useStaticTypeScale,
+          useStaticSpaceScale,
+        });
+      }
+    }
   } catch (error: any) {
     if (error?.name === "ExitPromptError") {
       console.log(chalk.yellow("\nBuild cancelled."));
@@ -465,6 +540,195 @@ export async function runTokenBuild(
       process.exit(1);
     }
   }
+}
+
+interface BuildOverlayCssOptions {
+  /** Base theme token module files (shared across base + every overlay). */
+  baseTokenFiles: string[];
+  /** Untracked base-context overrides (source theme overrides + base `tokenPath`). */
+  contextOverridePaths: string[];
+  /** Base theme destination; used when the overlay omits its own `destinationPath`. */
+  parentDestination: string;
+  /** Base theme font strategy; used when the overlay omits its own `fonts.strategy`. */
+  parentFontStrategy: NonNullable<TokensConfig["fonts"]>["strategy"];
+  assetFilePath: string;
+  useStaticTypeScale: boolean;
+  useStaticSpaceScale: boolean;
+}
+
+/**
+ * Computes the set of `"<module>.<entry>"` ids that must be emitted for an overlay: the
+ * overridden leaves plus every token whose value transitively references one of them.
+ *
+ * References use `{<module>.<entry>}` notation (e.g. `{font-family.alt}` → `zbk-font-family.alt`).
+ * Scale-resolved tokens (font-size/spacing) carry `calc(...)` values with no reference and only
+ * enter the closure when they were overridden directly. Cycles terminate naturally — the closure
+ * stops growing.
+ */
+function computeEmissionClosure(
+  scaled: Record<string, TokenInterface>,
+  overriddenKeys: Record<string, Set<string>>
+): Set<string> {
+  const closure = new Set<string>();
+  for (const [moduleKey, entries] of Object.entries(overriddenKeys)) {
+    for (const entry of entries) closure.add(`${moduleKey}.${entry}`);
+  }
+
+  // id -> the single reference target it depends on (token values are whole-value refs or literals).
+  const dependsOn = new Map<string, string>();
+  for (const [moduleKey, entries] of Object.entries(scaled)) {
+    for (const [entry, obj] of Object.entries(entries)) {
+      const value = (obj as { value?: unknown })?.value;
+      if (typeof value !== "string" || !value.startsWith("{") || !value.endsWith("}")) continue;
+      const [parent, child] = value.slice(1, -1).split(".");
+      if (!parent || !child) continue;
+      dependsOn.set(`${moduleKey}.${entry}`, `${ZEBKIT_PREFIX}-${parent}.${child}`);
+    }
+  }
+
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const [id, target] of dependsOn) {
+      if (!closure.has(id) && closure.has(target)) {
+        closure.add(id);
+        changed = true;
+      }
+    }
+  }
+  return closure;
+}
+
+/**
+ * Builds one scoped overlay theme stylesheet. Merges the overlay's `tokenPath` on top of the
+ * full base context (so fluid scales and `var()` references resolve), then emits ONLY the
+ * tokens the overlay changed, scoped under its selector.
+ */
+async function buildOverlayCss(
+  overlay: OverlayThemeConfig,
+  options: BuildOverlayCssOptions
+): Promise<void> {
+  const selector = resolveOverlayRootSelector(overlay);
+  console.log(
+    chalk.cyan(`Building overlay theme "${overlay.themeName}" → ${selector}`)
+  );
+
+  if (!(await fs.pathExists(overlay.tokenPath))) {
+    console.warn(
+      chalk.yellow(
+        `Overlay "${overlay.themeName}": tokenPath not found at ${overlay.tokenPath}. Skipping.`
+      )
+    );
+    return;
+  }
+
+  const destination = overlay.destinationPath
+    ? path.isAbsolute(overlay.destinationPath)
+      ? overlay.destinationPath
+      : path.resolve(process.cwd(), overlay.destinationPath)
+    : options.parentDestination;
+
+  // Merge base context + overlay overrides. `overriddenKeys` reflects only the overlay's
+  // tokenPath (context paths are applied untracked inside buildZebkitTokens).
+  const { tokens, layers, overriddenKeys } = await buildZebkitTokens(
+    overlay.themeName,
+    options.baseTokenFiles,
+    destination,
+    overlay.tokenPath,
+    [],
+    { splitMode: "combined", overridePaths: options.contextOverridePaths },
+    false
+  );
+
+  if (Object.keys(overriddenKeys).length === 0) {
+    console.warn(
+      chalk.yellow(
+        `Overlay "${overlay.themeName}": no tokens were overridden. Nothing to emit.`
+      )
+    );
+    return;
+  }
+
+  // Resolve scales on the full merged map (anchors present) before filtering.
+  let scaled = resolveSpaceScale(tokens, {
+    mode: options.useStaticSpaceScale ? "static" : "fluid",
+  });
+  scaled = resolveTypeScale(scaled, {
+    mode: options.useStaticTypeScale ? "static" : "fluid",
+  });
+
+  // Emit the transitive closure of the overridden tokens, not just the leaves. A CSS custom
+  // property inherits its already-substituted value, so an alias declared at :root
+  // (e.g. `--zbk-font-family-heading: var(--zbk-font-family-alt)`) is locked to the base value
+  // and will NOT pick up an overlay that only redeclares the leaf (`--zbk-font-family-alt`).
+  // Re-emitting every token that (transitively) references an overridden one — scoped under the
+  // overlay selector — makes the whole chain re-resolve in-scope. Still per-entry minimal.
+  const closure = computeEmissionClosure(scaled, overriddenKeys);
+  const emitted: Record<string, TokenInterface> = {};
+  for (const [moduleKey, resolvedModule] of Object.entries(scaled)) {
+    const picked: TokenInterface = {};
+    for (const [entry, value] of Object.entries(resolvedModule)) {
+      if (closure.has(`${moduleKey}.${entry}`)) picked[entry] = value;
+    }
+    if (Object.keys(picked).length > 0) emitted[moduleKey] = picked;
+  }
+
+  if (Object.keys(emitted).length === 0) {
+    console.warn(
+      chalk.yellow(
+        `Overlay "${overlay.themeName}": overridden tokens did not survive scale resolution. Nothing to emit.`
+      )
+    );
+    return;
+  }
+
+  const fontStrategy = overlay.fonts?.strategy ?? options.parentFontStrategy;
+  const { css, fontHead } = convertTokensToCssVars(emitted, {
+    layers,
+    selector,
+    fontStrategy,
+    assetFilePath: options.assetFilePath,
+    // Emit only the changed subset, but resolve `{x.y}` references against the full theme.
+    referenceTokens: scaled,
+  });
+
+  await fs.ensureDir(destination);
+  const outFile = path.join(destination, `zbk-${overlay.themeName.toLowerCase()}.css`);
+  await fs.writeFile(outFile, css);
+  console.log(chalk.green(`Overlay "${overlay.themeName}" written to ${outFile}`));
+
+  if (
+    (fontStrategy === "link" || fontStrategy === "preload") &&
+    (fontHead.stylesheets.length > 0 || fontHead.preloads.length > 0)
+  ) {
+    const snippetPath = path.join(
+      destination,
+      `zbk-${overlay.themeName.toLowerCase()}.fonts.html`
+    );
+    await fs.writeFile(snippetPath, buildFontHeadHtml(fontHead));
+    console.log(chalk.green(`Overlay font head snippet written to ${snippetPath}`));
+  }
+}
+
+/**
+ * Builds the sidecar `<head>` HTML snippet for `link`/`preload` font strategies. Google's
+ * gstatic preconnect requires `crossorigin`; preloads precede the stylesheet links.
+ */
+function buildFontHeadHtml(fontHead: FontHeadRequirements): string {
+  const lines: string[] = [
+    "<!-- Zebkit font tags. Paste into your document <head>, before your stylesheet. -->",
+  ];
+  for (const origin of fontHead.preconnect) {
+    const crossorigin = origin.includes("gstatic") ? " crossorigin" : "";
+    lines.push(`<link rel="preconnect" href="${origin}"${crossorigin}>`);
+  }
+  for (const href of fontHead.preloads) {
+    lines.push(`<link rel="preload" as="style" href="${href}">`);
+  }
+  for (const href of fontHead.stylesheets) {
+    lines.push(`<link rel="stylesheet" href="${href}">`);
+  }
+  return `${lines.join("\n")}\n`;
 }
 
 async function writeTokenLookupFile(

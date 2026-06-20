@@ -1,7 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@200..800&display=swap');
+/*
+ * Docs global styles.
+ *
+ * The docs site's entire look (fonts, palette, borders, etc.) is a real zebkit
+ * theme compiled from `theme/zebkit-docs/` via `zebkit.docs.config.json` and loaded
+ * as `/zebkit/zbk-default.min.css` (see app.html). Fonts are loaded by zebkit's own
+ * `@import` of Google Fonts from the font-family tokens — no @font-face here, no
+ * hand-overriding of CSS variables. Keep this file to bare document-level resets only.
+ */
+
+ @import 'remixicon/fonts/remixicon.css';
 
 :root {
   font-family: var(--zbk-font-family-body);
+}
+
+html {
+  font-size: var(--zbk-font-size-md);
+  /* Kill the grey/blue flash mobile browsers paint over tapped interactive
+     elements — focus-visible + :active states carry the real feedback. Inherits
+     to all descendants. (Also lives in the library reset.scss; this stays until
+     that reset is wired into the docs build.) */
+  -webkit-tap-highlight-color: transparent;
+}
+
+html * {
+  box-sizing: border-box;
 }
 
 body {

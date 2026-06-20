@@ -5,8 +5,8 @@ import { tokenObjectSchema } from '@definitions/tokens';
 /**
  * Generic schema for a semantic color family:
  * - roles: canvas, ink, border
- * - intensities: base, soft, muted, strong
- * - variants: base, inverse, inverse-soft, inverse-muted, inverse-strong
+ * - prominence: subtle, muted, base, emphasis
+ * - variants: base, inverse, inverse-subtle, inverse-muted, inverse-emphasis
  *
  * This schema is reused for:
  * - action
@@ -19,27 +19,29 @@ import { tokenObjectSchema } from '@definitions/tokens';
 
 const slots = [
   "canvas",
-  "canvas-soft",
+  "canvas-subtle",
   "canvas-muted",
-  "canvas-strong",
+  "canvas-emphasis",
   "canvas-inverse",
-  "canvas-inverse-soft",
+  "canvas-inverse-subtle",
   "canvas-inverse-muted",
-  "canvas-inverse-strong",
+  "canvas-inverse-emphasis",
   "ink",
-  "ink-soft",
+  "ink-subtle",
   "ink-muted",
+  "ink-emphasis",
   "ink-inverse",
-  "ink-inverse-soft",
+  "ink-inverse-subtle",
   "ink-inverse-muted",
+  "ink-inverse-emphasis",
   "border",
-  "border-soft",
+  "border-subtle",
   "border-muted",
-  "border-strong",
+  "border-emphasis",
   "border-inverse",
-  "border-inverse-soft",
+  "border-inverse-subtle",
   "border-inverse-muted",
-  "border-inverse-strong",
+  "border-inverse-emphasis",
 ] as const;
 
 type ColorSlot = (typeof slots)[number];

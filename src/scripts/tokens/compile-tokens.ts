@@ -27,6 +27,12 @@ export interface BuildZebkitTokensOptions {
 export interface BuildZebkitTokensResult {
   tokens: Record<string, TokenInterface>;
   layers: Record<string, LayerName>;
+  /**
+   * Per-module set of leaf token names that overrides actually wrote, e.g.
+   * `{ 'zbk-accent-primary': Set('default','hover') }`. Empty when no overrides applied.
+   * Drives minimal overlay emission (emit only what changed).
+   */
+  overriddenKeys: Record<string, Set<string>>;
 }
 
 /**
@@ -47,6 +53,7 @@ export async function buildZebkitTokens(
   const tokens: Record<string, TokenInterface> = {};
   const layers: Record<string, LayerName> = {};
   const tokenSchemas: Record<string, ZodSchema> = {};
+  const overriddenKeys: Record<string, Set<string>> = {};
   const splitMode = options.splitMode ?? 'combined';
   const overridePaths = options.overridePaths ?? [];
 
@@ -113,9 +120,12 @@ export async function buildZebkitTokens(
         const tokenKey = `${ZEBKIT_PREFIX}-${moduleKey}`;
 
         if (validateTokenExport(tokensExport, tokenSchema)) {
-          // Merge modules that share the same logical key (e.g., primitive + semantic spacing)
+          // Merge modules that share the same logical key (e.g., primitive + semantic spacing).
+          // Copy the imported export rather than aliasing it: token modules are ES singletons
+          // cached for the process lifetime, so mutating one (below, or via overrides) would
+          // leak keys into later builds in the same process (e.g. the hero-themes loop).
           if (!tokens[tokenKey]) {
-            tokens[tokenKey] = tokensExport;
+            tokens[tokenKey] = { ...tokensExport };
             tokenSchemas[tokenKey] = tokenSchema;
             layers[tokenKey] = moduleLayer;
           } else {
@@ -163,23 +173,24 @@ export async function buildZebkitTokens(
     ? destinationPath
     : path.resolve(process.cwd(), destinationPath);
 
-  const mergedOverridePaths = [
-    ...overridePaths,
-    ...(customTokenPath ? [customTokenPath] : []),
-  ];
-
-  for (const overridePath of mergedOverridePaths) {
+  // `overridePaths` supply base context (source/variant theme overrides) and are NOT
+  // tracked. Only `customTokenPath` is tracked into `overriddenKeys`, so an overlay build
+  // can emit just the tokens that overlay itself changed (minimal emission).
+  for (const overridePath of overridePaths) {
     await applyCustomOverrides(overridePath, tokens, tokenSchemas);
+  }
+  if (customTokenPath) {
+    await applyCustomOverrides(customTokenPath, tokens, tokenSchemas, overriddenKeys);
   }
 
   if (Object.keys(tokens).length === 0) {
     console.error(chalk.bgYellow('No valid tokens to write.'));
-    return { tokens, layers };
+    return { tokens, layers, overriddenKeys };
   }
 
   if (exportFile) await writeTokensToFile(tokens, resolvedDestination, outputFormats, themeName, splitMode);
 
-  return { tokens, layers };
+  return { tokens, layers, overriddenKeys };
 }
 
 function validateTokenExport(tokenExport: unknown, schema: ZodSchema): boolean {
@@ -195,7 +206,8 @@ function validateTokenExport(tokenExport: unknown, schema: ZodSchema): boolean {
 async function applyCustomOverrides(
   overridePath: string,
   tokens: Record<string, TokenInterface>,
-  tokenSchemas: Record<string, ZodSchema>
+  tokenSchemas: Record<string, ZodSchema>,
+  touched?: Record<string, Set<string>>
 ) {
   const spinner = ora('Processing custom token overrides...').start();
   const resolvedOverridePath = path.isAbsolute(overridePath)
@@ -211,7 +223,7 @@ async function applyCustomOverrides(
     const stats = await fs.stat(resolvedOverridePath);
     if (stats.isFile()) {
       const customTokenData = await fs.readJson(resolvedOverridePath);
-      mergeOverrideObject(customTokenData, tokens, tokenSchemas);
+      mergeOverrideObject(customTokenData, tokens, tokenSchemas, touched);
     } else if (stats.isDirectory()) {
       const overrideFiles = await glob('**/*.json', {
         cwd: resolvedOverridePath,
@@ -224,9 +236,9 @@ async function applyCustomOverrides(
         const inferredKey = inferTokenKeyFromFilename(file);
 
         if (Object.keys(data).some((key) => key.startsWith(`${ZEBKIT_PREFIX}-`))) {
-          mergeOverrideObject(data, tokens, tokenSchemas);
+          mergeOverrideObject(data, tokens, tokenSchemas, touched);
         } else if (inferredKey && tokens[inferredKey]) {
-          mergeOverrideObject({ [inferredKey]: data }, tokens, tokenSchemas);
+          mergeOverrideObject({ [inferredKey]: data }, tokens, tokenSchemas, touched);
         } else if (isVariantOverrideFile(file)) {
           console.info(
             chalk.gray(

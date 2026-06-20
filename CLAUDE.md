@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**Read [VISION.md](VISION.md) before making design decisions.** It is the project manifesto: the core beliefs, principles, and anti-goals that every architectural and design choice must trace back to. Its "For AI agents and tooling" section is binding.
+
 ## Build & Development Commands
 
 ```bash
@@ -14,7 +16,7 @@ npm run docs:dev            # Run docs dev server (Astro)
 npm run docs:build          # Build static docs
 ```
 
-**Configuration**: Token/component builds can skip prompts via `zebkit.config.json` (also accepts `zebkit-config.json` or `zekit.config.json`), or pass `--config path/to/config.json`.
+**Configuration**: Token/component builds can skip prompts via `zebkit.config.json`, or pass `--config path/to/config.json`.
 
 ## Architecture Overview
 
@@ -63,7 +65,7 @@ Zebkit includes foundation token modules for common visual properties:
 
 ### Utility Class System
 
-Zebkit generates utility classes via SCSS generators in `src/core/styles/utilities/`:
+Zebkit generates utility classes via SCSS generators in `src/core/styles/mixins/`:
 
 - **Responsive utilities** - Generated utilities support responsive breakpoints via `@media` queries
 - **Token-driven** - All utilities reference design tokens; no hard-coded values
@@ -83,6 +85,7 @@ Zebkit generates utility classes via SCSS generators in `src/core/styles/utiliti
 - **Tokens over hard-coded values**: Every visual decision is a token; direct values only in primitives
 - **Composable HTML**: Components use light DOM with progressive enhancement
 - **Deterministic overrides**: Re-theming happens through tokens, not component internals
+- **Pre-release, no back-compat**: The project has not shipped. When updating an existing feature, change it cleanly — do NOT add backward-compatibility shims, legacy fallbacks, deprecation paths, or dual-format support. Migrate callers/data to the new shape instead.
 
 ## Component Authoring
 

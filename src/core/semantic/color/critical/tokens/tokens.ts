@@ -3,7 +3,7 @@ import { z } from "zod";
 import { tokenSchema } from "./token-schema";
 
 /**
- * Zebkit critical color design tokens. 
+ * Zebkit critical color design tokens.
  */
 export const key = "critical";
 export const layer: LayerName = "base";
@@ -13,124 +13,134 @@ export type CriticalTokenSchema = z.infer<typeof tokenSchema>;
 const tokens = {
   // Canvas: base critical surfaces
   "canvas": {
-    value: "{color.dusk-50}",
+    value: "{color.red-500}",
     type: "color",
     description: "Base critical canvas color for primary surfaces."
   },
-  "canvas-soft": {
-    value: "",
+  "canvas-subtle": {
+    value: "{color.red-50}",
     type: "color",
-    description: "Soft critical canvas color for lightly tinted surfaces."
+    description: "Subtle critical canvas color for the least-prominent, lightly tinted surfaces."
   },
   "canvas-muted": {
-    value: "",
+    value: "{color.red-100}",
     type: "color",
-    description: "Muted critical canvas color for low-emphasis surfaces."
+    description: "Muted critical canvas color for low-emphasis, recessed surfaces."
   },
-  "canvas-strong": {
-    value: "",
+  "canvas-emphasis": {
+    value: "{color.red-600}",
     type: "color",
-    description: "Strong critical canvas color for high-emphasis surfaces."
+    description: "Emphasis critical canvas color for high-prominence surfaces."
   },
 
   // Canvas (inverse): critical surfaces in inverse contexts
   "canvas-inverse": {
-    value: "",
+    value: "{color.red-400}",
     type: "color",
     description: "Base inverse critical canvas color for surfaces on dark or inverted contexts."
   },
-  "canvas-inverse-soft": {
-    value: "",
+  "canvas-inverse-subtle": {
+    value: "{color.red-900}",
     type: "color",
-    description: "Soft inverse critical canvas color for lightly tinted surfaces in inverse contexts."
+    description: "Subtle inverse critical canvas color for the least-prominent surfaces in inverse contexts."
   },
   "canvas-inverse-muted": {
-    value: "",
+    value: "{color.red-800}",
     type: "color",
     description: "Muted inverse critical canvas color for low-emphasis surfaces in inverse contexts."
   },
-  "canvas-inverse-strong": {
-    value: "",
+  "canvas-inverse-emphasis": {
+    value: "{color.red-300}",
     type: "color",
-    description: "Strong inverse critical canvas color for high-emphasis surfaces in inverse contexts."
+    description: "Emphasis inverse critical canvas color for high-prominence surfaces in inverse contexts."
   },
 
   // Ink: critical text and icon colors
   "ink": {
-    value: "",
+    value: "{color.red-700}",
     type: "color",
-    description: "Base critical ink color for text and icons on neutral or light canvases."
+    description: "Base critical ink color for body text and icons on neutral or light canvases."
   },
-  "ink-soft": {
-    value: "",
+  "ink-subtle": {
+    value: "{color.red-400}",
     type: "color",
-    description: "Soft critical ink color for lower-emphasis text and icons."
+    description: "Subtle critical ink color for the least-prominent, tertiary text and icons."
   },
   "ink-muted": {
-    value: "",
+    value: "{color.red-500}",
     type: "color",
-    description: "Muted critical ink color for subtle or secondary text and icons."
+    description: "Muted critical ink color for secondary text and icons."
+  },
+  "ink-emphasis": {
+    value: "{color.red-800}",
+    type: "color",
+    description: "Emphasis critical ink color for high-prominence text and icons."
   },
 
   // Ink (inverse): critical text and icon colors on inverse canvases
   "ink-inverse": {
-    value: "",
+    value: "{color.red-300}",
     type: "color",
-    description: "Base inverse critical ink color for text and icons on inverse or dark canvases."
+    description: "Base inverse critical ink color for body text and icons on inverse or dark canvases."
   },
-  "ink-inverse-soft": {
-    value: "",
+  "ink-inverse-subtle": {
+    value: "{color.red-500}",
     type: "color",
-    description: "Soft inverse critical ink color for lower-emphasis text and icons on inverse canvases."
+    description: "Subtle inverse critical ink color for the least-prominent text and icons on inverse canvases."
   },
   "ink-inverse-muted": {
-    value: "",
+    value: "{color.red-400}",
     type: "color",
-    description: "Muted inverse critical ink color for subtle text and icons on inverse canvases."
+    description: "Muted inverse critical ink color for secondary text and icons on inverse canvases."
+  },
+  "ink-inverse-emphasis": {
+    value: "{color.red-200}",
+    type: "color",
+    description: "Emphasis inverse critical ink color for high-prominence text on inverse canvases."
   },
 
   // Border: critical border, outline, and divider colors
   "border": {
-    value: "",
+    value: "{color.red-500}",
     type: "color",
     description: "Base critical border color for outlines, strokes, and dividers."
   },
-  "border-soft": {
-    value: "",
+  "border-subtle": {
+    value: "{color.red-200}",
     type: "color",
-    description: "Soft critical border color for low-emphasis outlines and dividers."
+    description: "Subtle critical border color for the least-prominent outlines and dividers."
   },
   "border-muted": {
-    value: "",
+    value: "{color.red-300}",
     type: "color",
-    description: "Muted critical border color for subtle outlines and dividers."
+    description: "Muted critical border color for low-emphasis outlines and dividers."
   },
-  "border-strong": {
-    value: "",
+  "border-emphasis": {
+    value: "{color.red-600}",
     type: "color",
-    description: "Strong critical border color for high-emphasis outlines and dividers."
+    description: "Emphasis critical border color for high-prominence outlines and dividers."
   },
 
   // Border (inverse): critical borders in inverse contexts
   "border-inverse": {
-    value: "",
+    value: "{color.red-500}",
     type: "color",
     description: "Base inverse critical border color for outlines and dividers on inverse canvases."
   },
-  "border-inverse-soft": {
-    value: "",
+  "border-inverse-subtle": {
+    value: "{color.red-800}",
     type: "color",
-    description: "Soft inverse critical border color for low-emphasis outlines on inverse canvases."
+    description: "Subtle inverse critical border color for the least-prominent outlines on inverse canvases."
   },
   "border-inverse-muted": {
-    value: "",
+    value: "{color.red-700}",
     type: "color",
-    description: "Muted inverse critical border color for subtle outlines on inverse canvases."
+    description: "Muted inverse critical border color for low-emphasis outlines on inverse canvases."
   },
-  "border-inverse-strong": {
-    value: "",
+  "border-inverse-emphasis": {
+    value: "{color.red-400}",
     type: "color",
-    description: "Strong inverse critical border color for high-emphasis outlines on inverse canvases."
+    description: "Emphasis inverse critical border color for high-prominence outlines on inverse canvases."
   }
 } as const satisfies CriticalTokenSchema;
 

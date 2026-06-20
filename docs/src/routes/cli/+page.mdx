@@ -1,0 +1,163 @@
+---
+title: CLI reference
+description: The zebkit command line — scaffold a project, build CSS, sync tokens, edit config, and manage overlay themes. Every command reads and writes one self-documenting zebkit.config.json.
+layout: editorial
+section: CLI
+status: draft
+---
+
+# CLI reference
+
+Everything the CLI does flows through a single file: **`zebkit.config.json`** at your project
+root. `init` writes it, `config` edits it, `build` reads it, and `overlay-theme` manages the
+theme entries inside it. The config is **self-documenting** — every option is written out with
+its value, so the file is a complete picture of your setup with no hidden defaults.
+
+<aside class="editorial-marginalia">
+Only <code>zebkit.config.json</code> is discovered. Point any command at a different file with
+<code>-c, --config &lt;path&gt;</code>.
+</aside>
+
+## Commands at a glance
+
+| Command | What it does |
+|---|---|
+| `zebkit init` | Guided setup — writes a complete `zebkit.config.json` |
+| `zebkit init --quick` | Fast path: just the essentials |
+| `zebkit build` | Compile CSS from your tokens |
+| `zebkit pull` | Sync the latest default tokens into your token files |
+| `zebkit config` | Guided edit of the existing config |
+| `zebkit config get <path>` | Print one value |
+| `zebkit config set <path> <value>` | Set one value |
+| `zebkit overlay-theme` | Manage overlay themes (list / new / edit / delete) |
+
+## `init`
+
+The default `init` is a **full guided walkthrough** that covers most token options and writes a
+complete config. It asks about:
+
+- **Output directory** for compiled CSS and the **asset URL path**
+- **Starting theme** (base preset) and **project name** (drives the output filename)
+- **Google Fonts strategy** — `import`, `link`, `preload`, or `manual` (see [Fonts](/typography/fonts))
+- **Color palettes** — `all` families or `smart` (only families your tokens reference)
+- **Fluid vs. static** [type scale](/typography/type-scale) and [spacing](/spacing/scaling)
+- **Split mode** for token-export artifacts — `combined` or `per-module`
+- whether to **copy default token files** into `./tokens/` for editing
+- a gate for **token-export / advanced options** (artifact formats, lookup/registry JSON,
+  breakpoint vars and the responsive breakpoint set)
+
+It also writes `.vscode/settings.json` so the editor gets token schema validation and CSS
+custom-property hints.
+
+```bash
+zebkit init
+```
+
+### `--quick`
+
+The fast path asks only the four essentials — output directory, asset path, theme, and project
+name — then writes the same complete config (every other option lands on its default, written
+out explicitly).
+
+```bash
+zebkit init --quick
+```
+
+<aside class="editorial-marginalia">
+Both modes write a full config. <code>--quick</code> doesn't produce a smaller file — it just
+asks fewer questions and takes the defaults for the rest.
+</aside>
+
+## `build`
+
+Compiles your tokens into CSS at the configured `destinationPath`. This is the command that
+emits `zbk-<themeName>.css`, any [overlay theme](/foundations/theming) files, and (per your
+`fonts.strategy`) the sidecar `zbk-<theme>.fonts.html`.
+
+```bash
+zebkit build
+zebkit build -c path/to/zebkit.config.json
+```
+
+## `pull`
+
+Syncs the latest bundled default tokens into your project's token files — useful after
+upgrading zebkit to pick up new or changed default tokens without clobbering your overrides.
+
+```bash
+zebkit pull
+```
+
+## `config`
+
+Run with no arguments for a **guided edit** of the existing config. It walks the same questions
+as `init` (seeded with your current values) and rewrites the file. There must already be a
+`zebkit.config.json` — run `init` first if there isn't.
+
+```bash
+zebkit config
+```
+
+### Get and set single values
+
+Read or write a single value by dot-path — handy for scripts and one-off tweaks.
+
+```bash
+zebkit config get tokens.fonts.strategy
+zebkit config set tokens.fonts.strategy preload
+zebkit config set tokens.typeScale.static true
+```
+
+Values are validated and parsed to the right type (booleans, enums, arrays). An unknown path or
+an invalid value fails with the list of valid paths or accepted values.
+
+#### Settable paths
+
+| Path | Accepted values |
+|---|---|
+| `tokens.destinationPath` | any path |
+| `tokens.assetFilePath` | any path |
+| `tokens.basePreset` | a built-in theme name |
+| `tokens.themeName` | any string |
+| `tokens.tokenPath` | any path |
+| `tokens.fonts.strategy` | `import` · `link` · `preload` · `manual` |
+| `tokens.extendedTokens.colors` | `all` · `smart` |
+| `tokens.typeScale.static` | `true` · `false` |
+| `tokens.spaceScale.static` | `true` · `false` |
+| `tokens.splitMode` | `combined` · `per-module` |
+| `tokens.exportTokens` | `true` · `false` |
+| `tokens.outputFormats` | any of `JSON` · `TypeScript` · `JavaScript` |
+| `tokens.writeTokenLookup` | `true` · `false` |
+| `tokens.tokenLookupOutputPath` | any path |
+| `tokens.writeVariantRegistry` | `true` · `false` |
+| `tokens.writeAllowedTokenTypes` | `true` · `false` |
+| `tokens.extendedTokens.emitBreakpointVars` | `true` · `false` |
+| `tokens.extendedTokens.breakpoints` | `true`/`false`, or a subset of `tablet`, `tablet-lg`, `desktop`, `desktop-lg`, `widescreen` |
+
+## `overlay-theme`
+
+Manages the `tokens.overlays` array — the minimal, selector-scoped [overlay themes](/foundations/theming)
+emitted alongside your base theme. Run with no arguments to list current overlays and pick an
+action, or call a subcommand directly.
+
+```bash
+zebkit overlay-theme            # list, then choose an action
+zebkit overlay-theme list       # just list configured overlays
+zebkit overlay-theme new        # scaffold a new overlay
+zebkit overlay-theme edit [name]
+zebkit overlay-theme delete [name]
+```
+
+- **`new`** prompts for the overlay's `themeName`, `tokenPath`, optional `rootSelector` and
+  `destinationPath`, and a Google Fonts strategy. It then offers to **copy base-theme token
+  files** into the overlay's folder as a starting point — you trim each down to only the tokens
+  you want to override.
+- **`edit [name]`** updates an existing overlay's fields (prompts you to pick one if no name is
+  given).
+- **`delete [name]`** removes the overlay from the config and can optionally **delete its token
+  files and folder** too.
+
+<aside class="editorial-marginalia">
+An overlay redeclares only the tokens it changes — see <a href="/foundations/theming">Overlay
+themes</a> for what actually gets emitted and why.
+</aside>

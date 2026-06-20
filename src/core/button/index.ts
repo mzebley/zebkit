@@ -798,26 +798,20 @@ export class ZbkButton extends HTMLElement {
   }
 
   /**
-   * Resolve variant names into concrete class names. Uses registered variants
-   * when available and also applies legacy classes for compatibility.
+   * Resolve variant names into concrete class names, using a registered
+   * variant's class override when present, otherwise the default base class.
    */
   private resolveVariantClasses(variantNames: string[]): string[] {
     const classes: string[] = [];
 
     for (const name of variantNames) {
       const normalized = name.toLowerCase();
-      const registeredClass =
+      const variantClass =
         REGISTERED_VARIANT_CLASSES[normalized] ||
         `${ZEBKIT_PREFIX}-button--${normalized}`;
 
-      if (!classes.includes(registeredClass)) {
-        classes.push(registeredClass);
-      }
-
-      // Ensure the base variant class is always added for compatibility
-      const legacyClass = `${ZEBKIT_PREFIX}-button--${normalized}`;
-      if (!classes.includes(legacyClass)) {
-        classes.push(legacyClass);
+      if (!classes.includes(variantClass)) {
+        classes.push(variantClass);
       }
     }
 

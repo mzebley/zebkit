@@ -16,6 +16,7 @@ export default {
     '^@definitions/(.*)$': '<rootDir>/src/definitions/$1',
     '^@token-scripts/(.*)$': '<rootDir>/src/scripts/tokens/$1',
     '^@component-scripts/(.*)$': '<rootDir>/src/scripts/components/$1',
+    '^chalk$': '<rootDir>/src/test-support/chalk.mock.ts',
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
   testPathIgnorePatterns: ['\\.integration\\.test\\.tsx?$'],
