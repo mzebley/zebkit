@@ -1,8 +1,9 @@
 import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
-import { getZebkitDefaultsDir } from '../resolve-package-root.js';
+import { getZebkitDefaultsDir, getZebkitPackageRoot } from '../resolve-package-root.js';
 import { loadZebkitConfig } from '../../scripts/config.js';
+import { resolveBundledThemeTokensDir } from '../../scripts/theme-presets.js';
 import { runPullCommand } from './pull-command';
 
 export async function pull(options: { config?: string }) {
@@ -28,6 +29,8 @@ export async function pull(options: { config?: string }) {
         return loadZebkitConfig();
       },
       getZebkitDefaultsDir,
+      getZebkitPackageRoot,
+      resolveBundledThemeTokensDir,
       log: (message: string) => console.log(message),
     });
   } catch (error) {

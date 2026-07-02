@@ -13,6 +13,14 @@ describe('pull command', () => {
   const mockEnsureDir = jest.fn();
   const mockReadConfig = jest.fn();
   const mockGetZebkitDefaultsDir = jest.fn(() => '/pkg/dist/cli/defaults');
+  const mockGetZebkitPackageRoot = jest.fn(() => '/pkg');
+  // Mirrors the real resolver: default -> defaults dir, presets -> bundled preset dir.
+  const mockResolveBundledThemeTokensDir = jest.fn(
+    (themeName: string, defaultsDir: string, packageRoot: string) =>
+      themeName === 'default'
+        ? defaultsDir
+        : `${packageRoot}/dist/cli/presets/${themeName}`
+  );
   const mockLog = jest.fn();
 
   const createDeps = (): PullCommandDeps => ({
@@ -23,6 +31,8 @@ describe('pull command', () => {
     ensureDir: mockEnsureDir as PullCommandDeps['ensureDir'],
     readConfig: mockReadConfig as PullCommandDeps['readConfig'],
     getZebkitDefaultsDir: mockGetZebkitDefaultsDir,
+    getZebkitPackageRoot: mockGetZebkitPackageRoot,
+    resolveBundledThemeTokensDir: mockResolveBundledThemeTokensDir,
     log: mockLog,
   });
 
@@ -198,5 +208,59 @@ describe('pull command', () => {
     );
 
     expect(mockLog).toHaveBeenCalledWith('Updated .vscode/settings.json for editor support');
+  });
+
+  it('pulls from the configured base preset snapshot, not the default theme', async () => {
+    mockReadConfig.mockResolvedValue({
+      config: { tokens: { tokenPath: './tokens', basePreset: 'dusk' } },
+      path: '/workspace/project/zebkit.config.json',
+    });
+
+    const presetDir = '/pkg/dist/cli/presets/dusk';
+    mockPathExists.mockImplementation(async (target: string) => {
+      if (target === `${presetDir}/manifest.json`) return true;
+      return false;
+    });
+
+    mockReadJson.mockImplementation(async (target: string) => {
+      if (target === `${presetDir}/manifest.json`) {
+        return { modules: [{ key: 'zbk-button', file: 'zbk-button.json' }] };
+      }
+      if (target === `${presetDir}/zbk-button.json`) {
+        return {
+          _key: 'zbk-button',
+          _layer: 'base',
+          canvas: { value: '#123', type: 'color', description: 'Preset background.' },
+        };
+      }
+      throw new Error(`Unexpected readJson target: ${target}`);
+    });
+
+    mockReadJsonSafe.mockResolvedValue(undefined);
+
+    await runPullCommand(createDeps());
+
+    // The new file carries the PRESET value, not the default theme's.
+    expect(mockWriteJson).toHaveBeenCalledWith(
+      '/workspace/project/tokens/zbk-button.json',
+      {
+        'zbk-button': {
+          canvas: { value: '#123', type: 'color', description: 'Preset background.' },
+        },
+      },
+      { spaces: 2 }
+    );
+  });
+
+  it('returns with guidance (exit 0) when no tokenPath is configured', async () => {
+    mockReadConfig.mockResolvedValue({
+      config: { tokens: {} },
+      path: '/workspace/project/zebkit.config.json',
+    });
+
+    await runPullCommand(createDeps());
+
+    expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('No tokenPath set in config'));
+    expect(mockWriteJson).not.toHaveBeenCalled();
   });
 });

@@ -10,12 +10,20 @@ export interface PullCommandDeps {
   ensureDir: (path: string) => Promise<void>;
   readConfig: () => Promise<{ config: ZebkitConfig; path: string } | undefined>;
   getZebkitDefaultsDir: () => string;
+  getZebkitPackageRoot: () => string;
+  /** Maps a base preset name to its bundled token snapshot dir (defaults dir for `default`). */
+  resolveBundledThemeTokensDir: (
+    themeName: string,
+    defaultsDir: string,
+    packageRoot: string
+  ) => string;
   log: (message: string) => void;
 }
 
 async function countNewKeys(
   defaultTokenData: Record<string, unknown>,
   projectFilePath: string,
+  moduleKey: string,
   deps: Pick<PullCommandDeps, 'pathExists' | 'readJson'>
 ): Promise<number> {
   if (!(await deps.pathExists(projectFilePath))) {
@@ -27,7 +35,7 @@ async function countNewKeys(
   delete (defaultData as any)._key;
   delete (defaultData as any)._layer;
 
-  const projectTokens = projectFile[Object.keys(projectFile)[0]] || {};
+  const projectTokens = projectFile[moduleKey] || {};
   let newKeysCount = 0;
 
   for (const key of Object.keys(defaultData)) {
@@ -75,16 +83,31 @@ export async function runPullCommand(deps: PullCommandDeps) {
   const customTokenPath = config.tokens?.tokenPath;
 
   if (!customTokenPath) {
-    deps.log('No tokenPath set in config — nothing to pull into.');
-    process.exit(1);
+    deps.log(
+      'No tokenPath set in config — nothing to pull into.\n' +
+        'Set `tokens.tokenPath` (e.g. "./tokens") or re-run `zebkit init` and choose to copy token files.'
+    );
+    return;
   }
 
-  const tokensDir = path.resolve(path.dirname(configPath), customTokenPath);
+  // Pull from the snapshot of the configured base preset, not always the default
+  // theme — otherwise a preset-based project gets default-theme values for new keys.
+  const basePreset = config.tokens?.basePreset ?? 'default';
   const defaultsDir = deps.getZebkitDefaultsDir();
-  const manifestPath = path.join(defaultsDir, 'manifest.json');
+  const sourceDir = deps.resolveBundledThemeTokensDir(
+    basePreset,
+    defaultsDir,
+    deps.getZebkitPackageRoot()
+  );
+
+  const tokensDir = path.resolve(path.dirname(configPath), customTokenPath);
+  const manifestPath = path.join(sourceDir, 'manifest.json');
 
   if (!(await deps.pathExists(manifestPath))) {
-    deps.log(`Manifest not found at ${manifestPath}. Run \`npm run build:defaults\` in zebkit.`);
+    deps.log(
+      `Token snapshot for base preset "${basePreset}" not found at ${manifestPath}. ` +
+        'Run `npm run build:defaults` in zebkit.'
+    );
     process.exit(1);
   }
 
@@ -97,7 +120,7 @@ export async function runPullCommand(deps: PullCommandDeps) {
   const results: Array<{ file: string; status: 'added' | 'updated'; count?: number }> = [];
 
   for (const mod of manifest.modules) {
-    const srcFile = path.join(defaultsDir, mod.file);
+    const srcFile = path.join(sourceDir, mod.file);
     const destFile = path.join(tokensDir, mod.file);
     const raw = (await deps.readJson(srcFile)) as Record<string, unknown>;
     const { _key, _layer, ...defaultTokenData } = raw;
@@ -108,7 +131,7 @@ export async function runPullCommand(deps: PullCommandDeps) {
       await deps.writeJson(destFile, { [mod.key]: defaultTokenData }, { spaces: 2 });
       results.push({ file: mod.file, status: 'added' });
     } else {
-      const newKeysCount = await countNewKeys(defaultTokenData, destFile, deps);
+      const newKeysCount = await countNewKeys(defaultTokenData, destFile, mod.key, deps);
 
       if (newKeysCount > 0) {
         await mergeTokenFile(defaultTokenData, destFile, mod.key, deps);
