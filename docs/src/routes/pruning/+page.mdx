@@ -1,0 +1,235 @@
+---
+title: Pruning for production
+description: Ship only the CSS your project references. Prune removes unused utility classes, state variants, and unreachable design tokens from the compiled CSS based on a static scan of your source — the full zebkit vocabulary while you build, a fraction of the bytes in production.
+layout: editorial
+section: Pruning
+status: draft
+---
+
+# Pruning for production
+
+You build with the whole zebkit vocabulary — every utility, every state variant, every token.
+Most projects reference a small slice of it. **Prune** reads your source, finds the classes and
+tokens you actually use, and rewrites the compiled CSS to keep only those. It understands
+zebkit's conventions the naive tree-shaker misses: the `[class~="hover:…"]` state-variant
+selectors and the `.tablet\:text-sm` responsive-variant classes that make up the bulk of the
+bundle.
+
+Pruning is **opt-in** and **static** — it scans files, it never runs your app.
+
+<aside class="editorial-marginalia">
+The engine trims three things: unused <strong>utility selectors</strong>, their unreferenced
+<strong>state/responsive variants</strong>, and any <strong>design tokens</strong> left
+unreachable once those selectors are gone (a graph walk, so token→token chains stay intact).
+</aside>
+
+## Read this first: dynamic class names
+
+A static scan sees literal strings. A class name your code **builds at runtime** is invisible to
+it and will be pruned away:
+
+```js
+// Pruned — the scanner never sees "text-brand" or "text-accent"
+const cls = `text-${color}`;
+element.className = `padding-${size}`;
+```
+
+Two fixes, in order of preference:
+
+1. **Write the full class somewhere the scanner can read it** — a literal in your markup or a
+   lookup object (`{ brand: 'text-brand', accent: 'text-accent' }`). This is the robust fix.
+2. **Safelist it** (see [the cookbook](#safelist-cookbook)) when a literal isn't practical.
+
+Every run writes a **report** listing exactly which classes were dropped — if something looks
+wrong after pruning, that list is where you find it.
+
+## Two ways to run it
+
+**Standalone** — operates on the already-built `.min.css`, no rebuild required. This is the
+primary interface:
+
+```bash
+zebkit prune                 # honors tokens.prune config
+zebkit prune --dry-run       # compute + report only, write nothing
+```
+
+**As part of the build** — pruning runs inside `zebkit build`, before minification:
+
+```bash
+zebkit build --prune                  # prune after building (honors config)
+zebkit build --prune-out dist/zbk.pruned.min.css   # write a pruned sibling
+```
+
+Both share one engine and one content scan; they differ only in where the CSS comes from.
+
+## Replace vs. alongside
+
+| Mode | What it does | Use for |
+|---|---|---|
+| `replace` | Rewrites the canonical `zbk-<theme>.min.css` in place | Production builds |
+| `alongside` | Leaves the canonical file untouched; writes a `zbk-<theme>.pruned.min.css` sibling | Dev — test the pruned output before you trust it |
+
+<aside class="editorial-marginalia">
+The destructive path is never implicit. Standalone <code>zebkit prune</code> with no flags
+defaults to <strong>alongside</strong> — you have to ask for <code>--replace</code> (or set
+<code>output.mode</code>) to overwrite the canonical file.
+</aside>
+
+## Dev-mode workflow
+
+Prove the pruned CSS is safe before you ship it: write it alongside, point your dev server at it,
+click through the site, then flip back.
+
+```jsonc
+// package.json
+"scripts": {
+  "zbk:prune:dev": "zebkit prune --out src/lib/styles/zbk-mytheme.pruned.min.css",
+  "build": "zebkit prune --replace && vite build"
+}
+```
+
+1. Run `npm run zbk:prune:dev` to write the pruned sibling.
+2. Flip one import (e.g. in `src/app.css`) from the canonical file to the `.pruned` one.
+3. Browse the app — check the routes and states your static scan can't see (dynamic classes,
+   JS-toggled variants). Watch for missing styles.
+4. Flip the import back. When you're confident, `build` prunes in place for production.
+
+The pruned filename is deterministic, so the import you flip never churns between runs.
+
+## Config
+
+Everything lives under `tokens.prune` in `zebkit.config.json`. It's disabled by default:
+
+```jsonc
+{
+  "tokens": {
+    "prune": {
+      "enabled": false,
+      "content": ["src/**/*.{svelte,html,js,ts,jsx,tsx,vue,astro,md,svx}"],
+      "safelist": [],
+      "blocklist": [],
+      "output": { "mode": "replace", "path": "" },
+      "tokens": true,
+      "keepLayers": ["theme", "base"],
+      "report": true
+    }
+  }
+}
+```
+
+| Key | Default | Meaning |
+|---|---|---|
+| `enabled` | `false` | Run prune during `zebkit build`. The standalone command runs regardless. |
+| `content` | `["src/**/*.{svelte,html,…}"]` | Globs scanned for referenced classes and tokens. Resolved relative to the config file. |
+| `safelist` | `[]` | Force-keep. Exact class strings or `/regex/` strings. |
+| `blocklist` | `[]` | Force-drop even if referenced. Beats the safelist. |
+| `output.mode` | `"replace"` | `replace` (in place) or `alongside` (pruned sibling). |
+| `output.path` | `""` | Alongside output path. Blank → `<destinationPath>/zbk-<theme>.pruned.min.css`. |
+| `tokens` | `true` | Trim unreachable `:root` custom properties (token-graph reachability). |
+| `keepLayers` | `["theme", "base"]` | Cascade layers that are never pruned. |
+| `report` | `true` | Write `zbk-<theme>.prune-report.json` next to the output. |
+
+<aside class="editorial-marginalia">
+An invalid <code>/regex/</code> in <code>safelist</code>/<code>blocklist</code> fails the build
+loudly, naming the offending entry — it never silently degrades to "matches nothing."
+</aside>
+
+### CLI flags
+
+Flags override config, which overrides defaults.
+
+**`zebkit prune`**
+
+| Flag | Effect |
+|---|---|
+| `-c, --config <path>` | Config file (same resolution as `build`) |
+| `--css <path>` | Input CSS. Default `<destinationPath>/zbk-<theme>.min.css` |
+| `--out <path>` | Output path; implies alongside mode |
+| `--replace` | Prune in place (mutually exclusive with `--out`) |
+| `--dry-run` | Compute and report only; write no CSS |
+| `--report <path>` | Where to write the JSON report |
+
+**`zebkit build`**
+
+| Flag | Effect |
+|---|---|
+| `--prune` | Prune after building, honoring `tokens.prune` (force-enables it) |
+| `--prune-out <path>` | Write a pruned sibling to `<path>` (forces alongside mode) |
+
+## Safelist cookbook
+
+A safelist entry is either an **exact class name** or a `/regex/` string. Reach for it when a
+class is real but unscannable — built at runtime, applied by a third-party script, or composed in
+code.
+
+```jsonc
+{
+  "tokens": {
+    "prune": {
+      "safelist": [
+        "text-brand",          // exact: a dynamically composed class
+        "/^swiper-/",          // regex: keep every third-party swiper class
+        "/^--zbk-brand/"       // regex: also matches tokens (token-graph seeds)
+      ],
+      "blocklist": [
+        "debug-outline"        // force-drop even though it's referenced
+      ]
+    }
+  }
+}
+```
+
+- **Exact strings** match one class name.
+- **`/regex/` strings** match class names *and* token names — a `/^--zbk-…/` pattern keeps those
+  custom properties reachable.
+- **`blocklist`** is the escape hatch for classes you want gone even though they're referenced;
+  it beats the safelist.
+
+Third-party classes that live in *your* CSS/JS (swiper, etc.) aren't touched by pruning zebkit's
+file — but if you apply a zebkit utility at runtime with a literal string
+(`classList.add('text-brand')`), the scanner sees the literal and keeps it. Only **non-literal**
+construction needs a safelist.
+
+## The report
+
+Unless you set `report: false`, every run writes `zbk-<theme>.prune-report.json` next to the
+output and prints a console summary. It's the debugging artifact for over-pruning:
+
+```jsonc
+{
+  "input":  { "path": "…", "bytes": 1394190, "gzipBytes": 110852 },
+  "output": { "path": "…", "bytes": 53299, "gzipBytes": 7614, "mode": "alongside" },
+  "content":   { "files": 42, "candidates": 1810 },
+  "selectors": { "kept": 266, "dropped": 17067 },
+  "classes":   { "kept": [ … ], "dropped": [ … ] },   // full lists
+  "tokens":    { "kept": 443, "dropped": 555, "droppedNames": [ … ] },
+  "safelist":  { "entries": 3, "hits": [ … ] },        // which entries actually matched
+  "warnings":  [ … ]
+}
+```
+
+Two checks catch most mistakes:
+
+- **`classes.dropped`** should contain nothing you can `grep` for in your source. If it does, that
+  class is being constructed dynamically — write it as a literal or safelist it.
+- **`safelist.hits`** shows which safelist entries actually matched. An entry that never hits is a
+  typo or dead — clean it up.
+
+## What prune never touches
+
+- **`@layer theme` and `@layer base`** — the theme variables and reset are never class-gated, so
+  they're always kept (`keepLayers`).
+- **`@keyframes` and `@font-face`** bodies are kept wholesale.
+- **Custom properties outside `:root`** — overlay-theme tokens scoped under
+  `[data-zbk-theme=…]` are left alone; token trimming only touches `:root`.
+
+Token trimming is a **reachability graph**, not a mention-search: a token survives only if a
+surviving rule reaches it through `var()` — transitively, so `--zbk-h1-color:
+var(--zbk-neutral-120)` keeps the primitive alive even when no class names it directly. If your
+project references zebkit's web components (`import 'zebkit/components'` or `<z-…>` tags), prune
+detects that and preserves the tokens those components consume.
+
+<aside class="editorial-marginalia">
+Prune is a zebkit-native tool, not a general-purpose PurgeCSS replacement — it understands
+zebkit's variant conventions and token graph, and it only prunes zebkit's compiled CSS.
+</aside>

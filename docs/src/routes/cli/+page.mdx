@@ -25,6 +25,7 @@ Only <code>zebkit.config.json</code> is discovered. Point any command at a diffe
 | `zebkit init` | Guided setup — writes a complete `zebkit.config.json` |
 | `zebkit init --quick` | Fast path: just the essentials |
 | `zebkit build` | Compile CSS from your tokens |
+| `zebkit prune` | Remove unused classes and tokens from the compiled CSS |
 | `zebkit pull` | Sync the latest default tokens into your token files |
 | `zebkit config` | Guided edit of the existing config |
 | `zebkit config get <path>` | Print one value |
@@ -77,7 +78,24 @@ emits `zbk-<themeName>.css`, any [overlay theme](/foundations/theming) files, an
 ```bash
 zebkit build
 zebkit build -c path/to/zebkit.config.json
+zebkit build --prune                 # also prune unused CSS (honors tokens.prune)
+zebkit build --prune-out dist/zbk.pruned.min.css   # write a pruned sibling
 ```
+
+## `prune`
+
+Removes unused utility classes, state variants, and unreachable design tokens from the compiled
+CSS, based on a static scan of your source. Operates on the already-built `.min.css`, so it runs
+without a rebuild.
+
+```bash
+zebkit prune              # honors tokens.prune config
+zebkit prune --dry-run    # compute + report only, write nothing
+zebkit prune --replace    # prune the canonical file in place
+```
+
+See [Pruning for production](/pruning) for the config block, the dev-mode workflow, the safelist
+cookbook, and the report format.
 
 ## `pull`
 
