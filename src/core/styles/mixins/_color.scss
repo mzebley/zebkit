@@ -57,34 +57,54 @@ $color-states: ('base': null,
 
 // Main generator.
 // $families: list of color family names (e.g. red, stone, merlot, etc.)
+//
+// States are emitted one state at a time (base, focus, hover, active, disabled —
+// the $states map order) rather than interleaved per step. This keeps the
+// LVFHA cascade deterministic (an `active:` rule always beats a `hover:` rule of
+// equal specificity) and lets every hover rule share ONE
+// `@media (hover:hover) and (pointer:fine)` block per invocation instead of one
+// block per class — thousands of duplicate media headers across the bundle.
 @mixin generate-color-utilities($families,
   $roles: $color-roles,
   $steps: $color-steps,
   $states: $color-states) {
 
-  @each $role,
-  $property in $roles {
-    @each $family in $families {
-      @each $step in $steps {
-
-        // Base (no state prefix)
-        .#{$role}-#{$family}-#{$step} {
-          #{$property}: primitive-color-var($family, $step);
+  @each $state-name,
+  $pseudo in $states {
+    @if $state-name=='base' {
+      @each $role,
+      $property in $roles {
+        @each $family in $families {
+          @each $step in $steps {
+            .#{$role}-#{$family}-#{$step} {
+              #{$property}: primitive-color-var($family, $step);
+            }
+          }
         }
+      }
+    }
 
-        // State-prefixed variants (focus:, hover:, etc.)
-        @each $state-name,
-        $pseudo in $states {
-          @if $state-name !='base' {
-            @if $state-name=='hover' {
-              @media (hover: hover) and (pointer: fine) {
-                .#{$state-name}\:#{$role}-#{$family}-#{$step}#{$pseudo} {
-                  #{$property}: primitive-color-var($family, $step);
-                }
+    @else if $state-name=='hover' {
+      @media (hover: hover) and (pointer: fine) {
+        @each $role,
+        $property in $roles {
+          @each $family in $families {
+            @each $step in $steps {
+              .#{$state-name}\:#{$role}-#{$family}-#{$step}#{$pseudo} {
+                #{$property}: primitive-color-var($family, $step);
               }
             }
+          }
+        }
+      }
+    }
 
-            @else if $pseudo==null {
+    @else {
+      @each $role,
+      $property in $roles {
+        @each $family in $families {
+          @each $step in $steps {
+            @if $pseudo==null {
               [class~="#{$state-name}:#{$role}-#{$family}-#{$step}"] {
                 #{$property}: primitive-color-var($family, $step);
               }
@@ -182,6 +202,25 @@ $color-states: ('base': null,
   $intensities: (null, subtle, muted, emphasis),
   $states: $color-states) {
 
+  // One state at a time (see generate-color-utilities): deterministic LVFHA
+  // ordering and a single hover media block per invocation.
+  @each $state-name,
+  $pseudo in $states {
+    @if $state-name=='hover' {
+      @media (hover: hover) and (pointer: fine) {
+        @include -semantic-color-state-rules($families, $role-properties, $variants, $intensities, $state-name, $pseudo);
+      }
+    }
+
+    @else {
+      @include -semantic-color-state-rules($families, $role-properties, $variants, $intensities, $state-name, $pseudo);
+    }
+  }
+}
+
+// Emits every semantic color rule for one state (private helper for
+// generate-semantic-color-utilities).
+@mixin -semantic-color-state-rules($families, $role-properties, $variants, $intensities, $state-name, $pseudo) {
   @each $role,
   $properties in $role-properties {
     @each $family in $families {
@@ -190,26 +229,21 @@ $color-states: ('base': null,
           $var-ref: semantic-color-var($family, $role, $variant, $intensity);
           $class-name: semantic-color-class($role, $family, $intensity, $variant);
 
-          @each $state-name,
-          $pseudo in $states {
-            @if $state-name=='base' {
-              .#{$class-name} {
-                @include semantic-color-declaration($properties, $var-ref);
-              }
+          @if $state-name=='base' {
+            .#{$class-name} {
+              @include semantic-color-declaration($properties, $var-ref);
             }
+          }
 
-            @else if $state-name=='hover' {
-              @media (hover: hover) and (pointer: fine) {
-                .#{$state-name}\:#{$class-name}#{$pseudo} {
-                  @include semantic-color-declaration($properties, $var-ref);
-                }
-              }
+          @else if $state-name=='hover' {
+            .#{$state-name}\:#{$class-name}#{$pseudo} {
+              @include semantic-color-declaration($properties, $var-ref);
             }
+          }
 
-            @else {
-              [class~="#{$state-name}\:#{$class-name}"]#{$pseudo} {
-                @include semantic-color-declaration($properties, $var-ref);
-              }
+          @else {
+            [class~="#{$state-name}\:#{$class-name}"]#{$pseudo} {
+              @include semantic-color-declaration($properties, $var-ref);
             }
           }
         }
@@ -221,29 +255,40 @@ $color-states: ('base': null,
 
 // ---------- Semi-semantic color utilities (brand, primary & secondary accents) ----------
 
+// One state at a time (see generate-color-utilities): deterministic LVFHA
+// ordering and a single hover media block per invocation.
 @mixin generate-semi-semantic-color-classes($name, $roles: $color-roles, $steps: $color-steps, $states: $color-states) {
-  @each $step in $steps {
-
-    @each $role,
-    $property in $roles {
-
-      .#{$role}-#{$name}-#{$step} {
-        #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
+  @each $state-name,
+  $pseudo in $states {
+    @if $state-name=='base' {
+      @each $step in $steps {
+        @each $role,
+        $property in $roles {
+          .#{$role}-#{$name}-#{$step} {
+            #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
+          }
+        }
       }
+    }
 
-      // State-prefixed variants (focus:, hover:, etc.)
-      @each $state-name,
-      $pseudo in $states {
-        @if $state-name !='base' {
-          @if $state-name=='hover' {
-            @media (hover: hover) and (pointer: fine) {
-              .#{$state-name}\:#{$role}-#{$name}-#{$step}#{$pseudo} {
-                #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
-              }
+    @else if $state-name=='hover' {
+      @media (hover: hover) and (pointer: fine) {
+        @each $step in $steps {
+          @each $role,
+          $property in $roles {
+            .#{$state-name}\:#{$role}-#{$name}-#{$step}#{$pseudo} {
+              #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
             }
           }
+        }
+      }
+    }
 
-          @else if $pseudo==null {
+    @else {
+      @each $step in $steps {
+        @each $role,
+        $property in $roles {
+          @if $pseudo==null {
             [class~="#{$state-name}:#{$role}-#{$name}-#{$step}"] {
               #{$property}: var(--#{prefix.$cssVar}-#{$name}-#{$step});
             }
