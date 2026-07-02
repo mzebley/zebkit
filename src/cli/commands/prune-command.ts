@@ -8,6 +8,7 @@ import {
 } from '../../scripts/config.js';
 import { slugifyFileSegment } from '../../scripts/tokens/build-helpers.js';
 import {
+  extractZbkTokens,
   loadComponentTokens,
   type scanContent as scanContentFn,
 } from '../../scripts/prune/content-scan.js';
@@ -53,6 +54,24 @@ export interface PruneCommandDeps {
 /** Turns `zbk-x.min.css` / `zbk-x.css` into its alongside `.pruned` sibling. */
 export function derivePrunedPath(inputPath: string): string {
   return inputPath.replace(/(\.min)?\.css$/, '.pruned$1.css');
+}
+
+/**
+ * Output CSS paths of the configured overlay themes (`zbk-<themeName>.css`, always
+ * unminified). Overlays redeclare tokens scoped under `[data-zbk-theme]` and
+ * reference base `:root` tokens the light theme may never use — so the base prune
+ * must seed reachability from them or it drops tokens the overlays depend on.
+ */
+export function resolveOverlayCssPaths(
+  tokensConfig: TokensConfig | undefined,
+  cwd: string
+): string[] {
+  const overlays = tokensConfig?.overlays ?? [];
+  const baseDestination = tokensConfig?.destinationPath ?? './dist';
+  return overlays.map((overlay) => {
+    const destination = overlay.destinationPath ?? baseDestination;
+    return path.resolve(cwd, destination, `zbk-${slugifyFileSegment(overlay.themeName)}.css`);
+  });
 }
 
 /** Report path derived from the output CSS path (`…\/zbk-x.min.css` → `…\/zbk-x.prune-report.json`). */
@@ -150,10 +169,21 @@ export async function runPruneCommand(
     componentTokens,
   });
 
+  // Seed base-token reachability from the overlays so tokens they reference (but the
+  // base theme doesn't) survive. Overlay files resolve like the base CSS (vs cwd).
+  const tokenRoots = new Set(scan.tokenRoots);
+  for (const overlayPath of resolveOverlayCssPaths(tokensConfig, deps.cwd)) {
+    if (path.resolve(overlayPath) === path.resolve(inputPath)) continue;
+    if (!(await deps.pathExists(overlayPath))) continue;
+    for (const token of extractZbkTokens(await deps.readFile(overlayPath))) {
+      tokenRoots.add(token);
+    }
+  }
+
   const inputCss = await deps.readFile(inputPath);
   const engineResult = deps.pruneCss(inputCss, {
     candidates: scan.candidates,
-    tokenRoots: scan.tokenRoots,
+    tokenRoots,
     safelist,
     blocklist,
     tokens: pruneTokens,

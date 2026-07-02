@@ -39,7 +39,7 @@ import {
   TokensConfig,
   ZebkitConfig,
 } from "../config";
-import { loadComponentTokens, scanContent } from "../prune/content-scan";
+import { extractZbkTokens, loadComponentTokens, scanContent } from "../prune/content-scan";
 import { assembleReport } from "../prune/report";
 import type { PruneMode } from "../prune/types";
 import {
@@ -552,6 +552,40 @@ export async function runTokenBuild(
       packageRoot: zebkitPackageRoot ?? path.resolve(__dirname, "../../.."),
     });
 
+    // Compute overlays BEFORE the base compile. Overlays redeclare tokens scoped
+    // under `[data-zbk-theme]` and reference base `:root` tokens the base theme may
+    // never use — so the base prune must seed reachability from them, or it drops
+    // tokens the overlays depend on. (Computed here, written after the base.)
+    const overlays = tokensConfig?.overlays ?? [];
+    const overlayOutputs: OverlayOutput[] = [];
+    if (overlays.length > 0) {
+      const overlayContextPaths = [
+        ...overridePaths,
+        ...(customTokenPath ? [customTokenPath] : []),
+      ];
+      for (const overlay of overlays) {
+        const output = await computeOverlayCss(overlay, {
+          baseTokenFiles: files.tokenFiles,
+          contextOverridePaths: overlayContextPaths,
+          parentDestination: resolvedDestinationPath,
+          parentFontStrategy: fontStrategy,
+          assetFilePath,
+          useStaticTypeScale,
+          useStaticSpaceScale,
+          minify,
+        });
+        if (output) overlayOutputs.push(output);
+      }
+    }
+
+    if (resolvedPrune) {
+      const roots = new Set(resolvedPrune.request.engineOptions.tokenRoots);
+      for (const output of overlayOutputs) {
+        for (const token of extractZbkTokens(output.css)) roots.add(token);
+      }
+      resolvedPrune.request.engineOptions.tokenRoots = roots;
+    }
+
     const sassOptions: CompileSassOptions = {
       stylesheets: allStylesheets,
       cssVars,
@@ -608,29 +642,12 @@ export async function runTokenBuild(
       ]);
     }
 
-    // Scoped overlay themes. Each is a minimal, selector-scoped stylesheet that redeclares
-    // ONLY the tokens its `tokenPath` overrides — no palettes, utilities, reset, or variants
-    // (those already exist globally from the base CSS above). Built on the full base context
-    // so fluid type/space anchors and token references resolve correctly, then filtered down
-    // to the overlay's own changed tokens before emission.
-    const overlays = tokensConfig?.overlays ?? [];
-    if (overlays.length > 0) {
-      const overlayContextPaths = [
-        ...overridePaths,
-        ...(customTokenPath ? [customTokenPath] : []),
-      ];
-      for (const overlay of overlays) {
-        await buildOverlayCss(overlay, {
-          baseTokenFiles: files.tokenFiles,
-          contextOverridePaths: overlayContextPaths,
-          parentDestination: resolvedDestinationPath,
-          parentFontStrategy: fontStrategy,
-          assetFilePath,
-          useStaticTypeScale,
-          useStaticSpaceScale,
-          minify,
-        });
-      }
+    // Write the overlays computed before the base compile. Each is a minimal,
+    // selector-scoped stylesheet redeclaring only the tokens its `tokenPath`
+    // overrides — no palettes, utilities, reset, or variants (those exist globally
+    // from the base CSS above).
+    for (const output of overlayOutputs) {
+      await writeOverlayOutput(output);
     }
 
     console.log(
@@ -799,15 +816,26 @@ interface BuildOverlayCssOptions {
   minify: boolean;
 }
 
+/** A computed overlay stylesheet, ready to write. */
+interface OverlayOutput {
+  themeName: string;
+  outFile: string;
+  /** Post-processed CSS. Scanned for `--zbk-*` to seed the base prune's token roots. */
+  css: string;
+  fontSnippet?: { path: string; html: string };
+}
+
 /**
- * Builds one scoped overlay theme stylesheet. Merges the overlay's `tokenPath` on top of the
- * full base context (so fluid scales and `var()` references resolve), then emits ONLY the
- * tokens the overlay changed, scoped under its selector.
+ * Computes one scoped overlay theme stylesheet WITHOUT writing it. Merges the overlay's
+ * `tokenPath` on top of the full base context (so fluid scales and `var()` references
+ * resolve), then emits ONLY the tokens the overlay changed, scoped under its selector.
+ * Returns null when the overlay emits nothing. Kept separate from writing so the base
+ * `:root` prune can seed reachability from the tokens overlays reference.
  */
-async function buildOverlayCss(
+async function computeOverlayCss(
   overlay: OverlayThemeConfig,
   options: BuildOverlayCssOptions
-): Promise<void> {
+): Promise<OverlayOutput | null> {
   const selector = resolveOverlayRootSelector(overlay);
   console.log(
     chalk.cyan(`Building overlay theme "${overlay.themeName}" → ${selector}`)
@@ -845,7 +873,7 @@ async function buildOverlayCss(
         `Overlay "${overlay.themeName}": no tokens were overridden. Nothing to emit.`
       )
     );
-    return;
+    return null;
   }
 
   // Resolve scales on the full merged map (anchors present) before filtering.
@@ -878,7 +906,7 @@ async function buildOverlayCss(
         `Overlay "${overlay.themeName}": overridden tokens did not survive scale resolution. Nothing to emit.`
       )
     );
-    return;
+    return null;
   }
 
   const fontStrategy = overlay.fonts?.strategy ?? options.parentFontStrategy;
@@ -892,25 +920,37 @@ async function buildOverlayCss(
   });
   failOnConversionErrors(overlayConversionErrors);
 
-  await fs.ensureDir(destination);
   // Overlays get the same postcss pass as the base bundle (autoprefixer +
   // optional cssnano) but keep the `zbk-<name>.css` filename either way — the
   // overlay link href shouldn't change with the minify setting.
   const processed = await postProcessCss(css, options.minify);
   const outFile = path.join(destination, `zbk-${slugifyFileSegment(overlay.themeName)}.css`);
-  await fs.writeFile(outFile, processed);
-  console.log(chalk.green(`Overlay "${overlay.themeName}" written to ${outFile}`));
 
-  if (
+  const emitsFontSnippet =
     (fontStrategy === "link" || fontStrategy === "preload") &&
-    (fontHead.stylesheets.length > 0 || fontHead.preloads.length > 0)
-  ) {
-    const snippetPath = path.join(
-      destination,
-      `zbk-${slugifyFileSegment(overlay.themeName)}.fonts.html`
-    );
-    await fs.writeFile(snippetPath, buildFontHeadHtml(fontHead));
-    console.log(chalk.green(`Overlay font head snippet written to ${snippetPath}`));
+    (fontHead.stylesheets.length > 0 || fontHead.preloads.length > 0);
+
+  return {
+    themeName: overlay.themeName,
+    outFile,
+    css: processed,
+    fontSnippet: emitsFontSnippet
+      ? {
+          path: path.join(destination, `zbk-${slugifyFileSegment(overlay.themeName)}.fonts.html`),
+          html: buildFontHeadHtml(fontHead),
+        }
+      : undefined,
+  };
+}
+
+/** Writes a computed overlay stylesheet (and its optional font-head snippet). */
+async function writeOverlayOutput(output: OverlayOutput): Promise<void> {
+  await fs.ensureDir(path.dirname(output.outFile));
+  await fs.writeFile(output.outFile, output.css);
+  console.log(chalk.green(`Overlay "${output.themeName}" written to ${output.outFile}`));
+  if (output.fontSnippet) {
+    await fs.writeFile(output.fontSnippet.path, output.fontSnippet.html);
+    console.log(chalk.green(`Overlay font head snippet written to ${output.fontSnippet.path}`));
   }
 }
 

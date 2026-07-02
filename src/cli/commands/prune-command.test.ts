@@ -230,6 +230,36 @@ describe('runPruneCommand (fixture project)', () => {
     ).rejects.toThrow(/Input CSS not found/);
   });
 
+  it('keeps base :root tokens referenced only by a configured overlay', async () => {
+    const baseCss = [
+      '@layer utilities{.button{color:red}}',
+      ':root{--zbk-overlay-primitive:#222;--zbk-truly-unused:#333}',
+    ].join('\n');
+    await fs.outputFile(inputPath(), baseCss);
+    await fs.outputJson(configPath(), {
+      tokens: {
+        destinationPath: './dist',
+        themeName: theme,
+        overlays: [{ themeName: 'dark', tokenPath: './dark' }],
+        prune: { content: ['src/**/*.svelte'] },
+      },
+    });
+    // Overlay output references a base primitive the light theme never uses.
+    await fs.outputFile(
+      path.join(dir, 'dist', 'zbk-dark.css'),
+      '[data-zbk-theme="dark"]{--zbk-h1-color:var(--zbk-overlay-primitive)}'
+    );
+    await fs.outputFile(path.join(dir, 'src/App.svelte'), '<div class="button"></div>');
+
+    const report = await runPruneCommand(realDeps(), { config: configPath() });
+    const out = await fs.readFile(prunedPath(), 'utf8');
+
+    expect(out).toContain('--zbk-overlay-primitive'); // survives via the overlay reference
+    expect(out).not.toContain('--zbk-truly-unused'); // still pruned
+    expect(report.tokens.droppedNames).toContain('--zbk-truly-unused');
+    expect(report.tokens.droppedNames).not.toContain('--zbk-overlay-primitive');
+  });
+
   it('respects the report:false config (no report file)', async () => {
     await fs.outputJson(configPath(), {
       tokens: {
