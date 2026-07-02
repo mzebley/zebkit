@@ -9,6 +9,7 @@ import {
   getOptionByPath,
   KNOWN_PATHS,
 } from './config-options';
+import { DEFAULT_PRUNE_CONTENT } from '../scripts/config';
 
 describe('config-options registry', () => {
   it('exposes known paths for config set/get', () => {
@@ -37,6 +38,16 @@ describe('config-options registry', () => {
 
   it('returns undefined parser for unknown paths', () => {
     expect(getParserForPath('tokens.does.not.exist')).toBeUndefined();
+  });
+
+  it('parses prune options (globs, output mode)', () => {
+    expect(getParserForPath('tokens.prune.enabled')!('true')).toBe(true);
+    expect(getParserForPath('tokens.prune.content')!('src/**/*.svelte, src/**/*.ts')).toEqual([
+      'src/**/*.svelte',
+      'src/**/*.ts',
+    ]);
+    expect(getParserForPath('tokens.prune.output.mode')!('alongside')).toBe('alongside');
+    expect(() => getParserForPath('tokens.prune.output.mode')!('wipe')).toThrow(/Expected one of/);
   });
 });
 
@@ -87,6 +98,23 @@ describe('applyOptionValues', () => {
     );
     expect(config.tokens?.typeScale?.static).toBe(true); // fluid:false -> static:true
     expect(config.tokens?.extendedTokens?.breakpoints).toEqual(['tablet', 'desktop']);
+  });
+
+  it('writes a self-documenting prune block with defaults', () => {
+    const config = applyOptionValues({}, {}, {});
+    expect(config.tokens?.prune?.enabled).toBe(false);
+    expect(config.tokens?.prune?.content).toEqual(DEFAULT_PRUNE_CONTENT);
+    expect(config.tokens?.prune?.output?.mode).toBe('replace');
+    expect(config.tokens?.prune?.output?.path).toBe('');
+  });
+
+  it('maps a prune content string answer back to a glob array', () => {
+    const config = applyOptionValues(
+      {},
+      { pruneEnabled: true, pruneContent: 'src/**/*.svelte,app/**/*.tsx' },
+      {}
+    );
+    expect(config.tokens?.prune?.content).toEqual(['src/**/*.svelte', 'app/**/*.tsx']);
   });
 });
 

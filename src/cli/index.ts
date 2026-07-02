@@ -43,6 +43,8 @@ program
   .option('-c, --config <path>', 'path to config file')
   .option('--theme <preset>', 'override tokens.basePreset for this build')
   .option('--dest <path>', 'override tokens.destinationPath for this build')
+  .option('--prune', 'prune unused CSS after building (honors tokens.prune config)')
+  .option('--prune-out <path>', 'write a pruned file alongside the canonical CSS (implies alongside mode)')
   .option('-w, --watch', 'rebuild when the config or token override files change')
   .action(build);
 

@@ -26,15 +26,22 @@ import { resolveSpaceScale } from "@token-scripts/build-space-scale";
 import {
   compileSass,
   CompileSassOptions,
+  CompileSassPruneRequest,
   postProcessCss,
 } from "@token-scripts/compile-css";
 import {
+  DEFAULT_PRUNE_CONTENT,
+  DEFAULT_PRUNE_KEEP_LAYERS,
   loadZebkitConfig,
   OverlayThemeConfig,
+  PruneConfig,
   resolveOverlayRootSelector,
   TokensConfig,
   ZebkitConfig,
 } from "../config";
+import { scanContent } from "../prune/content-scan";
+import { assembleReport } from "../prune/report";
+import type { PruneMode } from "../prune/types";
 import {
   DEFAULT_THEME_NAME,
   getBuiltInThemeNames,
@@ -111,6 +118,10 @@ export interface RunTokenBuildOptions {
   cliOverrides?: {
     basePreset?: string;
     destinationPath?: string;
+    /** `--prune`: force-enable pruning for this build (honors config mode). */
+    prune?: boolean;
+    /** `--prune-out <path>`: force alongside mode, writing the pruned file here. */
+    pruneOut?: string;
   };
 }
 
@@ -526,6 +537,20 @@ export async function runTokenBuild(
 
     const minify = tokensConfig?.minify !== false;
 
+    const configDir =
+      loadedConfig && loadedConfig.path !== "(provided)"
+        ? path.dirname(loadedConfig.path)
+        : process.cwd();
+    const resolvedPrune = await resolvePruneRequest({
+      pruneConfig: tokensConfig?.prune,
+      cliPrune: cliOverrides?.prune,
+      cliPruneOut: cliOverrides?.pruneOut,
+      destination: resolvedDestinationPath,
+      themeName,
+      minify,
+      configDir,
+    });
+
     const sassOptions: CompileSassOptions = {
       stylesheets: allStylesheets,
       cssVars,
@@ -540,9 +565,18 @@ export async function runTokenBuild(
       activeBreakpoints,
       additionalModuleUses,
       minify,
+      prune: resolvedPrune?.request,
     };
 
-    await compileSass(sassOptions);
+    const compileResult = await compileSass(sassOptions);
+
+    if (resolvedPrune && compileResult.prune) {
+      await writePruneReport(
+        compileResult.prune,
+        resolvedPrune,
+        readZebkitVersion(zebkitPackageRoot)
+      );
+    }
 
     // For non-import strategies, write the sidecar `<head>` snippet (preconnect + stylesheet/
     // preload tags) the consumer pastes into their document head.
@@ -610,6 +644,116 @@ export async function runTokenBuild(
     // and the npm script entry — exit non-zero instead of shipping a bad build.
     console.error(chalk.red("Build failed:"), error instanceof Error ? error.message : error);
     throw error;
+  }
+}
+
+interface ResolvedPrune {
+  request: CompileSassPruneRequest;
+  contentFiles: number;
+  candidateCount: number;
+  safelistEntries: number;
+  reportEnabled: boolean;
+}
+
+/**
+ * Resolves whether/how to prune this build and scans project content for the
+ * candidate set. Returns undefined when pruning isn't enabled (config or flag).
+ * `--prune-out` forces alongside mode; otherwise the config mode wins (build
+ * default: replace, the production disposition).
+ */
+async function resolvePruneRequest(params: {
+  pruneConfig: PruneConfig | undefined;
+  cliPrune?: boolean;
+  cliPruneOut?: string;
+  destination: string;
+  themeName: string;
+  minify: boolean;
+  configDir: string;
+}): Promise<ResolvedPrune | undefined> {
+  const { pruneConfig, cliPrune, cliPruneOut, destination, themeName, minify, configDir } =
+    params;
+  const enabled = cliPruneOut != null || cliPrune === true || pruneConfig?.enabled === true;
+  if (!enabled) return undefined;
+
+  const cfg = pruneConfig ?? {};
+  const mode: PruneMode = cliPruneOut != null ? "alongside" : cfg.output?.mode ?? "replace";
+
+  let outPath: string | undefined;
+  if (mode === "alongside") {
+    const raw = cliPruneOut ?? cfg.output?.path?.trim();
+    if (raw) {
+      outPath = path.isAbsolute(raw) ? raw : path.resolve(process.cwd(), raw);
+    }
+  }
+
+  const contentGlobs =
+    cfg.content && cfg.content.length > 0 ? cfg.content : DEFAULT_PRUNE_CONTENT;
+  const inputCssPath = path.join(
+    destination,
+    `zbk-${slugifyFileSegment(themeName)}${minify ? ".min" : ""}.css`
+  );
+  const scan = await scanContent({ contentGlobs, cwd: configDir, inputCssPath });
+  const safelist = cfg.safelist ?? [];
+
+  return {
+    request: {
+      mode,
+      outPath,
+      engineOptions: {
+        candidates: scan.candidates,
+        tokenRoots: scan.tokenRoots,
+        safelist,
+        blocklist: cfg.blocklist ?? [],
+        tokens: cfg.tokens !== false,
+        keepLayers: cfg.keepLayers ?? DEFAULT_PRUNE_KEEP_LAYERS,
+      },
+    },
+    contentFiles: scan.files,
+    candidateCount: scan.candidates.size,
+    safelistEntries: safelist.length,
+    reportEnabled: cfg.report !== false,
+  };
+}
+
+/** Shapes and (unless disabled) writes the prune report next to the pruned CSS. */
+async function writePruneReport(
+  outcome: NonNullable<Awaited<ReturnType<typeof compileSass>>["prune"]>,
+  resolved: ResolvedPrune,
+  zebkitVersion: string
+): Promise<void> {
+  const report = assembleReport(outcome.engineResult, {
+    zebkitVersion,
+    inputPath: outcome.outputPath,
+    inputCss: outcome.canonicalCss,
+    outputPath: outcome.outputPath,
+    outputCss: outcome.prunedCss,
+    mode: outcome.mode,
+    contentFiles: resolved.contentFiles,
+    candidateCount: resolved.candidateCount,
+    safelistEntries: resolved.safelistEntries,
+  });
+
+  if (report.warnings.length > 0) {
+    console.log(
+      chalk.yellow(
+        `Prune kept ${report.warnings.length} selector(s) on unsupported attribute operators (see report).`
+      )
+    );
+  }
+
+  if (!resolved.reportEnabled) return;
+  const reportPath = outcome.outputPath.replace(/(\.min)?\.css$/, ".prune-report.json");
+  await fs.writeJson(reportPath, report, { spaces: 2 });
+  console.log(chalk.green(`Prune report written to ${reportPath}`));
+}
+
+function readZebkitVersion(packageRoot?: string): string {
+  try {
+    const root = packageRoot ?? path.resolve(__dirname, "../../..");
+    const pkg = fs.readJsonSync(path.join(root, "package.json"));
+    return typeof pkg.version === "string" ? pkg.version : "0.0.0";
+  } catch {
+    return "0.0.0";
   }
 }
 
