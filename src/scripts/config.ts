@@ -129,6 +129,12 @@ export type TokensConfig = {
   spaceScale?: SpaceScaleConfig;
   /** Controls how fonts are loaded (Google Fonts delivery strategy). */
   fonts?: FontsConfig;
+  /**
+   * Minify the compiled CSS (default true → `zbk-<theme>.min.css`). Set false for
+   * a readable, unminified `zbk-<theme>.css` while debugging. Overlays follow this
+   * setting but keep their `zbk-<name>.css` filename either way.
+   */
+  minify?: boolean;
 };
 
 export type ComponentsConfig = {

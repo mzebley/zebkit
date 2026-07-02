@@ -23,7 +23,11 @@ import {
 } from "@token-scripts/token-converter";
 import { resolveTypeScale } from "@token-scripts/build-type-scale";
 import { resolveSpaceScale } from "@token-scripts/build-space-scale";
-import { compileSass, CompileSassOptions } from "@token-scripts/compile-css";
+import {
+  compileSass,
+  CompileSassOptions,
+  postProcessCss,
+} from "@token-scripts/compile-css";
 import {
   loadZebkitConfig,
   OverlayThemeConfig,
@@ -147,6 +151,7 @@ export async function runTokenBuild(
   const builtInThemeNames = getThemePromptChoices(
     await getBuiltInThemeNames(zebkitPackageRoot)
   );
+  const buildStart = Date.now();
 
   try {
     const components = await getComponents(componentsDir);
@@ -519,6 +524,8 @@ export async function runTokenBuild(
       tokensConfig?.extendedTokens?.breakpoints
     );
 
+    const minify = tokensConfig?.minify !== false;
+
     const sassOptions: CompileSassOptions = {
       stylesheets: allStylesheets,
       cssVars,
@@ -532,6 +539,7 @@ export async function runTokenBuild(
       zebkitPackageRoot,
       activeBreakpoints,
       additionalModuleUses,
+      minify,
     };
 
     await compileSass(sassOptions);
@@ -544,7 +552,7 @@ export async function runTokenBuild(
     ) {
       const snippetPath = path.join(
         resolvedDestinationPath,
-        `zbk-${themeName.toLowerCase()}.fonts.html`
+        `zbk-${slugifyFileSegment(themeName)}.fonts.html`
       );
       await fs.writeFile(snippetPath, buildFontHeadHtml(fontHead));
       console.log(chalk.green(`Font head snippet written to ${snippetPath}`));
@@ -585,9 +593,14 @@ export async function runTokenBuild(
           assetFilePath,
           useStaticTypeScale,
           useStaticSpaceScale,
+          minify,
         });
       }
     }
+
+    console.log(
+      chalk.cyan(`\nBuild complete in ${((Date.now() - buildStart) / 1000).toFixed(1)}s.`)
+    );
   } catch (error: any) {
     if (error?.name === "ExitPromptError") {
       console.log(chalk.yellow("\nBuild cancelled."));
@@ -622,6 +635,8 @@ interface BuildOverlayCssOptions {
   assetFilePath: string;
   useStaticTypeScale: boolean;
   useStaticSpaceScale: boolean;
+  /** Minify the overlay stylesheet (follows the base theme's `tokens.minify`). */
+  minify: boolean;
 }
 
 /**
@@ -718,8 +733,12 @@ async function buildOverlayCss(
   failOnConversionErrors(overlayConversionErrors);
 
   await fs.ensureDir(destination);
-  const outFile = path.join(destination, `zbk-${overlay.themeName.toLowerCase()}.css`);
-  await fs.writeFile(outFile, css);
+  // Overlays get the same postcss pass as the base bundle (autoprefixer +
+  // optional cssnano) but keep the `zbk-<name>.css` filename either way — the
+  // overlay link href shouldn't change with the minify setting.
+  const processed = await postProcessCss(css, options.minify);
+  const outFile = path.join(destination, `zbk-${slugifyFileSegment(overlay.themeName)}.css`);
+  await fs.writeFile(outFile, processed);
   console.log(chalk.green(`Overlay "${overlay.themeName}" written to ${outFile}`));
 
   if (
@@ -728,7 +747,7 @@ async function buildOverlayCss(
   ) {
     const snippetPath = path.join(
       destination,
-      `zbk-${overlay.themeName.toLowerCase()}.fonts.html`
+      `zbk-${slugifyFileSegment(overlay.themeName)}.fonts.html`
     );
     await fs.writeFile(snippetPath, buildFontHeadHtml(fontHead));
     console.log(chalk.green(`Overlay font head snippet written to ${snippetPath}`));
@@ -805,7 +824,7 @@ async function writeVariantRegistryFiles(
   } else {
     const combinedPath = path.join(
       destinationPath,
-      `zbk-${themeName.toLowerCase()}-variants.json`
+      `zbk-${slugifyFileSegment(themeName)}-variants.json`
     );
     await fs.writeJson(combinedPath, registry, { spaces: 2 });
   }
