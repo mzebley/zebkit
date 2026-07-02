@@ -417,18 +417,42 @@ export async function runTokenBuild(
         ? getBundledThemeVariantOverridesDir(zebkitPackageRoot, baseThemeName)
         : undefined;
 
+    // Installed CLI mode: built-in variants come from the JSON snapshot written by
+    // build:defaults (the TS variant modules don't ship with the package).
+    let variantSnapshotPath: string | undefined;
+    if (zebkitPackageRoot && tokenDefaultsDir) {
+      const candidate = path.join(tokenDefaultsDir, "variants.json");
+      if (await fs.pathExists(candidate)) {
+        variantSnapshotPath = candidate;
+      } else {
+        console.warn(
+          chalk.yellow(
+            `Built-in variant snapshot not found at ${candidate}; built-in variants will be missing. ` +
+              `Re-run \`npm run build:defaults\` in the zebkit package.`
+          )
+        );
+      }
+    }
+
     const {
       registry: variantRegistry,
       inlineCss,
       extraStylesheets,
-    } = await buildZebkitVariants(tokens, [
-      ...(bundledVariantOverridePath &&
-      (await fs.pathExists(bundledVariantOverridePath))
-        ? [bundledVariantOverridePath]
-        : []),
-      ...overridePaths,
-      ...(customTokenPath ? [customTokenPath] : []),
-    ]);
+    } = await buildZebkitVariants(
+      tokens,
+      [
+        ...(bundledVariantOverridePath &&
+        (await fs.pathExists(bundledVariantOverridePath))
+          ? [bundledVariantOverridePath]
+          : []),
+        ...overridePaths,
+        ...(customTokenPath ? [customTokenPath] : []),
+      ],
+      {
+        snapshotPath: variantSnapshotPath,
+        packageRoot: zebkitPackageRoot,
+      }
+    );
     if (writeVariantRegistry) {
       await writeVariantRegistryFiles(
         variantRegistry,

@@ -63,20 +63,76 @@ export interface BuildZebkitVariantsResult {
   extraStylesheets: string[];
 }
 
+export interface BuildZebkitVariantsOptions {
+  /**
+   * JSON snapshot of built-in variant configs to load instead of discovering TS
+   * modules from src/ (installed CLI mode — the TS sources don't ship, and the
+   * bundled CLI couldn't import them anyway). Written by `npm run build:defaults`.
+   */
+  snapshotPath?: string;
+  /**
+   * Root that relative variant `styles.stylesheetPaths` resolve against.
+   * Defaults to the repo root inferred from this file's location (dev mode);
+   * pass the zebkit package root in installed CLI mode.
+   */
+  packageRoot?: string;
+}
+
 /**
- * Loads Zebkit variant modules, validates their overrides against the token maps,
- * resolves class names, and aggregates inline CSS + extra stylesheet imports.
- *
- * Variant modules are discovered under:
+ * Discovers built-in variant configs from TS modules under:
  *   - src/core/**\/variants/*.ts
  *   - src/components/**\/variants/*.ts
  *
  * Each file may default-export a single VariantConfig, an array of VariantConfig,
- * or expose `variants` as an array.
+ * or expose `variants` as an array. Only usable in dev mode (requires the TS
+ * sources plus a TS-aware loader); the installed CLI loads a JSON snapshot instead.
+ */
+export async function discoverVariantConfigs(): Promise<VariantConfig[]> {
+  const coreDir = path.resolve(__dirname, '../../core');
+  const componentsDir = path.resolve(__dirname, '../../components');
+
+  const variantPatterns: string[] = [];
+  if (await fs.pathExists(coreDir)) {
+    variantPatterns.push(path.join(coreDir, '**/variants/*.ts'));
+  }
+  if (await fs.pathExists(componentsDir)) {
+    variantPatterns.push(path.join(componentsDir, '**/variants/*.ts'));
+  }
+
+  const variantFiles: string[] = [];
+  for (const pattern of variantPatterns) {
+    const matches = await glob(pattern.replace(/\\/g, '/'), {
+      nodir: true,
+      absolute: true,
+    });
+    variantFiles.push(...matches);
+  }
+
+  const configs: VariantConfig[] = [];
+  for (const file of variantFiles) {
+    configs.push(...(await loadVariantFile(file)));
+  }
+  return configs;
+}
+
+/** Loads built-in variant configs from the JSON snapshot shipped with the package. */
+async function loadVariantSnapshot(snapshotPath: string): Promise<VariantConfig[]> {
+  const data = await fs.readJson(snapshotPath);
+  if (!Array.isArray(data)) {
+    throw new Error(`Variant snapshot at ${snapshotPath} is not an array of variant configs.`);
+  }
+  return data as VariantConfig[];
+}
+
+/**
+ * Loads Zebkit variant configs (TS discovery in dev, JSON snapshot when installed),
+ * validates their overrides against the token maps, resolves class names, and
+ * aggregates inline CSS + extra stylesheet imports.
  */
 export async function buildZebkitVariants(
   tokens: Record<string, TokenInterface>,
-  customVariantPath?: string | string[]
+  customVariantPath?: string | string[],
+  options: BuildZebkitVariantsOptions = {}
 ): Promise<BuildZebkitVariantsResult> {
   // Friendly CLI spinner to give the user feedback during variant collection.
   const spinner = ora('Processing Zebkit variants...').start();
@@ -86,38 +142,14 @@ export async function buildZebkitVariants(
   const variantMetadata = new Map<string, VariantMetadataEntry>();
 
   try {
-    // Determine base directories to inspect for variant modules relative to scripts dir.
-    const projectRoot = path.resolve(__dirname, '../../..');
-    const coreDir = path.resolve(__dirname, '../../core');
-    const componentsDir = path.resolve(__dirname, '../../components');
+    const projectRoot = options.packageRoot ?? path.resolve(__dirname, '../../..');
 
-    // Collect glob patterns for core/components variant folders.
-    const variantPatterns: string[] = [];
+    const configs = options.snapshotPath
+      ? await loadVariantSnapshot(options.snapshotPath)
+      : await discoverVariantConfigs();
 
-    if (await fs.pathExists(coreDir)) {
-      variantPatterns.push(path.join(coreDir, '**/variants/*.ts'));
-    }
-    if (await fs.pathExists(componentsDir)) {
-      variantPatterns.push(path.join(componentsDir, '**/variants/*.ts'));
-    }
-
-    const variantFiles: string[] = [];
-    for (const pattern of variantPatterns) {
-      const matches = await glob(pattern.replace(/\\/g, '/'), {
-        nodir: true,
-        absolute: true,
-      });
-      variantFiles.push(...matches);
-    }
-
-    for (const file of variantFiles) {
-      await loadVariantFile(
-        file,
-        tokens,
-        registry,
-        variantMetadata,
-        projectRoot
-      );
+    for (const variant of configs) {
+      await registerVariant(variant, tokens, registry, variantMetadata, projectRoot);
     }
 
     const buildOutputs = () => buildVariantOutputs(registry, variantMetadata, tokens);
@@ -150,18 +182,12 @@ export async function buildZebkitVariants(
   }
 }
 
-async function loadVariantFile(
-  file: string,
-  tokens: Record<string, TokenInterface>,
-  registry: VariantRegistry,
-  variantMetadata: Map<string, VariantMetadataEntry>,
-  projectRoot: string
-) {
-  try {
-    const baseName = path.basename(file);
-    // Skip plain type helper files that shouldn't be evaluated.
-    if (baseName === 'types.ts') return;
+async function loadVariantFile(file: string): Promise<VariantConfig[]> {
+  const baseName = path.basename(file);
+  // Skip plain type helper files that shouldn't be evaluated.
+  if (baseName === 'types.ts') return [];
 
+  try {
     // Dynamically import the module via file:// so ts-node/tsx can resolve TS output.
     const mod = await import(pathToFileURL(file).href);
     const rawExport =
@@ -176,23 +202,13 @@ async function loadVariantFile(
       ? rawExport
       : [rawExport];
 
-    for (const variant of variants) {
-      // Ignore module namespaces or non-object exports without required fields.
-      if (
-        !variant ||
-        typeof variant !== 'object' ||
-        (!('component' in variant) && !Array.isArray(rawExport))
-      ) {
-        continue;
-      }
-      await registerVariant(
-        variant as VariantConfig,
-        tokens,
-        registry,
-        variantMetadata,
-        projectRoot
-      );
-    }
+    return variants.filter(
+      (variant) =>
+        // Ignore module namespaces or non-object exports without required fields.
+        variant &&
+        typeof variant === 'object' &&
+        ('component' in variant || Array.isArray(rawExport))
+    );
   } catch (error) {
     // A variant module that fails to load would silently drop its variant CSS
     // from the bundle — fail the build instead.

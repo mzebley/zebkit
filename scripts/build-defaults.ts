@@ -12,6 +12,7 @@ import { glob } from 'glob';
 import { fileURLToPath } from 'node:url';
 import { gatherZebkitFiles } from '../src/scripts/tokens/gather-files.js';
 import { buildZebkitTokens } from '../src/scripts/tokens/compile-tokens.js';
+import { discoverVariantConfigs } from '../src/scripts/tokens/compile-variants.js';
 import type { LayerName } from '../src/definitions/layers.js';
 import { getBuiltInThemeNames, DEFAULT_THEME_NAME, resolveSourceThemeOverridePath } from '../src/scripts/theme-presets.js';
 
@@ -44,6 +45,14 @@ async function buildDefaults() {
   }
 
   await writeSnapshotDir(defaultsDir, tokens, layers);
+
+  // Snapshot built-in variant configs (raw, as-authored) so the installed CLI can
+  // register them without the TS sources — those don't ship, and the bundled CLI
+  // couldn't dynamically import .ts anyway.
+  const variantConfigs = await discoverVariantConfigs();
+  const variantsPath = path.join(defaultsDir, 'variants.json');
+  await fs.writeJson(variantsPath, variantConfigs, { spaces: 2 });
+  console.log(`Wrote ${variantConfigs.length} built-in variant config(s) to ${variantsPath}`);
 
   const builtInThemes = await getBuiltInThemeNames();
   const presetThemeNames = builtInThemes.filter((theme) => theme !== DEFAULT_THEME_NAME);

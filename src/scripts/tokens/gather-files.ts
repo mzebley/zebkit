@@ -52,7 +52,8 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
         cwd: options.tokenDefaultsDir,
         absolute: true,
         nodir: true,
-        ignore: ['manifest.json'],
+        // variants.json is the built-in variant snapshot, not a token module.
+        ignore: ['manifest.json', 'variants.json'],
       });
       tokenFiles.push(...jsonFiles);
     } else {
