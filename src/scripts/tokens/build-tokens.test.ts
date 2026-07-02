@@ -8,6 +8,7 @@ import breakpointTokens from '../../core/breakpoint/tokens/tokens';
 import {
   buildEnabledBreakpointsList,
   buildTokenLookup,
+  computeEmissionClosure,
   extractReferencedColorFamilies,
   resolveActiveBreakpointMap,
   resolveLookupOutputPath,
@@ -110,5 +111,62 @@ describe('build-tokens helpers', () => {
       '/artifacts/lookup.json'
     );
     expect(slugifyFileSegment(' Button / Large  ')).toBe('button-large');
+  });
+
+  describe('computeEmissionClosure', () => {
+    // Post-scale-resolution shape: control settings (min-ratio, max-scale,
+    // viewport anchors) are already stripped; steps carry resolved clamp values.
+    const scaled = {
+      'zbk-font-size': {
+        md: { value: 'clamp(1rem, 2vw, 1.2rem)', type: 'rootFontSize', description: '' },
+        lg: { value: 'clamp(1.2rem, 3vw, 1.6rem)', type: 'rootFontSize', description: '' },
+      },
+      'zbk-spacing': {
+        sm: { value: 'clamp(0.5rem, 1vw, 0.6rem)', type: 'rootSize', description: '' },
+      },
+      'zbk-h1': {
+        'font-size': { value: '{font-size.lg}', type: 'fontSize', description: '' },
+      },
+    } as unknown as Record<string, TokenInterface>;
+
+    it('includes overridden leaves and their transitive referrers', () => {
+      const closure = computeEmissionClosure(scaled, {
+        'zbk-font-size': new Set(['lg']),
+      });
+      expect(closure.has('zbk-font-size.lg')).toBe(true);
+      expect(closure.has('zbk-h1.font-size')).toBe(true);
+      expect(closure.has('zbk-font-size.md')).toBe(false);
+      expect(closure.has('zbk-spacing.sm')).toBe(false);
+    });
+
+    it('re-emits a whole scale module when a consumed control was overridden', () => {
+      // min-ratio was stripped during scale resolution, so it is absent from
+      // `scaled` — that marks it as a control every step depends on.
+      const closure = computeEmissionClosure(scaled, {
+        'zbk-font-size': new Set(['min-ratio']),
+      });
+      expect(closure.has('zbk-font-size.md')).toBe(true);
+      expect(closure.has('zbk-font-size.lg')).toBe(true);
+      // …and referrers of the re-emitted steps follow.
+      expect(closure.has('zbk-h1.font-size')).toBe(true);
+      // Spacing is untouched: no viewport anchor changed.
+      expect(closure.has('zbk-spacing.sm')).toBe(false);
+    });
+
+    it('re-emits spacing too when a shared viewport anchor was overridden', () => {
+      const closure = computeEmissionClosure(scaled, {
+        'zbk-font-size': new Set(['min-viewport']),
+      });
+      expect(closure.has('zbk-font-size.md')).toBe(true);
+      expect(closure.has('zbk-spacing.sm')).toBe(true);
+    });
+
+    it('re-emits the spacing module when its max-scale control was overridden', () => {
+      const closure = computeEmissionClosure(scaled, {
+        'zbk-spacing': new Set(['max-scale']),
+      });
+      expect(closure.has('zbk-spacing.sm')).toBe(true);
+      expect(closure.has('zbk-font-size.md')).toBe(false);
+    });
   });
 });

@@ -60,6 +60,10 @@ export async function buildZebkitTokens(
   const spinner = ora('Processing Zebkit tokens...').start();
   const coreDir = path.resolve(__dirname, '../../core');
   const componentsDir = path.resolve(__dirname, '../../components');
+  // Problems that would silently produce incomplete CSS (a broken/missing token
+  // module or schema). Collected across the loop, then thrown as one failure so
+  // the build exits non-zero instead of shipping a partial theme.
+  const fatalErrors: string[] = [];
 
   try {
     for (const file of files) {
@@ -74,6 +78,7 @@ export async function buildZebkitTokens(
           layers[tokenKey] = moduleLayer;
         } catch (error) {
           console.error(chalk.red(`Error loading JSON token file ${file}:`), error);
+          fatalErrors.push(`Failed to load JSON token file ${file}: ${error}`);
         }
         continue;
       }
@@ -97,11 +102,11 @@ export async function buildZebkitTokens(
       const schemaPath = path.join(baseDir, folderName, 'token-schema.ts');
 
       if (!(await fs.pathExists(tokenPath))) {
-        console.warn(chalk.yellow(`Token file missing: ${tokenPath}`));
+        fatalErrors.push(`Token file missing: ${tokenPath}`);
         continue;
       }
       if (!(await fs.pathExists(schemaPath))) {
-        console.warn(chalk.yellow(`Schema missing for token file: ${schemaPath}`));
+        fatalErrors.push(`Schema missing for token file: ${schemaPath}`);
         continue;
       }
 
@@ -157,16 +162,22 @@ export async function buildZebkitTokens(
             }
           }
         } else {
-          console.warn(chalk.yellow(`Invalid token structure in file: ${file}`));
+          fatalErrors.push(`Invalid token structure in file: ${file}`);
         }
       } catch (error) {
         console.error(chalk.red(`Error importing token file ${file}:`), error);
+        fatalErrors.push(`Failed to import token file ${file}: ${error}`);
       }
+    }
+    if (fatalErrors.length > 0) {
+      throw new Error(
+        `Token processing failed:\n${fatalErrors.map((e) => `  - ${e}`).join('\n')}`
+      );
     }
     spinner.succeed(chalk.green('Token processing complete.'));
   } catch (error) {
     spinner.fail(chalk.red('Failed to process tokens.'));
-    console.error(error);
+    throw error;
   }
 
   const resolvedDestination = path.isAbsolute(destinationPath)
@@ -184,8 +195,9 @@ export async function buildZebkitTokens(
   }
 
   if (Object.keys(tokens).length === 0) {
-    console.error(chalk.bgYellow('No valid tokens to write.'));
-    return { tokens, layers, overriddenKeys };
+    throw new Error(
+      'No valid token modules were loaded — the build would emit empty CSS. Check the token source paths.'
+    );
   }
 
   if (exportFile) await writeTokensToFile(tokens, resolvedDestination, outputFormats, themeName, splitMode);
@@ -216,7 +228,9 @@ async function applyCustomOverrides(
 
   try {
     if (!(await fs.pathExists(resolvedOverridePath))) {
-      spinner.fail(chalk.red('Custom token overrides path not found.'));
+      spinner.warn(
+        chalk.yellow(`Custom token overrides path not found: ${resolvedOverridePath}. Skipping.`)
+      );
       return;
     }
 
@@ -258,8 +272,10 @@ async function applyCustomOverrides(
     }
     spinner.succeed(chalk.green('Custom token overrides processed.'));
   } catch (error) {
-    spinner.fail(chalk.red('Failed to process custom token overrides.'));
-    console.error(error);
+    // A named overrides path that cannot be read (malformed JSON, IO failure) is
+    // fatal: continuing would silently ship CSS without the user's overrides.
+    spinner.fail(chalk.red(`Failed to process custom token overrides at ${resolvedOverridePath}.`));
+    throw error;
   }
 }
 
@@ -314,6 +330,6 @@ export async function writeTokensToFile(
     console.log(chalk.green(`Tokens written to: ${destinationPaths.join(', ')}`));
   } catch (error) {
     writeSpinner.fail(chalk.red('Failed to write tokens to file(s).'));
-    console.error(error);
+    throw error;
   }
 }

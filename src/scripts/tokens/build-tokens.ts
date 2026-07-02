@@ -41,6 +41,7 @@ import {
 } from "../theme-presets";
 import {
   buildTokenLookup,
+  computeEmissionClosure,
   extractReferencedColorFamilies,
   resolveActiveBreakpointMap,
   resolveLookupOutputPath,
@@ -61,6 +62,7 @@ const paletteGlobalColors = (selector: string = ":root"): string => `${selector}
 export {
   buildEnabledBreakpointsList,
   buildTokenLookup,
+  computeEmissionClosure,
   extractReferencedColorFamilies,
   resolveLookupOutputPath,
   slugifyFileSegment,
@@ -307,12 +309,9 @@ export async function runTokenBuild(
     }
 
     if (customTokenPath && !(await fs.pathExists(customTokenPath))) {
-      console.warn(
-        chalk.yellow(
-          `Custom token path not found at ${customTokenPath}. Skipping overrides.`
-        )
-      );
-      customTokenPath = undefined;
+      // Building without the overrides the user asked for would silently emit
+      // the base theme — fail loudly instead.
+      throw new Error(`Custom token path not found at ${customTokenPath}.`);
     }
 
     const selectedTokenDefaultsDir =
@@ -398,11 +397,16 @@ export async function runTokenBuild(
       }
     }
     const fontStrategy = tokensConfig?.fonts?.strategy ?? "import";
-    const { css: cssVars, fontHead } = convertTokensToCssVars(cssVarTokens, {
+    const {
+      css: cssVars,
+      fontHead,
+      errors: conversionErrors,
+    } = convertTokensToCssVars(cssVarTokens, {
       layers,
       fontStrategy,
       assetFilePath,
     });
+    failOnConversionErrors(conversionErrors);
     const tokenLookupOutputPath = resolveLookupOutputPath(
       tokensConfig?.tokenLookupOutputPath,
       resolvedDestinationPath
@@ -535,11 +539,22 @@ export async function runTokenBuild(
     if (error?.name === "ExitPromptError") {
       console.log(chalk.yellow("\nBuild cancelled."));
       return;
-    } else {
-      console.error(chalk.red("An error occurred:"), error);
-      process.exit(1);
     }
+    // Print here (closest to the failure), then rethrow so callers — the CLI
+    // and the npm script entry — exit non-zero instead of shipping a bad build.
+    console.error(chalk.red("Build failed:"), error instanceof Error ? error.message : error);
+    throw error;
   }
+}
+
+/** Throws when token→CSS conversion produced invalid values (never ship `undefined`). */
+function failOnConversionErrors(errors: string[]): void {
+  if (errors.length === 0) return;
+  throw new Error(
+    `Token conversion failed with ${errors.length} error(s):\n${errors
+      .map((e) => `  - ${e}`)
+      .join("\n")}`
+  );
 }
 
 interface BuildOverlayCssOptions {
@@ -557,49 +572,6 @@ interface BuildOverlayCssOptions {
 }
 
 /**
- * Computes the set of `"<module>.<entry>"` ids that must be emitted for an overlay: the
- * overridden leaves plus every token whose value transitively references one of them.
- *
- * References use `{<module>.<entry>}` notation (e.g. `{font-family.alt}` → `zbk-font-family.alt`).
- * Scale-resolved tokens (font-size/spacing) carry `calc(...)` values with no reference and only
- * enter the closure when they were overridden directly. Cycles terminate naturally — the closure
- * stops growing.
- */
-function computeEmissionClosure(
-  scaled: Record<string, TokenInterface>,
-  overriddenKeys: Record<string, Set<string>>
-): Set<string> {
-  const closure = new Set<string>();
-  for (const [moduleKey, entries] of Object.entries(overriddenKeys)) {
-    for (const entry of entries) closure.add(`${moduleKey}.${entry}`);
-  }
-
-  // id -> the single reference target it depends on (token values are whole-value refs or literals).
-  const dependsOn = new Map<string, string>();
-  for (const [moduleKey, entries] of Object.entries(scaled)) {
-    for (const [entry, obj] of Object.entries(entries)) {
-      const value = (obj as { value?: unknown })?.value;
-      if (typeof value !== "string" || !value.startsWith("{") || !value.endsWith("}")) continue;
-      const [parent, child] = value.slice(1, -1).split(".");
-      if (!parent || !child) continue;
-      dependsOn.set(`${moduleKey}.${entry}`, `${ZEBKIT_PREFIX}-${parent}.${child}`);
-    }
-  }
-
-  let changed = true;
-  while (changed) {
-    changed = false;
-    for (const [id, target] of dependsOn) {
-      if (!closure.has(id) && closure.has(target)) {
-        closure.add(id);
-        changed = true;
-      }
-    }
-  }
-  return closure;
-}
-
-/**
  * Builds one scoped overlay theme stylesheet. Merges the overlay's `tokenPath` on top of the
  * full base context (so fluid scales and `var()` references resolve), then emits ONLY the
  * tokens the overlay changed, scoped under its selector.
@@ -614,12 +586,11 @@ async function buildOverlayCss(
   );
 
   if (!(await fs.pathExists(overlay.tokenPath))) {
-    console.warn(
-      chalk.yellow(
-        `Overlay "${overlay.themeName}": tokenPath not found at ${overlay.tokenPath}. Skipping.`
-      )
+    // Overlays are explicitly configured; a missing tokenPath means the theme
+    // the user asked for would silently not ship.
+    throw new Error(
+      `Overlay "${overlay.themeName}": tokenPath not found at ${overlay.tokenPath}.`
     );
-    return;
   }
 
   const destination = overlay.destinationPath
@@ -683,7 +654,7 @@ async function buildOverlayCss(
   }
 
   const fontStrategy = overlay.fonts?.strategy ?? options.parentFontStrategy;
-  const { css, fontHead } = convertTokensToCssVars(emitted, {
+  const { css, fontHead, errors: overlayConversionErrors } = convertTokensToCssVars(emitted, {
     layers,
     selector,
     fontStrategy,
@@ -691,6 +662,7 @@ async function buildOverlayCss(
     // Emit only the changed subset, but resolve `{x.y}` references against the full theme.
     referenceTokens: scaled,
   });
+  failOnConversionErrors(overlayConversionErrors);
 
   await fs.ensureDir(destination);
   const outFile = path.join(destination, `zbk-${overlay.themeName.toLowerCase()}.css`);

@@ -146,8 +146,7 @@ export async function buildZebkitVariants(
     };
   } catch (error) {
     spinner.fail(chalk.red('Failed to process Zebkit variants.'));
-    console.error(error);
-    return { registry, inlineCss: '', extraStylesheets: [] };
+    throw error;
   }
 }
 
@@ -195,8 +194,9 @@ async function loadVariantFile(
       );
     }
   } catch (error) {
-    console.warn(chalk.yellow(`Failed to load variant file: ${file}`));
-    console.error(error);
+    // A variant module that fails to load would silently drop its variant CSS
+    // from the bundle — fail the build instead.
+    throw new Error(`Failed to load variant file ${file}: ${error}`);
   }
 }
 
@@ -261,8 +261,9 @@ async function applyVariantOverrides(
         );
       }
     } catch (error) {
-      console.warn(chalk.yellow(`Failed to parse variant override file '${file}'.`));
-      console.error(error);
+      // The user explicitly pointed the build at this override file; continuing
+      // would silently ship CSS without it.
+      throw new Error(`Failed to parse variant override file '${file}': ${error}`);
     }
   }
 }
@@ -379,6 +380,7 @@ function buildVariantOutputs(
 ): { inlineCss: string; extraStylesheets: string[] } {
   const inlineCssBlocks: string[] = [];
   const extraStylesheetSet = new Set<string>();
+  const referenceErrors: string[] = [];
 
   for (const [component, variants] of Object.entries(registry)) {
     const tokenKey = `${ZEBKIT_PREFIX}-${component}`;
@@ -395,7 +397,14 @@ function buildVariantOutputs(
         if (!sourceToken) continue;
         const resolvedValue =
           typeof value === 'string'
-            ? convertDotNotation(value, sourceToken.type, ZEBKIT_PREFIX, tokens)
+            ? convertDotNotation(
+                value,
+                sourceToken.type,
+                ZEBKIT_PREFIX,
+                tokens,
+                false,
+                referenceErrors
+              )
             : String(value);
         declarations.push(`--${tokenKey}-${key}: ${resolvedValue};`);
       }
@@ -414,6 +423,14 @@ function buildVariantOutputs(
         }
       }
     }
+  }
+
+  if (referenceErrors.length > 0) {
+    throw new Error(
+      `Variant overrides contain invalid token references:\n${referenceErrors
+        .map((e) => `  - ${e}`)
+        .join('\n')}`
+    );
   }
 
   const inlineCss =

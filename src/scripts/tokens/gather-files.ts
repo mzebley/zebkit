@@ -97,7 +97,7 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
     spinner.succeed('Token and stylesheet discovery complete.');
   } catch (error) {
     spinner.fail('Failed to gather token files.');
-    console.error(error);
+    throw error;
   }
 
   // Normalize stylesheet paths to be project-root-relative for Sass import generation.

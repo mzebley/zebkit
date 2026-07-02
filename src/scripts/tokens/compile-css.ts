@@ -181,7 +181,7 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
     spinner.succeed(chalk.green(`CSS written to ${outputFilePath}`));
   } catch (error) {
     spinner.fail(chalk.red('SCSS compilation failed'));
-    console.error(error);
+    throw error;
   }
 }
 
