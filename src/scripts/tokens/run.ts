@@ -3,4 +3,7 @@
 // so that build-tokens.ts can be imported as a pure module by the CLI.
 import { runTokenBuild } from './build-tokens.js';
 
-runTokenBuild();
+runTokenBuild().catch(() => {
+  // The failure has already been printed by runTokenBuild.
+  process.exit(1);
+});

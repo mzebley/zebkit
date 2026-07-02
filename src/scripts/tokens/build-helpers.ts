@@ -7,6 +7,80 @@ import {
 
 const ZEBKIT_PREFIX = 'zbk';
 
+const FONT_SIZE_MODULE_KEY = `${ZEBKIT_PREFIX}-font-size`;
+const SPACING_MODULE_KEY = `${ZEBKIT_PREFIX}-spacing`;
+/** Viewport anchors live in the font-size module but drive the spacing clamps too. */
+const SHARED_VIEWPORT_ANCHORS = new Set(['min-viewport', 'max-viewport']);
+
+/**
+ * Computes the set of `"<module>.<entry>"` ids that must be emitted for an overlay: the
+ * overridden leaves plus every token whose value transitively references one of them.
+ *
+ * References use `{<module>.<entry>}` notation (e.g. `{font-family.alt}` → `zbk-font-family.alt`).
+ * Cycles terminate naturally — the closure stops growing.
+ *
+ * Scale-resolved tokens (font-size/spacing) carry `calc(...)`/`clamp(...)` values with no
+ * reference back to the control settings that shaped them (min/max base, ratio, viewport
+ * anchors, spacing max-scale) — those controls are consumed at build time and stripped from
+ * `scaled`. So when an overlay overrides a control, every resolved step of the affected
+ * module(s) changed and must be re-emitted wholesale.
+ */
+export function computeEmissionClosure(
+  scaled: Record<string, TokenInterface>,
+  overriddenKeys: Record<string, Set<string>>
+): Set<string> {
+  const closure = new Set<string>();
+  for (const [moduleKey, entries] of Object.entries(overriddenKeys)) {
+    for (const entry of entries) closure.add(`${moduleKey}.${entry}`);
+  }
+
+  const addWholeModule = (moduleKey: string) => {
+    for (const entry of Object.keys(scaled[moduleKey] ?? {})) {
+      closure.add(`${moduleKey}.${entry}`);
+    }
+  };
+
+  // Overridden entries that no longer exist in the resolved map were build-time
+  // controls (settings) — re-emit the module they shaped.
+  for (const [moduleKey, entries] of Object.entries(overriddenKeys)) {
+    const resolvedModule = scaled[moduleKey];
+    if (!resolvedModule) continue;
+    const consumedControls = [...entries].filter((entry) => !(entry in resolvedModule));
+    if (consumedControls.length === 0) continue;
+    addWholeModule(moduleKey);
+    if (
+      moduleKey === FONT_SIZE_MODULE_KEY &&
+      consumedControls.some((entry) => SHARED_VIEWPORT_ANCHORS.has(entry))
+    ) {
+      addWholeModule(SPACING_MODULE_KEY);
+    }
+  }
+
+  // id -> the single reference target it depends on (token values are whole-value refs or literals).
+  const dependsOn = new Map<string, string>();
+  for (const [moduleKey, entries] of Object.entries(scaled)) {
+    for (const [entry, obj] of Object.entries(entries)) {
+      const value = (obj as { value?: unknown })?.value;
+      if (typeof value !== 'string' || !value.startsWith('{') || !value.endsWith('}')) continue;
+      const [parent, child] = value.slice(1, -1).split('.');
+      if (!parent || !child) continue;
+      dependsOn.set(`${moduleKey}.${entry}`, `${ZEBKIT_PREFIX}-${parent}.${child}`);
+    }
+  }
+
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const [id, target] of dependsOn) {
+      if (!closure.has(id) && closure.has(target)) {
+        closure.add(id);
+        changed = true;
+      }
+    }
+  }
+  return closure;
+}
+
 export function extractReferencedColorFamilies(
   tokens: Record<string, TokenInterface>
 ): Set<string> {

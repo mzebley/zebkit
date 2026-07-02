@@ -127,16 +127,17 @@ describe('build smoke tests', () => {
       expect(await fs.pathExists(overlayPath)).toBe(true);
       const overlayCss = await fs.readFile(overlayPath, 'utf8');
 
-      expect(overlayCss).toContain('[data-zbk-theme="dark"]');
+      // cssnano drops the quotes when the attribute value is an identifier.
+      expect(overlayCss).toMatch(/\[data-zbk-theme="?dark"?\]/);
       expect(overlayCss).not.toContain(':root');
       expect(overlayCss).not.toContain('undefined');
 
       // The overridden leaf is emitted.
-      expect(overlayCss).toContain('--zbk-font-family-alt: "Inter"');
+      expect(overlayCss).toMatch(/--zbk-font-family-alt:\s*"Inter"/);
       // Closure: the dependent alias is re-emitted so it re-resolves in-scope…
-      expect(overlayCss).toContain('--zbk-font-family-heading: var(--zbk-font-family-alt);');
+      expect(overlayCss).toMatch(/--zbk-font-family-heading:\s*var\(--zbk-font-family-alt\)/);
       // …as is the component token that depends on the alias.
-      expect(overlayCss).toContain('--zbk-h1-font-family: var(--zbk-font-family-heading);');
+      expect(overlayCss).toMatch(/--zbk-h1-font-family:\s*var\(--zbk-font-family-heading\)/);
 
       // Still minimal: an unrelated token that does not reference the override is absent.
       expect(overlayCss).not.toContain('--zbk-z-index-');

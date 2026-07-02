@@ -52,7 +52,8 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
         cwd: options.tokenDefaultsDir,
         absolute: true,
         nodir: true,
-        ignore: ['manifest.json'],
+        // variants.json is the built-in variant snapshot, not a token module.
+        ignore: ['manifest.json', 'variants.json'],
       });
       tokenFiles.push(...jsonFiles);
     } else {
@@ -97,7 +98,7 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
     spinner.succeed('Token and stylesheet discovery complete.');
   } catch (error) {
     spinner.fail('Failed to gather token files.');
-    console.error(error);
+    throw error;
   }
 
   // Normalize stylesheet paths to be project-root-relative for Sass import generation.

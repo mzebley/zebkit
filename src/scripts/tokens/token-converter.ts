@@ -32,9 +32,20 @@ function validateCssReferencesExist(
   value: string,
   type: AllowedTokenTypes | string,
   globalPrefix: string,
-  availableTokens: { [key: string]: TokenInterface }
+  availableTokens: { [key: string]: TokenInterface },
+  errors?: string[]
 ): boolean {
+  const report = (message: string) => {
+    console.error(chalk.red(message));
+    errors?.push(message);
+  };
   const tokenPath = value.slice(1, -1).split(".");
+  if (tokenPath.length !== 2) {
+    report(
+      `Invalid token reference: ${value}. References must be exactly '{module.entry}' (two dot-separated segments).`
+    );
+    return false;
+  }
   const parent = tokenPath[0] as string;
   const child = tokenPath[1] as string;
   let valid = false;
@@ -48,10 +59,8 @@ function validateCssReferencesExist(
         valid = true;
       } else {
         invalidType = true;
-        console.error(
-          chalk.red(
-            `Invalid token reference: ${value} (type '${type}' cannot reference '${tokenType}').`
-          )
+        report(
+          `Invalid token reference: ${value} (type '${type}' cannot reference '${tokenType}').`
         );
       }
     }
@@ -70,10 +79,8 @@ function validateCssReferencesExist(
         valid = true;
       } else {
         invalidType = true;
-        console.error(
-          chalk.red(
-            `Invalid token reference: ${value}. Token type '${type}' is not a color-compatible token.`
-          )
+        report(
+          `Invalid token reference: ${value}. Token type '${type}' is not a color-compatible token.`
         );
       }
     }
@@ -86,10 +93,8 @@ function validateCssReferencesExist(
         valid = true;
       } else {
         invalidType = true;
-        console.error(
-          chalk.red(
-            `Invalid token reference: ${value}. Token type '${type}' does not match '${tokenType}'.`
-          )
+        report(
+          `Invalid token reference: ${value}. Token type '${type}' does not match '${tokenType}'.`
         );
       }
     } else if (
@@ -104,20 +109,16 @@ function validateCssReferencesExist(
         valid = true;
       } else {
         invalidType = true;
-        console.error(
-          chalk.red(
-            `Invalid token reference: ${value}. Token type '${type}' does not match '${tokenType}'.`
-          )
+        report(
+          `Invalid token reference: ${value}. Token type '${type}' does not match '${tokenType}'.`
         );
       }
     }
   }
 
   if (!valid && !invalidType) {
-    console.error(
-      chalk.red(
-        `Invalid token reference: ${value}. Ensure the target token or palette color exists.`
-      )
+    report(
+      `Invalid token reference: ${value}. Ensure the target token or palette color exists.`
     );
   }
 
@@ -125,14 +126,18 @@ function validateCssReferencesExist(
 }
 
 /**
- * Resolves dot-notation token references into CSS variables.
+ * Resolves dot-notation token references into CSS variables. Invalid references
+ * resolve to the literal string "undefined" AND are appended to `errors` when
+ * provided — callers must treat a non-empty `errors` as a fatal build failure so
+ * `--x: undefined;` never ships.
  */
 export function convertDotNotation(
   value: string,
   type: AllowedTokenTypes | string,
   globalPrefix: string,
   availableTokens: { [key: string]: TokenInterface },
-  byPass = false
+  byPass = false,
+  errors?: string[]
 ): string {
   if (
     typeof value === "string" &&
@@ -141,7 +146,7 @@ export function convertDotNotation(
   ) {
     const valid =
       byPass ||
-      validateCssReferencesExist(value, type, globalPrefix, availableTokens);
+      validateCssReferencesExist(value, type, globalPrefix, availableTokens, errors);
 
     if (valid) {
       const variableName = value.slice(1, -1).replace(/\./g, "-");
@@ -188,6 +193,12 @@ export interface CssVarConversionResult {
   fontImports: string[];
   fontFaces: string[];
   fontHead: FontHeadRequirements;
+  /**
+   * Fatal conversion problems (invalid references, malformed token objects).
+   * Non-empty means the emitted CSS contains `undefined` values — callers must
+   * fail the build rather than ship it.
+   */
+  errors: string[];
 }
 
 /**
@@ -219,6 +230,7 @@ export const convertTokensToCssVars = (
   const headPreconnect: Set<string> = new Set();
   const headStylesheets: Set<string> = new Set();
   const headPreloads: Set<string> = new Set();
+  const errors: string[] = [];
 
   Object.entries(tokens).forEach(([key, tokenProperties]) => {
     const layer = layers[key] ?? defaultLayer;
@@ -246,7 +258,9 @@ export const convertTokensToCssVars = (
             rawValue,
             "fontFamily",
             ZEBKIT_PREFIX,
-            refTokens
+            refTokens,
+            false,
+            errors
           );
         } else {
           cssVariableValue = applyFallback(rawValue, norm.fallback);
@@ -282,7 +296,9 @@ export const convertTokensToCssVars = (
           String(item.value),
           item.type as AllowedTokenTypes,
           ZEBKIT_PREFIX,
-          refTokens
+          refTokens,
+          false,
+          errors
         );
 
         const baseValue = String(cssVariableValue);
@@ -303,7 +319,9 @@ export const convertTokensToCssVars = (
 
         currentStyles += `--${cssVariableKey}: ${cssVariableValue};\n`;
       } else {
-        console.error(chalk.red(`Invalid token object for ${cssVariableKey}.`));
+        const message = `Invalid token object for ${cssVariableKey}.`;
+        console.error(chalk.red(message));
+        errors.push(message);
       }
     });
     currentStyles += "}\n";
@@ -333,6 +351,7 @@ export const convertTokensToCssVars = (
       stylesheets: Array.from(headStylesheets),
       preloads: Array.from(headPreloads),
     },
+    errors,
   };
 };
 

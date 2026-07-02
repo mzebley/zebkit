@@ -198,3 +198,45 @@ describe('convertTokensToCssVars — font tokens', () => {
     expect(result.fontFaces[0]).toContain('url("https://cdn.example/BrandSans.woff2")');
   });
 });
+
+describe('convertTokensToCssVars — error collection', () => {
+  const errorSpy = () => jest.spyOn(console, 'error').mockImplementation(() => {});
+
+  it('collects an error (and emits undefined) for a reference to a missing token', () => {
+    const spy = errorSpy();
+    const result = convertTokensToCssVars({
+      'zbk-h1': {
+        color: { value: '{app.does-not-exist}', type: 'color', description: '' },
+      },
+    } as unknown as { [key: string]: TokenInterface });
+
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors[0]).toContain('{app.does-not-exist}');
+    expect(result.css).toContain('--zbk-h1-color: undefined;');
+    spy.mockRestore();
+  });
+
+  it('rejects references that are not exactly two dot-separated segments', () => {
+    const spy = errorSpy();
+    const result = convertTokensToCssVars({
+      'zbk-h1': {
+        color: { value: '{app.nested.ink}', type: 'color', description: '' },
+      },
+    } as unknown as { [key: string]: TokenInterface });
+
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors[0]).toContain("exactly '{module.entry}'");
+    spy.mockRestore();
+  });
+
+  it('reports no errors for a clean token map', () => {
+    const result = convertTokensToCssVars({
+      'zbk-app': {
+        canvas: { value: '#fff', type: 'color', description: '' },
+        ink: { value: '{app.canvas}', type: 'color', description: '' },
+      },
+    } as unknown as { [key: string]: TokenInterface });
+
+    expect(result.errors).toEqual([]);
+  });
+});

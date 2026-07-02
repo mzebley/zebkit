@@ -129,6 +129,12 @@ export type TokensConfig = {
   spaceScale?: SpaceScaleConfig;
   /** Controls how fonts are loaded (Google Fonts delivery strategy). */
   fonts?: FontsConfig;
+  /**
+   * Minify the compiled CSS (default true → `zbk-<theme>.min.css`). Set false for
+   * a readable, unminified `zbk-<theme>.css` while debugging. Overlays follow this
+   * setting but keep their `zbk-<name>.css` filename either way.
+   */
+  minify?: boolean;
 };
 
 export type ComponentsConfig = {
@@ -197,36 +203,43 @@ function parseConfigPathFromArgs(): string | undefined {
   return undefined;
 }
 
-export async function loadZebkitConfig(): Promise<
+/**
+ * Loads zebkit.config.json. `configPath` (e.g. commander's parsed `--config`
+ * value) takes precedence; without it, argv is scanned for `-c/--config` (the
+ * npm-script path, where no arg parser runs) and finally the cwd default.
+ *
+ * A config file that exists but cannot be parsed/validated is fatal — silently
+ * falling back to interactive prompts would build something the user didn't ask for.
+ */
+export async function loadZebkitConfig(configPath?: string): Promise<
   | {
       config: ZebkitConfig;
       path: string;
     }
   | undefined
 > {
-  const explicitPath = parseConfigPathFromArgs();
+  const explicitPath = configPath ?? parseConfigPathFromArgs();
 
   const candidates = explicitPath
     ? [explicitPath]
     : CONFIG_FILE_NAMES.map((name) => path.resolve(process.cwd(), name));
 
   for (const candidate of candidates) {
-    try {
-      const resolved = path.resolve(candidate);
-      if (await fs.pathExists(resolved)) {
+    const resolved = path.resolve(candidate);
+    if (await fs.pathExists(resolved)) {
+      try {
         const fileContents = await fs.readFile(resolved, 'utf-8');
         const parsed = JSON.parse(fileContents) as ZebkitConfig;
         validateOverlays(parsed.tokens?.overlays);
         return { config: parsed, path: resolved };
+      } catch (error) {
+        throw new Error(`Unable to read config file at ${resolved}: ${error}`);
       }
+    }
 
-      if (explicitPath) {
-        console.error(chalk.red(`Config file not found at ${resolved}.`));
-        process.exit(1);
-      }
-    } catch (error) {
-      console.warn(chalk.yellow(`Unable to read config file at ${candidate}: ${error}`));
-      return undefined;
+    if (explicitPath) {
+      console.error(chalk.red(`Config file not found at ${resolved}.`));
+      process.exit(1);
     }
   }
 

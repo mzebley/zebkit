@@ -8,6 +8,7 @@ import postcssPresetEnv from 'postcss-preset-env';
 import ora from 'ora';
 import chalk from 'chalk';
 import { fileURLToPath } from 'node:url';
+import { slugifyFileSegment } from './build-helpers';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,6 +31,25 @@ function buildBreakpointsUse(activeBreakpoints: Record<string, string>): string 
   return `@use 'core/styles/variables/breakpoints' with ($active-breakpoints: ${map});\n`;
 }
 
+const LAYER_ORDERING = '@layer theme, base, components, utilities;';
+
+/**
+ * Shared postcss pass for every emitted stylesheet (base bundle and overlays):
+ * preset-env + autoprefixer, plus cssnano when minifying.
+ */
+export async function postProcessCss(css: string, minify = true): Promise<string> {
+  const plugins = [
+    postcssPresetEnv({
+      stage: 3,
+      features: { 'custom-properties': false },
+    }),
+    autoprefixer(),
+    ...(minify ? [cssnano({ preset: 'default' })] : []),
+  ];
+  const result = await postcss(plugins).process(css, { from: undefined });
+  return result.css;
+}
+
 /**
  * Compiles SCSS bundles for a given theme, injecting CSS variables and Sass variables.
  */
@@ -39,6 +59,11 @@ export interface CompileSassOptions {
   destination: string;
   projectName: string;
   sassVariables: { [key: string]: SassVariable };
+  /**
+   * Path fragments (matched against each sheet's src-relative import path, posix
+   * separators) that mark a sheet as utility-emitting; those compile last so
+   * utility classes win same-specificity conflicts within their layer.
+   */
   utilityStylesheetPatterns?: string[];
   /**
    * Optional additional CSS (e.g., variant-specific rules)
@@ -58,10 +83,12 @@ export interface CompileSassOptions {
    */
   activeBreakpoints?: Record<string, string>;
   /**
-   * Additional @use statements to prepend before the gathered stylesheet modules.
+   * Additional @use statements appended after the gathered stylesheet modules.
    * Used for smart color filtering to include only referenced palette families.
    */
   additionalModuleUses?: string;
+  /** Minify the output (default true → `zbk-<name>.min.css`; false → `zbk-<name>.css`). */
+  minify?: boolean;
 }
 
 export async function compileSass(options: CompileSassOptions): Promise<void> {
@@ -72,11 +99,16 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
     destination,
     projectName,
     sassVariables = {},
-    utilityStylesheetPatterns = ['utilities', 'utility', 'color'],
+    utilityStylesheetPatterns = [
+      'core/styles/utility-classes/',
+      'core/colors/',
+      'core/semantic/color/',
+    ],
     variantCss = '',
     zebkitPackageRoot,
     activeBreakpoints = {},
     additionalModuleUses = '',
+    minify = true,
   } = options;
 
   // In dev mode, resolve from this file's location. In installed CLI mode,
@@ -102,36 +134,31 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
       }
     }
 
-    // Ensure utility sheets compile last
-    const utilitySheets: string[] = [];
-    const nonUtilitySheets: string[] = [];
-    for (const sheet of stylesheets) {
-      const matchesUtility = utilityStylesheetPatterns.some((pattern) =>
-        sheet.includes(pattern)
-      );
-      if (matchesUtility) {
-        utilitySheets.push(sheet);
-      } else {
-        nonUtilitySheets.push(sheet);
-      }
-    }
-    const orderedSheets = [...nonUtilitySheets, ...utilitySheets];
-
-    // Create stylesheet uses relative to zebkit's src root.
+    // Resolve each sheet to its src-relative import path, then order so
+    // utility-emitting sheets compile last.
     const includeBasePath = path.join(zbkRoot, 'src');
-    let moduleUses = '';
-    orderedSheets.forEach((sheet, index) => {
+    const importPaths = stylesheets.map((sheet) => {
       const absoluteSheet = path.isAbsolute(sheet)
         ? sheet
         : path.resolve(zbkRoot, sheet);
-      const importPath = path
-        .relative(includeBasePath, absoluteSheet)
-        .replace(/\\/g, '/');
+      return path.relative(includeBasePath, absoluteSheet).replace(/\\/g, '/');
+    });
+    const isUtilitySheet = (importPath: string) =>
+      utilityStylesheetPatterns.some((pattern) => importPath.includes(pattern));
+    const orderedImports = [
+      ...importPaths.filter((p) => !isUtilitySheet(p)),
+      ...importPaths.filter(isUtilitySheet),
+    ];
+
+    let moduleUses = '';
+    orderedImports.forEach((importPath, index) => {
       moduleUses += `@use '${importPath}' as zbk_module_${index};\n`;
     });
 
     const breakpointsUse = buildBreakpointsUse(activeBreakpoints);
-    const sassCode = variableDefinitions + breakpointsUse + additionalModuleUses + moduleUses;
+    // Smart-mode palette @uses come after the gathered modules, matching the
+    // palettes-last ordering that `utilityStylesheetPatterns` gives 'all' mode.
+    const sassCode = variableDefinitions + breakpointsUse + moduleUses + additionalModuleUses;
 
     const includePaths = [
       path.join(zbkRoot, 'src'),
@@ -144,45 +171,45 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
       loadPaths: includePaths,
     });
 
-    // Ensure @import statements from token conversion (e.g., Google Fonts) stay at the top
-    let importBlock = '';
-    let filteredCssVars = cssVars;
-    if (cssVars.includes('@import')) {
-      const importLines: string[] = [];
-      const otherLines: string[] = [];
-      cssVars.split('\n').forEach((line) => {
-        if (line.trim().startsWith('@import')) {
-          importLines.push(line.trim());
-        } else {
-          otherLines.push(line);
-        }
-      });
-      importBlock = importLines.join('\n');
-      filteredCssVars = otherLines.join('\n');
-    }
+    // Hoist @import statements from token conversion (e.g., Google Fonts) to the
+    // top, and drop the layer-ordering statement the converter emits — this file
+    // declares its own before any layered content.
+    const importLines: string[] = [];
+    const otherLines: string[] = [];
+    cssVars.split('\n').forEach((line) => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('@import')) {
+        importLines.push(trimmed);
+      } else if (trimmed === LAYER_ORDERING) {
+        // skip duplicate layer statement
+      } else {
+        otherLines.push(line);
+      }
+    });
+    const importBlock = importLines.join('\n');
+    const filteredCssVars = otherLines.join('\n');
 
-    const layerOrdering = '@layer theme, base, components, utilities;';
-    const cssCode = `${importBlock ? `${importBlock}\n` : ''}${layerOrdering}\n${sassResult.css}\n${filteredCssVars}\n${variantCss}`;
+    const cssCode = `${importBlock ? `${importBlock}\n` : ''}${LAYER_ORDERING}\n${sassResult.css}\n${filteredCssVars}\n${variantCss}`;
 
-    const result = await postcss([
-      postcssPresetEnv({
-        stage: 3,
-        features: { 'custom-properties': false },
-      }),
-      autoprefixer(),
-      cssnano({ preset: 'default' }),
-    ]).process(cssCode, { from: undefined });
+    const processed = await postProcessCss(cssCode, minify);
 
     const outputFilePath = path.join(
       resolvedDestination,
-      `zbk-${projectName.toLowerCase()}.min.css`
+      `zbk-${slugifyFileSegment(projectName)}${minify ? '.min' : ''}.css`
     );
-    await fs.writeFile(outputFilePath, result.css);
-    spinner.succeed(chalk.green(`CSS written to ${outputFilePath}`));
+    await fs.writeFile(outputFilePath, processed);
+    spinner.succeed(
+      chalk.green(`CSS written to ${outputFilePath} (${formatSize(Buffer.byteLength(processed))})`)
+    );
   } catch (error) {
     spinner.fail(chalk.red('SCSS compilation failed'));
-    console.error(error);
+    throw error;
   }
+}
+
+function formatSize(bytes: number): string {
+  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  return `${Math.round(bytes / 1024)} KB`;
 }
 
 function ensureTrailingSlash(value: string): string {

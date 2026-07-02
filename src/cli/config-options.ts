@@ -380,6 +380,7 @@ export const CONFIG_OPTIONS: ConfigOption[] = [
  */
 export const EXTRA_SETTABLE_PATHS: Record<string, { parse: (raw: string) => unknown }> = {
   'tokens.tokenPath': { parse: (raw) => raw },
+  'tokens.minify': { parse: parseBoolean },
 };
 
 /** All dot-paths accepted by `config set`/`config get`. */

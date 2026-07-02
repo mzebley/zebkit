@@ -30,8 +30,30 @@ describe('build command', () => {
 
     await runBuildCommand(createDeps());
 
-    expect(mockRunTokenBuild).toHaveBeenCalledWith(undefined, '/pkg', '/pkg/dist/cli/defaults');
+    expect(mockRunTokenBuild).toHaveBeenCalledWith({
+      zebkitPackageRoot: '/pkg',
+      tokenDefaultsDir: '/pkg/dist/cli/defaults',
+      configPath: undefined,
+      cliOverrides: { basePreset: undefined, destinationPath: undefined },
+    });
     expect(mockHandlePromptCancel).not.toHaveBeenCalled();
+  });
+
+  it('threads --config/--theme/--dest through to the token build', async () => {
+    mockIsPromptCancelError.mockReturnValue(false);
+
+    await runBuildCommand(createDeps(), {
+      config: './custom.config.json',
+      theme: 'dusk',
+      dest: './out',
+    });
+
+    expect(mockRunTokenBuild).toHaveBeenCalledWith({
+      zebkitPackageRoot: '/pkg',
+      tokenDefaultsDir: '/pkg/dist/cli/defaults',
+      configPath: './custom.config.json',
+      cliOverrides: { basePreset: 'dusk', destinationPath: './out' },
+    });
   });
 
   it('handles prompt cancellation without rethrowing', async () => {
