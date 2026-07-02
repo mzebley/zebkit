@@ -40,6 +40,7 @@ await build({
     'sass',
     'postcss',
     'postcss-preset-env',
+    'postcss-selector-parser',
     'autoprefixer',
     'cssnano',
     // commander uses CJS internally; marking external lets Node resolve its

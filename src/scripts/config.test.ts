@@ -4,8 +4,10 @@
 
 import {
   OverlayThemeConfig,
+  PruneConfig,
   resolveOverlayRootSelector,
   validateOverlays,
+  validatePruneConfig,
 } from './config';
 
 describe('resolveOverlayRootSelector', () => {
@@ -79,4 +81,61 @@ describe('validateOverlays', () => {
       ).toThrow(/clobber the base theme/);
     }
   );
+});
+
+describe('validatePruneConfig', () => {
+  it('accepts undefined (prune not configured)', () => {
+    expect(() => validatePruneConfig(undefined)).not.toThrow();
+  });
+
+  it('accepts a fully specified prune block', () => {
+    const prune: PruneConfig = {
+      enabled: true,
+      content: ['src/**/*.svelte'],
+      safelist: ['button', '/^swiper/'],
+      blocklist: ['debug-only'],
+      output: { mode: 'alongside', path: 'dist/zbk.pruned.min.css' },
+      tokens: true,
+      keepLayers: ['theme', 'base'],
+      componentCss: 'keep',
+      report: true,
+    };
+    expect(() => validatePruneConfig(prune)).not.toThrow();
+  });
+
+  it('rejects a non-object prune block', () => {
+    expect(() => validatePruneConfig([] as unknown as PruneConfig)).toThrow(
+      /`tokens.prune` must be an object/
+    );
+  });
+
+  it('rejects a non-string content entry', () => {
+    expect(() =>
+      validatePruneConfig({ content: [1] as unknown as string[] })
+    ).toThrow(/`tokens.prune.content` must be an array of strings/);
+  });
+
+  it('rejects a non-boolean enabled', () => {
+    expect(() =>
+      validatePruneConfig({ enabled: 'yes' as unknown as boolean })
+    ).toThrow(/`tokens.prune.enabled` must be a boolean/);
+  });
+
+  it('rejects an invalid output mode', () => {
+    expect(() =>
+      validatePruneConfig({ output: { mode: 'wipe' as unknown as 'replace' } })
+    ).toThrow(/`tokens.prune.output.mode` must be "replace" or "alongside"/);
+  });
+
+  it('rejects an invalid componentCss value', () => {
+    expect(() =>
+      validatePruneConfig({ componentCss: 'purge' as unknown as 'keep' })
+    ).toThrow(/`tokens.prune.componentCss` must be "keep" or "detect"/);
+  });
+
+  it('rejects an invalid regex safelist entry, naming it', () => {
+    expect(() => validatePruneConfig({ safelist: ['/[/'] })).toThrow(
+      /Invalid regex in prune list: "\/\[\/"/
+    );
+  });
 });
