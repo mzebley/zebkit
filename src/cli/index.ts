@@ -1,3 +1,5 @@
+import fs from 'fs-extra';
+import path from 'path';
 import { Command } from 'commander';
 import { init } from './commands/init.js';
 import { build } from './commands/build.js';
@@ -10,13 +12,23 @@ import {
   overlayThemeList,
   overlayThemeNew,
 } from './commands/overlay-theme.js';
+import { getZebkitPackageRoot } from './resolve-package-root.js';
+
+function readPackageVersion(): string {
+  try {
+    const pkg = fs.readJsonSync(path.join(getZebkitPackageRoot(), 'package.json'));
+    return typeof pkg.version === 'string' ? pkg.version : '0.0.0';
+  } catch {
+    return '0.0.0';
+  }
+}
 
 const program = new Command();
 
 program
   .name('zebkit')
   .description('Token-driven design system CLI')
-  .version('0.0.1');
+  .version(readPackageVersion());
 
 program
   .command('init')
@@ -28,6 +40,9 @@ program
   .command('build')
   .description('Build CSS from design tokens')
   .option('-c, --config <path>', 'path to config file')
+  .option('--theme <preset>', 'override tokens.basePreset for this build')
+  .option('--dest <path>', 'override tokens.destinationPath for this build')
+  .option('-w, --watch', 'rebuild when the config or token override files change')
   .action(build);
 
 program

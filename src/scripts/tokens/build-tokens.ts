@@ -88,28 +88,57 @@ async function getComponents(componentsDir?: string): Promise<string[]> {
     .map((item: Dirent) => item.name);
 }
 
+export interface RunTokenBuildOptions {
+  /** Config to use instead of loading from disk. */
+  overrideConfig?: ZebkitConfig;
+  /**
+   * Root of the zebkit package (installed CLI mode). When provided, SCSS include
+   * paths resolve against this directory.
+   */
+  zebkitPackageRoot?: string;
+  /**
+   * Directory containing pre-compiled JSON token defaults. When provided, loads
+   * tokens from JSON instead of dynamic TS imports (installed CLI mode).
+   */
+  tokenDefaultsDir?: string;
+  /** Explicit config file path (commander's parsed `--config` value). */
+  configPath?: string;
+  /** Per-invocation flag overrides layered on top of the loaded config. */
+  cliOverrides?: {
+    basePreset?: string;
+    destinationPath?: string;
+  };
+}
+
 /**
  * Run the full token build pipeline.
- *
- * @param overrideConfig - Optional config to use instead of loading from disk.
- * @param zebkitPackageRoot - Root of the zebkit package (for installed CLI mode).
- *   When provided, SCSS include paths resolve against this directory.
- * @param tokenDefaultsDir - Directory containing pre-compiled JSON token defaults.
- *   When provided, loads tokens from JSON instead of dynamic TS imports (installed CLI mode).
  */
 export async function runTokenBuild(
-  overrideConfig?: ZebkitConfig,
-  zebkitPackageRoot?: string,
-  tokenDefaultsDir?: string
+  options: RunTokenBuildOptions = {}
 ): Promise<void> {
+  const { overrideConfig, zebkitPackageRoot, tokenDefaultsDir, configPath, cliOverrides } =
+    options;
   displayWelcome();
 
   const loadedConfig = overrideConfig
     ? { config: overrideConfig, path: "(provided)" }
-    : await loadZebkitConfig();
-  const tokensConfig: TokensConfig | undefined = loadedConfig?.config.tokens;
+    : await loadZebkitConfig(configPath);
+  let tokensConfig: TokensConfig | undefined = loadedConfig?.config.tokens;
   if (loadedConfig && loadedConfig.path !== "(provided)") {
     console.log(chalk.green(`Using config from ${loadedConfig.path}`));
+  }
+
+  // Flag overrides (`--theme`, `--dest`) layer on top of the loaded config. When no
+  // config exists they establish one, which intentionally skips the interactive
+  // prompts for anything they don't cover (defaults apply).
+  if (cliOverrides?.basePreset || cliOverrides?.destinationPath) {
+    tokensConfig = {
+      ...(tokensConfig ?? {}),
+      ...(cliOverrides.basePreset ? { basePreset: cliOverrides.basePreset } : {}),
+      ...(cliOverrides.destinationPath
+        ? { destinationPath: cliOverrides.destinationPath }
+        : {}),
+    };
   }
 
   const componentsDir = zebkitPackageRoot
