@@ -7,7 +7,10 @@ import {
   type ZebkitConfig,
 } from '../../scripts/config.js';
 import { slugifyFileSegment } from '../../scripts/tokens/build-helpers.js';
-import type { scanContent as scanContentFn } from '../../scripts/prune/content-scan.js';
+import {
+  loadComponentTokens,
+  type scanContent as scanContentFn,
+} from '../../scripts/prune/content-scan.js';
 import type { pruneCss as pruneCssFn } from '../../scripts/prune/engine.js';
 import { assembleReport, renderConsoleSummary } from '../../scripts/prune/report.js';
 import type { PruneMode, PruneReport } from '../../scripts/prune/types.js';
@@ -40,6 +43,8 @@ export interface PruneCommandDeps {
   ensureDir: (dirPath: string) => Promise<void>;
   writeJson: (filePath: string, data: unknown) => Promise<void>;
   zebkitVersion: string;
+  /** zebkit package root — locates the shipped component-token list. */
+  zebkitPackageRoot: string;
   /** Working directory CLI flags resolve against (defaults handled by the caller). */
   cwd: string;
   log: (message: string) => void;
@@ -137,10 +142,12 @@ export async function runPruneCommand(
 
   const { mode, outputPath } = resolveOutput(options, pruneConfig, inputPath, deps.cwd);
 
+  const componentTokens = await loadComponentTokens(deps.zebkitPackageRoot);
   const scan = await deps.scanContent({
     contentGlobs,
     cwd: configDir,
     inputCssPath: inputPath,
+    componentTokens,
   });
 
   const inputCss = await deps.readFile(inputPath);

@@ -39,7 +39,7 @@ import {
   TokensConfig,
   ZebkitConfig,
 } from "../config";
-import { scanContent } from "../prune/content-scan";
+import { loadComponentTokens, scanContent } from "../prune/content-scan";
 import { assembleReport } from "../prune/report";
 import type { PruneMode } from "../prune/types";
 import {
@@ -549,6 +549,7 @@ export async function runTokenBuild(
       themeName,
       minify,
       configDir,
+      packageRoot: zebkitPackageRoot ?? path.resolve(__dirname, "../../.."),
     });
 
     const sassOptions: CompileSassOptions = {
@@ -669,9 +670,18 @@ async function resolvePruneRequest(params: {
   themeName: string;
   minify: boolean;
   configDir: string;
+  packageRoot: string;
 }): Promise<ResolvedPrune | undefined> {
-  const { pruneConfig, cliPrune, cliPruneOut, destination, themeName, minify, configDir } =
-    params;
+  const {
+    pruneConfig,
+    cliPrune,
+    cliPruneOut,
+    destination,
+    themeName,
+    minify,
+    configDir,
+    packageRoot,
+  } = params;
   const enabled = cliPruneOut != null || cliPrune === true || pruneConfig?.enabled === true;
   if (!enabled) return undefined;
 
@@ -692,7 +702,13 @@ async function resolvePruneRequest(params: {
     destination,
     `zbk-${slugifyFileSegment(themeName)}${minify ? ".min" : ""}.css`
   );
-  const scan = await scanContent({ contentGlobs, cwd: configDir, inputCssPath });
+  const componentTokens = await loadComponentTokens(packageRoot);
+  const scan = await scanContent({
+    contentGlobs,
+    cwd: configDir,
+    inputCssPath,
+    componentTokens,
+  });
   const safelist = cfg.safelist ?? [];
 
   return {

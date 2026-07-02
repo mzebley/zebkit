@@ -5,7 +5,7 @@
 import os from 'os';
 import path from 'path';
 import fs from 'fs-extra';
-import { scanContent } from './content-scan';
+import { extractZbkTokens, loadComponentTokens, scanContent } from './content-scan';
 
 describe('scanContent', () => {
   let dir: string;
@@ -86,5 +86,75 @@ describe('scanContent', () => {
     });
 
     expect(result.tokenRoots.has('--zbk-should-not-seed')).toBe(false);
+  });
+
+  // Hazard 5: components read `--zbk-*` from their shadow styles, invisible to a
+  // src scan. Seed the shipped list only when component usage is detected.
+  it('unions component tokens when a component tag is used', async () => {
+    await write('src/App.svelte', `<zbk-button>Save</zbk-button>`);
+    const result = await scanContent({
+      contentGlobs: ['src/**/*.svelte'],
+      cwd: dir,
+      inputCssPath: path.join(dir, 'dist/zbk.min.css'),
+      componentTokens: ['--zbk-button-background', '--zbk-button-ink'],
+    });
+
+    expect(result.usesComponents).toBe(true);
+    expect(result.tokenRoots.has('--zbk-button-background')).toBe(true);
+  });
+
+  it('detects a `zebkit/components` import', async () => {
+    await write('src/main.ts', `import 'zebkit/components';`);
+    const result = await scanContent({
+      contentGlobs: ['src/**/*.ts'],
+      cwd: dir,
+      inputCssPath: path.join(dir, 'dist/zbk.min.css'),
+      componentTokens: ['--zbk-checkbox-background'],
+    });
+
+    expect(result.usesComponents).toBe(true);
+    expect(result.tokenRoots.has('--zbk-checkbox-background')).toBe(true);
+  });
+
+  it('does NOT union component tokens when no components are used', async () => {
+    await write('src/App.svelte', `<div class="button">plain</div>`);
+    const result = await scanContent({
+      contentGlobs: ['src/**/*.svelte'],
+      cwd: dir,
+      inputCssPath: path.join(dir, 'dist/zbk.min.css'),
+      componentTokens: ['--zbk-button-background'],
+    });
+
+    expect(result.usesComponents).toBe(false);
+    expect(result.tokenRoots.has('--zbk-button-background')).toBe(false);
+  });
+});
+
+describe('extractZbkTokens', () => {
+  it('returns sorted distinct --zbk-* tokens', () => {
+    expect(
+      extractZbkTokens('var(--zbk-b); var(--zbk-a); var(--zbk-b); --other')
+    ).toEqual(['--zbk-a', '--zbk-b']);
+  });
+});
+
+describe('loadComponentTokens', () => {
+  let dir: string;
+  beforeEach(async () => {
+    dir = await fs.mkdtemp(path.join(os.tmpdir(), 'zbk-comp-'));
+  });
+  afterEach(async () => {
+    await fs.remove(dir);
+  });
+
+  it('reads the shipped list from dist/cli/defaults', async () => {
+    await fs.outputJson(path.join(dir, 'dist/cli/defaults/component-tokens.json'), [
+      '--zbk-button-background',
+    ]);
+    expect(await loadComponentTokens(dir)).toEqual(['--zbk-button-background']);
+  });
+
+  it('returns [] when the list is absent (graceful degradation)', async () => {
+    expect(await loadComponentTokens(dir)).toEqual([]);
   });
 });

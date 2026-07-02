@@ -11,8 +11,10 @@
 import { build } from 'esbuild';
 import { rollup } from 'rollup';
 import dts from 'rollup-plugin-dts';
+import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'node:url';
+import { extractZbkTokens } from '../src/scripts/prune/content-scan';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -55,3 +57,13 @@ const dtsBundle = await rollup({
 await dtsBundle.write({ file: outDts, format: 'es' });
 await dtsBundle.close();
 console.log(`Declarations written to ${outDts}`);
+
+// --- Component token roots ---
+// The shipped list of `--zbk-*` tokens the components read from their shadow
+// styles. `zebkit prune` unions these into the token graph when a project uses
+// components, so their tokens survive a src-only content scan (hazard 5).
+const componentTokens = extractZbkTokens(await fs.readFile(outJs, 'utf8'));
+const componentTokensPath = path.resolve(root, 'dist/cli/defaults/component-tokens.json');
+await fs.ensureDir(path.dirname(componentTokensPath));
+await fs.writeJson(componentTokensPath, componentTokens, { spaces: 2 });
+console.log(`Component token roots (${componentTokens.length}) written to ${componentTokensPath}`);

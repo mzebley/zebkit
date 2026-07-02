@@ -29,6 +29,7 @@ export async function prune(options: PruneCommandOptions = {}): Promise<void> {
         ensureDir: (dirPath) => fs.ensureDir(dirPath),
         writeJson: (filePath, data) => fs.writeJson(filePath, data, { spaces: 2 }),
         zebkitVersion: readZebkitVersion(),
+        zebkitPackageRoot: getZebkitPackageRoot(),
         cwd: process.cwd(),
         log: (message) => console.log(message),
       },

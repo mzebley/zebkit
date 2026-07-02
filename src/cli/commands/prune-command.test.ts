@@ -142,6 +142,7 @@ describe('runPruneCommand (fixture project)', () => {
     ensureDir: (dirPath) => fs.ensureDir(dirPath),
     writeJson: (filePath, data) => fs.writeJson(filePath, data, { spaces: 2 }),
     zebkitVersion: '0.7.0-test',
+    zebkitPackageRoot: dir,
     cwd: dir,
     log: () => {},
   });
