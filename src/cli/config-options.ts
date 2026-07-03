@@ -1,5 +1,5 @@
 import type { ZebkitConfig } from '../scripts/config';
-import { EXTENDED_TOKEN_BREAKPOINTS } from '../scripts/config';
+import { DEFAULT_PRUNE_CONTENT, EXTENDED_TOKEN_BREAKPOINTS } from '../scripts/config';
 import { getAtPath, setAtPath } from './config-paths';
 
 /**
@@ -68,6 +68,18 @@ function parseEnum<T extends string>(raw: string, allowed: readonly T[]): T {
   }
   return value;
 }
+
+/** Parses a comma-separated (or JSON array) glob list into a string[]. */
+function parseGlobList(raw: string): string[] {
+  const trimmed = raw.trim();
+  if (trimmed === '') return [];
+  const values = trimmed.startsWith('[')
+    ? (JSON.parse(trimmed) as string[])
+    : trimmed.split(',').map((v) => v.trim());
+  return values.filter((v) => v.length > 0);
+}
+
+const PRUNE_OUTPUT_MODES = ['replace', 'alongside'] as const;
 
 export const CONFIG_OPTIONS: ConfigOption[] = [
   // --- quick tier ---------------------------------------------------------
@@ -207,6 +219,70 @@ export const CONFIG_OPTIONS: ConfigOption[] = [
         { name: 'combined — one file per format (default)', value: 'combined' },
         { name: 'per-module — one file per token module', value: 'per-module' },
       ],
+      default: def,
+    }),
+  },
+
+  {
+    path: 'tokens.prune.enabled',
+    id: 'pruneEnabled',
+    tier: 'standard',
+    default: false,
+    parse: parseBoolean,
+    buildQuestion: (def) => ({
+      type: 'confirm',
+      name: 'pruneEnabled',
+      message: 'Prune unused CSS during `zebkit build`? (the standalone `zebkit prune` runs either way)',
+      default: def,
+    }),
+  },
+  {
+    path: 'tokens.prune.content',
+    id: 'pruneContent',
+    tier: 'standard',
+    default: DEFAULT_PRUNE_CONTENT,
+    parse: parseGlobList,
+    configToPrompt: (configValue) =>
+      Array.isArray(configValue) ? configValue.join(',') : String(configValue ?? ''),
+    promptToConfig: (answer) => parseGlobList(String(answer)),
+    when: (answers) => answers.pruneEnabled === true,
+    buildQuestion: (def) => ({
+      type: 'input',
+      name: 'pruneContent',
+      message: 'Content globs to scan for used classes/tokens (comma-separated):',
+      default: def,
+    }),
+  },
+  {
+    path: 'tokens.prune.output.mode',
+    id: 'pruneOutputMode',
+    tier: 'standard',
+    default: 'replace',
+    parse: (raw) => parseEnum(raw, PRUNE_OUTPUT_MODES),
+    when: (answers) => answers.pruneEnabled === true,
+    buildQuestion: (def) => ({
+      type: 'list',
+      name: 'pruneOutputMode',
+      message: 'Prune output disposition:',
+      choices: [
+        { name: 'replace — prune the canonical CSS in place (production, default)', value: 'replace' },
+        { name: 'alongside — keep the canonical CSS and write a pruned sibling (dev)', value: 'alongside' },
+      ],
+      default: def,
+    }),
+  },
+  {
+    path: 'tokens.prune.output.path',
+    id: 'pruneOutputPath',
+    tier: 'standard',
+    default: '',
+    parse: (raw) => raw,
+    when: (answers) =>
+      answers.pruneEnabled === true && answers.pruneOutputMode === 'alongside',
+    buildQuestion: (def) => ({
+      type: 'input',
+      name: 'pruneOutputPath',
+      message: 'Alongside output path (blank = <destination>/zbk-<theme>.pruned.min.css):',
       default: def,
     }),
   },

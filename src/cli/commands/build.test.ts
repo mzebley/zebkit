@@ -34,7 +34,12 @@ describe('build command', () => {
       zebkitPackageRoot: '/pkg',
       tokenDefaultsDir: '/pkg/dist/cli/defaults',
       configPath: undefined,
-      cliOverrides: { basePreset: undefined, destinationPath: undefined },
+      cliOverrides: {
+        basePreset: undefined,
+        destinationPath: undefined,
+        prune: undefined,
+        pruneOut: undefined,
+      },
     });
     expect(mockHandlePromptCancel).not.toHaveBeenCalled();
   });
@@ -52,8 +57,28 @@ describe('build command', () => {
       zebkitPackageRoot: '/pkg',
       tokenDefaultsDir: '/pkg/dist/cli/defaults',
       configPath: './custom.config.json',
-      cliOverrides: { basePreset: 'dusk', destinationPath: './out' },
+      cliOverrides: {
+        basePreset: 'dusk',
+        destinationPath: './out',
+        prune: undefined,
+        pruneOut: undefined,
+      },
     });
+  });
+
+  it('threads --prune/--prune-out through to the token build', async () => {
+    mockIsPromptCancelError.mockReturnValue(false);
+
+    await runBuildCommand(createDeps(), { prune: true, pruneOut: './dist/zbk.pruned.min.css' });
+
+    expect(mockRunTokenBuild).toHaveBeenCalledWith(
+      expect.objectContaining({
+        cliOverrides: expect.objectContaining({
+          prune: true,
+          pruneOut: './dist/zbk.pruned.min.css',
+        }),
+      })
+    );
   });
 
   it('handles prompt cancellation without rethrowing', async () => {

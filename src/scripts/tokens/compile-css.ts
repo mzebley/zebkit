@@ -9,6 +9,8 @@ import ora from 'ora';
 import chalk from 'chalk';
 import { fileURLToPath } from 'node:url';
 import { slugifyFileSegment } from './build-helpers';
+import { pruneCss } from '../prune/engine';
+import type { PruneEngineResult, PruneMode, PruneOptions } from '../prune/types';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,21 +35,68 @@ function buildBreakpointsUse(activeBreakpoints: Record<string, string>): string 
 
 const LAYER_ORDERING = '@layer theme, base, components, utilities;';
 
-/**
- * Shared postcss pass for every emitted stylesheet (base bundle and overlays):
- * preset-env + autoprefixer, plus cssnano when minifying.
- */
-export async function postProcessCss(css: string, minify = true): Promise<string> {
-  const plugins = [
+/** preset-env + autoprefixer: everything that runs before minification. */
+function preMinifyPlugins() {
+  return [
     postcssPresetEnv({
       stage: 3,
       features: { 'custom-properties': false },
     }),
     autoprefixer(),
-    ...(minify ? [cssnano({ preset: 'default' })] : []),
   ];
+}
+
+/** cssnano only. Split out so prune can run between the transforms and minification. */
+function minifyPlugins() {
+  return [cssnano({ preset: 'default' })];
+}
+
+async function runPostcss(css: string, plugins: postcss.AcceptedPlugin[]): Promise<string> {
   const result = await postcss(plugins).process(css, { from: undefined });
   return result.css;
+}
+
+/**
+ * Shared postcss pass for every emitted stylesheet (base bundle and overlays):
+ * preset-env + autoprefixer, plus cssnano when minifying. Single pass — the
+ * canonical (non-pruned) output is produced exclusively through here so it stays
+ * byte-identical whether or not a build also emits a pruned sibling.
+ */
+export async function postProcessCss(css: string, minify = true): Promise<string> {
+  const plugins = [...preMinifyPlugins(), ...(minify ? minifyPlugins() : [])];
+  return runPostcss(css, plugins);
+}
+
+/**
+ * A prune pass wired into a build. The candidate set is scanned by the caller
+ * (build-tokens) so this module stays free of content-file IO.
+ */
+export interface CompileSassPruneRequest {
+  engineOptions: PruneOptions;
+  mode: PruneMode;
+  /**
+   * Alongside-mode output path (absolute). Omitted = `<destination>/zbk-<theme>.pruned(.min).css`.
+   * Ignored in replace mode (the canonical file is pruned in place).
+   */
+  outPath?: string;
+}
+
+/** Prune outcome returned to the caller so it can shape and write the report. */
+export interface CompileSassPruneOutcome {
+  engineResult: PruneEngineResult;
+  /** Canonical (pre-prune) output — the report's "before". */
+  canonicalCss: string;
+  /** Pruned output actually written — the report's "after". */
+  prunedCss: string;
+  outputPath: string;
+  mode: PruneMode;
+}
+
+export interface CompileSassResult {
+  /** Absolute path of the canonical `zbk-<theme>(.min).css`. */
+  canonicalPath: string;
+  /** Present only when a prune request was supplied. */
+  prune?: CompileSassPruneOutcome;
 }
 
 /**
@@ -89,9 +138,15 @@ export interface CompileSassOptions {
   additionalModuleUses?: string;
   /** Minify the output (default true → `zbk-<name>.min.css`; false → `zbk-<name>.css`). */
   minify?: boolean;
+  /**
+   * Optional prune pass. When present, the prune runs on the preset-env/autoprefixer
+   * output *before* cssnano, so minification cleans up whatever pruning leaves. In
+   * alongside mode the canonical file is still written unchanged.
+   */
+  prune?: CompileSassPruneRequest;
 }
 
-export async function compileSass(options: CompileSassOptions): Promise<void> {
+export async function compileSass(options: CompileSassOptions): Promise<CompileSassResult> {
   const spinner = ora('Compiling Zebkit CSS...').start();
   const {
     stylesheets,
@@ -109,6 +164,7 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
     activeBreakpoints = {},
     additionalModuleUses = '',
     minify = true,
+    prune,
   } = options;
 
   // In dev mode, resolve from this file's location. In installed CLI mode,
@@ -191,16 +247,59 @@ export async function compileSass(options: CompileSassOptions): Promise<void> {
 
     const cssCode = `${importBlock ? `${importBlock}\n` : ''}${LAYER_ORDERING}\n${sassResult.css}\n${filteredCssVars}\n${variantCss}`;
 
-    const processed = await postProcessCss(cssCode, minify);
-
     const outputFilePath = path.join(
       resolvedDestination,
       `zbk-${slugifyFileSegment(projectName)}${minify ? '.min' : ''}.css`
     );
-    await fs.writeFile(outputFilePath, processed);
-    spinner.succeed(
-      chalk.green(`CSS written to ${outputFilePath} (${formatSize(Buffer.byteLength(processed))})`)
-    );
+
+    if (!prune) {
+      const processed = await postProcessCss(cssCode, minify);
+      await fs.writeFile(outputFilePath, processed);
+      spinner.succeed(
+        chalk.green(`CSS written to ${outputFilePath} (${formatSize(Buffer.byteLength(processed))})`)
+      );
+      return { canonicalPath: outputFilePath };
+    }
+
+    // Canonical output goes through the exact single-pass pipeline so it stays
+    // byte-identical to a non-prune build; the pruned sibling runs prune between
+    // the transforms and cssnano.
+    const canonicalCss = await postProcessCss(cssCode, minify);
+    const transformed = await runPostcss(cssCode, preMinifyPlugins());
+    const engineResult = pruneCss(transformed, prune.engineOptions);
+    const prunedCss = minify
+      ? await runPostcss(engineResult.css, minifyPlugins())
+      : engineResult.css;
+
+    let outputPath: string;
+    if (prune.mode === 'replace') {
+      // Prune in place; the unpruned canonical is never written.
+      outputPath = outputFilePath;
+      await fs.writeFile(outputPath, prunedCss);
+      spinner.succeed(
+        chalk.green(
+          `Pruned CSS written to ${outputPath} ` +
+            `(${formatSize(Buffer.byteLength(canonicalCss))} → ${formatSize(Buffer.byteLength(prunedCss))})`
+        )
+      );
+    } else {
+      // Alongside: canonical stays byte-identical to a non-prune build.
+      await fs.writeFile(outputFilePath, canonicalCss);
+      outputPath = prune.outPath ?? outputFilePath.replace(/(\.min)?\.css$/, '.pruned$1.css');
+      await fs.ensureDir(path.dirname(outputPath));
+      await fs.writeFile(outputPath, prunedCss);
+      spinner.succeed(
+        chalk.green(
+          `CSS written to ${outputFilePath}; pruned sibling ${outputPath} ` +
+            `(${formatSize(Buffer.byteLength(canonicalCss))} → ${formatSize(Buffer.byteLength(prunedCss))})`
+        )
+      );
+    }
+
+    return {
+      canonicalPath: outputFilePath,
+      prune: { engineResult, canonicalCss, prunedCss, outputPath, mode: prune.mode },
+    };
   } catch (error) {
     spinner.fail(chalk.red('SCSS compilation failed'));
     throw error;

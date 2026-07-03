@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
+import { compileMatchers } from './prune/matchers';
 
 export const EXTENDED_TOKEN_BREAKPOINTS = [
   'tablet',
@@ -99,6 +100,56 @@ export type OverlayThemeConfig = {
   fonts?: FontsConfig;
 };
 
+/** Default content globs scanned by prune when `tokens.prune.content` is omitted. */
+export const DEFAULT_PRUNE_CONTENT = [
+  'src/**/*.{svelte,html,js,ts,jsx,tsx,vue,astro,md,svx}',
+];
+
+/** Cascade layers prune never touches by default (never class-gated). */
+export const DEFAULT_PRUNE_KEEP_LAYERS = ['theme', 'base'];
+
+export type PruneOutputMode = 'replace' | 'alongside';
+
+export type PruneOutputConfig = {
+  /**
+   * `replace` prunes the canonical `zbk-<theme>.min.css` in place (production);
+   * `alongside` writes a second pruned file and leaves the canonical one untouched
+   * (dev mode). Default: `replace`.
+   */
+  mode?: PruneOutputMode;
+  /**
+   * Alongside-mode output path. Blank = `<destinationPath>/zbk-<theme>.pruned.min.css`.
+   * The filename must stay deterministic so a dev-server import doesn't churn.
+   */
+  path?: string;
+};
+
+/**
+ * Production pruning of the compiled CSS: removes unused utility classes, state
+ * variants, and unreachable design tokens based on a scan of project source.
+ * Opt-in; disabled by default. See zebkit-prune-handoff.md.
+ */
+export type PruneConfig = {
+  /** Enable prune during `zebkit build`. Default false. The standalone `zebkit prune` runs regardless. */
+  enabled?: boolean;
+  /** Content globs scanned for referenced classes/tokens. Resolved relative to the config file. */
+  content?: string[];
+  /** Force-keep entries: exact class strings or `/regex/` strings. */
+  safelist?: string[];
+  /** Force-drop entries even if matched (escape hatch); beats the safelist. */
+  blocklist?: string[];
+  /** Output disposition (replace in place vs. write a second pruned file). */
+  output?: PruneOutputConfig;
+  /** Token-graph trimming on/off. Default true. */
+  tokens?: boolean;
+  /** Layers never pruned. Default `['theme', 'base']`. */
+  keepLayers?: string[];
+  /** Component-layer handling. v1 ships `keep` only. */
+  componentCss?: 'keep' | 'detect';
+  /** Write `zbk-<theme>.prune-report.json` next to the output. Default true. */
+  report?: boolean;
+};
+
 export type TokensConfig = {
   selectedComponents?: string[];
   includeAllComponents?: boolean;
@@ -129,6 +180,8 @@ export type TokensConfig = {
   spaceScale?: SpaceScaleConfig;
   /** Controls how fonts are loaded (Google Fonts delivery strategy). */
   fonts?: FontsConfig;
+  /** Production pruning of the compiled CSS. Opt-in; see `PruneConfig`. */
+  prune?: PruneConfig;
   /**
    * Minify the compiled CSS (default true → `zbk-<theme>.min.css`). Set false for
    * a readable, unminified `zbk-<theme>.css` while debugging. Overlays follow this
@@ -190,6 +243,61 @@ export function validateOverlays(overlays: OverlayThemeConfig[] | undefined): vo
   });
 }
 
+/**
+ * Validates the `tokens.prune` block, throwing on any misconfiguration. Catches
+ * invalid regex entries (naming the offending entry), bad enums, and wrong types
+ * before a build silently ships the wrong CSS.
+ */
+export function validatePruneConfig(prune: PruneConfig | undefined): void {
+  if (prune === undefined) return;
+  if (typeof prune !== 'object' || Array.isArray(prune)) {
+    throw new Error('`tokens.prune` must be an object.');
+  }
+
+  const assertStringArray = (value: unknown, field: string): void => {
+    if (value === undefined) return;
+    if (!Array.isArray(value) || value.some((entry) => typeof entry !== 'string')) {
+      throw new Error(`\`tokens.prune.${field}\` must be an array of strings.`);
+    }
+  };
+  const assertBoolean = (value: unknown, field: string): void => {
+    if (value !== undefined && typeof value !== 'boolean') {
+      throw new Error(`\`tokens.prune.${field}\` must be a boolean.`);
+    }
+  };
+
+  assertBoolean(prune.enabled, 'enabled');
+  assertBoolean(prune.tokens, 'tokens');
+  assertBoolean(prune.report, 'report');
+  assertStringArray(prune.content, 'content');
+  assertStringArray(prune.safelist, 'safelist');
+  assertStringArray(prune.blocklist, 'blocklist');
+  assertStringArray(prune.keepLayers, 'keepLayers');
+
+  if (prune.componentCss !== undefined && !['keep', 'detect'].includes(prune.componentCss)) {
+    throw new Error('`tokens.prune.componentCss` must be "keep" or "detect".');
+  }
+
+  if (prune.output !== undefined) {
+    if (typeof prune.output !== 'object' || Array.isArray(prune.output)) {
+      throw new Error('`tokens.prune.output` must be an object.');
+    }
+    if (
+      prune.output.mode !== undefined &&
+      !['replace', 'alongside'].includes(prune.output.mode)
+    ) {
+      throw new Error('`tokens.prune.output.mode` must be "replace" or "alongside".');
+    }
+    if (prune.output.path !== undefined && typeof prune.output.path !== 'string') {
+      throw new Error('`tokens.prune.output.path` must be a string.');
+    }
+  }
+
+  // Compile safelist/blocklist entries now so an invalid `/regex/` fails loudly,
+  // naming the offending entry, instead of degrading to "matches nothing" mid-build.
+  compileMatchers([...(prune.safelist ?? []), ...(prune.blocklist ?? [])]);
+}
+
 const CONFIG_FILE_NAMES = ['zebkit.config.json'];
 
 function parseConfigPathFromArgs(): string | undefined {
@@ -231,6 +339,7 @@ export async function loadZebkitConfig(configPath?: string): Promise<
         const fileContents = await fs.readFile(resolved, 'utf-8');
         const parsed = JSON.parse(fileContents) as ZebkitConfig;
         validateOverlays(parsed.tokens?.overlays);
+        validatePruneConfig(parsed.tokens?.prune);
         return { config: parsed, path: resolved };
       } catch (error) {
         throw new Error(`Unable to read config file at ${resolved}: ${error}`);

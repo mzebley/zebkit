@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import { init } from './commands/init.js';
 import { build } from './commands/build.js';
 import { pull } from './commands/pull.js';
+import { prune } from './commands/prune.js';
 import { configGet, configGuided, configSet } from './commands/config.js';
 import {
   overlayTheme,
@@ -42,6 +43,8 @@ program
   .option('-c, --config <path>', 'path to config file')
   .option('--theme <preset>', 'override tokens.basePreset for this build')
   .option('--dest <path>', 'override tokens.destinationPath for this build')
+  .option('--prune', 'prune unused CSS after building (honors tokens.prune config)')
+  .option('--prune-out <path>', 'write a pruned file alongside the canonical CSS (implies alongside mode)')
   .option('-w, --watch', 'rebuild when the config or token override files change')
   .action(build);
 
@@ -50,6 +53,17 @@ program
   .description('Sync latest default tokens into your project token files')
   .option('-c, --config <path>', 'path to config file')
   .action(pull);
+
+program
+  .command('prune')
+  .description('Remove unused classes, variants, and unreachable tokens from built CSS')
+  .option('-c, --config <path>', 'path to config file')
+  .option('--css <path>', 'input CSS (default: <destinationPath>/zbk-<theme>.min.css)')
+  .option('--out <path>', 'output path; implies alongside mode')
+  .option('--replace', 'prune in place (mutually exclusive with --out)')
+  .option('--dry-run', 'no file written; report only')
+  .option('--report <path>', 'where to write the JSON report')
+  .action(prune);
 
 const config = program
   .command('config')

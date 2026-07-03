@@ -7,6 +7,10 @@ export interface BuildCommandOptions {
   theme?: string;
   /** Destination directory override for this build (`--dest`). */
   dest?: string;
+  /** Force-enable pruning after this build, honoring config mode (`--prune`). */
+  prune?: boolean;
+  /** Force alongside pruning to this path (`--prune-out <path>`). */
+  pruneOut?: string;
 }
 
 export interface BuildCommandDeps {
@@ -32,6 +36,8 @@ export async function runBuildCommand(
       cliOverrides: {
         basePreset: options.theme,
         destinationPath: options.dest,
+        prune: options.prune,
+        pruneOut: options.pruneOut,
       },
     });
   } catch (error) {

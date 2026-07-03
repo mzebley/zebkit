@@ -44,7 +44,10 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
         nodir: true,
       }
     );
-    stylesheets.push(...coreStyles);
+    // glob order follows filesystem readdir and varies between machines/runs.
+    // Sort every discovery so the compiled CSS (and thus a pruned build) is
+    // byte-reproducible.
+    stylesheets.push(...coreStyles.sort());
 
     if (options?.tokenDefaultsDir) {
       // Installed CLI mode: load pre-compiled JSON token defaults
@@ -55,14 +58,14 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
         // variants.json is the built-in variant snapshot, not a token module.
         ignore: ['manifest.json', 'variants.json'],
       });
-      tokenFiles.push(...jsonFiles);
+      tokenFiles.push(...jsonFiles.sort());
     } else {
       // Dev mode: discover TypeScript token modules
       const coreTokens = await glob('**/tokens/tokens.ts', {
         cwd: coreDir,
         nodir: true,
       });
-      tokenFiles.push(...coreTokens.map((file) => path.join('core', file)));
+      tokenFiles.push(...coreTokens.sort().map((file) => path.join('core', file)));
     }
 
     if (components.length > 0 && (await fs.pathExists(componentsDir))) {
@@ -83,14 +86,14 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
             nodir: true,
           }
         );
-        stylesheets.push(...componentStyles);
+        stylesheets.push(...componentStyles.sort());
 
         const componentTokens = await glob('**/tokens/tokens.ts', {
           cwd: componentDir,
           nodir: true,
         });
         tokenFiles.push(
-          ...componentTokens.map((file) => path.join('components', component, file))
+          ...componentTokens.sort().map((file) => path.join('components', component, file))
         );
       }
     }

@@ -17,6 +17,9 @@ export default {
     '^@token-scripts/(.*)$': '<rootDir>/src/scripts/tokens/$1',
     '^@component-scripts/(.*)$': '<rootDir>/src/scripts/components/$1',
     '^chalk$': '<rootDir>/src/test-support/chalk.mock.ts',
+    // Source uses `.js` extensions on relative imports (required for the
+    // NodeNext/esbuild build); strip them so ts-jest resolves the `.ts` source.
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
   testPathIgnorePatterns: ['\\.integration\\.test\\.tsx?$'],

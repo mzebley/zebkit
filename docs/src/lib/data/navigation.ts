@@ -87,6 +87,10 @@ export const navigation: NavSection[] = [
     ]
   },
   {
+    label: 'Pruning',
+    link: '/pruning'
+  },
+  {
     label: 'Theming',
     items: [
       { label: 'Playground', link: '/theming/playground' },
