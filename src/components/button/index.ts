@@ -19,6 +19,16 @@ import { buttonVariants } from './variants/index';
 
 export type ZbkButtonType = 'button' | 'submit' | 'reset';
 
+/**
+ * The zebkit button: a light-DOM element wrapping a real `<button>`. Renders
+ * the token-driven skeleton, reflects `variant` into classes, forwards native
+ * semantics, and adds the one behavior a native button lacks (`loading`).
+ * No custom events — the native `click` bubbles, and keyboard activation
+ * (Enter/Space) arrives as a click.
+ *
+ * @slot - The button's label content (its accessible name).
+ * @slot icon - A supplementary pictogram, rendered aria-hidden beside the label.
+ */
 export class ZbkButton extends ZebkitElement {
   static componentName = 'button';
   static variantConfigs = buttonVariants;

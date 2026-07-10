@@ -44,6 +44,7 @@ export abstract class ZebkitElement extends LitElement {
     variant: { type: String, reflect: false },
   };
 
+  /** Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. */
   variant = '';
 
   private zbkUid = ++uidCounter;

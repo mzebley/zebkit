@@ -28,7 +28,7 @@
     "test:watch": "jest --watch",
     "type-check": "tsc --noEmit",
     "check:docs": "npm --prefix docs run build",
-    "check": "npm run test:unit -- --runInBand && npm run type-check && npm run check:utilities && npm run lint:utilities && npm run check:cem && npm run check:docs",
+    "check": "npm run test:unit -- --runInBand && npm run type-check && npm run check:utilities && npm run lint:utilities && npm run check:cem && npm run check:context && npm run check:docs",
     "lint:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/lint.ts",
     "generate:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/generate.ts",
     "check:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/generate.ts --check",
@@ -46,7 +46,9 @@
     "docs:dev": "cd docs && npm run dev",
     "docs:build": "cd docs && npm run build",
     "build:cem": "custom-elements-manifest analyze",
-    "check:cem": "custom-elements-manifest analyze && git diff --exit-code custom-elements.json"
+    "check:cem": "custom-elements-manifest analyze && git diff --exit-code custom-elements.json",
+    "build:context": "tsx scripts/build-agent-context.ts",
+    "check:context": "npm run build:context && git diff --exit-code docs/static/zebkit/context"
   },
   "repository": {
     "type": "git",

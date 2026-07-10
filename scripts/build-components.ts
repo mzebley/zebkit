@@ -21,6 +21,7 @@ const root = path.resolve(__dirname, '..');
 
 const entry = path.resolve(root, 'src/components/index.ts');
 const outJs = path.resolve(root, 'dist/components/index.js');
+const outBrowserJs = path.resolve(root, 'dist/components/zebkit.js');
 const outDts = path.resolve(root, 'dist/components/index.d.ts');
 const tsconfigPath = path.resolve(root, 'tsconfig.json');
 
@@ -41,6 +42,23 @@ await build({
   logLevel: 'info',
 });
 console.log(`JS bundle written to ${outJs}`);
+
+// --- Self-contained browser bundle ---
+// Same entry with lit bundled in, for direct `<script type="module">` /
+// dynamic-import use without a bundler (the docs site serves this one).
+console.log('Building self-contained browser bundle...');
+await build({
+  entryPoints: [entry],
+  bundle: true,
+  platform: 'browser',
+  format: 'esm',
+  outfile: outBrowserJs,
+  minify: true,
+  tsconfig: tsconfigPath,
+  sourcemap: true,
+  logLevel: 'info',
+});
+console.log(`Browser bundle written to ${outBrowserJs}`);
 
 // --- Type declarations ---
 console.log('Building type declarations...');

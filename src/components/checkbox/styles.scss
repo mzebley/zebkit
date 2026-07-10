@@ -1,154 +1,235 @@
-:root {
-    --zbk-checkbox-size: var(--zbk-spacing-205);
-    --zbk-checkbox-border-radius: var(--zbk-border-radius-xs);
-    --zbk-checkbox-border-width: var(--zbk-border-width-md);
-    --zbk-checkbox-background: var(--zbk-body-background);
-    --zbk-checkbox-background-checked: var(--zbk-accent);
-    --zbk-checkbox-background-indeterminate: var(--zbk-accent);
-    --zbk-checkbox-border-color: var(--zbk-accent-400);
-    --zbk-checkbox-border-color-hover: var(--zbk-accent-500);
-    --zbk-checkbox-border-color-active: var(--zbk-accent);
-    --zbk-checkbox-border-color-disabled: var(--zbk-accent-200);
-    --zbk-checkbox-indicator-stroke-width: var(--zbk-border-width-sm);
-    --zbk-checkbox-indicator-color: var(--zbk-reverse-ink);
-    --zbk-checkbox-indicator-disabled-color: var(--zbk-accent-300);
-    --zbk-checkbox-indeterminate-bar-height: var(--zbk-border-width-lg);
-    --zbk-checkbox-indeterminate-bar-radius: var(--zbk-border-radius-pill);
-    --zbk-checkbox-focus-ring-color: var(--zbk-focus-color);
-    --zbk-checkbox-focus-ring-width: var(--zbk-border-width-lg);
-    --zbk-checkbox-focus-ring-offset: var(--zbk-spacing-05);
-    --zbk-checkbox-transition-timing-function: ease;
-    --zbk-checkbox-disabled-opacity: .7;
-    --zbk-checkbox-label-color: var(--zbk-ink);
-    --zbk-checkbox-label-disabled-color: var(--zbk-accent-400);
-    --zbk-checkbox-label-font-family: var(--zbk-font-family-interface);
-    --zbk-checkbox-label-font-size: var(--zbk-font-size-md);
-    --zbk-checkbox-label-font-weight: 400;
-    --zbk-checkbox-label-line-height: var(--zbk-line-height-interface);
-    --zbk-checkbox-label-letter-spacing: var(--zbk-letter-spacing-interface);
-    --zbk-checkbox-label-gap: var(--zbk-spacing-1);
-    --zbk-checkbox-transition-duration: 120ms;
-}
+@use 'tokens/styles/variables/prefix'as prefix;
 
 @layer components {
+  // The host stays out of layout; the label is the component's layout root.
+  zbk-checkbox {
+    display: var(--#{prefix.$cssVar}-checkbox-display);
+  }
 
-z-checkbox {
-    display: inline-block;
-}
-
-.z-checkbox {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--zbk-checkbox-label-gap);
-    font-family: var(--zbk-checkbox-label-font-family);
-    font-size: var(--zbk-checkbox-label-font-size);
-    font-weight: var(--zbk-checkbox-label-font-weight);
-    line-height: var(--zbk-checkbox-label-line-height);
-    letter-spacing: var(--zbk-checkbox-label-letter-spacing);
-    color: var(--zbk-checkbox-label-color);
-    cursor: pointer;
-    user-select: none;
-}
-
-.z-checkbox__input {
-    appearance: none;
-    width: var(--zbk-checkbox-size);
-    height: var(--zbk-checkbox-size);
-    margin: 0;
-    border-radius: var(--zbk-checkbox-border-radius);
-    border: var(--zbk-checkbox-border-width) solid var(--zbk-checkbox-border-color);
-    background-color: var(--zbk-checkbox-background);
-    display: grid;
-    place-content: center;
-    transition:
-        background-color var(--zbk-checkbox-transition-duration) var(--zbk-checkbox-transition-timing-function),
-        border-color var(--zbk-checkbox-transition-duration) var(--zbk-checkbox-transition-timing-function),
-        box-shadow var(--zbk-checkbox-transition-duration) var(--zbk-checkbox-transition-timing-function),
-        transform var(--zbk-checkbox-transition-duration) var(--zbk-checkbox-transition-timing-function);
+  // The one styling contract for checkboxes. <zbk-checkbox> renders exactly
+  // this markup in light DOM; the classes also work standalone on a native
+  // label + input pair.
+  label.zbk-checkbox {
     position: relative;
-}
+    display: inline-flex;
+    align-items: var(--#{prefix.$cssVar}-checkbox-align-items);
+    gap: var(--#{prefix.$cssVar}-checkbox-gap);
 
-.z-checkbox__input::before {
-    content: "";
-    width: calc(var(--zbk-checkbox-size) * .5);
-    height: calc(var(--zbk-checkbox-size) * .25);
-    border-right: var(--zbk-checkbox-indicator-stroke-width) solid var(--zbk-checkbox-indicator-color);
-    border-bottom: var(--zbk-checkbox-indicator-stroke-width) solid var(--zbk-checkbox-indicator-color);
-    border-left: 0;
-    border-top: 0;
+    /* Label typography */
+    color: var(--#{prefix.$cssVar}-checkbox-ink);
+    font-family: var(--#{prefix.$cssVar}-checkbox-font-family);
+    font-size: var(--#{prefix.$cssVar}-checkbox-font-size);
+    font-weight: var(--#{prefix.$cssVar}-checkbox-font-weight);
+    line-height: var(--#{prefix.$cssVar}-checkbox-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-checkbox-letter-spacing);
+
+    cursor: var(--#{prefix.$cssVar}-checkbox-cursor);
+    opacity: var(--#{prefix.$cssVar}-checkbox-opacity);
+    user-select: none;
+  }
+
+  /* The native input: functional but invisible, stretched across the whole
+     label so hover, press, click, and focus land on it natively anywhere in
+     the component. It stays in the DOM (focusable, announced, submitted). */
+  label.zbk-checkbox .zbk-checkbox__input {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+
+  label.zbk-checkbox .zbk-checkbox__input:disabled {
+    cursor: var(--#{prefix.$cssVar}-checkbox-cursor-disabled);
+  }
+
+  /* The visual control the input's state drives via sibling selectors. */
+  label.zbk-checkbox .zbk-checkbox__control {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    inline-size: var(--#{prefix.$cssVar}-checkbox-control-width);
+    block-size: var(--#{prefix.$cssVar}-checkbox-control-height);
+    background-color: var(--#{prefix.$cssVar}-checkbox-canvas);
+    border-color: var(--#{prefix.$cssVar}-checkbox-border-color);
+    border-style: var(--#{prefix.$cssVar}-checkbox-border-style);
+    border-width: var(--#{prefix.$cssVar}-checkbox-border-width);
+    border-radius: var(--#{prefix.$cssVar}-checkbox-border-radius);
+    box-shadow: var(--#{prefix.$cssVar}-checkbox-box-shadow);
+    transition-property: var(--#{prefix.$cssVar}-checkbox-transition-property);
+    transition-duration: var(--#{prefix.$cssVar}-checkbox-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-checkbox-transition-timing-function);
+    transition-delay: var(--#{prefix.$cssVar}-checkbox-transition-delay);
+  }
+
+  /* The checkmark: a stroked corner rotated into a check. Its proportions are
+     structure (the shape of a check); its color and stroke are tokens. */
+  label.zbk-checkbox .zbk-checkbox__control::before {
+    content: '';
+    grid-area: 1 / 1;
+    inline-size: calc(var(--#{prefix.$cssVar}-checkbox-control-height) * 0.5);
+    block-size: calc(var(--#{prefix.$cssVar}-checkbox-control-height) * 0.25);
+    border-right: var(--#{prefix.$cssVar}-checkbox-indicator-stroke-width) solid
+      var(--#{prefix.$cssVar}-checkbox-indicator-color);
+    border-bottom: var(--#{prefix.$cssVar}-checkbox-indicator-stroke-width) solid
+      var(--#{prefix.$cssVar}-checkbox-indicator-color);
     transform: scale(0) rotate(45deg);
     transform-origin: center;
-    transition: transform var(--zbk-checkbox-transition-duration) var(--zbk-checkbox-transition-timing-function);
-}
+    transition: transform var(--#{prefix.$cssVar}-checkbox-transition-duration)
+      var(--#{prefix.$cssVar}-checkbox-transition-timing-function);
+  }
 
-.z-checkbox__input::after {
-    content: "";
-    width: calc(var(--zbk-checkbox-size) * .6);
-    height: var(--zbk-checkbox-indeterminate-bar-height);
-    background-color: var(--zbk-checkbox-indicator-color);
-    border-radius: var(--zbk-checkbox-indeterminate-bar-radius);
+  /* The indeterminate bar. */
+  label.zbk-checkbox .zbk-checkbox__control::after {
+    content: '';
+    grid-area: 1 / 1;
+    inline-size: calc(var(--#{prefix.$cssVar}-checkbox-control-width) * 0.6);
+    block-size: var(--#{prefix.$cssVar}-checkbox-indicator-stroke-width);
+    background-color: var(--#{prefix.$cssVar}-checkbox-indicator-color);
+    border-radius: var(--#{prefix.$cssVar}-checkbox-indicator-radius);
     transform: scaleX(0);
-    transition: transform var(--zbk-checkbox-transition-duration) var(--zbk-checkbox-transition-timing-function);
-}
+    transition: transform var(--#{prefix.$cssVar}-checkbox-transition-duration)
+      var(--#{prefix.$cssVar}-checkbox-transition-timing-function);
+  }
 
-.z-checkbox__input:focus {
-    outline: none;
-}
+  /* Slotted state indicators (slot="checked|unchecked|indeterminate"): any
+     authored content — svg, icon-font glyph, HTML character, image — layered
+     over the control, sized by the indicator-size token, colored by
+     indicator-color (fonts and currentColor SVGs inherit), and animated with
+     the component's transition tokens. */
+  label.zbk-checkbox .zbk-checkbox__indicator {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    font-size: var(--#{prefix.$cssVar}-checkbox-indicator-size);
+    line-height: 1;
+    color: var(--#{prefix.$cssVar}-checkbox-indicator-color);
+    opacity: 0;
+    transform: scale(0);
+    transition: transform var(--#{prefix.$cssVar}-checkbox-transition-duration)
+        var(--#{prefix.$cssVar}-checkbox-transition-timing-function),
+      opacity var(--#{prefix.$cssVar}-checkbox-transition-duration)
+        var(--#{prefix.$cssVar}-checkbox-transition-timing-function);
+  }
 
-.z-checkbox__input:focus-visible {
-    outline: var(--zbk-checkbox-focus-ring-width) solid var(--zbk-checkbox-focus-ring-color);
-    outline-offset: var(--zbk-checkbox-focus-ring-offset);
-    border-color: var(--zbk-checkbox-border-color-active);
-}
+  label.zbk-checkbox .zbk-checkbox__indicator :is(svg, img) {
+    inline-size: var(--#{prefix.$cssVar}-checkbox-indicator-size);
+    block-size: auto;
+    max-block-size: 100%;
+  }
 
-.z-checkbox__input:checked {
-    border-color: var(--zbk-checkbox-border-color-active);
-    background-color: var(--zbk-checkbox-background-checked);
-}
+  /* Authored indicators retire the drawn pseudo they replace. */
+  label.zbk-checkbox .zbk-checkbox__control--slotted-checked::before {
+    content: none;
+  }
 
-.z-checkbox__input:checked::before {
-    transform: scale(1) rotate(45deg);
-}
+  label.zbk-checkbox .zbk-checkbox__control--slotted-indeterminate::after {
+    content: none;
+  }
 
-.z-checkbox__input:indeterminate {
-    border-color: var(--zbk-checkbox-border-color-active);
-    background-color: var(--zbk-checkbox-background-indeterminate);
-}
+  /* Each indicator shows for exactly its state (indeterminate wins over
+     checked, matching the drawn visuals). */
+  label.zbk-checkbox .zbk-checkbox__input:not(:checked):not(:indeterminate) + .zbk-checkbox__control .zbk-checkbox__indicator--unchecked,
+  label.zbk-checkbox .zbk-checkbox__input:checked:not(:indeterminate) + .zbk-checkbox__control .zbk-checkbox__indicator--checked,
+  label.zbk-checkbox .zbk-checkbox__input:indeterminate + .zbk-checkbox__control .zbk-checkbox__indicator--indeterminate {
+    opacity: 1;
+    transform: scale(1);
+  }
 
-.z-checkbox__input:indeterminate::before {
-    transform: scale(0) rotate(45deg);
-}
-
-.z-checkbox__input:indeterminate::after {
-    transform: scaleX(1);
-}
-
-.z-checkbox__input:disabled {
-    border-color: var(--zbk-checkbox-border-color-disabled);
-    background-color: var(--zbk-checkbox-background);
-    cursor: not-allowed;
-    opacity: var(--zbk-checkbox-disabled-opacity);
-}
-
-.z-checkbox__input:disabled::before {
-    border-right-color: var(--zbk-checkbox-indicator-disabled-color);
-    border-bottom-color: var(--zbk-checkbox-indicator-disabled-color);
-}
-
-.z-checkbox__input:disabled::after {
-    background-color: var(--zbk-checkbox-indicator-disabled-color);
-}
-
-z-checkbox[disabled] .z-checkbox,
-.z-checkbox__input:disabled + slot {
-    cursor: not-allowed;
-    color: var(--zbk-checkbox-label-disabled-color);
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .z-checkbox__input:not(:disabled):hover {
-        border-color: var(--zbk-checkbox-border-color-hover);
+  /* Hover (only on devices where hover is a real signal) */
+  @media (hover: hover) and (pointer: fine) {
+    label.zbk-checkbox .zbk-checkbox__input:hover:not(:disabled) + .zbk-checkbox__control {
+      background-color: var(--#{prefix.$cssVar}-checkbox-canvas-hover);
+      border-color: var(--#{prefix.$cssVar}-checkbox-border-color-hover);
+      box-shadow: var(--#{prefix.$cssVar}-checkbox-box-shadow-hover);
     }
-}
+  }
 
-} // @layer components
+  /* Active / pressed */
+  label.zbk-checkbox .zbk-checkbox__input:active:not(:disabled) + .zbk-checkbox__control {
+    background-color: var(--#{prefix.$cssVar}-checkbox-canvas-active);
+    border-color: var(--#{prefix.$cssVar}-checkbox-border-color-active);
+    box-shadow: var(--#{prefix.$cssVar}-checkbox-box-shadow-active);
+  }
+
+  /* Focus-visible (keyboard focus) */
+  label.zbk-checkbox .zbk-checkbox__input:focus-visible + .zbk-checkbox__control {
+    outline: var(--#{prefix.$cssVar}-checkbox-focus-width) solid
+      var(--#{prefix.$cssVar}-checkbox-focus-color);
+    outline-offset: var(--#{prefix.$cssVar}-checkbox-focus-offset);
+    box-shadow: var(--#{prefix.$cssVar}-checkbox-box-shadow-focus);
+  }
+
+  /* Checked */
+  label.zbk-checkbox .zbk-checkbox__input:checked + .zbk-checkbox__control {
+    background-color: var(--#{prefix.$cssVar}-checkbox-canvas-checked);
+    border-color: var(--#{prefix.$cssVar}-checkbox-border-color-checked);
+    box-shadow: var(--#{prefix.$cssVar}-checkbox-box-shadow-checked);
+  }
+
+  label.zbk-checkbox .zbk-checkbox__input:checked + .zbk-checkbox__control::before {
+    transform: scale(1) rotate(45deg);
+  }
+
+  /* Indeterminate (wins over checked visuals; the platform allows both) */
+  label.zbk-checkbox .zbk-checkbox__input:indeterminate + .zbk-checkbox__control {
+    background-color: var(--#{prefix.$cssVar}-checkbox-canvas-indeterminate);
+    border-color: var(--#{prefix.$cssVar}-checkbox-border-color-indeterminate);
+  }
+
+  label.zbk-checkbox .zbk-checkbox__input:indeterminate + .zbk-checkbox__control::before {
+    transform: scale(0) rotate(45deg);
+  }
+
+  label.zbk-checkbox .zbk-checkbox__input:indeterminate + .zbk-checkbox__control::after {
+    transform: scaleX(1);
+  }
+
+  /* Disabled */
+  label.zbk-checkbox .zbk-checkbox__input:disabled + .zbk-checkbox__control {
+    background-color: var(--#{prefix.$cssVar}-checkbox-canvas-disabled);
+    border-color: var(--#{prefix.$cssVar}-checkbox-border-color-disabled);
+    box-shadow: none;
+    opacity: var(--#{prefix.$cssVar}-checkbox-opacity-disabled);
+  }
+
+  label.zbk-checkbox .zbk-checkbox__input:disabled + .zbk-checkbox__control::before {
+    border-right-color: var(--#{prefix.$cssVar}-checkbox-indicator-color-disabled);
+    border-bottom-color: var(--#{prefix.$cssVar}-checkbox-indicator-color-disabled);
+  }
+
+  label.zbk-checkbox .zbk-checkbox__input:disabled + .zbk-checkbox__control::after {
+    background-color: var(--#{prefix.$cssVar}-checkbox-indicator-color-disabled);
+  }
+
+  label.zbk-checkbox .zbk-checkbox__input:disabled + .zbk-checkbox__control .zbk-checkbox__indicator {
+    color: var(--#{prefix.$cssVar}-checkbox-indicator-color-disabled);
+  }
+
+  label.zbk-checkbox .zbk-checkbox__input:disabled ~ .zbk-checkbox__label {
+    color: var(--#{prefix.$cssVar}-checkbox-ink-disabled);
+  }
+
+  /* Checkbox groups */
+  .zbk-checkbox-group {
+    display: flex;
+    flex-direction: var(--#{prefix.$cssVar}-checkbox-group-direction);
+    gap: var(--#{prefix.$cssVar}-checkbox-group-gap);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    label.zbk-checkbox .zbk-checkbox__control,
+    label.zbk-checkbox .zbk-checkbox__control::before,
+    label.zbk-checkbox .zbk-checkbox__control::after,
+    label.zbk-checkbox .zbk-checkbox__indicator {
+      transition: none;
+    }
+  }
+}

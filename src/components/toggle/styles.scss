@@ -1,0 +1,191 @@
+@use 'tokens/styles/variables/prefix'as prefix;
+
+@layer components {
+  // The host stays out of layout; the label is the component's layout root.
+  zbk-toggle {
+    display: var(--#{prefix.$cssVar}-toggle-display);
+  }
+
+  // The one styling contract for toggles. <zbk-toggle> renders exactly this
+  // markup in light DOM; the classes also work standalone on a native
+  // label + input pair.
+  label.zbk-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: var(--#{prefix.$cssVar}-toggle-align-items);
+    gap: var(--#{prefix.$cssVar}-toggle-gap);
+
+    /* Label typography */
+    color: var(--#{prefix.$cssVar}-toggle-ink);
+    font-family: var(--#{prefix.$cssVar}-toggle-font-family);
+    font-size: var(--#{prefix.$cssVar}-toggle-font-size);
+    font-weight: var(--#{prefix.$cssVar}-toggle-font-weight);
+    line-height: var(--#{prefix.$cssVar}-toggle-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-toggle-letter-spacing);
+
+    cursor: var(--#{prefix.$cssVar}-toggle-cursor);
+    opacity: var(--#{prefix.$cssVar}-toggle-opacity);
+    user-select: none;
+  }
+
+  /* The native input: functional but invisible, stretched across the whole
+     label so hover, press, click, and focus land on it natively anywhere in
+     the component. It stays in the DOM (focusable, announced, submitted). */
+  label.zbk-toggle .zbk-toggle__input {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+
+  label.zbk-toggle .zbk-toggle__input:disabled {
+    cursor: var(--#{prefix.$cssVar}-toggle-cursor-disabled);
+  }
+
+  /* The track the input's state drives via sibling selectors. */
+  label.zbk-toggle .zbk-toggle__track {
+    position: relative;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    inline-size: var(--#{prefix.$cssVar}-toggle-track-width);
+    block-size: var(--#{prefix.$cssVar}-toggle-track-height);
+    background-color: var(--#{prefix.$cssVar}-toggle-canvas);
+    border-color: var(--#{prefix.$cssVar}-toggle-border-color);
+    border-style: var(--#{prefix.$cssVar}-toggle-border-style);
+    border-width: var(--#{prefix.$cssVar}-toggle-border-width);
+    border-radius: var(--#{prefix.$cssVar}-toggle-border-radius);
+    box-shadow: var(--#{prefix.$cssVar}-toggle-box-shadow);
+    transition-property: var(--#{prefix.$cssVar}-toggle-transition-property);
+    transition-duration: var(--#{prefix.$cssVar}-toggle-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-toggle-transition-timing-function);
+    transition-delay: var(--#{prefix.$cssVar}-toggle-transition-delay);
+  }
+
+  /* The thumb. Vertical centering and travel are structural (they derive from
+     the geometry tokens); every visual property is a token. Travel animates
+     inset-inline-start so the thumb-transform-* physics tokens stay free to
+     compose lift/press effects on top. */
+  label.zbk-toggle .zbk-toggle__track::before {
+    content: '';
+    position: absolute;
+    box-sizing: border-box;
+    inline-size: var(--#{prefix.$cssVar}-toggle-thumb-size);
+    block-size: var(--#{prefix.$cssVar}-toggle-thumb-size);
+    inset-block-start: calc(50% - var(--#{prefix.$cssVar}-toggle-thumb-size) / 2);
+    inset-inline-start: var(--#{prefix.$cssVar}-toggle-thumb-inset);
+    background-color: var(--#{prefix.$cssVar}-toggle-thumb-canvas);
+    border-color: var(--#{prefix.$cssVar}-toggle-thumb-border-color);
+    border-style: var(--#{prefix.$cssVar}-toggle-thumb-border-style);
+    border-width: var(--#{prefix.$cssVar}-toggle-thumb-border-width);
+    border-radius: var(--#{prefix.$cssVar}-toggle-thumb-radius);
+    box-shadow: var(--#{prefix.$cssVar}-toggle-thumb-shadow);
+    transform: var(--#{prefix.$cssVar}-toggle-thumb-transform);
+    transition-property: inset-inline-start, background-color, border-color, box-shadow, transform;
+    transition-duration: var(--#{prefix.$cssVar}-toggle-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-toggle-transition-timing-function);
+    transition-delay: var(--#{prefix.$cssVar}-toggle-transition-delay);
+  }
+
+  /* Checked / on — track fills, thumb travels to the far end */
+  label.zbk-toggle .zbk-toggle__input:checked + .zbk-toggle__track {
+    background-color: var(--#{prefix.$cssVar}-toggle-canvas-checked);
+    border-color: var(--#{prefix.$cssVar}-toggle-border-color-checked);
+    box-shadow: var(--#{prefix.$cssVar}-toggle-box-shadow-checked);
+  }
+
+  label.zbk-toggle .zbk-toggle__input:checked + .zbk-toggle__track::before {
+    inset-inline-start: calc(
+      100% - var(--#{prefix.$cssVar}-toggle-thumb-size) -
+        var(--#{prefix.$cssVar}-toggle-thumb-inset)
+    );
+    background-color: var(--#{prefix.$cssVar}-toggle-thumb-canvas-checked);
+    border-color: var(--#{prefix.$cssVar}-toggle-thumb-border-color-checked);
+    box-shadow: var(--#{prefix.$cssVar}-toggle-thumb-shadow-checked);
+    transform: var(--#{prefix.$cssVar}-toggle-thumb-transform-checked);
+  }
+
+  /* Hover (only on devices where hover is a real signal). Placed after the
+     checked rules so lift physics apply mid-travel too; the thumb's hover
+     color applies only while off so it can't fight the checked color. */
+  @media (hover: hover) and (pointer: fine) {
+    label.zbk-toggle .zbk-toggle__input:hover:not(:disabled) + .zbk-toggle__track {
+      background-color: var(--#{prefix.$cssVar}-toggle-canvas-hover);
+      border-color: var(--#{prefix.$cssVar}-toggle-border-color-hover);
+      box-shadow: var(--#{prefix.$cssVar}-toggle-box-shadow-hover);
+    }
+
+    label.zbk-toggle .zbk-toggle__input:hover:not(:disabled):checked + .zbk-toggle__track {
+      background-color: var(--#{prefix.$cssVar}-toggle-canvas-checked);
+      border-color: var(--#{prefix.$cssVar}-toggle-border-color-checked);
+    }
+
+    label.zbk-toggle .zbk-toggle__input:hover:not(:disabled) + .zbk-toggle__track::before {
+      box-shadow: var(--#{prefix.$cssVar}-toggle-thumb-shadow-hover);
+      transform: var(--#{prefix.$cssVar}-toggle-thumb-transform-hover);
+    }
+
+    label.zbk-toggle .zbk-toggle__input:hover:not(:disabled):not(:checked) + .zbk-toggle__track::before {
+      background-color: var(--#{prefix.$cssVar}-toggle-thumb-canvas-hover);
+    }
+  }
+
+  /* Active / pressed */
+  label.zbk-toggle .zbk-toggle__input:active:not(:disabled) + .zbk-toggle__track {
+    background-color: var(--#{prefix.$cssVar}-toggle-canvas-active);
+    border-color: var(--#{prefix.$cssVar}-toggle-border-color-active);
+    box-shadow: var(--#{prefix.$cssVar}-toggle-box-shadow-active);
+  }
+
+  label.zbk-toggle .zbk-toggle__input:active:not(:disabled):checked + .zbk-toggle__track {
+    background-color: var(--#{prefix.$cssVar}-toggle-canvas-checked);
+    border-color: var(--#{prefix.$cssVar}-toggle-border-color-checked);
+  }
+
+  label.zbk-toggle .zbk-toggle__input:active:not(:disabled) + .zbk-toggle__track::before {
+    box-shadow: var(--#{prefix.$cssVar}-toggle-thumb-shadow-active);
+    transform: var(--#{prefix.$cssVar}-toggle-thumb-transform-active);
+  }
+
+  /* Focus-visible (keyboard focus) */
+  label.zbk-toggle .zbk-toggle__input:focus-visible + .zbk-toggle__track {
+    outline: var(--#{prefix.$cssVar}-toggle-focus-width) solid
+      var(--#{prefix.$cssVar}-toggle-focus-color);
+    outline-offset: var(--#{prefix.$cssVar}-toggle-focus-offset);
+    box-shadow: var(--#{prefix.$cssVar}-toggle-box-shadow-focus);
+  }
+
+  /* Disabled */
+  label.zbk-toggle .zbk-toggle__input:disabled + .zbk-toggle__track {
+    background-color: var(--#{prefix.$cssVar}-toggle-canvas-disabled);
+    border-color: var(--#{prefix.$cssVar}-toggle-border-color-disabled);
+    box-shadow: none;
+    opacity: var(--#{prefix.$cssVar}-toggle-opacity-disabled);
+  }
+
+  label.zbk-toggle .zbk-toggle__input:disabled + .zbk-toggle__track::before {
+    background-color: var(--#{prefix.$cssVar}-toggle-thumb-canvas-disabled);
+    box-shadow: none;
+  }
+
+  label.zbk-toggle .zbk-toggle__input:disabled ~ .zbk-toggle__label {
+    color: var(--#{prefix.$cssVar}-toggle-ink-disabled);
+  }
+
+  /* Toggle groups */
+  .zbk-toggle-group {
+    display: flex;
+    flex-direction: var(--#{prefix.$cssVar}-toggle-group-direction);
+    gap: var(--#{prefix.$cssVar}-toggle-group-gap);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    label.zbk-toggle .zbk-toggle__track,
+    label.zbk-toggle .zbk-toggle__track::before {
+      transition: none;
+    }
+  }
+}

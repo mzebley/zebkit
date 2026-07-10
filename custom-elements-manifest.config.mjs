@@ -6,4 +6,16 @@ export default {
   exclude: ['src/components/**/*.test.ts', 'src/components/**/variants/**'],
   outdir: '.',
   litelement: true,
+  plugins: [
+    {
+      // Glob order follows the filesystem, so sort modules to keep the
+      // manifest byte-stable across runs (the drift check depends on it).
+      name: 'zebkit-stable-module-order',
+      packageLinkPhase({ customElementsManifest }) {
+        customElementsManifest.modules.sort((a, b) =>
+          a.path.localeCompare(b.path)
+        );
+      },
+    },
+  ],
 };

@@ -11,6 +11,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import type { TokenInterface } from '@definitions/tokens';
 import type { VariantConfig } from '@definitions/token-variants';
 import { convertDotNotation } from './token-converter';
+import { computeEmissionClosure } from './build-helpers';
 import { ZEBKIT_PREFIX } from '@config';
 import {
   assertShippedVariantsAreTokenOnly,
@@ -478,6 +479,34 @@ function buildVariantOutputs(
                 referenceErrors
               )
             : String(value);
+        declarations.push(`--${tokenKey}-${key}: ${resolvedValue};`);
+      }
+
+      // A CSS custom property inherits its already-substituted value, so a
+      // derived token declared at :root (e.g. `--zbk-toggle-thumb-size:
+      // var(--zbk-toggle-track-height)`) is locked to the base value and will
+      // NOT pick up a variant that only redeclares what it references.
+      // Re-emit every same-component token that transitively references an
+      // overridden one so the chain re-resolves at the variant's scope — the
+      // same closure the theme-overlay pipeline uses.
+      const closure = computeEmissionClosure(tokens, {
+        [tokenKey]: new Set(Object.keys(entry.overrides || {})),
+      });
+      for (const [key, sourceToken] of Object.entries(sourceTokens)) {
+        if (entry.overrides && key in entry.overrides) continue;
+        if (!closure.has(`${tokenKey}.${key}`)) continue;
+        const raw = sourceToken.value;
+        const resolvedValue =
+          typeof raw === 'string'
+            ? convertDotNotation(
+                raw,
+                sourceToken.type,
+                ZEBKIT_PREFIX,
+                tokens,
+                false,
+                referenceErrors
+              )
+            : String(raw);
         declarations.push(`--${tokenKey}-${key}: ${resolvedValue};`);
       }
 

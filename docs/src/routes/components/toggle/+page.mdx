@@ -1,0 +1,83 @@
+---
+title: Toggle
+description: The zebkit toggle — the APG switch pattern on a fully native input, with its own track and thumb token surfaces.
+layout: components
+---
+
+<script lang="ts">
+  import TokenTable from '$components/TokenTable.svelte';
+  import AgentContext from '$components/AgentContext.svelte';
+  import { compiledTokens } from '$data/compiled-tokens';
+  import { buildTokenRows } from '$lib/utils/token-docs';
+
+  const toggleTokenRows = buildTokenRows('zbk-toggle', compiledTokens['zbk-toggle']);
+</script>
+
+`<zbk-toggle>` wraps a real `<input type="checkbox" role="switch">` inside its own `<label>` — the APG switch pattern on a fully native input. It is deliberately a separate component from [`<zbk-checkbox>`](/components/checkbox): a switch is a track with a traveling thumb, announces as on/off, and represents an immediate state change rather than a form selection, so it carries its own token surface — track and thumb each get per-state tokens.
+
+## Live examples
+
+<div class="border border-app-muted rounded-lg p-4 canvas-app-soft">
+  <div class="zbk-toggle-group">
+    <zbk-toggle name="demo-notify" checked>Email me about updates</zbk-toggle>
+    <zbk-toggle name="demo-digest">Weekly digest</zbk-toggle>
+    <zbk-toggle name="demo-locked" disabled>Managed by your organization</zbk-toggle>
+    <zbk-toggle name="demo-sm" variant="sm">Small</zbk-toggle>
+    <zbk-toggle name="demo-lg" variant="lg">Large</zbk-toggle>
+  </div>
+</div>
+
+## Usage
+
+```html
+<zbk-toggle name="notifications" checked>Email me about updates</zbk-toggle>
+```
+
+Renders (light DOM, inspectable):
+
+```html
+<zbk-toggle name="notifications" checked>
+  <label class="zbk-toggle">
+    <input type="checkbox" role="switch" class="zbk-toggle__input" name="notifications" />
+    <span class="zbk-toggle__track" aria-hidden="true"></span>
+    <span class="zbk-toggle__label">Email me about updates</span>
+  </label>
+</zbk-toggle>
+```
+
+The thumb is the track's `::before` — fully token-driven, no extra markup. Form participation and events are native; listen for `change` on the element.
+
+## Geometry that derives itself
+
+The thumb (`thumb-size`) and pill radius (`border-radius`) default to `{toggle.track-height}`, and `thumb-inset` controls how the thumb sits against the border (negative rides over it). Resizing the track is the whole recipe — which is exactly what the `sm`/`lg` variants do:
+
+| Variant | Axis | Remaps |
+|---|---|---|
+| `sm` | size | Smaller track and label type; thumb follows. |
+| `lg` | size | Larger track and label type; thumb follows. |
+
+Thumb travel animates structurally from the geometry, which leaves the `thumb-transform` and `thumb-shadow` per-state tokens free for physics — a hover lift or press-down is a pure token edit:
+
+```css
+/* mz-svelte-style thumb physics, no component changes */
+.my-theme {
+  --zbk-toggle-thumb-shadow: 0 2px 0 var(--zbk-app-border-emphasis);
+  --zbk-toggle-thumb-transform-hover: translateY(-2px);
+  --zbk-toggle-thumb-transform-active: translateY(0);
+}
+```
+
+## Accessibility
+
+- `role="switch"` on a native checkbox announces on/off while checkedness, form participation, and events stay fully native.
+- Label text is the accessible name via the wrapping `<label>`; text-free toggles must provide `aria-label` (a nameless toggle warns in dev with the fix).
+- Write `aria-*` on `<zbk-toggle>` — they relocate to the inner `<input>`, and `focus()` forwards to it.
+- Thumb travel and state transitions honor `prefers-reduced-motion`.
+
+## Tokens
+
+<TokenTable rows={toggleTokenRows} showSwatch={true} />
+
+## For agents
+
+<AgentContext tag="zbk-toggle" />

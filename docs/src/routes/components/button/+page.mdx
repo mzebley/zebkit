@@ -1,6 +1,6 @@
 ---
 title: Button
-description: Zebkit's token-driven button component and utility patterns.
+description: The zebkit button — a light-DOM element wrapping a real button, styled entirely through tokens.
 layout: components
 ---
 
@@ -9,22 +9,68 @@ layout: components
   import TokenTable from '$components/TokenTable.svelte';
   import TokenPlayground from '$components/TokenPlayground.svelte';
   import TokenLookupDemo from '$components/TokenLookupDemo.svelte';
+  import AgentContext from '$components/AgentContext.svelte';
   import { buttonTokenRows, buttonTokenGroups } from '$data/button-docs';
 </script>
 
-Zebkit buttons provide a semantic, token-aligned call to action. Use them for primary flows, secondary actions, destructive confirmation, and inline controls while keeping styling driven entirely by CSS variables and utility classes.
+`<zbk-button>` wraps a real `<button>` in light DOM. The platform already ships the platonic button; the element completes the pattern — it renders the token-driven skeleton, reflects `variant` into classes, forwards native semantics, and adds the one behavior a native button lacks (`loading`). It carries zero visual opinion: every visual property is a `--zbk-button-*` token.
 
 ## Live examples
 
 <ButtonShowcase />
+
+## Usage
+
+```html
+<zbk-button variant="ghost lg" type="submit">
+  <svg slot="icon" viewBox="0 0 24 24">…</svg>
+  Save draft
+</zbk-button>
+```
+
+Renders (light DOM, inspectable):
+
+```html
+<zbk-button variant="ghost lg" type="submit">
+  <button class="zbk-button zbk-button--ghost zbk-button--lg" type="submit">
+    <span class="zbk-button__icon" aria-hidden="true"><svg>…</svg></span>
+    <span class="zbk-button__label">Save draft</span>
+  </button>
+</zbk-button>
+```
+
+The rendered classes are the compilation target — stable and inspectable — so `.zbk-button` also works standalone on a native `<button>` when you need styling without JS. The element form is the documented entry point.
+
+## Events
+
+None custom. The native `click` bubbles out of the light DOM on its own — listen for `click` on `<zbk-button>` like any element. Keyboard activation (Enter/Space) arrives as a click, so one listener covers everything.
+
+## Variants
+
+A variant is a named, partial remapping of the token surface, compiled to a class. Anything not overridden falls through to the base token, so re-theming your aliases re-themes every variant automatically.
+
+| Variant | Axis | Remaps |
+|---|---|---|
+| `ghost` | style | Transparent canvas + border; ink takes the action role. |
+| `outline` | style | Transparent canvas, action-colored border. |
+| `subtle` | style | Low-emphasis fill on the subtle action canvas. |
+| `sm` | size | Smaller type/padding. Keeps the 44px tap-target floor. |
+| `lg` | size | Larger type/padding. |
+
+Different axes compose (`variant="outline lg"`); same-axis combinations warn in dev and the later class wins.
+
+## Accessibility
+
+- Label text is the accessible name; icon-only buttons must provide `aria-label` (a nameless button warns in dev with the fix).
+- Write `aria-*`/`role` on `<zbk-button>` as if it were the button — they relocate to the inner `<button>` automatically.
+- `loading` sets `aria-busy` and suppresses activation but keeps the button focusable, so keyboard and screen-reader users don't lose their place mid-operation.
+- Focus styles ride `:focus-visible` with the shared focus tokens.
 
 ## Tokens
 
 <TokenTable rows={buttonTokenRows} showSwatch={true} />
 
 ## Token alias lookup
-
-Use the lookup to see how any button alias resolves to a CSS custom property at runtime.
 
 <TokenLookupDemo
   prefix="button."
@@ -33,90 +79,20 @@ Use the lookup to see how any button alias resolves to a CSS custom property at 
   description="Select any button alias to see the compiled CSS custom property."
 />
 
-## Usage
-
-You can use the custom element (`<zbk-button>`) or apply the `.zbk-button` class to a native `<button>`. The web component wraps an inner button, mirrors classes, and syncs accessibility attributes so both approaches share the same styling and semantics.
-
-```html
-<zbk-button>
-  Save changes
-</zbk-button>
-
-<!-- Semantic HTML without the custom element -->
-<button class="zbk-button">Save changes</button>
-```
-
-### Variants and composition
-
-- Base appearance comes from component tokens (`--zbk-button-background`, `--zbk-button-foreground`, `--zbk-button-border-color`).
-- State tokens drive interaction: `--zbk-button-background-hover`, `--zbk-button-foreground-active`, and focus ring tokens like `--zbk-button-focus-color` and `--zbk-button-border-width`.
-- Layout tokens keep tap targets consistent: `--zbk-button-min-height`, `--zbk-button-padding-x`, and `--zbk-button-padding-y` ensure a minimum 44px hit area.
-
-Use color utilities to align the component with the active palette, or override component tokens inline for quick experiments:
-
-```html
-<zbk-button class="canvas-brand ink-brand focus:border-brand-inverse">
-  <span class="zbk-button__icon" aria-hidden="true">*</span>
-  Primary
-</zbk-button>
-
-<button
-  class="zbk-button"
-  style="--zbk-button-background: var(--zbk-color-brand-500); --zbk-button-border-radius: var(--zbk-spacing-05);"
->
-  Token-tuned button
-</button>
-```
-
 ## Token playground
 
 <TokenPlayground
   title="Button token overrides"
-  description="Adjust button primitives live and copy the generated CSS overrides."
+  description="Adjust button tokens live and copy the generated CSS overrides."
   groups={buttonTokenGroups}
 >
-  <div style="display: grid; gap: 1rem;">
+  <div style="display: grid; gap: 1rem; justify-items: start;">
     <zbk-button>Primary action</zbk-button>
     <zbk-button variant="outline">Outline action</zbk-button>
     <button class="zbk-button">Semantic HTML with .zbk-button</button>
   </div>
 </TokenPlayground>
 
-## States
+## For agents
 
-Button styles react to standard interaction and accessibility states:
-
-- **Hover**: applies `--zbk-button-foreground-hover`, `--zbk-button-background-hover`, and `--zbk-button-border-color-hover`.
-- **Active/pressed**: uses `--zbk-button-foreground-active`, `--zbk-button-background-hover`, and the selected border color token.
-- **Focus-visible**: draws an outline from `--zbk-button-focus-color`, width, and offset tokens plus any `--zbk-button-box-shadow-focus` hooks.
-- **Disabled**: both native `disabled` and `aria-disabled="true"` routes share the disabled color tokens, remove shadows, and prevent pointer events.
-
-## Accessibility
-
-- The custom element mirrors accessibility attributes (`aria-label`, `aria-describedby`, `aria-pressed`, `aria-expanded`, `aria-controls`, `role`, `tabindex`) to the inner button, so consumers can set them on the host.
-- Focus styles rely on `:focus-visible` to avoid outlining mouse clicks while remaining keyboard-obvious.
-- Disabled handling respects both native disabling and `aria-disabled` for situations where you need to prevent activation but maintain focusability.
-
-## Token overview
-
-Button tokens are exposed as `--zbk-button-*` CSS custom properties and map back to component defaults:
-
-- **Color + background**: `foreground`, `foreground-hover`, `foreground-active`, `foreground-disabled`, `background`, `background-hover`, `background-active`, `background-disabled`, `border-color` (+ hover/selected/disabled).
-- **Geometry**: `border-width`, `border-style`, `border-radius`, plus padding tokens (`padding-inline` via `--zbk-button-padding-x`, `padding-block` via `--zbk-button-padding-y`), directional overrides, spacing like `--zbk-button-gap`, and `--zbk-button-icon-font-size`.
-- **Typography**: `font-family`, `font-size`, `font-weight`, `line-height`, `letter-spacing`, `text-transform`, `text-decoration`, `text-align`.
-- **Layout + interaction**: sizing tokens (`min-width`, `min-height`), cursor, flex alignment, transitions, shadows, opacity, and `--zbk-button-raised-amount` for the raised variant.
-- **Focus**: `--zbk-button-focus-color`, `--zbk-button-focus-width`, and offsets control the outline.
-
-Override tokens globally or per-instance to retheme buttons without changing markup.
-
-## Design guidelines
-
-- **Primary vs. secondary**: reserve brand or accent-primary canvases for primary actions; use app or action tokens for secondary buttons so hierarchy stays clear.
-- **Destructive actions**: combine critical tokens with the button component when the outcome is irreversible. Pair critical ink with inverse variants to keep text legible on strong canvases.
-- **Density**: adjust padding tokens rather than font sizes to keep tap targets above 44px while matching layout rhythm.
-
-## Implementation notes
-
-- The component observes the `variant` attribute and mirrors host classes onto the inner button, so utility classes and variant flags stay in sync across both elements.
-- Button groups can rely on `.zbk-button-group` and the `--zbk-button-group-gap` token for consistent spacing between stacked or inline buttons.
-- All styling flows through CSS variables; prefer overriding tokens (via inline styles or theme layers) instead of editing the component stylesheet.
+<AgentContext tag="zbk-button" />

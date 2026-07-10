@@ -21,8 +21,8 @@ const CUSTOM_PROPERTY = /--[\w-]+/g;
 const ZBK_TOKEN = /--zbk-[\w-]+/g;
 /** Signals a project consumes zebkit's Lit components (shadow styles read tokens a src scan can't see). */
 const COMPONENT_IMPORT = /zebkit\/components/;
-/** Component custom-element tags: `<zbk-button>`, `<z-checkbox>`, `<z-radio>`, … (over-detection is safe). */
-const COMPONENT_TAG = /<\/?(?:z|zbk)-[a-z][\w-]*/i;
+/** Component custom-element tags: `<zbk-button>`, `<zbk-checkbox>`, `<zbk-radio>`, … (over-detection is safe). */
+const COMPONENT_TAG = /<\/?zbk-[a-z][\w-]*/i;
 
 const IGNORED_GLOBS = ['**/node_modules/**', '**/.git/**'];
 
@@ -70,7 +70,7 @@ export interface ContentScanResult {
   tokenRoots: Set<string>;
   /** Number of content files scanned (report `content.files`). */
   files: number;
-  /** True when a content file imports `zebkit/components` or uses a `<z-…>`/`<zbk-…>` tag. */
+  /** True when a content file imports `zebkit/components` or uses a `<zbk-…>` tag. */
   usesComponents: boolean;
 }
 

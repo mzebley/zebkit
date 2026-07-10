@@ -4,12 +4,392 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/components/index.ts",
+      "path": "src/components/base/announce.ts",
       "declarations": [
         {
           "kind": "function",
-          "name": "defineZebkitComponents",
-          "description": "Register every zebkit component (each define is idempotent)."
+          "name": "announce",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "parameters": [
+            {
+              "name": "message",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "options",
+              "default": "{}",
+              "type": {
+                "text": "AnnounceOptions"
+              }
+            }
+          ],
+          "description": "Announce `message` to assistive tech via the shared live region."
+        },
+        {
+          "kind": "function",
+          "name": "resetAnnouncer",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "description": "Remove the mounted live regions (handy for tests / teardown)."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "announce",
+          "declaration": {
+            "name": "announce",
+            "module": "src/components/base/announce.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "resetAnnouncer",
+          "declaration": {
+            "name": "resetAnnouncer",
+            "module": "src/components/base/announce.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/base/zebkit-element.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ZebkitElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "componentName",
+              "type": {
+                "text": "string"
+              },
+              "static": true,
+              "default": "''",
+              "description": "The pattern's common name in kebab-case, e.g. \"button\". Set per subclass."
+            },
+            {
+              "kind": "field",
+              "name": "variantConfigs",
+              "type": {
+                "text": "ReadonlyArray<VariantConfig>"
+              },
+              "static": true,
+              "default": "[]",
+              "description": "Variant configs registered for this component (its ./variants module)."
+            },
+            {
+              "kind": "field",
+              "name": "warnings",
+              "type": {
+                "text": "boolean"
+              },
+              "static": true,
+              "default": "true",
+              "description": "Dev diagnostics switch. Warnings name the fix (see GRAMMAR.md §9); silence\nthem wholesale in production builds if desired."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
+              "attribute": "variant"
+            },
+            {
+              "kind": "field",
+              "name": "zbkUid",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "++uidCounter"
+            },
+            {
+              "kind": "field",
+              "name": "adopted",
+              "type": {
+                "text": "AdoptedChildren | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "ariaObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "relocatingAria",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "componentName",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "baseClass",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "componentClasses",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "description": "`zbk-{component}` plus one `zbk-{component}--{name}` per applied variant.\nSubclass templates bind this to the skeleton's root native element.",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "uidFor",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "suffix",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Generate a document-unique id for internal ARIA relationships."
+            },
+            {
+              "kind": "method",
+              "name": "parsedVariantNames",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "appliedVariants",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VariantConfig[]"
+                }
+              },
+              "description": "The registered VariantConfigs matching the `variant` attribute, in order."
+            },
+            {
+              "kind": "method",
+              "name": "validateVariants",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Validate the `variant` attribute; every warning names the fix."
+            },
+            {
+              "kind": "field",
+              "name": "nativeElement",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "privacy": "protected",
+              "description": "The internal native element that carries the pattern's semantics (the\n`<button>` inside `<zbk-button>`). ARIA relocates here; focus forwards here.",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "focusTarget",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "privacy": "protected",
+              "description": "Override when the focus target differs from the ARIA target.",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "focus",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "options",
+                  "optional": true,
+                  "type": {
+                    "text": "FocusOptions"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "blur",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "relocateAria",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Move `aria-*` and `role` from the host to the internal native element.\nThe host stays role-generic; AT reads the native element."
+            },
+            {
+              "kind": "method",
+              "name": "observeAria",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "captureChildren",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Capture authored children before Lit's first render so the component can\nplace them inside the skeleton it renders. Named positions use the `slot`\nattribute; everything else is default content."
+            },
+            {
+              "kind": "method",
+              "name": "slotted",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "Node[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Authored content for a named slot (or the default content when omitted)."
+            },
+            {
+              "kind": "method",
+              "name": "hasSlotted",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "True when the author supplied content for the given position."
+            },
+            {
+              "kind": "method",
+              "name": "warn",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "`[zbk-button] <message>` — every message names the fix (GRAMMAR.md §9)."
+            },
+            {
+              "kind": "method",
+              "name": "hasAccessibleName",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Rough accessible-name computation for the dev-mode nameless-control check:\nvisible text, aria-label, or aria-labelledby on the native element."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
+              "fieldName": "variant"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
         }
       ],
       "exports": [
@@ -18,111 +398,7 @@
           "name": "ZebkitElement",
           "declaration": {
             "name": "ZebkitElement",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "announce",
-          "declaration": {
-            "name": "announce",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "resetAnnouncer",
-          "declaration": {
-            "name": "resetAnnouncer",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ZbkButton",
-          "declaration": {
-            "name": "ZbkButton",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "defineZbkButton",
-          "declaration": {
-            "name": "defineZbkButton",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ZbkTooltip",
-          "declaration": {
-            "name": "ZbkTooltip",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "defineZbkTooltip",
-          "declaration": {
-            "name": "defineZbkTooltip",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ZCheckbox",
-          "declaration": {
-            "name": "ZCheckbox",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "defineZCheckbox",
-          "declaration": {
-            "name": "defineZCheckbox",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ZRadio",
-          "declaration": {
-            "name": "ZRadio",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "defineZRadio",
-          "declaration": {
-            "name": "defineZRadio",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ZbkHeading",
-          "declaration": {
-            "name": "ZbkHeading",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "defineZbkHeading",
-          "declaration": {
-            "name": "defineZbkHeading",
-            "module": "src/components/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "defineZebkitComponents",
-          "declaration": {
-            "name": "defineZebkitComponents",
-            "module": "src/components/index.ts"
+            "module": "src/components/base/zebkit-element.ts"
           }
         }
       ]
@@ -133,8 +409,18 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "",
+          "description": "The zebkit button: a light-DOM element wrapping a real `<button>`. Renders\nthe token-driven skeleton, reflects `variant` into classes, forwards native\nsemantics, and adds the one behavior a native button lacks (`loading`).\nNo custom events — the native `click` bubbles, and keyboard activation\n(Enter/Space) arrives as a click.",
           "name": "ZbkButton",
+          "slots": [
+            {
+              "description": "The button's label content (its accessible name).",
+              "name": ""
+            },
+            {
+              "description": "A supplementary pictogram, rendered aria-hidden beside the label.",
+              "name": "icon"
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -282,6 +568,7 @@
                 "text": "string"
               },
               "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
               "attribute": "variant",
               "inheritedFrom": {
                 "name": "ZebkitElement",
@@ -668,6 +955,7 @@
                 "text": "string"
               },
               "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
               "fieldName": "variant",
               "inheritedFrom": {
                 "name": "ZebkitElement",
@@ -726,109 +1014,376 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "",
-          "name": "ZCheckbox",
+          "description": "The zebkit checkbox: a light-DOM element wrapping a real\n`<input type=\"checkbox\">` inside its own `<label>`. The invisible native\ninput stretches across the whole label (hover, press, click, and focus land\non it natively anywhere); an aria-hidden control span visualizes its state.\nNo custom events — the native `change`/`input` bubble.",
+          "name": "ZbkCheckbox",
+          "slots": [
+            {
+              "description": "The label content (the accessible name via the wrapping label).",
+              "name": ""
+            },
+            {
+              "description": "Indicator content shown while checked; replaces the drawn checkmark. Presentational (the control is aria-hidden).",
+              "name": "checked"
+            },
+            {
+              "description": "Indicator content shown while neither checked nor indeterminate.",
+              "name": "unchecked"
+            },
+            {
+              "description": "Indicator content shown while indeterminate; replaces the drawn bar.",
+              "name": "indeterminate"
+            }
+          ],
           "members": [
             {
               "kind": "field",
-              "name": "input",
+              "name": "componentName",
               "type": {
-                "text": "HTMLInputElement"
+                "text": "string"
               },
-              "privacy": "private",
-              "default": "shadow.querySelector( \"input.z-checkbox__input\" )"
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "HTMLLabelElement"
-              },
-              "privacy": "private",
-              "default": "shadow.querySelector(\"label.z-checkbox\")"
-            },
-            {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver | undefined"
-              },
-              "privacy": "private",
-              "default": "new MutationObserver((mutations) => { for (const mutation of mutations) { if (mutation.type === \"attributes\" && mutation.attributeName) { this.reflectClassToLabel(mutation.attributeName); } } })"
-            },
-            {
-              "kind": "field",
-              "name": "mirroredBooleanAttributes",
-              "privacy": "private",
-              "static": true,
+              "privacy": "protected",
               "readonly": true,
-              "default": "[ \"checked\", \"indeterminate\", \"disabled\", \"required\", ]",
-              "type": {
-                "text": "[\n    \"checked\",\n    \"indeterminate\",\n    \"disabled\",\n    \"required\",\n  ]"
+              "static": true,
+              "default": "'checkbox'",
+              "description": "The pattern's common name in kebab-case, e.g. \"button\". Set per subclass.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
               }
             },
             {
               "kind": "field",
-              "name": "mirroredStringAttributes",
-              "privacy": "private",
-              "static": true,
-              "readonly": true,
-              "default": "[ \"name\", \"value\", \"tabindex\", ]",
+              "name": "variantConfigs",
               "type": {
-                "text": "[\n    \"name\",\n    \"value\",\n    \"tabindex\",\n  ]"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "accessibilityAttributes",
-              "type": {
-                "text": "array"
+                "text": "ReadonlyArray<VariantConfig>"
               },
-              "privacy": "private",
               "static": true,
-              "readonly": true,
-              "default": "[ \"aria-label\", \"aria-labelledby\", \"aria-describedby\", \"aria-controls\", \"aria-checked\", \"aria-required\", \"aria-invalid\", \"aria-disabled\", \"aria-expanded\", \"role\", ]"
+              "default": "checkboxVariants",
+              "description": "Variant configs registered for this component (its ./variants module).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
             },
             {
               "kind": "field",
               "name": "checked",
+              "privacy": "public",
               "type": {
                 "text": "boolean"
-              }
+              },
+              "default": "false",
+              "description": "Whether the checkbox is checked. Syncs from user interaction.",
+              "attribute": "checked"
             },
             {
               "kind": "field",
               "name": "indeterminate",
+              "privacy": "public",
               "type": {
                 "text": "boolean"
-              }
+              },
+              "default": "false",
+              "description": "The mixed \"some but not all\" state. Visual + AT state only, never\nsubmitted; any user toggle clears it (native behavior).",
+              "attribute": "indeterminate"
             },
             {
               "kind": "field",
               "name": "disabled",
+              "privacy": "public",
               "type": {
                 "text": "boolean"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              }
+              },
+              "default": "false",
+              "description": "Native disabled: removed from the tab order, blocks all interaction.",
+              "attribute": "disabled"
             },
             {
               "kind": "field",
               "name": "required",
+              "privacy": "public",
               "type": {
                 "text": "boolean"
+              },
+              "default": "false",
+              "description": "Forwarded for native constraint validation.",
+              "attribute": "required"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "privacy": "public",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Forwarded to the internal input for native form participation.",
+              "attribute": "name"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "default": "'on'",
+              "description": "The submitted value; defaults to the platform's \"on\".",
+              "attribute": "value"
+            },
+            {
+              "kind": "field",
+              "name": "nativeElement",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "privacy": "protected",
+              "description": "The internal native element that carries the pattern's semantics (the\n`<button>` inside `<zbk-button>`). ARIA relocates here; focus forwards here.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "controlClasses",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "description": "A `--slotted-{state}` modifier per authored indicator lets the stylesheet\nretire the drawn pseudo the slotted content replaces."
+            },
+            {
+              "kind": "method",
+              "name": "renderIndicator",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "TemplateResult | typeof nothing"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "'checked' | 'unchecked' | 'indeterminate'"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Keep element state mirroring the native input (the source of truth)."
+            },
+            {
+              "kind": "method",
+              "name": "hasAccessibleName",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "The wrapping label names the control; check adopted content too.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "warnings",
+              "type": {
+                "text": "boolean"
+              },
+              "static": true,
+              "default": "true",
+              "description": "Dev diagnostics switch. Warnings name the fix (see GRAMMAR.md §9); silence\nthem wholesale in production builds if desired.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
+              "attribute": "variant",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "zbkUid",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "++uidCounter",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "adopted",
+              "type": {
+                "text": "AdoptedChildren | undefined"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "ariaObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "relocatingAria",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "baseClass",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "componentClasses",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "description": "`zbk-{component}` plus one `zbk-{component}--{name}` per applied variant.\nSubclass templates bind this to the skeleton's root native element.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "uidFor",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "suffix",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Generate a document-unique id for internal ARIA relationships.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "parsedVariantNames",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "appliedVariants",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VariantConfig[]"
+                }
+              },
+              "description": "The registered VariantConfigs matching the `variant` attribute, in order.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "validateVariants",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Validate the `variant` attribute; every warning names the fix.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusTarget",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "privacy": "protected",
+              "description": "Override when the focus target differs from the ARIA target.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
               }
             },
             {
@@ -847,132 +1402,249 @@
                     "text": "FocusOptions"
                   }
                 }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleClick",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleInputChange",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "syncFromAttributes",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
+              ],
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
               }
             },
             {
               "kind": "method",
-              "name": "reflectClassToLabel",
+              "name": "blur",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "relocateAria",
               "privacy": "private",
               "return": {
                 "type": {
                   "text": "void"
                 }
               },
+              "description": "Move `aria-*` and `role` from the host to the internal native element.\nThe host stays role-generic; AT reads the native element.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "observeAria",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "captureChildren",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Capture authored children before Lit's first render so the component can\nplace them inside the skeleton it renders. Named positions use the `slot`\nattribute; everything else is default content.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "slotted",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "Node[]"
+                }
+              },
               "parameters": [
                 {
-                  "name": "attributeName",
+                  "name": "name",
+                  "optional": true,
                   "type": {
                     "text": "string"
                   }
                 }
-              ]
+              ],
+              "description": "Authored content for a named slot (or the default content when omitted).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
             },
             {
               "kind": "method",
-              "name": "reflectAllClasses",
-              "privacy": "private",
+              "name": "hasSlotted",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "True when the author supplied content for the given position.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "warn",
+              "privacy": "protected",
               "return": {
                 "type": {
                   "text": "void"
                 }
+              },
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "`[zbk-button] <message>` — every message names the fix (GRAMMAR.md §9).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
               }
             }
           ],
-          "events": [
+          "attributes": [
             {
-              "name": "z-change",
+              "name": "checked",
               "type": {
-                "text": "CustomEvent"
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is checked. Syncs from user interaction.",
+              "fieldName": "checked"
+            },
+            {
+              "name": "indeterminate",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "The mixed \"some but not all\" state. Visual + AT state only, never\nsubmitted; any user toggle clears it (native behavior).",
+              "fieldName": "indeterminate"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Native disabled: removed from the tab order, blocks all interaction.",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Forwarded for native constraint validation.",
+              "fieldName": "required"
+            },
+            {
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Forwarded to the internal input for native form participation.",
+              "fieldName": "name"
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "'on'",
+              "description": "The submitted value; defaults to the platform's \"on\".",
+              "fieldName": "value"
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
+              "fieldName": "variant",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
               }
             }
           ],
           "superclass": {
-            "name": "HTMLElement"
+            "name": "ZebkitElement",
+            "module": "/src/components/base/zebkit-element"
           },
-          "tagName": "z-checkbox",
+          "tagName": "zbk-checkbox",
           "customElement": true
         },
         {
           "kind": "function",
-          "name": "defineZCheckbox"
+          "name": "defineZbkCheckbox",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "description": "Register <zbk-checkbox> (idempotent)."
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "ZCheckbox",
+          "name": "ZbkCheckbox",
           "declaration": {
-            "name": "ZCheckbox",
+            "name": "ZbkCheckbox",
             "module": "src/components/checkbox/index.ts"
           }
         },
         {
           "kind": "js",
-          "name": "defineZCheckbox",
+          "name": "defineZbkCheckbox",
           "declaration": {
-            "name": "defineZCheckbox",
+            "name": "defineZbkCheckbox",
             "module": "src/components/checkbox/index.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "z-checkbox",
+          "name": "zbk-checkbox",
           "declaration": {
-            "name": "ZCheckbox",
-            "module": "src/components/checkbox/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "ZCheckbox",
+            "name": "ZbkCheckbox",
             "module": "src/components/checkbox/index.ts"
           }
         }
@@ -1143,106 +1815,516 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/index.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "defineZebkitComponents",
+          "description": "Register every zebkit component (each define is idempotent)."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ZebkitElement",
+          "declaration": {
+            "name": "ZebkitElement",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "announce",
+          "declaration": {
+            "name": "announce",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "resetAnnouncer",
+          "declaration": {
+            "name": "resetAnnouncer",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ZbkButton",
+          "declaration": {
+            "name": "ZbkButton",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineZbkButton",
+          "declaration": {
+            "name": "defineZbkButton",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ZbkTooltip",
+          "declaration": {
+            "name": "ZbkTooltip",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineZbkTooltip",
+          "declaration": {
+            "name": "defineZbkTooltip",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ZbkCheckbox",
+          "declaration": {
+            "name": "ZbkCheckbox",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineZbkCheckbox",
+          "declaration": {
+            "name": "defineZbkCheckbox",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ZbkRadio",
+          "declaration": {
+            "name": "ZbkRadio",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineZbkRadio",
+          "declaration": {
+            "name": "defineZbkRadio",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ZbkToggle",
+          "declaration": {
+            "name": "ZbkToggle",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineZbkToggle",
+          "declaration": {
+            "name": "defineZbkToggle",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ZbkHeading",
+          "declaration": {
+            "name": "ZbkHeading",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineZbkHeading",
+          "declaration": {
+            "name": "defineZbkHeading",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineZebkitComponents",
+          "declaration": {
+            "name": "defineZebkitComponents",
+            "module": "src/components/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/radio/index.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "",
-          "name": "ZRadio",
+          "description": "The zebkit radio: a light-DOM element wrapping a real\n`<input type=\"radio\">` inside its own `<label>`. Radios sharing a `name`\nform a native group — mutual exclusion, arrow-key navigation, and form\nsubmission come from the platform. No custom events — the native `change`\nbubbles from the newly selected input.",
+          "name": "ZbkRadio",
+          "slots": [
+            {
+              "description": "The label content (the accessible name via the wrapping label).",
+              "name": ""
+            },
+            {
+              "description": "Indicator content shown while selected; replaces the drawn dot. Presentational (the control is aria-hidden).",
+              "name": "checked"
+            },
+            {
+              "description": "Indicator content shown while not selected.",
+              "name": "unchecked"
+            }
+          ],
           "members": [
             {
               "kind": "field",
-              "name": "input",
+              "name": "componentName",
               "type": {
-                "text": "HTMLInputElement"
+                "text": "string"
               },
-              "privacy": "private",
-              "default": "shadow.querySelector(\"input.z-radio__input\")"
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "HTMLLabelElement"
-              },
-              "privacy": "private",
-              "default": "shadow.querySelector(\"label.z-radio\")"
-            },
-            {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver | undefined"
-              },
-              "privacy": "private",
-              "default": "new MutationObserver((mutations) => { for (const mutation of mutations) { if (mutation.type === \"attributes\" && mutation.attributeName) { this.reflectClassToLabel(mutation.attributeName); } } })"
-            },
-            {
-              "kind": "field",
-              "name": "mirroredBooleanAttributes",
-              "privacy": "private",
-              "static": true,
+              "privacy": "protected",
               "readonly": true,
-              "default": "[ \"checked\", \"disabled\", \"required\", ]",
-              "type": {
-                "text": "[\n    \"checked\",\n    \"disabled\",\n    \"required\",\n  ]"
+              "static": true,
+              "default": "'radio'",
+              "description": "The pattern's common name in kebab-case, e.g. \"button\". Set per subclass.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
               }
             },
             {
               "kind": "field",
-              "name": "mirroredStringAttributes",
-              "privacy": "private",
-              "static": true,
-              "readonly": true,
-              "default": "[ \"name\", \"value\", \"tabindex\", ]",
+              "name": "variantConfigs",
               "type": {
-                "text": "[\n    \"name\",\n    \"value\",\n    \"tabindex\",\n  ]"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "accessibilityAttributes",
-              "type": {
-                "text": "array"
+                "text": "ReadonlyArray<VariantConfig>"
               },
-              "privacy": "private",
               "static": true,
-              "readonly": true,
-              "default": "[ \"aria-label\", \"aria-labelledby\", \"aria-describedby\", \"aria-controls\", \"aria-checked\", \"aria-required\", \"aria-invalid\", \"aria-disabled\", \"aria-expanded\", \"role\", ]"
+              "default": "radioVariants",
+              "description": "Variant configs registered for this component (its ./variants module).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
             },
             {
               "kind": "field",
               "name": "checked",
+              "privacy": "public",
               "type": {
                 "text": "boolean"
-              }
+              },
+              "default": "false",
+              "description": "Whether this radio is the group's selection. Syncs from user interaction.",
+              "attribute": "checked"
             },
             {
               "kind": "field",
               "name": "disabled",
+              "privacy": "public",
               "type": {
                 "text": "boolean"
-              }
+              },
+              "default": "false",
+              "description": "Native disabled: removed from the tab order, blocks all interaction.",
+              "attribute": "disabled"
             },
             {
               "kind": "field",
               "name": "required",
+              "privacy": "public",
               "type": {
                 "text": "boolean"
-              }
+              },
+              "default": "false",
+              "description": "Forwarded for native constraint validation.",
+              "attribute": "required"
             },
             {
               "kind": "field",
               "name": "name",
+              "privacy": "public",
               "type": {
-                "text": "string"
-              }
+                "text": "string | undefined"
+              },
+              "description": "The group key. Radios only behave as one group when they share a name.",
+              "attribute": "name"
             },
             {
               "kind": "field",
               "name": "value",
+              "privacy": "public",
               "type": {
                 "text": "string"
+              },
+              "default": "'on'",
+              "description": "This option's submitted value; defaults to the platform's \"on\".",
+              "attribute": "value"
+            },
+            {
+              "kind": "field",
+              "name": "nativeElement",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "privacy": "protected",
+              "description": "The internal native element that carries the pattern's semantics (the\n`<button>` inside `<zbk-button>`). ARIA relocates here; focus forwards here.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "controlClasses",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "description": "A `--slotted-{state}` modifier per authored indicator lets the stylesheet\nretire the drawn dot the slotted content replaces."
+            },
+            {
+              "kind": "method",
+              "name": "renderIndicator",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "TemplateResult | typeof nothing"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "'checked' | 'unchecked'"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "The platform already unchecked the rest of the group; it just doesn't\nfire events on them. Mirror the native state back onto every zbk-radio\nsharing this group so their `checked` properties stay truthful."
+            },
+            {
+              "kind": "method",
+              "name": "syncFromNative",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Re-read `checked` from the native input (the source of truth)."
+            },
+            {
+              "kind": "method",
+              "name": "hasAccessibleName",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "The wrapping label names the control; check adopted content too.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "warnings",
+              "type": {
+                "text": "boolean"
+              },
+              "static": true,
+              "default": "true",
+              "description": "Dev diagnostics switch. Warnings name the fix (see GRAMMAR.md §9); silence\nthem wholesale in production builds if desired.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
+              "attribute": "variant",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "zbkUid",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "++uidCounter",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "adopted",
+              "type": {
+                "text": "AdoptedChildren | undefined"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "ariaObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "relocatingAria",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "baseClass",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "componentClasses",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "description": "`zbk-{component}` plus one `zbk-{component}--{name}` per applied variant.\nSubclass templates bind this to the skeleton's root native element.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "uidFor",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "suffix",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Generate a document-unique id for internal ARIA relationships.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "parsedVariantNames",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "appliedVariants",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VariantConfig[]"
+                }
+              },
+              "description": "The registered VariantConfigs matching the `variant` attribute, in order.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "validateVariants",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Validate the `variant` attribute; every warning names the fix.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusTarget",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "privacy": "protected",
+              "description": "Override when the focus target differs from the ARIA target.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
               }
             },
             {
@@ -1261,153 +2343,822 @@
                     "text": "FocusOptions"
                   }
                 }
-              ]
+              ],
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
             },
             {
               "kind": "method",
-              "name": "handleClick",
+              "name": "blur",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "relocateAria",
               "privacy": "private",
               "return": {
                 "type": {
                   "text": "void"
                 }
               },
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
+              "description": "Move `aria-*` and `role` from the host to the internal native element.\nThe host stays role-generic; AT reads the native element.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
             },
             {
               "kind": "method",
-              "name": "handleInputChange",
+              "name": "observeAria",
               "privacy": "private",
               "return": {
                 "type": {
                   "text": "void"
                 }
               },
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "uncheckOtherRadiosInGroup",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
               }
             },
             {
               "kind": "method",
-              "name": "getRadioGroupRoot",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "ParentNode"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "syncFromAttributes",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "reflectClassToLabel",
+              "name": "captureChildren",
               "privacy": "private",
               "return": {
                 "type": {
                   "text": "void"
                 }
               },
+              "description": "Capture authored children before Lit's first render so the component can\nplace them inside the skeleton it renders. Named positions use the `slot`\nattribute; everything else is default content.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "slotted",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "Node[]"
+                }
+              },
               "parameters": [
                 {
-                  "name": "attributeName",
+                  "name": "name",
+                  "optional": true,
                   "type": {
                     "text": "string"
                   }
                 }
-              ]
+              ],
+              "description": "Authored content for a named slot (or the default content when omitted).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
             },
             {
               "kind": "method",
-              "name": "reflectAllClasses",
-              "privacy": "private",
+              "name": "hasSlotted",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "True when the author supplied content for the given position.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "warn",
+              "privacy": "protected",
               "return": {
                 "type": {
                   "text": "void"
                 }
+              },
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "`[zbk-button] <message>` — every message names the fix (GRAMMAR.md §9).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
               }
             }
           ],
-          "events": [
+          "attributes": [
             {
-              "name": "z-change",
+              "name": "checked",
               "type": {
-                "text": "CustomEvent"
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this radio is the group's selection. Syncs from user interaction.",
+              "fieldName": "checked"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Native disabled: removed from the tab order, blocks all interaction.",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Forwarded for native constraint validation.",
+              "fieldName": "required"
+            },
+            {
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The group key. Radios only behave as one group when they share a name.",
+              "fieldName": "name"
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "'on'",
+              "description": "This option's submitted value; defaults to the platform's \"on\".",
+              "fieldName": "value"
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
+              "fieldName": "variant",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
               }
             }
           ],
           "superclass": {
-            "name": "HTMLElement"
+            "name": "ZebkitElement",
+            "module": "/src/components/base/zebkit-element"
           },
-          "tagName": "z-radio",
+          "tagName": "zbk-radio",
           "customElement": true
         },
         {
           "kind": "function",
-          "name": "defineZRadio"
+          "name": "defineZbkRadio",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "description": "Register <zbk-radio> (idempotent)."
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "ZRadio",
+          "name": "ZbkRadio",
           "declaration": {
-            "name": "ZRadio",
+            "name": "ZbkRadio",
             "module": "src/components/radio/index.ts"
           }
         },
         {
           "kind": "js",
-          "name": "defineZRadio",
+          "name": "defineZbkRadio",
           "declaration": {
-            "name": "defineZRadio",
+            "name": "defineZbkRadio",
             "module": "src/components/radio/index.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "z-radio",
+          "name": "zbk-radio",
           "declaration": {
-            "name": "ZRadio",
+            "name": "ZbkRadio",
             "module": "src/components/radio/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/toggle/index.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "The zebkit toggle (switch): a light-DOM element wrapping a real\n`<input type=\"checkbox\" role=\"switch\">` inside its own `<label>` — the APG\nswitch pattern on a fully native input. A track with a traveling thumb that\nannounces on/off; deliberately separate from `<zbk-checkbox>` so each\ncarries an intentional token surface. No custom events — the native\n`change`/`input` bubble.",
+          "name": "ZbkToggle",
+          "slots": [
+            {
+              "description": "The label content (the accessible name via the wrapping label).",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "componentName",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "readonly": true,
+              "static": true,
+              "default": "'toggle'",
+              "description": "The pattern's common name in kebab-case, e.g. \"button\". Set per subclass.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variantConfigs",
+              "type": {
+                "text": "ReadonlyArray<VariantConfig>"
+              },
+              "static": true,
+              "default": "toggleVariants",
+              "description": "Variant configs registered for this component (its ./variants module).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the toggle is on. Syncs from user interaction.",
+              "attribute": "checked"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Native disabled: removed from the tab order, blocks all interaction.",
+              "attribute": "disabled"
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Forwarded for native constraint validation.",
+              "attribute": "required"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "privacy": "public",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Forwarded to the internal input for native form participation.",
+              "attribute": "name"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "default": "'on'",
+              "description": "The submitted value; defaults to the platform's \"on\".",
+              "attribute": "value"
+            },
+            {
+              "kind": "field",
+              "name": "nativeElement",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "privacy": "protected",
+              "description": "The internal native element that carries the pattern's semantics (the\n`<button>` inside `<zbk-button>`). ARIA relocates here; focus forwards here.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Keep element state mirroring the native input (the source of truth)."
+            },
+            {
+              "kind": "method",
+              "name": "hasAccessibleName",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "The wrapping label names the control; check adopted content too.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "warnings",
+              "type": {
+                "text": "boolean"
+              },
+              "static": true,
+              "default": "true",
+              "description": "Dev diagnostics switch. Warnings name the fix (see GRAMMAR.md §9); silence\nthem wholesale in production builds if desired.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
+              "attribute": "variant",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "zbkUid",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "++uidCounter",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "adopted",
+              "type": {
+                "text": "AdoptedChildren | undefined"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "ariaObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "relocatingAria",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "baseClass",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "componentClasses",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "description": "`zbk-{component}` plus one `zbk-{component}--{name}` per applied variant.\nSubclass templates bind this to the skeleton's root native element.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "uidFor",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "suffix",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Generate a document-unique id for internal ARIA relationships.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "parsedVariantNames",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "appliedVariants",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VariantConfig[]"
+                }
+              },
+              "description": "The registered VariantConfigs matching the `variant` attribute, in order.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "validateVariants",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Validate the `variant` attribute; every warning names the fix.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusTarget",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "privacy": "protected",
+              "description": "Override when the focus target differs from the ARIA target.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "focus",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "options",
+                  "optional": true,
+                  "type": {
+                    "text": "FocusOptions"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "blur",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "relocateAria",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Move `aria-*` and `role` from the host to the internal native element.\nThe host stays role-generic; AT reads the native element.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "observeAria",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "captureChildren",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Capture authored children before Lit's first render so the component can\nplace them inside the skeleton it renders. Named positions use the `slot`\nattribute; everything else is default content.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "slotted",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "Node[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Authored content for a named slot (or the default content when omitted).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "hasSlotted",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "True when the author supplied content for the given position.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "warn",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "`[zbk-button] <message>` — every message names the fix (GRAMMAR.md §9).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the toggle is on. Syncs from user interaction.",
+              "fieldName": "checked"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Native disabled: removed from the tab order, blocks all interaction.",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Forwarded for native constraint validation.",
+              "fieldName": "required"
+            },
+            {
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Forwarded to the internal input for native form participation.",
+              "fieldName": "name"
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "'on'",
+              "description": "The submitted value; defaults to the platform's \"on\".",
+              "fieldName": "value"
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
+              "fieldName": "variant",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "ZebkitElement",
+            "module": "/src/components/base/zebkit-element"
+          },
+          "tagName": "zbk-toggle",
+          "customElement": true
+        },
+        {
+          "kind": "function",
+          "name": "defineZbkToggle",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "description": "Register <zbk-toggle> (idempotent)."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ZbkToggle",
+          "declaration": {
+            "name": "ZbkToggle",
+            "module": "src/components/toggle/index.ts"
           }
         },
         {
           "kind": "js",
-          "name": "default",
+          "name": "defineZbkToggle",
           "declaration": {
-            "name": "ZRadio",
-            "module": "src/components/radio/index.ts"
+            "name": "defineZbkToggle",
+            "module": "src/components/toggle/index.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "zbk-toggle",
+          "declaration": {
+            "name": "ZbkToggle",
+            "module": "src/components/toggle/index.ts"
           }
         }
       ]
@@ -1418,8 +3169,14 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "",
+          "description": "The zebkit tooltip/toggletip: a light-DOM element that adopts its child as\nthe trigger and renders a positioned bubble beside it. `mode=\"hint\"` (the\ndefault) describes the trigger on hover/focus per WCAG 1.4.13 (hoverable,\ndismissible, persistent); `mode=\"toggle\"` turns click-triggered toggletip\nbehavior on, announcing content through the shared live region. Positioning\nuses floating-ui with `popover=\"manual\"` top-layer promotion where\nsupported. No custom events.",
           "name": "ZbkTooltip",
+          "slots": [
+            {
+              "description": "The trigger element the tooltip describes (a focusable control).",
+              "name": ""
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -1779,6 +3536,7 @@
                 "text": "string"
               },
               "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
               "attribute": "variant",
               "inheritedFrom": {
                 "name": "ZebkitElement",
@@ -2143,6 +3901,7 @@
                 "text": "string"
               },
               "default": "''",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
               "fieldName": "variant",
               "inheritedFrom": {
                 "name": "ZebkitElement",
@@ -2191,405 +3950,6 @@
           "declaration": {
             "name": "ZbkTooltip",
             "module": "src/components/tooltip/index.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/base/announce.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "announce",
-          "return": {
-            "type": {
-              "text": "void"
-            }
-          },
-          "parameters": [
-            {
-              "name": "message",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "options",
-              "default": "{}",
-              "type": {
-                "text": "AnnounceOptions"
-              }
-            }
-          ],
-          "description": "Announce `message` to assistive tech via the shared live region."
-        },
-        {
-          "kind": "function",
-          "name": "resetAnnouncer",
-          "return": {
-            "type": {
-              "text": "void"
-            }
-          },
-          "description": "Remove the mounted live regions (handy for tests / teardown)."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "announce",
-          "declaration": {
-            "name": "announce",
-            "module": "src/components/base/announce.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "resetAnnouncer",
-          "declaration": {
-            "name": "resetAnnouncer",
-            "module": "src/components/base/announce.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/base/zebkit-element.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ZebkitElement",
-          "members": [
-            {
-              "kind": "field",
-              "name": "componentName",
-              "type": {
-                "text": "string"
-              },
-              "static": true,
-              "default": "''",
-              "description": "The pattern's common name in kebab-case, e.g. \"button\". Set per subclass."
-            },
-            {
-              "kind": "field",
-              "name": "variantConfigs",
-              "type": {
-                "text": "ReadonlyArray<VariantConfig>"
-              },
-              "static": true,
-              "default": "[]",
-              "description": "Variant configs registered for this component (its ./variants module)."
-            },
-            {
-              "kind": "field",
-              "name": "warnings",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true",
-              "description": "Dev diagnostics switch. Warnings name the fix (see GRAMMAR.md §9); silence\nthem wholesale in production builds if desired."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "privacy": "public",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "attribute": "variant"
-            },
-            {
-              "kind": "field",
-              "name": "zbkUid",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "++uidCounter"
-            },
-            {
-              "kind": "field",
-              "name": "adopted",
-              "type": {
-                "text": "AdoptedChildren | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "ariaObserver",
-              "type": {
-                "text": "MutationObserver | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "relocatingAria",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "componentName",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "protected",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "baseClass",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "protected",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "componentClasses",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "protected",
-              "description": "`zbk-{component}` plus one `zbk-{component}--{name}` per applied variant.\nSubclass templates bind this to the skeleton's root native element.",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "uidFor",
-              "privacy": "protected",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "suffix",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Generate a document-unique id for internal ARIA relationships."
-            },
-            {
-              "kind": "method",
-              "name": "parsedVariantNames",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "appliedVariants",
-              "privacy": "protected",
-              "return": {
-                "type": {
-                  "text": "VariantConfig[]"
-                }
-              },
-              "description": "The registered VariantConfigs matching the `variant` attribute, in order."
-            },
-            {
-              "kind": "method",
-              "name": "validateVariants",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "description": "Validate the `variant` attribute; every warning names the fix."
-            },
-            {
-              "kind": "field",
-              "name": "nativeElement",
-              "type": {
-                "text": "HTMLElement | null"
-              },
-              "privacy": "protected",
-              "description": "The internal native element that carries the pattern's semantics (the\n`<button>` inside `<zbk-button>`). ARIA relocates here; focus forwards here.",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "focusTarget",
-              "type": {
-                "text": "HTMLElement | null"
-              },
-              "privacy": "protected",
-              "description": "Override when the focus target differs from the ARIA target.",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "focus",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "options",
-                  "optional": true,
-                  "type": {
-                    "text": "FocusOptions"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "blur",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "relocateAria",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "description": "Move `aria-*` and `role` from the host to the internal native element.\nThe host stays role-generic; AT reads the native element."
-            },
-            {
-              "kind": "method",
-              "name": "observeAria",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "captureChildren",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "description": "Capture authored children before Lit's first render so the component can\nplace them inside the skeleton it renders. Named positions use the `slot`\nattribute; everything else is default content."
-            },
-            {
-              "kind": "method",
-              "name": "slotted",
-              "privacy": "protected",
-              "return": {
-                "type": {
-                  "text": "Node[]"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "name",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Authored content for a named slot (or the default content when omitted)."
-            },
-            {
-              "kind": "method",
-              "name": "hasSlotted",
-              "privacy": "protected",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "name",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "True when the author supplied content for the given position."
-            },
-            {
-              "kind": "method",
-              "name": "warn",
-              "privacy": "protected",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "message",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "`[zbk-button] <message>` — every message names the fix (GRAMMAR.md §9)."
-            },
-            {
-              "kind": "method",
-              "name": "hasAccessibleName",
-              "privacy": "protected",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Rough accessible-name computation for the dev-mode nameless-control check:\nvisible text, aria-label, or aria-labelledby on the native element."
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "fieldName": "variant"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ZebkitElement",
-          "declaration": {
-            "name": "ZebkitElement",
-            "module": "src/components/base/zebkit-element.ts"
           }
         }
       ]

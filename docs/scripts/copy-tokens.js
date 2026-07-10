@@ -2,8 +2,11 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 const staticDir = path.resolve('static', 'zebkit');
-const publicDir = path.resolve('public', 'zebkit');
 const targetDir = path.resolve('src', 'lib', 'data', 'generated');
+
+// The component bundle the docs serve at /zebkit/zebkit.js comes straight from
+// the library build (`npm run build:components`).
+const componentsDist = path.resolve('..', 'dist', 'components');
 
 // Sources for the primitive palette (live in the library, not the token JSON).
 const paletteDir = path.resolve('..', 'src', 'tokens', 'colors', 'palette');
@@ -14,7 +17,11 @@ const tokenFiles = [
   'token-lookup.json',
   'allowed-token-types.json'
 ];
-const staticAssets = ['zebkit.js', 'zebkit.js.map'];
+async function copyComponentBundle() {
+  // zebkit.js is the self-contained browser bundle (lit included).
+  await copyFile(componentsDist, 'zebkit.js', path.join(staticDir, 'zebkit.js'));
+  await copyFile(componentsDist, 'zebkit.js.map', path.join(staticDir, 'zebkit.js.map'));
+}
 
 async function copyFile(sourceDir, filename, targetPath) {
   const sourcePath = path.join(sourceDir, filename);
@@ -95,11 +102,7 @@ async function run() {
     tokenFiles.map((filename) => copyFile(staticDir, filename, path.join(targetDir, filename)))
   );
 
-  await Promise.all(
-    staticAssets.map((filename) =>
-      copyFile(publicDir, filename, path.join(staticDir, filename))
-    )
-  );
+  await copyComponentBundle();
 
   await generatePrimitivePalette();
 }

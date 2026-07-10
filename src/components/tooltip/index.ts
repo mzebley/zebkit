@@ -62,6 +62,17 @@ function matchesFocusVisible(el: Element): boolean {
   }
 }
 
+/**
+ * The zebkit tooltip/toggletip: a light-DOM element that adopts its child as
+ * the trigger and renders a positioned bubble beside it. `mode="hint"` (the
+ * default) describes the trigger on hover/focus per WCAG 1.4.13 (hoverable,
+ * dismissible, persistent); `mode="toggle"` turns click-triggered toggletip
+ * behavior on, announcing content through the shared live region. Positioning
+ * uses floating-ui with `popover="manual"` top-layer promotion where
+ * supported. No custom events.
+ *
+ * @slot - The trigger element the tooltip describes (a focusable control).
+ */
 export class ZbkTooltip extends ZebkitElement {
   static componentName = 'tooltip';
 

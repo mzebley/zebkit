@@ -1,0 +1,73 @@
+---
+title: Tooltip
+description: The zebkit tooltip/toggletip — WCAG 1.4.13 hint bubbles and click-triggered toggletips in one element.
+layout: components
+---
+
+<script lang="ts">
+  import TokenTable from '$components/TokenTable.svelte';
+  import AgentContext from '$components/AgentContext.svelte';
+  import { compiledTokens } from '$data/compiled-tokens';
+  import { buildTokenRows } from '$lib/utils/token-docs';
+
+  const tooltipTokenRows = buildTokenRows('zbk-tooltip', compiledTokens['zbk-tooltip']);
+</script>
+
+`<zbk-tooltip>` adopts its child as the trigger and renders a positioned bubble beside it. One element, two modes: `hint` (the default) describes the trigger on hover and focus; `toggle` turns click-triggered toggletip behavior on, announcing content through the shared live region. Positioning uses floating-ui — flip, shift, and arrow work on every supported browser — with `popover="manual"` top-layer promotion where the platform provides it.
+
+## Live examples
+
+<div class="border border-app-muted rounded-lg p-4 canvas-app-soft flex flex-wrap gap-4 items-center">
+  <zbk-tooltip content="Copies a shareable link to this page">
+    <button class="zbk-button">Hover or focus me</button>
+  </zbk-tooltip>
+  <zbk-tooltip content="Placed below the trigger" placement="bottom">
+    <button class="zbk-button zbk-button--outline">Bottom placement</button>
+  </zbk-tooltip>
+  <zbk-tooltip mode="toggle" content="Toggletips hold richer context. Escape or an outside press dismisses them.">
+    <button class="zbk-button zbk-button--ghost" aria-label="More information">?</button>
+  </zbk-tooltip>
+</div>
+
+## Usage
+
+```html
+<!-- Hint (default): describes the trigger on hover/focus -->
+<zbk-tooltip content="Copies the link">
+  <button class="zbk-button">Copy</button>
+</zbk-tooltip>
+
+<!-- Toggletip: click to reveal, announced via the live region -->
+<zbk-tooltip mode="toggle" content="Data refreshes every 15 minutes.">
+  <button class="zbk-button" aria-label="About this data">?</button>
+</zbk-tooltip>
+```
+
+The child element is the trigger — the component wires `aria-describedby` (hint) or `aria-expanded` (toggle) onto it, appending to any IDREFs you authored and restoring them on disconnect.
+
+## The two modes
+
+| Mode | Trigger | Semantics | Dismissal |
+|---|---|---|---|
+| `hint` (default) | hover / focus | `role="tooltip"` + `aria-describedby` | pointer leaves (with grace period), blur, or Escape |
+| `toggle` | click | `aria-expanded` on the trigger; content announced via the shared live region | outside press, Escape (returns focus), or second click |
+
+## Accessibility
+
+WCAG 1.4.13 is built in, not configurable off:
+
+- **Hoverable** — the pointer can travel onto the bubble without it vanishing (`hide-grace` token).
+- **Dismissible** — Escape hides the hint and it stays hidden until the pointer leaves and returns.
+- **Persistent** — the bubble stays as long as the trigger is hovered or focused.
+
+Focus handling tracks input modality: keyboard focus always shows the hint, touch focus shows it, and a mouse click doesn't stick it open. `show-delay` and `hide-grace` are a11y-flagged tokens read at runtime — timing is part of the accessible contract, and re-themable like everything else.
+
+In toggle mode the bubble itself is `aria-hidden`; screen readers hear the content through the shared live-region announcer, so it reads exactly once, when revealed.
+
+## Tokens
+
+<TokenTable rows={tooltipTokenRows} showSwatch={true} />
+
+## For agents
+
+<AgentContext tag="zbk-tooltip" />

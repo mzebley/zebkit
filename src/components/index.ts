@@ -1,8 +1,9 @@
 // Zebkit component registry: import everything, register with one call.
 import { ZbkButton, defineZbkButton } from "./button";
 import { ZbkTooltip, defineZbkTooltip } from "./tooltip";
-import { ZCheckbox, defineZCheckbox } from "./checkbox";
-import { ZRadio, defineZRadio } from "./radio";
+import { ZbkCheckbox, defineZbkCheckbox } from "./checkbox";
+import { ZbkRadio, defineZbkRadio } from "./radio";
+import { ZbkToggle, defineZbkToggle } from "./toggle";
 import { ZbkHeading, defineZbkHeading } from "./heading";
 import { ZebkitElement } from "./base/zebkit-element";
 import { announce, resetAnnouncer } from "./base/announce";
@@ -15,10 +16,12 @@ export {
   defineZbkButton,
   ZbkTooltip,
   defineZbkTooltip,
-  ZCheckbox,
-  defineZCheckbox,
-  ZRadio,
-  defineZRadio,
+  ZbkCheckbox,
+  defineZbkCheckbox,
+  ZbkRadio,
+  defineZbkRadio,
+  ZbkToggle,
+  defineZbkToggle,
   ZbkHeading,
   defineZbkHeading,
 };
@@ -27,7 +30,8 @@ export {
 export const defineZebkitComponents = () => {
   defineZbkButton();
   defineZbkTooltip();
-  defineZCheckbox();
-  defineZRadio();
+  defineZbkCheckbox();
+  defineZbkRadio();
+  defineZbkToggle();
   defineZbkHeading();
 };

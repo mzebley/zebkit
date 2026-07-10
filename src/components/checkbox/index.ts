@@ -1,454 +1,164 @@
-export interface ZCheckboxChangeDetail {
-  checked: boolean;
-  indeterminate: boolean;
-  value: string;
-}
+// <zbk-checkbox> — the zebkit checkbox.
+//
+// A light-DOM custom element wrapping a real <input type="checkbox"> inside
+// its own <label>. The native input stays functional but invisible, stretched
+// across the whole label so hover, press, click, and focus land on it natively
+// anywhere in the component; an aria-hidden control span visualizes its state
+// through sibling selectors.
+//
+//   <zbk-checkbox name="terms" value="yes" checked>I agree</zbk-checkbox>
+//
+// The drawn checkmark and indeterminate bar can be replaced with any authored
+// content — an svg, an icon-font glyph, an HTML character, an image — via the
+// state-indicator slots (GRAMMAR.md §7 shared vocabulary):
+//
+//   <zbk-checkbox name="tasks">
+//     <i class="ti ti-checks" slot="checked"></i>
+//     <span slot="indeterminate">&ndash;</span>
+//     All tasks
+//   </zbk-checkbox>
+//
+// Slotted indicators layer over the control, size from the indicator-size
+// token, inherit indicator-color, and animate with the component's transition
+// tokens. The control is aria-hidden, so indicator content is presentational.
+//
+// State changes surface as the input's own bubbling `change`/`input` events —
+// there is no custom event. Styling lives entirely in the compiled zebkit CSS
+// (`.zbk-checkbox`, consuming `--zbk-checkbox-*` tokens).
 
-const CHECKBOX_STYLE = /* css */ `
-:host {
-  display: inline-block;
-}
+import { html, nothing, type PropertyDeclarations, type PropertyValues, type TemplateResult } from 'lit';
+import { ZebkitElement } from '../base/zebkit-element';
+import { checkboxVariants } from './variants/index';
 
-.z-checkbox {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--zbk-checkbox-label-gap);
-  font-family: var(--zbk-checkbox-label-font-family);
-  font-size: var(--zbk-checkbox-label-font-size);
-  font-weight: var(--zbk-checkbox-label-font-weight);
-  line-height: var(--zbk-checkbox-label-line-height);
-  letter-spacing: var(--zbk-checkbox-label-letter-spacing);
-  color: var(--zbk-checkbox-label-color);
-  cursor: pointer;
-  user-select: none;
-}
+/**
+ * The zebkit checkbox: a light-DOM element wrapping a real
+ * `<input type="checkbox">` inside its own `<label>`. The invisible native
+ * input stretches across the whole label (hover, press, click, and focus land
+ * on it natively anywhere); an aria-hidden control span visualizes its state.
+ * No custom events — the native `change`/`input` bubble.
+ *
+ * @slot - The label content (the accessible name via the wrapping label).
+ * @slot checked - Indicator content shown while checked; replaces the drawn checkmark. Presentational (the control is aria-hidden).
+ * @slot unchecked - Indicator content shown while neither checked nor indeterminate.
+ * @slot indeterminate - Indicator content shown while indeterminate; replaces the drawn bar.
+ */
+export class ZbkCheckbox extends ZebkitElement {
+  static componentName = 'checkbox';
+  static variantConfigs = checkboxVariants;
 
-.z-checkbox__input {
-  appearance: none;
-  width: var(--zbk-checkbox-size);
-  height: var(--zbk-checkbox-size);
-  margin: 0;
-  border-radius: var(--zbk-checkbox-border-radius);
-  border: var(--zbk-checkbox-border-width) solid
-    var(--zbk-checkbox-border-color);
-  background-color: var(--zbk-checkbox-background);
-  display: grid;
-  place-content: center;
-  transition:
-    background-color var(--zbk-checkbox-transition-duration)
-      var(--zbk-checkbox-transition-timing-function),
-    border-color var(--zbk-checkbox-transition-duration)
-      var(--zbk-checkbox-transition-timing-function),
-    box-shadow var(--zbk-checkbox-transition-duration)
-      var(--zbk-checkbox-transition-timing-function),
-    transform var(--zbk-checkbox-transition-duration)
-      var(--zbk-checkbox-transition-timing-function);
-  position: relative;
-}
+  static properties: PropertyDeclarations = {
+    checked: { type: Boolean },
+    indeterminate: { type: Boolean },
+    disabled: { type: Boolean },
+    required: { type: Boolean },
+    name: { type: String },
+    value: { type: String },
+  };
 
-.z-checkbox__input::before {
-  content: "";
-  width: calc(var(--zbk-checkbox-size) * 0.5);
-  height: calc(var(--zbk-checkbox-size) * 0.25);
-  border-right: var(--zbk-checkbox-indicator-stroke-width) solid
-    var(--zbk-checkbox-indicator-color);
-  border-bottom: var(--zbk-checkbox-indicator-stroke-width) solid
-    var(--zbk-checkbox-indicator-color);
-  border-left: 0;
-  border-top: 0;
-  transform: scale(0) rotate(45deg);
-  transform-origin: center;
-  transition: transform var(--zbk-checkbox-transition-duration)
-    var(--zbk-checkbox-transition-timing-function);
-}
+  /** Whether the checkbox is checked. Syncs from user interaction. */
+  checked = false;
 
-.z-checkbox__input::after {
-  content: "";
-  width: calc(var(--zbk-checkbox-size) * 0.6);
-  height: var(--zbk-checkbox-indeterminate-bar-height);
-  background-color: var(--zbk-checkbox-indicator-color);
-  border-radius: var(--zbk-checkbox-indeterminate-bar-radius);
-  transform: scaleX(0);
-  transition: transform var(--zbk-checkbox-transition-duration)
-    var(--zbk-checkbox-transition-timing-function);
-}
+  /**
+   * The mixed "some but not all" state. Visual + AT state only, never
+   * submitted; any user toggle clears it (native behavior).
+   */
+  indeterminate = false;
 
-.z-checkbox__input:focus {
-  outline: none;
-}
+  /** Native disabled: removed from the tab order, blocks all interaction. */
+  disabled = false;
 
-.z-checkbox__input:focus-visible {
-  outline: var(--zbk-checkbox-focus-ring-width) solid
-    var(--zbk-checkbox-focus-ring-color);
-  outline-offset: var(--zbk-checkbox-focus-ring-offset);
-  border-color: var(--zbk-checkbox-border-color-active);
-}
+  /** Forwarded for native constraint validation. */
+  required = false;
 
-.z-checkbox__input:checked {
-  border-color: var(--zbk-checkbox-border-color-active);
-  background-color: var(--zbk-checkbox-background-checked);
-}
+  /** Forwarded to the internal input for native form participation. */
+  name?: string;
 
-.z-checkbox__input:checked::before {
-  transform: scale(1) rotate(45deg);
-}
+  /** The submitted value; defaults to the platform's "on". */
+  value = 'on';
 
-.z-checkbox__input:indeterminate {
-  border-color: var(--zbk-checkbox-border-color-active);
-  background-color: var(--zbk-checkbox-background-indeterminate);
-}
-
-.z-checkbox__input:indeterminate::before {
-  transform: scale(0) rotate(45deg);
-}
-
-.z-checkbox__input:indeterminate::after {
-  transform: scaleX(1);
-}
-
-.z-checkbox__input:disabled {
-  border-color: var(--zbk-checkbox-border-color-disabled);
-  background-color: var(--zbk-checkbox-background);
-  cursor: not-allowed;
-  opacity: var(--zbk-checkbox-disabled-opacity);
-}
-
-.z-checkbox__input:disabled::before {
-  border-right-color: var(--zbk-checkbox-indicator-disabled-color);
-  border-bottom-color: var(--zbk-checkbox-indicator-disabled-color);
-}
-
-.z-checkbox__input:disabled::after {
-  background-color: var(--zbk-checkbox-indicator-disabled-color);
-}
-
-:host([disabled]) .z-checkbox,
-.z-checkbox__input:disabled + slot {
-  cursor: not-allowed;
-  color: var(--zbk-checkbox-label-disabled-color);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .z-checkbox__input:not(:disabled):hover {
-    border-color: var(--zbk-checkbox-border-color-hover);
-  }
-}
-`;
-
-const CHECKBOX_TEMPLATE = document.createElement("template");
-CHECKBOX_TEMPLATE.innerHTML = `
-  <style>${CHECKBOX_STYLE}</style>
-  <label class="z-checkbox">
-    <input type="checkbox" class="z-checkbox__input" />
-    <slot></slot>
-  </label>
-`;
-
-export class ZCheckbox extends HTMLElement {
-  private input: HTMLInputElement;
-  private label: HTMLLabelElement;
-  private mutationObserver?: MutationObserver;
-
-  private static readonly mirroredBooleanAttributes = [
-    "checked",
-    "indeterminate",
-    "disabled",
-    "required",
-  ] as const;
-
-  private static readonly mirroredStringAttributes = [
-    "name",
-    "value",
-    "tabindex",
-  ] as const;
-
-  private static readonly accessibilityAttributes = [
-    "aria-label",
-    "aria-labelledby",
-    "aria-describedby",
-    "aria-controls",
-    "aria-checked",
-    "aria-required",
-    "aria-invalid",
-    "aria-disabled",
-    "aria-expanded",
-    "role",
-  ];
-
-  static get observedAttributes(): string[] {
-    return [
-      ...ZCheckbox.mirroredBooleanAttributes,
-      ...ZCheckbox.mirroredStringAttributes,
-      ...ZCheckbox.accessibilityAttributes,
-    ];
+  protected get nativeElement(): HTMLInputElement | null {
+    return this.querySelector(':scope input');
   }
 
-  constructor() {
-    super();
-
-    const shadow = this.attachShadow({ mode: "open" });
-    const templateContent = CHECKBOX_TEMPLATE.content.cloneNode(true);
-    shadow.append(templateContent);
-
-    this.label = shadow.querySelector("label.z-checkbox") as HTMLLabelElement;
-    this.input = shadow.querySelector(
-      "input.z-checkbox__input"
-    ) as HTMLInputElement;
-
-    if (!this.label || !this.input) {
-      throw new Error("ZCheckbox: Failed to initialize shadow DOM structure.");
-    }
-
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-
-    this.mutationObserver = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.type === "attributes" && mutation.attributeName) {
-          this.reflectClassToLabel(mutation.attributeName);
-        }
-      }
-    });
+  protected render(): TemplateResult {
+    return html`<label class=${this.componentClasses}>
+      <input
+        type="checkbox"
+        class="${this.baseClass}__input"
+        .checked=${this.checked}
+        ?disabled=${this.disabled}
+        ?required=${this.required}
+        name=${this.name ?? nothing}
+        .value=${this.value}
+        @change=${this.handleChange}
+      />
+      <span class=${this.controlClasses()} aria-hidden="true">
+        ${this.renderIndicator('checked')}
+        ${this.renderIndicator('unchecked')}
+        ${this.renderIndicator('indeterminate')}
+      </span>
+      <span class="${this.baseClass}__label">${this.slotted()}</span>
+    </label>`;
   }
 
-  connectedCallback(): void {
-    this.input.addEventListener("change", this.handleInputChange);
-    this.input.addEventListener("input", this.handleInputChange);
-    this.addEventListener("click", this.handleClick);
-
-    ZCheckbox.observedAttributes.forEach((name) => {
-      this.attributeChangedCallback(name, null, this.getAttribute(name));
-    });
-
-    this.reflectAllClasses();
-    this.mutationObserver?.observe(this, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-  }
-
-  disconnectedCallback(): void {
-    this.input.removeEventListener("change", this.handleInputChange);
-    this.input.removeEventListener("input", this.handleInputChange);
-    this.removeEventListener("click", this.handleClick);
-    this.mutationObserver?.disconnect();
-  }
-
-  attributeChangedCallback(
-    name: string,
-    _oldValue: string | null,
-    newValue: string | null
-  ): void {
-    if (!this.input) {
-      return;
-    }
-
-    if (ZCheckbox.mirroredBooleanAttributes.includes(name as any)) {
-      const isPresent = newValue !== null;
-      switch (name) {
-        case "checked":
-          this.input.checked = isPresent;
-          break;
-        case "indeterminate":
-          this.input.indeterminate = isPresent;
-          break;
-        case "disabled":
-          this.input.disabled = isPresent;
-          break;
-        case "required":
-          this.input.required = isPresent;
-          break;
-      }
-      return;
-    }
-
-    if (ZCheckbox.mirroredStringAttributes.includes(name as any)) {
-      if (name === "tabindex") {
-        if (newValue === null) {
-          this.input.tabIndex = 0;
-          this.input.removeAttribute("tabindex");
-          return;
-        }
-
-        const value = newValue.trim();
-
-        if (value === "") {
-          this.input.tabIndex = 0;
-          this.input.setAttribute("tabindex", "0");
-          return;
-        }
-
-        if (value === "-1" || /^\d+$/.test(value)) {
-          const parsedValue = value === "-1" ? -1 : parseInt(value, 10);
-          this.input.tabIndex = parsedValue;
-          this.input.setAttribute("tabindex", value);
-          return;
-        }
-
-        console.warn(
-          `ZCheckbox: Invalid tabindex value "${newValue}". Expected -1, a non-negative integer, or empty string. Disregarding and removing attribute.`
-        );
-        this.input.tabIndex = 0;
-        this.input.removeAttribute("tabindex");
-        if (this.hasAttribute("tabindex")) {
-          this.removeAttribute("tabindex");
-        }
-        return;
-      }
-
-      if (newValue === null) {
-        this.input.removeAttribute(name);
-        if (name === "value") {
-          this.input.value = "on";
-        } else if (name === "name") {
-          this.input.name = "";
-        }
-      } else {
-        if (name === "value") {
-          this.input.value = newValue;
-        } else if (name === "name") {
-          this.input.name = newValue;
-        }
-      }
-      return;
-    }
-
-    if (
-      ZCheckbox.accessibilityAttributes.includes(name) ||
-      name.startsWith("aria-")
-    ) {
-      if (newValue === null) {
-        this.input.removeAttribute(name);
-      } else {
-        this.input.setAttribute(name, newValue);
+  /**
+   * A `--slotted-{state}` modifier per authored indicator lets the stylesheet
+   * retire the drawn pseudo the slotted content replaces.
+   */
+  private controlClasses(): string {
+    const classes = [`${this.baseClass}__control`];
+    for (const state of ['checked', 'unchecked', 'indeterminate'] as const) {
+      if (this.hasSlotted(state)) {
+        classes.push(`${this.baseClass}__control--slotted-${state}`);
       }
     }
+    return classes.join(' ');
   }
 
-  get checked(): boolean {
-    return this.hasAttribute("checked");
+  private renderIndicator(
+    state: 'checked' | 'unchecked' | 'indeterminate'
+  ): TemplateResult | typeof nothing {
+    if (!this.hasSlotted(state)) return nothing;
+    return html`<span
+      class="${this.baseClass}__indicator ${this.baseClass}__indicator--${state}"
+    >${this.slotted(state)}</span>`;
   }
 
-  set checked(value: boolean) {
-    this.toggleAttribute("checked", value);
+  /** Keep element state mirroring the native input (the source of truth). */
+  private handleChange(): void {
+    const input = this.nativeElement;
+    if (!input) return;
+    this.checked = input.checked;
+    this.indeterminate = input.indeterminate;
   }
 
-  get indeterminate(): boolean {
-    return this.hasAttribute("indeterminate");
+  protected updated(changed: PropertyValues): void {
+    super.updated(changed);
+    // `indeterminate` is property-only on the platform; no template binding
+    // exists for it, so push it after every render.
+    const input = this.nativeElement;
+    if (input) input.indeterminate = this.indeterminate;
   }
 
-  set indeterminate(value: boolean) {
-    this.toggleAttribute("indeterminate", value);
-    this.input.indeterminate = value;
+  /** The wrapping label names the control; check adopted content too. */
+  protected hasAccessibleName(): boolean {
+    if (this.slotted().some((node) => node.textContent?.trim())) return true;
+    return super.hasAccessibleName();
   }
 
-  get disabled(): boolean {
-    return this.hasAttribute("disabled");
-  }
-
-  set disabled(value: boolean) {
-    this.toggleAttribute("disabled", value);
-  }
-
-  get name(): string {
-    return this.getAttribute("name") ?? "";
-  }
-
-  set name(value: string) {
-    this.setAttribute("name", value);
-  }
-
-  get value(): string {
-    return this.getAttribute("value") ?? "on";
-  }
-
-  set value(value: string) {
-    this.setAttribute("value", value);
-  }
-
-  get required(): boolean {
-    return this.hasAttribute("required");
-  }
-
-  set required(value: boolean) {
-    this.toggleAttribute("required", value);
-  }
-
-  focus(options?: FocusOptions): void {
-    this.input.focus(options);
-  }
-
-  private handleClick(event: MouseEvent): void {
-    if (this.disabled) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
+  protected firstUpdated(changed: PropertyValues): void {
+    super.firstUpdated(changed);
+    if (!this.hasAccessibleName()) {
+      this.warn(
+        'No accessible name. Provide label text as children, or aria-label / aria-labelledby.'
+      );
     }
-  }
-
-  private handleInputChange(event: Event): void {
-    if (this.disabled) {
-      event.preventDefault();
-      this.syncFromAttributes();
-      return;
-    }
-
-    this.toggleAttribute("checked", this.input.checked);
-    if (this.input.indeterminate) {
-      this.setAttribute("indeterminate", "");
-    } else {
-      this.removeAttribute("indeterminate");
-    }
-
-    const detail: ZCheckboxChangeDetail = {
-      checked: this.input.checked,
-      indeterminate: this.input.indeterminate,
-      value: this.input.value,
-    };
-
-    this.dispatchEvent(
-      new CustomEvent<ZCheckboxChangeDetail>("z-change", {
-        detail,
-        bubbles: true,
-        composed: true,
-      })
-    );
-  }
-
-  private syncFromAttributes(): void {
-    this.attributeChangedCallback(
-      "checked",
-      null,
-      this.getAttribute("checked")
-    );
-    this.attributeChangedCallback(
-      "indeterminate",
-      null,
-      this.getAttribute("indeterminate")
-    );
-  }
-
-  private reflectClassToLabel(attributeName: string): void {
-    if (attributeName !== "class") {
-      return;
-    }
-    const elementClasses = Array.from(this.classList);
-    this.label.className = "z-checkbox";
-    elementClasses.forEach((cls) => {
-      if (!cls.startsWith("z-checkbox__")) {
-        this.label.classList.add(cls);
-      }
-    });
-  }
-
-  private reflectAllClasses(): void {
-    this.reflectClassToLabel("class");
   }
 }
 
-export function defineZCheckbox() {
-  if (!customElements.get("z-checkbox")) {
-    customElements.define("z-checkbox", ZCheckbox);
+/** Register <zbk-checkbox> (idempotent). */
+export const defineZbkCheckbox = (): void => {
+  if (!customElements.get('zbk-checkbox')) {
+    customElements.define('zbk-checkbox', ZbkCheckbox);
   }
-}
-
-export default ZCheckbox;
+};
