@@ -1,0 +1,205 @@
+@use 'tokens/styles/variables/prefix'as prefix;
+
+@layer components {
+  // The host stays out of layout; the label is the component's layout root.
+  zbk-select {
+    display: var(--#{prefix.$cssVar}-select-display);
+  }
+
+  // The one styling contract for selects. <zbk-select> renders exactly this
+  // markup in light DOM; the classes also work standalone on a native
+  // label > span + span > select structure.
+  label.zbk-select {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--#{prefix.$cssVar}-select-label-gap);
+    max-width: var(--#{prefix.$cssVar}-select-max-width);
+    opacity: var(--#{prefix.$cssVar}-select-opacity);
+  }
+
+  /* Label typography */
+  label.zbk-select .zbk-select__label {
+    color: var(--#{prefix.$cssVar}-select-label-ink);
+    font-family: var(--#{prefix.$cssVar}-select-font-family);
+    font-size: var(--#{prefix.$cssVar}-select-label-font-size);
+    font-weight: var(--#{prefix.$cssVar}-select-label-font-weight);
+  }
+
+  /* The field box: border, background, and state visuals live here so affixes
+     and the drawn chevron sit inside the bordered area with the select. */
+  label.zbk-select .zbk-select__field {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--#{prefix.$cssVar}-select-gap);
+    box-sizing: border-box;
+
+    width: var(--#{prefix.$cssVar}-select-width);
+    min-width: var(--#{prefix.$cssVar}-select-min-width);
+    max-width: var(--#{prefix.$cssVar}-select-max-width);
+    min-height: var(--#{prefix.$cssVar}-select-min-height);
+
+    padding-inline: var(--#{prefix.$cssVar}-select-padding-inline);
+    padding-block: var(--#{prefix.$cssVar}-select-padding-block);
+
+    background-color: var(--#{prefix.$cssVar}-select-canvas);
+    border-color: var(--#{prefix.$cssVar}-select-border-color);
+    border-style: var(--#{prefix.$cssVar}-select-border-style);
+    border-width: var(--#{prefix.$cssVar}-select-border-width);
+    border-radius: var(--#{prefix.$cssVar}-select-border-radius);
+    box-shadow: var(--#{prefix.$cssVar}-select-box-shadow);
+
+    cursor: var(--#{prefix.$cssVar}-select-cursor);
+
+    transition-property: var(--#{prefix.$cssVar}-select-transition-property);
+    transition-duration: var(--#{prefix.$cssVar}-select-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-select-transition-timing-function);
+    transition-delay: var(--#{prefix.$cssVar}-select-transition-delay);
+  }
+
+  /* The native select: unboxed (the field box carries the visuals), with the
+     platform's own arrow suppressed — the indicator is the token layer's. */
+  label.zbk-select .zbk-select__select {
+    appearance: none;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: inherit;
+
+    color: var(--#{prefix.$cssVar}-select-ink);
+    font-family: var(--#{prefix.$cssVar}-select-font-family);
+    font-size: var(--#{prefix.$cssVar}-select-font-size);
+    font-weight: var(--#{prefix.$cssVar}-select-font-weight);
+    line-height: var(--#{prefix.$cssVar}-select-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-select-letter-spacing);
+  }
+
+  /* The chevron: a stroked corner rotated to point down. Its proportions are
+     structure (the shape of a chevron); its color and stroke are tokens.
+     Rendered as the field's last flex item, after any suffix. */
+  label.zbk-select .zbk-select__field::after {
+    content: '';
+    flex-shrink: 0;
+    box-sizing: border-box;
+    inline-size: var(--#{prefix.$cssVar}-select-indicator-size);
+    block-size: var(--#{prefix.$cssVar}-select-indicator-size);
+    border-right: var(--#{prefix.$cssVar}-select-indicator-stroke-width) solid
+      var(--#{prefix.$cssVar}-select-indicator-color);
+    border-bottom: var(--#{prefix.$cssVar}-select-indicator-stroke-width) solid
+      var(--#{prefix.$cssVar}-select-indicator-color);
+    transform: rotate(45deg) translate(-15%, -15%);
+    pointer-events: none;
+  }
+
+  /* Authored suffix content replaces the drawn chevron; a multiple select is
+     a list box and has no picker affordance to indicate. */
+  label.zbk-select .zbk-select__field--slotted-suffix::after,
+  label.zbk-select .zbk-select__field:has(.zbk-select__select[multiple])::after {
+    content: none;
+  }
+
+  /* Affixes (prefix/suffix slots): any authored content — svg, icon-font
+     glyph, HTML character, image — sized by icon-size, colored by affix-ink
+     (fonts and currentColor SVGs inherit). Aria-hidden: presentational. */
+  label.zbk-select .zbk-select__affix {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    font-size: var(--#{prefix.$cssVar}-select-icon-size);
+    line-height: 1;
+    color: var(--#{prefix.$cssVar}-select-affix-ink);
+  }
+
+  label.zbk-select .zbk-select__affix :is(svg, img) {
+    inline-size: var(--#{prefix.$cssVar}-select-icon-size);
+    block-size: auto;
+    max-block-size: 100%;
+  }
+
+  /* Hover (only on devices where hover is a real signal) */
+  @media (hover: hover) and (pointer: fine) {
+    label.zbk-select .zbk-select__field:hover:has(.zbk-select__select:not(:disabled)) {
+      background-color: var(--#{prefix.$cssVar}-select-canvas-hover);
+      border-color: var(--#{prefix.$cssVar}-select-border-color-hover);
+      box-shadow: var(--#{prefix.$cssVar}-select-box-shadow-hover);
+    }
+  }
+
+  /* Active / pressed */
+  label.zbk-select .zbk-select__field:has(.zbk-select__select:active:not(:disabled)) {
+    background-color: var(--#{prefix.$cssVar}-select-canvas-active);
+    border-color: var(--#{prefix.$cssVar}-select-border-color-active);
+    box-shadow: var(--#{prefix.$cssVar}-select-box-shadow-active);
+  }
+
+  /* Focus-visible (keyboard focus) */
+  label.zbk-select .zbk-select__field:has(.zbk-select__select:focus-visible) {
+    background-color: var(--#{prefix.$cssVar}-select-canvas-focus);
+    border-color: var(--#{prefix.$cssVar}-select-border-color-focus);
+    outline: var(--#{prefix.$cssVar}-select-focus-width) solid
+      var(--#{prefix.$cssVar}-select-focus-color);
+    outline-offset: var(--#{prefix.$cssVar}-select-focus-offset);
+    box-shadow: var(--#{prefix.$cssVar}-select-box-shadow-focus);
+  }
+
+  /* Invalid: only after the user has interacted (:user-invalid), or when the
+     author asserts it (aria-invalid). */
+  label.zbk-select .zbk-select__field:has(.zbk-select__select:user-invalid),
+  label.zbk-select .zbk-select__field:has(.zbk-select__select[aria-invalid='true']) {
+    background-color: var(--#{prefix.$cssVar}-select-canvas-invalid);
+    border-color: var(--#{prefix.$cssVar}-select-border-color-invalid);
+    box-shadow: var(--#{prefix.$cssVar}-select-box-shadow-invalid);
+  }
+
+  label.zbk-select .zbk-select__select:user-invalid,
+  label.zbk-select .zbk-select__select[aria-invalid='true'] {
+    color: var(--#{prefix.$cssVar}-select-ink-invalid);
+  }
+
+  /* Disabled */
+  label.zbk-select:has(.zbk-select__select:disabled) {
+    cursor: var(--#{prefix.$cssVar}-select-cursor-disabled);
+  }
+
+  label.zbk-select .zbk-select__field:has(.zbk-select__select:disabled) {
+    background-color: var(--#{prefix.$cssVar}-select-canvas-disabled);
+    border-color: var(--#{prefix.$cssVar}-select-border-color-disabled);
+    box-shadow: none;
+    cursor: var(--#{prefix.$cssVar}-select-cursor-disabled);
+    opacity: var(--#{prefix.$cssVar}-select-opacity-disabled);
+  }
+
+  label.zbk-select .zbk-select__select:disabled {
+    color: var(--#{prefix.$cssVar}-select-ink-disabled);
+  }
+
+  label.zbk-select .zbk-select__field:has(.zbk-select__select:disabled)::after {
+    border-right-color: var(--#{prefix.$cssVar}-select-indicator-color-disabled);
+    border-bottom-color: var(--#{prefix.$cssVar}-select-indicator-color-disabled);
+  }
+
+  label.zbk-select .zbk-select__field:has(.zbk-select__select:disabled) .zbk-select__affix {
+    color: var(--#{prefix.$cssVar}-select-affix-ink-disabled);
+  }
+
+  label.zbk-select:has(.zbk-select__select:disabled) .zbk-select__label {
+    color: var(--#{prefix.$cssVar}-select-label-ink-disabled);
+  }
+
+  /* Field groups (stacked forms) */
+  .zbk-select-group {
+    display: flex;
+    flex-direction: var(--#{prefix.$cssVar}-select-group-direction);
+    gap: var(--#{prefix.$cssVar}-select-group-gap);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    label.zbk-select .zbk-select__field {
+      transition: none;
+    }
+  }
+}

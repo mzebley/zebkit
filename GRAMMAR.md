@@ -57,7 +57,7 @@ States are semantics; what they look like is the token layer's business. Two kin
 | focus | `-focus` | `:focus-visible` |
 | disabled | `-disabled` | `:disabled` / `[disabled]` |
 
-**Semantic states** — drawn from a shared vocabulary (`-selected`, `-checked`, `-indeterminate`, `-invalid`, `-expanded`, ...) and present only when the pattern genuinely has that semantic. A component never invents a private state suffix; the shared vocabulary grows by amending this spec.
+**Semantic states** — drawn from a shared vocabulary (`-selected`, `-checked`, `-indeterminate`, `-invalid`, `-readonly`, `-expanded`, ...) and present only when the pattern genuinely has that semantic. A component never invents a private state suffix; the shared vocabulary grows by amending this spec.
 
 Every visual property that varies by state gets the suffixed token. A state whose appearance can't be changed through tokens alone is a token-surface gap — fix the surface.
 
@@ -101,6 +101,7 @@ Rules:
 - **The element owns its internal skeleton.** The author writes the element and its content; the component renders the structure (the native element at its core, wrappers, ARIA wiring). Authors never hand-write internal DOM.
 - **Content is adopted, not replaced.** On upgrade, the element moves its authored children into the skeleton it renders. Named positions use the `slot` attribute with a shared vocabulary that means the same thing on every component and grows only by amending this spec. Default (unnamed) children are the component's primary content. The vocabulary:
   - `icon` — a supplementary pictogram rendered alongside the primary content (aria-hidden).
+  - `prefix` / `suffix` — supplementary content (any markup: svg, icon-font glyph, HTML character, image) rendered inside a field's box at its inline start/end, sized by the component's `icon-size` token and colored by `affix-ink`. Affixes are aria-hidden, so they are presentational: information an affix carries must also live in the field's accessible name or description.
   - `checked` / `unchecked` / `indeterminate` — state-indicator content on selection controls (any markup: svg, icon-font glyph, HTML character, image). Layered over the control, shown for exactly the matching state, sized by the component's `indicator-size` token, colored by `indicator-color`, animated with the component's transition tokens. The control is aria-hidden, so indicator content is presentational; the state is conveyed by the native input.
 - **Pre-upgrade markup must be sane.** Authored content is real DOM and should read correctly before the element upgrades (SSR and progressive enhancement are the same requirement).
 - **Generated ids, never hardcoded.** Internal ARIA relationships (`aria-describedby`, `aria-controls`, ...) use generated unique ids. Author-supplied ids and IDREF lists are preserved — appended to, never clobbered, and restored on disconnect.

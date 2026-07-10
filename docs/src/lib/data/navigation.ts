@@ -80,7 +80,9 @@ export const navigation: NavSection[] = [
     items: [
       { label: 'Button', link: '/components/button' },
       { label: 'Checkbox', link: '/components/checkbox' },
+      { label: 'Input', link: '/components/input' },
       { label: 'Radio', link: '/components/radio' },
+      { label: 'Select', link: '/components/select' },
       { label: 'Toggle', link: '/components/toggle' },
       { label: 'Tooltip', link: '/components/tooltip' }
     ]

@@ -1,0 +1,195 @@
+@use 'tokens/styles/variables/prefix'as prefix;
+
+@layer components {
+  // The host stays out of layout; the label is the component's layout root.
+  zbk-input {
+    display: var(--#{prefix.$cssVar}-input-display);
+  }
+
+  // The one styling contract for text fields. <zbk-input> renders exactly this
+  // markup in light DOM; the classes also work standalone on a native
+  // label > span + span > input structure.
+  label.zbk-input {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--#{prefix.$cssVar}-input-label-gap);
+    max-width: var(--#{prefix.$cssVar}-input-max-width);
+    opacity: var(--#{prefix.$cssVar}-input-opacity);
+  }
+
+  /* Label typography */
+  label.zbk-input .zbk-input__label {
+    color: var(--#{prefix.$cssVar}-input-label-ink);
+    font-family: var(--#{prefix.$cssVar}-input-font-family);
+    font-size: var(--#{prefix.$cssVar}-input-label-font-size);
+    font-weight: var(--#{prefix.$cssVar}-input-label-font-weight);
+  }
+
+  /* The field box: border, background, and state visuals live here so affixes
+     sit inside the bordered area with the input. */
+  label.zbk-input .zbk-input__field {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--#{prefix.$cssVar}-input-gap);
+    box-sizing: border-box;
+
+    width: var(--#{prefix.$cssVar}-input-width);
+    min-width: var(--#{prefix.$cssVar}-input-min-width);
+    max-width: var(--#{prefix.$cssVar}-input-max-width);
+    min-height: var(--#{prefix.$cssVar}-input-min-height);
+
+    padding-inline: var(--#{prefix.$cssVar}-input-padding-inline);
+    padding-block: var(--#{prefix.$cssVar}-input-padding-block);
+
+    background-color: var(--#{prefix.$cssVar}-input-canvas);
+    border-color: var(--#{prefix.$cssVar}-input-border-color);
+    border-style: var(--#{prefix.$cssVar}-input-border-style);
+    border-width: var(--#{prefix.$cssVar}-input-border-width);
+    border-radius: var(--#{prefix.$cssVar}-input-border-radius);
+    box-shadow: var(--#{prefix.$cssVar}-input-box-shadow);
+
+    cursor: var(--#{prefix.$cssVar}-input-cursor);
+
+    transition-property: var(--#{prefix.$cssVar}-input-transition-property);
+    transition-duration: var(--#{prefix.$cssVar}-input-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-input-transition-timing-function);
+    transition-delay: var(--#{prefix.$cssVar}-input-transition-delay);
+  }
+
+  /* The native input: unboxed (the field box carries the visuals), growing to
+     fill the space between affixes. */
+  label.zbk-input .zbk-input__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: inherit;
+
+    color: var(--#{prefix.$cssVar}-input-ink);
+    caret-color: var(--#{prefix.$cssVar}-input-caret-color);
+    font-family: var(--#{prefix.$cssVar}-input-font-family);
+    font-size: var(--#{prefix.$cssVar}-input-font-size);
+    font-weight: var(--#{prefix.$cssVar}-input-font-weight);
+    line-height: var(--#{prefix.$cssVar}-input-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-input-letter-spacing);
+  }
+
+  label.zbk-input .zbk-input__input::placeholder {
+    color: var(--#{prefix.$cssVar}-input-placeholder-ink);
+    opacity: 1;
+  }
+
+  /* Affixes (prefix/suffix slots): any authored content — svg, icon-font
+     glyph, HTML character, image — sized by icon-size, colored by affix-ink
+     (fonts and currentColor SVGs inherit). Aria-hidden: presentational. */
+  label.zbk-input .zbk-input__affix {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    font-size: var(--#{prefix.$cssVar}-input-icon-size);
+    line-height: 1;
+    color: var(--#{prefix.$cssVar}-input-affix-ink);
+  }
+
+  label.zbk-input .zbk-input__affix :is(svg, img) {
+    inline-size: var(--#{prefix.$cssVar}-input-icon-size);
+    block-size: auto;
+    max-block-size: 100%;
+  }
+
+  /* Hover (only on devices where hover is a real signal) */
+  @media (hover: hover) and (pointer: fine) {
+    label.zbk-input .zbk-input__field:hover:has(.zbk-input__input:not(:disabled)) {
+      background-color: var(--#{prefix.$cssVar}-input-canvas-hover);
+      border-color: var(--#{prefix.$cssVar}-input-border-color-hover);
+      box-shadow: var(--#{prefix.$cssVar}-input-box-shadow-hover);
+    }
+  }
+
+  /* Active / pressed (pointer down before focus) */
+  label.zbk-input .zbk-input__field:has(.zbk-input__input:active:not(:disabled)) {
+    background-color: var(--#{prefix.$cssVar}-input-canvas-active);
+    border-color: var(--#{prefix.$cssVar}-input-border-color-active);
+    box-shadow: var(--#{prefix.$cssVar}-input-box-shadow-active);
+  }
+
+  /* Focus. Editable controls match :focus-visible whenever focused, so the
+     ring shows for keyboard and pointer alike (that's correct for a field). */
+  label.zbk-input .zbk-input__field:has(.zbk-input__input:focus-visible) {
+    background-color: var(--#{prefix.$cssVar}-input-canvas-focus);
+    border-color: var(--#{prefix.$cssVar}-input-border-color-focus);
+    outline: var(--#{prefix.$cssVar}-input-focus-width) solid
+      var(--#{prefix.$cssVar}-input-focus-color);
+    outline-offset: var(--#{prefix.$cssVar}-input-focus-offset);
+    box-shadow: var(--#{prefix.$cssVar}-input-box-shadow-focus);
+  }
+
+  /* Invalid: only after the user has interacted (:user-invalid), or when the
+     author asserts it (aria-invalid). */
+  label.zbk-input .zbk-input__field:has(.zbk-input__input:user-invalid),
+  label.zbk-input .zbk-input__field:has(.zbk-input__input[aria-invalid='true']) {
+    background-color: var(--#{prefix.$cssVar}-input-canvas-invalid);
+    border-color: var(--#{prefix.$cssVar}-input-border-color-invalid);
+    box-shadow: var(--#{prefix.$cssVar}-input-box-shadow-invalid);
+  }
+
+  label.zbk-input .zbk-input__input:user-invalid,
+  label.zbk-input .zbk-input__input[aria-invalid='true'] {
+    color: var(--#{prefix.$cssVar}-input-ink-invalid);
+  }
+
+  /* Readonly: focusable and legible, value locked. */
+  label.zbk-input .zbk-input__field:has(.zbk-input__input:read-only:not(:disabled)) {
+    background-color: var(--#{prefix.$cssVar}-input-canvas-readonly);
+    border-color: var(--#{prefix.$cssVar}-input-border-color-readonly);
+  }
+
+  label.zbk-input .zbk-input__input:read-only:not(:disabled) {
+    color: var(--#{prefix.$cssVar}-input-ink-readonly);
+  }
+
+  /* Disabled */
+  label.zbk-input:has(.zbk-input__input:disabled) {
+    cursor: var(--#{prefix.$cssVar}-input-cursor-disabled);
+  }
+
+  label.zbk-input .zbk-input__field:has(.zbk-input__input:disabled) {
+    background-color: var(--#{prefix.$cssVar}-input-canvas-disabled);
+    border-color: var(--#{prefix.$cssVar}-input-border-color-disabled);
+    box-shadow: none;
+    cursor: var(--#{prefix.$cssVar}-input-cursor-disabled);
+    opacity: var(--#{prefix.$cssVar}-input-opacity-disabled);
+  }
+
+  label.zbk-input .zbk-input__input:disabled {
+    color: var(--#{prefix.$cssVar}-input-ink-disabled);
+  }
+
+  label.zbk-input .zbk-input__input:disabled::placeholder {
+    color: var(--#{prefix.$cssVar}-input-placeholder-ink-disabled);
+  }
+
+  label.zbk-input .zbk-input__field:has(.zbk-input__input:disabled) .zbk-input__affix {
+    color: var(--#{prefix.$cssVar}-input-affix-ink-disabled);
+  }
+
+  label.zbk-input:has(.zbk-input__input:disabled) .zbk-input__label {
+    color: var(--#{prefix.$cssVar}-input-label-ink-disabled);
+  }
+
+  /* Field groups (stacked forms) */
+  .zbk-input-group {
+    display: flex;
+    flex-direction: var(--#{prefix.$cssVar}-input-group-direction);
+    gap: var(--#{prefix.$cssVar}-input-group-gap);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    label.zbk-input .zbk-input__field {
+      transition: none;
+    }
+  }
+}

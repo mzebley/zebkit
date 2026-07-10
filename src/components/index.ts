@@ -4,6 +4,8 @@ import { ZbkTooltip, defineZbkTooltip } from "./tooltip";
 import { ZbkCheckbox, defineZbkCheckbox } from "./checkbox";
 import { ZbkRadio, defineZbkRadio } from "./radio";
 import { ZbkToggle, defineZbkToggle } from "./toggle";
+import { ZbkInput, defineZbkInput } from "./input";
+import { ZbkSelect, defineZbkSelect } from "./select";
 import { ZbkHeading, defineZbkHeading } from "./heading";
 import { ZebkitElement } from "./base/zebkit-element";
 import { announce, resetAnnouncer } from "./base/announce";
@@ -22,6 +24,10 @@ export {
   defineZbkRadio,
   ZbkToggle,
   defineZbkToggle,
+  ZbkInput,
+  defineZbkInput,
+  ZbkSelect,
+  defineZbkSelect,
   ZbkHeading,
   defineZbkHeading,
 };
@@ -33,5 +39,7 @@ export const defineZebkitComponents = () => {
   defineZbkCheckbox();
   defineZbkRadio();
   defineZbkToggle();
+  defineZbkInput();
+  defineZbkSelect();
   defineZbkHeading();
 };

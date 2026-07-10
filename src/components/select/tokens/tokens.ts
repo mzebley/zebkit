@@ -1,0 +1,356 @@
+import type { LayerName } from "@definitions/layers";
+import { z } from "zod";
+import { tokenSchema } from "./token-schema";
+
+/**
+ * Zebkit select design tokens. The module key is fixed to `select` so these
+ * values become `--zbk-select-*` CSS custom properties during the token build.
+ * Tokens stay declarative and can be referenced with dot-notation overrides.
+ */
+export const key = "select";
+export const layer: LayerName = "base";
+
+export type SelectTokens = z.infer<typeof tokenSchema>;
+
+const tokens = {
+  // Host layout: the label is the layout root, so the host gets out of the way.
+  display: {
+    value: "contents",
+    type: "display",
+    description: "Display mode for the <zbk-select> host element.",
+  },
+
+  // Field box background
+  canvas: {
+    value: "{app.canvas}",
+    type: "color",
+    description: "Background of the field box.",
+  },
+  "canvas-hover": {
+    value: "{app.canvas}",
+    type: "color",
+    description: "Field background when hovered.",
+  },
+  "canvas-focus": {
+    value: "{app.canvas}",
+    type: "color",
+    description: "Field background while focused.",
+  },
+  "canvas-active": {
+    value: "{select.canvas-focus}",
+    type: "color",
+    description: "Field background while pressed.",
+  },
+  "canvas-disabled": {
+    value: "{disabled.canvas}",
+    type: "color",
+    description: "Field background when disabled.",
+  },
+  "canvas-invalid": {
+    value: "{select.canvas}",
+    type: "color",
+    description: "Field background when the selection is invalid (after interaction).",
+  },
+
+  // Selected-option text
+  ink: {
+    value: "{app.ink}",
+    type: "color",
+    description: "Color of the selected option's text.",
+  },
+  "ink-disabled": {
+    value: "{disabled.ink}",
+    type: "color",
+    description: "Selected-option text color when disabled.",
+  },
+  "ink-invalid": {
+    value: "{select.ink}",
+    type: "color",
+    description: "Selected-option text color when the selection is invalid.",
+  },
+
+  // Field border
+  "border-color": {
+    value: "{app.border-emphasis}",
+    type: "color",
+    description: "Border color of the field box.",
+  },
+  "border-color-hover": {
+    value: "{accent-primary.400}",
+    type: "color",
+    description: "Field border color when hovered.",
+  },
+  "border-color-focus": {
+    value: "{accent-primary.500}",
+    type: "color",
+    description: "Field border color while focused.",
+  },
+  "border-color-active": {
+    value: "{select.border-color-focus}",
+    type: "color",
+    description: "Field border color while pressed.",
+  },
+  "border-color-disabled": {
+    value: "{disabled.border}",
+    type: "color",
+    description: "Field border color when disabled.",
+  },
+  "border-color-invalid": {
+    value: "{critical.border-emphasis}",
+    type: "color",
+    description: "Field border color when the selection is invalid.",
+  },
+  "border-width": {
+    value: "{border.width-sm}",
+    type: "borderWidth",
+    description: "Border thickness of the field box.",
+  },
+  "border-style": {
+    value: "{border.style}",
+    type: "borderStyle",
+    description: "Border style of the field box.",
+  },
+  "border-radius": {
+    value: "{border.radius-md}",
+    type: "borderRadius",
+    description: "Corner radius of the field box.",
+  },
+
+  // Selected-option typography
+  "font-family": {
+    value: "{font-family.interface}",
+    type: "fontFamily",
+    description: "Font family for the selected option's text.",
+  },
+  "font-size": {
+    value: "{font-size.md}",
+    type: "fontSize",
+    description: "Font size for the selected option's text.",
+  },
+  "font-weight": {
+    value: "{font-weight.normal}",
+    type: "fontWeight",
+    description: "Font weight for the selected option's text.",
+  },
+  "line-height": {
+    value: "{line-height.2}",
+    type: "lineHeight",
+    description: "Line height for the selected option's text.",
+  },
+  "letter-spacing": {
+    value: "{tracking.normal}",
+    type: "letterSpacing",
+    description: "Letter spacing for the selected option's text.",
+  },
+
+  // Label
+  "label-ink": {
+    value: "{app.ink}",
+    type: "color",
+    description: "Label text color.",
+  },
+  "label-ink-disabled": {
+    value: "{disabled.ink}",
+    type: "color",
+    description: "Label text color when disabled.",
+  },
+  "label-font-size": {
+    value: "{font-size.sm}",
+    type: "fontSize",
+    description: "Font size for the label.",
+  },
+  "label-font-weight": {
+    value: "{font-weight.medium}",
+    type: "fontWeight",
+    description: "Font weight for the label.",
+  },
+  "label-gap": {
+    value: "{spacing.2xs}",
+    type: "spacing",
+    description: "Space between the label and the field box.",
+  },
+
+  // Affixes (prefix/suffix slots)
+  "affix-ink": {
+    value: "{app.ink-muted}",
+    type: "color",
+    description: "Color of prefix/suffix affix content (icon fonts and currentColor SVGs inherit it).",
+  },
+  "affix-ink-disabled": {
+    value: "{disabled.ink}",
+    type: "color",
+    description: "Affix color when disabled.",
+  },
+  "icon-size": {
+    value: "1em",
+    type: "sizing",
+    description:
+      "Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it.",
+  },
+
+  // Indicator (the drawn chevron; retired by slotted suffix content)
+  "indicator-color": {
+    value: "{app.ink-muted}",
+    type: "color",
+    description: "Color of the drawn chevron indicator.",
+  },
+  "indicator-color-disabled": {
+    value: "{disabled.ink}",
+    type: "color",
+    description: "Chevron color when disabled.",
+  },
+  "indicator-size": {
+    value: "0.5em",
+    type: "sizing",
+    description: "Side length of the drawn chevron; 0.5em tracks the field's font-size.",
+  },
+  "indicator-stroke-width": {
+    value: "{border.width-md}",
+    type: "borderWidth",
+    description: "Stroke width of the drawn chevron.",
+  },
+
+  // Internal layout
+  "padding-inline": {
+    value: "{spacing.sm}",
+    type: "spacing",
+    description: "Inline (horizontal) padding of the field box.",
+  },
+  "padding-block": {
+    value: "{spacing.2xs}",
+    type: "spacing",
+    description: "Block (vertical) padding of the field box.",
+  },
+  gap: {
+    value: "{spacing.2xs}",
+    type: "spacing",
+    description: "Space between affixes, the select, and the indicator.",
+  },
+
+  // Sizing
+  width: {
+    value: "auto",
+    type: "sizing",
+    description: "Width of the field box.",
+  },
+  "min-width": {
+    value: "0",
+    type: "sizing",
+    description: "Minimum width of the field box.",
+  },
+  "max-width": {
+    value: "100%",
+    type: "sizing",
+    description: "Maximum width of the field box.",
+  },
+  "min-height": {
+    value: "44px",
+    type: "sizing",
+    description: "Minimum field height to ensure a tappable area.",
+  },
+
+  // Grouping
+  "group-gap": {
+    value: "{spacing.md}",
+    type: "spacing",
+    description: "Gap between fields in a .zbk-select-group.",
+  },
+  "group-direction": {
+    value: "column",
+    type: "flex",
+    description: "Flow direction of a .zbk-select-group (column or row).",
+  },
+
+  // Focus ring
+  "focus-color": {
+    value: "{focus.color}",
+    type: "color",
+    description: "Outline color for keyboard focus.",
+  },
+  "focus-width": {
+    value: "{focus.width}",
+    type: "borderWidth",
+    description: "Outline width for keyboard focus.",
+  },
+  "focus-offset": {
+    value: "{focus.offset}",
+    type: "spacing",
+    description: "Outline offset for keyboard focus.",
+  },
+
+  // Shadow / lift physics (default flat; themes can add depth)
+  "box-shadow": {
+    value: "none",
+    type: "boxShadow",
+    description: "Default field shadow.",
+  },
+  "box-shadow-hover": {
+    value: "none",
+    type: "boxShadow",
+    description: "Field shadow when hovered.",
+  },
+  "box-shadow-focus": {
+    value: "none",
+    type: "boxShadow",
+    description: "Field shadow while focused (in addition to the outline).",
+  },
+  "box-shadow-active": {
+    value: "none",
+    type: "boxShadow",
+    description: "Field shadow while pressed.",
+  },
+  "box-shadow-invalid": {
+    value: "none",
+    type: "boxShadow",
+    description: "Field shadow when the selection is invalid.",
+  },
+
+  // Interaction behavior
+  cursor: {
+    value: "pointer",
+    type: "utility",
+    description: "Cursor over an enabled select.",
+  },
+  "cursor-disabled": {
+    value: "not-allowed",
+    type: "utility",
+    description: "Cursor over a disabled select.",
+  },
+
+  // Transitions
+  "transition-duration": {
+    value: "{transition.calm-fx-duration-default}",
+    type: "transition",
+    description: "Duration for field state transitions.",
+    a11y: true,
+  },
+  "transition-timing-function": {
+    value: "{transition.calm-fx-function-default}",
+    type: "transition",
+    description: "Easing for field state transitions.",
+  },
+  "transition-property": {
+    value: "background-color, border-color, box-shadow, outline",
+    type: "transition",
+    description: "CSS properties that animate on state changes.",
+  },
+  "transition-delay": {
+    value: "0",
+    type: "transition",
+    description: "Delay before field transitions run.",
+  },
+
+  // Other
+  opacity: {
+    value: 1,
+    type: "opacity",
+    description: "Opacity of the field.",
+  },
+  "opacity-disabled": {
+    value: "{opacity.70}",
+    type: "opacity",
+    description: "Field opacity when disabled.",
+  },
+} as const satisfies SelectTokens;
+
+export default tokens;
