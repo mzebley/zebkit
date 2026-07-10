@@ -34,7 +34,7 @@ async function buildDefaults() {
   await fs.ensureDir(presetsDir);
 
   // Gather all core token files (no components, no SCSS needed)
-  const files = await gatherZebkitFiles([]);
+  const files = await gatherZebkitFiles();
 
   // Run the full token pipeline in-memory (no CSS compilation, no file export)
   const { tokens, layers } = await buildZebkitTokens(DEFAULT_THEME_NAME, files.tokenFiles, defaultsDir, undefined, [], { splitMode: 'combined' }, false);

@@ -58,7 +58,7 @@ export async function buildZebkitTokens(
   const overridePaths = options.overridePaths ?? [];
 
   const spinner = ora('Processing Zebkit tokens...').start();
-  const coreDir = path.resolve(__dirname, '../../core');
+  const tokensDir = path.resolve(__dirname, '../../tokens');
   const componentsDir = path.resolve(__dirname, '../../components');
   // Problems that would silently produce incomplete CSS (a broken/missing token
   // module or schema). Collected across the loop, then thrown as one failure so
@@ -86,9 +86,9 @@ export async function buildZebkitTokens(
       let baseDir = '';
       let relativePath = '';
 
-      if (file.startsWith('core/')) {
-        baseDir = coreDir;
-        relativePath = file.replace('core/', '');
+      if (file.startsWith('tokens/')) {
+        baseDir = tokensDir;
+        relativePath = file.replace('tokens/', '');
       } else if (file.startsWith('components/')) {
         baseDir = componentsDir;
         relativePath = file.replace('components/', '');

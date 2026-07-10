@@ -1,0 +1,144 @@
+@use 'tokens/styles/variables/prefix'as prefix;
+
+@layer components {
+  // The one styling contract for buttons. <zbk-button> renders exactly this
+  // markup in light DOM; the classes also work standalone on a native button.
+  button.zbk-button {
+    /* Core text & color */
+    color: var(--#{prefix.$cssVar}-button-ink);
+    background-color: var(--#{prefix.$cssVar}-button-canvas);
+    border-color: var(--#{prefix.$cssVar}-button-border-color);
+
+    /* Border geometry */
+    border-width: var(--#{prefix.$cssVar}-button-border-width);
+    border-style: var(--#{prefix.$cssVar}-button-border-style);
+    border-radius: var(--#{prefix.$cssVar}-button-border-radius);
+
+    /* Typography */
+    font-family: var(--#{prefix.$cssVar}-button-font-family);
+    font-size: var(--#{prefix.$cssVar}-button-font-size);
+    font-weight: var(--#{prefix.$cssVar}-button-font-weight);
+    line-height: var(--#{prefix.$cssVar}-button-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-button-letter-spacing);
+    text-transform: var(--#{prefix.$cssVar}-button-text-transform);
+    text-decoration: var(--#{prefix.$cssVar}-button-text-decoration);
+    text-align: var(--#{prefix.$cssVar}-button-text-align);
+
+    /* Layout & sizing */
+    display: var(--#{prefix.$cssVar}-button-display);
+    width: var(--#{prefix.$cssVar}-button-width);
+    min-width: var(--#{prefix.$cssVar}-button-min-width);
+    max-width: var(--#{prefix.$cssVar}-button-max-width);
+    height: var(--#{prefix.$cssVar}-button-height);
+    min-height: var(--#{prefix.$cssVar}-button-min-height);
+    max-height: var(--#{prefix.$cssVar}-button-max-height);
+
+    /* Internal spacing (padding) */
+    padding-block: var(--#{prefix.$cssVar}-button-padding-block);
+    padding-inline: var(--#{prefix.$cssVar}-button-padding-inline);
+
+    // Optional directional overrides
+    padding-inline-start: var(--#{prefix.$cssVar}-button-padding-inline-start);
+    padding-inline-end: var(--#{prefix.$cssVar}-button-padding-inline-end);
+    padding-block-start: var(--#{prefix.$cssVar}-button-padding-block-start);
+    padding-block-end: var(--#{prefix.$cssVar}-button-padding-block-end);
+
+    /* External spacing (margin) */
+    // Base margins
+    margin-inline: var(--#{prefix.$cssVar}-button-margin-inline);
+    margin-block: var(--#{prefix.$cssVar}-button-margin-block);
+
+    // Optional directional overrides
+    margin-inline-start: var(--#{prefix.$cssVar}-button-margin-inline-start);
+    margin-inline-end: var(--#{prefix.$cssVar}-button-margin-inline-end);
+    margin-block-start: var(--#{prefix.$cssVar}-button-margin-block-start);
+    margin-block-end: var(--#{prefix.$cssVar}-button-margin-block-end);
+
+    /* Layout alignment (flex-based button content) */
+    flex-direction: var(--#{prefix.$cssVar}-button-flex-direction);
+    justify-content: var(--#{prefix.$cssVar}-button-justify-content);
+    align-items: var(--#{prefix.$cssVar}-button-align-items);
+
+    /* Icon-related */
+    // See .zbk-button__icon below for size usage
+
+    /* Focus ring */
+    outline: none;
+
+    /* Shadows / elevation */
+    box-shadow: var(--#{prefix.$cssVar}-button-box-shadow);
+
+    /* Interaction behavior */
+    cursor: var(--#{prefix.$cssVar}-button-cursor);
+
+    /* Transitions */
+    transition-property: var(--#{prefix.$cssVar}-button-transition-property);
+    transition-duration: var(--#{prefix.$cssVar}-button-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-button-transition-timing-function);
+    transition-delay: var(--#{prefix.$cssVar}-button-transition-delay);
+
+    /* Other */
+    opacity: var(--#{prefix.$cssVar}-button-opacity);
+    gap: var(--#{prefix.$cssVar}-button-gap);
+  }
+
+  /* Hover state (only when interactive) */
+  button.zbk-button:hover {
+    color: var(--#{prefix.$cssVar}-button-ink-hover);
+    background-color: var(--#{prefix.$cssVar}-button-canvas-hover);
+    border-color: var(--#{prefix.$cssVar}-button-border-color-hover);
+    box-shadow: var(--#{prefix.$cssVar}-button-box-shadow-hover);
+  }
+
+  /* Active / pressed state */
+  button.zbk-button:active {
+    color: var(--#{prefix.$cssVar}-button-ink-active);
+    background-color: var(--#{prefix.$cssVar}-button-canvas-active);
+    border-color: var(--#{prefix.$cssVar}-button-border-color-active);
+    box-shadow: var(--#{prefix.$cssVar}-button-box-shadow-active);
+  }
+
+  /* Focus-visible state (keyboard focus) */
+  button.zbk-button:focus-visible {
+    outline-color: var(--#{prefix.$cssVar}-button-focus-color);
+    outline-width: var(--#{prefix.$cssVar}-button-focus-width);
+    outline-style: solid;
+    outline-offset: var(--#{prefix.$cssVar}-button-focus-offset);
+    box-shadow: var(--#{prefix.$cssVar}-button-box-shadow-focus);
+  }
+
+  /* Disabled state (native + ARIA) */
+  button.zbk-button[disabled],
+  button.zbk-button[aria-disabled='true'] {
+    color: var(--#{prefix.$cssVar}-button-ink-disabled);
+    background-color: var(--#{prefix.$cssVar}-button-canvas-disabled);
+    border-color: var(--#{prefix.$cssVar}-button-border-color-disabled);
+    box-shadow: none;
+    opacity: var(--#{prefix.$cssVar}-button-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Loading / busy state: focusable, announced via aria-busy, activation
+     suppressed by the element. */
+  button.zbk-button[aria-busy='true'] {
+    color: var(--#{prefix.$cssVar}-button-ink-loading);
+    background-color: var(--#{prefix.$cssVar}-button-canvas-loading);
+    border-color: var(--#{prefix.$cssVar}-button-border-color-loading);
+    cursor: var(--#{prefix.$cssVar}-button-cursor-loading);
+    opacity: var(--#{prefix.$cssVar}-button-opacity-loading);
+  }
+
+  /* Icon sizing / layout */
+  button.zbk-button .zbk-button__icon {
+    inline-size: var(--#{prefix.$cssVar}-button-icon-size);
+    block-size: var(--#{prefix.$cssVar}-button-icon-size);
+    flex-shrink: 0;
+  }
+
+  /* Button groups (using group-gap token) */
+  .zbk-button-group {
+    display: inline-flex;
+    gap: var(--#{prefix.$cssVar}-button-group-gap);
+  }
+}

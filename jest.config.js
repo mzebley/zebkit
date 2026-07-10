@@ -10,12 +10,17 @@ export default {
         tsconfig: './tsconfig.jest.json',
       },
     ],
+    // Lit ships ESM-only; babel-jest converts it (and only it) for Jest.
+    '^.+\\.js$': [
+      'babel-jest',
+      { presets: [['@babel/preset-env', { targets: { node: 'current' } }]] },
+    ],
   },
+  transformIgnorePatterns: ['/node_modules/(?!(@lit|lit|lit-html|lit-element)/)'],
   moduleNameMapper: {
     '^@config$': '<rootDir>/src/config/zebkit.ts',
     '^@definitions/(.*)$': '<rootDir>/src/definitions/$1',
     '^@token-scripts/(.*)$': '<rootDir>/src/scripts/tokens/$1',
-    '^@component-scripts/(.*)$': '<rootDir>/src/scripts/components/$1',
     '^chalk$': '<rootDir>/src/test-support/chalk.mock.ts',
     // Source uses `.js` extensions on relative imports (required for the
     // NodeNext/esbuild build); strip them so ts-jest resolves the `.ts` source.

@@ -9,9 +9,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export interface GatherOptions {
-  /** Override for core SCSS/token source directory (defaults to src/core relative to this file) */
-  coreDir?: string;
-  /** Override for components directory */
+  /** Override for the token-module source directory (defaults to src/tokens relative to this file) */
+  tokensDir?: string;
+  /** Override for the components directory (defaults to src/components) */
   componentsDir?: string;
   /**
    * When set, loads pre-compiled JSON token defaults from this directory instead of
@@ -22,24 +22,29 @@ export interface GatherOptions {
 
 /**
  * Collects Zebkit token sources and SCSS entry points.
- * Expects token files at src/core/.../tokens.ts and src/components/.../tokens.ts.
+ *
+ * Token modules live at src/tokens/.../tokens/tokens.ts (the token language) and
+ * src/components/{name}/tokens/tokens.ts (per-component surfaces). Component
+ * tokens are part of the default vocabulary — every component's tokens are
+ * always gathered; shrinking the shipped surface is `zebkit prune`'s job.
+ *
  * In installed CLI mode, pass tokenDefaultsDir to load pre-compiled JSON defaults instead.
  */
-export async function gatherZebkitFiles(components: string[], options?: GatherOptions) {
+export async function gatherZebkitFiles(options?: GatherOptions) {
   const stylesheets: string[] = [];
   const tokenFiles: string[] = [];
 
   const spinner = ora('Gathering Zebkit token files...').start();
 
   try {
-    const coreDir = options?.coreDir ?? path.resolve(__dirname, '../../core');
+    const tokensDir = options?.tokensDir ?? path.resolve(__dirname, '../../tokens');
     const componentsDir = options?.componentsDir ?? path.resolve(__dirname, '../../components');
 
-    // Core stylesheets: entry styles.scss plus nested styles/*.scss
-    const coreStyles = await glob(
+    // Token-language stylesheets: entry styles.scss plus nested styles/*.scss
+    const tokenStyles = await glob(
       ['**/styles.scss', 'styles/**/*.scss'],
       {
-        cwd: coreDir,
+        cwd: tokensDir,
         absolute: true,
         nodir: true,
       }
@@ -47,7 +52,16 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
     // glob order follows filesystem readdir and varies between machines/runs.
     // Sort every discovery so the compiled CSS (and thus a pruned build) is
     // byte-reproducible.
-    stylesheets.push(...coreStyles.sort());
+    stylesheets.push(...tokenStyles.sort());
+
+    if (await fs.pathExists(componentsDir)) {
+      const componentStyles = await glob('**/styles.scss', {
+        cwd: componentsDir,
+        absolute: true,
+        nodir: true,
+      });
+      stylesheets.push(...componentStyles.sort());
+    }
 
     if (options?.tokenDefaultsDir) {
       // Installed CLI mode: load pre-compiled JSON token defaults
@@ -55,45 +69,26 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
         cwd: options.tokenDefaultsDir,
         absolute: true,
         nodir: true,
-        // variants.json is the built-in variant snapshot, not a token module.
-        ignore: ['manifest.json', 'variants.json'],
+        // variants.json is the built-in variant snapshot and component-tokens.json
+        // is the component-consumed-vars list for prune — neither is a token module.
+        ignore: ['manifest.json', 'variants.json', 'component-tokens.json'],
       });
       tokenFiles.push(...jsonFiles.sort());
     } else {
       // Dev mode: discover TypeScript token modules
-      const coreTokens = await glob('**/tokens/tokens.ts', {
-        cwd: coreDir,
+      const languageTokens = await glob('**/tokens/tokens.ts', {
+        cwd: tokensDir,
         nodir: true,
       });
-      tokenFiles.push(...coreTokens.sort().map((file) => path.join('core', file)));
-    }
+      tokenFiles.push(...languageTokens.sort().map((file) => path.join('tokens', file)));
 
-    if (components.length > 0 && (await fs.pathExists(componentsDir))) {
-      for (const component of components) {
-        const componentDir = path.join(componentsDir, component);
-        if (!(await fs.pathExists(componentDir))) {
-          console.warn(
-            chalk.yellow(`Component directory does not exist: ${componentDir}`)
-          );
-          continue;
-        }
-
-        const componentStyles = await glob(
-          ['**/styles.scss', 'styles/**/*.scss'],
-          {
-            cwd: componentDir,
-            absolute: true,
-            nodir: true,
-          }
-        );
-        stylesheets.push(...componentStyles.sort());
-
+      if (await fs.pathExists(componentsDir)) {
         const componentTokens = await glob('**/tokens/tokens.ts', {
-          cwd: componentDir,
+          cwd: componentsDir,
           nodir: true,
         });
         tokenFiles.push(
-          ...componentTokens.sort().map((file) => path.join('components', component, file))
+          ...componentTokens.sort().map((file) => path.join('components', file))
         );
       }
     }

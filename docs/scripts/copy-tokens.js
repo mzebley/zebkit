@@ -6,8 +6,8 @@ const publicDir = path.resolve('public', 'zebkit');
 const targetDir = path.resolve('src', 'lib', 'data', 'generated');
 
 // Sources for the primitive palette (live in the library, not the token JSON).
-const paletteDir = path.resolve('..', 'src', 'core', 'colors', 'palette');
-const colorMixin = path.resolve('..', 'src', 'core', 'styles', 'mixins', '_color.scss');
+const paletteDir = path.resolve('..', 'src', 'tokens', 'colors', 'palette');
+const colorMixin = path.resolve('..', 'src', 'tokens', 'styles', 'mixins', '_color.scss');
 
 const tokenFiles = [
   'default-tokens.json',

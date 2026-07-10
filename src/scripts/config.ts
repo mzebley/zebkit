@@ -23,7 +23,7 @@ export type ExtendedTokensConfig = {
   /**
    * Controls which responsive breakpoint utility classes are generated. This is
    * a per-build filter over the breakpoints enabled in the breakpoint token
-   * module (src/core/breakpoint); naming a token-disabled breakpoint is an error.
+   * module (src/tokens/breakpoint); naming a token-disabled breakpoint is an error.
    * true or absent = all enabled breakpoints (default).
    * false = no responsive utility classes.
    * string[] = only the named breakpoints.
@@ -151,8 +151,6 @@ export type PruneConfig = {
 };
 
 export type TokensConfig = {
-  selectedComponents?: string[];
-  includeAllComponents?: boolean;
   destinationPath?: string;
   assetFilePath?: string;
   /** Built-in base preset to start from (e.g. `'default'`). The base theme is always emitted at `:root`. */

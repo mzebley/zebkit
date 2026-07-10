@@ -1,0 +1,10 @@
+@use 'tokens/styles/mixins/generators' as gen;
+@use 'tokens/styles/variables/prefix' as prefix;
+
+// Opacity scale values
+$opacity-scale: ('0', '5', '10', '15', '20', '25', '30', '40', '50', '60', '70', '75', '80', '85', '90', '95', '100');
+
+@layer utilities {
+  // Generate opacity utilities: .opacity-0, .opacity-50, .opacity-100, etc.
+  @include gen.generate-responsive-token-utility('opacity', opacity, $opacity-scale, 'opacity');
+}

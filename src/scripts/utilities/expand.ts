@@ -1,10 +1,10 @@
 // Shared types and grammar expansion for utility manifests
 // (schemas/utility-manifest.schema.json). Used by both lint.ts and generate.ts.
 
-export const MANIFEST_GLOB = "src/core/**/*utilities.manifest.json";
+export const MANIFEST_GLOB = "src/tokens/**/*utilities.manifest.json";
 
 // Fallback breakpoint axis, used only if the breakpoint token module can't be
-// loaded. The source of truth is the breakpoint token module (src/core/breakpoint);
+// loaded. The source of truth is the breakpoint token module (src/tokens/breakpoint);
 // generate.ts and lint.ts derive the list via breakpointKeysFromModules().
 export const BREAKPOINTS = [
   "tablet",

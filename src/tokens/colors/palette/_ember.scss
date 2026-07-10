@@ -1,0 +1,9 @@
+@use 'tokens/styles/mixins/color' as color-utils;
+
+:root {
+  @include color-utils.primitiveColor("ember", 16, 78%);
+}
+
+@layer utilities {
+  @include color-utils.generate-color-utilities("ember");
+}

@@ -1,0 +1,146 @@
+@use 'tokens/styles/mixins/font' as font-utils;
+
+
+@layer utilities {
+    .text-left {
+        text-align: left;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-justify {
+        text-align: justify;
+    }
+
+    .text-truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .text-overflow-ellipsis {
+        text-overflow: ellipsis;
+    }
+
+    .text-overflow-clip {
+        text-overflow: clip;
+    }
+
+    .text-wrap {
+        text-wrap: wrap;
+    }
+
+    .text-nowrap,
+    .text-wrap-none {
+        text-wrap: nowrap;
+    }
+
+    .text-wrap-balance {
+        text-wrap: balance;
+    }
+
+    .text-wrap-pretty {
+        text-wrap: pretty;
+    }
+
+    .text-uppercase {
+        text-transform: uppercase;
+    }
+
+    .text-lowercase {
+        text-transform: lowercase;
+    }
+
+    .text-capitalize {
+        text-transform: capitalize;
+    }
+
+    .text-normal-case {
+        text-transform: none;
+    }
+
+    .overflow-wrap-normal {
+        overflow-wrap: normal;
+    }
+
+    .overflow-wrap-break-word {
+        overflow-wrap: break-word;
+    }
+
+    .overflow-wrap-anywhere {
+        overflow-wrap: anywhere;
+    }
+
+    .whitespace-normal {
+        white-space: normal;
+    }
+
+    .whitespace-nowrap {
+        white-space: nowrap;
+    }
+
+    .whitespace-pre {
+        white-space: pre;
+    }
+
+    .whitespace-pre-line {
+        white-space: pre-line;
+    }
+
+    .whitespace-break-spaces {
+        white-space: break-spaces;
+    }
+
+    .whitespace-nowrap {
+        white-space: nowrap;
+    }
+
+    .word-break-normal {
+        word-break: normal;
+    }
+
+    .word-break-all {
+        word-break: break-all;
+    }
+
+    .word-break-keep {
+        word-break: keep-all;
+    }
+
+    .text-underline {
+        text-decoration-line: underline;
+    }
+
+    .text-overline {
+        text-decoration-line: overline;
+    }
+
+    .text-line-through {
+        text-decoration-line: line-through;
+    }
+
+    .text-no-underline,
+    .text-underline-none {
+        text-decoration-line: none;
+    }
+
+    // Generate font classes
+    @include font-utils.generate-font-family-classes();
+    @include font-utils.generate-font-size-classes();
+    @include font-utils.generate-font-size-media-queries();
+    @include font-utils.generate-line-height-classes();
+    @include font-utils.generate-line-height-media-queries();
+    @include font-utils.generate-font-weight-classes();
+    @include font-utils.generate-font-weight-media-queries();
+    @include font-utils.generate-tracking-classes();
+    @include font-utils.generate-text-measure-classes();
+    @include font-utils.generate-text-measure-media-queries();
+    @include font-utils.generate-line-clamp-classes();
+    @include font-utils.generate-line-clamp-media-queries();
+}

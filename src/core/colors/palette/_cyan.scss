@@ -1,9 +1,0 @@
-@use 'core/styles/mixins/color' as color-utils;
-
-:root {
-  @include color-utils.primitiveColor("cyan", 190, 72%);
-}
-
-@layer utilities {
-  @include color-utils.generate-color-utilities("cyan");
-}

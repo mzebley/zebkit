@@ -7,6 +7,19 @@ export interface VariantRuntimeEntryLike {
   name: string;
   className: string;
   overrides: Record<string, string>;
+  /** Advisory composition axis (e.g. "style", "size"). */
+  axis?: string;
+  /** One-line summary surfaced in the registry, docs, and agent context. */
+  description?: string;
+  /**
+   * Consumer-only escape hatch: extra CSS declarations / stylesheets attached
+   * to the variant class. These bypass the token and a11y guarantees — the
+   * build says so. Zebkit-shipped variants must be token-only (lint-enforced).
+   */
+  styles?: {
+    inline?: string | string[];
+    stylesheetPaths?: string[];
+  };
 }
 
 export interface VariantRegistryLike {
@@ -99,12 +112,37 @@ export function normalizeVariantOverrideEntry(
       ? entry.className.trim()
       : `${ZEBKIT_PREFIX}-${component}--${name}`;
 
-  return {
+  const normalized: VariantRuntimeEntryLike = {
     component,
     name,
     className,
     overrides,
   };
+
+  if (typeof entry.axis === 'string' && entry.axis.trim()) {
+    normalized.axis = entry.axis.trim();
+  }
+  if (typeof entry.description === 'string' && entry.description.trim()) {
+    normalized.description = entry.description.trim();
+  }
+
+  if (entry.styles && typeof entry.styles === 'object') {
+    const inline =
+      typeof entry.styles.inline === 'string' || Array.isArray(entry.styles.inline)
+        ? entry.styles.inline
+        : undefined;
+    const stylesheetPaths = Array.isArray(entry.styles.stylesheetPaths)
+      ? entry.styles.stylesheetPaths.filter((p: unknown) => typeof p === 'string')
+      : undefined;
+    if (inline || stylesheetPaths?.length) {
+      normalized.styles = {
+        ...(inline ? { inline } : {}),
+        ...(stylesheetPaths?.length ? { stylesheetPaths } : {}),
+      };
+    }
+  }
+
+  return normalized;
 }
 
 export function mergeVariantOverrideEntry(
@@ -112,7 +150,9 @@ export function mergeVariantOverrideEntry(
   registry: VariantRegistryLike,
   tokens: Record<string, TokenInterface>,
   variantMetadata: Map<string, VariantMetadataEntry>,
-  sourceLabel: string
+  sourceLabel: string,
+  /** Directory consumer stylesheetPaths resolve against (the override file's dir). */
+  stylesheetBaseDir?: string
 ) {
   const tokenKey = `${ZEBKIT_PREFIX}-${entry.component}`;
   const sourceTokens = tokens[tokenKey];
@@ -151,7 +191,35 @@ export function mergeVariantOverrideEntry(
       ...(existing?.overrides ?? {}),
       ...sanitizedOverrides,
     },
+    ...(entry.axis ?? existing?.axis
+      ? { axis: entry.axis ?? existing?.axis }
+      : {}),
+    ...(entry.description ?? existing?.description
+      ? { description: entry.description ?? existing?.description }
+      : {}),
   };
+
+  // Consumer escape hatch: honored, but announced — these declarations leave
+  // the token and a11y guarantees.
+  const inlineStyles = entry.styles?.inline
+    ? (Array.isArray(entry.styles.inline)
+        ? entry.styles.inline
+        : [entry.styles.inline]
+      )
+        .map((line) => line.trim())
+        .filter(Boolean)
+    : [];
+  const stylesheetPaths = (entry.styles?.stylesheetPaths ?? []).map((sheet) =>
+    path.isAbsolute(sheet)
+      ? sheet
+      : path.resolve(stylesheetBaseDir ?? process.cwd(), sheet)
+  );
+
+  if (inlineStyles.length > 0 || stylesheetPaths.length > 0) {
+    console.warn(
+      `Variant "${entry.component}.${entry.name}" uses the styles escape hatch — these declarations bypass zebkit's token and accessibility guarantees. Prefer token overrides; if the token surface can't express this, report the gap. Source: ${sourceLabel}`
+    );
+  }
 
   const metaKey = buildVariantMetaKey(entry.component, entry.name);
   const existingMeta = variantMetadata.get(metaKey);
@@ -159,11 +227,45 @@ export function mergeVariantOverrideEntry(
     component: entry.component,
     name: entry.name,
     className,
-    inlineStyles: existingMeta?.inlineStyles ?? [],
-    stylesheetPaths: existingMeta?.stylesheetPaths ?? [],
+    inlineStyles: [...(existingMeta?.inlineStyles ?? []), ...inlineStyles],
+    stylesheetPaths: [...(existingMeta?.stylesheetPaths ?? []), ...stylesheetPaths],
   });
 }
 
 export function buildVariantMetaKey(component: string, name: string): string {
   return `${component}::${name}`;
+}
+
+/**
+ * Build-failing lint: zebkit's own variants must be pure token remaps
+ * (GRAMMAR.md §6). The styles escape hatch exists for consumers (variant JSON
+ * overlays); a shipped variant that needs a CSS declaration is a component
+ * token-surface gap.
+ */
+export function assertShippedVariantsAreTokenOnly(
+  configs: Array<{
+    component: string;
+    name: string;
+    overrides?: Partial<Record<string, string>>;
+    styles?: { inline?: string | string[]; stylesheetPaths?: string[] };
+  }>
+): void {
+  const violations = configs.filter((variant) => {
+    const inline = variant.styles?.inline;
+    const hasInline = Array.isArray(inline) ? inline.length > 0 : Boolean(inline);
+    return hasInline || (variant.styles?.stylesheetPaths?.length ?? 0) > 0;
+  });
+
+  if (violations.length === 0) return;
+
+  throw new Error(
+    `Zebkit-shipped variants must be token-only (GRAMMAR.md §6) — a shipped variant that needs a CSS declaration is a component token-surface gap. Fix the token surface instead:\n${violations
+      .map(
+        (variant) =>
+          `  - ${variant.component}.${variant.name} uses styles.${
+            variant.styles?.inline ? 'inline' : 'stylesheetPaths'
+          }`
+      )
+      .join('\n')}`
+  );
 }

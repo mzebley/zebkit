@@ -1,0 +1,16 @@
+@use 'tokens/styles/mixins/generators' as gen;
+@use 'tokens/styles/variables/prefix' as prefix;
+
+// Z-index scale values (numeric)
+$z-index-scale: ('auto', '0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100');
+
+// Semantic z-index values
+$z-index-semantic: ('dropdown', 'sticky', 'fixed', 'modal-backdrop', 'modal', 'popover', 'tooltip');
+
+@layer utilities {
+  // Generate numeric scale utilities: .z-0, .z-10, .z-20, etc.
+  @include gen.generate-token-utility('z', z-index, $z-index-scale, 'z-index');
+
+  // Generate semantic utilities: .z-dropdown, .z-modal, .z-tooltip, etc.
+  @include gen.generate-token-utility('z', z-index, $z-index-semantic, 'z-index');
+}

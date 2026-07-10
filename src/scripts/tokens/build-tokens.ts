@@ -89,16 +89,6 @@ function displayWelcome() {
   console.log(chalk.cyan("============================"));
 }
 
-async function getComponents(componentsDir?: string): Promise<string[]> {
-  const dir = componentsDir ?? path.resolve(__dirname, "../../components");
-  if (!(await fs.pathExists(dir))) return [];
-
-  const items = await fs.readdir(dir, { withFileTypes: true });
-  return items
-    .filter((item: Dirent) => item.isDirectory() && !item.name.startsWith("."))
-    .map((item: Dirent) => item.name);
-}
-
 export interface RunTokenBuildOptions {
   /** Config to use instead of loading from disk. */
   overrideConfig?: ZebkitConfig;
@@ -156,44 +146,12 @@ export async function runTokenBuild(
     };
   }
 
-  const componentsDir = zebkitPackageRoot
-    ? path.join(zebkitPackageRoot, "src", "components")
-    : undefined;
   const builtInThemeNames = getThemePromptChoices(
     await getBuiltInThemeNames(zebkitPackageRoot)
   );
   const buildStart = Date.now();
 
   try {
-    const components = await getComponents(componentsDir);
-    const includeAllComponents = tokensConfig?.includeAllComponents;
-    const selectedComponents = includeAllComponents
-      ? components
-      : tokensConfig?.selectedComponents
-      ? tokensConfig.selectedComponents.filter((component) => {
-          const exists = components.includes(component);
-          if (!exists) {
-            console.warn(
-              chalk.yellow(
-                `Component "${component}" not found. Ignoring this entry from config.`
-              )
-            );
-          }
-          return exists;
-        })
-      : components.length > 0
-      ? (
-          await inquirer.prompt([
-            {
-              type: "checkbox",
-              name: "selectedComponents",
-              message: "Select components to include:",
-              choices: components,
-            },
-          ])
-        ).selectedComponents
-      : [];
-
     const { destinationPath, assetFilePath } = tokensConfig
       ? {
           destinationPath: tokensConfig.destinationPath ?? "./dist",
@@ -381,7 +339,7 @@ export async function runTokenBuild(
 
     const gatherOptions = zebkitPackageRoot
       ? {
-          coreDir: path.join(zebkitPackageRoot, "src", "core"),
+          tokensDir: path.join(zebkitPackageRoot, "src", "tokens"),
           componentsDir: path.join(zebkitPackageRoot, "src", "components"),
           tokenDefaultsDir:
             selectedTokenDefaultsDir &&
@@ -391,7 +349,7 @@ export async function runTokenBuild(
         }
       : undefined;
 
-    const files = await gatherZebkitFiles(selectedComponents, gatherOptions);
+    const files = await gatherZebkitFiles(gatherOptions);
 
     const resolvedSplitMode =
       splitMode as BuildZebkitTokensOptions["splitMode"];
@@ -524,7 +482,7 @@ export async function runTokenBuild(
         .sort()
         .map(
           (family, i) =>
-            `@use 'core/colors/palette/${family}' as zbk_smart_palette_${i};\n`
+            `@use 'tokens/colors/palette/${family}' as zbk_smart_palette_${i};\n`
         )
         .join("");
       finalVariantCss = `${inlineCss}\n${paletteGlobalColors()}`;

@@ -1,6 +1,6 @@
 // The variant compiler stitches together runtime variant registries, inline CSS,
 // and additional stylesheet imports. Variants can come from TypeScript modules in
-// src/core or src/components, and end-users can override them by providing JSON
+// src/tokens or src/components, and end-users can override them by providing JSON
 // exports when running the token builder in custom theme mode.
 import path from 'path';
 import fs from 'fs-extra';
@@ -13,6 +13,7 @@ import type { VariantConfig } from '@definitions/token-variants';
 import { convertDotNotation } from './token-converter';
 import { ZEBKIT_PREFIX } from '@config';
 import {
+  assertShippedVariantsAreTokenOnly,
   buildVariantMetaKey,
   extractVariantOverrideEntries,
   isVariantOverrideFile,
@@ -33,6 +34,10 @@ export interface VariantRuntimeEntry {
   name: string;
   className: string;
   overrides: Record<string, string>;
+  /** Advisory composition axis (e.g. "style", "size"). */
+  axis?: string;
+  /** One-line summary surfaced in the registry, docs, and agent context. */
+  description?: string;
 }
 
 /**
@@ -80,7 +85,7 @@ export interface BuildZebkitVariantsOptions {
 
 /**
  * Discovers built-in variant configs from TS modules under:
- *   - src/core/**\/variants/*.ts
+ *   - src/tokens/**\/variants/*.ts
  *   - src/components/**\/variants/*.ts
  *
  * Each file may default-export a single VariantConfig, an array of VariantConfig,
@@ -88,12 +93,12 @@ export interface BuildZebkitVariantsOptions {
  * sources plus a TS-aware loader); the installed CLI loads a JSON snapshot instead.
  */
 export async function discoverVariantConfigs(): Promise<VariantConfig[]> {
-  const coreDir = path.resolve(__dirname, '../../core');
+  const tokensDir = path.resolve(__dirname, '../../tokens');
   const componentsDir = path.resolve(__dirname, '../../components');
 
   const variantPatterns: string[] = [];
-  if (await fs.pathExists(coreDir)) {
-    variantPatterns.push(path.join(coreDir, '**/variants/*.ts'));
+  if (await fs.pathExists(tokensDir)) {
+    variantPatterns.push(path.join(tokensDir, '**/variants/*.ts'));
   }
   if (await fs.pathExists(componentsDir)) {
     variantPatterns.push(path.join(componentsDir, '**/variants/*.ts'));
@@ -109,8 +114,17 @@ export async function discoverVariantConfigs(): Promise<VariantConfig[]> {
   }
 
   const configs: VariantConfig[] = [];
+  // A variant is typically exported both by its own module and by the
+  // component's variants/index.ts registry; dedupe by component + name so the
+  // snapshot and registry hold each config exactly once.
+  const seen = new Set<string>();
   for (const file of variantFiles) {
-    configs.push(...(await loadVariantFile(file)));
+    for (const config of await loadVariantFile(file)) {
+      const key = `${config.component}::${config.name}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      configs.push(config);
+    }
   }
   return configs;
 }
@@ -148,6 +162,11 @@ export async function buildZebkitVariants(
       ? await loadVariantSnapshot(options.snapshotPath)
       : await discoverVariantConfigs();
 
+    // GRAMMAR.md §6: zebkit-shipped variants are token-only. The styles escape
+    // hatch exists for consumers (variant JSON overlays); a shipped variant
+    // that needs a CSS declaration is a component token-surface gap.
+    assertShippedVariantsAreTokenOnly(configs);
+
     for (const variant of configs) {
       await registerVariant(variant, tokens, registry, variantMetadata, projectRoot);
     }
@@ -169,6 +188,8 @@ export async function buildZebkitVariants(
     if (overridePaths.length > 0) {
       ({ inlineCss, extraStylesheets } = buildOutputs());
     }
+
+    warnOnCrossAxisOverlaps(registry);
 
     spinner.succeed(chalk.green('Variant processing complete.'));
     return {
@@ -273,7 +294,8 @@ async function applyVariantOverrides(
           registry,
           tokens,
           variantMetadata,
-          path.basename(file)
+          path.basename(file),
+          path.dirname(file)
         );
       }
     } catch (error) {
@@ -291,6 +313,38 @@ export {
   mergeVariantOverrideEntry,
   normalizeVariantOverrideEntry,
 } from './compile-variant-helpers';
+
+/**
+ * Advisory cross-axis check. Same-axis variants are alternatives — overlapping
+ * tokens there is expected (the dev runtime warns if a user stacks them). But
+ * DIFFERENT axes promise composability (`variant="ghost lg"`), so two
+ * different-axis variants overriding the same token is a composability promise
+ * the CSS can't keep. Never blocking — the vocabulary stays complete.
+ */
+function warnOnCrossAxisOverlaps(registry: VariantRegistry): void {
+  for (const [component, variants] of Object.entries(registry)) {
+    const entries = Object.values(variants).filter((entry) => entry.axis);
+    for (let i = 0; i < entries.length; i++) {
+      for (let j = i + 1; j < entries.length; j++) {
+        const a = entries[i];
+        const b = entries[j];
+        if (a.axis === b.axis) continue;
+        const overlap = Object.keys(a.overrides ?? {}).filter((key) =>
+          Object.prototype.hasOwnProperty.call(b.overrides ?? {}, key)
+        );
+        if (overlap.length > 0) {
+          console.warn(
+            chalk.yellow(
+              `Variants "${component}.${a.name}" (axis "${a.axis}") and "${component}.${b.name}" (axis "${b.axis}") both set: ${overlap.join(
+                ', '
+              )}. Different axes promise composability — move the shared token to one axis or align their axes.`
+            )
+          );
+        }
+      }
+    }
+  }
+}
 
 async function registerVariant(
   variant: VariantConfig<string, string>,
@@ -357,6 +411,8 @@ async function registerVariant(
     name,
     className,
     overrides,
+    ...(variant.axis ? { axis: variant.axis } : {}),
+    ...(variant.description ? { description: variant.description } : {}),
   };
 
   const inlineStyles =

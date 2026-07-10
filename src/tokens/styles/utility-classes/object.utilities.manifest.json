@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Object utilities",
+  "key": "object",
+  "description": "Controls how objects are placed and fitted within their container.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "object-fit",
+      "description": "Specifies how the content of a replaced element (like an <img> or <video>) should resize to fit its container.",
+      "guidance": [
+        "To make object-fit work, you must explicitly declare both width and height on the image element."
+      ],
+      "source": "src/tokens/styles/utility-classes/object.scss",
+      "properties": [
+        "object-fit"
+      ],
+      "pattern": {
+        "base": "object-fit",
+        "values": [
+          "fill",
+          "cover",
+          "contain",
+          "none",
+          "scale-down"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "object-position",
+      "description": "Controls the alignment of a replaced element's content (like an <img> or <video>) inside its container.",
+      "guidance": [
+        "Almost always paired with object-fit."
+      ],
+      "source": "src/tokens/styles/utility-classes/object.scss",
+      "properties": [
+        "object-position"
+      ],
+      "pattern": {
+        "base": "object-position",
+        "values": [
+          "center",
+          "top",
+          "top-right",
+          "right",
+          "bottom-right",
+          "bottom",
+          "bottom-left",
+          "left",
+          "top-left"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "top-right": "top right",
+          "bottom-right": "bottom right",
+          "bottom-left": "bottom left",
+          "top-left": "top left"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    }
+  ]
+}

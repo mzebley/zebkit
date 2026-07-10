@@ -1,0 +1,25 @@
+@use 'tokens/styles/variables/prefix'as prefix;
+
+@layer base {
+
+.prose > h1, h1.prose {
+  font-family: var(--#{prefix.$cssVar}-h1-font-family);
+  font-size: var(--#{prefix.$cssVar}-h1-font-size);
+  font-weight: var(--#{prefix.$cssVar}-h1-font-weight);
+  line-height: var(--#{prefix.$cssVar}-h1-line-height);
+  letter-spacing: var(--#{prefix.$cssVar}-h1-letter-spacing);
+  max-width: var(--#{prefix.$cssVar}-h1-measure);
+  color: var(--#{prefix.$cssVar}-h1-color);
+  font-style: var(--#{prefix.$cssVar}-h1-font-style);
+  text-transform: var(--#{prefix.$cssVar}-h1-text-transform);
+}
+
+.prose>*+h1 {
+  margin-top:var(--#{prefix.$cssVar}-h1-spacing-before);
+}
+
+.prose>h1+*, h1.prose+* {
+  margin-top:var(--#{prefix.$cssVar}-h1-spacing-after);
+}
+
+} // @layer base

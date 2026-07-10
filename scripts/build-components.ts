@@ -19,7 +19,7 @@ import { extractZbkTokens } from '../src/scripts/prune/content-scan';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
-const entry = path.resolve(root, 'src/core/index.ts');
+const entry = path.resolve(root, 'src/components/index.ts');
 const outJs = path.resolve(root, 'dist/components/index.js');
 const outDts = path.resolve(root, 'dist/components/index.d.ts');
 const tsconfigPath = path.resolve(root, 'tsconfig.json');

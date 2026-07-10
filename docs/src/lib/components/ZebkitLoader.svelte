@@ -15,7 +15,7 @@
     try {
       const scriptUrl = new URL('/zebkit/zebkit.js', window.location.origin).toString();
       const module = await import(/* @vite-ignore */ scriptUrl);
-      module?.core?.defineCoreComponents?.();
+      module?.core?.defineZebkitComponents?.() ?? module?.defineZebkitComponents?.();
     } catch (error) {
       console.error('Failed to load zebkit components:', error);
     }

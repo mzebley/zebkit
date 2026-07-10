@@ -1,0 +1,9 @@
+@use 'tokens/styles/mixins/color' as color-utils;
+
+:root {
+  @include color-utils.primitiveColor("butterfield", 48, 72%);
+}
+
+@layer utilities {
+  @include color-utils.generate-color-utilities("butterfield");
+}

@@ -23,7 +23,6 @@ describe('build smoke tests', () => {
 
     const config = {
       tokens: {
-        includeAllComponents: true,
         destinationPath,
         assetFilePath: '/assets/',
         basePreset: 'default',
@@ -90,7 +89,6 @@ describe('build smoke tests', () => {
 
     const config = {
       tokens: {
-        includeAllComponents: true,
         destinationPath,
         assetFilePath: '/assets/',
         basePreset: 'default',
@@ -169,7 +167,6 @@ describe('build smoke tests', () => {
 
     const config = {
       tokens: {
-        includeAllComponents: false,
         destinationPath,
         assetFilePath: '/assets/',
         basePreset: 'default',

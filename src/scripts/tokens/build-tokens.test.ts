@@ -4,7 +4,7 @@
 
 import type { TokenInterface } from '@definitions/tokens';
 import { EXTENDED_TOKEN_BREAKPOINTS } from '../config';
-import breakpointTokens from '../../core/breakpoint/tokens/tokens';
+import breakpointTokens from '../../tokens/breakpoint/tokens/tokens';
 import {
   buildEnabledBreakpointsList,
   buildTokenLookup,

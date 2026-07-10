@@ -1,0 +1,23 @@
+@use 'tokens/styles/mixins/spacing'as spacing-utils;
+@use 'tokens/styles/mixins/position'as position-utils;
+@use 'tokens/styles/variables/spacing'as spacing-vars;
+
+@layer utilities {
+  // Generate min/max height/width utility classes
+  @include spacing-utils.generate-size-classes(height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-classes(min-height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-classes(max-height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-classes(width, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-classes(min-width, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-classes(max-width, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(min-height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(max-height, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(width, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(min-width, spacing-vars.$size-values);
+  @include spacing-utils.generate-size-media-queries(max-width, spacing-vars.$size-values);
+
+  // Generate positioning classes ( .top-05, .left-5, etc)
+  @include position-utils.generate-position-classes(spacing-vars.$spacing-values);
+  @include position-utils.generate-position-media-queries(spacing-vars.$spacing-values);
+}
