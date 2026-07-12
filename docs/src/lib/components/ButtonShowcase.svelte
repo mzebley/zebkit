@@ -55,19 +55,21 @@
         <h3 class="text-base font-semibold ink-app-strong">Icon slot</h3>
         <p class="text-sm ink-app-muted">
           <code class="canvas-app-muted px-1 py-0.5 rounded">slot="icon"</code> renders aria-hidden
-          beside the label; icon-only buttons need
+          beside the label. Use
+          <code class="canvas-app-muted px-1 py-0.5 rounded">data-position="start|end"</code>
+          for explicit placement; icon-only buttons need
           <code class="canvas-app-muted px-1 py-0.5 rounded">aria-label</code>.
         </p>
       </header>
       <div class="flex flex-wrap gap-3 items-center">
         <zbk-button variant="outline">
-          <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg slot="icon" data-position="start" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 5v14m-7-7h14" />
           </svg>
           Add item
         </zbk-button>
         <zbk-button variant="ghost" aria-label="Close">
-          <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg slot="icon" data-position="start" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 6l12 12M18 6L6 18" />
           </svg>
         </zbk-button>

@@ -43,6 +43,8 @@ complete config. It asks about:
 - **Color palettes** — `all` families or `smart` (only families your tokens reference)
 - **Fluid vs. static** [type scale](/typography/type-scale) and [spacing](/spacing/scaling)
 - **Split mode** for token-export artifacts — `combined` or `per-module`
+- **Components to include** — unchecked components are excluded from the build entirely
+  (see [the `components` block](#the-components-block))
 - whether to **copy default token files** into `./tokens/` for editing
 - a gate for **token-export / advanced options** (artifact formats, lookup/registry JSON,
   breakpoint vars and the responsive breakpoint set)
@@ -151,6 +153,57 @@ an invalid value fails with the list of valid paths or accepted values.
 | `tokens.writeAllowedTokenTypes` | `true` · `false` |
 | `tokens.extendedTokens.emitBreakpointVars` | `true` · `false` |
 | `tokens.extendedTokens.breakpoints` | `true`/`false`, or a subset of `tablet`, `tablet-lg`, `desktop`, `desktop-lg`, `widescreen` |
+| `components` | a JSON object — see [the `components` block](#the-components-block) |
+
+## The `components` block
+
+A top-level config key (a sibling of `tokens`) declaring which components ship. Omitted
+components are included with all their shipped variants, so the block only needs to say what
+changes:
+
+```json
+{
+  "tokens": { "...": "..." },
+  "components": {
+    "tooltip": false,
+    "button": { "variants": ["ghost", "lg"] }
+  }
+}
+```
+
+| Entry | Effect |
+|---|---|
+| `false` | Exclude the component entirely — its styles, `--zbk-{name}-*` tokens, and variants leave the build |
+| `true` | Explicit include (same as omitting it) |
+| `{ "variants": [...] }` | Include the component with only the named shipped variants; `[]` drops them all |
+
+Rules and interactions:
+
+- **Declared intent vs. evidence.** The `components` block filters at gather time, before the
+  compile; [`prune`](/pruning) scans your source afterwards and can only ever remove *more*.
+  Use `components` for "we never ship accordions", prune for "this page never uses `subtle`".
+- **Variant allowlists govern shipped variants only.** [Custom variants](/foundations/theming#custom-variants)
+  from your theme's variant JSON files are never filtered — but a custom file that *patches* an
+  allowlisted-out shipped variant warns and is skipped (it can't resurrect CSS the config removed).
+- **Unknown names warn** with the valid component vocabulary; token or overlay override files
+  targeting an excluded component warn with the fix.
+- **The JS bundle doesn't shrink.** Config can't remove code from the npm package — imports do
+  that. To keep dev warnings honest, mirror the config at runtime:
+
+```js
+import { ZebkitElement, defineZebkitComponents } from "zebkit/components";
+import config from "./zebkit.config.json";
+
+ZebkitElement.applyComponentsConfig(config.components); // before elements upgrade
+defineZebkitComponents();
+```
+
+With the mirror in place, an excluded component warns on first use, and a filtered-out shipped
+variant (`variant="subtle"` when only `ghost, lg` ship) warns instead of silently rendering
+base styles.
+
+The non-quick `init` (and guided `config`) asks which components to include as a checkbox;
+per-component variant allowlists are a config-file edit.
 
 ## `overlay-theme`
 

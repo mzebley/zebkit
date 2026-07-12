@@ -18,6 +18,7 @@ export interface InitCommandDeps {
   getZebkitDefaultsDir: () => string;
   getBuiltInThemeNames: (packageRoot?: string) => Promise<string[]>;
   getThemePromptChoices: (themeNames: string[]) => string[];
+  getKnownComponents: (tokenDefaultsDir?: string) => Promise<string[]>;
   resolveBundledThemeTokensDir: (
     themeName: string,
     defaultsDir: string,
@@ -143,6 +144,7 @@ export async function runInitCommand(
     const ctx: PromptContext = {
       themeChoices,
       defaultProjectName: getDefaultProjectName(process.cwd()),
+      componentChoices: await deps.getKnownComponents(defaultsDir),
     };
 
     if (await deps.pathExists(configPath)) {

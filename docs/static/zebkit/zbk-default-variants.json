@@ -1,4 +1,31 @@
 {
+  "input": {
+    "sm": {
+      "component": "input",
+      "name": "sm",
+      "className": "zbk-input--sm",
+      "overrides": {
+        "font-size": "{font-size.sm}",
+        "label-font-size": "{font-size.xs}",
+        "padding-inline": "{spacing.xs}"
+      },
+      "axis": "size",
+      "description": "Smaller type and padding; keeps the 44px minimum tap target."
+    },
+    "lg": {
+      "component": "input",
+      "name": "lg",
+      "className": "zbk-input--lg",
+      "overrides": {
+        "font-size": "{font-size.lg}",
+        "label-font-size": "{font-size.md}",
+        "padding-inline": "{spacing.md}",
+        "padding-block": "{spacing.xs}"
+      },
+      "axis": "size",
+      "description": "Larger type and padding."
+    }
+  },
   "toggle": {
     "sm": {
       "component": "toggle",
@@ -25,6 +52,33 @@
       "description": "Larger track and label type; thumb follows the track."
     }
   },
+  "select": {
+    "sm": {
+      "component": "select",
+      "name": "sm",
+      "className": "zbk-select--sm",
+      "overrides": {
+        "font-size": "{font-size.sm}",
+        "label-font-size": "{font-size.xs}",
+        "padding-inline": "{spacing.xs}"
+      },
+      "axis": "size",
+      "description": "Smaller type and padding; keeps the 44px minimum tap target."
+    },
+    "lg": {
+      "component": "select",
+      "name": "lg",
+      "className": "zbk-select--lg",
+      "overrides": {
+        "font-size": "{font-size.lg}",
+        "label-font-size": "{font-size.md}",
+        "padding-inline": "{spacing.md}",
+        "padding-block": "{spacing.xs}"
+      },
+      "axis": "size",
+      "description": "Larger type and padding."
+    }
+  },
   "radio": {
     "sm": {
       "component": "radio",
@@ -47,33 +101,6 @@
       },
       "axis": "size",
       "description": "Larger control and label type."
-    }
-  },
-  "input": {
-    "sm": {
-      "component": "input",
-      "name": "sm",
-      "className": "zbk-input--sm",
-      "overrides": {
-        "font-size": "{font-size.sm}",
-        "label-font-size": "{font-size.xs}",
-        "padding-inline": "{spacing.xs}"
-      },
-      "axis": "size",
-      "description": "Smaller type and padding; keeps the 44px minimum tap target."
-    },
-    "lg": {
-      "component": "input",
-      "name": "lg",
-      "className": "zbk-input--lg",
-      "overrides": {
-        "font-size": "{font-size.lg}",
-        "label-font-size": "{font-size.md}",
-        "padding-inline": "{spacing.md}",
-        "padding-block": "{spacing.xs}"
-      },
-      "axis": "size",
-      "description": "Larger type and padding."
     }
   },
   "checkbox": {
@@ -183,33 +210,6 @@
       },
       "axis": "style",
       "description": "Transparent canvas and border; ink takes the action role with a subtle hover wash."
-    }
-  },
-  "select": {
-    "sm": {
-      "component": "select",
-      "name": "sm",
-      "className": "zbk-select--sm",
-      "overrides": {
-        "font-size": "{font-size.sm}",
-        "label-font-size": "{font-size.xs}",
-        "padding-inline": "{spacing.xs}"
-      },
-      "axis": "size",
-      "description": "Smaller type and padding; keeps the 44px minimum tap target."
-    },
-    "lg": {
-      "component": "select",
-      "name": "lg",
-      "className": "zbk-select--lg",
-      "overrides": {
-        "font-size": "{font-size.lg}",
-        "label-font-size": "{font-size.md}",
-        "padding-inline": "{spacing.md}",
-        "padding-block": "{spacing.xs}"
-      },
-      "axis": "size",
-      "description": "Larger type and padding."
     }
   }
 }

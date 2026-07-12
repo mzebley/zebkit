@@ -66,6 +66,48 @@ describe('ZbkButton', () => {
       expect(el.querySelector('.zbk-button__label')!.textContent).toContain('Save');
     });
 
+    it('renders an explicit start icon before label content', async () => {
+      const el = await mount(
+        '<zbk-button>Save<span slot="icon" data-position="start" data-i></span></zbk-button>'
+      );
+      const icon = el.querySelector('.zbk-button__icon--start')!;
+      const label = el.querySelector('.zbk-button__label')!;
+      expect(icon.querySelector('[data-i]')).not.toBeNull();
+      expect(
+        Boolean(
+          icon.compareDocumentPosition(label) &
+            Node.DOCUMENT_POSITION_FOLLOWING
+        )
+      ).toBe(true);
+    });
+
+    it('renders an explicit end icon after label content', async () => {
+      const el = await mount(
+        '<zbk-button><span slot="icon" data-position="end" data-i></span>Save</zbk-button>'
+      );
+      const icon = el.querySelector('.zbk-button__icon--end')!;
+      const label = el.querySelector('.zbk-button__label')!;
+      expect(icon.querySelector('[data-i]')).not.toBeNull();
+      expect(
+        Boolean(
+          label.compareDocumentPosition(icon) &
+            Node.DOCUMENT_POSITION_FOLLOWING
+        )
+      ).toBe(true);
+    });
+
+    it('infers start and end icons from authored child order', async () => {
+      const el = await mount(
+        '<zbk-button><span slot="icon" data-start></span>Save<span slot="icon" data-end></span></zbk-button>'
+      );
+      expect(
+        el.querySelector('.zbk-button__icon--start [data-start]')
+      ).not.toBeNull();
+      expect(
+        el.querySelector('.zbk-button__icon--end [data-end]')
+      ).not.toBeNull();
+    });
+
     it('renders no icon wrapper without icon content', async () => {
       const el = await mount('<zbk-button>Save</zbk-button>');
       expect(el.querySelector('.zbk-button__icon')).toBeNull();

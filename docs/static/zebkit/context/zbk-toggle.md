@@ -109,3 +109,5 @@ A variant is a named, partial remapping of the token surface compiled to a class
 |---|---|---|---|---|
 | `sm` | size | `zbk-toggle--sm` | Smaller track and label type; thumb follows the track. | track-width: {spacing.lg}; track-height: {spacing.md}; font-size: {font-size.sm} |
 | `lg` | size | `zbk-toggle--lg` | Larger track and label type; thumb follows the track. | track-width: {spacing.xl}; track-height: {spacing.lg}; font-size: {font-size.lg} |
+
+Custom variants: add a `zbk-toggle.variants.json` file to the base theme's token folder (component-keyed map of `{ "toggle": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-toggle--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.

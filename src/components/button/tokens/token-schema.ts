@@ -70,6 +70,8 @@ export const tokenSchema = z.object({
 
   // Icon-related
   'icon-size': tokenObjectSchema,
+  'icon-end-size': tokenObjectSchema,
+  'icon-start-size': tokenObjectSchema,
 
   // Focus & interaction
   'focus-color': tokenObjectSchema,
@@ -81,6 +83,12 @@ export const tokenSchema = z.object({
   'box-shadow-hover': tokenObjectSchema,
   'box-shadow-active': tokenObjectSchema,
   'box-shadow-focus': tokenObjectSchema,
+
+  // Transformation
+  'transform': tokenObjectSchema,
+  'transform-hover': tokenObjectSchema,
+  'transform-active': tokenObjectSchema,
+  'transform-focus': tokenObjectSchema,
 
   // Interaction behavior
   cursor: tokenObjectSchema,

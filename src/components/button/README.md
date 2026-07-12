@@ -8,17 +8,23 @@ Contract details (naming, states, ARIA relocation, content model) live in [GRAMM
 
 ```html
 <zbk-button variant="ghost lg" type="submit">
-  <svg slot="icon" viewBox="0 0 24 24">…</svg>
+  <svg slot="icon" data-position="start" viewBox="0 0 24 24">…</svg>
   Save draft
 </zbk-button>
 ```
+
+Slotted icons use `data-position="start|end"` for explicit placement. If
+`data-position` is omitted, placement is inferred from the icon's original
+authored order relative to the default label content.
 
 Renders (light DOM, inspectable):
 
 ```html
 <zbk-button variant="ghost lg" type="submit">
   <button class="zbk-button zbk-button--ghost zbk-button--lg" type="submit">
-    <span class="zbk-button__icon" aria-hidden="true"><svg>…</svg></span>
+    <span class="zbk-button__icon zbk-button__icon--start" aria-hidden="true"
+      ><svg>…</svg></span
+    >
     <span class="zbk-button__label">Save draft</span>
   </button>
 </zbk-button>

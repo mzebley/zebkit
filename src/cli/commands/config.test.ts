@@ -26,6 +26,7 @@ describe('config command', () => {
     getZebkitPackageRoot: () => '/pkg',
     getBuiltInThemeNames: mockGetBuiltInThemeNames,
     getThemePromptChoices: mockGetThemePromptChoices,
+    getKnownComponents: jest.fn(async () => ['button', 'tooltip']),
     handlePromptCancel: mockHandlePromptCancel,
     isPromptCancelError: ((e: unknown) =>
       mockIsPromptCancelError()) as ConfigCommandDeps['isPromptCancelError'],

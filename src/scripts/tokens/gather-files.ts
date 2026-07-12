@@ -18,6 +18,11 @@ export interface GatherOptions {
    * dynamically importing TS token modules. Used by the installed CLI.
    */
   tokenDefaultsDir?: string;
+  /**
+   * Component names excluded by the `components` config block. Their styles.scss
+   * and token modules are dropped here, before the compile.
+   */
+  excludedComponents?: ReadonlySet<string>;
 }
 
 /**
@@ -25,8 +30,10 @@ export interface GatherOptions {
  *
  * Token modules live at src/tokens/.../tokens/tokens.ts (the token language) and
  * src/components/{name}/tokens/tokens.ts (per-component surfaces). Component
- * tokens are part of the default vocabulary — every component's tokens are
- * always gathered; shrinking the shipped surface is `zebkit prune`'s job.
+ * tokens are part of the default vocabulary; the shipped surface shrinks in two
+ * ways that compose: the `components` config (declared intent, filtered here at
+ * gather time) and `zebkit prune` (evidence-based, runs after the compile and
+ * can only ever remove more).
  *
  * In installed CLI mode, pass tokenDefaultsDir to load pre-compiled JSON defaults instead.
  */
@@ -39,6 +46,9 @@ export async function gatherZebkitFiles(options?: GatherOptions) {
   try {
     const tokensDir = options?.tokensDir ?? path.resolve(__dirname, '../../tokens');
     const componentsDir = options?.componentsDir ?? path.resolve(__dirname, '../../components');
+    const excluded = options?.excludedComponents ?? new Set<string>();
+    const componentNameOf = (file: string): string =>
+      path.relative(componentsDir, file).split(path.sep)[0]?.toLowerCase() ?? '';
 
     // Token-language stylesheets: entry styles.scss plus nested styles/*.scss
     const tokenStyles = await glob(
@@ -60,7 +70,9 @@ export async function gatherZebkitFiles(options?: GatherOptions) {
         absolute: true,
         nodir: true,
       });
-      stylesheets.push(...componentStyles.sort());
+      stylesheets.push(
+        ...componentStyles.filter((file) => !excluded.has(componentNameOf(file))).sort()
+      );
     }
 
     if (options?.tokenDefaultsDir) {
@@ -69,11 +81,21 @@ export async function gatherZebkitFiles(options?: GatherOptions) {
         cwd: options.tokenDefaultsDir,
         absolute: true,
         nodir: true,
-        // variants.json is the built-in variant snapshot and component-tokens.json
-        // is the component-consumed-vars list for prune — neither is a token module.
-        ignore: ['manifest.json', 'variants.json', 'component-tokens.json'],
+        // manifest/variants/components are pipeline snapshots and
+        // component-tokens.json is the component-consumed-vars list for prune —
+        // none of them is a token module.
+        ignore: ['manifest.json', 'variants.json', 'components.json', 'component-tokens.json'],
       });
-      tokenFiles.push(...jsonFiles.sort());
+      const excludedModuleKeys = new Set(
+        [...excluded].map((component) => `zbk-${component}`)
+      );
+      tokenFiles.push(
+        ...jsonFiles
+          .filter(
+            (file) => !excludedModuleKeys.has(path.basename(file, '.json').toLowerCase())
+          )
+          .sort()
+      );
     } else {
       // Dev mode: discover TypeScript token modules
       const languageTokens = await glob('**/tokens/tokens.ts', {
@@ -88,7 +110,10 @@ export async function gatherZebkitFiles(options?: GatherOptions) {
           nodir: true,
         });
         tokenFiles.push(
-          ...componentTokens.sort().map((file) => path.join('components', file))
+          ...componentTokens
+            .filter((file) => !excluded.has(file.split(/[\\/]/)[0]?.toLowerCase() ?? ''))
+            .sort()
+            .map((file) => path.join('components', file))
         );
       }
     }

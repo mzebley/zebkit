@@ -1,0 +1,243 @@
+{
+  "display": {
+    "value": "contents",
+    "type": "display",
+    "description": "Display mode for the <zbk-radio> host element."
+  },
+  "control-size": {
+    "value": "{spacing.105}",
+    "type": "sizing",
+    "description": "Base width and height of the radio control."
+  },
+  "control-width": {
+    "value": "{radio.control-size}",
+    "type": "sizing",
+    "description": "Control width override when it differs from control-size."
+  },
+  "control-height": {
+    "value": "{radio.control-size}",
+    "type": "sizing",
+    "description": "Control height override when it differs from control-size."
+  },
+  "canvas": {
+    "value": "{app.canvas}",
+    "type": "color",
+    "description": "Background of an unselected radio control."
+  },
+  "canvas-hover": {
+    "value": "{app.canvas-subtle}",
+    "type": "color",
+    "description": "Control background when hovered."
+  },
+  "canvas-active": {
+    "value": "{app.canvas-muted}",
+    "type": "color",
+    "description": "Control background while pressed."
+  },
+  "canvas-checked": {
+    "value": "{accent-primary.500}",
+    "type": "color",
+    "description": "Control background when selected."
+  },
+  "canvas-disabled": {
+    "value": "{disabled.canvas}",
+    "type": "color",
+    "description": "Control background when disabled."
+  },
+  "border-color": {
+    "value": "{app.border-emphasis}",
+    "type": "color",
+    "description": "Border color of an unselected radio control."
+  },
+  "border-color-hover": {
+    "value": "{accent-primary.400}",
+    "type": "color",
+    "description": "Control border color when hovered."
+  },
+  "border-color-active": {
+    "value": "{accent-primary.500}",
+    "type": "color",
+    "description": "Control border color while pressed."
+  },
+  "border-color-checked": {
+    "value": "{radio.canvas-checked}",
+    "type": "color",
+    "description": "Control border color when selected."
+  },
+  "border-color-disabled": {
+    "value": "{disabled.border}",
+    "type": "color",
+    "description": "Control border color when disabled."
+  },
+  "border-width": {
+    "value": "{border.width-md}",
+    "type": "borderWidth",
+    "description": "Border thickness of the radio control."
+  },
+  "border-style": {
+    "value": "{border.style}",
+    "type": "borderStyle",
+    "description": "Border style of the radio control."
+  },
+  "border-radius": {
+    "value": "50%",
+    "type": "borderRadius",
+    "description": "Corner radius of the radio control (a circle by default)."
+  },
+  "indicator-color": {
+    "value": "{app.ink-inverse}",
+    "type": "color",
+    "description": "Color of the selection dot."
+  },
+  "indicator-color-disabled": {
+    "value": "{disabled.ink}",
+    "type": "color",
+    "description": "Selection dot color when disabled."
+  },
+  "indicator-size": {
+    "value": "0.75em",
+    "type": "sizing",
+    "description": "Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size."
+  },
+  "indicator-radius": {
+    "value": "50%",
+    "type": "borderRadius",
+    "description": "Corner radius of the selection dot (a circle by default)."
+  },
+  "ink": {
+    "value": "{app.ink}",
+    "type": "color",
+    "description": "Label text color."
+  },
+  "ink-disabled": {
+    "value": "{disabled.ink}",
+    "type": "color",
+    "description": "Label text color when disabled."
+  },
+  "font-family": {
+    "value": "{font-family.interface}",
+    "type": "fontFamily",
+    "description": "Font family for the radio label."
+  },
+  "font-size": {
+    "value": "{font-size.md}",
+    "type": "fontSize",
+    "description": "Font size for the radio label."
+  },
+  "font-weight": {
+    "value": "{font-weight.normal}",
+    "type": "fontWeight",
+    "description": "Font weight for the radio label."
+  },
+  "line-height": {
+    "value": "{line-height.2}",
+    "type": "lineHeight",
+    "description": "Line height for the radio label."
+  },
+  "letter-spacing": {
+    "value": "{tracking.normal}",
+    "type": "letterSpacing",
+    "description": "Letter spacing for the radio label."
+  },
+  "gap": {
+    "value": "{spacing.sm}",
+    "type": "spacing",
+    "description": "Space between the control and its label."
+  },
+  "align-items": {
+    "value": "center",
+    "type": "flex",
+    "description": "Cross-axis alignment of control and label."
+  },
+  "group-gap": {
+    "value": "{spacing.md}",
+    "type": "spacing",
+    "description": "Gap between radios in a .zbk-radio-group."
+  },
+  "group-direction": {
+    "value": "column",
+    "type": "flex",
+    "description": "Flow direction of a .zbk-radio-group (column or row)."
+  },
+  "focus-color": {
+    "value": "{focus.color}",
+    "type": "color",
+    "description": "Outline color for keyboard focus."
+  },
+  "focus-width": {
+    "value": "{focus.width}",
+    "type": "borderWidth",
+    "description": "Outline width for keyboard focus."
+  },
+  "focus-offset": {
+    "value": "{focus.offset}",
+    "type": "spacing",
+    "description": "Outline offset for keyboard focus."
+  },
+  "box-shadow": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Default control shadow."
+  },
+  "box-shadow-hover": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Control shadow when hovered."
+  },
+  "box-shadow-active": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Control shadow while pressed."
+  },
+  "box-shadow-checked": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Control shadow when selected."
+  },
+  "box-shadow-focus": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Control shadow in the focus state (in addition to the outline)."
+  },
+  "cursor": {
+    "value": "pointer",
+    "type": "utility",
+    "description": "Cursor when hovering an enabled radio."
+  },
+  "cursor-disabled": {
+    "value": "not-allowed",
+    "type": "utility",
+    "description": "Cursor when hovering a disabled radio."
+  },
+  "transition-duration": {
+    "value": "{transition.playful-fx-duration-default}",
+    "type": "transition",
+    "description": "Duration for radio state transitions.",
+    "a11y": true
+  },
+  "transition-timing-function": {
+    "value": "{transition.playful-fx-function-default}",
+    "type": "transition",
+    "description": "Easing for radio state transitions."
+  },
+  "transition-property": {
+    "value": "background-color, border-color, box-shadow, transform, opacity, outline",
+    "type": "transition",
+    "description": "CSS properties that animate on state changes."
+  },
+  "transition-delay": {
+    "value": "0",
+    "type": "transition",
+    "description": "Delay before radio transitions run."
+  },
+  "opacity": {
+    "value": 1,
+    "type": "opacity",
+    "description": "Opacity of the radio."
+  },
+  "opacity-disabled": {
+    "value": "{opacity.70}",
+    "type": "opacity",
+    "description": "Control opacity when disabled."
+  }
+}

@@ -26,7 +26,7 @@ For every intent the system supports there is exactly one documented way to expr
 | Variant class | `zbk-{component}--{variant}` | `.zbk-button--ghost` |
 | Component token | `--zbk-{component}-{property}[-{state}]` | `--zbk-button-canvas-hover` |
 | Custom event | `zbk-{event}` | `zbk-dismiss` |
-| Named slot | `slot="{name}"` from the shared slot vocabulary | `<span slot="icon">` |
+| Named slot | `slot="{name}"` from the shared slot vocabulary | `<span slot="icon" data-position="start">` |
 
 `{component}` is the pattern's common name in kebab-case (`button`, `tooltip`, `menu-item`). Names describe the pattern, never the appearance.
 
@@ -94,13 +94,14 @@ Rules:
 - **Escape hatches (`styles.inline`, `styles.stylesheetPaths`) are for consumers only.** They exist so a genuine one-off doesn't force an exit from the variant system entirely, but their declarations bypass the token and a11y guarantees, and the build says so. A lint fails the build if any zebkit-shipped variant uses them.
 - Shipped variants are **structural recipes, not aesthetic choices** — patterns like `ghost`, `outline`, `subtle`, `sm`, `lg` defined entirely in terms of aliases. Taste ships as guidance, never as the only option.
 - Every variant lands in the compiled variant registry (component → name → class + overridden tokens + axis) — the machine-readable source for runtime validation, docs, and agent context.
+- **Consumers add or patch variants with JSON files in their base theme's token folder**, detected by filename: `zbk-{component}.variants.json` (all custom variants for a component), `zbk-{component}.variant.{name}.json` (one variant), or any `*-variants.json` (multi-component collection). Same rules as shipped variants; a shipped name patches, a new name compiles a new class. A new name additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="..."` accepts it — registration teaches the runtime the vocabulary, the CSS comes from the build.
 
 ## 7. Light DOM and the content model
 
 - **Components render into light DOM.** No shadow roots. Tokens, utility classes, cascade layers, and the runtime a11y machinery must reach everything.
 - **The element owns its internal skeleton.** The author writes the element and its content; the component renders the structure (the native element at its core, wrappers, ARIA wiring). Authors never hand-write internal DOM.
 - **Content is adopted, not replaced.** On upgrade, the element moves its authored children into the skeleton it renders. Named positions use the `slot` attribute with a shared vocabulary that means the same thing on every component and grows only by amending this spec. Default (unnamed) children are the component's primary content. The vocabulary:
-  - `icon` — a supplementary pictogram rendered alongside the primary content (aria-hidden).
+  - `icon` — a supplementary pictogram rendered alongside the primary content (aria-hidden). Components that support start/end icon placement use `data-position="start|end"`; when omitted, placement is inferred from the original authored child order.
   - `prefix` / `suffix` — supplementary content (any markup: svg, icon-font glyph, HTML character, image) rendered inside a field's box at its inline start/end, sized by the component's `icon-size` token and colored by `affix-ink`. Affixes are aria-hidden, so they are presentational: information an affix carries must also live in the field's accessible name or description.
   - `checked` / `unchecked` / `indeterminate` — state-indicator content on selection controls (any markup: svg, icon-font glyph, HTML character, image). Layered over the control, shown for exactly the matching state, sized by the component's `indicator-size` token, colored by `indicator-color`, animated with the component's transition tokens. The control is aria-hidden, so indicator content is presentational; the state is conveyed by the native input.
 - **Pre-upgrade markup must be sane.** Authored content is real DOM and should read correctly before the element upgrades (SSR and progressive enhancement are the same requirement).

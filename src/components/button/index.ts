@@ -6,18 +6,24 @@
 // native semantics, and add the one behavior a native button lacks (loading).
 //
 //   <zbk-button variant="ghost lg" type="submit">
-//     <svg slot="icon">…</svg>
+//     <svg slot="icon" data-position="start">…</svg>
 //     Save draft
 //   </zbk-button>
 //
 // Styling lives entirely in the compiled zebkit CSS (`.zbk-button`, consuming
 // `--zbk-button-*` tokens) — this file contains zero visual opinion.
 
-import { html, nothing, type PropertyDeclarations, type PropertyValues, type TemplateResult } from 'lit';
-import { ZebkitElement } from '../base/zebkit-element';
-import { buttonVariants } from './variants/index';
+import {
+  html,
+  nothing,
+  type PropertyDeclarations,
+  type PropertyValues,
+  type TemplateResult,
+} from "lit";
+import { ZebkitElement } from "../base/zebkit-element";
+import { buttonVariants } from "./variants/index";
 
-export type ZbkButtonType = 'button' | 'submit' | 'reset';
+export type ZbkButtonType = "button" | "submit" | "reset";
 
 /**
  * The zebkit button: a light-DOM element wrapping a real `<button>`. Renders
@@ -27,10 +33,10 @@ export type ZbkButtonType = 'button' | 'submit' | 'reset';
  * (Enter/Space) arrives as a click.
  *
  * @slot - The button's label content (its accessible name).
- * @slot icon - A supplementary pictogram, rendered aria-hidden beside the label.
+ * @slot icon - A supplementary pictogram rendered aria-hidden beside the label. Use `data-position="start|end"` to set placement explicitly; otherwise placement is inferred from authored child order.
  */
 export class ZbkButton extends ZebkitElement {
-  static componentName = 'button';
+  static componentName = "button";
   static variantConfigs = buttonVariants;
 
   static properties: PropertyDeclarations = {
@@ -44,7 +50,7 @@ export class ZbkButton extends ZebkitElement {
 
   /** Forwarded to the internal button. Defaults to "button" — the platform's
    * "submit" default is a well-known footgun inside forms. */
-  type: ZbkButtonType = 'button';
+  type: ZbkButtonType = "button";
 
   /** Native disabled: removed from the tab order, blocks all interaction. */
   disabled = false;
@@ -62,7 +68,7 @@ export class ZbkButton extends ZebkitElement {
   form?: string;
 
   protected get nativeElement(): HTMLButtonElement | null {
-    return this.querySelector(':scope > button');
+    return this.querySelector(":scope > button");
   }
 
   protected render(): TemplateResult {
@@ -73,11 +79,13 @@ export class ZbkButton extends ZebkitElement {
       name=${this.name ?? nothing}
       value=${this.value ?? nothing}
       form=${this.form ?? nothing}
-      aria-busy=${this.loading ? 'true' : nothing}
+      aria-busy=${this.loading ? "true" : nothing}
       @click=${this.handleClick}
-    >${this.hasSlotted('icon')
-        ? html`<span class="zbk-button__icon" aria-hidden="true">${this.slotted('icon')}</span>`
-        : nothing}<span class="zbk-button__label">${this.slotted()}</span></button>`;
+    >
+      ${this.renderIcon("start")}
+      <span class="${this.baseClass}__label">${this.slotted()}</span>
+      ${this.renderIcon("end")}
+    </button>`;
   }
 
   /**
@@ -96,7 +104,7 @@ export class ZbkButton extends ZebkitElement {
     super.firstUpdated(changed);
     if (!this.hasAccessibleName()) {
       this.warn(
-        'No accessible name. Provide label text, or aria-label / aria-labelledby for icon-only buttons.'
+        "No accessible name. Provide label text, or aria-label / aria-labelledby for icon-only buttons.",
       );
     }
   }
@@ -104,7 +112,7 @@ export class ZbkButton extends ZebkitElement {
 
 /** Register <zbk-button> (idempotent). */
 export const defineZbkButton = (): void => {
-  if (!customElements.get('zbk-button')) {
-    customElements.define('zbk-button', ZbkButton);
+  if (!customElements.get("zbk-button")) {
+    customElements.define("zbk-button", ZbkButton);
   }
 };

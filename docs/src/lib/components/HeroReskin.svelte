@@ -2,6 +2,7 @@
   import { theme } from "$lib/stores/theme.svelte";
   import { heroThemes, diffFor, type HeroThemeName } from "$data/hero-themes";
   import ZebkitLoader from "$components/ZebkitLoader.svelte";
+  import ZbkButton from "$components/ZbkButton.svelte";
 
   // Hero-local reskin state lives on the shared store (scaffolded there), but only
   // this component reads it — switching never touches the rest of the page.
@@ -106,15 +107,13 @@
   <!-- Preset switcher -->
   <div class="switcher" role="group" aria-label="Theme preset">
     {#each heroThemes as t (t.name)}
-      <button
-        type="button"
-        class="chip font-code text-xs"
-        class:is-active={active === t.name}
+      <ZbkButton
+        class={active === t.name ? "is-active" : undefined}
         aria-pressed={active === t.name}
         onclick={() => select(t.name)}
       >
         {t.label}
-      </button>
+      </ZbkButton>
     {/each}
   </div>
 
@@ -319,32 +318,18 @@
     flex-wrap: wrap;
     gap: var(--zbk-spacing-05);
   }
-  .chip {
-    padding-block: var(--zbk-spacing-025);
-    padding-inline: var(--zbk-spacing-1);
-    background: transparent;
-    color: var(--zbk-app-ink);
-    border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
-    background: var(--zbk-app-canvas);
-    border-radius: var(--zbk-border-radius-sm);
-    cursor: pointer;
-    transition:
-      background-color var(--zbk-transition-duration-fast),
-      color var(--zbk-transition-duration-fast),
-      border-color var(--zbk-transition-duration-fast);
-  }
-  .chip:hover {
-    color: var(--zbk-app-ink);
-    border-color: var(--zbk-action-canvas-soft);
-  }
-  .chip.is-active {
-    background: var(--zbk-action-canvas-muted);
+  /* The switcher button now renders from the ZbkButton wrapper, so it no longer
+     carries this component's scoping hash — reach across the boundary with
+     :global(), still anchored under the scoped .switcher. */
+  .switcher :global(zbk-button.is-active) {
+    --zbk-button-canvas: var(--zbk-action-canvas-muted);
+    --zbk-button-canvas-hover: var(--zbk-action-canvas-muted);
+    --zbk-button-canvas-active: var(--zbk-action-canvas-muted);
+    --zbk-button-transform: var(--zbk-button-transform-hover);
+    --zbk-button-box-shadow: var(--zbk-button-box-shadow-hover);
+    --zbk-button-border-color: var(--zbk-button-border-color-hover);
     color: var(--zbk-app-ink);
     border-color: var(--zbk-action-canvas);
-  }
-  .chip:focus-visible {
-    outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
-    outline-offset: var(--zbk-focus-offset);
   }
 
   /* ── The themed subtree ────────────────────────────────────────────────── */
@@ -454,7 +439,6 @@
     color: var(--influence-link-ink-hover);
     background: var(--influence-link-canvas-hover);
     border-color: var(--influence-link-border-color-hover);
-    
   }
 
   .influence-link:hover > span {

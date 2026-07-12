@@ -1,5 +1,7 @@
 import path from 'path';
 import type { TokenInterface } from '@definitions/tokens';
+import type { VariantConfig } from '@definitions/token-variants';
+import type { ComponentsFilter } from '../components-config';
 import { ZEBKIT_PREFIX } from '@config';
 
 export interface VariantRuntimeEntryLike {
@@ -38,7 +40,7 @@ export interface VariantMetadataEntry {
 
 export function isVariantOverrideFile(filePath: string): boolean {
   const baseName = path.basename(filePath, path.extname(filePath));
-  return /-variants$/i.test(baseName) || /\.variant\./i.test(path.basename(filePath));
+  return /-variants$/i.test(baseName) || /\.variants?\./i.test(path.basename(filePath));
 }
 
 export function extractVariantOverrideEntries(data: any): VariantRuntimeEntryLike[] {
@@ -234,6 +236,63 @@ export function mergeVariantOverrideEntry(
 
 export function buildVariantMetaKey(component: string, name: string): string {
   return `${component}::${name}`;
+}
+
+/**
+ * Applies the `components` config to the shipped variant configs. Excluded
+ * components drop silently (the config asked for the whole component to go);
+ * allowlist misses are collected so consumer overrides that patch them can
+ * warn with the fix. Allowlist names matching no shipped variant warn with the
+ * shipped vocabulary — a typo would otherwise silently drop every variant.
+ */
+export function filterShippedVariants(
+  configs: VariantConfig[],
+  filter?: ComponentsFilter
+): {
+  activeConfigs: VariantConfig[];
+  excludedShippedVariants: Map<string, Set<string>>;
+} {
+  const excludedShippedVariants = new Map<string, Set<string>>();
+  if (!filter) return { activeConfigs: configs, excludedShippedVariants };
+
+  const shippedNamesByComponent = new Map<string, string[]>();
+  for (const config of configs) {
+    if (!config.component || !config.name) continue;
+    const component = config.component.toLowerCase();
+    const names = shippedNamesByComponent.get(component) ?? [];
+    names.push(config.name);
+    shippedNamesByComponent.set(component, names);
+  }
+
+  for (const [component, allowlist] of filter.variantAllowlists) {
+    const shipped = shippedNamesByComponent.get(component) ?? [];
+    const shippedLower = new Set(shipped.map((name) => name.toLowerCase()));
+    for (const allowed of allowlist) {
+      if (!shippedLower.has(allowed)) {
+        console.warn(
+          `components.${component}.variants names unknown shipped variant "${allowed}". ` +
+            `Shipped variants: ${shipped.length > 0 ? shipped.join(', ') : '(none)'}.`
+        );
+      }
+    }
+  }
+
+  const activeConfigs = configs.filter((config) => {
+    if (!config.component || !config.name) return true; // registerVariant warns
+    const component = config.component.toLowerCase();
+    const name = config.name.toLowerCase();
+    if (filter.excluded.has(component)) return false;
+    const allowlist = filter.variantAllowlists.get(component);
+    if (allowlist && !allowlist.has(name)) {
+      const dropped = excludedShippedVariants.get(component) ?? new Set<string>();
+      dropped.add(name);
+      excludedShippedVariants.set(component, dropped);
+      return false;
+    }
+    return true;
+  });
+
+  return { activeConfigs, excludedShippedVariants };
 }
 
 /**

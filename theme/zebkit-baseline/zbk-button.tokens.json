@@ -19,6 +19,11 @@
     "type": "color",
     "description": "Label color for disabled buttons."
   },
+  "ink-loading": {
+    "value": "{button.ink}",
+    "type": "color",
+    "description": "Label color while the button is in its loading state."
+  },
   "canvas": {
     "value": "{brand.200}",
     "type": "color",
@@ -39,6 +44,11 @@
     "type": "color",
     "description": "Background for disabled buttons."
   },
+  "canvas-loading": {
+    "value": "{button.canvas}",
+    "type": "color",
+    "description": "Background while the button is in its loading state."
+  },
   "border-color": {
     "value": "{accent-primary.500}",
     "type": "color",
@@ -52,12 +62,17 @@
   "border-color-active": {
     "value": "{accent-primary.500}",
     "type": "color",
-    "description": "Border color when the button is selected/active."
+    "description": "Border color when the button is active/pressed."
   },
   "border-color-disabled": {
     "value": "{disabled.border}",
     "type": "color",
     "description": "Border color for disabled buttons."
+  },
+  "border-color-loading": {
+    "value": "{button.border-color}",
+    "type": "color",
+    "description": "Border color while the button is in its loading state."
   },
   "border-width": {
     "value": "{border.width-sm}",
@@ -195,7 +210,7 @@
     "description": "Default button width."
   },
   "min-width": {
-    "value": "44px",
+    "value": "{a11y.min-interaction-size}",
     "type": "sizing",
     "description": "Minimum button width."
   },
@@ -210,7 +225,7 @@
     "description": "Default button height."
   },
   "min-height": {
-    "value": "44px",
+    "value": "{a11y.min-interaction-size}",
     "type": "sizing",
     "description": "Minimum height to ensure tappable area."
   },
@@ -220,9 +235,19 @@
     "description": "Maximum button height."
   },
   "icon-size": {
-    "value": "1.125rem",
+    "value": "{button.font-size}",
     "type": "sizing",
     "description": "Default icon size within buttons."
+  },
+  "icon-start-size": {
+    "value": "{button.icon-size}",
+    "type": "sizing",
+    "description": "Default icon size for icons at start of buttons."
+  },
+  "icon-end-size": {
+    "value": "{button.icon-size}",
+    "type": "sizing",
+    "description": "Default icon size for icons at end of buttons."
   },
   "focus-color": {
     "value": "{focus.color}",
@@ -264,6 +289,11 @@
     "type": "utility",
     "description": "Cursor style when hovering over buttons."
   },
+  "cursor-loading": {
+    "value": "progress",
+    "type": "utility",
+    "description": "Cursor style while the button is in its loading state."
+  },
   "flex-direction": {
     "value": "row",
     "type": "flex",
@@ -304,5 +334,10 @@
     "value": 1,
     "type": "opacity",
     "description": "Visual opacity of button."
+  },
+  "opacity-loading": {
+    "value": 1,
+    "type": "opacity",
+    "description": "Visual opacity while the button is in its loading state."
   }
 }

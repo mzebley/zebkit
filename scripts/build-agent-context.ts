@@ -188,6 +188,15 @@ function renderComponent(
     lines.push('No shipped variants.');
   }
   lines.push('');
+  lines.push(
+    `Custom variants: add a \`${tag}.variants.json\` file to the base theme's token folder ` +
+      `(component-keyed map of \`{ "${component}": { "{name}": { "overrides": { ... } } } }\`; ` +
+      `token keys must exist in the table above, values are alias references or structural literals). ` +
+      `A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new ` +
+      `\`.${tag}--{name}\` class and additionally needs \`ZebkitElement.registerVariants(json)\` before ` +
+      `elements upgrade so \`variant="{name}"\` validates and applies it.`
+  );
+  lines.push('');
 
   return lines.join('\n');
 }
@@ -223,7 +232,8 @@ function main(): void {
     '- Components render into light DOM around a native element. ARIA written on the element relocates to it; native events bubble; `focus()` forwards.',
     '- Every visual property is a `--zbk-{component}-{property}[-{state}]` token. State suffixes: `-hover`, `-active`, `-focus`, `-disabled`, plus semantic states (`-checked`, `-indeterminate`, ...) where the pattern has them.',
     '- `variant="name other-name"` applies registered variants — named token remaps compiled to classes. Unknown names warn with the registered vocabulary.',
-    '- Named slots come from a shared vocabulary: `icon`, and `checked`/`unchecked`/`indeterminate` state indicators on selection controls.',
+    '- Consumers add or patch variants with JSON files in the base theme\'s token folder, detected by filename: `zbk-{component}.variants.json` (all custom variants for a component), `zbk-{component}.variant.{name}.json` (one variant), or any `*-variants.json`. A shipped name patches that variant; a new name compiles a new class and needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="..."` accepts it.',
+    '- Named slots come from a shared vocabulary: `icon` (use `data-position="start|end"` for explicit icon placement where supported), and `checked`/`unchecked`/`indeterminate` state indicators on selection controls.',
     '',
   ];
 

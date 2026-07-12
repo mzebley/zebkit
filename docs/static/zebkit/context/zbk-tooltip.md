@@ -65,3 +65,5 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 ## Variants
 
 No shipped variants.
+
+Custom variants: add a `zbk-tooltip.variants.json` file to the base theme's token folder (component-keyed map of `{ "tooltip": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-tooltip--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.

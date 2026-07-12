@@ -11,6 +11,7 @@ import {
   getThemePromptChoices,
   resolveBundledThemeTokensDir,
 } from '../../scripts/theme-presets.js';
+import { getKnownComponents } from '../../scripts/known-components.js';
 import {
   copyThemeTokens,
   getDefaultProjectName,
@@ -36,6 +37,7 @@ export async function init(options: { quick?: boolean } = {}) {
     getZebkitDefaultsDir,
     getBuiltInThemeNames,
     getThemePromptChoices,
+    getKnownComponents,
     resolveBundledThemeTokensDir,
     handlePromptCancel,
     isPromptCancelError,

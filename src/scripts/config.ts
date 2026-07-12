@@ -188,10 +188,20 @@ export type TokensConfig = {
   minify?: boolean;
 };
 
-export type ComponentsConfig = {
-  selectedComponents?: string[];
-  jsOutput?: string;
-};
+/**
+ * Per-component build inclusion. Omitted component = included with all shipped
+ * variants. `false` excludes the component entirely (styles, tokens, variants);
+ * `true` is an explicit include; `{ variants: [...] }` includes the component
+ * with only the named shipped variants (`[]` = none). Custom variants from the
+ * theme's variant JSON files are never filtered by the allowlist.
+ *
+ * This is declared intent, filtered at gather time; `tokens.prune` is
+ * evidence-based and runs after — prune can only ever remove more.
+ */
+export type ComponentConfigEntry = boolean | { variants?: string[] };
+
+/** Map of component name (e.g. `"button"`) to its inclusion entry. */
+export type ComponentsConfig = Record<string, ComponentConfigEntry>;
 
 export type ZebkitConfig = {
   tokens?: TokensConfig;
@@ -296,6 +306,36 @@ export function validatePruneConfig(prune: PruneConfig | undefined): void {
   compileMatchers([...(prune.safelist ?? []), ...(prune.blocklist ?? [])]);
 }
 
+/**
+ * Validates the top-level `components` block shape, throwing on any
+ * misconfiguration. Component *names* are validated at build time, where the
+ * component vocabulary is known (unknown names warn with the valid list).
+ */
+export function validateComponentsConfig(components: ComponentsConfig | undefined): void {
+  if (components === undefined) return;
+  if (typeof components !== 'object' || Array.isArray(components) || components === null) {
+    throw new Error(
+      '`components` must be an object mapping component names to `false` | `true` | `{ variants: [...] }`.'
+    );
+  }
+
+  for (const [name, entry] of Object.entries(components)) {
+    if (typeof entry === 'boolean') continue;
+    if (entry === null || typeof entry !== 'object' || Array.isArray(entry)) {
+      throw new Error(
+        `\`components.${name}\` must be \`false\`, \`true\`, or \`{ variants: [...] }\`.`
+      );
+    }
+    if (
+      entry.variants !== undefined &&
+      (!Array.isArray(entry.variants) ||
+        entry.variants.some((variant) => typeof variant !== 'string'))
+    ) {
+      throw new Error(`\`components.${name}.variants\` must be an array of variant names.`);
+    }
+  }
+}
+
 const CONFIG_FILE_NAMES = ['zebkit.config.json'];
 
 function parseConfigPathFromArgs(): string | undefined {
@@ -338,6 +378,7 @@ export async function loadZebkitConfig(configPath?: string): Promise<
         const parsed = JSON.parse(fileContents) as ZebkitConfig;
         validateOverlays(parsed.tokens?.overlays);
         validatePruneConfig(parsed.tokens?.prune);
+        validateComponentsConfig(parsed.components);
         return { config: parsed, path: resolved };
       } catch (error) {
         throw new Error(`Unable to read config file at ${resolved}: ${error}`);

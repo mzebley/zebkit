@@ -1,6 +1,7 @@
 @use 'tokens/styles/variables/prefix'as prefix;
 
 @layer components {
+
   // The one styling contract for buttons. <zbk-button> renders exactly this
   // markup in light DOM; the classes also work standalone on a native button.
   button.zbk-button {
@@ -70,6 +71,7 @@
 
     /* Interaction behavior */
     cursor: var(--#{prefix.$cssVar}-button-cursor);
+    transform: var(--#{prefix.$cssVar}-button-transform);
 
     /* Transitions */
     transition-property: var(--#{prefix.$cssVar}-button-transition-property);
@@ -88,6 +90,7 @@
     background-color: var(--#{prefix.$cssVar}-button-canvas-hover);
     border-color: var(--#{prefix.$cssVar}-button-border-color-hover);
     box-shadow: var(--#{prefix.$cssVar}-button-box-shadow-hover);
+    transform: var(--#{prefix.$cssVar}-button-transform-hover);
   }
 
   /* Active / pressed state */
@@ -96,6 +99,7 @@
     background-color: var(--#{prefix.$cssVar}-button-canvas-active);
     border-color: var(--#{prefix.$cssVar}-button-border-color-active);
     box-shadow: var(--#{prefix.$cssVar}-button-box-shadow-active);
+    transform: var(--#{prefix.$cssVar}-button-transform-active);
   }
 
   /* Focus-visible state (keyboard focus) */
@@ -105,6 +109,7 @@
     outline-style: solid;
     outline-offset: var(--#{prefix.$cssVar}-button-focus-offset);
     box-shadow: var(--#{prefix.$cssVar}-button-box-shadow-focus);
+    transform: var(--#{prefix.$cssVar}-button-transform-focus);
   }
 
   /* Disabled state (native + ARIA) */
@@ -131,9 +136,25 @@
 
   /* Icon sizing / layout */
   button.zbk-button .zbk-button__icon {
-    inline-size: var(--#{prefix.$cssVar}-button-icon-size);
-    block-size: var(--#{prefix.$cssVar}-button-icon-size);
+    font-size: var(--#{prefix.$cssVar}-button-icon-size);
+    min-inline-size: var(--#{prefix.$cssVar}-button-icon-size);
+    min-block-size: var(--#{prefix.$cssVar}-button-icon-size);
     flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  button.zbk-button .zbk-button__icon-start {
+    font-size: var(--#{prefix.$cssVar}-button-icon-start-size);
+    min-inline-size: var(--#{prefix.$cssVar}-button-icon-start-size);
+    min-block-size: var(--#{prefix.$cssVar}-button-icon-start-size);
+  }
+
+  button.zbk-button .zbk-button__icon-end {
+    font-size: var(--#{prefix.$cssVar}-button-icon-end-size);
+    min-inline-size: var(--#{prefix.$cssVar}-button-icon-end-size);
+    min-block-size: var(--#{prefix.$cssVar}-button-icon-end-size);
   }
 
   /* Button groups (using group-gap token) */

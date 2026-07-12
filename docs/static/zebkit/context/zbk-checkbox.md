@@ -101,3 +101,5 @@ A variant is a named, partial remapping of the token surface compiled to a class
 |---|---|---|---|---|
 | `sm` | size | `zbk-checkbox--sm` | Smaller control and label type. | control-size: {spacing.md}; font-size: {font-size.sm} |
 | `lg` | size | `zbk-checkbox--lg` | Larger control and label type. | control-size: {spacing.lg}; font-size: {font-size.lg} |
+
+Custom variants: add a `zbk-checkbox.variants.json` file to the base theme's token folder (component-keyed map of `{ "checkbox": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-checkbox--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.

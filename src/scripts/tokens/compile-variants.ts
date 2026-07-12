@@ -10,6 +10,7 @@ import { glob } from 'glob';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import type { TokenInterface } from '@definitions/tokens';
 import type { VariantConfig } from '@definitions/token-variants';
+import type { ComponentsFilter } from '../components-config';
 import { convertDotNotation } from './token-converter';
 import { computeEmissionClosure } from './build-helpers';
 import { ZEBKIT_PREFIX } from '@config';
@@ -17,6 +18,7 @@ import {
   assertShippedVariantsAreTokenOnly,
   buildVariantMetaKey,
   extractVariantOverrideEntries,
+  filterShippedVariants,
   isVariantOverrideFile,
   mergeVariantOverrideEntry,
   normalizeVariantOverrideEntry,
@@ -82,6 +84,13 @@ export interface BuildZebkitVariantsOptions {
    * pass the zebkit package root in installed CLI mode.
    */
   packageRoot?: string;
+  /**
+   * Resolved `components` config block. Excluded components' variants are
+   * dropped wholesale; shipped variants outside a component's allowlist are
+   * dropped and consumer overrides that target them warn with the fix.
+   * Custom (new-name) consumer variants are never filtered.
+   */
+  componentsFilter?: ComponentsFilter;
 }
 
 /**
@@ -165,10 +174,16 @@ export async function buildZebkitVariants(
 
     // GRAMMAR.md §6: zebkit-shipped variants are token-only. The styles escape
     // hatch exists for consumers (variant JSON overlays); a shipped variant
-    // that needs a CSS declaration is a component token-surface gap.
+    // that needs a CSS declaration is a component token-surface gap. Linted
+    // pre-filter so the vocabulary stays clean regardless of any config.
     assertShippedVariantsAreTokenOnly(configs);
 
-    for (const variant of configs) {
+    const { activeConfigs, excludedShippedVariants } = filterShippedVariants(
+      configs,
+      options.componentsFilter
+    );
+
+    for (const variant of activeConfigs) {
       await registerVariant(variant, tokens, registry, variantMetadata, projectRoot);
     }
 
@@ -183,7 +198,14 @@ export async function buildZebkitVariants(
 
     for (const overridePath of overridePaths) {
       // Once built-in variants are loaded, optionally apply overlay JSON overrides.
-      await applyVariantOverrides(overridePath, registry, tokens, variantMetadata);
+      await applyVariantOverrides(
+        overridePath,
+        registry,
+        tokens,
+        variantMetadata,
+        options.componentsFilter,
+        excludedShippedVariants
+      );
     }
 
     if (overridePaths.length > 0) {
@@ -242,7 +264,9 @@ async function applyVariantOverrides(
   overridePath: string,
   registry: VariantRegistry,
   tokens: Record<string, TokenInterface>,
-  variantMetadata: Map<string, VariantMetadataEntry>
+  variantMetadata: Map<string, VariantMetadataEntry>,
+  componentsFilter?: ComponentsFilter,
+  excludedShippedVariants?: Map<string, Set<string>>
 ) {
   // Support both absolute and relative override references (CLI accepts either).
   const resolvedOverridePath = path.isAbsolute(overridePath)
@@ -290,6 +314,30 @@ async function applyVariantOverrides(
       if (entries.length === 0) continue;
 
       for (const entry of entries) {
+        // Consumer overrides can't resurrect what the components config removed;
+        // both warnings name the fix (GRAMMAR.md §9).
+        const component = entry.component.toLowerCase();
+        const name = entry.name.toLowerCase();
+        if (componentsFilter?.excluded.has(component)) {
+          console.warn(
+            chalk.yellow(
+              `Variant override '${entry.component}.${entry.name}' targets component ` +
+                `"${entry.component}", which is excluded by the components config. ` +
+                `Remove the override or re-include the component. Source: ${path.basename(file)}`
+            )
+          );
+          continue;
+        }
+        if (excludedShippedVariants?.get(component)?.has(name)) {
+          console.warn(
+            chalk.yellow(
+              `Variant override '${entry.component}.${entry.name}' patches shipped variant ` +
+                `"${entry.name}", which is excluded by components.${entry.component}.variants. ` +
+                `Add "${entry.name}" to the allowlist or remove the override. Source: ${path.basename(file)}`
+            )
+          );
+          continue;
+        }
         mergeVariantOverrideEntry(
           entry,
           registry,
@@ -310,10 +358,12 @@ async function applyVariantOverrides(
 export {
   buildVariantMetaKey,
   extractVariantOverrideEntries,
+  filterShippedVariants,
   isVariantOverrideFile,
   mergeVariantOverrideEntry,
   normalizeVariantOverrideEntry,
 } from './compile-variant-helpers';
+export { writeVariantScaffolds } from './write-variant-scaffolds';
 
 /**
  * Advisory cross-axis check. Same-axis variants are alternatives — overlapping

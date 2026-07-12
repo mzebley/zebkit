@@ -18,6 +18,7 @@ describe('init command', () => {
   const mockIsPromptCancelError = jest.fn();
   const mockGetBuiltInThemeNames = jest.fn(async () => ['dynamowaves']);
   const mockGetThemePromptChoices = jest.fn((themes: string[]) => themes);
+  const mockGetKnownComponents = jest.fn(async () => ['button', 'tooltip']);
   const mockResolveBundledThemeTokensDir = jest.fn(() => '/pkg/dist/cli/presets/dynamowaves');
 
   const mockReadJsonSafe = jest.fn(async () => undefined);
@@ -33,6 +34,7 @@ describe('init command', () => {
     getZebkitDefaultsDir: mockGetZebkitDefaultsDir,
     getBuiltInThemeNames: mockGetBuiltInThemeNames,
     getThemePromptChoices: mockGetThemePromptChoices,
+    getKnownComponents: mockGetKnownComponents,
     resolveBundledThemeTokensDir: mockResolveBundledThemeTokensDir,
     handlePromptCancel: mockHandlePromptCancel,
     isPromptCancelError: ((error: unknown) =>

@@ -19,3 +19,5 @@ No custom events. Native events (`click`, `change`, `input`, ...) bubble from th
 ## Variants
 
 No shipped variants.
+
+Custom variants: add a `zbk-heading.variants.json` file to the base theme's token folder (component-keyed map of `{ "heading": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-heading--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.

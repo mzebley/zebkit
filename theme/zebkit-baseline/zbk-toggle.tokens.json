@@ -1,0 +1,313 @@
+{
+  "display": {
+    "value": "contents",
+    "type": "display",
+    "description": "Display mode for the <zbk-toggle> host element."
+  },
+  "track-width": {
+    "value": "{spacing.205}",
+    "type": "sizing",
+    "description": "Width of the toggle track."
+  },
+  "track-height": {
+    "value": "{spacing.105}",
+    "type": "sizing",
+    "description": "Height of the toggle track; the thumb and pill radius derive from it."
+  },
+  "canvas": {
+    "value": "{app.canvas-muted}",
+    "type": "color",
+    "description": "Track background when the toggle is off."
+  },
+  "canvas-hover": {
+    "value": "{toggle.canvas}",
+    "type": "color",
+    "description": "Track background when hovered."
+  },
+  "canvas-active": {
+    "value": "{toggle.canvas}",
+    "type": "color",
+    "description": "Track background while pressed."
+  },
+  "canvas-checked": {
+    "value": "{accent-primary.500}",
+    "type": "color",
+    "description": "Track background when the toggle is on."
+  },
+  "canvas-disabled": {
+    "value": "{disabled.canvas}",
+    "type": "color",
+    "description": "Track background when disabled."
+  },
+  "border-color": {
+    "value": "{app.border-emphasis}",
+    "type": "color",
+    "description": "Track border color when the toggle is off."
+  },
+  "border-color-hover": {
+    "value": "{accent-primary.400}",
+    "type": "color",
+    "description": "Track border color when hovered."
+  },
+  "border-color-active": {
+    "value": "{accent-primary.500}",
+    "type": "color",
+    "description": "Track border color while pressed."
+  },
+  "border-color-checked": {
+    "value": "{toggle.canvas-checked}",
+    "type": "color",
+    "description": "Track border color when the toggle is on."
+  },
+  "border-color-disabled": {
+    "value": "{disabled.border}",
+    "type": "color",
+    "description": "Track border color when disabled."
+  },
+  "border-width": {
+    "value": "{border.width-md}",
+    "type": "borderWidth",
+    "description": "Border thickness of the toggle track."
+  },
+  "border-style": {
+    "value": "{border.style}",
+    "type": "borderStyle",
+    "description": "Border style of the toggle track."
+  },
+  "border-radius": {
+    "value": "{toggle.track-height}",
+    "type": "borderRadius",
+    "description": "Corner radius of the track (track-height yields a pill)."
+  },
+  "box-shadow": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Default track shadow."
+  },
+  "box-shadow-hover": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Track shadow when hovered."
+  },
+  "box-shadow-active": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Track shadow while pressed."
+  },
+  "box-shadow-checked": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Track shadow when the toggle is on."
+  },
+  "box-shadow-focus": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Track shadow in the focus state (in addition to the outline)."
+  },
+  "thumb-size": {
+    "value": "{toggle.track-height}",
+    "type": "sizing",
+    "description": "Diameter of the thumb."
+  },
+  "thumb-inset": {
+    "value": "{spacing.neg-2px}",
+    "type": "spacing",
+    "description": "Thumb offset from the track's start edge; negative overlaps the border."
+  },
+  "thumb-canvas": {
+    "value": "{app.canvas}",
+    "type": "color",
+    "description": "Thumb background when the toggle is off."
+  },
+  "thumb-canvas-hover": {
+    "value": "{toggle.thumb-canvas}",
+    "type": "color",
+    "description": "Thumb background when hovered."
+  },
+  "thumb-canvas-checked": {
+    "value": "{toggle.thumb-canvas}",
+    "type": "color",
+    "description": "Thumb background when the toggle is on."
+  },
+  "thumb-canvas-disabled": {
+    "value": "{toggle.thumb-canvas}",
+    "type": "color",
+    "description": "Thumb background when disabled."
+  },
+  "thumb-border-color": {
+    "value": "{toggle.border-color}",
+    "type": "color",
+    "description": "Thumb border color when the toggle is off."
+  },
+  "thumb-border-color-checked": {
+    "value": "{toggle.thumb-border-color}",
+    "type": "color",
+    "description": "Thumb border color when the toggle is on."
+  },
+  "thumb-border-width": {
+    "value": "{toggle.border-width}",
+    "type": "borderWidth",
+    "description": "Border thickness of the thumb."
+  },
+  "thumb-border-style": {
+    "value": "{toggle.border-style}",
+    "type": "borderStyle",
+    "description": "Border style of the thumb."
+  },
+  "thumb-radius": {
+    "value": "50%",
+    "type": "borderRadius",
+    "description": "Corner radius of the thumb (a circle by default)."
+  },
+  "thumb-shadow": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Default thumb shadow."
+  },
+  "thumb-shadow-hover": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Thumb shadow when hovered."
+  },
+  "thumb-shadow-active": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Thumb shadow while pressed."
+  },
+  "thumb-shadow-checked": {
+    "value": "none",
+    "type": "boxShadow",
+    "description": "Thumb shadow when the toggle is on."
+  },
+  "thumb-transform": {
+    "value": "none",
+    "type": "utility",
+    "description": "Default thumb transform (travel is handled structurally)."
+  },
+  "thumb-transform-hover": {
+    "value": "none",
+    "type": "utility",
+    "description": "Thumb transform when hovered (e.g. a translateY lift)."
+  },
+  "thumb-transform-active": {
+    "value": "none",
+    "type": "utility",
+    "description": "Thumb transform while pressed (e.g. a press-down)."
+  },
+  "thumb-transform-checked": {
+    "value": "none",
+    "type": "utility",
+    "description": "Thumb transform when the toggle is on."
+  },
+  "ink": {
+    "value": "{app.ink}",
+    "type": "color",
+    "description": "Label text color."
+  },
+  "ink-disabled": {
+    "value": "{disabled.ink}",
+    "type": "color",
+    "description": "Label text color when disabled."
+  },
+  "font-family": {
+    "value": "{font-family.interface}",
+    "type": "fontFamily",
+    "description": "Font family for the toggle label."
+  },
+  "font-size": {
+    "value": "{font-size.md}",
+    "type": "fontSize",
+    "description": "Font size for the toggle label."
+  },
+  "font-weight": {
+    "value": "{font-weight.normal}",
+    "type": "fontWeight",
+    "description": "Font weight for the toggle label."
+  },
+  "line-height": {
+    "value": "{line-height.2}",
+    "type": "lineHeight",
+    "description": "Line height for the toggle label."
+  },
+  "letter-spacing": {
+    "value": "{tracking.normal}",
+    "type": "letterSpacing",
+    "description": "Letter spacing for the toggle label."
+  },
+  "gap": {
+    "value": "{spacing.sm}",
+    "type": "spacing",
+    "description": "Space between the track and its label."
+  },
+  "align-items": {
+    "value": "center",
+    "type": "flex",
+    "description": "Cross-axis alignment of track and label."
+  },
+  "group-gap": {
+    "value": "{spacing.md}",
+    "type": "spacing",
+    "description": "Gap between toggles in a .zbk-toggle-group."
+  },
+  "group-direction": {
+    "value": "column",
+    "type": "flex",
+    "description": "Flow direction of a .zbk-toggle-group (column or row)."
+  },
+  "focus-color": {
+    "value": "{focus.color}",
+    "type": "color",
+    "description": "Outline color for keyboard focus."
+  },
+  "focus-width": {
+    "value": "{focus.width}",
+    "type": "borderWidth",
+    "description": "Outline width for keyboard focus."
+  },
+  "focus-offset": {
+    "value": "{focus.offset}",
+    "type": "spacing",
+    "description": "Outline offset for keyboard focus."
+  },
+  "cursor": {
+    "value": "pointer",
+    "type": "utility",
+    "description": "Cursor when hovering an enabled toggle."
+  },
+  "cursor-disabled": {
+    "value": "not-allowed",
+    "type": "utility",
+    "description": "Cursor when hovering a disabled toggle."
+  },
+  "transition-duration": {
+    "value": "{transition.playful-fx-duration-default}",
+    "type": "transition",
+    "description": "Duration for toggle state transitions, including thumb travel.",
+    "a11y": true
+  },
+  "transition-timing-function": {
+    "value": "{transition.playful-fx-function-default}",
+    "type": "transition",
+    "description": "Easing for toggle state transitions."
+  },
+  "transition-property": {
+    "value": "background-color, border-color, box-shadow, transform, opacity, outline",
+    "type": "transition",
+    "description": "CSS properties that animate on track state changes."
+  },
+  "transition-delay": {
+    "value": "0",
+    "type": "transition",
+    "description": "Delay before toggle transitions run."
+  },
+  "opacity": {
+    "value": 1,
+    "type": "opacity",
+    "description": "Opacity of the toggle."
+  },
+  "opacity-disabled": {
+    "value": "{opacity.70}",
+    "type": "opacity",
+    "description": "Track and thumb opacity when disabled."
+  }
+}

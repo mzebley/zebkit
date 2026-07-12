@@ -7,11 +7,26 @@ import {
   assertShippedVariantsAreTokenOnly,
   buildVariantMetaKey,
   extractVariantOverrideEntries,
+  isVariantOverrideFile,
   mergeVariantOverrideEntry,
+  filterShippedVariants,
   normalizeVariantOverrideEntry,
 } from './compile-variant-helpers';
 
 describe('compile-variants helpers', () => {
+  it('recognizes variant override filenames', () => {
+    // Canonical per-component file, parallel to zbk-button.tokens.json.
+    expect(isVariantOverrideFile('theme/acme/zbk-button.variants.json')).toBe(true);
+    // Single-variant file (bundled theme presets use this form).
+    expect(isVariantOverrideFile('theme/acme/zbk-button.variant.pill.json')).toBe(true);
+    // Multi-component collection file.
+    expect(isVariantOverrideFile('theme/acme/zbk-variants.json')).toBe(true);
+    expect(isVariantOverrideFile('theme/acme/custom-variants.json')).toBe(true);
+
+    expect(isVariantOverrideFile('theme/acme/zbk-button.tokens.json')).toBe(false);
+    expect(isVariantOverrideFile('theme/acme/zbk-app.tokens.json')).toBe(false);
+  });
+
   it('normalizes variant override entry shapes', () => {
     expect(
       normalizeVariantOverrideEntry({
@@ -286,5 +301,60 @@ describe('shipped-variant token-only lint', () => {
         { component: 'button', name: 'ghost', overrides: {}, styles: {} },
       ])
     ).not.toThrow();
+  });
+});
+
+describe('components-config variant filtering', () => {
+  const shipped = [
+    { component: 'button', name: 'ghost', axis: 'style', overrides: { canvas: 'transparent' } },
+    { component: 'button', name: 'outline', axis: 'style', overrides: { canvas: 'transparent' } },
+    { component: 'button', name: 'lg', axis: 'size', overrides: { 'font-size': '{font-size.lg}' } },
+    { component: 'tooltip', name: 'inverse', overrides: { canvas: '{app.ink}' } },
+  ];
+
+  it('passes everything through without a filter', () => {
+    const { activeConfigs, excludedShippedVariants } = filterShippedVariants(shipped);
+    expect(activeConfigs).toHaveLength(4);
+    expect(excludedShippedVariants.size).toBe(0);
+  });
+
+  it('drops all variants of an excluded component silently', () => {
+    const { activeConfigs, excludedShippedVariants } = filterShippedVariants(shipped, {
+      excluded: new Set(['tooltip']),
+      variantAllowlists: new Map(),
+    });
+    expect(activeConfigs.map((v) => `${v.component}.${v.name}`)).toEqual([
+      'button.ghost',
+      'button.outline',
+      'button.lg',
+    ]);
+    // Excluded-component variants are not "allowlist misses" — no patch warning applies.
+    expect(excludedShippedVariants.size).toBe(0);
+  });
+
+  it('keeps only allowlisted shipped variants and records the dropped names', () => {
+    const { activeConfigs, excludedShippedVariants } = filterShippedVariants(shipped, {
+      excluded: new Set(),
+      variantAllowlists: new Map([['button', new Set(['ghost'])]]),
+    });
+    expect(activeConfigs.map((v) => `${v.component}.${v.name}`)).toEqual([
+      'button.ghost',
+      'tooltip.inverse',
+    ]);
+    expect(excludedShippedVariants.get('button')).toEqual(new Set(['outline', 'lg']));
+  });
+
+  it('warns with the shipped vocabulary when an allowlist names an unknown variant', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    filterShippedVariants(shipped, {
+      excluded: new Set(),
+      variantAllowlists: new Map([['button', new Set(['ghots'])]]),
+    });
+    expect(warnSpy.mock.calls.some(
+      (call) =>
+        String(call[0]).includes('unknown shipped variant "ghots"') &&
+        String(call[0]).includes('ghost, outline, lg')
+    )).toBe(true);
+    warnSpy.mockRestore();
   });
 });

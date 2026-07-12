@@ -16,6 +16,7 @@ import {
 import {
   buildZebkitVariants,
   VariantRegistry,
+  writeVariantScaffolds,
 } from "@token-scripts/compile-variants";
 import {
   convertTokensToCssVars,
@@ -37,8 +38,15 @@ import {
   PruneConfig,
   resolveOverlayRootSelector,
   TokensConfig,
+  validateComponentsConfig,
   ZebkitConfig,
 } from "../config";
+import {
+  ComponentsFilter,
+  resolveComponentsFilter,
+  warnUnknownComponents,
+} from "../components-config";
+import { getKnownComponents } from "../known-components";
 import { extractZbkTokens, loadComponentTokens, scanContent } from "../prune/content-scan";
 import { assembleReport } from "../prune/report";
 import type { PruneMode } from "../prune/types";
@@ -131,6 +139,15 @@ export async function runTokenBuild(
   let tokensConfig: TokensConfig | undefined = loadedConfig?.config.tokens;
   if (loadedConfig && loadedConfig.path !== "(provided)") {
     console.log(chalk.green(`Using config from ${loadedConfig.path}`));
+  }
+
+  // Declared component intent: excluded components and shipped-variant allowlists.
+  // Filters at gather time; prune (evidence-based) runs after and only removes more.
+  const componentsConfig = loadedConfig?.config.components;
+  validateComponentsConfig(componentsConfig);
+  const componentsFilter: ComponentsFilter = resolveComponentsFilter(componentsConfig);
+  if (componentsConfig && Object.keys(componentsConfig).length > 0) {
+    warnUnknownComponents(componentsConfig, await getKnownComponents(tokenDefaultsDir));
   }
 
   // Flag overrides (`--theme`, `--dest`) layer on top of the loaded config. When no
@@ -337,17 +354,20 @@ export async function runTokenBuild(
       );
     }
 
-    const gatherOptions = zebkitPackageRoot
-      ? {
-          tokensDir: path.join(zebkitPackageRoot, "src", "tokens"),
-          componentsDir: path.join(zebkitPackageRoot, "src", "components"),
-          tokenDefaultsDir:
-            selectedTokenDefaultsDir &&
-            (await fs.pathExists(selectedTokenDefaultsDir))
-              ? selectedTokenDefaultsDir
-              : tokenDefaultsDir,
-        }
-      : undefined;
+    const gatherOptions = {
+      ...(zebkitPackageRoot
+        ? {
+            tokensDir: path.join(zebkitPackageRoot, "src", "tokens"),
+            componentsDir: path.join(zebkitPackageRoot, "src", "components"),
+            tokenDefaultsDir:
+              selectedTokenDefaultsDir &&
+              (await fs.pathExists(selectedTokenDefaultsDir))
+                ? selectedTokenDefaultsDir
+                : tokenDefaultsDir,
+          }
+        : {}),
+      excludedComponents: componentsFilter.excluded,
+    };
 
     const files = await gatherZebkitFiles(gatherOptions);
 
@@ -360,7 +380,11 @@ export async function runTokenBuild(
       resolvedDestinationPath,
       customTokenPath,
       outputFormats,
-      { splitMode: resolvedSplitMode, overridePaths },
+      {
+        splitMode: resolvedSplitMode,
+        overridePaths,
+        excludedComponents: componentsFilter.excluded,
+      },
       exportTokens
     );
 
@@ -454,6 +478,7 @@ export async function runTokenBuild(
       {
         snapshotPath: variantSnapshotPath,
         packageRoot: zebkitPackageRoot,
+        componentsFilter,
       }
     );
     if (writeVariantRegistry) {
@@ -462,6 +487,18 @@ export async function runTokenBuild(
         resolvedDestinationPath,
         themeName,
         resolvedSplitMode
+      );
+    }
+
+    // Editable variant definitions ride along with the token exports — same
+    // splitMode/format knobs, authorable shape (round-trips as override input).
+    if (exportTokens) {
+      await writeVariantScaffolds(
+        variantRegistry,
+        resolvedDestinationPath,
+        outputFormats,
+        themeName,
+        resolvedSplitMode ?? "combined"
       );
     }
 
@@ -531,6 +568,7 @@ export async function runTokenBuild(
           useStaticTypeScale,
           useStaticSpaceScale,
           minify,
+          excludedComponents: componentsFilter.excluded,
         });
         if (output) overlayOutputs.push(output);
       }
@@ -772,6 +810,8 @@ interface BuildOverlayCssOptions {
   useStaticSpaceScale: boolean;
   /** Minify the overlay stylesheet (follows the base theme's `tokens.minify`). */
   minify: boolean;
+  /** Components excluded by the components config; overlay overrides targeting them warn. */
+  excludedComponents?: ReadonlySet<string>;
 }
 
 /** A computed overlay stylesheet, ready to write. */
@@ -821,7 +861,11 @@ async function computeOverlayCss(
     destination,
     overlay.tokenPath,
     [],
-    { splitMode: "combined", overridePaths: options.contextOverridePaths },
+    {
+      splitMode: "combined",
+      overridePaths: options.contextOverridePaths,
+      excludedComponents: options.excludedComponents,
+    },
     false
   );
 

@@ -241,7 +241,7 @@ const tokens = {
     description: "Default button width.",
   },
   "min-width": {
-    value: "44px",
+    value: "{a11y.min-interaction-size}",
     type: "sizing",
     description: "Minimum button width.",
   },
@@ -256,7 +256,7 @@ const tokens = {
     description: "Default button height.",
   },
   "min-height": {
-    value: "44px",
+    value: "{a11y.min-interaction-size}",
     type: "sizing",
     description: "Minimum height to ensure tappable area.",
   },
@@ -268,9 +268,19 @@ const tokens = {
 
   // Icon-related
   "icon-size": {
-    value: "1.125rem",
+    value: "{button.font-size}",
     type: "sizing",
     description: "Default icon size within buttons.",
+  },
+    "icon-start-size": {
+    value: "{button.icon-size}",
+    type: "sizing",
+    description: "Default icon size for icons at start of buttons.",
+  },
+    "icon-end-size": {
+    value: "{button.icon-size}",
+    type: "sizing",
+    description: "Default icon size for icons at end of buttons.",
   },
 
   // Focus & interaction
@@ -310,6 +320,28 @@ const tokens = {
     value: "none",
     type: "boxShadow",
     description: "Box shadow in focus state (in addition to outline).",
+  },
+
+  // Transformation
+  "transform": {
+    value: "translateY(0)",
+    type: "utility",
+    description: "Default transform property for buttons.",
+  },
+  "transform-hover": {
+    value: "translateY(-1%)",
+    type: "utility",
+    description: "Transform effect on hover.",
+  },
+  "transform-active": {
+    value: "translateY(0)",
+    type: "utility",
+    description: "Transform effect when active/pressed.",
+  },
+  "transform-focus": {
+    value: "translateY(0)",
+    type: "utility",
+    description: "Transform effect in focus state (in addition to outline).",
   },
 
   // Interaction behavior & layout alignment

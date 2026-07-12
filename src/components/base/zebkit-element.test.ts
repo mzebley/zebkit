@@ -36,7 +36,8 @@ class TestElement extends ZebkitElement {
 
   render() {
     return html`<button class=${this.componentClasses} type="button">
-      ${this.slotted('icon')}${this.slotted()}
+      ${this.renderIcon('start')}<span class="label">${this.slotted()}</span
+      >${this.renderIcon('end')}
     </button>`;
   }
 }
@@ -108,6 +109,122 @@ describe('ZebkitElement', () => {
     });
   });
 
+  describe('consumer variants', () => {
+    afterEach(() => {
+      ZebkitElement.resetConsumerVariants();
+    });
+
+    it('applies a runtime-registered variant via the variant attribute', async () => {
+      ZebkitElement.registerVariants({
+        component: 'testel',
+        name: 'pill',
+        overrides: { radius: '{radius.full}' },
+      });
+      const el = await mount('<zbk-testel variant="pill">Go</zbk-testel>');
+      expect(el.querySelector('button')!.classList.contains('zbk-testel--pill')).toBe(true);
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it('accepts the component-keyed map shape from variant JSON files', async () => {
+      ZebkitElement.registerVariants({
+        testel: {
+          pill: { overrides: { radius: '{radius.full}' } },
+        },
+      });
+      const el = await mount('<zbk-testel variant="pill">Go</zbk-testel>');
+      expect(el.querySelector('button')!.classList.contains('zbk-testel--pill')).toBe(true);
+    });
+
+    it('honors the registry className field as classNameOverride', async () => {
+      ZebkitElement.registerVariants([
+        { component: 'testel', name: 'pill', className: 'zbk-custom-pill', overrides: {} },
+      ]);
+      const el = await mount('<zbk-testel variant="pill">Go</zbk-testel>');
+      expect(el.querySelector('button')!.classList.contains('zbk-custom-pill')).toBe(true);
+    });
+
+    it('lists consumer variants in the unknown-variant vocabulary', async () => {
+      ZebkitElement.registerVariants({
+        component: 'testel',
+        name: 'pill',
+        overrides: {},
+      });
+      await mount('<zbk-testel variant="ghots">Go</zbk-testel>');
+      expect(warnSpy).toHaveBeenCalledWith(
+        '[zbk-testel] Unknown variant "ghots". Registered variants: ghost, solid, lg, pill.'
+      );
+    });
+
+    it('replaces a shipped variant of the same name instead of duplicating it', async () => {
+      ZebkitElement.registerVariants({
+        component: 'testel',
+        name: 'ghost',
+        axis: 'style',
+        overrides: { canvas: '{brand.100}' },
+      });
+      const el = await mount('<zbk-testel variant="ghost">Go</zbk-testel>');
+      const button = el.querySelector('button')!;
+      expect(button.className.trim()).toBe('zbk-testel zbk-testel--ghost');
+    });
+  });
+
+  describe('components config mirror', () => {
+    afterEach(() => {
+      ZebkitElement.resetComponentsConfig();
+      ZebkitElement.resetConsumerVariants();
+    });
+
+    it('stops applying a shipped variant outside the allowlist and warns with the fix', async () => {
+      ZebkitElement.applyComponentsConfig({ testel: { variants: ['solid', 'lg'] } });
+      const el = await mount('<zbk-testel variant="ghost lg">Go</zbk-testel>');
+      const button = el.querySelector('button')!;
+
+      expect(button.classList.contains('zbk-testel--ghost')).toBe(false);
+      expect(button.classList.contains('zbk-testel--lg')).toBe(true);
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'Variant "ghost" is excluded by the components config (components.testel.variants)'
+        )
+      );
+    });
+
+    it('keeps consumer variants outside the allowlist filter', async () => {
+      ZebkitElement.applyComponentsConfig({ testel: { variants: ['solid'] } });
+      ZebkitElement.registerVariants({
+        component: 'testel',
+        name: 'pill',
+        overrides: {},
+      });
+      const el = await mount('<zbk-testel variant="pill">Go</zbk-testel>');
+      expect(el.querySelector('button')!.classList.contains('zbk-testel--pill')).toBe(true);
+    });
+
+    it('does not let registerVariants resurrect an excluded shipped variant', async () => {
+      ZebkitElement.applyComponentsConfig({ testel: { variants: ['solid'] } });
+      ZebkitElement.registerVariants({
+        component: 'testel',
+        name: 'ghost',
+        overrides: { canvas: '{brand.100}' },
+      });
+      const el = await mount('<zbk-testel variant="ghost">Go</zbk-testel>');
+      expect(el.querySelector('button')!.classList.contains('zbk-testel--ghost')).toBe(false);
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('excluded by the components config')
+      );
+    });
+
+    it('warns once when an excluded component is used', async () => {
+      ZebkitElement.applyComponentsConfig({ testel: false });
+      await mount('<zbk-testel>Go</zbk-testel>');
+      await mount('<zbk-testel>Again</zbk-testel>');
+
+      const exclusionWarnings = warnSpy.mock.calls.filter((call) =>
+        String(call[0]).includes('<zbk-testel> is excluded by the components config')
+      );
+      expect(exclusionWarnings).toHaveLength(1);
+    });
+  });
+
   describe('ARIA relocation', () => {
     it('moves authored aria-* from host to the native element', async () => {
       const el = await mount('<zbk-testel aria-label="Close">x</zbk-testel>');
@@ -145,6 +262,39 @@ describe('ZebkitElement', () => {
       // protected members exercised via subclass cast
       expect((el as any).hasSlotted()).toBe(true);
       expect((el as any).hasSlotted('icon')).toBe(false);
+    });
+
+    it('renders explicitly positioned icons into start and end wrappers', async () => {
+      const el = await mount(
+        '<zbk-testel><span slot="icon" data-position="start" data-start></span>Save<span slot="icon" data-position="end" data-end></span></zbk-testel>'
+      );
+      expect(
+        el.querySelector('.zbk-testel__icon--start [data-start]')
+      ).not.toBeNull();
+      expect(
+        el.querySelector('.zbk-testel__icon--end [data-end]')
+      ).not.toBeNull();
+    });
+
+    it('ignores bare position and infers from authored order', async () => {
+      const el = await mount(
+        '<zbk-testel><span slot="icon" position="end" data-start></span>Save</zbk-testel>'
+      );
+      expect(
+        el.querySelector('.zbk-testel__icon--start [data-start]')
+      ).not.toBeNull();
+    });
+
+    it('infers icon position from original child order', async () => {
+      const el = await mount(
+        '<zbk-testel><span slot="icon" data-start></span>Save<span slot="icon" data-end></span></zbk-testel>'
+      );
+      expect(
+        el.querySelector('.zbk-testel__icon--start [data-start]')
+      ).not.toBeNull();
+      expect(
+        el.querySelector('.zbk-testel__icon--end [data-end]')
+      ).not.toBeNull();
     });
   });
 

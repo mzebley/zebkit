@@ -233,3 +233,17 @@ detects that and preserves the tokens those components consume.
 Prune is a zebkit-native tool, not a general-purpose PurgeCSS replacement — it understands
 zebkit's variant conventions and token graph, and it only prunes zebkit's compiled CSS.
 </aside>
+
+## Prune vs. the `components` block
+
+Two mechanisms shrink the shipped surface, and they compose rather than compete:
+
+- [The `components` config block](/cli#the-components-block) is **declared intent** — "we never
+  ship tooltips" — and filters at gather time, so excluded components' styles, tokens, and
+  variants never enter the compile at all.
+- **Prune is evidence** — a static scan of what your source actually uses — and runs on the
+  compiled CSS afterwards.
+
+The config always wins: prune operates on CSS the components block already filtered, so it can
+only ever remove *more*. If a component should never ship regardless of what a scan finds,
+exclude it in `components`; use prune for the long tail of unused utilities, states, and tokens.
