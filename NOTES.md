@@ -10,7 +10,7 @@ A place to keep track of things I don't want to forget as we build this out.
 
 - [ ] Create .eyebrow prose tokens & css classes
 - [ ] Create viewport classes for text-alignment (check into other typography things as well)
-- [ ] Create .lede prose tokens & css classes
+- [x] Create .lede prose tokens & css classes
 - [ ] Create code & pre prose tokens & css classes
 - [ ] Create .link tokens & css classes
 - [ ] Create .breadcrumb tokens & css classes
