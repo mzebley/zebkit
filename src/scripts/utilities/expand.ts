@@ -58,13 +58,25 @@ export function classesFromRules(rules: UtilityRule[]): string[] {
 export const STATE_PATTERN_STATES = ["base", "focus", "hover", "active", "disabled"] as const;
 export type StatePatternStateName = (typeof STATE_PATTERN_STATES)[number];
 
-export type StatePattern = {
-  roles: Record<string, string | string[]>;
-  axes: Record<string, (string | null)[]>;
+export type StatePatternProjection = {
+  targets: Record<string, string | string[]>;
+  axes?: Record<string, (string | null)[]>;
   class: string;
   var: string;
   varSource?: "scss";
+};
+
+export type StatePattern = {
+  axes: Record<string, (string | null)[]>;
+  projections: StatePatternProjection[];
   states: true | StatePatternStateName[];
+};
+
+export type StatePatternEntry = {
+  className: string;
+  properties: string[];
+  varName: string;
+  varSource?: "scss";
 };
 
 /** Substitute {axis} and {-axis} placeholders in a template string. */
@@ -84,15 +96,38 @@ function cartesian<T>(arrays: T[][]): T[][] {
   );
 }
 
-/** All axis-value combinations for a statePattern (excludes role axis). */
-function statePatternAxisCombos(sp: StatePattern): Array<Record<string, string | null>> {
-  const axisNames = Object.keys(sp.axes);
-  const axisValueArrays = axisNames.map((name) => sp.axes[name]);
+/** All axis-value combinations for one statePattern projection. */
+function statePatternAxisCombos(
+  sp: StatePattern,
+  projection: StatePatternProjection
+): Array<Record<string, string | null>> {
+  const axes = { ...sp.axes, ...(projection.axes ?? {}) };
+  const axisNames = Object.keys(axes);
+  const axisValueArrays = axisNames.map((name) => axes[name]);
   return cartesian(axisValueArrays).map((combo) => {
     const bindings: Record<string, string | null> = {};
     axisNames.forEach((name, i) => { bindings[name] = combo[i]; });
     return bindings;
   });
+}
+
+/** Resolve every class/property/token projection in a statePattern. */
+export function statePatternEntries(sp: StatePattern): StatePatternEntry[] {
+  const entries: StatePatternEntry[] = [];
+  for (const projection of sp.projections) {
+    const combos = statePatternAxisCombos(sp, projection);
+    for (const [target, rawProperties] of Object.entries(projection.targets)) {
+      const properties = Array.isArray(rawProperties) ? rawProperties : [rawProperties];
+      for (const axisBindings of combos) {
+        const bindings = { target, ...axisBindings };
+        const className = instantiateTemplate(projection.class, bindings);
+        const varName = instantiateTemplate(projection.var, bindings);
+        if (!className || !varName) continue;
+        entries.push({ className, properties, varName, varSource: projection.varSource });
+      }
+    }
+  }
+  return entries;
 }
 
 export type UtilityFamily = {
@@ -184,15 +219,9 @@ export function expandFamily(family: UtilityFamily): Expansion {
     const sp = family.statePattern;
     const enabledStates: StatePatternStateName[] =
       sp.states === true ? [...STATE_PATTERN_STATES] : sp.states;
-    const combos = statePatternAxisCombos(sp);
-    for (const [roleName] of Object.entries(sp.roles)) {
-      for (const axisBindings of combos) {
-        const bindings = { role: roleName, ...axisBindings };
-        const baseClass = instantiateTemplate(sp.class, bindings);
-        if (!baseClass) continue;
-        for (const state of enabledStates) {
-          core.add(state === "base" ? baseClass : `${state}:${baseClass}`);
-        }
+    for (const { className } of statePatternEntries(sp)) {
+      for (const state of enabledStates) {
+        core.add(state === "base" ? className : `${state}:${className}`);
       }
     }
   } else if (family.classes) {

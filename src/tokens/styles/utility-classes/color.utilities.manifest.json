@@ -2,71 +2,96 @@
   "$schema": "../../../../schemas/utility-manifest.schema.json",
   "name": "Color utilities",
   "key": "color",
-  "description": "Ink (text), canvas (background), border-color, and fill utilities for all color surfaces: primitive palette, semi-semantic (brand/neutral/accent), and semantic (role × family × intensity × variant). All surfaces emit base classes and interaction-state prefixed forms (hover:, focus:, active:, disabled:).",
+  "description": "Color utilities project primitive, semi-semantic, and semantic token values onto text, background, border, SVG fill, and SVG stroke properties. All surfaces emit base classes and interaction-state prefixed forms (hover:, focus:, active:, disabled:).",
   "domain": "color",
   "layer": "utilities",
   "families": [
     {
       "name": "color-palette",
-      "description": "Primitive palette color utilities. Maps ink/canvas/border/fill roles to the full palette step scale for every color family.",
+      "description": "Primitive palette color utilities. Projects the full palette step scale onto ink, canvas, border, fill, and stroke properties.",
       "source": "src/tokens/styles/utility-classes/color-palette.scss",
-      "properties": ["color", "background-color", "border-color", "fill"],
+      "properties": ["color", "background-color", "border-color", "fill", "stroke"],
       "statePattern": {
-        "roles": {
-          "ink": "color",
-          "canvas": "background-color",
-          "border": "border-color",
-          "fill": "fill"
-        },
         "axes": {
           "family": ["blue", "butterfield", "charcoal", "cyan", "deepcurrent", "dusk", "ember", "gold", "green", "indigo", "lavenderfield", "merlot", "mint", "orange", "pink", "red", "rosewater", "sea", "stone", "teal", "violet", "yellow"],
           "step": ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"]
         },
-        "class": "{role}-{family}-{step}",
-        "var": "--zbk-color-{family}-{step}",
-        "varSource": "scss",
+        "projections": [
+          {
+            "targets": {
+              "ink": "color",
+              "canvas": "background-color",
+              "border": "border-color",
+              "fill": "fill",
+              "stroke": "stroke"
+            },
+            "class": "{target}-{family}-{step}",
+            "var": "--zbk-color-{family}-{step}",
+            "varSource": "scss"
+          }
+        ],
         "states": true
       }
     },
     {
       "name": "color-semi-semantic",
-      "description": "Semi-semantic color utilities for brand, neutral, and accent-primary/secondary surfaces. Maps ink/canvas/border/fill roles to the step scale without the 'color-' prefix.",
+      "description": "Semi-semantic color utilities for brand, neutral, and accent-primary/secondary families. Projects their step scales onto ink, canvas, border, fill, and stroke properties.",
       "source": "src/tokens/styles/utility-classes/color-semi-semantic.scss",
-      "properties": ["color", "background-color", "border-color", "fill"],
+      "properties": ["color", "background-color", "border-color", "fill", "stroke"],
       "statePattern": {
-        "roles": {
-          "ink": "color",
-          "canvas": "background-color",
-          "border": "border-color",
-          "fill": "fill"
-        },
         "axes": {
           "family": ["brand", "neutral", "accent-primary", "accent-secondary"],
           "step": ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"]
         },
-        "class": "{role}-{family}-{step}",
-        "var": "--zbk-{family}-{step}",
+        "projections": [
+          {
+            "targets": {
+              "ink": "color",
+              "canvas": "background-color",
+              "border": "border-color",
+              "fill": "fill",
+              "stroke": "stroke"
+            },
+            "class": "{target}-{family}-{step}",
+            "var": "--zbk-{family}-{step}"
+          }
+        ],
         "states": true
       }
     },
     {
       "name": "color-semantic",
-      "description": "Semantic color utilities with role × family × intensity × variant axes. Canvas sets both background-color and background; ink sets color; border sets border-color.",
+      "description": "Semantic color utilities select a canvas, ink, or border token from each family, intensity, and variant. Direct utilities bind matching CSS properties; fill and stroke projections can select any of those semantic color roles.",
       "source": "src/tokens/styles/utility-classes/color-semantic.scss",
-      "properties": ["background-color", "background", "color", "border-color"],
+      "properties": ["background-color", "background", "color", "border-color", "fill", "stroke"],
       "statePattern": {
-        "roles": {
-          "canvas": ["background-color", "background"],
-          "ink": "color",
-          "border": "border-color"
-        },
         "axes": {
           "family": ["accent-primary", "accent-secondary", "action", "app", "brand", "caution", "critical", "disabled", "info", "positive"],
           "intensity": [null, "subtle", "muted", "emphasis"],
           "variant": [null, "inverse"]
         },
-        "class": "{role}-{family}{-intensity}{-variant}",
-        "var": "--zbk-{family}-{role}{-variant}{-intensity}",
+        "projections": [
+          {
+            "targets": {
+              "canvas": ["background-color", "background"],
+              "ink": "color",
+              "border": "border-color"
+            },
+            "class": "{target}-{family}{-intensity}{-variant}",
+            "var": "--zbk-{family}-{target}{-variant}{-intensity}"
+          },
+          {
+            "targets": {
+              "fill": "fill",
+              "stroke": "stroke"
+            },
+            "axes": {
+              "role": ["canvas", "ink", "border"]
+            },
+            "class": "{target}-{family}-{role}{-intensity}{-variant}",
+            "var": "--zbk-{family}-{role}{-variant}{-intensity}"
+          }
+        ],
         "states": true
       }
     }

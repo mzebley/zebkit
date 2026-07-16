@@ -1,20 +1,10 @@
 import { compiledTokens } from './compiled-tokens';
 
-// Utility manifests are the linted source of truth for the utility surface
-// (src/tokens/styles/utility-classes/*.utilities.manifest.json). We import them
-// directly and expand each family's grammar into its class vocabulary, deriving
-// token-bound values from the same compiled token set the generator uses — so
-// these pages are generated from source and cannot silently drift.
-import flexManifest from '$core/styles/utility-classes/flex.utilities.manifest.json';
-import gridManifest from '$core/styles/utility-classes/grid.utilities.manifest.json';
-import layoutManifest from '$core/styles/utility-classes/layout.utilities.manifest.json';
-import marginManifest from '$core/styles/utility-classes/margin.utilities.manifest.json';
-import objectManifest from '$core/styles/utility-classes/object.utilities.manifest.json';
-import overflowManifest from '$core/styles/utility-classes/overflow.utilities.manifest.json';
-import paddingManifest from '$core/styles/utility-classes/padding.utilities.manifest.json';
-import pointerManifest from '$core/styles/utility-classes/pointer.utilities.manifest.json';
-import textManifest from '$core/styles/utility-classes/text.utilities.manifest.json';
-import visibilityManifest from '$core/styles/utility-classes/visibility.utilities.manifest.json';
+// Utility manifests are the linted source of truth for the utility surface.
+// Match generate:utilities' recursive src/tokens/**/*utilities.manifest.json
+// discovery so adding a co-located token utility automatically adds its docs
+// route and navigation entry as well.
+const manifestModules = import.meta.glob('$core/**/*utilities.manifest.json', { eager: true });
 
 // Minimal shape of the manifest fields we consume (mirrors expand.ts).
 interface ManifestFamily {
@@ -25,6 +15,17 @@ interface ManifestFamily {
   properties: string[];
   a11y?: string;
   classes?: string[];
+  rules?: UtilityRule[];
+  statePattern?: {
+    axes: Record<string, (string | null)[]>;
+    projections: Array<{
+      targets: Record<string, string | string[]>;
+      axes?: Record<string, (string | null)[]>;
+      class: string;
+      var: string;
+    }>;
+    states: true | StateName[];
+  };
   pattern?: {
     base: string;
     edges?: string[];
@@ -43,6 +44,15 @@ interface ManifestFamily {
     declarations?: Record<string, Record<string, string>>;
   };
 }
+
+interface UtilityRule {
+  selector: string;
+  declarations: Record<string, string>;
+  nested?: UtilityRule[];
+}
+
+type StateName = 'base' | 'focus' | 'hover' | 'active' | 'disabled';
+
 interface Manifest {
   name: string;
   key: string;
@@ -50,18 +60,47 @@ interface Manifest {
   families: ManifestFamily[];
 }
 
-const RAW: Manifest[] = [
-  marginManifest,
-  paddingManifest,
-  layoutManifest,
-  flexManifest,
-  gridManifest,
-  textManifest,
-  objectManifest,
-  overflowManifest,
-  pointerManifest,
-  visibilityManifest
-] as unknown as Manifest[];
+const UTILITY_ORDER = [
+  'margin',
+  'padding',
+  'page-section-spacing',
+  'spacing',
+  'layout',
+  'flex',
+  'grid',
+  'typography',
+  'text',
+  'prose',
+  'color',
+  'border',
+  'focus',
+  'elevation',
+  'opacity',
+  'transition',
+  'z-index',
+  'object',
+  'overflow',
+  'pointer',
+  'visibility'
+] as const;
+
+const orderByKey = new Map<string, number>(UTILITY_ORDER.map((key, index) => [key, index]));
+
+const RAW = Object.entries(manifestModules)
+  .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
+  .map(([, module]) => (module as { default: Manifest }).default)
+  .sort((a, b) => {
+    const orderA = orderByKey.get(a.key) ?? Number.MAX_SAFE_INTEGER;
+    const orderB = orderByKey.get(b.key) ?? Number.MAX_SAFE_INTEGER;
+    return orderA - orderB || a.key.localeCompare(b.key);
+  });
+
+const duplicateKeys = RAW.map((manifest) => manifest.key).filter(
+  (key, index, keys) => keys.indexOf(key) !== index
+);
+if (duplicateKeys.length) {
+  throw new Error(`Duplicate utility manifest keys: ${[...new Set(duplicateKeys)].join(', ')}`);
+}
 
 type TokenEntry = { type: string };
 
@@ -186,9 +225,119 @@ function resolveProperties(family: ManifestFamily, edge: string | null): string[
   return edgeProperties[edge ?? ''] ?? [];
 }
 
+function instantiateTemplate(template: string, values: Record<string, string | null>): string {
+  return template.replace(/\{(-?)([a-zA-Z-]+)\}/g, (_, dash: string, axis: string) => {
+    const value = values[axis] ?? null;
+    if (value === null) return '';
+    return dash ? `-${value}` : value;
+  });
+}
+
+function cartesian<T>(arrays: T[][]): T[][] {
+  return arrays.reduce<T[][]>(
+    (combinations, values) =>
+      combinations.flatMap((combination) => values.map((value) => [...combination, value])),
+    [[]]
+  );
+}
+
+function classesInSelector(selector: string): string[] {
+  const classes: string[] = [];
+  const classToken = /\.((?:[a-zA-Z]|\\:)(?:[a-zA-Z0-9_-]|\\:)*)/g;
+  const attributeToken = /\[class~=["']([^"']+)["']\]/g;
+  for (const match of selector.matchAll(classToken)) classes.push(match[1].replace(/\\:/g, ':'));
+  for (const match of selector.matchAll(attributeToken)) classes.push(match[1]);
+  return classes;
+}
+
+function classesFromRules(rules: UtilityRule[]): string[] {
+  return rules.flatMap((rule) => [
+    ...classesInSelector(rule.selector),
+    ...classesFromRules(rule.nested ?? [])
+  ]);
+}
+
+function statePatternEntries(family: ManifestFamily): Array<{
+  className: string;
+  properties: string[];
+  value: string;
+}> {
+  const pattern = family.statePattern;
+  if (!pattern) return [];
+
+  const states: StateName[] =
+    pattern.states === true
+      ? ['base', 'focus', 'hover', 'active', 'disabled']
+      : pattern.states;
+  const entries: Array<{ className: string; properties: string[]; value: string }> = [];
+
+  for (const projection of pattern.projections) {
+    const axes = { ...pattern.axes, ...(projection.axes ?? {}) };
+    const axisNames = Object.keys(axes);
+    const combinations = cartesian(axisNames.map((name) => axes[name]));
+    for (const [target, rawProperties] of Object.entries(projection.targets)) {
+      const properties = Array.isArray(rawProperties) ? rawProperties : [rawProperties];
+      for (const combination of combinations) {
+        const bindings: Record<string, string | null> = { target };
+        axisNames.forEach((name, index) => (bindings[name] = combination[index]));
+        const baseClass = instantiateTemplate(projection.class, bindings);
+        const value = `var(${instantiateTemplate(projection.var, bindings)})`;
+        for (const state of states) {
+          entries.push({
+            className: state === 'base' ? baseClass : `${state}:${baseClass}`,
+            properties,
+            value
+          });
+        }
+      }
+    }
+  }
+
+  return entries;
+}
+
+function pushDeclarations(
+  out: Record<string, Declaration[]>,
+  className: string,
+  declarations: Record<string, string>
+) {
+  const current = out[className] ?? [];
+  for (const [property, value] of Object.entries(declarations)) {
+    if (
+      current.some(
+        (declaration) => declaration.property === property && declaration.value === value
+      )
+    ) {
+      continue;
+    }
+    current.push({ property, value, vars: cssVarsIn(value) });
+  }
+  out[className] = current;
+}
+
+function addRuleDeclarations(out: Record<string, Declaration[]>, rules: UtilityRule[]) {
+  for (const rule of rules) {
+    for (const className of classesInSelector(rule.selector)) {
+      pushDeclarations(out, className, rule.declarations);
+    }
+    addRuleDeclarations(out, rule.nested ?? []);
+  }
+}
+
 /** Build the class → declarations map for a family. */
 function familyDeclarations(family: ManifestFamily): Record<string, Declaration[]> {
   const out: Record<string, Declaration[]> = {};
+
+  if (family.statePattern) {
+    for (const entry of statePatternEntries(family)) {
+      pushDeclarations(
+        out,
+        entry.className,
+        Object.fromEntries(entry.properties.map((property) => [property, entry.value]))
+      );
+    }
+    return out;
+  }
 
   if (family.classes) {
     for (const cls of family.classes) {
@@ -200,6 +349,11 @@ function familyDeclarations(family: ManifestFamily): Record<string, Declaration[
         vars: cssVarsIn(value)
       }));
     }
+    return out;
+  }
+
+  if (family.rules) {
+    addRuleDeclarations(out, family.rules);
     return out;
   }
 
@@ -238,8 +392,12 @@ function expandFamily(family: ManifestFamily): UtilityFamilyDoc {
   const core = new Set<string>();
   const p = family.pattern;
 
-  if (family.classes) {
+  if (family.statePattern) {
+    for (const entry of statePatternEntries(family)) core.add(entry.className);
+  } else if (family.classes) {
     for (const c of family.classes) core.add(c);
+  } else if (family.rules) {
+    for (const c of classesFromRules(family.rules)) core.add(c);
   } else if (p) {
     const edges: Array<string | null> = p.edgeRequired ? [] : [null];
     for (const e of p.edges ?? []) edges.push(e);

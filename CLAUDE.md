@@ -15,13 +15,13 @@ npm run build:components    # Build web components
 npm run generate            # Regenerate all manifest-derived source (utilities + components)
 npm run generate:utilities  # Utility SCSS from utility manifests
 npm run generate:components # Component slot-contract.ts from component manifests
-npm run build               # Full ordered build: generate -> cem -> css -> defaults -> context -> editor/cli -> components
+npm run build               # Full build: generate -> CEM -> tokens/CSS -> components -> docs/context -> editor/CLI
 npm run lint                # Lint components + utilities
 npm run lint:utilities      # Lint utility manifests against generated SCSS
 npm run lint:components     # Lint component manifests against code (slots, examples)
 npm run check               # Full gate: tests, type-check, both lints, drift checks, docs build
-npm run docs:dev            # Run docs dev server (SvelteKit)
-npm run docs:build          # Build static docs
+npm run docs:dev            # Refresh every generated artifact, then run the docs dev server
+npm run docs:build          # Refresh every generated artifact, then build static docs
 ```
 
 **Configuration**: Token/component builds can skip prompts via `zebkit.config.json`, or pass `--config path/to/config.json`.

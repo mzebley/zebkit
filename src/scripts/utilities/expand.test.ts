@@ -11,6 +11,7 @@ import {
   classesInSelector,
   classesFromRules,
   expandFamily,
+  statePatternEntries,
   type UtilityFamily,
 } from "./expand";
 
@@ -58,5 +59,54 @@ describe("expandFamily on a rules family", () => {
     };
     const { classes } = expandFamily(family);
     expect(classes).toEqual(new Set(["focusable"]));
+  });
+});
+
+describe("statePattern projections", () => {
+  const family: UtilityFamily = {
+    name: "semantic-color",
+    description: "",
+    source: "semantic-color.scss",
+    properties: ["color", "fill", "stroke"],
+    statePattern: {
+      axes: { family: ["app", "brand"] },
+      projections: [
+        {
+          targets: { ink: "color" },
+          class: "{target}-{family}",
+          var: "--zbk-{family}-{target}",
+        },
+        {
+          targets: { fill: "fill", stroke: "stroke" },
+          axes: { role: ["canvas", "ink"] },
+          class: "{target}-{family}-{role}",
+          var: "--zbk-{family}-{role}",
+        },
+      ],
+      states: ["base"],
+    },
+  };
+
+  it("keeps the CSS property target independent from the selected token role", () => {
+    expect(statePatternEntries(family.statePattern!)).toContainEqual({
+      className: "fill-app-canvas",
+      properties: ["fill"],
+      varName: "--zbk-app-canvas",
+      varSource: undefined,
+    });
+    expect(statePatternEntries(family.statePattern!)).toContainEqual({
+      className: "stroke-brand-ink",
+      properties: ["stroke"],
+      varName: "--zbk-brand-ink",
+      varSource: undefined,
+    });
+  });
+
+  it("expands every projection into the claimed class vocabulary", () => {
+    const { classes } = expandFamily(family);
+    expect(classes).toContain("ink-app");
+    expect(classes).toContain("fill-app-canvas");
+    expect(classes).toContain("stroke-brand-ink");
+    expect(classes).not.toContain("fill-app");
   });
 });

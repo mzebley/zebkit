@@ -46,7 +46,7 @@
     "generate:components": "tsx -r tsconfig-paths/register src/scripts/components/generate.ts",
     "generate:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/generate.ts",
     "check:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/generate.ts --check",
-    "build": "npm run generate && npm run build:cem && npm run build:tokens -- --config zebkit.docs.config.json && npm run build:defaults && npm run build:context && npm run build:editor && npm run build:cli && npm run build:components",
+    "build": "npm run generate && npm run build:cem && npm run build:tokens -- --config zebkit.docs.config.json && npm run build:hero-themes && npm run build:defaults && npm run build:components && npm --prefix docs run sync:generated && npm run build:context && npm run build:editor && npm run build:cli",
     "build:components": "tsx scripts/build-components.ts",
     "build-scripts": "tsc",
     "build:tokens": "tsx -r tsconfig-paths/register src/scripts/tokens/run.ts",

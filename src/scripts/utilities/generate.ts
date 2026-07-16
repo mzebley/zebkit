@@ -15,7 +15,7 @@ import {
   MANIFEST_GLOB,
   STATE_PATTERN_STATES,
   expandFamily,
-  instantiateTemplate,
+  statePatternEntries,
   type StatePatternStateName,
   type UtilityFamily,
   type UtilityManifest,
@@ -203,32 +203,14 @@ function renderStatePatternRules(family: UtilityFamily): string {
   );
   const stateConfigs = ALL_STATE_CONFIGS.filter((s) => enabledStateNames.has(s.name));
 
-  const axisNames = Object.keys(sp.axes);
-  const axisValueArrays = axisNames.map((name) => sp.axes[name]);
-  const combos: Array<Record<string, string | null>> = axisValueArrays
-    .reduce<Array<(string | null)[]>>(
-      (acc, arr) => acc.flatMap((combo) => arr.map((item) => [...combo, item])),
-      [[]]
-    )
-    .map((combo) => {
-      const b: Record<string, string | null> = {};
-      axisNames.forEach((name, i) => { b[name] = combo[i]; });
-      return b;
-    });
-
   type RuleEntry = { className: string; properties: string[]; varValue: string };
-  const entries: RuleEntry[] = [];
-
-  for (const [roleName, propsRaw] of Object.entries(sp.roles)) {
-    const properties = Array.isArray(propsRaw) ? propsRaw : [propsRaw];
-    for (const axisBindings of combos) {
-      const bindings = { role: roleName, ...axisBindings };
-      const className = instantiateTemplate(sp.class, bindings);
-      if (!className) continue;
-      const varName = rewritePrefix(instantiateTemplate(sp.var, bindings));
-      entries.push({ className, properties, varValue: `var(${varName})` });
-    }
-  }
+  const entries: RuleEntry[] = statePatternEntries(sp).map(
+    ({ className, properties, varName }) => ({
+      className,
+      properties,
+      varValue: `var(${rewritePrefix(varName)})`,
+    })
+  );
 
   const blocks: string[] = [];
 

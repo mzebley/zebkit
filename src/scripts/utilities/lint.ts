@@ -43,11 +43,9 @@ import {
 import {
   BREAKPOINTS,
   MANIFEST_GLOB,
-  STATE_PATTERN_STATES,
   classesInSelector,
   expandFamily,
-  instantiateTemplate,
-  type StatePatternStateName,
+  statePatternEntries,
   type UtilityFamily,
   type UtilityRule,
 } from "./expand.js";
@@ -292,42 +290,26 @@ async function main() {
     }
   }
 
-  // U2 — statePattern var integrity: every instantiated --zbk- var must resolve
-  // in tokenVarNames. Skipped when varSource === "scss" (vars emitted by Sass
-  // mixin, not a TS token module, and therefore absent from tokenVarNames).
+  // U2 — statePattern var integrity: every projected --zbk- var must resolve in
+  // tokenVarNames. Projections with varSource "scss" are skipped because those
+  // vars are emitted by Sass rather than a TS token module.
   for (const file of manifestFiles) {
     const manifest: any = await fs.readJson(path.resolve(rootDir, file));
     const subjectBase = manifest.name ?? file;
     for (const family of manifest.families as UtilityFamily[]) {
       const sp = family.statePattern;
-      if (!sp || sp.varSource === "scss") continue;
+      if (!sp) continue;
       const subject = `${subjectBase}.${family.name}`;
-      const axisNames = Object.keys(sp.axes);
-      const combos: Array<Record<string, string | null>> = Object.keys(sp.axes)
-        .map((n) => sp.axes[n])
-        .reduce<Array<(string | null)[]>>(
-          (acc, arr) => acc.flatMap((c) => arr.map((v) => [...c, v])),
-          [[]]
-        )
-        .map((combo) => {
-          const b: Record<string, string | null> = {};
-          axisNames.forEach((name, i) => { b[name] = combo[i]; });
-          return b;
-        });
-      for (const [roleName] of Object.entries(sp.roles)) {
-        for (const axisBindings of combos) {
-          const bindings = { role: roleName, ...axisBindings };
-          const varFull = instantiateTemplate(sp.var, bindings);
-          if (!varFull) continue;
-          const varName = varFull.replace(/^--zbk-/, "");
-          if (!tokenVarNames.has(varName)) {
-            findings.push({
-              rule: "U2",
-              file,
-              subject,
-              message: `statePattern var '${varFull}' (suffix '${varName}') does not resolve to any known token. Check that the token module is loaded and the var template is correct.`,
-            });
-          }
+      for (const entry of statePatternEntries(sp)) {
+        if (entry.varSource === "scss") continue;
+        const varName = entry.varName.replace(/^--zbk-/, "");
+        if (!tokenVarNames.has(varName)) {
+          findings.push({
+            rule: "U2",
+            file,
+            subject,
+            message: `statePattern var '${entry.varName}' (suffix '${varName}') does not resolve to any known token. Check that the projection axes and var template select a real token.`,
+          });
         }
       }
     }

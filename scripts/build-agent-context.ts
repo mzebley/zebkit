@@ -454,13 +454,19 @@ function renderUtilityFamily(family: UtilityFamily): string {
     lines.push('');
   } else if (family.statePattern) {
     const state = family.statePattern;
-    const axes = Object.entries(state.axes)
-      .map(([name, values]) => `${name}: ${valueList(values, family.valueTiers)}`)
-      .join(' · ');
     const states = state.states === true ? ['focus', 'hover', 'active', 'disabled'] : state.states.filter((name) => name !== 'base');
-    lines.push(
-      `Grammar: \`${state.class}\` — roles: ${Object.keys(state.roles).join(', ')} · ${axes} · state prefixes: ${states.map((name) => `\`${name}:\``).join(' ')}`
-    );
+    for (const projection of state.projections) {
+      const axes = Object.entries({ ...state.axes, ...(projection.axes ?? {}) })
+        .map(([name, values]) => `${name}: ${valueList(values, family.valueTiers)}`)
+        .join(' · ');
+      const targets = Object.entries(projection.targets)
+        .map(([target, properties]) => `${target} -> ${[properties].flat().join(' + ')}`)
+        .join(', ');
+      lines.push(
+        `Projection: \`${projection.class}\` -> \`${projection.var}\` — targets: ${targets} · ${axes}`
+      );
+    }
+    lines.push(`State prefixes: ${states.map((name) => `\`${name}:\``).join(' ')}.`);
     lines.push('');
   } else if (family.classes) {
     lines.push(`Classes: ${family.classes.map((name) => `\`${name}\``).join(', ')}.`);

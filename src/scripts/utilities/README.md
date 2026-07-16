@@ -125,27 +125,37 @@ Families emit in the order they appear in the manifest's `families` array, and a
 
 ## `statePattern` — interaction-state color families
 
-`statePattern` is a fourth family kind for role × axis families that need base classes *plus* hover/focus/active/disabled prefixed forms. It is forbidden on `modifiers` (state coverage is controlled by the `states` field instead).
+`statePattern` is a fourth family kind for token projections that need base classes *plus* hover/focus/active/disabled prefixed forms. Common axes define the token vocabulary; each projection independently defines the class target, CSS properties, and token template. It is forbidden on `modifiers` (state coverage is controlled by the `states` field instead).
 
 ```jsonc
 "statePattern": {
-  "roles": {
-    "canvas": ["background-color", "background"],  // one or more properties
-    "ink": "color",
-    "border": "border-color"
-  },
   "axes": {
     "family": ["accent-primary", "positive", ...],
     "intensity": [null, "subtle", "muted", "emphasis"],  // null = optional axis
     "variant": [null, "inverse"]
   },
-  "class": "{role}-{family}{-intensity}{-variant}",   // {-axis} = omit when null
-  "var": "--zbk-{family}-{role}{-variant}{-intensity}", // segment order may differ
+  "projections": [
+    {
+      "targets": {
+        "canvas": ["background-color", "background"],  // one or more properties
+        "ink": "color",
+        "border": "border-color"
+      },
+      "class": "{target}-{family}{-intensity}{-variant}",
+      "var": "--zbk-{family}-{target}{-variant}{-intensity}"
+    },
+    {
+      "targets": { "fill": "fill", "stroke": "stroke" },
+      "axes": { "role": ["canvas", "ink", "border"] },
+      "class": "{target}-{family}-{role}{-intensity}{-variant}",
+      "var": "--zbk-{family}-{role}{-variant}{-intensity}"
+    }
+  ],
   "states": true   // all 5 states; or a subset array ["base", "hover"]
 }
 ```
 
-Template syntax: `{axis}` = required; `{-axis}` = optional (dropped with its leading dash when the axis value is `null`). Class and var templates may use different segment orders — that difference is the whole point.
+Template syntax: `{axis}` = required; `{-axis}` = optional (dropped with its leading dash when the axis value is `null`). `{target}` is supplied by each `targets` key. Projection axes augment the common axes, so a CSS property can select a different token role: `.fill-app-canvas` projects `--zbk-app-canvas` onto `fill`, while `.stroke-brand-ink` projects `--zbk-brand-ink` onto `stroke`.
 
 **Generated selector shapes:**
 
@@ -159,7 +169,7 @@ Template syntax: `{axis}` = required; `{-axis}` = optional (dropped with its lea
 
 Emission is one state at a time for the **whole family** in LVFHA order (base → focus → hover → active → disabled), and hover uses exactly **one** `@media` block per manifest family. This is load-bearing for the cascade.
 
-**U2 var integrity**: every instantiated `var` template is checked against `tokenVarNames`. Set `varSource: "scss"` to skip this check when the variables are emitted by a Sass mixin (not a TS token module) — e.g. the primitive palette surface.
+**U2 var integrity**: every instantiated projection `var` template is checked against `tokenVarNames`. Set `varSource: "scss"` on a projection to skip this check when the variables are emitted by a Sass mixin (not a TS token module) — e.g. the primitive palette surface.
 
 ## Three family shapes (recipes)
 

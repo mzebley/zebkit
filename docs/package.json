@@ -4,12 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "sync:tokens": "npm run build:tokens --prefix .. -- --config zebkit.docs.config.json && npm run build:hero-themes --prefix .. && node ./scripts/copy-tokens.js",
-    "predev": "npm run sync:tokens && svelte-kit sync",
+    "sync:generated": "node ./scripts/copy-tokens.js",
+    "sync:tokens": "npm run build:tokens --prefix .. -- --config zebkit.docs.config.json && npm run build:hero-themes --prefix .. && npm run sync:generated",
+    "refresh": "npm run build --prefix ..",
+    "predev": "npm run refresh && svelte-kit sync",
     "dev": "vite dev",
-    "prestart": "npm run sync:tokens && svelte-kit sync",
+    "prestart": "npm run refresh && svelte-kit sync",
     "start": "vite dev",
-    "prebuild": "npm run sync:tokens && svelte-kit sync",
+    "prebuild": "npm run refresh && svelte-kit sync",
     "build": "vite build",
     "preview": "vite preview"
   },
