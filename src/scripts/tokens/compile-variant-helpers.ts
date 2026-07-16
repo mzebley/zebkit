@@ -154,13 +154,14 @@ export function mergeVariantOverrideEntry(
   variantMetadata: Map<string, VariantMetadataEntry>,
   sourceLabel: string,
   /** Directory consumer stylesheetPaths resolve against (the override file's dir). */
-  stylesheetBaseDir?: string
-) {
+  stylesheetBaseDir?: string,
+  errors: string[] = [],
+): void {
   const tokenKey = `${ZEBKIT_PREFIX}-${entry.component}`;
   const sourceTokens = tokens[tokenKey];
   if (!sourceTokens) {
-    console.warn(
-      `Variant override '${entry.component}.${entry.name}' references unknown component tokens. Source: ${sourceLabel}`
+    errors.push(
+      `[zbk-${entry.component}] Variant '${entry.name}' targets an unknown component token surface. Source: ${sourceLabel}. Add tokens for '${entry.component}' or use a registered component.`,
     );
     return;
   }
@@ -168,8 +169,8 @@ export function mergeVariantOverrideEntry(
   const sanitizedOverrides: Record<string, string> = {};
   for (const [key, value] of Object.entries(entry.overrides || {})) {
     if (!Object.prototype.hasOwnProperty.call(sourceTokens, key)) {
-      console.warn(
-        `Variant override '${entry.component}.${entry.name}' references unknown token '${key}'. Source: ${sourceLabel}`
+      errors.push(
+        `[zbk-${entry.component}] Variant '${entry.name}' overrides unknown token '${key}'. Source: ${sourceLabel}. Valid token keys: ${Object.keys(sourceTokens).join(', ')}.`,
       );
       continue;
     }
@@ -236,6 +237,12 @@ export function mergeVariantOverrideEntry(
 
 export function buildVariantMetaKey(component: string, name: string): string {
   return `${component}::${name}`;
+}
+
+/** Fail only after a whole source has been inspected, so one build names every fix. */
+export function throwVariantOverrideErrors(errors: string[]): void {
+  if (errors.length === 0) return;
+  throw new Error(`Variant override validation failed:\n${errors.map((error) => `  - ${error}`).join('\n')}`);
 }
 
 /**

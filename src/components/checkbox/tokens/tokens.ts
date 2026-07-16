@@ -11,7 +11,6 @@ export const layer: LayerName = "base";
 
 export type CheckboxTokenKey =
   'display'
-  | 'control-size'
   | 'control-width'
   | 'control-height'
   | 'canvas'
@@ -70,21 +69,15 @@ const tokens = {
     description: "Display mode for the <zbk-checkbox> host element.",
   },
 
-  // Control geometry. Width and height default to the shared size so a single
-  // override rescales the control, but they stay independently addressable
-  // (a track-shaped control is a width override, not a new component).
-  "control-size": {
-    value: "{spacing.105}",
-    type: "sizing",
-    description: "Base width and height of the checkbox control.",
-  },
+  // Control geometry. Width and height stay independently addressable so a
+  // track-shaped control is a width override, not a new component.
   "control-width": {
-    value: "{checkbox.control-size}",
+    value: "{spacing.105}",
     type: "sizing",
     description: "Control width override when it differs from control-size.",
   },
   "control-height": {
-    value: "{checkbox.control-size}",
+    value: "{spacing.105}",
     type: "sizing",
     description: "Control height override when it differs from control-size.",
   },

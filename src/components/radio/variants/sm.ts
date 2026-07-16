@@ -10,7 +10,8 @@ const sm: RadioVariantConfig = {
   axis: 'size',
   description: 'Smaller control and label type.',
   overrides: {
-    'control-size': '{spacing.md}',
+    'control-width': '{spacing.md}',
+    'control-height': '{spacing.md}',
     'font-size': '{font-size.sm}',
   },
 };

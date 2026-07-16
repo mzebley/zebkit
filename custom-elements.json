@@ -8145,7 +8145,7 @@
                 {
                   "name": "token",
                   "type": {
-                    "text": "string"
+                    "text": "\"--zbk-tooltip-show-delay\" | \"--zbk-tooltip-hide-grace\""
                   }
                 },
                 {
@@ -8159,6 +8159,16 @@
             {
               "kind": "method",
               "name": "arrowPx",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "offsetPx",
               "privacy": "private",
               "return": {
                 "type": {

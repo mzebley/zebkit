@@ -11,6 +11,7 @@ import {
   mergeVariantOverrideEntry,
   filterShippedVariants,
   normalizeVariantOverrideEntry,
+  throwVariantOverrideErrors,
 } from './compile-variant-helpers';
 
 describe('compile-variants helpers', () => {
@@ -80,8 +81,7 @@ describe('compile-variants helpers', () => {
     ]);
   });
 
-  it('merges sanitized overrides into the registry and metadata', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  it('collects unknown override keys with the valid vocabulary while preserving valid overrides', () => {
     const registry = {
       button: {
         outline: {
@@ -111,6 +111,7 @@ describe('compile-variants helpers', () => {
       ],
     ]);
 
+    const errors: string[] = [];
     mergeVariantOverrideEntry(
       {
         component: 'button',
@@ -124,7 +125,9 @@ describe('compile-variants helpers', () => {
       registry,
       tokens,
       metadata,
-      'button.variant.outline.json'
+      'button.variant.outline.json',
+      undefined,
+      errors,
     );
 
     expect(registry.button.outline).toEqual({
@@ -143,7 +146,16 @@ describe('compile-variants helpers', () => {
       inlineStyles: [],
       stylesheetPaths: [],
     });
-    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(errors).toEqual([
+      expect.stringContaining("unknown token 'missing'. Source: button.variant.outline.json. Valid token keys: canvas, radius."),
+    ]);
+  });
+
+  it('fails the build with every collected variant override fix', () => {
+    expect(() => throwVariantOverrideErrors([
+      "[zbk-button] Variant 'outline' overrides unknown token 'canavs'. Source: theme.json. Valid token keys: canvas.",
+    ])).toThrow("unknown token 'canavs'. Source: theme.json. Valid token keys: canvas.");
+    expect(() => throwVariantOverrideErrors([])).not.toThrow();
   });
 });
 

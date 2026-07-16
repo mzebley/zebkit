@@ -44,7 +44,6 @@ export const tokenSchema = z.object({
   'font-family': tokenObjectSchema,
   'font-size': tokenObjectSchema,
   'font-weight': tokenObjectSchema,
-  'line-height': tokenObjectSchema,
   'field-line-height': tokenObjectSchema,
   'letter-spacing': tokenObjectSchema,
 

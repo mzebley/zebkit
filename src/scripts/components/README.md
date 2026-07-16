@@ -22,6 +22,9 @@ Hand-authored JSON contracts (`src/components/{name}/zbk-{name}.manifest.json`) 
 - **C4** — every zbk-* tag in the CEM has a manifest. `MISSING_MANIFESTS` in `lint.ts` is the migration ledger: shrink it, never grow it.
 - **C5** — delivery diff: declared slots match the slots the component source consumes, both directions. Asymmetric on purpose — "declared but undelivered" accepts any quoted occurrence of the name (delivery flows through private wrappers like `renderIndicator('checked')`); "delivered but undeclared" uses only precise base-class call sites (`slotted()`/`hasSlotted()` literals, and `renderIcon`/`hasIcon`/`iconsAt` whose name parameter defaults to `icon`) so attribute names that shadow the vocabulary (`'checked'`) can't false-positive.
 - **C6** — generated `slot-contract.ts` matches the manifest: the committed contract must equal what `npm run generate:components` would write. Fails on drift (a manifest changed but nobody regenerated, or a hand-edit to a generated contract). Run `npm run generate:components` and commit the result.
+- **C7** — token-surface delivery diff: every `--zbk-{component}-*` reference in a component's `styles.scss` or `index.ts` has a token, and every defined component token is consumed. `KNOWN_TOKEN_EXCEPTIONS` is empty by default and may only document genuinely indirect consumption.
+- **C8** — registration completeness: every component directory is imported from, re-exported by, and defined through `src/components/index.ts`.
+- **C9** — Markdown HTML fences in `INSTALL.md` and component READMEs use the same executable-example checks as C3. Write ` ```html no-lint ` only for deliberately broken teaching examples; MDX fences remain out of scope until they have an MDX-aware parser.
 
 ## Anatomy of a manifest
 

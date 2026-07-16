@@ -130,7 +130,8 @@ export async function buildZebkitTokens(
           tokenModule.key || path.basename(path.dirname(folderName)) || path.basename(folderName);
         const tokenKey = `${ZEBKIT_PREFIX}-${moduleKey}`;
 
-        if (validateTokenExport(tokensExport, tokenSchema)) {
+        const schemaErrors = validateTokenExport(tokensExport, tokenSchema);
+        if (schemaErrors.length === 0) {
           // Merge modules that share the same logical key (e.g., primitive + semantic spacing).
           // Copy the imported export rather than aliasing it: token modules are ES singletons
           // cached for the process lifetime, so mutating one (below, or via overrides) would
@@ -168,7 +169,7 @@ export async function buildZebkitTokens(
             }
           }
         } else {
-          fatalErrors.push(`Invalid token structure in file: ${file}`);
+          fatalErrors.push(`Invalid token structure in file: ${file}\n${schemaErrors.map((issue) => `    ${issue}`).join('\n')}`);
         }
       } catch (error) {
         console.error(chalk.red(`Error importing token file ${file}:`), error);
@@ -217,13 +218,15 @@ export async function buildZebkitTokens(
   return { tokens, layers, overriddenKeys };
 }
 
-function validateTokenExport(tokenExport: unknown, schema: ZodSchema): boolean {
+export function validateTokenExport(tokenExport: unknown, schema: ZodSchema): string[] {
   try {
     schema.parse(tokenExport);
-    return true;
+    return [];
   } catch (error) {
-    console.warn(chalk.yellow('Token export failed schema validation.'));
-    return false;
+    if (error instanceof z.ZodError) {
+      return error.issues.map((issue) => `${issue.path.join('.') || '(root)'} → ${issue.message}`);
+    }
+    return [`(root) → ${error instanceof Error ? error.message : String(error)}`];
   }
 }
 

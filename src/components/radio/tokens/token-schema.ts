@@ -11,7 +11,6 @@ export const tokenSchema = z.object({
   display: tokenObjectSchema,
 
   // Control geometry
-  'control-size': tokenObjectSchema,
   'control-width': tokenObjectSchema,
   'control-height': tokenObjectSchema,
 

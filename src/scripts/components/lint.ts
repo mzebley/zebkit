@@ -23,6 +23,9 @@
 //       component source consumes, in both directions
 //   C6  the generated slot-contract.ts matches what the manifest would emit
 //       (run `npm run generate:components` on drift)
+//   C7  component styles/runtime token references exactly match their token module
+//   C8  every component is imported, re-exported, and defined by the registry
+//   C9  INSTALL.md and component README HTML fences are executable documentation
 //
 // C5 is deliberately asymmetric. "Declared but never delivered" accepts any
 // quoted occurrence of the slot name (delivery often flows through private
@@ -44,6 +47,7 @@ import { globSync } from "glob";
 import Ajv from "ajv/dist/2020.js";
 import { loadTokenModules } from "../utilities/token-source.js";
 import { renderSlotContract } from "./render.js";
+import { extractZbkTokens } from "../prune/content-scan.js";
 
 type Finding = { rule: string; file: string; subject: string; message: string };
 
@@ -56,6 +60,10 @@ const CEM_PATH = "custom-elements.json";
 // zbk-heading is pre-grammar (LitElement + shadow slot, no ZebkitElement
 // content adoption) — it stays until it is rebuilt on the base class.
 const MISSING_MANIFESTS = new Set(["zbk-heading"]);
+
+// C7 is deliberately empty. Add an entry only for a token whose consumption is
+// genuinely indirect, with a reason; remove it as soon as the indirection goes away.
+const KNOWN_TOKEN_EXCEPTIONS: Record<string, ReadonlySet<string>> = {};
 
 // Attributes examples may use on any zbk-* element without a CEM declaration.
 // aria-*, data-*, and on* pass by prefix.
@@ -144,6 +152,59 @@ function scanElements(html: string): ScannedElement[] {
     elements.push({ tag: tagMatch[1].toLowerCase(), attrs });
   }
   return elements;
+}
+
+type ExampleValidationContext = {
+  cemTags: Map<string, Set<string>>;
+  variantNames: Map<string, Set<string>>;
+  slotsByTag: Map<string, Set<string>>;
+  declaredSlots: Set<string>;
+};
+
+/** Shared C3/C9 validator for manifest examples and Markdown HTML fences. */
+function validateExampleHtml(
+  html: string,
+  context: ExampleValidationContext,
+  onFinding: (message: string) => void,
+): void {
+  const elements = scanElements(html);
+  const exampleSlots = new Set(context.declaredSlots);
+  for (const element of elements) {
+    for (const name of context.slotsByTag.get(element.tag) ?? []) exampleSlots.add(name);
+  }
+  for (const element of elements) {
+    const isZbk = element.tag.startsWith("zbk-");
+    if (isZbk && !context.cemTags.has(element.tag)) {
+      onFinding(`<${element.tag}> has no CEM declaration.`);
+      continue;
+    }
+    for (const [attr, value] of element.attrs) {
+      if (isZbk && !context.cemTags.get(element.tag)!.has(attr) && !isGlobalAttribute(attr)) {
+        onFinding(`<${element.tag}> has no attribute '${attr}' (CEM: ${[...context.cemTags.get(element.tag)!].join(", ")}).`);
+      }
+      if (attr === "slot" && !exampleSlots.has(value)) {
+        onFinding(`slot="${value}" is not declared by any component in this example (declared: ${[...exampleSlots].join(", ")}).`);
+      }
+      if (attr === "variant" && isZbk) {
+        const registered = context.variantNames.get(element.tag.replace(/^zbk-/, "")) ?? new Set<string>();
+        for (const name of value.split(/\s+/).filter(Boolean)) {
+          if (!registered.has(name)) {
+            onFinding(`variant '${name}' is not registered for ${element.tag} (registered: ${[...registered].join(", ") || "none"}).`);
+          }
+        }
+      }
+    }
+  }
+}
+
+function htmlFences(markdown: string): { html: string; line: number }[] {
+  const fences: { html: string; line: number }[] = [];
+  const pattern = /^```html(?:\s+(no-lint))?\s*\n([\s\S]*?)^```\s*$/gim;
+  for (const match of markdown.matchAll(pattern)) {
+    if (match[1] === "no-lint") continue;
+    fences.push({ html: match[2], line: markdown.slice(0, match.index).split("\n").length });
+  }
+  return fences;
 }
 
 /**
@@ -326,59 +387,11 @@ async function main() {
         });
       }
 
-      const elements = scanElements(example.html);
-
-      // slot="..." may target any component composed into the example.
-      const exampleSlots = new Set(declaredSlots);
-      for (const element of elements) {
-        for (const name of slotsByTag.get(element.tag) ?? []) exampleSlots.add(name);
-      }
-
-      for (const element of elements) {
-        const isZbk = element.tag.startsWith("zbk-");
-
-        if (isZbk && !cemTags.has(element.tag)) {
-          findings.push({
-            rule: "C3",
-            file,
-            subject,
-            message: `<${element.tag}> has no CEM declaration.`,
-          });
-          continue;
-        }
-
-        for (const [attr, value] of element.attrs) {
-          if (isZbk && !cemTags.get(element.tag)!.has(attr) && !isGlobalAttribute(attr)) {
-            findings.push({
-              rule: "C3",
-              file,
-              subject,
-              message: `<${element.tag}> has no attribute '${attr}' (CEM: ${[...cemTags.get(element.tag)!].join(", ")}).`,
-            });
-          }
-          if (attr === "slot" && !exampleSlots.has(value)) {
-            findings.push({
-              rule: "C3",
-              file,
-              subject,
-              message: `slot="${value}" is not declared by any component in this example (declared: ${[...exampleSlots].join(", ")}).`,
-            });
-          }
-          if (attr === "variant" && isZbk) {
-            const forTag = variantNames.get(element.tag.replace(/^zbk-/, "")) ?? new Set<string>();
-            for (const name of value.split(/\s+/).filter(Boolean)) {
-              if (!forTag.has(name)) {
-                findings.push({
-                  rule: "C3",
-                  file,
-                  subject,
-                  message: `variant '${name}' is not registered for ${element.tag} (registered: ${[...forTag].join(", ") || "none"}).`,
-                });
-              }
-            }
-          }
-        }
-      }
+      validateExampleHtml(
+        example.html,
+        { cemTags, variantNames, slotsByTag, declaredSlots },
+        (message) => findings.push({ rule: "C3", file, subject, message }),
+      );
     }
 
     // C6 — the generated runtime slot contract matches the manifest
@@ -430,6 +443,92 @@ async function main() {
           message: `source consumes slot '${slotName}' but the manifest does not declare it.`,
         });
       }
+    }
+  }
+
+  // C7 — token delivery diff. A component surface is only honest when every
+  // defined token is consumed and every consumed component token is defined.
+  const tokenComponentDirs = globSync("src/components/*/tokens/tokens.ts", { cwd: rootDir })
+    .map((file) => path.basename(path.dirname(path.dirname(file))));
+  for (const component of tokenComponentDirs) {
+    const keys = tokenModules.get(component)!;
+    const componentDir = path.resolve(rootDir, "src/components", component);
+    const sources = await Promise.all(
+      ["styles.scss", "index.ts"].map(async (name) => {
+        const sourcePath = path.join(componentDir, name);
+        return (await fs.pathExists(sourcePath)) ? fs.readFile(sourcePath, "utf8") : "";
+      }),
+    );
+    const prefix = `--zbk-${component}-`;
+    const referenced = new Set(
+      sources.flatMap((source) =>
+        extractZbkTokens(
+          source
+            .replace(/\/\/[^\n]*/g, "")
+            .replace(/\/\*[\s\S]*?\*\//g, "")
+            .replace(/--#\{prefix\.\$cssVar\}/g, "--zbk"),
+        ).filter((token) => token.startsWith(prefix) && token !== prefix),
+      ),
+    );
+    const defined = new Set([...keys.keys()].map((key) => `${prefix}${key}`));
+    const exceptions = KNOWN_TOKEN_EXCEPTIONS[component] ?? new Set<string>();
+    for (const token of referenced) {
+      if (!defined.has(token)) {
+        findings.push({
+          rule: "C7",
+          file: `src/components/${component}/styles.scss`,
+          subject: `zbk-${component}`,
+          message: `references '${token}' but tokens/tokens.ts does not define it — add the token to the component surface or use a defined token (${[...defined].join(", ")}).`,
+        });
+      }
+    }
+    for (const token of defined) {
+      if (!referenced.has(token) && !exceptions.has(token)) {
+        findings.push({
+          rule: "C7",
+          file: `src/components/${component}/tokens/tokens.ts`,
+          subject: `zbk-${component}`,
+          message: `defines '${token}' but styles.scss and index.ts never consume it — deliver the token or delete the dead surface.`,
+        });
+      }
+    }
+  }
+
+  // C8 — src/components/index.ts is the single manual registry seam.
+  const registryPath = "src/components/index.ts";
+  const registrySource = await fs.readFile(path.resolve(rootDir, registryPath), "utf8");
+  const componentDirs = globSync("src/components/*/index.ts", { cwd: rootDir })
+    .map((file) => path.basename(path.dirname(file)))
+    .filter((name) => name !== "base");
+  for (const component of componentDirs) {
+    const pascal = component.replace(/(^|-)([a-z])/g, (_, _dash, letter) => letter.toUpperCase());
+    const className = `Zbk${pascal}`;
+    const defineName = `defineZbk${pascal}`;
+    const imported = new RegExp(`import\\s+\\{[^}]*\\b${className}\\b[^}]*\\b${defineName}\\b[^}]*\\}\\s+from\\s+["']\\./${component}["']`).test(registrySource);
+    const reExported = new RegExp(`export\\s+\\{[\\s\\S]*?\\b${className}\\b[\\s\\S]*?\\b${defineName}\\b[\\s\\S]*?\\}`, "m").test(registrySource);
+    const defined = new RegExp(`defineZebkitComponents[\\s\\S]*?\\b${defineName}\\(\\)`).test(registrySource);
+    if (!imported || !reExported || !defined) {
+      findings.push({
+        rule: "C8",
+        file: registryPath,
+        subject: `zbk-${component}`,
+        message: `is not fully registered — import ${className} and ${defineName} from './${component}', re-export both, and call ${defineName}() inside defineZebkitComponents().`,
+      });
+    }
+  }
+
+  // C9 — Markdown examples use the same parser and validation as C3. Docs
+  // MDX remains intentionally out of scope because its template expressions
+  // need an MDX-aware parser.
+  const markdownFiles = ["INSTALL.md", ...globSync("src/components/*/README.md", { cwd: rootDir }).sort()];
+  for (const file of markdownFiles) {
+    const source = await fs.readFile(path.resolve(rootDir, file), "utf8");
+    for (const fence of htmlFences(source)) {
+      validateExampleHtml(
+        fence.html,
+        { cemTags, variantNames, slotsByTag, declaredSlots: new Set() },
+        (message) => findings.push({ rule: "C9", file, subject: `html fence at line ${fence.line}`, message }),
+      );
     }
   }
 

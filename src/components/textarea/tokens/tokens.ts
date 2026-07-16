@@ -38,7 +38,6 @@ export type TextareaTokenKey =
   | 'font-family'
   | 'font-size'
   | 'font-weight'
-  | 'line-height'
   | 'field-line-height'
   | 'letter-spacing'
   | 'label-ink'
@@ -219,11 +218,6 @@ const tokens = {
     value: "{font-weight.normal}",
     type: "fontWeight",
     description: "Font weight for the entered text.",
-  },
-  "line-height": {
-    value: "{line-height.2}",
-    type: "lineHeight",
-    description: "Line height for the entered text.",
   },
   "field-line-height": {
     value: "{line-height.2}",

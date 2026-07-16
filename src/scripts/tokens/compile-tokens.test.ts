@@ -73,4 +73,5 @@ describe('compile-tokens helpers', () => {
       'Unsupported format: yaml'
     );
   });
+
 });

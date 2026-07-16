@@ -10,7 +10,8 @@ const lg: RadioVariantConfig = {
   axis: 'size',
   description: 'Larger control and label type.',
   overrides: {
-    'control-size': '{spacing.lg}',
+    'control-width': '{spacing.lg}',
+    'control-height': '{spacing.lg}',
     'font-size': '{font-size.lg}',
   },
 };

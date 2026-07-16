@@ -11,7 +11,6 @@ export const layer: LayerName = "base";
 
 export type RadioTokenKey =
   'display'
-  | 'control-size'
   | 'control-width'
   | 'control-height'
   | 'canvas'
@@ -67,20 +66,14 @@ const tokens = {
     description: "Display mode for the <zbk-radio> host element.",
   },
 
-  // Control geometry. Width and height default to the shared size so a single
-  // override rescales the control, but they stay independently addressable.
-  "control-size": {
-    value: "{spacing.105}",
-    type: "sizing",
-    description: "Base width and height of the radio control.",
-  },
+  // Control geometry. Width and height stay independently addressable.
   "control-width": {
-    value: "{radio.control-size}",
+    value: "{spacing.105}",
     type: "sizing",
     description: "Control width override when it differs from control-size.",
   },
   "control-height": {
-    value: "{radio.control-size}",
+    value: "{spacing.105}",
     type: "sizing",
     description: "Control height override when it differs from control-size.",
   },

@@ -22,6 +22,7 @@ import {
   isVariantOverrideFile,
   mergeVariantOverrideEntry,
   normalizeVariantOverrideEntry,
+  throwVariantOverrideErrors,
   VariantMetadataEntry,
 } from './compile-variant-helpers';
 
@@ -186,9 +187,11 @@ export async function buildZebkitVariants(
       options.componentsFilter
     );
 
+    const overrideErrors: string[] = [];
     for (const variant of activeConfigs) {
-      await registerVariant(variant, tokens, registry, variantMetadata, projectRoot);
+      await registerVariant(variant, tokens, registry, variantMetadata, projectRoot, overrideErrors);
     }
+    throwVariantOverrideErrors(overrideErrors);
 
     const buildOutputs = () => buildVariantOutputs(registry, variantMetadata, tokens);
     let { inlineCss, extraStylesheets } = buildOutputs();
@@ -315,6 +318,7 @@ async function applyVariantOverrides(
       const rawData = await fs.readJson(file);
       const entries = extractVariantOverrideEntries(rawData);
       if (entries.length === 0) continue;
+      const overrideErrors: string[] = [];
 
       for (const entry of entries) {
         // Consumer overrides can't resurrect what the components config removed;
@@ -347,9 +351,11 @@ async function applyVariantOverrides(
           tokens,
           variantMetadata,
           path.basename(file),
-          path.dirname(file)
+          path.dirname(file),
+          overrideErrors
         );
       }
+      throwVariantOverrideErrors(overrideErrors);
     } catch (error) {
       // The user explicitly pointed the build at this override file; continuing
       // would silently ship CSS without it.
@@ -365,6 +371,7 @@ export {
   isVariantOverrideFile,
   mergeVariantOverrideEntry,
   normalizeVariantOverrideEntry,
+  throwVariantOverrideErrors,
 } from './compile-variant-helpers';
 export { writeVariantScaffolds } from './write-variant-scaffolds';
 
@@ -405,7 +412,8 @@ async function registerVariant(
   tokens: Record<string, TokenInterface>,
   registry: VariantRegistry,
   variantMetadata: Map<string, VariantMetadataEntry>,
-  projectRoot: string
+  projectRoot: string,
+  overrideErrors: string[]
 ) {
   // Hard fail (with warning) if component or name missing.
   const component = variant.component;
@@ -421,10 +429,8 @@ async function registerVariant(
   const tokenKey = `${ZEBKIT_PREFIX}-${component}`;
 
   if (!tokens[tokenKey]) {
-    console.warn(
-      chalk.yellow(
-        `No token map found for component "${component}" (expected key "${tokenKey}"). Skipping variant "${name}".`
-      )
+    overrideErrors.push(
+      `[zbk-${component}] Shipped variant '${name}' targets an unknown component token surface. Source: shipped registry. Add tokens for '${component}' or use a registered component.`,
     );
     return;
   }
@@ -438,10 +444,8 @@ async function registerVariant(
   if (variant.overrides) {
     for (const [key, value] of Object.entries(variant.overrides)) {
       if (!Object.prototype.hasOwnProperty.call(sourceTokens, key)) {
-        console.warn(
-          chalk.yellow(
-            `Variant "${component}.${name}" has override for unknown token "${key}". Ignoring.`
-          )
+        overrideErrors.push(
+          `[zbk-${component}] Shipped variant '${name}' overrides unknown token '${key}'. Source: shipped registry. Valid token keys: ${Object.keys(sourceTokens).join(', ')}.`,
         );
         continue;
       }

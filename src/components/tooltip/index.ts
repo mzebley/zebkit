@@ -159,10 +159,10 @@ export class ZbkTooltip extends ZebkitElement {
   // ---------------------------------------------------------------------------
   // Timing: read from the token surface so the a11y machinery reaches it.
 
-  private tokenMs(token: string, fallback: number): number {
+  private tokenMs(token: "--zbk-tooltip-show-delay" | "--zbk-tooltip-hide-grace", fallback: number): number {
     if (typeof getComputedStyle !== 'function') return fallback;
     const raw = getComputedStyle(this)
-      .getPropertyValue(`--zbk-tooltip-${token}`)
+      .getPropertyValue(token)
       .trim();
     if (!raw) return fallback;
     const parsed = parseFloat(raw);
@@ -175,6 +175,13 @@ export class ZbkTooltip extends ZebkitElement {
     const raw = getComputedStyle(this)
       .getPropertyValue('--zbk-tooltip-arrow-size')
       .trim();
+    const parsed = parseFloat(raw);
+    return Number.isNaN(parsed) ? 8 : parsed;
+  }
+
+  private offsetPx(): number {
+    if (typeof getComputedStyle !== 'function') return 8;
+    const raw = getComputedStyle(this).getPropertyValue('--zbk-tooltip-offset').trim();
     const parsed = parseFloat(raw);
     return Number.isNaN(parsed) ? 8 : parsed;
   }
@@ -196,7 +203,7 @@ export class ZbkTooltip extends ZebkitElement {
         placement: this.placement,
         strategy: 'fixed',
         middleware: [
-          offset(arrowSize),
+          offset(this.offsetPx()),
           flip({ padding: 8 }),
           shift({ padding: 8 }),
           arrow({ element: arrowEl }),
@@ -284,7 +291,7 @@ export class ZbkTooltip extends ZebkitElement {
         this.showTimer = setTimeout(() => {
           this.showTimer = undefined;
           this.show();
-        }, this.tokenMs('show-delay', 150));
+        }, this.tokenMs('--zbk-tooltip-show-delay', 150));
       }
     } else {
       clearTimeout(this.showTimer);
@@ -293,7 +300,7 @@ export class ZbkTooltip extends ZebkitElement {
       this.hideTimer = setTimeout(() => {
         this.hideTimer = undefined;
         this.hide();
-      }, this.tokenMs('hide-grace', 120));
+      }, this.tokenMs('--zbk-tooltip-hide-grace', 120));
     }
   }
 
