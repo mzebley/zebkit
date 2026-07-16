@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenObject } from "@definitions/tokens";
 
 /**
  * Zebkit button design tokens. The module key is fixed to `button` so these
@@ -10,7 +9,79 @@ import { tokenSchema } from "./token-schema";
 export const key = "button";
 export const layer: LayerName = "base";
 
-export type ButtonTokens = z.infer<typeof tokenSchema>;
+export type ButtonTokenKey =
+  'ink'
+  | 'ink-hover'
+  | 'ink-active'
+  | 'ink-disabled'
+  | 'ink-loading'
+  | 'canvas'
+  | 'canvas-hover'
+  | 'canvas-active'
+  | 'canvas-disabled'
+  | 'canvas-loading'
+  | 'border-color'
+  | 'border-color-hover'
+  | 'border-color-active'
+  | 'border-color-disabled'
+  | 'border-color-loading'
+  | 'border-width'
+  | 'border-style'
+  | 'border-radius'
+  | 'font-family'
+  | 'font-size'
+  | 'font-weight'
+  | 'line-height'
+  | 'letter-spacing'
+  | 'text-transform'
+  | 'text-decoration'
+  | 'text-align'
+  | 'padding-inline'
+  | 'padding-block'
+  | 'padding-inline-start'
+  | 'padding-block-start'
+  | 'padding-inline-end'
+  | 'padding-block-end'
+  | 'gap'
+  | 'group-gap'
+  | 'margin-block-start'
+  | 'margin-inline-end'
+  | 'margin-block-end'
+  | 'margin-inline-start'
+  | 'margin-inline'
+  | 'margin-block'
+  | 'display'
+  | 'width'
+  | 'min-width'
+  | 'max-width'
+  | 'height'
+  | 'min-height'
+  | 'max-height'
+  | 'icon-size'
+  | 'icon-end-size'
+  | 'icon-start-size'
+  | 'focus-color'
+  | 'focus-width'
+  | 'focus-offset'
+  | 'box-shadow'
+  | 'box-shadow-hover'
+  | 'box-shadow-active'
+  | 'box-shadow-focus'
+  | 'transform'
+  | 'transform-hover'
+  | 'transform-active'
+  | 'transform-focus'
+  | 'cursor'
+  | 'cursor-loading'
+  | 'flex-direction'
+  | 'justify-content'
+  | 'align-items'
+  | 'transition-duration'
+  | 'transition-timing-function'
+  | 'transition-property'
+  | 'transition-delay'
+  | 'opacity'
+  | 'opacity-loading';
 
 const tokens = {
   // Core label colors
@@ -403,6 +474,6 @@ const tokens = {
     type: "opacity",
     description: "Visual opacity while the button is in its loading state.",
   },
-} as const satisfies ButtonTokens;
+} as const satisfies Record<ButtonTokenKey, TokenObject>;
 
 export default tokens;

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { tokenObjectSchema } from '@definitions/tokens';
+import type { TextareaTokenKey } from './tokens';
 
 /**
  * Strict schema for textarea tokens. Keep this in sync with tokens.ts so
@@ -92,6 +93,6 @@ export const tokenSchema = z.object({
   // Other
   opacity: tokenObjectSchema,
   'opacity-disabled': tokenObjectSchema,
-});
+} satisfies Record<TextareaTokenKey, typeof tokenObjectSchema>);
 
 export type TextareaTokenSchema = typeof tokenSchema;

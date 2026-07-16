@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenObject } from "@definitions/tokens";
 
 /**
  * Zebkit checkbox design tokens. The module key is fixed to `checkbox` so these
@@ -10,7 +9,58 @@ import { tokenSchema } from "./token-schema";
 export const key = "checkbox";
 export const layer: LayerName = "base";
 
-export type CheckboxTokens = z.infer<typeof tokenSchema>;
+export type CheckboxTokenKey =
+  'display'
+  | 'control-size'
+  | 'control-width'
+  | 'control-height'
+  | 'canvas'
+  | 'canvas-hover'
+  | 'canvas-active'
+  | 'canvas-checked'
+  | 'canvas-indeterminate'
+  | 'canvas-disabled'
+  | 'border-color'
+  | 'border-color-hover'
+  | 'border-color-active'
+  | 'border-color-checked'
+  | 'border-color-indeterminate'
+  | 'border-color-disabled'
+  | 'border-width'
+  | 'border-style'
+  | 'border-radius'
+  | 'indicator-color'
+  | 'indicator-color-disabled'
+  | 'indicator-stroke-width'
+  | 'indicator-radius'
+  | 'indicator-size'
+  | 'ink'
+  | 'ink-disabled'
+  | 'font-family'
+  | 'font-size'
+  | 'font-weight'
+  | 'line-height'
+  | 'letter-spacing'
+  | 'gap'
+  | 'align-items'
+  | 'group-gap'
+  | 'group-direction'
+  | 'focus-color'
+  | 'focus-width'
+  | 'focus-offset'
+  | 'box-shadow'
+  | 'box-shadow-hover'
+  | 'box-shadow-active'
+  | 'box-shadow-checked'
+  | 'box-shadow-focus'
+  | 'cursor'
+  | 'cursor-disabled'
+  | 'transition-duration'
+  | 'transition-timing-function'
+  | 'transition-property'
+  | 'transition-delay'
+  | 'opacity'
+  | 'opacity-disabled';
 
 const tokens = {
   // Host layout: the label is the layout root, so the host gets out of the way.
@@ -295,6 +345,6 @@ const tokens = {
     type: "opacity",
     description: "Control opacity when disabled.",
   },
-} as const satisfies CheckboxTokens;
+} as const satisfies Record<CheckboxTokenKey, TokenObject>;
 
 export default tokens;

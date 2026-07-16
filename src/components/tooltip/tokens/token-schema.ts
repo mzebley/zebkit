@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { tokenObjectSchema } from '@definitions/tokens';
+import type { TooltipTokenKey } from './tokens';
 
 /**
  * Strict schema for tooltip tokens. Keep this in sync with tokens.ts so
@@ -36,6 +37,6 @@ export const tokenSchema = z.object({
   'hide-grace': tokenObjectSchema,
 
   opacity: tokenObjectSchema,
-});
+} satisfies Record<TooltipTokenKey, typeof tokenObjectSchema>);
 
 export type TooltipTokenSchema = typeof tokenSchema;

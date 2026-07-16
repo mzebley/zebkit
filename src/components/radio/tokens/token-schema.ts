@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { tokenObjectSchema } from '@definitions/tokens';
+import type { RadioTokenKey } from './tokens';
 
 /**
  * Strict schema for radio tokens. Keep this in sync with tokens.ts so
@@ -77,6 +78,6 @@ export const tokenSchema = z.object({
   // Other
   opacity: tokenObjectSchema,
   'opacity-disabled': tokenObjectSchema,
-});
+} satisfies Record<RadioTokenKey, typeof tokenObjectSchema>);
 
 export type RadioTokenSchema = typeof tokenSchema;

@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenObject } from "@definitions/tokens";
 
 /**
  * Zebkit textarea design tokens. The module key is fixed to `textarea` so these
@@ -10,7 +9,66 @@ import { tokenSchema } from "./token-schema";
 export const key = "textarea";
 export const layer: LayerName = "base";
 
-export type TextareaTokens = z.infer<typeof tokenSchema>;
+export type TextareaTokenKey =
+  'display'
+  | 'canvas'
+  | 'canvas-hover'
+  | 'canvas-focus'
+  | 'canvas-active'
+  | 'canvas-disabled'
+  | 'canvas-readonly'
+  | 'canvas-invalid'
+  | 'ink'
+  | 'ink-disabled'
+  | 'ink-readonly'
+  | 'ink-invalid'
+  | 'placeholder-ink'
+  | 'placeholder-ink-disabled'
+  | 'caret-color'
+  | 'border-color'
+  | 'border-color-hover'
+  | 'border-color-focus'
+  | 'border-color-active'
+  | 'border-color-disabled'
+  | 'border-color-readonly'
+  | 'border-color-invalid'
+  | 'border-width'
+  | 'border-style'
+  | 'border-radius'
+  | 'font-family'
+  | 'font-size'
+  | 'font-weight'
+  | 'line-height'
+  | 'field-line-height'
+  | 'letter-spacing'
+  | 'label-ink'
+  | 'label-ink-disabled'
+  | 'label-font-size'
+  | 'label-font-weight'
+  | 'label-gap'
+  | 'padding-inline'
+  | 'padding-block'
+  | 'resize'
+  | 'width'
+  | 'min-width'
+  | 'max-width'
+  | 'min-block-size'
+  | 'focus-color'
+  | 'focus-width'
+  | 'focus-offset'
+  | 'box-shadow'
+  | 'box-shadow-hover'
+  | 'box-shadow-focus'
+  | 'box-shadow-active'
+  | 'box-shadow-invalid'
+  | 'cursor'
+  | 'cursor-disabled'
+  | 'transition-duration'
+  | 'transition-timing-function'
+  | 'transition-property'
+  | 'transition-delay'
+  | 'opacity'
+  | 'opacity-disabled';
 
 const tokens = {
   // Host layout: the label is the layout root, so the host gets out of the way.
@@ -337,6 +395,6 @@ const tokens = {
     type: "opacity",
     description: "Field opacity when disabled.",
   },
-} as const satisfies TextareaTokens;
+} as const satisfies Record<TextareaTokenKey, TokenObject>;
 
 export default tokens;

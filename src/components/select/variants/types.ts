@@ -1,7 +1,7 @@
 import type { VariantConfig } from '@definitions/token-variants';
-import type { SelectTokens } from '../tokens/tokens';
+import type { SelectTokenKey } from '../tokens/tokens';
 
-export type SelectVariantTokenKey = keyof SelectTokens;
+export type SelectVariantTokenKey = SelectTokenKey;
 
 /**
  * Select-specific variant config. Strongly typed to select token keys.

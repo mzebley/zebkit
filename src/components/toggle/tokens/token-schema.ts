@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { tokenObjectSchema } from '@definitions/tokens';
+import type { ToggleTokenKey } from './tokens';
 
 /**
  * Strict schema for toggle tokens. Keep this in sync with tokens.ts so
@@ -93,6 +94,6 @@ export const tokenSchema = z.object({
   // Other
   opacity: tokenObjectSchema,
   'opacity-disabled': tokenObjectSchema,
-});
+} satisfies Record<ToggleTokenKey, typeof tokenObjectSchema>);
 
 export type ToggleTokenSchema = typeof tokenSchema;

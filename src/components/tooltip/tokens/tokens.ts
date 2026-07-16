@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenObject } from "@definitions/tokens";
 
 /**
  * Zebkit tooltip design tokens. The module key is fixed to `tooltip` so these
@@ -11,7 +10,31 @@ import { tokenSchema } from "./token-schema";
 export const key = "tooltip";
 export const layer: LayerName = "base";
 
-export type TooltipTokens = z.infer<typeof tokenSchema>;
+export type TooltipTokenKey =
+  'display'
+  | 'canvas'
+  | 'ink'
+  | 'border-color'
+  | 'border-width'
+  | 'border-style'
+  | 'border-radius'
+  | 'font-family'
+  | 'font-size'
+  | 'font-weight'
+  | 'line-height'
+  | 'letter-spacing'
+  | 'padding-inline'
+  | 'padding-block'
+  | 'max-width'
+  | 'arrow-size'
+  | 'offset'
+  | 'box-shadow'
+  | 'z-index'
+  | 'transition-duration'
+  | 'transition-timing-function'
+  | 'show-delay'
+  | 'hide-grace'
+  | 'opacity';
 
 const tokens = {
   // Host layout: the element wraps its trigger without disturbing layout.
@@ -151,6 +174,6 @@ const tokens = {
     type: "opacity",
     description: "Bubble opacity.",
   },
-} as const satisfies TooltipTokens;
+} as const satisfies Record<TooltipTokenKey, TokenObject>;
 
 export default tokens;

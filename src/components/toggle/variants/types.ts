@@ -1,7 +1,7 @@
 import type { VariantConfig } from '@definitions/token-variants';
-import type { ToggleTokens } from '../tokens/tokens';
+import type { ToggleTokenKey } from '../tokens/tokens';
 
-export type ToggleVariantTokenKey = keyof ToggleTokens;
+export type ToggleVariantTokenKey = ToggleTokenKey;
 
 /**
  * Toggle-specific variant config. Strongly typed to toggle token keys.

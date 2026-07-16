@@ -78,3 +78,11 @@ responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescr
 ## Ordering vs the color sprint
 
 Independent — run in either order. If this lands first, `utilities-color.md` simply doesn't exist yet and the color sprint adds it (plus `statePattern` rendering: one extra grammar-line form showing the `hover:`/`focus:`/`active:`/`disabled:` prefixes). If color lands first, this plan renders it like any other kind.
+
+## Addendum (2026-07-15, post-audit — read before executing)
+
+Written after the branch audit; three deltas to the plan above:
+
+1. **The color sprint has landed.** `LEGACY_PARTIALS` is empty and `color.utilities.manifest.json` exists (21 manifests / 100 families now, not 20/117). So this pass takes the "color lands first" branch: render `utilities-color.md` like any other domain, including the `statePattern` grammar-line form with the `hover:`/`focus:`/`active:`/`disabled:` prefixes. The domain table's "reserved" row is obsolete.
+2. **Fix the agents-page drift while you're in here.** `docs/src/routes/agents/+page.mdx` hand-enumerates the context files and is already wrong (lists 5 of 10). In Phase 3 you're building the index data anyway — also emit it as JSON (e.g. `docs/src/lib/data/generated/context-index.json`, matching the repo's generated-data pattern) and render the agents page's file table from it. Hand-written enumeration of generated files must not survive this plan.
+3. **Publish `llms.txt` where the convention looks for it.** The canonical file stays at `docs/static/zebkit/context/llms.txt`, but llmstxt.org discovery expects `/llms.txt` at the site root — add a copy step (docs build or `build:context` writing both) so `docs/static/llms.txt` exists and stays drift-checked. Same for `llms-full.txt`.

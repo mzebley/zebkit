@@ -3,7 +3,6 @@
   "version": "0.7.0",
   "type": "module",
   "description": "A fully flexible, token-based web component library.",
-  "main": "index.ts",
   "bin": {
     "zebkit": "./dist/cli/zebkit.mjs"
   },
@@ -13,14 +12,22 @@
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js"
     },
+    "./components/*": {
+      "types": "./dist/components/*/index.d.ts",
+      "import": "./dist/components/*/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
     "dist/cli/",
     "dist/components/",
     "dist/editor/",
+    "custom-elements.json",
     "src/**/*.scss"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "test": "npm run test:unit",
     "test:unit": "jest",

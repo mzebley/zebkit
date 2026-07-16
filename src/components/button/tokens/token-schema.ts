@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { tokenObjectSchema } from '@definitions/tokens';
+import type { ButtonTokenKey } from './tokens';
 
 /**
  * Strict schema for button tokens. Keep this in sync with tokens.ts so
@@ -106,6 +107,6 @@ export const tokenSchema = z.object({
   // Other
   opacity: tokenObjectSchema,
   'opacity-loading': tokenObjectSchema
-});
+} satisfies Record<ButtonTokenKey, typeof tokenObjectSchema>);
 
 export type ButtonTokenSchema = typeof tokenSchema;

@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenObject } from "@definitions/tokens";
 
 /**
  * Zebkit toggle (switch) design tokens. The module key is fixed to `toggle` so
@@ -15,7 +14,69 @@ import { tokenSchema } from "./token-schema";
 export const key = "toggle";
 export const layer: LayerName = "base";
 
-export type ToggleTokens = z.infer<typeof tokenSchema>;
+export type ToggleTokenKey =
+  'display'
+  | 'track-width'
+  | 'track-height'
+  | 'canvas'
+  | 'canvas-hover'
+  | 'canvas-active'
+  | 'canvas-checked'
+  | 'canvas-disabled'
+  | 'border-color'
+  | 'border-color-hover'
+  | 'border-color-active'
+  | 'border-color-checked'
+  | 'border-color-disabled'
+  | 'border-width'
+  | 'border-style'
+  | 'border-radius'
+  | 'box-shadow'
+  | 'box-shadow-hover'
+  | 'box-shadow-active'
+  | 'box-shadow-checked'
+  | 'box-shadow-focus'
+  | 'thumb-size'
+  | 'thumb-inset'
+  | 'thumb-canvas'
+  | 'thumb-canvas-hover'
+  | 'thumb-canvas-checked'
+  | 'thumb-canvas-disabled'
+  | 'thumb-border-color'
+  | 'thumb-border-color-checked'
+  | 'thumb-border-width'
+  | 'thumb-border-style'
+  | 'thumb-radius'
+  | 'thumb-shadow'
+  | 'thumb-shadow-hover'
+  | 'thumb-shadow-active'
+  | 'thumb-shadow-checked'
+  | 'thumb-transform'
+  | 'thumb-transform-hover'
+  | 'thumb-transform-active'
+  | 'thumb-transform-checked'
+  | 'ink'
+  | 'ink-disabled'
+  | 'font-family'
+  | 'font-size'
+  | 'font-weight'
+  | 'line-height'
+  | 'letter-spacing'
+  | 'gap'
+  | 'align-items'
+  | 'group-gap'
+  | 'group-direction'
+  | 'focus-color'
+  | 'focus-width'
+  | 'focus-offset'
+  | 'cursor'
+  | 'cursor-disabled'
+  | 'transition-duration'
+  | 'transition-timing-function'
+  | 'transition-property'
+  | 'transition-delay'
+  | 'opacity'
+  | 'opacity-disabled';
 
 const tokens = {
   // Host layout: the label is the layout root, so the host gets out of the way.
@@ -357,6 +418,6 @@ const tokens = {
     type: "opacity",
     description: "Track and thumb opacity when disabled.",
   },
-} as const satisfies ToggleTokens;
+} as const satisfies Record<ToggleTokenKey, TokenObject>;
 
 export default tokens;

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { tokenObjectSchema } from '@definitions/tokens';
+import type { CheckboxTokenKey } from './tokens';
 
 /**
  * Strict schema for checkbox tokens. Keep this in sync with tokens.ts so
@@ -80,6 +81,6 @@ export const tokenSchema = z.object({
   // Other
   opacity: tokenObjectSchema,
   'opacity-disabled': tokenObjectSchema,
-});
+} satisfies Record<CheckboxTokenKey, typeof tokenObjectSchema>);
 
 export type CheckboxTokenSchema = typeof tokenSchema;

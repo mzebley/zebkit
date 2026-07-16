@@ -75,9 +75,17 @@ defineZbkButton();
 Or register everything at once:
 
 ```ts
-import { defineCoreComponents } from 'zebkit/components';
+import { defineZebkitComponents } from 'zebkit/components';
 
-defineCoreComponents();
+defineZebkitComponents();
+```
+
+For the tree-shaking path, import and register only the component you use:
+
+```ts
+import { defineZbkButton } from 'zebkit/components/button';
+
+defineZbkButton();
 ```
 
 Then use the elements anywhere in your HTML:
@@ -85,7 +93,7 @@ Then use the elements anywhere in your HTML:
 ```html
 <zbk-heading level="1" anchor copy-link>Getting started</zbk-heading>
 
-<zbk-button variant="primary">Save</zbk-button>
+<zbk-button variant="outline">Save</zbk-button>
 ```
 
 ### TypeScript

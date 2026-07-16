@@ -1,7 +1,7 @@
 import type { VariantConfig } from '@definitions/token-variants';
-import type { RadioTokens } from '../tokens/tokens';
+import type { RadioTokenKey } from '../tokens/tokens';
 
-export type RadioVariantTokenKey = keyof RadioTokens;
+export type RadioVariantTokenKey = RadioTokenKey;
 
 /**
  * Radio-specific variant config. Strongly typed to radio token keys.
