@@ -1,4 +1,4 @@
-// src/core/button/variants/types.ts
+// src/components/button/variants/types.ts
 
 import type { VariantConfig } from '@definitions/token-variants';
 import type { ButtonTokenKey } from '../tokens/tokens';

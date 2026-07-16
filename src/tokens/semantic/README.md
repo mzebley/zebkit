@@ -8,8 +8,8 @@ This allows teams to express intent (“use card spacing”, “use compact padd
 Zebkit’s compiler merges semantic tokens into the same logical module as their corresponding primitives.  
 For example:
 
-- `src/core/spacing/tokens.ts` → primitives for spacing  
-- `src/core/semantic/spacing/tokens.ts` → semantic aliases for spacing  
+- `src/tokens/spacing/tokens.ts` → primitives for spacing  
+- `src/tokens/semantic/spacing/tokens.ts` → semantic aliases for spacing  
 - Both merge into the single token module: `zbk-spacing`
 
 This makes semantic token usage identical to primitive usage — the consuming code doesn’t care which file defined which key.

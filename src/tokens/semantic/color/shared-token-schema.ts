@@ -1,4 +1,4 @@
-// src/core/color-family/tokens/color-family-schema.ts
+// src/tokens/semantic/color/shared-token-schema.ts
 import { z } from 'zod';
 import { tokenObjectSchema } from '@definitions/tokens';
 

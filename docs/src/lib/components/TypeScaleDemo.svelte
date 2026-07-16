@@ -2,7 +2,7 @@
   // Live, viewport-simulating preview of zebkit's default fluid type scale.
   //
   // The numbers here MIRROR the build-time generator (src/scripts/tokens/build-type-scale.ts)
-  // and the default control tokens (src/core/typography/type-scale/tokens/tokens.ts). It is a
+  // and the default control tokens (src/tokens/typography/type-scale/tokens/tokens.ts). It is a
   // re-implementation on purpose: a `clamp()` reacts to the real browser viewport, but to let a
   // reader *operate* the scale we compute each size from a SIMULATED viewport width instead.
   // If the default controls change, update these constants to match.

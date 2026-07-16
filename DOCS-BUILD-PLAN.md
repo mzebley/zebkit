@@ -10,11 +10,11 @@
 
 1. **One task at a time, in order.** After each task, run its verify step. If it fails, fix it before moving on. If you can't, stop and report — do not invent a workaround.
 2. **Token-bound only.** Never write a hard-coded color/size/radius/font value, even in CSS. Use a zebkit utility class, or bind a zebkit CSS variable (`var(--zbk-…)`). If no utility or token exists for what you need, **stop and log it** in a `### Gaps found` section at the bottom of this file — do not hard-code.
-3. **Sources of truth:** token values come from `static/zebkit/*.json` (synced from the build); utility info comes from `src/core/styles/utility-classes/*.utilities.manifest.json`. Never hand-transcribe values.
+3. **Sources of truth:** token values come from `static/zebkit/*.json` (synced from the build); utility info comes from `src/tokens/styles/utility-classes/*.utilities.manifest.json`. Never hand-transcribe values.
 4. **Svelte 5 + runes only** (see cheat-sheet below). Do not mix in Svelte 4 `export let` / `on:click` / stores syntax.
 5. **Checkpoints:** each Phase ends with a checkpoint. At a checkpoint, `npm run build` (in `docs/`) and `npm run check` (repo root) must both pass. **A green build does NOT prove your tokens resolve** — an invalid `var(--zbk-…)` with no fallback is silently dropped, not an error. When you reference zebkit tokens in CSS, verify each name actually exists in `docs/static/zebkit/zbk-default.min.css` (`grep -- "--zbk-foo:"`); don't assume.
 6. **Don't author "for agents" prose** (Phase 7) — build the structure/wiring only and leave content as clearly-marked TODO.
-7. **Stay inside `docs/`.** All your edits live under `docs/` only. If a build failure traces to a file outside `docs/` (e.g. `src/core/**`), **STOP and report it as a blocker** in your summary — do not edit core/library source. That code is mid-refactor and owned by Mark; an out-of-scope "fix" can collide with his work.
+7. **Stay inside `docs/`.** All your edits live under `docs/` only. If a build failure traces to a file outside `docs/` (e.g. `src/tokens/**`), **STOP and report it as a blocker** in your summary — do not edit core/library source. That code is mid-refactor and owned by Mark; an out-of-scope "fix" can collide with his work.
 
 ### Svelte 5 idiom cheat-sheet
 ```svelte
@@ -142,19 +142,19 @@ All catalog pages are **generated from sources of truth**, never hand-written.
 - **Verify:** `npm run build` lists each family route; visit two.
 
 ### T4.3 — Utility catalog from manifests
-- **Source:** `src/core/styles/utility-classes/*.utilities.manifest.json` (read at build time via a load function). Each manifest family has `name`, `description`, `properties`, optional `guidance`, `a11y`, and a `pattern`/`classes` grammar.
+- **Source:** `src/tokens/styles/utility-classes/*.utilities.manifest.json` (read at build time via a load function). Each manifest family has `name`, `description`, `properties`, optional `guidance`, `a11y`, and a `pattern`/`classes` grammar.
 - **Component:** `UtilityTable.svelte` — render the family's full **vocabulary** (expand `pattern` to class names; you may import the expander at `src/scripts/utilities/expand.ts`) and render `guidance` as ranked annotations. (Per VISION: vocabulary = `values`, rhetoric = `guidance`. If/when guidance gains recommended/situational/discouraged tiers, render them as such; for now render guidance text plainly.)
 - **Routes:** `/utilities` overview + a page per manifest family.
 - **Banner:** show "Generated from the linted manifest — verified on every build" (lean into the no-drift guarantee).
 - **Done when:** a utility page (e.g. margin) renders its real class set + guidance straight from the manifest.
 - **Verify:** class list matches `npm run generate:utilities -- --check` output for that family.
 
-> **Checkpoint 4:** tokens, colors, and utilities are all generated from source and cannot drift. — ✓ DONE (Claude, 2026-06-13). `$core` alias added → `../src/core`. T4.1 `TokenTable` (runes/brief), `TokenCatalog` (filterable) at `/tokens` + `/foundations/tokens`. T4.2 `ColorFamily` + dynamic `/foundations/color/[family]` (4 ramps; status groups excluded as non-ramps). T4.3 `UtilityTable` + `/utilities` + `/utilities/[family]` (10 families) from manifests via `$core`; expansion derives token values + literals + neg mirror + edges + hover. **Parity verified byte-exact: margin = 385 base classes, 0 diff vs generated CSS** (core deriver NOT imported — docs isolation kept). `navigation.ts` regenerated from source. Build green; not re-run full root `npm run check` (jest/utilities lint unaffected by docs-only changes).
+> **Checkpoint 4:** tokens, colors, and utilities are all generated from source and cannot drift. — ✓ DONE (Claude, 2026-06-13). `$core` alias added → `../src/tokens`. T4.1 `TokenTable` (runes/brief), `TokenCatalog` (filterable) at `/tokens` + `/foundations/tokens`. T4.2 `ColorFamily` + dynamic `/foundations/color/[family]` (4 ramps; status groups excluded as non-ramps). T4.3 `UtilityTable` + `/utilities` + `/utilities/[family]` (10 families) from manifests via `$core`; expansion derives token values + literals + neg mirror + edges + hover. **Parity verified byte-exact: margin = 385 base classes, 0 diff vs generated CSS** (core deriver NOT imported — docs isolation kept). `navigation.ts` regenerated from source. Build green; not re-run full root `npm run check` (jest/utilities lint unaffected by docs-only changes).
 
 ---
 
 ## Phase C — Core prerequisite: scoped-theme support (zebkit, NOT docs — owned by Mark/Claude)
-> Required before the hero themes (Phase 5). This is a `src/core`/`src/scripts` change in Mark's refactor zone — **do not assign to Haiku.** It also makes "theme a subtree" a real zebkit capability the docs then document.
+> Required before the hero themes (Phase 5). This is a `src/tokens`/`src/scripts` change in Mark's refactor zone — **do not assign to Haiku.** It also makes "theme a subtree" a real zebkit capability the docs then document.
 
 ### TC.1 — `rootSelector` option on the token compiler — ✓ DONE (Claude)
 > Implemented: `rootSelector?: string` on `TokensConfig` (`src/scripts/config.ts`), threaded into `convertTokensToCssVars` and the palette-globals block in `build-tokens.ts`. Defaults to `:root` (backward-compatible); primitive color ramps stay global, token layer scopes. Unit test in `src/scripts/tokens/token-converter.test.ts` (+ a `chalk` jest mock so token modules are testable). Smoke-tested end-to-end. `npm run check` green.

@@ -201,7 +201,7 @@ Because the families all share the same structure, swapping palettes (e.g. using
 
 To add a new color family that follows the same structure:
 
-1. Create a new folder under `src/core/colors` (e.g. `status-success` or `app`).
+1. Create a new folder under `src/tokens/colors` (e.g. `status-success` or `app`).
 2. Add a `tokens.ts` file with keys prefixed by the family name and matching the `slots` list.
 3. Add a `token-schema.ts` file that calls `buildColorFamilySchema("family-prefix")`.
 4. Wire that family into the compiler so its tokens get emitted as CSS variables.

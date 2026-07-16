@@ -62,7 +62,7 @@ export interface VariantConfig<
      * One or more stylesheet paths (relative to project root or src)
      * that should be included when building Zebkit CSS.
      *
-     * Example: ["src/core/button/variants/outline.styles.scss"]
+     * Example: ["src/components/button/variants/outline.styles.scss"]
      */
     stylesheetPaths?: string[];
 
