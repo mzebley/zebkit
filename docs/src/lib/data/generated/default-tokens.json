@@ -3499,20 +3499,15 @@
       "type": "display",
       "description": "Display mode for the <zbk-checkbox> host element."
     },
-    "control-size": {
+    "control-width": {
       "value": "{spacing.105}",
       "type": "sizing",
-      "description": "Base width and height of the checkbox control."
-    },
-    "control-width": {
-      "value": "{checkbox.control-size}",
-      "type": "sizing",
-      "description": "Control width override when it differs from control-size."
+      "description": "Width of the checkbox control."
     },
     "control-height": {
-      "value": "{checkbox.control-size}",
+      "value": "{spacing.105}",
       "type": "sizing",
-      "description": "Control height override when it differs from control-size."
+      "description": "Height of the checkbox control."
     },
     "canvas": {
       "value": "{app.canvas}",
@@ -4075,20 +4070,15 @@
       "type": "display",
       "description": "Display mode for the <zbk-radio> host element."
     },
-    "control-size": {
+    "control-width": {
       "value": "{spacing.105}",
       "type": "sizing",
-      "description": "Base width and height of the radio control."
-    },
-    "control-width": {
-      "value": "{radio.control-size}",
-      "type": "sizing",
-      "description": "Control width override when it differs from control-size."
+      "description": "Width of the radio control."
     },
     "control-height": {
-      "value": "{radio.control-size}",
+      "value": "{spacing.105}",
       "type": "sizing",
-      "description": "Control height override when it differs from control-size."
+      "description": "Height of the radio control."
     },
     "canvas": {
       "value": "{app.canvas}",
@@ -4760,11 +4750,6 @@
       "value": "{font-weight.normal}",
       "type": "fontWeight",
       "description": "Font weight for the entered text."
-    },
-    "line-height": {
-      "value": "{line-height.2}",
-      "type": "lineHeight",
-      "description": "Line height for the entered text."
     },
     "field-line-height": {
       "value": "{line-height.2}",

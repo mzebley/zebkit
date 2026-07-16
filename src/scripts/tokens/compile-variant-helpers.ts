@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs-extra';
 import type { TokenInterface } from '@definitions/tokens';
 import type { VariantConfig } from '@definitions/token-variants';
 import type { ComponentsFilter } from '../components-config';
@@ -243,6 +244,21 @@ export function buildVariantMetaKey(component: string, name: string): string {
 export function throwVariantOverrideErrors(errors: string[]): void {
   if (errors.length === 0) return;
   throw new Error(`Variant override validation failed:\n${errors.map((error) => `  - ${error}`).join('\n')}`);
+}
+
+export async function readVariantOverrideFiles(
+  files: readonly string[],
+  errors: string[]
+): Promise<Array<{ file: string; rawData: unknown }>> {
+  const loaded: Array<{ file: string; rawData: unknown }> = [];
+  for (const file of [...files].sort()) {
+    try {
+      loaded.push({ file, rawData: await fs.readJson(file) });
+    } catch (error) {
+      errors.push(`Failed to parse variant override file '${file}': ${error}`);
+    }
+  }
+  return loaded;
 }
 
 /**

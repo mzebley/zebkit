@@ -4,22 +4,30 @@ description: Zebkit's compiled component contract, formatted for LLM context win
 layout: editorial
 ---
 
+<script lang="ts">
+  import contextIndex from '$lib/data/generated/context-index.json';
+</script>
+
 Zebkit optimizes for the developer with no memory — human or machine. The same discipline that makes components guessable for people (one spelling per intent, one grammar across components) makes them reliable for agents: a model that has seen one zebkit component has effectively seen them all.
 
-The contract is compiled, never hand-written. `npm run build:context` distills the Custom Elements Manifest, the token modules, and the variant registry into one markdown file per component, plus a combined index. The docs site, the TypeScript types, and these files are three renderings of one dataset.
+The contract is compiled, never hand-written. `npm run build:context` distills the Custom Elements Manifest, token modules, variant registry, and utility manifests into focused files plus an index. The docs site, the TypeScript types, and these files are three renderings of one dataset.
 
 ## The files
 
-Everything zebkit ships lives under `/zebkit/context/`:
+Everything zebkit ships lives under `/zebkit/context/`. The standard discovery files are also available at [`/llms.txt`](/llms.txt) and [`/llms-full.txt`](/llms-full.txt).
 
-| File | Contents |
-|---|---|
-| [`llms.txt`](/zebkit/context/llms.txt) | The grammar preamble plus every component — paste this for full-library context. |
-| [`zbk-button.md`](/zebkit/context/zbk-button.md) | Button: attributes, slots, tokens, variants. |
-| [`zbk-checkbox.md`](/zebkit/context/zbk-checkbox.md) | Checkbox, including the state-indicator slots. |
-| [`zbk-radio.md`](/zebkit/context/zbk-radio.md) | Radio and its native grouping contract. |
-| [`zbk-toggle.md`](/zebkit/context/zbk-toggle.md) | Toggle: track/thumb token surfaces and physics tokens. |
-| [`zbk-tooltip.md`](/zebkit/context/zbk-tooltip.md) | Tooltip/toggletip modes and a11y timing tokens. |
+<table>
+  <thead>
+    <tr><th>File</th><th>Contents</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><a href="/zebkit/context/llms.txt"><code>llms.txt</code></a></td><td>A compact index for selecting the relevant component or utility context.</td></tr>
+    <tr><td><a href="/zebkit/context/llms-full.txt"><code>llms-full.txt</code></a></td><td>Every component and utility file concatenated for full-library context.</td></tr>
+    {#each contextIndex.files as file}
+      <tr><td><a href={`/zebkit/context/${file.href}`}><code>{file.name}</code></a></td><td>{file.description}</td></tr>
+    {/each}
+  </tbody>
+</table>
 
 Each component page also embeds its own file under "For agents", with copy and download buttons.
 

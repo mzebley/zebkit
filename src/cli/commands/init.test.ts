@@ -12,8 +12,11 @@ describe('init command', () => {
   const mockWriteJson = jest.fn();
   const mockReadJson = jest.fn();
   const mockEnsureDir = jest.fn();
-  const mockReaddir = jest.fn(async () => [] as string[]);
+  const mockReaddir = jest.fn(async (_target?: string) => [] as string[]);
   const mockCopyFile = jest.fn();
+  const mockRemove = jest.fn();
+  const mockReadFile = jest.fn(async () => '');
+  const mockWriteFile = jest.fn();
   const mockGetZebkitDefaultsDir = jest.fn(() => '/pkg/dist/cli/defaults');
   const mockGetZebkitPackageRoot = jest.fn(() => '/pkg');
   const mockGetZebkitContextDir = jest.fn(() => '/pkg/dist/cli/context');
@@ -34,6 +37,9 @@ describe('init command', () => {
     ensureDir: mockEnsureDir as InitCommandDeps['ensureDir'],
     readdir: mockReaddir as InitCommandDeps['readdir'],
     copyFile: mockCopyFile as InitCommandDeps['copyFile'],
+    remove: mockRemove as InitCommandDeps['remove'],
+    readFile: mockReadFile as InitCommandDeps['readFile'],
+    writeFile: mockWriteFile as InitCommandDeps['writeFile'],
     prompt: ((questions: unknown) => mockPrompt(questions)) as InitCommandDeps['prompt'],
     getZebkitPackageRoot: mockGetZebkitPackageRoot,
     getZebkitDefaultsDir: mockGetZebkitDefaultsDir,
@@ -168,7 +174,12 @@ describe('init command', () => {
       if (target === '/pkg/dist/cli/context') return true;
       return false;
     });
-    mockReaddir.mockResolvedValue(['llms.txt', 'zbk-button.md', 'zbk-tooltip.md']);
+    mockReaddir.mockImplementation(async (target?: string) =>
+      target === '/pkg/dist/cli/context'
+        ? ['llms.txt', 'utilities-spacing.md', 'llms-full.txt', 'zbk-button.md', 'zbk-tooltip.md']
+        : ['llms-full.txt', 'utilities-border.md', 'project-notes.md']
+    );
+    mockReadFile.mockResolvedValue('# Index\n\n- [zbk-button](zbk-button.md): Button.\n- [zbk-tooltip](zbk-tooltip.md): Tooltip.\n');
     mockPrompt.mockResolvedValueOnce({
       destinationPath: './dist',
       assetFilePath: '/',
@@ -186,14 +197,25 @@ describe('init command', () => {
     const written = findWrittenConfig();
     expect(written.context).toEqual({ path: './zebkit/context' });
     expect(mockEnsureDir).toHaveBeenCalledWith('/workspace/project/zebkit/context');
-    expect(mockCopyFile).toHaveBeenCalledWith(
-      '/pkg/dist/cli/context/llms.txt',
-      '/workspace/project/zebkit/context/llms.txt'
+    expect(mockWriteFile).toHaveBeenCalledWith(
+      '/workspace/project/zebkit/context/llms.txt',
+      '# Index\n\n- [zbk-button](zbk-button.md): Button.\n- [zbk-tooltip](zbk-tooltip.md): Tooltip.\n'
     );
     expect(mockCopyFile).toHaveBeenCalledWith(
       '/pkg/dist/cli/context/zbk-button.md',
       '/workspace/project/zebkit/context/zbk-button.md'
     );
+    expect(mockCopyFile).toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/utilities-spacing.md',
+      '/workspace/project/zebkit/context/utilities-spacing.md'
+    );
+    expect(mockCopyFile).not.toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/llms-full.txt',
+      '/workspace/project/zebkit/context/llms-full.txt'
+    );
+    expect(mockRemove).toHaveBeenCalledWith('/workspace/project/zebkit/context/llms-full.txt');
+    expect(mockRemove).toHaveBeenCalledWith('/workspace/project/zebkit/context/utilities-border.md');
+    expect(mockRemove).not.toHaveBeenCalledWith('/workspace/project/zebkit/context/project-notes.md');
   });
 
   it('does not copy context or set context.path when declined (full mode)', async () => {

@@ -95,4 +95,4 @@ Label text (default children) is the accessible name via the wrapping `<label>`.
 
 ## Styling
 
-Everything is tokens: control geometry (`control-size`, with `control-width`/`control-height` independently addressable), per-state canvas/border including `-checked` and `-indeterminate`, indicator color/stroke/size, label typography, focus ring, per-state box-shadows for lift/press physics, and playful-fx motion with reduced-motion handling. See `tokens/tokens.ts` for the full annotated surface. The `.zbk-checkbox` classes also work standalone on a native `label > input + span + span` structure — the element form is the documented entry point.
+Everything is tokens: independently addressable `control-width`/`control-height`, per-state canvas/border including `-checked` and `-indeterminate`, indicator color/stroke/size, label typography, focus ring, per-state box-shadows for lift/press physics, and playful-fx motion with reduced-motion handling. See `tokens/tokens.ts` for the full annotated surface. The `.zbk-checkbox` classes also work standalone on a native `label > input + span + span` structure — the element form is the documented entry point.

@@ -14,6 +14,7 @@ import {
   isVariantOverrideFile,
   mergeOverrideObject,
   mergeTokens,
+  validateTokenExport,
 } from './compile-token-helpers';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -216,18 +217,6 @@ export async function buildZebkitTokens(
   if (exportFile) await writeTokensToFile(tokens, resolvedDestination, outputFormats, themeName, splitMode);
 
   return { tokens, layers, overriddenKeys };
-}
-
-export function validateTokenExport(tokenExport: unknown, schema: ZodSchema): string[] {
-  try {
-    schema.parse(tokenExport);
-    return [];
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return error.issues.map((issue) => `${issue.path.join('.') || '(root)'} → ${issue.message}`);
-    }
-    return [`(root) → ${error instanceof Error ? error.message : String(error)}`];
-  }
 }
 
 async function applyCustomOverrides(

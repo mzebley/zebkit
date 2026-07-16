@@ -4,13 +4,9 @@ import { resolveComponentsFilter } from '../../scripts/components-config';
 import { copyAgentContext, writeVscodeSettings, type ContextCopyDeps } from './init-command';
 
 export interface PullCommandDeps extends ContextCopyDeps {
-  pathExists: (path: string) => Promise<boolean>;
   readJson: (path: string) => Promise<any>;
   readJsonSafe: (path: string) => Promise<any>;
   writeJson: (path: string, data: any, options?: any) => Promise<void>;
-  ensureDir: (path: string) => Promise<void>;
-  readdir: (path: string) => Promise<string[]>;
-  copyFile: (src: string, dest: string) => Promise<void>;
   readConfig: () => Promise<{ config: ZebkitConfig; path: string } | undefined>;
   getZebkitDefaultsDir: () => string;
   getZebkitPackageRoot: () => string;

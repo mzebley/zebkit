@@ -17,15 +17,16 @@ export interface ContextCopyDeps {
   ensureDir: (path: string) => Promise<void>;
   readdir: (path: string) => Promise<string[]>;
   copyFile: (src: string, dest: string) => Promise<void>;
+  remove: (path: string) => Promise<void>;
+  readFile: (path: string, encoding: 'utf8') => Promise<string>;
+  writeFile: (path: string, data: string) => Promise<void>;
   log?: (message: string) => void;
 }
 
 export interface InitCommandDeps extends ContextCopyDeps {
-  pathExists: (path: string) => Promise<boolean>;
   writeJson: (...args: any[]) => Promise<void>;
   readJson: (path: string) => Promise<any>;
   readJsonSafe: (path: string) => Promise<any>;
-  ensureDir: (path: string) => Promise<void>;
   prompt: (...args: any[]) => Promise<any>;
   getZebkitPackageRoot: () => string;
   getZebkitDefaultsDir: () => string;
@@ -42,9 +43,30 @@ export interface InitCommandDeps extends ContextCopyDeps {
   isPromptCancelError: (error: unknown) => error is { name: string };
 }
 
-// A per-component context doc is named zbk-<component>.md; llms.txt and any
-// other file are component-agnostic and always copied.
+// A per-component context doc is named zbk-<component>.md. The full-library
+// aggregate deliberately stays docs-site-only: it would expose excluded component docs.
 const CONTEXT_COMPONENT_RE = /^zbk-(.+)\.md$/;
+const CONTEXT_UTILITY_RE = /^utilities-.+\.md$/;
+const CONTEXT_DOCS_ONLY_FILES = new Set(['llms-full.txt']);
+
+function isManagedContextFile(file: string): boolean {
+  return (
+    file === 'llms.txt' ||
+    CONTEXT_DOCS_ONLY_FILES.has(file) ||
+    CONTEXT_COMPONENT_RE.test(file) ||
+    CONTEXT_UTILITY_RE.test(file)
+  );
+}
+
+function filterContextIndex(content: string, excluded: ReadonlySet<string>): string {
+  return content
+    .split('\n')
+    .filter((line) => {
+      const component = line.match(/\]\(zbk-(.+)\.md\)/)?.[1]?.toLowerCase();
+      return !component || !excluded.has(component);
+    })
+    .join('\n');
+}
 
 /**
  * Copies the agent context (per-component markdown + llms.txt) from the bundled
@@ -66,9 +88,35 @@ export async function copyAgentContext(
 
   await deps.ensureDir(targetDir);
   const files = (await deps.readdir(sourceDir)).sort();
+  const desired = new Set(
+    files.filter((file) => {
+      if (CONTEXT_DOCS_ONLY_FILES.has(file)) return false;
+      const match = file.match(CONTEXT_COMPONENT_RE);
+      return !match || !excluded.has(match[1].toLowerCase());
+    })
+  );
+
+  // Reconcile only files owned by Zebkit. This removes docs for components that
+  // became excluded and retired generated files without touching consumer notes.
+  for (const file of await deps.readdir(targetDir)) {
+    if (isManagedContextFile(file) && !desired.has(file)) {
+      await deps.remove(path.join(targetDir, file));
+    }
+  }
+
   let copied = 0;
 
   for (const file of files) {
+    if (CONTEXT_DOCS_ONLY_FILES.has(file)) continue;
+    if (file === 'llms.txt') {
+      const content = await deps.readFile(path.join(sourceDir, file), 'utf8');
+      await deps.writeFile(
+        path.join(targetDir, file),
+        filterContextIndex(content, excluded)
+      );
+      copied++;
+      continue;
+    }
     const match = file.match(CONTEXT_COMPONENT_RE);
     if (match && excluded.has(match[1].toLowerCase())) continue;
     await deps.copyFile(path.join(sourceDir, file), path.join(targetDir, file));

@@ -87,9 +87,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | Token | Default | Type | Description |
 |---|---|---|---|
 | `--zbk-radio-display` | `contents` | display | Display mode for the <zbk-radio> host element. |
-| `--zbk-radio-control-size` | `{spacing.105}` | sizing | Base width and height of the radio control. |
-| `--zbk-radio-control-width` | `{radio.control-size}` | sizing | Control width override when it differs from control-size. |
-| `--zbk-radio-control-height` | `{radio.control-size}` | sizing | Control height override when it differs from control-size. |
+| `--zbk-radio-control-width` | `{spacing.105}` | sizing | Width of the radio control. |
+| `--zbk-radio-control-height` | `{spacing.105}` | sizing | Height of the radio control. |
 | `--zbk-radio-canvas` | `{app.canvas}` | color | Background of an unselected radio control. |
 | `--zbk-radio-canvas-hover` | `{app.canvas-subtle}` | color | Control background when hovered. |
 | `--zbk-radio-canvas-active` | `{app.canvas-muted}` | color | Control background while pressed. |
@@ -141,8 +140,8 @@ A variant is a named, partial remapping of the token surface compiled to a class
 
 | Variant | Axis | Class | Description | Overrides |
 |---|---|---|---|---|
-| `sm` | size | `zbk-radio--sm` | Smaller control and label type. | control-size: {spacing.md}; font-size: {font-size.sm} |
-| `lg` | size | `zbk-radio--lg` | Larger control and label type. | control-size: {spacing.lg}; font-size: {font-size.lg} |
+| `lg` | size | `zbk-radio--lg` | Larger control and label type. | control-width: {spacing.lg}; control-height: {spacing.lg}; font-size: {font-size.lg} |
+| `sm` | size | `zbk-radio--sm` | Smaller control and label type. | control-width: {spacing.md}; control-height: {spacing.md}; font-size: {font-size.sm} |
 
 Custom variants: add a `zbk-radio.variants.json` file to the base theme's token folder (component-keyed map of `{ "radio": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-radio--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
 

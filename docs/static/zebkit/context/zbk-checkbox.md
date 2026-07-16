@@ -94,9 +94,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | Token | Default | Type | Description |
 |---|---|---|---|
 | `--zbk-checkbox-display` | `contents` | display | Display mode for the <zbk-checkbox> host element. |
-| `--zbk-checkbox-control-size` | `{spacing.105}` | sizing | Base width and height of the checkbox control. |
-| `--zbk-checkbox-control-width` | `{checkbox.control-size}` | sizing | Control width override when it differs from control-size. |
-| `--zbk-checkbox-control-height` | `{checkbox.control-size}` | sizing | Control height override when it differs from control-size. |
+| `--zbk-checkbox-control-width` | `{spacing.105}` | sizing | Width of the checkbox control. |
+| `--zbk-checkbox-control-height` | `{spacing.105}` | sizing | Height of the checkbox control. |
 | `--zbk-checkbox-canvas` | `{app.canvas}` | color | Background of an unchecked checkbox control. |
 | `--zbk-checkbox-canvas-hover` | `{app.canvas-subtle}` | color | Control background when hovered. |
 | `--zbk-checkbox-canvas-active` | `{app.canvas-muted}` | color | Control background while pressed. |
@@ -151,8 +150,8 @@ A variant is a named, partial remapping of the token surface compiled to a class
 
 | Variant | Axis | Class | Description | Overrides |
 |---|---|---|---|---|
-| `sm` | size | `zbk-checkbox--sm` | Smaller control and label type. | control-size: {spacing.md}; font-size: {font-size.sm} |
-| `lg` | size | `zbk-checkbox--lg` | Larger control and label type. | control-size: {spacing.lg}; font-size: {font-size.lg} |
+| `lg` | size | `zbk-checkbox--lg` | Larger control and label type. | control-width: {spacing.lg}; control-height: {spacing.lg}; font-size: {font-size.lg} |
+| `sm` | size | `zbk-checkbox--sm` | Smaller control and label type. | control-width: {spacing.md}; control-height: {spacing.md}; font-size: {font-size.sm} |
 
 Custom variants: add a `zbk-checkbox.variants.json` file to the base theme's token folder (component-keyed map of `{ "checkbox": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-checkbox--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
 

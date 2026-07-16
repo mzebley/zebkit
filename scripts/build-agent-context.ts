@@ -1,7 +1,7 @@
 // Agent context generator (GRAMMAR.md §10): compiles the machine-readable
 // component contract — Custom Elements Manifest + token modules + variant
-// registry + component manifests — into per-component markdown plus a
-// combined llms.txt, served by the docs site at /zebkit/context/.
+// registry + component manifests — into per-component and utility markdown,
+// a concise index, and a full aggregate served at /zebkit/context/.
 //
 // Inputs are tracked build artifacts plus the hand-authored manifests:
 //   - custom-elements.json                                  (build:cem)
@@ -17,9 +17,41 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { globSync } from 'glob';
+import {
+  MANIFEST_GLOB,
+  classesFromRules,
+  type UtilityFamily,
+  type UtilityManifest,
+} from '../src/scripts/utilities/expand.js';
+import {
+  breakpointKeysFromModules,
+  loadTokenModules,
+  resolvePatternValues,
+} from '../src/scripts/utilities/token-source.js';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(repoRoot, 'docs', 'static', 'zebkit', 'context');
+const generatedDataDir = path.join(repoRoot, 'docs', 'src', 'lib', 'data', 'generated');
+const docsStaticDir = path.join(repoRoot, 'docs', 'static');
+
+const DOMAIN_META = {
+  layout: { title: 'Layout utilities', summary: 'flex, grid, display, positioning, object fitting, overflow, and visibility' },
+  spacing: { title: 'Spacing utilities', summary: 'margins, padding, sizes, position offsets, and page or section rhythm' },
+  typography: { title: 'Typography utilities', summary: 'type scales, text behavior, and long-form prose' },
+  border: { title: 'Border utilities', summary: 'border width, radius, style, and semantic border color' },
+  effects: { title: 'Effects utilities', summary: 'elevation, opacity, stacking order, transitions, and focus rings' },
+  interaction: { title: 'Interaction utilities', summary: 'cursor and pointer-event behavior' },
+  color: { title: 'Color utilities', summary: 'token-bound ink, canvas, border, fill, and interaction-state color surfaces' },
+} as const;
+
+type UtilityDomain = keyof typeof DOMAIN_META;
+
+interface ContextIndexEntry {
+  name: string;
+  href: string;
+  description: string;
+  kind: 'component' | 'utility';
+}
 
 interface CemAttribute {
   name: string;
@@ -90,8 +122,37 @@ function loadManifests(): Map<string, ComponentManifest> {
   return manifests;
 }
 
+async function loadUtilityManifests(): Promise<UtilityManifest[]> {
+  const tokenModules = await loadTokenModules(repoRoot);
+  const breakpoints = breakpointKeysFromModules(tokenModules);
+  const manifests: UtilityManifest[] = [];
+
+  for (const file of globSync(MANIFEST_GLOB, { cwd: repoRoot }).sort()) {
+    const manifest = readJson<UtilityManifest>(file);
+    for (const family of manifest.families) {
+      resolvePatternValues(family, tokenModules);
+      if (family.modifiers?.responsive && family.modifiers.responsive.length === 0) {
+        family.modifiers.responsive = breakpoints;
+      }
+    }
+    manifests.push(manifest);
+  }
+  return manifests;
+}
+
 function readJson<T>(relPath: string): T {
   return JSON.parse(fs.readFileSync(path.join(repoRoot, relPath), 'utf8')) as T;
+}
+
+function writeText(filePath: string, content: string): void {
+  fs.writeFileSync(filePath, content.endsWith('\n') ? content : `${content}\n`);
+}
+
+function rootContextIndex(content: string): string {
+  return content.replace(
+    /\]\((zbk-[^)]+\.md|utilities-[^)]+\.md)\)/g,
+    '](/zebkit/context/$1)'
+  );
 }
 
 /** Single-line, pipe-safe table cell. */
@@ -315,7 +376,140 @@ function renderComponent(
   return lines.join('\n');
 }
 
-function main(): void {
+function utilityPreamble(): string[] {
+  return [
+    'Utilities are token-bound class grammar, not hard-coded values. They live in `@layer utilities`, so unlayered consumer CSS overrides them without `!important`.',
+    '',
+    '- Pattern families use `base[-edge]-{value}`. Edges are logical (`block`, `inline`, `block-start`, `inline-end`) unless a family says otherwise.',
+    '- When a family lists responsive support, prefix its class with `tablet:`, `tablet-lg:`, `desktop:`, `desktop-lg:`, or `widescreen:`.',
+    '- Negative values use `neg-{value}` only where the family offers them.',
+    '- Values resolve through design tokens; use the documented grammar instead of writing raw CSS values.',
+    '',
+  ];
+}
+
+function valueList(values: readonly (string | null)[], tiers: Record<string, string> = {}): string {
+  if (Object.keys(tiers).length === 0 && values.length >= 4 && values.every((value) => value !== null && /^-?\d+$/.test(value))) {
+    const numbers = values.map((value) => Number(value));
+    const step = numbers[1] - numbers[0];
+    if (numbers.every((value, index) => index === 0 || value === numbers[0] + step * index)) {
+      return `${values[0]}…${values.at(-1)}`;
+    }
+  }
+  return values
+    .map((value) => {
+      const text = value === null ? 'optional' : value;
+      return tiers[text] ? `${text} (${tiers[text]})` : text;
+    })
+    .join(', ');
+}
+
+function familyNotes(lines: string[], family: UtilityFamily): void {
+  if (family.a11y) lines.push(`- Accessibility: ${family.a11y}`);
+  if (family.tier) lines.push(`- Usage tier: ${family.tier}.`);
+  if (family.valueTiers && Object.keys(family.valueTiers).length > 0) {
+    lines.push(
+      `- Value tiers: ${Object.entries(family.valueTiers)
+        .map(([value, tier]) => `\`${value}\` (${tier})`)
+        .join(', ')}.`
+    );
+  }
+  if (family.pattern?.aliases && Object.keys(family.pattern.aliases).length > 0) {
+    lines.push(
+      `- Aliases: ${Object.entries(family.pattern.aliases)
+        .map(([alias, target]) => `\`${alias}\` → \`${target}\``)
+        .join(', ')}.`
+    );
+  }
+  if (family.knownExceptions) {
+    const exceptions = [
+      ...(family.knownExceptions.extra ?? []).map((entry) => `extra \`${entry}\``),
+      ...(family.knownExceptions.missing ?? []).map((entry) => `missing \`${entry}\``),
+    ];
+    if (exceptions.length > 0) lines.push(`- Known exceptions: ${exceptions.join('; ')}.`);
+  }
+  for (const guidance of family.guidance ?? []) lines.push(`- ${guidance}`);
+  if (lines.at(-1)?.startsWith('- ')) lines.push('');
+}
+
+function renderUtilityFamily(family: UtilityFamily): string {
+  const lines = [`### ${family.name}`, '', family.description, ''];
+
+  if (family.pattern) {
+    const pattern = family.pattern;
+    const edgePart = pattern.edges?.length ? ` — edges: ${pattern.edges.join(', ')}` : '';
+    const values = pattern.values ?? [];
+    const tokenBinding = family.tokens
+      ? ` (${family.tokens.group} tokens${family.tokens.types ? `: ${family.tokens.types.join(', ')}` : ''})`
+      : '';
+    const negatives = Array.isArray(pattern.negativeValues) && pattern.negativeValues.length > 0
+      ? ` · negatives: ${pattern.negativeValues.join(', ')}`
+      : '';
+    const responsive = family.modifiers?.responsive?.length
+      ? ` · responsive: prefix with ${family.modifiers.responsive.map((name) => `\`${name}:\``).join(' ')}`
+      : '';
+    lines.push(
+      `Grammar: \`${pattern.base}${pattern.edges?.length ? '[-edge]' : ''}-{value}\`${edgePart} · values: ${valueList(values, family.valueTiers)}${tokenBinding}${negatives}${responsive}`
+    );
+    lines.push('');
+  } else if (family.statePattern) {
+    const state = family.statePattern;
+    const axes = Object.entries(state.axes)
+      .map(([name, values]) => `${name}: ${valueList(values, family.valueTiers)}`)
+      .join(' · ');
+    const states = state.states === true ? ['focus', 'hover', 'active', 'disabled'] : state.states.filter((name) => name !== 'base');
+    lines.push(
+      `Grammar: \`${state.class}\` — roles: ${Object.keys(state.roles).join(', ')} · ${axes} · state prefixes: ${states.map((name) => `\`${name}:\``).join(' ')}`
+    );
+    lines.push('');
+  } else if (family.classes) {
+    lines.push(`Classes: ${family.classes.map((name) => `\`${name}\``).join(', ')}.`);
+    const declarations = family.generator?.declarations
+      ? Object.entries(family.generator.declarations)
+          .map(([name, values]) => `\`${name}\`: ${Object.keys(values).join(', ')}`)
+          .join('; ')
+      : family.properties.join(', ');
+    lines.push(`Sets: ${declarations}.`);
+    if (family.modifiers?.responsive?.length) {
+      lines.push(
+        `Responsive: prefix with ${family.modifiers.responsive
+          .map((name) => `\`${name}:\``)
+          .join(' ')}.`
+      );
+    }
+    lines.push('');
+  } else if (family.rules) {
+    const classes = [...new Set(classesFromRules(family.rules))];
+    lines.push(classes.length ? `Defines: ${classes.map((name) => `\`${name}\``).join(', ')}.` : 'Defines no standalone utility class.');
+    if (family.name.startsWith('transition-')) {
+      lines.push('Transition timing variants compose with `transition-slow` and `transition-fast` where the family defines those modifiers.');
+    }
+    if (family.name.startsWith('prose')) {
+      lines.push('The prose context styles matching descendant elements; use it for long-form content rather than as an element-by-element utility.');
+    }
+    lines.push('');
+  }
+
+  familyNotes(lines, family);
+  return lines.join('\n');
+}
+
+function renderUtilityDomain(
+  domain: UtilityDomain,
+  manifests: UtilityManifest[],
+  stamp: string,
+  title = DOMAIN_META[domain].title
+): string {
+  const meta = DOMAIN_META[domain];
+  const lines = [stamp, '', `# ${title}`, '', ...utilityPreamble()];
+  for (const manifest of manifests) {
+    lines.push(`## ${manifest.name}`, '', manifest.description, '');
+    for (const family of manifest.families) lines.push(renderUtilityFamily(family));
+  }
+  return lines.join('\n');
+}
+
+async function main(): Promise<void> {
   const cem = readJson<{ modules: { declarations?: CemDeclaration[] }[] }>(
     'custom-elements.json'
   );
@@ -329,6 +523,7 @@ function main(): void {
     Object.values(byName)
   );
   const manifests = loadManifests();
+  const utilityManifests = await loadUtilityManifests();
 
   const declarations = componentDeclarations(cem);
   fs.mkdirSync(outDir, { recursive: true });
@@ -336,11 +531,7 @@ function main(): void {
   const stamp =
     '<!-- Generated by `npm run build:context` (GRAMMAR.md §10). Do not edit by hand. -->';
 
-  const combined: string[] = [
-    stamp,
-    '',
-    '# Zebkit components — agent context',
-    '',
+  const grammarPreamble = [
     'Zebkit is a token-driven, accessibility-first web component library. One grammar covers every component:',
     '',
     '- The custom element is the single documented entry point; rendered classes are the compilation target.',
@@ -349,25 +540,122 @@ function main(): void {
     '- `variant="name other-name"` applies registered variants — named token remaps compiled to classes. Unknown names warn with the registered vocabulary.',
     '- Consumers add or patch variants with JSON files in the base theme\'s token folder, detected by filename: `zbk-{component}.variants.json` (all custom variants for a component), `zbk-{component}.variant.{name}.json` (one variant), or any `*-variants.json`. A shipped name patches that variant; a new name compiles a new class and needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="..."` accepts it.',
     '- Named slots come from a shared vocabulary: `icon` (use `data-position="start|end"` for explicit icon placement where supported), and `checked`/`unchecked`/`indeterminate` state indicators on selection controls.',
+  ];
+  const full: string[] = [stamp, '', '# Zebkit — full agent context', '', ...grammarPreamble, ''];
+  const index: string[] = [
+    stamp,
+    '',
+    '# Zebkit agent context',
+    '',
+    'Zebkit is a token-driven, accessibility-first web component library. Components have one semantic grammar; utility classes are exhaustive, token-bound CSS vocabulary.',
+    '',
+    '## Components',
     '',
   ];
+  const contextIndex: ContextIndexEntry[] = [];
 
   const written: string[] = [];
+  const expectedContextFiles = new Set<string>();
   for (const decl of declarations) {
     const tag = decl.tagName!;
     const body = renderComponent(decl, tokenRegistry[tag], variants, manifests.get(tag));
     const filePath = path.join(outDir, `${tag}.md`);
-    fs.writeFileSync(filePath, `${stamp}\n\n${body}`);
+    writeText(filePath, `${stamp}\n\n${body}`);
+    expectedContextFiles.add(path.basename(filePath));
     written.push(path.relative(repoRoot, filePath));
-    combined.push('---', '', body);
+    full.push('---', '', body);
+    const manifest = manifests.get(tag);
+    const description = manifest?.purpose || decl.description?.trim() || `The ${tag} component.`;
+    index.push(`- [${tag}](${tag}.md): ${description}`);
+    contextIndex.push({ name: tag, href: `${tag}.md`, description, kind: 'component' });
+  }
+
+  index.push('', '## Utilities', '');
+  const byDomain = new Map<UtilityDomain, UtilityManifest[]>();
+  for (const manifest of utilityManifests) {
+    const domain = manifest.domain as UtilityDomain;
+    const group = byDomain.get(domain) ?? [];
+    group.push(manifest);
+    byDomain.set(domain, group);
+  }
+  for (const domain of Object.keys(DOMAIN_META) as UtilityDomain[]) {
+    const domainManifests = byDomain.get(domain);
+    if (!domainManifests?.length) continue;
+    const files =
+      domain === 'layout'
+        ? [
+            {
+              fileName: 'utilities-layout.md',
+              manifests: domainManifests.filter((manifest) => manifest.key !== 'grid'),
+              title: DOMAIN_META.layout.title,
+              summary: 'flex, display, positioning, object fitting, overflow, and visibility',
+            },
+            {
+              fileName: 'utilities-grid.md',
+              manifests: domainManifests.filter((manifest) => manifest.key === 'grid'),
+              title: 'Grid utilities',
+              summary: 'grid tracks, placement, alignment, and sizing',
+            },
+          ]
+        : [
+            {
+              fileName: domain === 'border' ? 'utilities-borders.md' : `utilities-${domain}.md`,
+              manifests: domainManifests,
+              title: DOMAIN_META[domain].title,
+              summary: DOMAIN_META[domain].summary,
+            },
+          ];
+    for (const entry of files) {
+      if (entry.manifests.length === 0) continue;
+      const body = renderUtilityDomain(domain, entry.manifests, stamp, entry.title);
+      const filePath = path.join(outDir, entry.fileName);
+      writeText(filePath, body);
+      expectedContextFiles.add(path.basename(filePath));
+      written.push(path.relative(repoRoot, filePath));
+      full.push('---', '', body);
+      index.push(`- [${entry.title}](${entry.fileName}): ${entry.summary}.`);
+      contextIndex.push({
+        name: entry.title,
+        href: entry.fileName,
+        description: entry.summary,
+        kind: 'utility',
+      });
+    }
   }
 
   const llmsPath = path.join(outDir, 'llms.txt');
-  fs.writeFileSync(llmsPath, combined.join('\n'));
+  writeText(llmsPath, index.join('\n'));
+  expectedContextFiles.add(path.basename(llmsPath));
   written.push(path.relative(repoRoot, llmsPath));
+  const fullPath = path.join(outDir, 'llms-full.txt');
+  writeText(fullPath, full.join('\n'));
+  expectedContextFiles.add(path.basename(fullPath));
+  written.push(path.relative(repoRoot, fullPath));
+
+  writeText(path.join(docsStaticDir, 'llms.txt'), rootContextIndex(index.join('\n')));
+  writeText(path.join(docsStaticDir, 'llms-full.txt'), full.join('\n'));
+  fs.mkdirSync(generatedDataDir, { recursive: true });
+  writeText(
+    path.join(generatedDataDir, 'context-index.json'),
+    JSON.stringify({ files: contextIndex }, null, 2)
+  );
+
+  // Delete only obsolete files carrying this generator's stamp. Unknown files
+  // in the directory are consumer-owned and remain untouched.
+  for (const file of fs.readdirSync(outDir)) {
+    if (expectedContextFiles.has(file)) continue;
+    const filePath = path.join(outDir, file);
+    if (!fs.statSync(filePath).isFile()) continue;
+    if (fs.readFileSync(filePath, 'utf8').startsWith(stamp)) {
+      fs.unlinkSync(filePath);
+    }
+  }
 
   console.log(`Agent context written for ${declarations.length} component(s):`);
-  for (const file of written) console.log(`  ${file}`);
+  for (const file of written) {
+    const size = fs.statSync(path.join(repoRoot, file)).size;
+    console.log(`  ${file} (${size} bytes)`);
+  }
 }
 
 main();

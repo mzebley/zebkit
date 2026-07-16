@@ -14,6 +14,9 @@ describe('pull command', () => {
   const mockReadConfig = jest.fn();
   const mockReaddir = jest.fn();
   const mockCopyFile = jest.fn();
+  const mockRemove = jest.fn();
+  const mockReadFile = jest.fn();
+  const mockWriteFile = jest.fn();
   const mockGetZebkitDefaultsDir = jest.fn(() => '/pkg/dist/cli/defaults');
   const mockGetZebkitPackageRoot = jest.fn(() => '/pkg');
   const mockGetZebkitContextDir = jest.fn(() => '/pkg/dist/cli/context');
@@ -34,6 +37,9 @@ describe('pull command', () => {
     ensureDir: mockEnsureDir as PullCommandDeps['ensureDir'],
     readdir: mockReaddir as PullCommandDeps['readdir'],
     copyFile: mockCopyFile as PullCommandDeps['copyFile'],
+    remove: mockRemove as PullCommandDeps['remove'],
+    readFile: mockReadFile as PullCommandDeps['readFile'],
+    writeFile: mockWriteFile as PullCommandDeps['writeFile'],
     readConfig: mockReadConfig as PullCommandDeps['readConfig'],
     getZebkitDefaultsDir: mockGetZebkitDefaultsDir,
     getZebkitPackageRoot: mockGetZebkitPackageRoot,
@@ -280,19 +286,29 @@ describe('pull command', () => {
       path: '/workspace/project/zebkit.config.json',
     });
     mockPathExists.mockImplementation(async (target: string) => target === '/pkg/dist/cli/context');
-    mockReaddir.mockResolvedValue([
-      'llms.txt',
-      'zbk-button.md',
-      'zbk-checkbox.md',
-    ]);
+    mockReaddir.mockImplementation(async (target: string) =>
+      target === '/pkg/dist/cli/context'
+        ? [
+            'llms.txt',
+            'llms-full.txt',
+            'utilities-spacing.md',
+            'zbk-button.md',
+            'zbk-checkbox.md',
+          ]
+        : ['llms-full.txt', 'utilities-border.md', 'zbk-checkbox.md', 'project-notes.md']
+    );
+    mockReadFile.mockResolvedValue(
+      '# Index\n\n- [zbk-button](zbk-button.md): Button.\n- [zbk-checkbox](zbk-checkbox.md): Checkbox.\n'
+    );
 
     await runPullCommand(createDeps());
 
-    // llms.txt + button copied; excluded checkbox skipped.
+    // The index is filtered, utility docs are copied, the full aggregate stays hosted,
+    // and the excluded component doc is skipped.
     expect(mockEnsureDir).toHaveBeenCalledWith('/workspace/project/zebkit/context');
-    expect(mockCopyFile).toHaveBeenCalledWith(
-      '/pkg/dist/cli/context/llms.txt',
-      '/workspace/project/zebkit/context/llms.txt'
+    expect(mockWriteFile).toHaveBeenCalledWith(
+      '/workspace/project/zebkit/context/llms.txt',
+      '# Index\n\n- [zbk-button](zbk-button.md): Button.\n'
     );
     expect(mockCopyFile).toHaveBeenCalledWith(
       '/pkg/dist/cli/context/zbk-button.md',
@@ -302,7 +318,19 @@ describe('pull command', () => {
       '/pkg/dist/cli/context/zbk-checkbox.md',
       expect.anything()
     );
-    expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('Refreshed 2 agent context files'));
+    expect(mockCopyFile).toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/utilities-spacing.md',
+      '/workspace/project/zebkit/context/utilities-spacing.md'
+    );
+    expect(mockCopyFile).not.toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/llms-full.txt',
+      expect.anything()
+    );
+    expect(mockRemove).toHaveBeenCalledWith('/workspace/project/zebkit/context/llms-full.txt');
+    expect(mockRemove).toHaveBeenCalledWith('/workspace/project/zebkit/context/utilities-border.md');
+    expect(mockRemove).toHaveBeenCalledWith('/workspace/project/zebkit/context/zbk-checkbox.md');
+    expect(mockRemove).not.toHaveBeenCalledWith('/workspace/project/zebkit/context/project-notes.md');
+    expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('Refreshed 3 agent context files'));
   });
 
   it('does not touch context when context.path is unset (opted out)', async () => {

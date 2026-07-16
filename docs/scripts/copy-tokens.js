@@ -10,7 +10,7 @@ const componentsDist = path.resolve('..', 'dist', 'components');
 
 // Sources for the primitive palette (live in the library, not the token JSON).
 const paletteDir = path.resolve('..', 'src', 'tokens', 'colors', 'palette');
-const colorMixin = path.resolve('..', 'src', 'tokens', 'styles', 'mixins', '_color.scss');
+const colorMixin = path.resolve('..', 'src', 'tokens', 'styles', 'mixins', '_primitive-color.scss');
 
 const tokenFiles = [
   'default-tokens.json',

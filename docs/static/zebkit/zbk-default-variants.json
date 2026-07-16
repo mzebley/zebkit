@@ -20,6 +20,19 @@
       "axis": "style",
       "description": "Transparent canvas and border; ink takes the action role with a subtle hover wash."
     },
+    "lg": {
+      "component": "button",
+      "name": "lg",
+      "className": "zbk-button--lg",
+      "overrides": {
+        "font-size": "{font-size.lg}",
+        "padding-inline": "{spacing.lg}",
+        "padding-block": "{spacing.sm}",
+        "icon-size": "1.5rem"
+      },
+      "axis": "size",
+      "description": "Larger type and padding."
+    },
     "outline": {
       "component": "button",
       "name": "outline",
@@ -39,6 +52,19 @@
       "axis": "style",
       "description": "Transparent canvas with an action-colored border; subtle wash on hover."
     },
+    "sm": {
+      "component": "button",
+      "name": "sm",
+      "className": "zbk-button--sm",
+      "overrides": {
+        "font-size": "{font-size.sm}",
+        "padding-inline": "{spacing.xs}",
+        "padding-block": "{spacing.2xs}",
+        "icon-size": "1rem"
+      },
+      "axis": "size",
+      "description": "Smaller type and padding; keeps the 44px minimum tap target."
+    },
     "subtle": {
       "component": "button",
       "name": "subtle",
@@ -56,71 +82,35 @@
       },
       "axis": "style",
       "description": "Low-emphasis fill on the subtle action canvas; no border."
-    },
-    "sm": {
-      "component": "button",
-      "name": "sm",
-      "className": "zbk-button--sm",
-      "overrides": {
-        "font-size": "{font-size.sm}",
-        "padding-inline": "{spacing.xs}",
-        "padding-block": "{spacing.2xs}",
-        "icon-size": "1rem"
-      },
-      "axis": "size",
-      "description": "Smaller type and padding; keeps the 44px minimum tap target."
-    },
-    "lg": {
-      "component": "button",
-      "name": "lg",
-      "className": "zbk-button--lg",
-      "overrides": {
-        "font-size": "{font-size.lg}",
-        "padding-inline": "{spacing.lg}",
-        "padding-block": "{spacing.sm}",
-        "icon-size": "1.5rem"
-      },
-      "axis": "size",
-      "description": "Larger type and padding."
     }
   },
   "checkbox": {
-    "sm": {
-      "component": "checkbox",
-      "name": "sm",
-      "className": "zbk-checkbox--sm",
-      "overrides": {
-        "control-size": "{spacing.md}",
-        "font-size": "{font-size.sm}"
-      },
-      "axis": "size",
-      "description": "Smaller control and label type."
-    },
     "lg": {
       "component": "checkbox",
       "name": "lg",
       "className": "zbk-checkbox--lg",
       "overrides": {
-        "control-size": "{spacing.lg}",
+        "control-width": "{spacing.lg}",
+        "control-height": "{spacing.lg}",
         "font-size": "{font-size.lg}"
       },
       "axis": "size",
       "description": "Larger control and label type."
+    },
+    "sm": {
+      "component": "checkbox",
+      "name": "sm",
+      "className": "zbk-checkbox--sm",
+      "overrides": {
+        "control-width": "{spacing.md}",
+        "control-height": "{spacing.md}",
+        "font-size": "{font-size.sm}"
+      },
+      "axis": "size",
+      "description": "Smaller control and label type."
     }
   },
   "input": {
-    "sm": {
-      "component": "input",
-      "name": "sm",
-      "className": "zbk-input--sm",
-      "overrides": {
-        "font-size": "{font-size.sm}",
-        "label-font-size": "{font-size.xs}",
-        "padding-inline": "{spacing.xs}"
-      },
-      "axis": "size",
-      "description": "Smaller type and padding; keeps the 44px minimum tap target."
-    },
     "lg": {
       "component": "input",
       "name": "lg",
@@ -133,37 +123,11 @@
       },
       "axis": "size",
       "description": "Larger type and padding."
-    }
-  },
-  "radio": {
-    "sm": {
-      "component": "radio",
-      "name": "sm",
-      "className": "zbk-radio--sm",
-      "overrides": {
-        "control-size": "{spacing.md}",
-        "font-size": "{font-size.sm}"
-      },
-      "axis": "size",
-      "description": "Smaller control and label type."
     },
-    "lg": {
-      "component": "radio",
-      "name": "lg",
-      "className": "zbk-radio--lg",
-      "overrides": {
-        "control-size": "{spacing.lg}",
-        "font-size": "{font-size.lg}"
-      },
-      "axis": "size",
-      "description": "Larger control and label type."
-    }
-  },
-  "select": {
     "sm": {
-      "component": "select",
+      "component": "input",
       "name": "sm",
-      "className": "zbk-select--sm",
+      "className": "zbk-input--sm",
       "overrides": {
         "font-size": "{font-size.sm}",
         "label-font-size": "{font-size.xs}",
@@ -171,7 +135,35 @@
       },
       "axis": "size",
       "description": "Smaller type and padding; keeps the 44px minimum tap target."
+    }
+  },
+  "radio": {
+    "lg": {
+      "component": "radio",
+      "name": "lg",
+      "className": "zbk-radio--lg",
+      "overrides": {
+        "control-width": "{spacing.lg}",
+        "control-height": "{spacing.lg}",
+        "font-size": "{font-size.lg}"
+      },
+      "axis": "size",
+      "description": "Larger control and label type."
     },
+    "sm": {
+      "component": "radio",
+      "name": "sm",
+      "className": "zbk-radio--sm",
+      "overrides": {
+        "control-width": "{spacing.md}",
+        "control-height": "{spacing.md}",
+        "font-size": "{font-size.sm}"
+      },
+      "axis": "size",
+      "description": "Smaller control and label type."
+    }
+  },
+  "select": {
     "lg": {
       "component": "select",
       "name": "lg",
@@ -184,13 +176,11 @@
       },
       "axis": "size",
       "description": "Larger type and padding."
-    }
-  },
-  "textarea": {
+    },
     "sm": {
-      "component": "textarea",
+      "component": "select",
       "name": "sm",
-      "className": "zbk-textarea--sm",
+      "className": "zbk-select--sm",
       "overrides": {
         "font-size": "{font-size.sm}",
         "label-font-size": "{font-size.xs}",
@@ -198,7 +188,9 @@
       },
       "axis": "size",
       "description": "Smaller type and padding; keeps the 44px minimum tap target."
-    },
+    }
+  },
+  "textarea": {
     "lg": {
       "component": "textarea",
       "name": "lg",
@@ -211,21 +203,21 @@
       },
       "axis": "size",
       "description": "Larger type and padding."
+    },
+    "sm": {
+      "component": "textarea",
+      "name": "sm",
+      "className": "zbk-textarea--sm",
+      "overrides": {
+        "font-size": "{font-size.sm}",
+        "label-font-size": "{font-size.xs}",
+        "padding-inline": "{spacing.xs}"
+      },
+      "axis": "size",
+      "description": "Smaller type and padding; keeps the 44px minimum tap target."
     }
   },
   "toggle": {
-    "sm": {
-      "component": "toggle",
-      "name": "sm",
-      "className": "zbk-toggle--sm",
-      "overrides": {
-        "track-width": "{spacing.lg}",
-        "track-height": "{spacing.md}",
-        "font-size": "{font-size.sm}"
-      },
-      "axis": "size",
-      "description": "Smaller track and label type; thumb follows the track."
-    },
     "lg": {
       "component": "toggle",
       "name": "lg",
@@ -237,6 +229,18 @@
       },
       "axis": "size",
       "description": "Larger track and label type; thumb follows the track."
+    },
+    "sm": {
+      "component": "toggle",
+      "name": "sm",
+      "className": "zbk-toggle--sm",
+      "overrides": {
+        "track-width": "{spacing.lg}",
+        "track-height": "{spacing.md}",
+        "font-size": "{font-size.sm}"
+      },
+      "axis": "size",
+      "description": "Smaller track and label type; thumb follows the track."
     }
   }
 }

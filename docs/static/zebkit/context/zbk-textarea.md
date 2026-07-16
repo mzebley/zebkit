@@ -110,7 +110,6 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-font-family` | `{font-family.interface}` | fontFamily | Font family for the entered text. |
 | `--zbk-textarea-font-size` | `{font-size.md}` | fontSize | Font size for the entered text. |
 | `--zbk-textarea-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the entered text. |
-| `--zbk-textarea-line-height` | `{line-height.2}` | lineHeight | Line height for the entered text. |
 | `--zbk-textarea-field-line-height` | `{line-height.2}` | lineHeight | Line height of the entered multi-line text. |
 | `--zbk-textarea-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the entered text. |
 | `--zbk-textarea-label-ink` | `{app.ink}` | color | Label text color. |
@@ -148,8 +147,8 @@ A variant is a named, partial remapping of the token surface compiled to a class
 
 | Variant | Axis | Class | Description | Overrides |
 |---|---|---|---|---|
-| `sm` | size | `zbk-textarea--sm` | Smaller type and padding; keeps the 44px minimum tap target. | font-size: {font-size.sm}; label-font-size: {font-size.xs}; padding-inline: {spacing.xs} |
 | `lg` | size | `zbk-textarea--lg` | Larger type and padding. | font-size: {font-size.lg}; label-font-size: {font-size.md}; padding-inline: {spacing.md}; padding-block: {spacing.xs} |
+| `sm` | size | `zbk-textarea--sm` | Smaller type and padding; keeps the 44px minimum tap target. | font-size: {font-size.sm}; label-font-size: {font-size.xs}; padding-inline: {spacing.xs} |
 
 Custom variants: add a `zbk-textarea.variants.json` file to the base theme's token folder (component-keyed map of `{ "textarea": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-textarea--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
 

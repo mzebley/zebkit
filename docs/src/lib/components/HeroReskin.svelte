@@ -52,7 +52,7 @@
     },
     {
       label: "Typography",
-      href: "/typography",
+      href: "/typography/type-scale",
       blurb: "Type scale, families, and measure.",
       kind: "type",
     },
@@ -64,25 +64,25 @@
     },
     {
       label: "Icons",
-      href: "/foundations/icons",
+      href: "/styleguide",
       blurb: "The icon set and sizing tokens.",
       kind: "icons",
     },
     {
       label: "Components",
-      href: "/components",
+      href: "/components/button",
       blurb: "Accessible, token-driven elements.",
       kind: "components",
     },
     {
       label: "Spacing",
-      href: "/spacing",
+      href: "/spacing/scaling",
       blurb: "The size-based spacing scale.",
       kind: "spacing",
     },
   ];
 
-  // "Next steps" — real wayfinding into the zebkit docs (some routes are aspirational).
+  // "Next steps" — real wayfinding into the zebkit docs.
   const nextSteps = [
     { label: "Get started", href: "/foundations/why-tokens" },
     { label: "Design tokens", href: "/foundations/tokens" },

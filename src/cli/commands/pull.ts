@@ -22,6 +22,9 @@ export async function pull(options: { config?: string }) {
       ensureDir: fs.ensureDir,
       readdir: fs.readdir,
       copyFile: fs.copyFile,
+      remove: fs.remove,
+      readFile: fs.readFile,
+      writeFile: fs.writeFile,
       readConfig: async () => {
         if (options.config) {
           const resolved = path.resolve(options.config);

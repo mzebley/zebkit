@@ -5,6 +5,18 @@ import { ZEBKIT_PREFIX } from '@config';
 
 export { isVariantOverrideFile } from './compile-variant-helpers';
 
+export function validateTokenExport(tokenExport: unknown, schema: ZodSchema): string[] {
+  try {
+    schema.parse(tokenExport);
+    return [];
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return error.issues.map((issue) => `${issue.path.join('.') || '(root)'} → ${issue.message}`);
+    }
+    return [`(root) → ${error instanceof Error ? error.message : String(error)}`];
+  }
+}
+
 export function inferTokenKeyFromFilename(filePath: string): string | undefined {
   const baseName = path.basename(filePath, path.extname(filePath));
   if (!baseName) return undefined;

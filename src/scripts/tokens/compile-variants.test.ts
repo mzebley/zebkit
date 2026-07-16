@@ -3,6 +3,9 @@
  */
 
 import type { TokenInterface } from '@definitions/tokens';
+import fs from 'fs-extra';
+import os from 'node:os';
+import path from 'node:path';
 import {
   assertShippedVariantsAreTokenOnly,
   buildVariantMetaKey,
@@ -11,6 +14,7 @@ import {
   mergeVariantOverrideEntry,
   filterShippedVariants,
   normalizeVariantOverrideEntry,
+  readVariantOverrideFiles,
   throwVariantOverrideErrors,
 } from './compile-variant-helpers';
 
@@ -368,5 +372,28 @@ describe('components-config variant filtering', () => {
         String(call[0]).includes('ghost, outline, lg')
     )).toBe(true);
     warnSpy.mockRestore();
+  });
+});
+
+describe('variant build diagnostics', () => {
+  it('reports parse failures from every override file in one rejection', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-variant-errors-'));
+    const overrideDir = path.join(root, 'overrides');
+
+    try {
+      await fs.ensureDir(overrideDir);
+      const first = path.join(overrideDir, 'first-variants.json');
+      const second = path.join(overrideDir, 'second-variants.json');
+      await fs.writeFile(first, '{ invalid');
+      await fs.writeFile(second, '{ also-invalid');
+
+      const errors: string[] = [];
+      await readVariantOverrideFiles([second, first], errors);
+      expect(() => throwVariantOverrideErrors(errors)).toThrow(
+        /Variant override validation failed:[\s\S]*first-variants\.json[\s\S]*second-variants\.json/
+      );
+    } finally {
+      await fs.remove(root);
+    }
   });
 });

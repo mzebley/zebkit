@@ -46,8 +46,8 @@ complete config. It asks about:
 - **Components to include** — unchecked components are excluded from the build entirely
   (see [the `components` block](#the-components-block))
 - whether to **copy default token files** into `./tokens/` for editing
-- whether to **copy the agent context** (per-component markdown + `llms.txt`) into
-  `./zebkit/context/` so local LLMs and coding agents can read the component contracts directly
+- whether to **copy the agent context** (component and utility markdown plus the `llms.txt`
+  index) into `./zebkit/context/` so local LLMs and coding agents can read the contracts directly
 - a gate for **token-export / advanced options** (artifact formats, lookup/registry JSON,
   breakpoint vars and the responsive breakpoint set)
 
@@ -113,8 +113,10 @@ zebkit pull
 ```
 
 If your config has a `context.path`, `pull` also refreshes that directory with the latest agent
-context (per-component markdown + `llms.txt`). Per-component docs for components you've excluded
-in the [`components` block](#the-components-block) are skipped; `llms.txt` is always refreshed.
+context (component and utility markdown plus the `llms.txt` index). Per-component docs for
+components you've excluded in the [`components` block](#the-components-block) are skipped, and
+the index is filtered to match; utility docs are always refreshed. `llms-full.txt` remains a
+hosted/docs artifact so it cannot expose excluded component docs.
 
 ## `config`
 

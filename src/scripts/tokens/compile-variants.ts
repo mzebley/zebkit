@@ -22,12 +22,14 @@ import {
   isVariantOverrideFile,
   mergeVariantOverrideEntry,
   normalizeVariantOverrideEntry,
+  readVariantOverrideFiles,
   throwVariantOverrideErrors,
   VariantMetadataEntry,
 } from './compile-variant-helpers';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const variantSourceFiles = new WeakMap<object, string>();
 
 /**
  * In-memory representation of a single variant entry. The runtime registry maps
@@ -124,7 +126,13 @@ export async function discoverVariantConfigs(): Promise<VariantConfig[]> {
     // glob order follows filesystem readdir and varies between machines/runs.
     // Sort so config discovery order — and thus the registry insertion order that
     // drives the emitted variant CSS block order — is byte-reproducible.
-    variantFiles.push(...matches.sort());
+    variantFiles.push(
+      ...matches.sort((a, b) => {
+        const aIndex = path.basename(a) === 'index.ts' ? 1 : 0;
+        const bIndex = path.basename(b) === 'index.ts' ? 1 : 0;
+        return aIndex - bIndex || a.localeCompare(b);
+      })
+    );
   }
 
   const configs: VariantConfig[] = [];
@@ -137,6 +145,7 @@ export async function discoverVariantConfigs(): Promise<VariantConfig[]> {
       const key = `${config.component}::${config.name}`;
       if (seen.has(key)) continue;
       seen.add(key);
+      variantSourceFiles.set(config, path.relative(process.cwd(), file));
       configs.push(config);
     }
   }
@@ -149,7 +158,11 @@ async function loadVariantSnapshot(snapshotPath: string): Promise<VariantConfig[
   if (!Array.isArray(data)) {
     throw new Error(`Variant snapshot at ${snapshotPath} is not an array of variant configs.`);
   }
-  return data as VariantConfig[];
+  const configs = data as VariantConfig[];
+  for (const config of configs) {
+    variantSourceFiles.set(config, path.relative(process.cwd(), snapshotPath));
+  }
+  return configs;
 }
 
 /**
@@ -182,19 +195,21 @@ export async function buildZebkitVariants(
     // pre-filter so the vocabulary stays clean regardless of any config.
     assertShippedVariantsAreTokenOnly(configs);
 
+    // Validate the complete shipped vocabulary before component filtering so a
+    // broken built-in variant cannot be hidden by a consumer allowlist.
+    const overrideErrors: string[] = [];
+    for (const variant of configs) {
+      validateShippedVariantOverrides(variant, tokens, overrideErrors);
+    }
+
     const { activeConfigs, excludedShippedVariants } = filterShippedVariants(
       configs,
       options.componentsFilter
     );
 
-    const overrideErrors: string[] = [];
     for (const variant of activeConfigs) {
-      await registerVariant(variant, tokens, registry, variantMetadata, projectRoot, overrideErrors);
+      registerVariant(variant, tokens, registry, variantMetadata, projectRoot);
     }
-    throwVariantOverrideErrors(overrideErrors);
-
-    const buildOutputs = () => buildVariantOutputs(registry, variantMetadata, tokens);
-    let { inlineCss, extraStylesheets } = buildOutputs();
 
     const overridePaths = Array.isArray(customVariantPath)
       ? customVariantPath
@@ -210,13 +225,17 @@ export async function buildZebkitVariants(
         tokens,
         variantMetadata,
         options.componentsFilter,
-        excludedShippedVariants
+        excludedShippedVariants,
+        overrideErrors
       );
     }
 
-    if (overridePaths.length > 0) {
-      ({ inlineCss, extraStylesheets } = buildOutputs());
-    }
+    throwVariantOverrideErrors(overrideErrors);
+    const { inlineCss, extraStylesheets } = buildVariantOutputs(
+      registry,
+      variantMetadata,
+      tokens
+    );
 
     warnOnCrossAxisOverlaps(registry);
 
@@ -272,7 +291,8 @@ async function applyVariantOverrides(
   tokens: Record<string, TokenInterface>,
   variantMetadata: Map<string, VariantMetadataEntry>,
   componentsFilter?: ComponentsFilter,
-  excludedShippedVariants?: Map<string, Set<string>>
+  excludedShippedVariants?: Map<string, Set<string>>,
+  overrideErrors: string[] = []
 ) {
   // Support both absolute and relative override references (CLI accepts either).
   const resolvedOverridePath = path.isAbsolute(overridePath)
@@ -302,7 +322,7 @@ async function applyVariantOverrides(
       absolute: true,
       nodir: true,
     });
-    overrideFiles.push(...files.filter(isVariantOverrideFile));
+    overrideFiles.push(...files.filter(isVariantOverrideFile).sort());
   } else {
     console.warn(
       chalk.yellow(
@@ -312,54 +332,47 @@ async function applyVariantOverrides(
     return;
   }
 
-  for (const file of overrideFiles) {
-    try {
-      // Parse raw JSON and convert it into a flat list of entries, regardless of structure.
-      const rawData = await fs.readJson(file);
-      const entries = extractVariantOverrideEntries(rawData);
-      if (entries.length === 0) continue;
-      const overrideErrors: string[] = [];
-
-      for (const entry of entries) {
-        // Consumer overrides can't resurrect what the components config removed;
-        // both warnings name the fix (GRAMMAR.md §9).
-        const component = entry.component.toLowerCase();
-        const name = entry.name.toLowerCase();
-        if (componentsFilter?.excluded.has(component)) {
-          console.warn(
-            chalk.yellow(
-              `Variant override '${entry.component}.${entry.name}' targets component ` +
-                `"${entry.component}", which is excluded by the components config. ` +
-                `Remove the override or re-include the component. Source: ${path.basename(file)}`
-            )
-          );
-          continue;
-        }
-        if (excludedShippedVariants?.get(component)?.has(name)) {
-          console.warn(
-            chalk.yellow(
-              `Variant override '${entry.component}.${entry.name}' patches shipped variant ` +
-                `"${entry.name}", which is excluded by components.${entry.component}.variants. ` +
-                `Add "${entry.name}" to the allowlist or remove the override. Source: ${path.basename(file)}`
-            )
-          );
-          continue;
-        }
-        mergeVariantOverrideEntry(
-          entry,
-          registry,
-          tokens,
-          variantMetadata,
-          path.basename(file),
-          path.dirname(file),
-          overrideErrors
+  for (const { file, rawData } of await readVariantOverrideFiles(
+    overrideFiles,
+    overrideErrors
+  )) {
+    // Convert raw JSON into a flat list of entries, regardless of structure.
+    const entries = extractVariantOverrideEntries(rawData);
+    if (entries.length === 0) continue;
+    for (const entry of entries) {
+      // Consumer overrides can't resurrect what the components config removed;
+      // both warnings name the fix (GRAMMAR.md §9).
+      const component = entry.component.toLowerCase();
+      const name = entry.name.toLowerCase();
+      if (componentsFilter?.excluded.has(component)) {
+        console.warn(
+          chalk.yellow(
+            `Variant override '${entry.component}.${entry.name}' targets component ` +
+              `"${entry.component}", which is excluded by the components config. ` +
+              `Remove the override or re-include the component. Source: ${path.basename(file)}`
+          )
         );
+        continue;
       }
-      throwVariantOverrideErrors(overrideErrors);
-    } catch (error) {
-      // The user explicitly pointed the build at this override file; continuing
-      // would silently ship CSS without it.
-      throw new Error(`Failed to parse variant override file '${file}': ${error}`);
+      if (excludedShippedVariants?.get(component)?.has(name)) {
+        console.warn(
+          chalk.yellow(
+            `Variant override '${entry.component}.${entry.name}' patches shipped variant ` +
+              `"${entry.name}", which is excluded by components.${entry.component}.variants. ` +
+              `Add "${entry.name}" to the allowlist or remove the override. Source: ${path.basename(file)}`
+          )
+        );
+        continue;
+      }
+      mergeVariantOverrideEntry(
+        entry,
+        registry,
+        tokens,
+        variantMetadata,
+        path.basename(file),
+        path.dirname(file),
+        overrideErrors
+      );
     }
   }
 }
@@ -407,13 +420,12 @@ function warnOnCrossAxisOverlaps(registry: VariantRegistry): void {
   }
 }
 
-async function registerVariant(
+function registerVariant(
   variant: VariantConfig<string, string>,
   tokens: Record<string, TokenInterface>,
   registry: VariantRegistry,
   variantMetadata: Map<string, VariantMetadataEntry>,
-  projectRoot: string,
-  overrideErrors: string[]
+  projectRoot: string
 ) {
   // Hard fail (with warning) if component or name missing.
   const component = variant.component;
@@ -429,9 +441,6 @@ async function registerVariant(
   const tokenKey = `${ZEBKIT_PREFIX}-${component}`;
 
   if (!tokens[tokenKey]) {
-    overrideErrors.push(
-      `[zbk-${component}] Shipped variant '${name}' targets an unknown component token surface. Source: shipped registry. Add tokens for '${component}' or use a registered component.`,
-    );
     return;
   }
 
@@ -444,9 +453,6 @@ async function registerVariant(
   if (variant.overrides) {
     for (const [key, value] of Object.entries(variant.overrides)) {
       if (!Object.prototype.hasOwnProperty.call(sourceTokens, key)) {
-        overrideErrors.push(
-          `[zbk-${component}] Shipped variant '${name}' overrides unknown token '${key}'. Source: shipped registry. Valid token keys: ${Object.keys(sourceTokens).join(', ')}.`,
-        );
         continue;
       }
       if (typeof value !== 'string') {
@@ -501,6 +507,33 @@ async function registerVariant(
     inlineStyles,
     stylesheetPaths,
   });
+}
+
+function validateShippedVariantOverrides(
+  variant: VariantConfig<string, string>,
+  tokens: Record<string, TokenInterface>,
+  overrideErrors: string[]
+): void {
+  const { component, name } = variant;
+  if (!component || !name) return;
+
+  const source = variantSourceFiles.get(variant) ?? 'unknown variant module';
+  const tokenKey = `${ZEBKIT_PREFIX}-${component}`;
+  const sourceTokens = tokens[tokenKey];
+  if (!sourceTokens) {
+    overrideErrors.push(
+      `[zbk-${component}] Shipped variant '${name}' targets an unknown component token surface. Source: ${source}. Add tokens for '${component}' or use a registered component.`
+    );
+    return;
+  }
+
+  for (const key of Object.keys(variant.overrides ?? {})) {
+    if (!Object.prototype.hasOwnProperty.call(sourceTokens, key)) {
+      overrideErrors.push(
+        `[zbk-${component}] Shipped variant '${name}' overrides unknown token '${key}'. Source: ${source}. Valid token keys: ${Object.keys(sourceTokens).join(', ')}.`
+      );
+    }
+  }
 }
 
 function buildVariantOutputs(

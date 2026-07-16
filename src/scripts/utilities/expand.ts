@@ -162,6 +162,7 @@ export type UtilityManifest = {
   name: string;
   key: string;
   description: string;
+  domain: "layout" | "spacing" | "typography" | "color" | "border" | "effects" | "interaction";
   layer?: string;
   families: UtilityFamily[];
 };

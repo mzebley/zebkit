@@ -1,6 +1,6 @@
 # Utility Manifests
 
-Hand-authored JSON contracts that are the **single source of truth** for zebkit's utility classes. Each manifest declares *families* of classes as a grammar (`base x edges x values`, multiplied by hover/breakpoint modifiers) instead of enumerating every class. From that one contract we generate the SCSS, lint it for drift, and (eventually) feed docs, editor autocomplete, the Claude design skill, and non-CSS style targets.
+Hand-authored JSON contracts that are the **single source of truth** for zebkit's utility classes. Each manifest declares *families* of classes as a grammar (`base x edges x values`, multiplied by hover/breakpoint modifiers) instead of enumerating every class. From that one contract we generate the SCSS, lint it for drift, and feed docs, editor autocomplete, agent context docs, the Claude design skill, and non-CSS style targets. Guidance edits regenerate the agent context, and `npm run check` fails on drift.
 
 **The golden rule: never edit a generated `_*.scss` partial. Edit the manifest, regenerate.**
 

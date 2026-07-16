@@ -116,7 +116,6 @@
     max-width: var(--zbk-text-measure-3, 65ch);
     margin: 0 0 var(--zbk-spacing-4);
   }
-  .lede code,
   .strata code {
     font-family: var(--zbk-font-family-code);
     font-size: 0.9em;

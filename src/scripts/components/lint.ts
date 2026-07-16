@@ -48,6 +48,7 @@ import Ajv from "ajv/dist/2020.js";
 import { loadTokenModules } from "../utilities/token-source.js";
 import { renderSlotContract } from "./render.js";
 import { extractZbkTokens } from "../prune/content-scan.js";
+import { inspectRegistryRegistration } from "./registry-lint.js";
 
 type Finding = { rule: string; file: string; subject: string; message: string };
 
@@ -456,27 +457,33 @@ async function main() {
     const sources = await Promise.all(
       ["styles.scss", "index.ts"].map(async (name) => {
         const sourcePath = path.join(componentDir, name);
-        return (await fs.pathExists(sourcePath)) ? fs.readFile(sourcePath, "utf8") : "";
+        return {
+          name,
+          source: (await fs.pathExists(sourcePath)) ? await fs.readFile(sourcePath, "utf8") : "",
+        };
       }),
     );
     const prefix = `--zbk-${component}-`;
-    const referenced = new Set(
-      sources.flatMap((source) =>
-        extractZbkTokens(
-          source
-            .replace(/\/\/[^\n]*/g, "")
-            .replace(/\/\*[\s\S]*?\*\//g, "")
-            .replace(/--#\{prefix\.\$cssVar\}/g, "--zbk"),
-        ).filter((token) => token.startsWith(prefix) && token !== prefix),
-      ),
-    );
+    const referencedIn = new Map<string, string>();
+    for (const { name, source } of sources) {
+      const tokens = extractZbkTokens(
+        source
+          .replace(/\/\/[^\n]*/g, "")
+          .replace(/\/\*[\s\S]*?\*\//g, "")
+          .replace(/--#\{prefix\.\$cssVar\}/g, "--zbk"),
+      ).filter((token) => token.startsWith(prefix) && token !== prefix);
+      for (const token of tokens) {
+        if (!referencedIn.has(token)) referencedIn.set(token, name);
+      }
+    }
+    const referenced = new Set(referencedIn.keys());
     const defined = new Set([...keys.keys()].map((key) => `${prefix}${key}`));
     const exceptions = KNOWN_TOKEN_EXCEPTIONS[component] ?? new Set<string>();
     for (const token of referenced) {
       if (!defined.has(token)) {
         findings.push({
           rule: "C7",
-          file: `src/components/${component}/styles.scss`,
+          file: `src/components/${component}/${referencedIn.get(token) ?? "styles.scss"}`,
           subject: `zbk-${component}`,
           message: `references '${token}' but tokens/tokens.ts does not define it — add the token to the component surface or use a defined token (${[...defined].join(", ")}).`,
         });
@@ -504,9 +511,12 @@ async function main() {
     const pascal = component.replace(/(^|-)([a-z])/g, (_, _dash, letter) => letter.toUpperCase());
     const className = `Zbk${pascal}`;
     const defineName = `defineZbk${pascal}`;
-    const imported = new RegExp(`import\\s+\\{[^}]*\\b${className}\\b[^}]*\\b${defineName}\\b[^}]*\\}\\s+from\\s+["']\\./${component}["']`).test(registrySource);
-    const reExported = new RegExp(`export\\s+\\{[\\s\\S]*?\\b${className}\\b[\\s\\S]*?\\b${defineName}\\b[\\s\\S]*?\\}`, "m").test(registrySource);
-    const defined = new RegExp(`defineZebkitComponents[\\s\\S]*?\\b${defineName}\\(\\)`).test(registrySource);
+    const { imported, reExported, defined } = inspectRegistryRegistration(
+      registrySource,
+      component,
+      className,
+      defineName,
+    );
     if (!imported || !reExported || !defined) {
       findings.push({
         rule: "C8",

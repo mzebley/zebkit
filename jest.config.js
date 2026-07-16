@@ -16,7 +16,9 @@ export default {
       { presets: [['@babel/preset-env', { targets: { node: 'current' } }]] },
     ],
   },
-  transformIgnorePatterns: ['/node_modules/(?!(@lit|lit|lit-html|lit-element)/)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!(?:\\.pnpm/[^/]+/node_modules/)?(?:@lit|lit|lit-html|lit-element)(?:/|$))',
+  ],
   moduleNameMapper: {
     '^@config$': '<rootDir>/src/config/zebkit.ts',
     '^@definitions/(.*)$': '<rootDir>/src/definitions/$1',

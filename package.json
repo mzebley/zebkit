@@ -60,7 +60,7 @@
     "build:cem": "custom-elements-manifest analyze",
     "check:cem": "custom-elements-manifest analyze && git diff --exit-code custom-elements.json",
     "build:context": "tsx scripts/build-agent-context.ts",
-    "check:context": "npm run build:context && git diff --exit-code docs/static/zebkit/context"
+    "check:context": "npm --prefix docs run sync:tokens && npm run build:context && tsx scripts/assert-clean-paths.ts docs/static/zebkit docs/static/llms.txt docs/static/llms-full.txt docs/src/lib/data/generated"
   },
   "repository": {
     "type": "git",

@@ -4,7 +4,7 @@
   "title": "Zebkit Utility Class Manifest",
   "description": "Canonical, hand-authored contract for a group of utility-class families. Encodes the grammar (base x edges x values expanded against token scales) rather than enumerating classes, except for keyword families whose values are hardcoded CSS keywords by design. generate:utilities renders each family's source SCSS partial from this contract; lint:utilities keeps the round trip honest. Consumed by docs and editor support.",
   "type": "object",
-  "required": ["name", "key", "description", "families"],
+  "required": ["name", "key", "description", "domain", "families"],
   "additionalProperties": false,
   "properties": {
     "$schema": { "type": "string" },
@@ -20,6 +20,10 @@
     "description": {
       "type": "string",
       "description": "What this group of utilities is for, written for both humans and tooling."
+    },
+    "domain": {
+      "enum": ["layout", "spacing", "typography", "color", "border", "effects", "interaction"],
+      "description": "Agent-context domain this manifest belongs to. Domain files group related utility grammar without fragmenting it per manifest."
     },
     "layer": {
       "type": "string",

@@ -74,12 +74,12 @@ const tokens = {
   "control-width": {
     value: "{spacing.105}",
     type: "sizing",
-    description: "Control width override when it differs from control-size.",
+    description: "Width of the checkbox control.",
   },
   "control-height": {
     value: "{spacing.105}",
     type: "sizing",
-    description: "Control height override when it differs from control-size.",
+    description: "Height of the checkbox control.",
   },
 
   // Control background

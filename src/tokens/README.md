@@ -40,4 +40,4 @@ Utility manifests bind `tokens.group` to this key. When a token-bound family der
 2. Build the docs token set: `npm run build:tokens -- --config zebkit.docs.config.json`.
 3. Run `npm run check` before handing off the change.
 
-`npm run build:defaults` publishes new primitive and alias tokens to the generated docs data.
+The docs token build writes the static token artifacts; `docs/scripts/copy-tokens.js` syncs them into the generated docs data. `npm run build:defaults` only creates the snapshots bundled with the CLI.

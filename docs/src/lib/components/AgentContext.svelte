@@ -12,7 +12,7 @@
 
   let { tag }: Props = $props();
 
-  const contextUrl = `/zebkit/context/${tag}.md`;
+  const contextUrl = $derived(`/zebkit/context/${tag}.md`);
 
   let context = $state('');
   let error = $state(false);
