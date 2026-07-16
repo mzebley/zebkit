@@ -17,11 +17,11 @@ import {
   html,
   nothing,
   type PropertyDeclarations,
-  type PropertyValues,
   type TemplateResult,
 } from "lit";
 import { ZebkitElement } from "../base/zebkit-element";
 import { buttonVariants } from "./variants/index";
+import { slotContract } from "./slot-contract";
 
 export type ZbkButtonType = "button" | "submit" | "reset";
 
@@ -31,13 +31,11 @@ export type ZbkButtonType = "button" | "submit" | "reset";
  * semantics, and adds the one behavior a native button lacks (`loading`).
  * No custom events — the native `click` bubbles, and keyboard activation
  * (Enter/Space) arrives as a click.
- *
- * @slot - The button's label content (its accessible name).
- * @slot icon - A supplementary pictogram rendered aria-hidden beside the label. Use `data-position="start|end"` to set placement explicitly; otherwise placement is inferred from authored child order.
  */
 export class ZbkButton extends ZebkitElement {
   static componentName = "button";
   static variantConfigs = buttonVariants;
+  static slotContract = slotContract;
 
   static properties: PropertyDeclarations = {
     type: { type: String },
@@ -100,13 +98,8 @@ export class ZbkButton extends ZebkitElement {
     }
   }
 
-  protected firstUpdated(changed: PropertyValues): void {
-    super.firstUpdated(changed);
-    if (!this.hasAccessibleName()) {
-      this.warn(
-        "No accessible name. Provide label text, or aria-label / aria-labelledby for icon-only buttons.",
-      );
-    }
+  protected accessibleNameWarning(): string {
+    return "No accessible name. Provide label text, or aria-label / aria-labelledby for icon-only buttons.";
   }
 }
 

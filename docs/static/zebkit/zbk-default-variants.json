@@ -1,4 +1,54 @@
 {
+  "toggle": {
+    "sm": {
+      "component": "toggle",
+      "name": "sm",
+      "className": "zbk-toggle--sm",
+      "overrides": {
+        "track-width": "{spacing.lg}",
+        "track-height": "{spacing.md}",
+        "font-size": "{font-size.sm}"
+      },
+      "axis": "size",
+      "description": "Smaller track and label type; thumb follows the track."
+    },
+    "lg": {
+      "component": "toggle",
+      "name": "lg",
+      "className": "zbk-toggle--lg",
+      "overrides": {
+        "track-width": "{spacing.xl}",
+        "track-height": "{spacing.lg}",
+        "font-size": "{font-size.lg}"
+      },
+      "axis": "size",
+      "description": "Larger track and label type; thumb follows the track."
+    }
+  },
+  "radio": {
+    "sm": {
+      "component": "radio",
+      "name": "sm",
+      "className": "zbk-radio--sm",
+      "overrides": {
+        "control-size": "{spacing.md}",
+        "font-size": "{font-size.sm}"
+      },
+      "axis": "size",
+      "description": "Smaller control and label type."
+    },
+    "lg": {
+      "component": "radio",
+      "name": "lg",
+      "className": "zbk-radio--lg",
+      "overrides": {
+        "control-size": "{spacing.lg}",
+        "font-size": "{font-size.lg}"
+      },
+      "axis": "size",
+      "description": "Larger control and label type."
+    }
+  },
   "input": {
     "sm": {
       "component": "input",
@@ -26,30 +76,28 @@
       "description": "Larger type and padding."
     }
   },
-  "toggle": {
+  "checkbox": {
     "sm": {
-      "component": "toggle",
+      "component": "checkbox",
       "name": "sm",
-      "className": "zbk-toggle--sm",
+      "className": "zbk-checkbox--sm",
       "overrides": {
-        "track-width": "{spacing.lg}",
-        "track-height": "{spacing.md}",
+        "control-size": "{spacing.md}",
         "font-size": "{font-size.sm}"
       },
       "axis": "size",
-      "description": "Smaller track and label type; thumb follows the track."
+      "description": "Smaller control and label type."
     },
     "lg": {
-      "component": "toggle",
+      "component": "checkbox",
       "name": "lg",
-      "className": "zbk-toggle--lg",
+      "className": "zbk-checkbox--lg",
       "overrides": {
-        "track-width": "{spacing.xl}",
-        "track-height": "{spacing.lg}",
+        "control-size": "{spacing.lg}",
         "font-size": "{font-size.lg}"
       },
       "axis": "size",
-      "description": "Larger track and label type; thumb follows the track."
+      "description": "Larger control and label type."
     }
   },
   "select": {
@@ -79,52 +127,31 @@
       "description": "Larger type and padding."
     }
   },
-  "radio": {
+  "textarea": {
     "sm": {
-      "component": "radio",
+      "component": "textarea",
       "name": "sm",
-      "className": "zbk-radio--sm",
+      "className": "zbk-textarea--sm",
       "overrides": {
-        "control-size": "{spacing.md}",
-        "font-size": "{font-size.sm}"
+        "font-size": "{font-size.sm}",
+        "label-font-size": "{font-size.xs}",
+        "padding-inline": "{spacing.xs}"
       },
       "axis": "size",
-      "description": "Smaller control and label type."
+      "description": "Smaller type and padding; keeps the 44px minimum tap target."
     },
     "lg": {
-      "component": "radio",
+      "component": "textarea",
       "name": "lg",
-      "className": "zbk-radio--lg",
+      "className": "zbk-textarea--lg",
       "overrides": {
-        "control-size": "{spacing.lg}",
-        "font-size": "{font-size.lg}"
+        "font-size": "{font-size.lg}",
+        "label-font-size": "{font-size.md}",
+        "padding-inline": "{spacing.md}",
+        "padding-block": "{spacing.xs}"
       },
       "axis": "size",
-      "description": "Larger control and label type."
-    }
-  },
-  "checkbox": {
-    "sm": {
-      "component": "checkbox",
-      "name": "sm",
-      "className": "zbk-checkbox--sm",
-      "overrides": {
-        "control-size": "{spacing.md}",
-        "font-size": "{font-size.sm}"
-      },
-      "axis": "size",
-      "description": "Smaller control and label type."
-    },
-    "lg": {
-      "component": "checkbox",
-      "name": "lg",
-      "className": "zbk-checkbox--lg",
-      "overrides": {
-        "control-size": "{spacing.lg}",
-        "font-size": "{font-size.lg}"
-      },
-      "axis": "size",
-      "description": "Larger control and label type."
+      "description": "Larger type and padding."
     }
   },
   "button": {

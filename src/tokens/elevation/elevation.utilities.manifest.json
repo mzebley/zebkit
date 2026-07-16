@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../schemas/utility-manifest.schema.json",
+  "name": "Elevation utilities",
+  "key": "elevation",
+  "description": "Box-shadow utilities that lift an element off the surface (or press it in). Values bind to the elevation token scale, including inner-shadow variants.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "shadow",
+      "description": "Applies a box-shadow from the elevation scale, including inner shadows.",
+      "guidance": [
+        "Use elevation to signal layering (raised cards, popovers), not decoration; keep the scale consistent so higher elements read as closer.",
+        "Inner shadows (shadow-inner*) press an element into the surface — use for wells and insets, not raised surfaces."
+      ],
+      "a11y": "Elevation is a visual affordance only; never rely on shadow alone to convey state — pair it with a non-visual cue.",
+      "source": "src/tokens/elevation/styles.scss",
+      "properties": ["box-shadow"],
+      "tokens": {
+        "group": "elevation",
+        "varPrefix": "elevation"
+      },
+      "pattern": {
+        "base": "shadow"
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    }
+  ]
+}

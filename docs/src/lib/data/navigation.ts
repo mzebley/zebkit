@@ -83,6 +83,7 @@ export const navigation: NavSection[] = [
       { label: 'Input', link: '/components/input' },
       { label: 'Radio', link: '/components/radio' },
       { label: 'Select', link: '/components/select' },
+      { label: 'Textarea', link: '/components/textarea' },
       { label: 'Toggle', link: '/components/toggle' },
       { label: 'Tooltip', link: '/components/tooltip' }
     ]

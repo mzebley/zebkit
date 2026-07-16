@@ -1,0 +1,166 @@
+@use 'tokens/styles/variables/prefix'as prefix;
+
+@layer components {
+  // The host stays out of layout; the label is the component's layout root.
+  zbk-textarea {
+    display: var(--#{prefix.$cssVar}-textarea-display);
+  }
+
+  // The one styling contract for multi-line text fields. <zbk-textarea> renders
+  // exactly this markup in light DOM; the classes also work standalone on a
+  // native label > span + span > textarea structure.
+  label.zbk-textarea {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--#{prefix.$cssVar}-textarea-label-gap);
+    max-width: var(--#{prefix.$cssVar}-textarea-max-width);
+    opacity: var(--#{prefix.$cssVar}-textarea-opacity);
+  }
+
+  /* Label typography */
+  label.zbk-textarea .zbk-textarea__label {
+    color: var(--#{prefix.$cssVar}-textarea-label-ink);
+    font-family: var(--#{prefix.$cssVar}-textarea-font-family);
+    font-size: var(--#{prefix.$cssVar}-textarea-label-font-size);
+    font-weight: var(--#{prefix.$cssVar}-textarea-label-font-weight);
+  }
+
+  /* The field box: border, background, and state visuals live here so the
+     bordered area wraps the native textarea. */
+  label.zbk-textarea .zbk-textarea__field {
+    display: flex;
+    box-sizing: border-box;
+
+    width: var(--#{prefix.$cssVar}-textarea-width);
+    min-width: var(--#{prefix.$cssVar}-textarea-min-width);
+    max-width: var(--#{prefix.$cssVar}-textarea-max-width);
+    min-block-size: var(--#{prefix.$cssVar}-textarea-min-block-size);
+
+    padding-inline: var(--#{prefix.$cssVar}-textarea-padding-inline);
+    padding-block: var(--#{prefix.$cssVar}-textarea-padding-block);
+
+    background-color: var(--#{prefix.$cssVar}-textarea-canvas);
+    border-color: var(--#{prefix.$cssVar}-textarea-border-color);
+    border-style: var(--#{prefix.$cssVar}-textarea-border-style);
+    border-width: var(--#{prefix.$cssVar}-textarea-border-width);
+    border-radius: var(--#{prefix.$cssVar}-textarea-border-radius);
+    box-shadow: var(--#{prefix.$cssVar}-textarea-box-shadow);
+
+    cursor: var(--#{prefix.$cssVar}-textarea-cursor);
+
+    transition-property: var(--#{prefix.$cssVar}-textarea-transition-property);
+    transition-duration: var(--#{prefix.$cssVar}-textarea-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-textarea-transition-timing-function);
+    transition-delay: var(--#{prefix.$cssVar}-textarea-transition-delay);
+  }
+
+  /* The native textarea: unboxed (the field box carries the visuals), growing
+     to fill the field. Resizing and scrolling live on this element. */
+  label.zbk-textarea .zbk-textarea__textarea {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: inherit;
+    resize: var(--#{prefix.$cssVar}-textarea-resize);
+
+    color: var(--#{prefix.$cssVar}-textarea-ink);
+    caret-color: var(--#{prefix.$cssVar}-textarea-caret-color);
+    font-family: var(--#{prefix.$cssVar}-textarea-font-family);
+    font-size: var(--#{prefix.$cssVar}-textarea-font-size);
+    font-weight: var(--#{prefix.$cssVar}-textarea-font-weight);
+    line-height: var(--#{prefix.$cssVar}-textarea-field-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-textarea-letter-spacing);
+  }
+
+  label.zbk-textarea .zbk-textarea__textarea::placeholder {
+    color: var(--#{prefix.$cssVar}-textarea-placeholder-ink);
+    opacity: 1;
+  }
+
+  /* Hover (only on devices where hover is a real signal) */
+  @media (hover: hover) and (pointer: fine) {
+    label.zbk-textarea .zbk-textarea__field:hover:has(.zbk-textarea__textarea:not(:disabled)) {
+      background-color: var(--#{prefix.$cssVar}-textarea-canvas-hover);
+      border-color: var(--#{prefix.$cssVar}-textarea-border-color-hover);
+      box-shadow: var(--#{prefix.$cssVar}-textarea-box-shadow-hover);
+    }
+  }
+
+  /* Active / pressed (pointer down before focus) */
+  label.zbk-textarea .zbk-textarea__field:has(.zbk-textarea__textarea:active:not(:disabled)) {
+    background-color: var(--#{prefix.$cssVar}-textarea-canvas-active);
+    border-color: var(--#{prefix.$cssVar}-textarea-border-color-active);
+    box-shadow: var(--#{prefix.$cssVar}-textarea-box-shadow-active);
+  }
+
+  /* Focus. A single control per field, so :focus-within shows the ring for
+     keyboard and pointer alike (that's correct for a text field). */
+  label.zbk-textarea .zbk-textarea__field:focus-within {
+    background-color: var(--#{prefix.$cssVar}-textarea-canvas-focus);
+    border-color: var(--#{prefix.$cssVar}-textarea-border-color-focus);
+    outline: var(--#{prefix.$cssVar}-textarea-focus-width) solid
+      var(--#{prefix.$cssVar}-textarea-focus-color);
+    outline-offset: var(--#{prefix.$cssVar}-textarea-focus-offset);
+    box-shadow: var(--#{prefix.$cssVar}-textarea-box-shadow-focus);
+  }
+
+  /* Invalid: only after the user has interacted (:user-invalid), or when the
+     author asserts it (aria-invalid). */
+  label.zbk-textarea .zbk-textarea__field:has(.zbk-textarea__textarea:user-invalid),
+  label.zbk-textarea .zbk-textarea__field:has(.zbk-textarea__textarea[aria-invalid='true']) {
+    background-color: var(--#{prefix.$cssVar}-textarea-canvas-invalid);
+    border-color: var(--#{prefix.$cssVar}-textarea-border-color-invalid);
+    box-shadow: var(--#{prefix.$cssVar}-textarea-box-shadow-invalid);
+  }
+
+  label.zbk-textarea .zbk-textarea__textarea:user-invalid,
+  label.zbk-textarea .zbk-textarea__textarea[aria-invalid='true'] {
+    color: var(--#{prefix.$cssVar}-textarea-ink-invalid);
+  }
+
+  /* Readonly: focusable and legible, value locked. */
+  label.zbk-textarea .zbk-textarea__field:has(.zbk-textarea__textarea:read-only:not(:disabled)) {
+    background-color: var(--#{prefix.$cssVar}-textarea-canvas-readonly);
+    border-color: var(--#{prefix.$cssVar}-textarea-border-color-readonly);
+  }
+
+  label.zbk-textarea .zbk-textarea__textarea:read-only:not(:disabled) {
+    color: var(--#{prefix.$cssVar}-textarea-ink-readonly);
+  }
+
+  /* Disabled */
+  label.zbk-textarea:has(.zbk-textarea__textarea:disabled) {
+    cursor: var(--#{prefix.$cssVar}-textarea-cursor-disabled);
+  }
+
+  label.zbk-textarea .zbk-textarea__field:has(.zbk-textarea__textarea:disabled) {
+    background-color: var(--#{prefix.$cssVar}-textarea-canvas-disabled);
+    border-color: var(--#{prefix.$cssVar}-textarea-border-color-disabled);
+    box-shadow: none;
+    cursor: var(--#{prefix.$cssVar}-textarea-cursor-disabled);
+    opacity: var(--#{prefix.$cssVar}-textarea-opacity-disabled);
+  }
+
+  label.zbk-textarea .zbk-textarea__textarea:disabled {
+    color: var(--#{prefix.$cssVar}-textarea-ink-disabled);
+  }
+
+  label.zbk-textarea .zbk-textarea__textarea:disabled::placeholder {
+    color: var(--#{prefix.$cssVar}-textarea-placeholder-ink-disabled);
+  }
+
+  label.zbk-textarea:has(.zbk-textarea__textarea:disabled) .zbk-textarea__label {
+    color: var(--#{prefix.$cssVar}-textarea-label-ink-disabled);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    label.zbk-textarea .zbk-textarea__field {
+      transition: none;
+    }
+  }
+}

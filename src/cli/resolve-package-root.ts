@@ -34,3 +34,13 @@ export function getZebkitPresetsDir(): string {
   const dir = path.dirname(fileURLToPath(import.meta.url));
   return path.resolve(dir, 'presets');
 }
+
+/**
+ * Returns the directory containing the bundled agent context (per-component
+ * markdown + llms.txt). In the installed CLI bundle this resolves to
+ * dist/cli/context/ (copied from docs/static/zebkit/context/ at build time).
+ */
+export function getZebkitContextDir(): string {
+  const dir = path.dirname(fileURLToPath(import.meta.url));
+  return path.resolve(dir, 'context');
+}

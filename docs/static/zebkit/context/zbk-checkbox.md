@@ -10,6 +10,19 @@ No custom events — the native `change`/`input` bubble.
 
 Base class: `.zbk-checkbox`. Variant classes: `.zbk-checkbox--{variant}`. Tokens: `--zbk-checkbox-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- An independent on/off choice submitted with a form ('I agree to the terms').
+- Selecting any number of items from a list — each checkbox stands alone.
+- A parent summarizing a group: `indeterminate` expresses 'some but not all'.
+- NOT Exactly one choice among mutually exclusive options. → zbk-radio
+- NOT The setting takes effect immediately, with no form submit. → zbk-toggle
+
+## Guidance
+
+- `indeterminate` is visual and AT state only — it is never submitted, and any user toggle clears it (native behavior). Set it from the group's state, don't ask users to.
+- The invisible native input stretches across the whole label: hover, press, click, and focus land on it natively anywhere — never add click handlers to fake this.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -20,20 +33,59 @@ Base class: `.zbk-checkbox`. Variant classes: `.zbk-checkbox--{variant}`. Tokens
 | `required` | `boolean` | `false` | Forwarded for native constraint validation. |
 | `name` | `string \| undefined` | — | Forwarded to the internal input for native form participation. |
 | `value` | `string` | `'on'` | The submitted value; defaults to the platform's "on". |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The label content (the accessible name via the wrapping label). |
-| `checked` | Indicator content shown while checked; replaces the drawn checkmark. Presentational (the control is aria-hidden). |
-| `unchecked` | Indicator content shown while neither checked nor indeterminate. |
-| `indeterminate` | Indicator content shown while indeterminate; replaces the drawn bar. |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The label content (the accessible name via the wrapping label). | required |
+| `checked` | Indicator content shown while checked; replaces the drawn checkmark. Any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `indicator-size`; colored by `indicator-color` |
+| `unchecked` | Indicator content shown while neither checked nor indeterminate. | aria-hidden; sized by `indicator-size`; colored by `indicator-color` |
+| `indeterminate` | Indicator content shown while indeterminate; replaces the drawn bar. | aria-hidden; sized by `indicator-size`; colored by `indicator-color` |
+
+- `checked`: The control is aria-hidden — the state is conveyed by the native input, so indicator content is purely visual.
+- `indeterminate`: Each state slot only affects its own state — a customized checkmark leaves the drawn indeterminate bar in place unless this slot is also filled.
+
+## Keyboard
+
+- `Space` — Toggles checked (native input behavior, preserved).
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-checkbox name="terms" required>I agree to the terms</zbk-checkbox>
+```
+
+**Custom indicators**
+
+```html
+<zbk-checkbox name="favorite" checked>Add to favorites<span slot="checked">★</span><span slot="unchecked">☆</span></zbk-checkbox>
+```
+
+Indicator content layers over the aria-hidden control, sized by indicator-size and colored by indicator-color; the drawn checkmark is replaced only for the states provided.
+
+**Indeterminate group parent**
+
+```html
+<zbk-checkbox indeterminate>Select all</zbk-checkbox>
+```
+
+Set indeterminate from the child checkboxes' mixed state; toggling the parent clears it natively.
+
+**Labelless checkbox** (discouraged)
+
+```html
+<zbk-checkbox name="row-1"></zbk-checkbox>
+```
+
+No accessible name. Even in dense table rows, give it label children (visually hidden if needed) or aria-label naming what it selects.
 
 ## Tokens (CSS custom properties)
 
@@ -103,3 +155,5 @@ A variant is a named, partial remapping of the token surface compiled to a class
 | `lg` | size | `zbk-checkbox--lg` | Larger control and label type. | control-size: {spacing.lg}; font-size: {font-size.lg} |
 
 Custom variants: add a `zbk-checkbox.variants.json` file to the base theme's token folder (component-keyed map of `{ "checkbox": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-checkbox--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
+
+Related: `<zbk-radio>`, `<zbk-toggle>`.

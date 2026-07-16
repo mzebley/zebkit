@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../schemas/component-manifest.schema.json",
+  "tag": "zbk-textarea",
+  "purpose": "Multi-line free-form text entry: a light-DOM element wrapping a real <textarea> inside its own label. No affixes, no masking.",
+  "nativeElement": "textarea",
+  "useWhen": [
+    "Input is prose-length or naturally multi-line: notes, descriptions, messages, feedback."
+  ],
+  "notWhen": [
+    {
+      "case": "Single-line values: names, emails, search terms.",
+      "instead": "zbk-input"
+    },
+    {
+      "case": "The value has a fixed printed format.",
+      "instead": "zbk-input with mask"
+    }
+  ],
+  "guidance": [
+    "A placeholder is never a substitute for label content — the accessible name comes from the default children or an aria-label.",
+    "`rows` sets the initial visible height; size the box for the length of answer you expect."
+  ],
+  "slots": {
+    "default": {
+      "description": "The visible label content (the accessible name via the wrapping label).",
+      "required": true
+    }
+  },
+  "keyboard": [
+    {
+      "keys": "Enter",
+      "does": "Inserts a newline — never submits the form (native textarea behavior, preserved)."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Basic",
+      "html": "<zbk-textarea name=\"notes\" rows=\"4\">Delivery notes</zbk-textarea>"
+    },
+    {
+      "title": "Length-constrained",
+      "html": "<zbk-textarea name=\"bio\" maxlength=\"280\" required>Short bio</zbk-textarea>",
+      "why": "minlength/maxlength forward to native constraint validation."
+    },
+    {
+      "title": "Placeholder as label",
+      "tier": "discouraged",
+      "html": "<zbk-textarea name=\"feedback\" placeholder=\"Tell us what you think\"></zbk-textarea>",
+      "why": "No accessible name: placeholders vanish on entry and are not announced as the name. Give it label children or aria-label."
+    }
+  ],
+  "related": ["zbk-input"]
+}

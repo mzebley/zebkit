@@ -1,9 +1,4 @@
-@use 'tokens/styles/mixins/color' as color-utils;
-
+@use 'tokens/styles/mixins/primitive-color' as color-utils;
 :root {
   @include color-utils.primitiveColor("teal", 170, 68%);
-}
-
-@layer utilities {
-  @include color-utils.generate-color-utilities("teal");
 }

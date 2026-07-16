@@ -12,11 +12,21 @@ npm run test:watch          # Run tests in watch mode
 npm run type-check          # TypeScript type checking (tsc --noEmit)
 npm run build:tokens        # Build design tokens (interactive prompts)
 npm run build:components    # Build web components
-npm run docs:dev            # Run docs dev server (Astro)
+npm run generate            # Regenerate all manifest-derived source (utilities + components)
+npm run generate:utilities  # Utility SCSS from utility manifests
+npm run generate:components # Component slot-contract.ts from component manifests
+npm run build               # Full ordered build: generate -> cem -> css -> defaults -> context -> editor/cli -> components
+npm run lint                # Lint components + utilities
+npm run lint:utilities      # Lint utility manifests against generated SCSS
+npm run lint:components     # Lint component manifests against code (slots, examples)
+npm run check               # Full gate: tests, type-check, both lints, drift checks, docs build
+npm run docs:dev            # Run docs dev server (SvelteKit)
 npm run docs:build          # Build static docs
 ```
 
 **Configuration**: Token/component builds can skip prompts via `zebkit.config.json`, or pass `--config path/to/config.json`.
+
+**Manifests are the source of truth.** Utility classes are generated from hand-authored `*utilities.manifest.json` contracts (`src/scripts/utilities/README.md`); component slot contracts and agent docs are generated from `zbk-*.manifest.json` (`src/scripts/components/README.md`). Never hand-edit a generated `*.scss` partial or `slot-contract.ts` — edit the manifest and regenerate.
 
 ## Architecture Overview
 

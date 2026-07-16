@@ -10,6 +10,19 @@ bubbles from the newly selected input.
 
 Base class: `.zbk-radio`. Variant classes: `.zbk-radio--{variant}`. Tokens: `--zbk-radio-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- Exactly one choice among a small set of mutually exclusive options, all visible at once.
+- The choice is submitted with a form rather than taking effect immediately.
+- NOT An independent on/off choice. → zbk-checkbox
+- NOT The setting takes effect immediately, with no form submit. → zbk-toggle
+- NOT The option list is long or space is constrained. → zbk-select
+
+## Guidance
+
+- Radios only behave as one group when they share a `name` — the group, not each radio, is the single form control.
+- A group should have a group label (a <fieldset>/<legend> or aria-labelledby on a wrapping group) in addition to each radio's own label.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -19,19 +32,53 @@ Base class: `.zbk-radio`. Variant classes: `.zbk-radio--{variant}`. Tokens: `--z
 | `required` | `boolean` | `false` | Forwarded for native constraint validation. |
 | `name` | `string \| undefined` | — | The group key. Radios only behave as one group when they share a name. |
 | `value` | `string` | `'on'` | This option's submitted value; defaults to the platform's "on". |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The label content (the accessible name via the wrapping label). |
-| `checked` | Indicator content shown while selected; replaces the drawn dot. Presentational (the control is aria-hidden). |
-| `unchecked` | Indicator content shown while not selected. |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The label content (the accessible name via the wrapping label). | required |
+| `checked` | Indicator content shown while selected; replaces the drawn dot. Any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `indicator-size`; colored by `indicator-color` |
+| `unchecked` | Indicator content shown while not selected. | aria-hidden; sized by `indicator-size`; colored by `indicator-color` |
+
+- `checked`: The control is aria-hidden — the state is conveyed by the native input, so indicator content is purely visual.
+
+## Keyboard
+
+- `ArrowDown / ArrowRight, ArrowUp / ArrowLeft` — Moves the group's selection to the next / previous radio (native behavior, preserved).
+- `Space` — Selects the focused radio (native).
+- `Tab` — The group is a single tab stop; focus lands on the selected radio (native).
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic group**
+
+```html
+<zbk-radio name="plan" value="monthly" checked>Monthly</zbk-radio><zbk-radio name="plan" value="annual">Annual</zbk-radio>
+```
+
+The shared name is what makes them one control; checked marks the group's current selection.
+
+**Custom indicator**
+
+```html
+<zbk-radio name="mood" value="good"><span slot="checked">●</span>Good</zbk-radio>
+```
+
+Indicator content layers over the aria-hidden control, sized by indicator-size and colored by indicator-color.
+
+**Lone radio** (discouraged)
+
+```html
+<zbk-radio name="agree">I agree</zbk-radio>
+```
+
+A radio without group siblings can never be unchecked once selected — an on/off choice is zbk-checkbox.
 
 ## Tokens (CSS custom properties)
 
@@ -98,3 +145,5 @@ A variant is a named, partial remapping of the token surface compiled to a class
 | `lg` | size | `zbk-radio--lg` | Larger control and label type. | control-size: {spacing.lg}; font-size: {font-size.lg} |
 
 Custom variants: add a `zbk-radio.variants.json` file to the base theme's token folder (component-keyed map of `{ "radio": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-radio--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
+
+Related: `<zbk-checkbox>`, `<zbk-toggle>`, `<zbk-select>`.

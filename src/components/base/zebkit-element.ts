@@ -21,6 +21,7 @@ import {
   type TemplateResult,
 } from "lit";
 import type { VariantConfig } from "@definitions/token-variants";
+import type { SlotContract } from "./slot-contract";
 import { ZEBKIT_PREFIX } from "@config";
 
 let uidCounter = 0;
@@ -40,6 +41,13 @@ export abstract class ZebkitElement extends LitElement {
 
   /** Variant configs registered for this component (its ./variants module). */
   static variantConfigs: ReadonlyArray<VariantConfig> = [];
+
+  /**
+   * The component's slot contract (its generated ./slot-contract module,
+   * from zbk-{name}.manifest.json). Drives the unknown-slot and missing
+   * required-content warnings. Set per subclass.
+   */
+  static slotContract?: SlotContract;
 
   /** Consumer variants registered via registerVariants, keyed by component name. */
   private static consumerVariants = new Map<string, Map<string, VariantConfig>>();
@@ -371,6 +379,23 @@ export abstract class ZebkitElement extends LitElement {
       node.parentNode?.removeChild(node);
     }
 
+    // A slot name outside the contract lands in a bucket nothing renders —
+    // the content would silently vanish. Name the fix (GRAMMAR.md §9).
+    const contract = (this.constructor as typeof ZebkitElement).slotContract;
+    if (contract) {
+      const supported = contract.slots.filter((name) => name !== "default");
+      for (const slotName of named.keys()) {
+        if (!contract.slots.includes(slotName)) {
+          this.warn(
+            `Unknown slot "${slotName}" — its content will not render. ` +
+              (supported.length > 0
+                ? `Supported slots: ${supported.join(", ")}.`
+                : `This component has no named slots; remove the slot attribute for default content.`),
+          );
+        }
+      }
+    }
+
     this.adopted = { defaultContent, named };
   }
 
@@ -462,6 +487,17 @@ export abstract class ZebkitElement extends LitElement {
   }
 
   /**
+   * The dev-mode warning for a required-but-empty accessible name, fired from
+   * firstUpdated when the slot contract requires default content. Override to
+   * tailor the fix text; return null to opt out (a component whose default
+   * content is not its accessible name, e.g. a tooltip's trigger, warns with
+   * its own semantics instead).
+   */
+  protected accessibleNameWarning(): string | null {
+    return "No accessible name. Provide label text as children, or aria-label / aria-labelledby.";
+  }
+
+  /**
    * Rough accessible-name computation for the dev-mode nameless-control check:
    * visible text, aria-label, or aria-labelledby on the native element.
    */
@@ -513,6 +549,12 @@ export abstract class ZebkitElement extends LitElement {
     super.firstUpdated(changed);
     this.relocateAria();
     this.observeAria();
+
+    const contract = (this.constructor as typeof ZebkitElement).slotContract;
+    if (contract?.required.includes("default")) {
+      const message = this.accessibleNameWarning();
+      if (message && !this.hasAccessibleName()) this.warn(message);
+    }
   }
 }
 

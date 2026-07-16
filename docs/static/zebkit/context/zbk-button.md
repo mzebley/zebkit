@@ -10,28 +10,104 @@ No custom events — the native `click` bubbles, and keyboard activation
 
 Base class: `.zbk-button`. Variant classes: `.zbk-button--{variant}`. Tokens: `--zbk-button-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- The user triggers an action: submit, confirm, open, dismiss, toggle a panel.
+- Work is in flight after activation — `loading` announces it (aria-busy), suppresses re-activation, and keeps the button focusable.
+- NOT Activation navigates to another URL. → An <a> element — buttons act, links navigate.
+- NOT The control flips a persistent on/off setting. → zbk-toggle
+
+## Guidance
+
+- `type` defaults to "button" — the platform's "submit" default is a footgun inside forms; opt into submit explicitly.
+- Prefer `loading` over `disabled` for in-flight work: unlike disabled, it keeps the button focusable so keyboard and screen-reader users don't lose their place mid-operation.
+- Style variants (ghost, outline, subtle) share one axis and are alternatives; size variants (sm, lg) compose with them: variant="ghost sm".
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
 |---|---|---|---|
-| `type` | `ZbkButtonType` | `'button'` | Forwarded to the internal button. Defaults to "button" — the platform's "submit" default is a well-known footgun inside forms. |
+| `type` | `ZbkButtonType` | `"button"` | Forwarded to the internal button. Defaults to "button" — the platform's "submit" default is a well-known footgun inside forms. |
 | `disabled` | `boolean` | `false` | Native disabled: removed from the tab order, blocks all interaction. |
 | `loading` | `boolean` | `false` | Busy state (`aria-busy`): announces in-flight work, suppresses activation, and — unlike `disabled` — keeps the button focusable so keyboard and screen-reader users don't lose their place mid-operation. |
 | `name` | `string \| undefined` | — | Forwarded to the internal button for native form participation. |
 | `value` | `string \| undefined` | — |  |
 | `form` | `string \| undefined` | — |  |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The button's label content (its accessible name). |
-| `icon` | A supplementary pictogram rendered aria-hidden beside the label. Use `data-position="start\|end"` to set placement explicitly; otherwise placement is inferred from authored child order. |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The button's label content (its accessible name). | required |
+| `icon` | A supplementary pictogram rendered aria-hidden beside the label — any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `icon-size`; data-position: start\\|end |
+
+- `default`: Icon-only buttons must supply the accessible name via aria-label or aria-labelledby; dev mode warns when the computed name is empty.
+- `icon`: Use data-position="start|end" for explicit placement; when omitted, placement is inferred from authored child order.
+- `icon`: Icons inherit the label's ink (currentColor); there is no separate icon color token.
+- `icon`: The icon is aria-hidden: it can reinforce the label, never replace it — meaning must live in the accessible name.
+
+## Keyboard
+
+- `Enter / Space` — Activates the button; arrives as a native click (native behavior, preserved). Suppressed while loading.
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-button>Save</zbk-button>
+```
+
+**Explicit submit in a form**
+
+```html
+<zbk-button type="submit">Create account</zbk-button>
+```
+
+type must opt into "submit" — zebkit defaults it to "button".
+
+**Icon with label**
+
+```html
+<zbk-button variant="outline"><svg slot="icon" data-position="start" viewBox="0 0 16 16"><path d="M8 0 16 16H0z"/></svg>Save draft</zbk-button>
+```
+
+**Composed variants**
+
+```html
+<zbk-button variant="ghost sm">Cancel</zbk-button>
+```
+
+ghost (style axis) and sm (size axis) compose; two style-axis variants would conflict and warn.
+
+**Loading**
+
+```html
+<zbk-button loading>Saving…</zbk-button>
+```
+
+aria-busy announces the in-flight work; activation is suppressed but focus is kept.
+
+**Icon-only** (situational)
+
+```html
+<zbk-button aria-label="Close" variant="ghost"><svg slot="icon" viewBox="0 0 16 16"><path d="M2 2l12 12M14 2L2 14"/></svg></zbk-button>
+```
+
+Valid only with an aria-label supplying the accessible name; without one, dev mode warns.
+
+**Button as navigation** (discouraged)
+
+```html
+<zbk-button onclick="location.href='/pricing'">Pricing</zbk-button>
+```
+
+Navigation belongs to <a>: middle-click, open-in-new-tab, and link semantics for AT are all lost.
 
 ## Tokens (CSS custom properties)
 
@@ -125,3 +201,5 @@ A variant is a named, partial remapping of the token surface compiled to a class
 | `ghost` | style | `zbk-button--ghost` | Transparent canvas and border; ink takes the action role with a subtle hover wash. | canvas: transparent; canvas-hover: {action.canvas-subtle}; canvas-active: {action.canvas-muted}; canvas-disabled: transparent; ink: {action.ink}; ink-hover: {action.ink-emphasis}; ink-active: {action.ink-emphasis}; border-color: transparent; border-color-hover: transparent; border-color-active: transparent; border-color-disabled: transparent |
 
 Custom variants: add a `zbk-button.variants.json` file to the base theme's token folder (component-keyed map of `{ "button": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-button--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
+
+Related: `<zbk-toggle>`.

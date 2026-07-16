@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schemas/component-manifest.schema.json",
+  "tag": "zbk-input",
+  "purpose": "Single-line text entry: a light-DOM element wrapping a real <input> inside its own label, with optional format-as-you-type masking.",
+  "nativeElement": "input",
+  "useWhen": [
+    "The value is a single line of free text: names, emails, search terms, URLs.",
+    "The value has a fixed printed format (phone, date, code) — use `mask` so the field formats as the user types.",
+    "The value is numeric but still text-shaped (amounts, quantities) — pair `inputmode` with the right `type`."
+  ],
+  "notWhen": [
+    {
+      "case": "Input is prose-length or multi-line.",
+      "instead": "zbk-textarea"
+    },
+    {
+      "case": "The user picks from a fixed set of options.",
+      "instead": "zbk-select"
+    },
+    {
+      "case": "The value is a boolean on/off choice.",
+      "instead": "zbk-checkbox"
+    }
+  ],
+  "guidance": [
+    "A placeholder is never a substitute for label content — the accessible name comes from the default children or an aria-label.",
+    "With a mask, `value` is always the masked form (and what submits); read `rawValue` for the value with literals stripped.",
+    "For checkboxes, radios, and buttons use their own zebkit components, not `type`."
+  ],
+  "slots": {
+    "default": {
+      "description": "The visible label content (the accessible name via the wrapping label).",
+      "required": true,
+      "guidance": [
+        "Omit only when aria-label supplies the accessible name; the field must never be nameless."
+      ]
+    },
+    "prefix": {
+      "description": "Affix content at the field's inline start — any markup: svg, icon-font glyph, HTML character, image.",
+      "presentational": true,
+      "tokens": { "size": "icon-size", "color": "affix-ink" },
+      "guidance": [
+        "Affixes are aria-hidden: information an affix carries must also live in the field's accessible name or description."
+      ]
+    },
+    "suffix": {
+      "description": "Affix content at the field's inline end — any markup: svg, icon-font glyph, HTML character, image.",
+      "presentational": true,
+      "tokens": { "size": "icon-size", "color": "affix-ink" },
+      "guidance": [
+        "Affixes are aria-hidden: information an affix carries must also live in the field's accessible name or description."
+      ]
+    }
+  },
+  "keyboard": [
+    {
+      "keys": "Enter",
+      "does": "Submits the owning form (native behavior, preserved)."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Basic",
+      "html": "<zbk-input name=\"email\" type=\"email\" autocomplete=\"email\" required>Email</zbk-input>"
+    },
+    {
+      "title": "Masked phone number",
+      "html": "<zbk-input name=\"phone\" type=\"tel\" mask=\"(###) ###-####\" autocomplete=\"tel\">Phone</zbk-input>",
+      "why": "The all-digit mask defaults inputmode to numeric; the masked form is the submitted value."
+    },
+    {
+      "title": "Currency prefix",
+      "html": "<zbk-input name=\"price\" inputmode=\"decimal\">Price (USD)<span slot=\"prefix\">$</span></zbk-input>",
+      "why": "The affix is aria-hidden, so the label carries the currency — never let the prefix be the only place the unit appears."
+    },
+    {
+      "title": "Placeholder as label",
+      "tier": "discouraged",
+      "html": "<zbk-input name=\"q\" placeholder=\"Search\"></zbk-input>",
+      "why": "No accessible name: placeholders vanish on entry and are not announced as the name. Give it label children or aria-label."
+    }
+  ],
+  "related": ["zbk-textarea", "zbk-select"]
+}

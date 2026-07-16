@@ -13,9 +13,13 @@ import postcss from "postcss";
 import {
   BREAKPOINTS,
   MANIFEST_GLOB,
+  STATE_PATTERN_STATES,
   expandFamily,
+  instantiateTemplate,
+  type StatePatternStateName,
   type UtilityFamily,
   type UtilityManifest,
+  type UtilityRule,
 } from "./expand.js";
 import {
   breakpointKeysFromModules,
@@ -51,6 +55,27 @@ function renderRule(selectors: string[], declarations: Array<[string, string]>):
   return `${selectors.join(",\n")} {\n${declarations
     .map(([prop, value]) => `  ${prop}: ${value};`)
     .join("\n")}\n}\n`;
+}
+
+// Manifests author custom properties and var() references with the literal
+// --zbk- prefix; the generated SCSS uses the configurable prefix var so a
+// consumer's prefix flows through, exactly like pattern families' token vars.
+function rewritePrefix(text: string): string {
+  return text.replace(/--zbk-/g, "--#{prefix.$cssVar}-");
+}
+
+// Render one `rules` family rule (selector + declarations + nested) as verbatim
+// SCSS. Declarations and selectors are emitted literally; only the --zbk- prefix
+// is rewritten. Nested rules use '&' and are indented inside the parent block.
+function renderRuleBlock(rule: UtilityRule): string {
+  const declarations = Object.entries(rule.declarations)
+    .map(([prop, value]) => `  ${rewritePrefix(prop)}: ${rewritePrefix(value)};`)
+    .join("\n");
+  const nested = (rule.nested ?? [])
+    .map((child) => indent(renderRuleBlock(child), 2))
+    .join("\n\n");
+  const body = [declarations, nested].filter(Boolean).join("\n\n");
+  return `${rule.selector} {\n${body}\n}`;
 }
 
 function patternEntries(family: UtilityFamily): PatternEntry[] {
@@ -100,7 +125,7 @@ function resolveValue(
     valueMap?.[entry.value] ??
     family.pattern?.literals?.[entry.value];
   if (mappedValue !== undefined) {
-    return { css: mappedValue, verbatim: true };
+    return { css: rewritePrefix(mappedValue), verbatim: true };
   }
 
   if (family.tokens) {
@@ -162,7 +187,89 @@ function selectorsFor(family: UtilityFamily, className: string, breakpoint?: str
   return [selectorForClass(prefixed), selectorForClass(hoverName) + ":hover"];
 }
 
+type StateConfig = { name: StatePatternStateName; pseudo: string | null };
+const ALL_STATE_CONFIGS: StateConfig[] = [
+  { name: "base", pseudo: null },
+  { name: "focus", pseudo: ":is(:focus-visible, :focus-within)" },
+  { name: "hover", pseudo: ":hover" },
+  { name: "active", pseudo: ":active" },
+  { name: "disabled", pseudo: ':is(:disabled, [aria-disabled="true"])' },
+];
+
+function renderStatePatternRules(family: UtilityFamily): string {
+  const sp = family.statePattern!;
+  const enabledStateNames = new Set<string>(
+    sp.states === true ? [...STATE_PATTERN_STATES] : sp.states
+  );
+  const stateConfigs = ALL_STATE_CONFIGS.filter((s) => enabledStateNames.has(s.name));
+
+  const axisNames = Object.keys(sp.axes);
+  const axisValueArrays = axisNames.map((name) => sp.axes[name]);
+  const combos: Array<Record<string, string | null>> = axisValueArrays
+    .reduce<Array<(string | null)[]>>(
+      (acc, arr) => acc.flatMap((combo) => arr.map((item) => [...combo, item])),
+      [[]]
+    )
+    .map((combo) => {
+      const b: Record<string, string | null> = {};
+      axisNames.forEach((name, i) => { b[name] = combo[i]; });
+      return b;
+    });
+
+  type RuleEntry = { className: string; properties: string[]; varValue: string };
+  const entries: RuleEntry[] = [];
+
+  for (const [roleName, propsRaw] of Object.entries(sp.roles)) {
+    const properties = Array.isArray(propsRaw) ? propsRaw : [propsRaw];
+    for (const axisBindings of combos) {
+      const bindings = { role: roleName, ...axisBindings };
+      const className = instantiateTemplate(sp.class, bindings);
+      if (!className) continue;
+      const varName = rewritePrefix(instantiateTemplate(sp.var, bindings));
+      entries.push({ className, properties, varValue: `var(${varName})` });
+    }
+  }
+
+  const blocks: string[] = [];
+
+  for (const { name: stateName, pseudo } of stateConfigs) {
+    if (stateName === "base") {
+      for (const { className, properties, varValue } of entries) {
+        blocks.push(renderRule([`.${escapeClassName(className)}`], properties.map((p) => [p, varValue])));
+      }
+    } else if (stateName === "hover") {
+      const hoverRules = entries
+        .map(({ className, properties, varValue }) =>
+          renderRule(
+            [`.${escapeClassName(`hover:${className}`)}${pseudo}`],
+            properties.map((p) => [p, varValue])
+          )
+        )
+        .join("\n");
+      blocks.push(`@media (hover: hover) and (pointer: fine) {\n${indent(hoverRules.trimEnd(), 2)}\n}`);
+    } else {
+      for (const { className, properties, varValue } of entries) {
+        const selector = `[class~="${stateName}:${className}"]${pseudo}`;
+        blocks.push(renderRule([selector], properties.map((p) => [p, varValue])));
+      }
+    }
+  }
+
+  return blocks.join("\n");
+}
+
 function renderFamilyRules(family: UtilityFamily, breakpoint?: string): string {
+  if (family.statePattern) {
+    // statePattern families don't support breakpoint modifiers.
+    if (breakpoint) return "";
+    return renderStatePatternRules(family);
+  }
+
+  if (family.rules) {
+    // Rules families do not support modifiers, so they only ever render at base.
+    return family.rules.map(renderRuleBlock).join("\n\n");
+  }
+
   if (family.generator?.rawScss) {
     const raw = family.generator.rawScss.trim();
     if (breakpoint) {
@@ -182,8 +289,8 @@ function renderFamilyRules(family: UtilityFamily, breakpoint?: string): string {
           renderRule(
             selectorsFor(family, className, breakpoint),
             Object.entries(classDeclarationsOrThrow(family, className)).map(([prop, value]) => [
-              prop,
-              withImportant(family, value),
+              rewritePrefix(prop),
+              withImportant(family, rewritePrefix(value)),
             ])
           )
         )
@@ -219,14 +326,24 @@ function indent(value: string, spaces: number): string {
 
 function renderSourceFile(plan: SourcePlan, breakpoints: string[]): string {
   const manifestList = Array.from(plan.manifestPaths).sort().join(", ");
-  const layer = plan.families[0]?.layer ?? "utilities";
 
-  const blocks = plan.families
+  // Unlayered rules families (e.g. transition :root defaults) emit outside the
+  // @layer stack; everything else wraps in the file's @layer. The layer comes
+  // from the first layered family so an unlayered family never sets it.
+  const unlayeredFamilies = plan.families.filter((family) => family.rules && family.unlayered);
+  const layeredFamilies = plan.families.filter((family) => !(family.rules && family.unlayered));
+  const layer = layeredFamilies[0]?.layer ?? "utilities";
+
+  const unlayeredBlocks = unlayeredFamilies
+    .map((family) => renderFamilyRules(family).trim())
+    .filter(Boolean);
+
+  const blocks = layeredFamilies
     .map((family) => renderFamilyRules(family).trim())
     .filter(Boolean);
 
   for (const breakpoint of breakpoints) {
-    const rulesForBreakpoint = plan.families
+    const rulesForBreakpoint = layeredFamilies
       .filter((family) => (family.modifiers?.responsive ?? []).includes(breakpoint))
       .map((family) => renderFamilyRules(family, breakpoint).trim())
       .filter(Boolean)
@@ -235,16 +352,17 @@ function renderSourceFile(plan: SourcePlan, breakpoints: string[]): string {
     blocks.push(`@include gen.from-breakpoint('${breakpoint}') {\n${indent(rulesForBreakpoint, 2)}\n}`);
   }
 
-  return [
+  const lines = [
     `// GENERATED by generate:utilities from ${manifestList} — do not edit; edit the manifest and regenerate.`,
     `@use 'tokens/styles/variables/prefix' as prefix;`,
     `@use 'tokens/styles/mixins/generators' as gen;`,
     ``,
-    `@layer ${layer} {`,
-    indent(blocks.join("\n\n"), 2),
-    `}`,
-    ``,
-  ].join("\n");
+  ];
+  if (unlayeredBlocks.length > 0) {
+    lines.push(unlayeredBlocks.join("\n\n"), ``);
+  }
+  lines.push(`@layer ${layer} {`, indent(blocks.join("\n\n"), 2), `}`, ``);
+  return lines.join("\n");
 }
 
 async function main(): Promise<void> {

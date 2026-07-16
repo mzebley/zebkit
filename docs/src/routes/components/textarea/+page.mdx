@@ -1,0 +1,78 @@
+---
+title: Textarea
+description: The zebkit multi-line text field — a native textarea inside its own label, with a token-driven resize behavior.
+layout: components
+---
+
+<script lang="ts">
+  import TokenTable from '$components/TokenTable.svelte';
+  import AgentContext from '$components/AgentContext.svelte';
+  import { compiledTokens } from '$data/compiled-tokens';
+  import { buildTokenRows } from '$lib/utils/token-docs';
+
+  const textareaTokenRows = buildTokenRows('zbk-textarea', compiledTokens['zbk-textarea']);
+</script>
+
+`<zbk-textarea>` wraps a real `<textarea>` inside its own `<label>`. It is [`<zbk-input>`](/components/input) for multi-line text: default children are the visible label — the accessible name via the wrapping label — and the field box carries the native textarea. No affixes, no masking. For single-line text, use [`<zbk-input>`](/components/input).
+
+## Live examples
+
+<div class="border border-app-muted rounded-lg p-4 canvas-app-soft">
+  <div class="zbk-input-group">
+    <zbk-textarea name="demo-notes" rows="4" placeholder="Anything else we should know?">Additional notes</zbk-textarea>
+    <zbk-textarea name="demo-bio" rows="6" placeholder="Tell us about yourself">Bio</zbk-textarea>
+    <zbk-textarea name="demo-readonly" rows="3" value="This value is locked." readonly>Order note (readonly)</zbk-textarea>
+    <zbk-textarea name="demo-disabled" rows="3" value="Disabled" disabled>Disabled field</zbk-textarea>
+    <zbk-textarea name="demo-sm" rows="3" variant="sm">Small</zbk-textarea>
+    <zbk-textarea name="demo-lg" rows="3" variant="lg">Large</zbk-textarea>
+  </div>
+</div>
+
+## Usage
+
+```html
+<zbk-textarea name="notes" rows="4" placeholder="Anything else we should know?">
+  Additional notes
+</zbk-textarea>
+```
+
+Renders (light DOM, inspectable):
+
+```html
+<zbk-textarea name="notes" rows="4">
+  <label class="zbk-textarea">
+    <span class="zbk-textarea__label">Additional notes</span>
+    <span class="zbk-textarea__field">
+      <textarea class="zbk-textarea__textarea" name="notes" rows="4"></textarea>
+    </span>
+  </label>
+</zbk-textarea>
+```
+
+Form participation, constraint validation (`required`, `minlength`, `maxlength`), and events are fully native — listen for `input`/`change` on the element; there is no custom event. Write `aria-*`/`role` on `<zbk-textarea>` and they relocate to the inner `<textarea>` automatically. There is no `type`, `inputmode`, `mask`, or `pattern` — those are input-only or meaningless on a textarea.
+
+## Resizing
+
+Resizability is a token, not an attribute. `resize` defaults to `vertical`; re-theme it (`vertical`, `horizontal`, `both`, `none`) via `--zbk-textarea-resize` like any other visual property. The `min-block-size` token sets the field's minimum height (also a tappable floor).
+
+## Variants
+
+| Variant | Axis | Remaps |
+|---|---|---|
+| `sm` | size | Smaller type and padding; keeps the 44px minimum tap target. |
+| `lg` | size | Larger type and padding. |
+
+## Accessibility
+
+- Label text (default children) is the accessible name via the wrapping `<label>`; label-free fields must provide `aria-label` — a placeholder is not a label, and a nameless field warns in dev with the fix.
+- Write `aria-*`/`role` on `<zbk-textarea>` — they relocate to the inner `<textarea>` automatically, and `focus()` forwards to it.
+- `:user-invalid` (invalid after interaction) and `[aria-invalid="true"]` drive the `-invalid` tokens; `readonly` drives the `-readonly` tokens.
+- Motion uses the calm-fx transition tokens and honors `prefers-reduced-motion`.
+
+## Tokens
+
+<TokenTable rows={textareaTokenRows} showSwatch={true} />
+
+## For agents
+
+<AgentContext tag="zbk-textarea" />

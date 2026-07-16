@@ -46,11 +46,15 @@ complete config. It asks about:
 - **Components to include** — unchecked components are excluded from the build entirely
   (see [the `components` block](#the-components-block))
 - whether to **copy default token files** into `./tokens/` for editing
+- whether to **copy the agent context** (per-component markdown + `llms.txt`) into
+  `./zebkit/context/` so local LLMs and coding agents can read the component contracts directly
 - a gate for **token-export / advanced options** (artifact formats, lookup/registry JSON,
   breakpoint vars and the responsive breakpoint set)
 
 It also writes `.vscode/settings.json` so the editor gets token schema validation and CSS
-custom-property hints.
+custom-property hints. When you accept the context copy, the location is recorded as
+`context.path` in the config (omit it, or set `context.path: false`, to opt out); `zebkit pull`
+refreshes that directory on upgrade.
 
 ```bash
 zebkit init
@@ -107,6 +111,10 @@ upgrading zebkit to pick up new or changed default tokens without clobbering you
 ```bash
 zebkit pull
 ```
+
+If your config has a `context.path`, `pull` also refreshes that directory with the latest agent
+context (per-component markdown + `llms.txt`). Per-component docs for components you've excluded
+in the [`components` block](#the-components-block) are skipped; `llms.txt` is always refreshed.
 
 ## `config`
 

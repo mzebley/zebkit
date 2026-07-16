@@ -333,4 +333,71 @@ describe('ZebkitElement', () => {
       expect((el as any).hasAccessibleName()).toBe(false);
     });
   });
+
+  describe('slot contract', () => {
+    async function mountContract(markup: string): Promise<ContractElement> {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = markup;
+      document.body.appendChild(wrapper);
+      const el = wrapper.querySelector('zbk-contractel') as ContractElement;
+      await el.updateComplete;
+      return el;
+    }
+
+    it('warns on an unknown slot with the supported vocabulary', async () => {
+      await mountContract(
+        '<zbk-contractel>Go<i slot="ikon">x</i></zbk-contractel>'
+      );
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          '[zbk-contractel] Unknown slot "ikon" — its content will not render. Supported slots: icon.'
+        )
+      );
+    });
+
+    it('does not warn for contract slots', async () => {
+      await mountContract(
+        '<zbk-contractel><i slot="icon">x</i>Go</zbk-contractel>'
+      );
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it('warns when required default content leaves the control nameless', async () => {
+      await mountContract('<zbk-contractel></zbk-contractel>');
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('[zbk-contractel] No accessible name.')
+      );
+    });
+
+    it('accepts aria-label in place of default content', async () => {
+      await mountContract('<zbk-contractel aria-label="Go"></zbk-contractel>');
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it('stays silent for components without a contract', async () => {
+      await mount('<zbk-testel><i slot="ikon">x</i></zbk-testel>');
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+  });
 });
+
+class ContractElement extends ZebkitElement {
+  static componentName = 'contractel';
+  static slotContract = {
+    slots: ['default', 'icon'],
+    required: ['default'],
+  };
+
+  protected get nativeElement(): HTMLElement | null {
+    return this.querySelector('button');
+  }
+
+  render() {
+    return html`<button class=${this.componentClasses} type="button">
+      ${this.renderIcon('start')}<span class="label">${this.slotted()}</span
+      >${this.renderIcon('end')}
+    </button>`;
+  }
+}
+
+customElements.define('zbk-contractel', ContractElement);

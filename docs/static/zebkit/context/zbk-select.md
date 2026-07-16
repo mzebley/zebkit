@@ -10,6 +10,20 @@ replaced through the suffix slot. No custom events — the native
 
 Base class: `.zbk-select`. Variant classes: `.zbk-select--{variant}`. Tokens: `--zbk-select-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- The user picks one option from a fixed list too long to lay out as radios.
+- Space is constrained and the options can collapse behind a field.
+- Several options may be picked from one list — `multiple` renders a native list box.
+- NOT A handful of options that should all be visible at once. → zbk-radio
+- NOT The value is free text. → zbk-input
+- NOT An independent on/off choice. → zbk-checkbox
+
+## Guidance
+
+- Options are real <option>/<optgroup>/<hr> children and keep their native semantics — the component adopts them into the internal select untouched.
+- Leave `value` unset for uncontrolled behavior (the platform selects the first option); include an empty-value "Choose…" option when no default should win.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -22,19 +36,58 @@ Base class: `.zbk-select`. Variant classes: `.zbk-select--{variant}`. Tokens: `-
 | `name` | `string \| undefined` | — | Forwarded to the internal select for native form participation. |
 | `form` | `string \| undefined` | — |  |
 | `autocomplete` | `string \| undefined` | — | Native autofill hint, forwarded verbatim. |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | `<option>`/`<optgroup>`/`<hr>` children populate the select; everything else is the visible label content (the accessible name via the wrapping label). |
-| `prefix` | Affix content at the field's inline start (aria-hidden, presentational). |
-| `suffix` | Affix content at the field's inline end; replaces the drawn chevron (aria-hidden, presentational). |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | <option>/<optgroup>/<hr> children populate the select; everything else is the visible label content (the accessible name via the wrapping label). | required |
+| `prefix` | Affix content at the field's inline start — any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `icon-size`; colored by `affix-ink` |
+| `suffix` | Affix content at the field's inline end; replaces the drawn chevron indicator. | aria-hidden; sized by `icon-size`; colored by `affix-ink` |
+
+- `prefix`: Affixes are aria-hidden: information an affix carries must also live in the field's accessible name or description.
+- `suffix`: Supplying a suffix takes over the open-indicator role — make it still read as "this opens".
+
+## Keyboard
+
+- `ArrowUp / ArrowDown` — Moves through the options (native select behavior, preserved).
+- `Enter / Space` — Opens the platform picker; details vary by OS (native).
+- `Printable characters` — Native typeahead jumps to the first matching option.
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-select name="state" required>State<option value="">Choose…</option><option value="oh">Ohio</option><option value="pa">Pennsylvania</option></zbk-select>
+```
+
+**Grouped options**
+
+```html
+<zbk-select name="instrument">Instrument<optgroup label="Strings"><option>Violin</option><option>Cello</option></optgroup><optgroup label="Brass"><option>Trumpet</option></optgroup></zbk-select>
+```
+
+**Custom open indicator**
+
+```html
+<zbk-select name="sort">Sort by<span slot="suffix">▾</span><option>Newest</option><option>Oldest</option></zbk-select>
+```
+
+A suffix replaces the drawn chevron; it is aria-hidden, so it stays purely visual.
+
+**Placeholder option as label** (discouraged)
+
+```html
+<zbk-select name="country"><option value="">Country</option><option>Portugal</option></zbk-select>
+```
+
+A disappearing first option is not an accessible name. Give the field label children or aria-label.
 
 ## Tokens (CSS custom properties)
 
@@ -114,3 +167,5 @@ A variant is a named, partial remapping of the token surface compiled to a class
 | `lg` | size | `zbk-select--lg` | Larger type and padding. | font-size: {font-size.lg}; label-font-size: {font-size.md}; padding-inline: {spacing.md}; padding-block: {spacing.xs} |
 
 Custom variants: add a `zbk-select.variants.json` file to the base theme's token folder (component-keyed map of `{ "select": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-select--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
+
+Related: `<zbk-radio>`, `<zbk-input>`.

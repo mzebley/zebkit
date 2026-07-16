@@ -1,0 +1,87 @@
+{
+  "$schema": "../../../schemas/component-manifest.schema.json",
+  "tag": "zbk-select",
+  "purpose": "Pick from a fixed set of options: a light-DOM element wrapping a real <select> inside its own label. Authored option content is adopted into the select; remaining default children are the visible label.",
+  "nativeElement": "select",
+  "useWhen": [
+    "The user picks one option from a fixed list too long to lay out as radios.",
+    "Space is constrained and the options can collapse behind a field.",
+    "Several options may be picked from one list — `multiple` renders a native list box."
+  ],
+  "notWhen": [
+    {
+      "case": "A handful of options that should all be visible at once.",
+      "instead": "zbk-radio"
+    },
+    {
+      "case": "The value is free text.",
+      "instead": "zbk-input"
+    },
+    {
+      "case": "An independent on/off choice.",
+      "instead": "zbk-checkbox"
+    }
+  ],
+  "guidance": [
+    "Options are real <option>/<optgroup>/<hr> children and keep their native semantics — the component adopts them into the internal select untouched.",
+    "Leave `value` unset for uncontrolled behavior (the platform selects the first option); include an empty-value \"Choose…\" option when no default should win."
+  ],
+  "slots": {
+    "default": {
+      "description": "<option>/<optgroup>/<hr> children populate the select; everything else is the visible label content (the accessible name via the wrapping label).",
+      "required": true
+    },
+    "prefix": {
+      "description": "Affix content at the field's inline start — any markup: svg, icon-font glyph, HTML character, image.",
+      "presentational": true,
+      "tokens": { "size": "icon-size", "color": "affix-ink" },
+      "guidance": [
+        "Affixes are aria-hidden: information an affix carries must also live in the field's accessible name or description."
+      ]
+    },
+    "suffix": {
+      "description": "Affix content at the field's inline end; replaces the drawn chevron indicator.",
+      "presentational": true,
+      "tokens": { "size": "icon-size", "color": "affix-ink" },
+      "guidance": [
+        "Supplying a suffix takes over the open-indicator role — make it still read as \"this opens\"."
+      ]
+    }
+  },
+  "keyboard": [
+    {
+      "keys": "ArrowUp / ArrowDown",
+      "does": "Moves through the options (native select behavior, preserved)."
+    },
+    {
+      "keys": "Enter / Space",
+      "does": "Opens the platform picker; details vary by OS (native)."
+    },
+    {
+      "keys": "Printable characters",
+      "does": "Native typeahead jumps to the first matching option."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Basic",
+      "html": "<zbk-select name=\"state\" required>State<option value=\"\">Choose…</option><option value=\"oh\">Ohio</option><option value=\"pa\">Pennsylvania</option></zbk-select>"
+    },
+    {
+      "title": "Grouped options",
+      "html": "<zbk-select name=\"instrument\">Instrument<optgroup label=\"Strings\"><option>Violin</option><option>Cello</option></optgroup><optgroup label=\"Brass\"><option>Trumpet</option></optgroup></zbk-select>"
+    },
+    {
+      "title": "Custom open indicator",
+      "html": "<zbk-select name=\"sort\">Sort by<span slot=\"suffix\">▾</span><option>Newest</option><option>Oldest</option></zbk-select>",
+      "why": "A suffix replaces the drawn chevron; it is aria-hidden, so it stays purely visual."
+    },
+    {
+      "title": "Placeholder option as label",
+      "tier": "discouraged",
+      "html": "<zbk-select name=\"country\"><option value=\"\">Country</option><option>Portugal</option></zbk-select>",
+      "why": "A disappearing first option is not an accessible name. Give the field label children or aria-label."
+    }
+  ],
+  "related": ["zbk-radio", "zbk-input"]
+}

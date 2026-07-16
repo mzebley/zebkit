@@ -16,13 +16,13 @@ Migrating a `LEGACY` family does **not** add coverage — it moves the tag to a 
 
 ## Legacy migration backlog (refactor map)
 
-Five mixin families are the entire legacy surface. Everything tagged `LEGACY` below rolls up to one of these:
+All legacy partials have been migrated. `LEGACY_PARTIALS` is now empty.
 
-- [ ] **color** mixin -> `ink-*` (text), `canvas-*` (bg), `border-*` (border-color), `fill-*` — incl. hover/focus/active/disabled states
-- [ ] **font** mixin -> font-family, font-size, font-weight, line-height, letter-spacing (`tracking`), line-clamp, text-measure (`measure`)
-- [ ] **border** mixin -> border-width, border-radius
-- [ ] **position** mixin -> physical-edge offsets (top/right/bottom/left)
-- [ ] **spacing** mixin -> largely superseded by margin/padding manifests; confirm nothing remains
+- [x] **color** mixin (`_color.scss`) -> migrated to `color.utilities.manifest.json` (`statePattern` kind); generates `color-palette.scss`, `color-semi-semantic.scss`, `color-semantic.scss`
+- [x] **font** mixin -> migrated (typography manifest)
+- [x] **border** mixin -> migrated (border manifest)
+- [x] **position** mixin -> migrated (spacing manifest, top/right/bottom/left)
+- [x] **spacing/size** mixin -> migrated (spacing + page/section manifests)
 
 ---
 
@@ -34,8 +34,8 @@ Five mixin families are the entire legacy surface. Everything tagged `LEGACY` be
 - [x] object-fit
 - [x] object-position
 - [x] overflow (+ -x / -y)
-- [~] LEGACY inset / top-right-bottom-left — position mixin; physical edges only, no logical, no `inset` shorthand, no `auto`
-- [ ] z-index — token module exists, no classes
+- [x] top / right / bottom / left offsets (spacing manifest; physical edges + negatives, no `inset` shorthand yet)
+- [x] z-index (+ semantic layers)
 - [ ] box-sizing
 - [ ] aspect-ratio
 - [ ] float / clear
@@ -60,27 +60,27 @@ Five mixin families are the entire legacy surface. Everything tagged `LEGACY` be
 - [x] padding (logical edges)
 - [ ] space-between (`space-x` / `space-y`) `(scope? — gap preferred)`
 
-## Sizing — large gap
+## Sizing
 
-- [ ] width / min-width / max-width
-- [~] LEGACY max-width for text only (`measure-*`, via font mixin) — no general `max-w`
-- [ ] height / min-height / max-height
+- [x] width / min-width / max-width (spacing manifest — scale + keywords + semantic sizes)
+- [x] height / min-height / max-height
+- [x] max-width for text (`measure-*`, typography manifest)
 - [ ] size (w+h shorthand)
 
 ## Typography
 
 - [x] white-space, word-break, overflow-wrap, hyphens, text-wrap, text-overflow, truncate
-- [x] LEGACY font-family
-- [x] LEGACY font-size (`font-*` / `text-*`)
-- [x] LEGACY font-weight
-- [x] LEGACY line-height
-- [x] LEGACY letter-spacing (`tracking-*`)
-- [x] LEGACY line-clamp
-- [~] LEGACY text-measure (`measure-*`)
-- [ ] text-align — bare-minimum miss
-- [ ] text-transform (uppercase/lowercase/capitalize)
+- [x] font-family
+- [x] font-size (`font-*` / `text-*`)
+- [x] font-weight
+- [x] line-height
+- [x] letter-spacing (`tracking-*`)
+- [x] line-clamp
+- [x] text-measure (`measure-*`)
+- [x] text-align
+- [x] text-transform (uppercase/lowercase/capitalize)
+- [x] text-decoration-line (underline / overline / line-through / no-underline)
 - [ ] font-style (italic)
-- [ ] text-decoration-line (underline / line-through / no-underline)
 - [ ] text-decoration-color / -style / -thickness / underline-offset
 - [ ] vertical-align
 - [ ] text-indent
@@ -91,29 +91,30 @@ Five mixin families are the entire legacy surface. Everything tagged `LEGACY` be
 
 ## Colors / Backgrounds
 
-- [x] LEGACY text color (`ink-*`) — with hover/focus/active/disabled states
-- [x] LEGACY background-color (`canvas-*`)
+- [x] text color (`ink-*`) — with hover/focus/active/disabled states
+- [x] background-color (`canvas-*`)
 - [ ] background-image / gradients `(scope?)`
 - [ ] background-position / -size / -repeat / -attachment / -clip / -origin `(scope?)`
 
 ## Borders
 
-- [x] LEGACY border-width (+ x/y/per-side)
-- [x] LEGACY border-radius (+ per-corner)
-- [x] LEGACY border-color (`border-*`)
-- [ ] border-style (solid/dashed/dotted/none) — bare-minimum miss; widths exist, no style control
-- [ ] outline-width / -color / -style / -offset
+- [x] border-width (+ x/y/per-side)
+- [x] border-radius (+ per-corner + pill)
+- [x] border-color (`border-*`)
+- [x] border-style (solid/dashed/dotted)
+- [ ] outline-width / -color / -style / -offset (focus ring covered via `.focusable`)
 - [ ] divide-x / -y / -color `(scope?)`
 
 ## Effects
 
-- [ ] box-shadow — elevation token module exists, no utility
-- [ ] opacity — opacity token module exists, no utility
+- [x] box-shadow (`shadow-*`, incl. inner)
+- [x] opacity (`opacity-*`)
 - [ ] mix-blend-mode / background-blend-mode `(scope?)`
 
 ## Transitions & Animation
 
-- [ ] transition-property / -duration / -timing-function / -delay — transition token module exists, no utility
+- [x] transition timing-function / duration (`transition-*`, incl. speed + motion personality)
+- [ ] transition-property scale beyond the common set / -delay
 - [ ] animation `(scope?)`
 
 ## Transforms
@@ -142,7 +143,7 @@ Five mixin families are the entire legacy surface. Everything tagged `LEGACY` be
 
 ## SVG
 
-- [x] LEGACY fill (`fill-*`)
+- [x] fill (`fill-*`)
 - [ ] stroke / stroke-width
 
 ## Tables
@@ -158,11 +159,9 @@ Five mixin families are the entire legacy surface. Everything tagged `LEGACY` be
 
 ## Bare-minimum candidates
 
-Honest gaps that fit zebkit's token-driven philosophy and would most likely clear an internal bare-minimum bar:
+Most of the previous bare-minimum backlog has landed (sizing, text-align, border-style, z-index/opacity/box-shadow/transition, position offsets, text-decoration/transform). Remaining honest gaps that fit zebkit's token-driven philosophy:
 
-1. **Sizing** — width / height / min / max / size (biggest single hole). Spacing token group already carries `sizing`-type tokens, so a token source is ready.
-2. **text-align** (typography)
-3. **border-style** (have width + color, can't switch style)
-4. **z-index, opacity, box-shadow, transition** utilities — all four have token modules already; low-effort, high-value.
-5. **inset/position offsets** upgraded to logical edges + manifest (currently physical-only legacy).
-6. **text-decoration + text-transform** (typography polish).
+1. **Color migration** — move the `_color.scss` mixin (`ink-*`/`canvas-*`/`border-*`/`fill-*`, with hover/focus/active/disabled states) onto a manifest. Needs a state-prefixed color-family grammar extension (see the legacy backlog note); it is the last legacy surface.
+2. **size (w+h shorthand)** and **inset shorthand / logical position offsets**.
+3. **font-style (italic)** and remaining text-decoration controls.
+4. **box-sizing, aspect-ratio, resize** and other single-property layout/interactivity utilities.

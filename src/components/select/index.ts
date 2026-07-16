@@ -24,6 +24,7 @@
 import { html, nothing, type PropertyDeclarations, type PropertyValues, type TemplateResult } from 'lit';
 import { ZebkitElement } from '../base/zebkit-element';
 import { selectVariants } from './variants/index';
+import { slotContract } from './slot-contract';
 
 /** Elements that belong inside a native <select>. */
 const OPTION_TAGS = new Set(['OPTION', 'OPTGROUP', 'HR']);
@@ -34,14 +35,11 @@ const OPTION_TAGS = new Set(['OPTION', 'OPTGROUP', 'HR']);
  * default children are the visible label. The drawn chevron indicator can be
  * replaced through the suffix slot. No custom events — the native
  * `change`/`input` bubble.
- *
- * @slot - `<option>`/`<optgroup>`/`<hr>` children populate the select; everything else is the visible label content (the accessible name via the wrapping label).
- * @slot prefix - Affix content at the field's inline start (aria-hidden, presentational).
- * @slot suffix - Affix content at the field's inline end; replaces the drawn chevron (aria-hidden, presentational).
  */
 export class ZbkSelect extends ZebkitElement {
   static componentName = 'select';
   static variantConfigs = selectVariants;
+  static slotContract = slotContract;
 
   static properties: PropertyDeclarations = {
     value: { type: String },
@@ -177,13 +175,8 @@ export class ZbkSelect extends ZebkitElement {
     return false;
   }
 
-  protected firstUpdated(changed: PropertyValues): void {
-    super.firstUpdated(changed);
-    if (!this.hasAccessibleName()) {
-      this.warn(
-        'No accessible name. Provide label text as children (options are adopted into the select; other content labels it), or aria-label / aria-labelledby.'
-      );
-    }
+  protected accessibleNameWarning(): string {
+    return 'No accessible name. Provide label text as children (options are adopted into the select; other content labels it), or aria-label / aria-labelledby.';
   }
 }
 

@@ -1,0 +1,140 @@
+{
+  "$schema": "../../../schemas/utility-manifest.schema.json",
+  "name": "Sizing and position utilities",
+  "key": "spacing",
+  "description": "Width/height sizing and top/right/bottom/left position-offset utilities bound to the spacing token scale, plus the sizing keywords (auto, full, min/max-content, ...).",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "height",
+      "description": "Sets the element's block size (height).",
+      "guidance": ["Prefer intrinsic sizing (auto, min-content, max-content) over fixed heights so content is never clipped when it grows or text is enlarged by the a11y dial."],
+      "a11y": "Fixed heights can clip content when users enlarge text; prefer min-height or auto.",
+      "source": "src/tokens/spacing/styles.scss",
+      "properties": ["height"],
+      "tokens": { "group": "spacing", "varPrefix": "spacing" },
+      "pattern": {
+        "base": "height",
+        "values": ["neg-1px", "0", "1px", "2px", "025", "05", "1", "105", "2", "205", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25", "30", "40", "50", "60", "70", "80", "90", "100", "card", "mobile", "mobile-lg", "tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen", "section", "aside"],
+        "literals": { "auto": "auto", "full": "100%", "viewport": "100vw", "min": "min-content", "max": "max-content", "inherit": "inherit" }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "min-height",
+      "description": "Sets the element's minimum block size.",
+      "source": "src/tokens/spacing/styles.scss",
+      "properties": ["min-height"],
+      "tokens": { "group": "spacing", "varPrefix": "spacing" },
+      "pattern": {
+        "base": "min-height",
+        "values": ["neg-1px", "0", "1px", "2px", "025", "05", "1", "105", "2", "205", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25", "30", "40", "50", "60", "70", "80", "90", "100", "card", "mobile", "mobile-lg", "tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen", "section", "aside"],
+        "literals": { "auto": "auto", "full": "100%", "viewport": "100vw", "min": "min-content", "max": "max-content", "inherit": "inherit" }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "max-height",
+      "description": "Sets the element's maximum block size.",
+      "source": "src/tokens/spacing/styles.scss",
+      "properties": ["max-height"],
+      "tokens": { "group": "spacing", "varPrefix": "spacing" },
+      "pattern": {
+        "base": "max-height",
+        "values": ["neg-1px", "0", "1px", "2px", "025", "05", "1", "105", "2", "205", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25", "30", "40", "50", "60", "70", "80", "90", "100", "card", "mobile", "mobile-lg", "tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen", "section", "aside"],
+        "literals": { "auto": "auto", "full": "100%", "viewport": "100vw", "min": "min-content", "max": "max-content", "inherit": "inherit" }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "width",
+      "description": "Sets the element's inline size (width).",
+      "guidance": ["Prefer intrinsic or percentage widths over fixed widths so layouts reflow; a fixed width can force horizontal scrolling at small viewports or large text."],
+      "source": "src/tokens/spacing/styles.scss",
+      "properties": ["width"],
+      "tokens": { "group": "spacing", "varPrefix": "spacing" },
+      "pattern": {
+        "base": "width",
+        "values": ["neg-1px", "0", "1px", "2px", "025", "05", "1", "105", "2", "205", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25", "30", "40", "50", "60", "70", "80", "90", "100", "card", "mobile", "mobile-lg", "tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen", "section", "aside"],
+        "literals": { "auto": "auto", "full": "100%", "viewport": "100vw", "min": "min-content", "max": "max-content", "inherit": "inherit" }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "min-width",
+      "description": "Sets the element's minimum inline size.",
+      "source": "src/tokens/spacing/styles.scss",
+      "properties": ["min-width"],
+      "tokens": { "group": "spacing", "varPrefix": "spacing" },
+      "pattern": {
+        "base": "min-width",
+        "values": ["neg-1px", "0", "1px", "2px", "025", "05", "1", "105", "2", "205", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25", "30", "40", "50", "60", "70", "80", "90", "100", "card", "mobile", "mobile-lg", "tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen", "section", "aside"],
+        "literals": { "auto": "auto", "full": "100%", "viewport": "100vw", "min": "min-content", "max": "max-content", "inherit": "inherit" }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "max-width",
+      "description": "Sets the element's maximum inline size.",
+      "guidance": ["max-width on text containers improves readability; prefer the measure/prose utilities for body copy line length."],
+      "source": "src/tokens/spacing/styles.scss",
+      "properties": ["max-width"],
+      "tokens": { "group": "spacing", "varPrefix": "spacing" },
+      "pattern": {
+        "base": "max-width",
+        "values": ["neg-1px", "0", "1px", "2px", "025", "05", "1", "105", "2", "205", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "25", "30", "40", "50", "60", "70", "80", "90", "100", "card", "mobile", "mobile-lg", "tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen", "section", "aside"],
+        "literals": { "auto": "auto", "full": "100%", "viewport": "100vw", "min": "min-content", "max": "max-content", "inherit": "inherit" }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "top",
+      "description": "Sets the top offset of a positioned element from the spacing scale (positive and negative).",
+      "guidance": ["Offsets only affect positioned elements (position other than static). Prefer gap/flex/grid for normal-flow spacing."],
+      "source": "src/tokens/spacing/styles.scss",
+      "properties": ["top"],
+      "tokens": { "group": "spacing", "varPrefix": "spacing" },
+      "pattern": {
+        "base": "top",
+        "values": ["neg-15", "neg-10", "neg-9", "neg-8", "neg-7", "neg-6", "neg-5", "neg-4", "neg-3", "neg-205", "neg-2", "neg-105", "neg-1", "neg-05", "neg-025", "neg-2px", "neg-1px", "0", "1px", "2px", "025", "05", "1", "105", "2", "205", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "2xs", "xs", "sm", "md", "lg", "xl", "2xl", "3xl"]
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "right",
+      "description": "Sets the right offset of a positioned element from the spacing scale (positive and negative).",
+      "source": "src/tokens/spacing/styles.scss",
+      "properties": ["right"],
+      "tokens": { "group": "spacing", "varPrefix": "spacing" },
+      "pattern": {
+        "base": "right",
+        "values": ["neg-15", "neg-10", "neg-9", "neg-8", "neg-7", "neg-6", "neg-5", "neg-4", "neg-3", "neg-205", "neg-2", "neg-105", "neg-1", "neg-05", "neg-025", "neg-2px", "neg-1px", "0", "1px", "2px", "025", "05", "1", "105", "2", "205", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "2xs", "xs", "sm", "md", "lg", "xl", "2xl", "3xl"]
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "bottom",
+      "description": "Sets the bottom offset of a positioned element from the spacing scale (positive and negative).",
+      "source": "src/tokens/spacing/styles.scss",
+      "properties": ["bottom"],
+      "tokens": { "group": "spacing", "varPrefix": "spacing" },
+      "pattern": {
+        "base": "bottom",
+        "values": ["neg-15", "neg-10", "neg-9", "neg-8", "neg-7", "neg-6", "neg-5", "neg-4", "neg-3", "neg-205", "neg-2", "neg-105", "neg-1", "neg-05", "neg-025", "neg-2px", "neg-1px", "0", "1px", "2px", "025", "05", "1", "105", "2", "205", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "2xs", "xs", "sm", "md", "lg", "xl", "2xl", "3xl"]
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "left",
+      "description": "Sets the left offset of a positioned element from the spacing scale (positive and negative).",
+      "source": "src/tokens/spacing/styles.scss",
+      "properties": ["left"],
+      "tokens": { "group": "spacing", "varPrefix": "spacing" },
+      "pattern": {
+        "base": "left",
+        "values": ["neg-15", "neg-10", "neg-9", "neg-8", "neg-7", "neg-6", "neg-5", "neg-4", "neg-3", "neg-205", "neg-2", "neg-105", "neg-1", "neg-05", "neg-025", "neg-2px", "neg-1px", "0", "1px", "2px", "025", "05", "1", "105", "2", "205", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "2xs", "xs", "sm", "md", "lg", "xl", "2xl", "3xl"]
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    }
+  ]
+}

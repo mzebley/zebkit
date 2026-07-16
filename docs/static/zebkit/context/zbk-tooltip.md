@@ -12,6 +12,19 @@ supported. No custom events.
 
 Base class: `.zbk-tooltip`. Variant classes: `.zbk-tooltip--{variant}`. Tokens: `--zbk-tooltip-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- A control needs a short supplementary description — most often an icon-only button.
+- Brief clarifying text should appear on click without stealing focus: mode="toggle".
+- NOT The content is interactive or rich (links, buttons, forms). → A dialog or popover pattern — tooltip content is plain text only.
+- NOT The information is essential to completing the task. → Visible text — instructions users must read cannot hide behind hover.
+
+## Guidance
+
+- `content` is plain text only: supplementary descriptions flatten to a string for assistive technology anyway.
+- The hint tooltip follows WCAG 1.4.13 — hoverable, dismissible with Escape, persistent while hovered or focused.
+- A tooltip describes its trigger; it never replaces the trigger's accessible name.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -19,17 +32,50 @@ Base class: `.zbk-tooltip`. Variant classes: `.zbk-tooltip--{variant}`. Tokens: 
 | `content` | `string` | `''` | The tooltip text. Plain text only — supplementary description flattens to a string for AT anyway; interactive content is a different pattern. |
 | `mode` | `ZbkTooltipMode` | `'hint'` | Trigger semantics: "hint" (hover/focus) or "toggle" (click). |
 | `placement` | `Placement` | `'top'` | Preferred side, floating-ui vocabulary: top \| right \| bottom \| left (optionally `-start` / `-end`). Flips automatically when it can't fit. |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The trigger element the tooltip describes (a focusable control). |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The trigger element the tooltip describes — a single focusable control. | required |
+
+- `default`: The trigger must be focusable (a button, input, link): hint tooltips show on focus, and keyboard users can never reach a tooltip on a non-focusable trigger.
+
+## Keyboard
+
+- `Escape` — Dismisses the tooltip (WCAG 1.4.13); in toggle mode, focus returns to the trigger.
+- `Tab` — Focusing the trigger shows a hint tooltip; moving focus away hides it.
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Hint on an icon-only button**
+
+```html
+<zbk-tooltip content="Copy link"><zbk-button aria-label="Copy link" variant="ghost"><svg slot="icon" viewBox="0 0 16 16"><path d="M4 4h8v8H4z"/></svg></zbk-button></zbk-tooltip>
+```
+
+The tooltip text and the aria-label say the same thing: the tooltip is the sighted-hover rendering of the name, not a substitute for it.
+
+**Toggletip**
+
+```html
+<zbk-tooltip mode="toggle" content="Charged at the end of your billing cycle." placement="bottom"><zbk-button variant="ghost" aria-label="More about billing">?</zbk-button></zbk-tooltip>
+```
+
+Click-triggered; the content announces through the shared live region instead of a description.
+
+**Essential instructions in a tooltip** (discouraged)
+
+```html
+<zbk-tooltip content="Password must contain at least 12 characters"><zbk-input type="password" required>Password</zbk-input></zbk-tooltip>
+```
+
+Requirements users must meet belong in visible text or the field's description, not behind a hover.
 
 ## Tokens (CSS custom properties)
 
@@ -67,3 +113,5 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 No shipped variants.
 
 Custom variants: add a `zbk-tooltip.variants.json` file to the base theme's token folder (component-keyed map of `{ "tooltip": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-tooltip--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
+
+Related: `<zbk-button>`.

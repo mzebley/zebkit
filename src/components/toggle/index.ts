@@ -16,9 +16,10 @@
 // entirely in the compiled zebkit CSS (`.zbk-toggle`, consuming
 // `--zbk-toggle-*` tokens).
 
-import { html, nothing, type PropertyDeclarations, type PropertyValues, type TemplateResult } from 'lit';
+import { html, nothing, type PropertyDeclarations, type TemplateResult } from 'lit';
 import { ZebkitElement } from '../base/zebkit-element';
 import { toggleVariants } from './variants/index';
+import { slotContract } from './slot-contract';
 
 /**
  * The zebkit toggle (switch): a light-DOM element wrapping a real
@@ -27,12 +28,11 @@ import { toggleVariants } from './variants/index';
  * announces on/off; deliberately separate from `<zbk-checkbox>` so each
  * carries an intentional token surface. No custom events — the native
  * `change`/`input` bubble.
- *
- * @slot - The label content (the accessible name via the wrapping label).
  */
 export class ZbkToggle extends ZebkitElement {
   static componentName = 'toggle';
   static variantConfigs = toggleVariants;
+  static slotContract = slotContract;
 
   static properties: PropertyDeclarations = {
     checked: { type: Boolean },
@@ -95,14 +95,6 @@ export class ZbkToggle extends ZebkitElement {
     return super.hasAccessibleName();
   }
 
-  protected firstUpdated(changed: PropertyValues): void {
-    super.firstUpdated(changed);
-    if (!this.hasAccessibleName()) {
-      this.warn(
-        'No accessible name. Provide label text as children, or aria-label / aria-labelledby.'
-      );
-    }
-  }
 }
 
 /** Register <zbk-toggle> (idempotent). */

@@ -12,8 +12,11 @@ describe('init command', () => {
   const mockWriteJson = jest.fn();
   const mockReadJson = jest.fn();
   const mockEnsureDir = jest.fn();
+  const mockReaddir = jest.fn(async () => [] as string[]);
+  const mockCopyFile = jest.fn();
   const mockGetZebkitDefaultsDir = jest.fn(() => '/pkg/dist/cli/defaults');
   const mockGetZebkitPackageRoot = jest.fn(() => '/pkg');
+  const mockGetZebkitContextDir = jest.fn(() => '/pkg/dist/cli/context');
   const mockHandlePromptCancel = jest.fn();
   const mockIsPromptCancelError = jest.fn();
   const mockGetBuiltInThemeNames = jest.fn(async () => ['dynamowaves']);
@@ -29,9 +32,12 @@ describe('init command', () => {
     readJson: mockReadJson as InitCommandDeps['readJson'],
     readJsonSafe: mockReadJsonSafe as InitCommandDeps['readJsonSafe'],
     ensureDir: mockEnsureDir as InitCommandDeps['ensureDir'],
+    readdir: mockReaddir as InitCommandDeps['readdir'],
+    copyFile: mockCopyFile as InitCommandDeps['copyFile'],
     prompt: ((questions: unknown) => mockPrompt(questions)) as InitCommandDeps['prompt'],
     getZebkitPackageRoot: mockGetZebkitPackageRoot,
     getZebkitDefaultsDir: mockGetZebkitDefaultsDir,
+    getZebkitContextDir: mockGetZebkitContextDir,
     getBuiltInThemeNames: mockGetBuiltInThemeNames,
     getThemePromptChoices: mockGetThemePromptChoices,
     getKnownComponents: mockGetKnownComponents,
@@ -154,6 +160,64 @@ describe('init command', () => {
     expect(written.tokens.fonts.strategy).toBe('import');
     expect(written.tokens.extendedTokens.colors).toBe('all');
     expect(written.tokens.splitMode).toBe('combined');
+  });
+
+  it('copies agent context and records context.path when accepted (full mode)', async () => {
+    mockPathExists.mockImplementation(async (target: string) => {
+      if (target === '/workspace/project/zebkit.config.json') return false;
+      if (target === '/pkg/dist/cli/context') return true;
+      return false;
+    });
+    mockReaddir.mockResolvedValue(['llms.txt', 'zbk-button.md', 'zbk-tooltip.md']);
+    mockPrompt.mockResolvedValueOnce({
+      destinationPath: './dist',
+      assetFilePath: '/',
+      basePreset: 'dynamowaves',
+      themeName: 'my-app',
+      copyTokens: false,
+      copyContext: true,
+      configureAdvanced: false,
+    });
+    mockReadJson.mockImplementation(async (target: string) => tokenReadJson(target));
+    mockIsPromptCancelError.mockReturnValue(false);
+
+    await runInitCommand(createDeps());
+
+    const written = findWrittenConfig();
+    expect(written.context).toEqual({ path: './zebkit/context' });
+    expect(mockEnsureDir).toHaveBeenCalledWith('/workspace/project/zebkit/context');
+    expect(mockCopyFile).toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/llms.txt',
+      '/workspace/project/zebkit/context/llms.txt'
+    );
+    expect(mockCopyFile).toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/zbk-button.md',
+      '/workspace/project/zebkit/context/zbk-button.md'
+    );
+  });
+
+  it('does not copy context or set context.path when declined (full mode)', async () => {
+    mockPathExists.mockImplementation(async (target: string) => {
+      if (target === '/workspace/project/zebkit.config.json') return false;
+      return false;
+    });
+    mockPrompt.mockResolvedValueOnce({
+      destinationPath: './dist',
+      assetFilePath: '/',
+      basePreset: 'dynamowaves',
+      themeName: 'my-app',
+      copyTokens: false,
+      copyContext: false,
+      configureAdvanced: false,
+    });
+    mockReadJson.mockImplementation(async (target: string) => tokenReadJson(target));
+    mockIsPromptCancelError.mockReturnValue(false);
+
+    await runInitCommand(createDeps());
+
+    const written = findWrittenConfig();
+    expect(written.context).toBeUndefined();
+    expect(mockCopyFile).not.toHaveBeenCalled();
   });
 
   it('stops when overwrite is declined', async () => {

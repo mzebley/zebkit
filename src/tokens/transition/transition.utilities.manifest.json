@@ -1,0 +1,202 @@
+{
+  "$schema": "../../../schemas/utility-manifest.schema.json",
+  "name": "Transition utilities",
+  "key": "transition",
+  "description": "Transition-timing utilities. transition-* classes drive a shared timing-function and duration via cascade variables, with speed (slow/fast) and motion-personality (playful/calm x motion/fx) modifiers and per-property transition-property helpers.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "transition-defaults",
+      "description": "Root cascade-variable defaults for the transition timing-function and duration. Sits outside @layer so it establishes the inherited baseline the transition-* classes build on.",
+      "unlayered": true,
+      "source": "src/tokens/transition/styles.scss",
+      "properties": ["--zbk-transition-timing-function", "--zbk-transition-duration"],
+      "rules": [
+        {
+          "selector": ":root",
+          "declarations": {
+            "--zbk-transition-timing-function": "ease",
+            "--zbk-transition-duration": "var(--zbk-transition-duration-default)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "transition-base",
+      "description": "Applies the shared timing-function and duration to any transition-* element, with .transition-slow / .transition-fast speed overrides.",
+      "guidance": ["Respect prefers-reduced-motion: the fx vs motion split lets effect transitions be tuned separately from motion; do not force motion on users who opt out."],
+      "a11y": "Durations are token-bound and honor the reduced-motion dial; never hard-code transition durations.",
+      "source": "src/tokens/transition/styles.scss",
+      "properties": ["transition-timing-function", "transition-duration"],
+      "rules": [
+        {
+          "selector": "[class^='transition-'], [class*=' transition-']",
+          "declarations": {
+            "transition-timing-function": "var(--zbk-transition-timing-function)",
+            "transition-duration": "var(--zbk-transition-duration)"
+          },
+          "nested": [
+            {
+              "selector": "&.transition-slow",
+              "declarations": { "--zbk-transition-duration": "var(--zbk-transition-duration-slow)" }
+            },
+            {
+              "selector": "&.transition-fast",
+              "declarations": { "--zbk-transition-duration": "var(--zbk-transition-duration-fast)" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "transition-easing",
+      "description": "Overrides the transition timing-function with a named easing keyword.",
+      "source": "src/tokens/transition/styles.scss",
+      "properties": ["--zbk-transition-timing-function"],
+      "classes": ["transition-ease", "transition-ease-in", "transition-ease-out", "transition-ease-in-out", "transition-linear"],
+      "generator": {
+        "declarations": {
+          "transition-ease": { "--zbk-transition-timing-function": "ease" },
+          "transition-ease-in": { "--zbk-transition-timing-function": "ease-in" },
+          "transition-ease-out": { "--zbk-transition-timing-function": "ease-out" },
+          "transition-ease-in-out": { "--zbk-transition-timing-function": "ease-in-out" },
+          "transition-linear": { "--zbk-transition-timing-function": "linear" }
+        }
+      }
+    },
+    {
+      "name": "transition-playful-motion",
+      "description": "Playful motion personality: sets timing-function and duration from the playful-motion tokens, with slow/fast overrides.",
+      "source": "src/tokens/transition/styles.scss",
+      "properties": ["--zbk-transition-timing-function", "--zbk-transition-duration"],
+      "rules": [
+        {
+          "selector": ".transition-playful-motion",
+          "declarations": {
+            "--zbk-transition-timing-function": "var(--zbk-transition-playful-motion-function-default)",
+            "--zbk-transition-duration": "var(--zbk-transition-playful-motion-duration-default)"
+          },
+          "nested": [
+            {
+              "selector": "&.transition-slow",
+              "declarations": {
+                "--zbk-transition-timing-function": "var(--zbk-transition-playful-motion-function-slow)",
+                "--zbk-transition-duration": "var(--zbk-transition-playful-motion-duration-slow)"
+              }
+            },
+            {
+              "selector": "&.transition-fast",
+              "declarations": {
+                "--zbk-transition-timing-function": "var(--zbk-transition-playful-motion-function-fast)",
+                "--zbk-transition-duration": "var(--zbk-transition-playful-motion-duration-fast)"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "transition-playful-fx",
+      "description": "Playful effects personality: sets timing-function and duration from the playful-fx tokens, with slow/fast overrides.",
+      "source": "src/tokens/transition/styles.scss",
+      "properties": ["--zbk-transition-timing-function", "--zbk-transition-duration"],
+      "rules": [
+        {
+          "selector": ".transition-playful-fx",
+          "declarations": {
+            "--zbk-transition-timing-function": "var(--zbk-transition-playful-fx-function-default)",
+            "--zbk-transition-duration": "var(--zbk-transition-playful-fx-duration-default)"
+          },
+          "nested": [
+            {
+              "selector": "&.transition-slow",
+              "declarations": {
+                "--zbk-transition-timing-function": "var(--zbk-transition-playful-fx-function-slow)",
+                "--zbk-transition-duration": "var(--zbk-transition-playful-fx-duration-slow)"
+              }
+            },
+            {
+              "selector": "&.transition-fast",
+              "declarations": {
+                "--zbk-transition-timing-function": "var(--zbk-transition-playful-fx-function-fast)",
+                "--zbk-transition-duration": "var(--zbk-transition-playful-fx-duration-fast)"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "transition-calm-motion",
+      "description": "Calm motion personality: sets timing-function and duration from the calm-motion tokens, with slow/fast overrides.",
+      "source": "src/tokens/transition/styles.scss",
+      "properties": ["--zbk-transition-timing-function", "--zbk-transition-duration"],
+      "rules": [
+        {
+          "selector": ".transition-calm-motion",
+          "declarations": {
+            "--zbk-transition-timing-function": "var(--zbk-transition-calm-motion-function-default)",
+            "--zbk-transition-duration": "var(--zbk-transition-calm-motion-duration-default)"
+          },
+          "nested": [
+            {
+              "selector": "&.transition-slow",
+              "declarations": {
+                "--zbk-transition-timing-function": "var(--zbk-transition-calm-motion-function-slow)",
+                "--zbk-transition-duration": "var(--zbk-transition-calm-motion-duration-slow)"
+              }
+            },
+            {
+              "selector": "&.transition-fast",
+              "declarations": {
+                "--zbk-transition-timing-function": "var(--zbk-transition-calm-motion-function-fast)",
+                "--zbk-transition-duration": "var(--zbk-transition-calm-motion-duration-fast)"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "transition-calm-fx",
+      "description": "Calm effects personality: sets timing-function and duration from the calm-fx tokens, with slow/fast overrides.",
+      "source": "src/tokens/transition/styles.scss",
+      "properties": ["--zbk-transition-timing-function", "--zbk-transition-duration"],
+      "rules": [
+        {
+          "selector": ".transition-calm-fx",
+          "declarations": {
+            "--zbk-transition-timing-function": "var(--zbk-transition-calm-fx-function-default)",
+            "--zbk-transition-duration": "var(--zbk-transition-calm-fx-duration-default)"
+          },
+          "nested": [
+            {
+              "selector": "&.transition-slow",
+              "declarations": {
+                "--zbk-transition-timing-function": "var(--zbk-transition-calm-fx-function-slow)",
+                "--zbk-transition-duration": "var(--zbk-transition-calm-fx-duration-slow)"
+              }
+            },
+            {
+              "selector": "&.transition-fast",
+              "declarations": {
+                "--zbk-transition-timing-function": "var(--zbk-transition-calm-fx-function-fast)",
+                "--zbk-transition-duration": "var(--zbk-transition-calm-fx-duration-fast)"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "transition-property",
+      "description": "Restricts which CSS property the transition applies to.",
+      "source": "src/tokens/transition/styles.scss",
+      "properties": ["transition-property"],
+      "pattern": {
+        "base": "transition",
+        "values": ["all", "opacity", "transform", "color", "background", "background-color", "height", "width", "fill"]
+      }
+    }
+  ]
+}

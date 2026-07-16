@@ -1,18 +1,22 @@
 // Agent context generator (GRAMMAR.md §10): compiles the machine-readable
 // component contract — Custom Elements Manifest + token modules + variant
-// registry — into per-component markdown plus a combined llms.txt, served by
-// the docs site at /zebkit/context/.
+// registry + component manifests — into per-component markdown plus a
+// combined llms.txt, served by the docs site at /zebkit/context/.
 //
-// Every input is a tracked build artifact, never hand-written:
+// Inputs are tracked build artifacts plus the hand-authored manifests:
 //   - custom-elements.json                                  (build:cem)
 //   - docs/src/lib/data/generated/default-tokens.json       (build:defaults)
 //   - docs/static/zebkit/zbk-default-variants.json          (build:defaults)
+//   - src/components/*/zbk-*.manifest.json                  (hand-authored;
+//     the guidance layer: slots, usage, keyboard, examples — lint:components
+//     keeps them honest against the code)
 //
 // Run via `npm run build:context`; `npm run check` fails on drift.
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { globSync } from 'glob';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(repoRoot, 'docs', 'static', 'zebkit', 'context');
@@ -54,6 +58,38 @@ interface VariantEntry {
   overrides?: Record<string, string>;
 }
 
+interface ManifestSlot {
+  description: string;
+  required?: boolean;
+  presentational?: boolean;
+  tokens?: { size?: string; color?: string };
+  positions?: string[];
+  guidance?: string[];
+}
+
+interface ComponentManifest {
+  tag: string;
+  purpose: string;
+  nativeElement?: string;
+  useWhen?: string[];
+  notWhen?: { case: string; instead?: string }[];
+  guidance?: string[];
+  slots: Record<string, ManifestSlot>;
+  keyboard?: { keys: string; does: string }[];
+  examples: { title: string; html: string; tier?: string; why?: string }[];
+  variantTiers?: Record<string, string>;
+  related?: string[];
+}
+
+function loadManifests(): Map<string, ComponentManifest> {
+  const manifests = new Map<string, ComponentManifest>();
+  for (const file of globSync('src/components/*/zbk-*.manifest.json', { cwd: repoRoot }).sort()) {
+    const manifest = readJson<ComponentManifest>(file);
+    manifests.set(manifest.tag, manifest);
+  }
+  return manifests;
+}
+
 function readJson<T>(relPath: string): T {
   return JSON.parse(fs.readFileSync(path.join(repoRoot, relPath), 'utf8')) as T;
 }
@@ -77,7 +113,8 @@ function componentDeclarations(cem: {
 function renderComponent(
   decl: CemDeclaration,
   tokens: Record<string, TokenEntry> | undefined,
-  variants: VariantEntry[]
+  variants: VariantEntry[],
+  manifest: ComponentManifest | undefined
 ): string {
   const tag = decl.tagName!;
   const component = tag.replace(/^zbk-/, '');
@@ -85,8 +122,9 @@ function renderComponent(
 
   lines.push(`# <${tag}>`);
   lines.push('');
-  if (decl.description) {
-    lines.push(decl.description.trim());
+  const intro = decl.description?.trim() || manifest?.purpose;
+  if (intro) {
+    lines.push(intro);
     lines.push('');
   }
   lines.push(
@@ -96,6 +134,23 @@ function renderComponent(
       `\`focus()\` forwards to the internal focusable.`
   );
   lines.push('');
+
+  if (manifest?.useWhen?.length || manifest?.notWhen?.length) {
+    lines.push('## When to use');
+    lines.push('');
+    for (const entry of manifest.useWhen ?? []) lines.push(`- ${entry}`);
+    for (const entry of manifest.notWhen ?? []) {
+      lines.push(`- NOT ${entry.case}${entry.instead ? ` → ${entry.instead}` : ''}`);
+    }
+    lines.push('');
+  }
+
+  if (manifest?.guidance?.length) {
+    lines.push('## Guidance');
+    lines.push('');
+    for (const entry of manifest.guidance) lines.push(`- ${entry}`);
+    lines.push('');
+  }
 
   const attributes = decl.attributes ?? [];
   if (attributes.length > 0) {
@@ -113,18 +168,53 @@ function renderComponent(
     lines.push('');
   }
 
-  const slots = decl.slots ?? [];
-  if (slots.length > 0) {
+  if (manifest) {
+    lines.push('## Slots');
+    lines.push('');
+    lines.push('| Slot | Description | Notes |');
+    lines.push('|---|---|---|');
+    for (const [name, slot] of Object.entries(manifest.slots)) {
+      const notes: string[] = [];
+      if (slot.required) notes.push('required');
+      if (slot.presentational) notes.push('aria-hidden');
+      if (slot.tokens?.size) notes.push(`sized by \`${slot.tokens.size}\``);
+      if (slot.tokens?.color) notes.push(`colored by \`${slot.tokens.color}\``);
+      if (slot.positions?.length) notes.push(`data-position: ${slot.positions.join('\\|')}`);
+      lines.push(
+        `| ${name === 'default' ? '*(default)*' : `\`${name}\``} | ${cell(
+          slot.description
+        )} | ${cell(notes.join('; ')) || '—'} |`
+      );
+    }
+    lines.push('');
+    const slotGuidance = Object.entries(manifest.slots).flatMap(([name, slot]) =>
+      (slot.guidance ?? []).map((entry) => `- \`${name}\`: ${entry}`)
+    );
+    if (slotGuidance.length > 0) {
+      lines.push(...slotGuidance);
+      lines.push('');
+    }
+  } else if ((decl.slots ?? []).length > 0) {
+    // Pre-manifest fallback (zbk-heading) — CEM @slot annotations.
     lines.push('## Slots');
     lines.push('');
     lines.push('| Slot | Description |');
     lines.push('|---|---|');
-    for (const slot of slots) {
+    for (const slot of decl.slots ?? []) {
       lines.push(
         `| ${slot.name ? `\`${slot.name}\`` : '*(default)*'} | ${cell(
           slot.description
         )} |`
       );
+    }
+    lines.push('');
+  }
+
+  if (manifest?.keyboard?.length) {
+    lines.push('## Keyboard');
+    lines.push('');
+    for (const entry of manifest.keyboard) {
+      lines.push(`- \`${entry.keys}\` — ${cell(entry.does)}`);
     }
     lines.push('');
   }
@@ -142,6 +232,24 @@ function renderComponent(
     );
   }
   lines.push('');
+
+  if (manifest?.examples.length) {
+    lines.push('## Examples');
+    lines.push('');
+    for (const example of manifest.examples) {
+      const tier = example.tier && example.tier !== 'recommended' ? ` (${example.tier})` : '';
+      lines.push(`**${example.title}**${tier}`);
+      lines.push('');
+      lines.push('```html');
+      lines.push(example.html);
+      lines.push('```');
+      lines.push('');
+      if (example.why) {
+        lines.push(example.why);
+        lines.push('');
+      }
+    }
+  }
 
   const tokenEntries = Object.entries(tokens ?? {});
   if (tokenEntries.length > 0) {
@@ -178,8 +286,9 @@ function renderComponent(
       const overrides = Object.entries(variant.overrides ?? {})
         .map(([token, value]) => `${token}: ${value}`)
         .join('; ');
+      const tier = manifest?.variantTiers?.[variant.name];
       lines.push(
-        `| \`${variant.name}\` | ${cell(variant.axis) || '—'} | \`${
+        `| \`${variant.name}\`${tier ? ` (${tier})` : ''} | ${cell(variant.axis) || '—'} | \`${
           variant.className ?? `${tag}--${variant.name}`
         }\` | ${cell(variant.description)} | ${cell(overrides)} |`
       );
@@ -198,6 +307,11 @@ function renderComponent(
   );
   lines.push('');
 
+  if (manifest?.related?.length) {
+    lines.push(`Related: ${manifest.related.map((ref) => `\`<${ref}>\``).join(', ')}.`);
+    lines.push('');
+  }
+
   return lines.join('\n');
 }
 
@@ -214,6 +328,7 @@ function main(): void {
   const variants = Object.values(variantRegistry).flatMap((byName) =>
     Object.values(byName)
   );
+  const manifests = loadManifests();
 
   const declarations = componentDeclarations(cem);
   fs.mkdirSync(outDir, { recursive: true });
@@ -240,7 +355,7 @@ function main(): void {
   const written: string[] = [];
   for (const decl of declarations) {
     const tag = decl.tagName!;
-    const body = renderComponent(decl, tokenRegistry[tag], variants);
+    const body = renderComponent(decl, tokenRegistry[tag], variants, manifests.get(tag));
     const filePath = path.join(outDir, `${tag}.md`);
     fs.writeFileSync(filePath, `${stamp}\n\n${body}`);
     written.push(path.relative(repoRoot, filePath));

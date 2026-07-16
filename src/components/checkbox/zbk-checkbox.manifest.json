@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../schemas/component-manifest.schema.json",
+  "tag": "zbk-checkbox",
+  "purpose": "A binary (or mixed-state) choice: a light-DOM element wrapping a real <input type=\"checkbox\"> inside its own label, with an aria-hidden control span visualizing its state.",
+  "nativeElement": "input",
+  "useWhen": [
+    "An independent on/off choice submitted with a form ('I agree to the terms').",
+    "Selecting any number of items from a list — each checkbox stands alone.",
+    "A parent summarizing a group: `indeterminate` expresses 'some but not all'."
+  ],
+  "notWhen": [
+    {
+      "case": "Exactly one choice among mutually exclusive options.",
+      "instead": "zbk-radio"
+    },
+    {
+      "case": "The setting takes effect immediately, with no form submit.",
+      "instead": "zbk-toggle"
+    }
+  ],
+  "guidance": [
+    "`indeterminate` is visual and AT state only — it is never submitted, and any user toggle clears it (native behavior). Set it from the group's state, don't ask users to.",
+    "The invisible native input stretches across the whole label: hover, press, click, and focus land on it natively anywhere — never add click handlers to fake this."
+  ],
+  "slots": {
+    "default": {
+      "description": "The label content (the accessible name via the wrapping label).",
+      "required": true
+    },
+    "checked": {
+      "description": "Indicator content shown while checked; replaces the drawn checkmark. Any markup: svg, icon-font glyph, HTML character, image.",
+      "presentational": true,
+      "tokens": { "size": "indicator-size", "color": "indicator-color" },
+      "guidance": [
+        "The control is aria-hidden — the state is conveyed by the native input, so indicator content is purely visual."
+      ]
+    },
+    "unchecked": {
+      "description": "Indicator content shown while neither checked nor indeterminate.",
+      "presentational": true,
+      "tokens": { "size": "indicator-size", "color": "indicator-color" }
+    },
+    "indeterminate": {
+      "description": "Indicator content shown while indeterminate; replaces the drawn bar.",
+      "presentational": true,
+      "tokens": { "size": "indicator-size", "color": "indicator-color" },
+      "guidance": [
+        "Each state slot only affects its own state — a customized checkmark leaves the drawn indeterminate bar in place unless this slot is also filled."
+      ]
+    }
+  },
+  "keyboard": [
+    {
+      "keys": "Space",
+      "does": "Toggles checked (native input behavior, preserved)."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Basic",
+      "html": "<zbk-checkbox name=\"terms\" required>I agree to the terms</zbk-checkbox>"
+    },
+    {
+      "title": "Custom indicators",
+      "html": "<zbk-checkbox name=\"favorite\" checked>Add to favorites<span slot=\"checked\">★</span><span slot=\"unchecked\">☆</span></zbk-checkbox>",
+      "why": "Indicator content layers over the aria-hidden control, sized by indicator-size and colored by indicator-color; the drawn checkmark is replaced only for the states provided."
+    },
+    {
+      "title": "Indeterminate group parent",
+      "html": "<zbk-checkbox indeterminate>Select all</zbk-checkbox>",
+      "why": "Set indeterminate from the child checkboxes' mixed state; toggling the parent clears it natively."
+    },
+    {
+      "title": "Labelless checkbox",
+      "tier": "discouraged",
+      "html": "<zbk-checkbox name=\"row-1\"></zbk-checkbox>",
+      "why": "No accessible name. Even in dense table rows, give it label children (visually hidden if needed) or aria-label naming what it selects."
+    }
+  ],
+  "related": ["zbk-radio", "zbk-toggle"]
+}

@@ -33,6 +33,7 @@
 import { html, nothing, type PropertyDeclarations, type PropertyValues, type TemplateResult } from 'lit';
 import { ZebkitElement } from '../base/zebkit-element';
 import { radioVariants } from './variants/index';
+import { slotContract } from './slot-contract';
 
 /**
  * The zebkit radio: a light-DOM element wrapping a real
@@ -40,14 +41,11 @@ import { radioVariants } from './variants/index';
  * form a native group — mutual exclusion, arrow-key navigation, and form
  * submission come from the platform. No custom events — the native `change`
  * bubbles from the newly selected input.
- *
- * @slot - The label content (the accessible name via the wrapping label).
- * @slot checked - Indicator content shown while selected; replaces the drawn dot. Presentational (the control is aria-hidden).
- * @slot unchecked - Indicator content shown while not selected.
  */
 export class ZbkRadio extends ZebkitElement {
   static componentName = 'radio';
   static variantConfigs = radioVariants;
+  static slotContract = slotContract;
 
   static properties: PropertyDeclarations = {
     checked: { type: Boolean },
@@ -153,11 +151,6 @@ export class ZbkRadio extends ZebkitElement {
     if (!this.name) {
       this.warn(
         'No name. Radios only behave as one group when they share a name; set the same name attribute on every radio in the group.'
-      );
-    }
-    if (!this.hasAccessibleName()) {
-      this.warn(
-        'No accessible name. Provide label text as children, or aria-label / aria-labelledby.'
       );
     }
   }

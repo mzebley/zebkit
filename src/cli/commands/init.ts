@@ -2,7 +2,11 @@ import path from 'path';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { getZebkitDefaultsDir, getZebkitPackageRoot } from '../resolve-package-root.js';
+import {
+  getZebkitContextDir,
+  getZebkitDefaultsDir,
+  getZebkitPackageRoot,
+} from '../resolve-package-root.js';
 import { handlePromptCancel, isPromptCancelError } from '../prompt-cancel.js';
 import type { ZebkitConfig } from '../../scripts/config.js';
 import {
@@ -32,9 +36,12 @@ export async function init(options: { quick?: boolean } = {}) {
       }
     },
     ensureDir: fs.ensureDir,
+    readdir: fs.readdir,
+    copyFile: fs.copyFile,
     prompt: inquirer.prompt,
     getZebkitPackageRoot,
     getZebkitDefaultsDir,
+    getZebkitContextDir,
     getBuiltInThemeNames,
     getThemePromptChoices,
     getKnownComponents,

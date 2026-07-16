@@ -11,6 +11,18 @@ carries an intentional token surface. No custom events — the native
 
 Base class: `.zbk-toggle`. Variant classes: `.zbk-toggle--{variant}`. Tokens: `--zbk-toggle-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- A setting applies the moment it changes, with no form submit (notifications on/off, dark mode).
+- The state reads as on/off rather than selected/unselected — screen readers announce it as a switch.
+- NOT The choice is collected and submitted with a form. → zbk-checkbox
+- NOT Exactly one choice among mutually exclusive options. → zbk-radio
+
+## Guidance
+
+- A toggle promises immediacy: flipping it must apply the change right away. If the change only lands on submit, that promise is broken — use zbk-checkbox.
+- Deliberately separate from zbk-checkbox so each carries an intentional token surface; there is no mixed/indeterminate state on a switch.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -20,17 +32,39 @@ Base class: `.zbk-toggle`. Variant classes: `.zbk-toggle--{variant}`. Tokens: `-
 | `required` | `boolean` | `false` | Forwarded for native constraint validation. |
 | `name` | `string \| undefined` | — | Forwarded to the internal input for native form participation. |
 | `value` | `string` | `'on'` | The submitted value; defaults to the platform's "on". |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The label content (the accessible name via the wrapping label). |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The label content (the accessible name via the wrapping label). | required |
+
+- `default`: Label the setting, not the current state — "Email notifications", never "On".
+
+## Keyboard
+
+- `Space` — Flips the switch (native input behavior, preserved).
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-toggle name="notifications" checked>Email notifications</zbk-toggle>
+```
+
+**State as label** (discouraged)
+
+```html
+<zbk-toggle checked>On</zbk-toggle>
+```
+
+The switch role already announces on/off; a state word as the label reads as "On, switch, on" and goes stale the moment it flips. Name the setting instead.
 
 ## Tokens (CSS custom properties)
 
@@ -111,3 +145,5 @@ A variant is a named, partial remapping of the token surface compiled to a class
 | `lg` | size | `zbk-toggle--lg` | Larger track and label type; thumb follows the track. | track-width: {spacing.xl}; track-height: {spacing.lg}; font-size: {font-size.lg} |
 
 Custom variants: add a `zbk-toggle.variants.json` file to the base theme's token folder (component-keyed map of `{ "toggle": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-toggle--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
+
+Related: `<zbk-checkbox>`, `<zbk-radio>`.

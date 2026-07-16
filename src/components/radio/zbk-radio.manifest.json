@@ -1,0 +1,80 @@
+{
+  "$schema": "../../../schemas/component-manifest.schema.json",
+  "tag": "zbk-radio",
+  "purpose": "One option in a mutually exclusive group: a light-DOM element wrapping a real <input type=\"radio\"> inside its own label. Radios sharing a name form a native group — mutual exclusion, arrow-key navigation, and form submission come from the platform.",
+  "nativeElement": "input",
+  "useWhen": [
+    "Exactly one choice among a small set of mutually exclusive options, all visible at once.",
+    "The choice is submitted with a form rather than taking effect immediately."
+  ],
+  "notWhen": [
+    {
+      "case": "An independent on/off choice.",
+      "instead": "zbk-checkbox"
+    },
+    {
+      "case": "The setting takes effect immediately, with no form submit.",
+      "instead": "zbk-toggle"
+    },
+    {
+      "case": "The option list is long or space is constrained.",
+      "instead": "zbk-select"
+    }
+  ],
+  "guidance": [
+    "Radios only behave as one group when they share a `name` — the group, not each radio, is the single form control.",
+    "A group should have a group label (a <fieldset>/<legend> or aria-labelledby on a wrapping group) in addition to each radio's own label."
+  ],
+  "slots": {
+    "default": {
+      "description": "The label content (the accessible name via the wrapping label).",
+      "required": true
+    },
+    "checked": {
+      "description": "Indicator content shown while selected; replaces the drawn dot. Any markup: svg, icon-font glyph, HTML character, image.",
+      "presentational": true,
+      "tokens": { "size": "indicator-size", "color": "indicator-color" },
+      "guidance": [
+        "The control is aria-hidden — the state is conveyed by the native input, so indicator content is purely visual."
+      ]
+    },
+    "unchecked": {
+      "description": "Indicator content shown while not selected.",
+      "presentational": true,
+      "tokens": { "size": "indicator-size", "color": "indicator-color" }
+    }
+  },
+  "keyboard": [
+    {
+      "keys": "ArrowDown / ArrowRight, ArrowUp / ArrowLeft",
+      "does": "Moves the group's selection to the next / previous radio (native behavior, preserved)."
+    },
+    {
+      "keys": "Space",
+      "does": "Selects the focused radio (native)."
+    },
+    {
+      "keys": "Tab",
+      "does": "The group is a single tab stop; focus lands on the selected radio (native)."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Basic group",
+      "html": "<zbk-radio name=\"plan\" value=\"monthly\" checked>Monthly</zbk-radio><zbk-radio name=\"plan\" value=\"annual\">Annual</zbk-radio>",
+      "why": "The shared name is what makes them one control; checked marks the group's current selection."
+    },
+    {
+      "title": "Custom indicator",
+      "html": "<zbk-radio name=\"mood\" value=\"good\"><span slot=\"checked\">●</span>Good</zbk-radio>",
+      "why": "Indicator content layers over the aria-hidden control, sized by indicator-size and colored by indicator-color."
+    },
+    {
+      "title": "Lone radio",
+      "tier": "discouraged",
+      "html": "<zbk-radio name=\"agree\">I agree</zbk-radio>",
+      "why": "A radio without group siblings can never be unchecked once selected — an on/off choice is zbk-checkbox."
+    }
+  ],
+  "related": ["zbk-checkbox", "zbk-toggle", "zbk-select"]
+}

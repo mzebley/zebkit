@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../schemas/component-manifest.schema.json",
+  "tag": "zbk-toggle",
+  "purpose": "An on/off switch that takes effect immediately: a light-DOM element wrapping a real <input type=\"checkbox\" role=\"switch\"> inside its own label — the APG switch pattern on a fully native input, drawn as a track with a traveling thumb.",
+  "nativeElement": "input",
+  "useWhen": [
+    "A setting applies the moment it changes, with no form submit (notifications on/off, dark mode).",
+    "The state reads as on/off rather than selected/unselected — screen readers announce it as a switch."
+  ],
+  "notWhen": [
+    {
+      "case": "The choice is collected and submitted with a form.",
+      "instead": "zbk-checkbox"
+    },
+    {
+      "case": "Exactly one choice among mutually exclusive options.",
+      "instead": "zbk-radio"
+    }
+  ],
+  "guidance": [
+    "A toggle promises immediacy: flipping it must apply the change right away. If the change only lands on submit, that promise is broken — use zbk-checkbox.",
+    "Deliberately separate from zbk-checkbox so each carries an intentional token surface; there is no mixed/indeterminate state on a switch."
+  ],
+  "slots": {
+    "default": {
+      "description": "The label content (the accessible name via the wrapping label).",
+      "required": true,
+      "guidance": [
+        "Label the setting, not the current state — \"Email notifications\", never \"On\"."
+      ]
+    }
+  },
+  "keyboard": [
+    {
+      "keys": "Space",
+      "does": "Flips the switch (native input behavior, preserved)."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Basic",
+      "html": "<zbk-toggle name=\"notifications\" checked>Email notifications</zbk-toggle>"
+    },
+    {
+      "title": "State as label",
+      "tier": "discouraged",
+      "html": "<zbk-toggle checked>On</zbk-toggle>",
+      "why": "The switch role already announces on/off; a state word as the label reads as \"On, switch, on\" and goes stale the moment it flips. Name the setting instead."
+    }
+  ],
+  "related": ["zbk-checkbox", "zbk-radio"]
+}

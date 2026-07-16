@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../schemas/utility-manifest.schema.json",
+  "name": "Z-index utilities",
+  "key": "z-index",
+  "description": "Stacking-order utilities bound to the z-index token scale: a numeric ladder plus semantic layers (dropdown, sticky, fixed, modal, popover, tooltip). Not responsive — stacking order is a structural decision, not a breakpoint one.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "z",
+      "description": "Sets the stacking order (z-index) from the numeric ladder, the auto keyword, or a semantic layer.",
+      "guidance": [
+        "Prefer the semantic layers (z-dropdown, z-modal, z-tooltip, ...) over raw numbers so overlapping surfaces stay coordinated system-wide.",
+        "z-index only affects positioned elements (position other than static)."
+      ],
+      "source": "src/tokens/z-index/styles.scss",
+      "properties": ["z-index"],
+      "tokens": {
+        "group": "z-index",
+        "varPrefix": "z-index"
+      },
+      "pattern": {
+        "base": "z",
+        "values": [
+          "auto",
+          "0",
+          "10",
+          "20",
+          "30",
+          "40",
+          "50",
+          "60",
+          "70",
+          "80",
+          "90",
+          "100",
+          "dropdown",
+          "sticky",
+          "fixed",
+          "modal-backdrop",
+          "modal",
+          "popover",
+          "tooltip"
+        ]
+      }
+    }
+  ]
+}

@@ -29,6 +29,7 @@
 import { html, nothing, type PropertyDeclarations, type PropertyValues, type TemplateResult } from 'lit';
 import { ZebkitElement } from '../base/zebkit-element';
 import { checkboxVariants } from './variants/index';
+import { slotContract } from './slot-contract';
 
 /**
  * The zebkit checkbox: a light-DOM element wrapping a real
@@ -36,15 +37,11 @@ import { checkboxVariants } from './variants/index';
  * input stretches across the whole label (hover, press, click, and focus land
  * on it natively anywhere); an aria-hidden control span visualizes its state.
  * No custom events — the native `change`/`input` bubble.
- *
- * @slot - The label content (the accessible name via the wrapping label).
- * @slot checked - Indicator content shown while checked; replaces the drawn checkmark. Presentational (the control is aria-hidden).
- * @slot unchecked - Indicator content shown while neither checked nor indeterminate.
- * @slot indeterminate - Indicator content shown while indeterminate; replaces the drawn bar.
  */
 export class ZbkCheckbox extends ZebkitElement {
   static componentName = 'checkbox';
   static variantConfigs = checkboxVariants;
+  static slotContract = slotContract;
 
   static properties: PropertyDeclarations = {
     checked: { type: Boolean },
@@ -146,14 +143,6 @@ export class ZbkCheckbox extends ZebkitElement {
     return super.hasAccessibleName();
   }
 
-  protected firstUpdated(changed: PropertyValues): void {
-    super.firstUpdated(changed);
-    if (!this.hasAccessibleName()) {
-      this.warn(
-        'No accessible name. Provide label text as children, or aria-label / aria-labelledby.'
-      );
-    }
-  }
 }
 
 /** Register <zbk-checkbox> (idempotent). */

@@ -220,4 +220,37 @@ describe('build smoke tests', () => {
       await fs.remove(tmpDir);
     }
   });
+
+  it('delivers the agent context through the bundled CLI pull', async () => {
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-context-pull-'));
+    const configPath = path.join(tmpDir, 'zebkit.config.json');
+
+    // Simulates what `zebkit init` records; pull refreshes this directory.
+    await fs.writeJson(
+      configPath,
+      { context: { path: './zebkit/context' }, components: { checkbox: false } },
+      { spaces: 2 }
+    );
+
+    try {
+      // build:cli copies docs/static/zebkit/context -> dist/cli/context and bundles the CLI.
+      await execFileAsync('npm', ['run', 'build:cli'], {
+        cwd: PROJECT_ROOT,
+        env: { ...process.env, CI: 'true', FORCE_COLOR: '0' },
+      });
+
+      await execFileAsync('node', [path.join(PROJECT_ROOT, 'dist/cli/zebkit.mjs'), 'pull'], {
+        cwd: tmpDir,
+        env: { ...process.env, CI: 'true', FORCE_COLOR: '0' },
+      });
+
+      const contextDir = path.join(tmpDir, 'zebkit', 'context');
+      expect(await fs.pathExists(path.join(contextDir, 'llms.txt'))).toBe(true);
+      expect(await fs.pathExists(path.join(contextDir, 'zbk-button.md'))).toBe(true);
+      // Excluded component's per-component doc is skipped.
+      expect(await fs.pathExists(path.join(contextDir, 'zbk-checkbox.md'))).toBe(false);
+    } finally {
+      await fs.remove(tmpDir);
+    }
+  });
 });

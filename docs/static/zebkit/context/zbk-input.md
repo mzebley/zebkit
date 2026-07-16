@@ -10,6 +10,21 @@ formats the value as the user types. No custom events — the native
 
 Base class: `.zbk-input`. Variant classes: `.zbk-input--{variant}`. Tokens: `--zbk-input-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- The value is a single line of free text: names, emails, search terms, URLs.
+- The value has a fixed printed format (phone, date, code) — use `mask` so the field formats as the user types.
+- The value is numeric but still text-shaped (amounts, quantities) — pair `inputmode` with the right `type`.
+- NOT Input is prose-length or multi-line. → zbk-textarea
+- NOT The user picks from a fixed set of options. → zbk-select
+- NOT The value is a boolean on/off choice. → zbk-checkbox
+
+## Guidance
+
+- A placeholder is never a substitute for label content — the accessible name comes from the default children or an aria-label.
+- With a mask, `value` is always the masked form (and what submits); read `rawValue` for the value with literals stripped.
+- For checkboxes, radios, and buttons use their own zebkit components, not `type`.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -31,19 +46,59 @@ Base class: `.zbk-input`. Variant classes: `.zbk-input--{variant}`. Tokens: `--z
 | `max` | `string \| undefined` | — |  |
 | `step` | `string \| undefined` | — |  |
 | `pattern` | `string \| undefined` | — |  |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The visible label content (the accessible name via the wrapping label). |
-| `prefix` | Affix content at the field's inline start (aria-hidden, presentational). |
-| `suffix` | Affix content at the field's inline end (aria-hidden, presentational). |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The visible label content (the accessible name via the wrapping label). | required |
+| `prefix` | Affix content at the field's inline start — any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `icon-size`; colored by `affix-ink` |
+| `suffix` | Affix content at the field's inline end — any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `icon-size`; colored by `affix-ink` |
+
+- `default`: Omit only when aria-label supplies the accessible name; the field must never be nameless.
+- `prefix`: Affixes are aria-hidden: information an affix carries must also live in the field's accessible name or description.
+- `suffix`: Affixes are aria-hidden: information an affix carries must also live in the field's accessible name or description.
+
+## Keyboard
+
+- `Enter` — Submits the owning form (native behavior, preserved).
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-input name="email" type="email" autocomplete="email" required>Email</zbk-input>
+```
+
+**Masked phone number**
+
+```html
+<zbk-input name="phone" type="tel" mask="(###) ###-####" autocomplete="tel">Phone</zbk-input>
+```
+
+The all-digit mask defaults inputmode to numeric; the masked form is the submitted value.
+
+**Currency prefix**
+
+```html
+<zbk-input name="price" inputmode="decimal">Price (USD)<span slot="prefix">$</span></zbk-input>
+```
+
+The affix is aria-hidden, so the label carries the currency — never let the prefix be the only place the unit appears.
+
+**Placeholder as label** (discouraged)
+
+```html
+<zbk-input name="q" placeholder="Search"></zbk-input>
+```
+
+No accessible name: placeholders vanish on entry and are not announced as the name. Give it label children or aria-label.
 
 ## Tokens (CSS custom properties)
 
@@ -125,3 +180,5 @@ A variant is a named, partial remapping of the token surface compiled to a class
 | `lg` | size | `zbk-input--lg` | Larger type and padding. | font-size: {font-size.lg}; label-font-size: {font-size.md}; padding-inline: {spacing.md}; padding-block: {spacing.xs} |
 
 Custom variants: add a `zbk-input.variants.json` file to the base theme's token folder (component-keyed map of `{ "input": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-input--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
+
+Related: `<zbk-textarea>`, `<zbk-select>`.

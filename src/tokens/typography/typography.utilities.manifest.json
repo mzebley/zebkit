@@ -1,0 +1,226 @@
+{
+  "$schema": "../../../schemas/utility-manifest.schema.json",
+  "name": "Typography utilities",
+  "key": "typography",
+  "description": "Type utilities: alignment, transform, decoration, whitespace/wrap keywords, plus token-bound font-family, font-size, line-height, font-weight, letter-spacing (tracking), measure, and line-clamp. Text-overflow, word-break, overflow-wrap and hyphens live in the text manifest.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "text-align",
+      "description": "Sets the horizontal alignment of inline content.",
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["text-align"],
+      "classes": ["text-left", "text-right", "text-center", "text-justify"],
+      "generator": {
+        "declarations": {
+          "text-left": { "text-align": "left" },
+          "text-right": { "text-align": "right" },
+          "text-center": { "text-align": "center" },
+          "text-justify": { "text-align": "justify" }
+        }
+      }
+    },
+    {
+      "name": "text-truncate",
+      "description": "Truncates overflowing single-line text with an ellipsis (shorthand for overflow, text-overflow and white-space).",
+      "guidance": ["Only truncates a single line. For multi-line clamping use line-clamp-*.", "The element must be block/inline-block with a constrained width for truncation to take effect."],
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["overflow", "text-overflow", "white-space"],
+      "classes": ["text-truncate"],
+      "generator": {
+        "declarations": {
+          "text-truncate": { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+        }
+      }
+    },
+    {
+      "name": "text-wrap-keyword",
+      "description": "Keyword shorthands for text-wrap (wrap / nowrap). The text-wrap-<mode> scale lives in the text manifest.",
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["text-wrap"],
+      "classes": ["text-wrap", "text-nowrap", "text-wrap-none"],
+      "generator": {
+        "declarations": {
+          "text-wrap": { "text-wrap": "wrap" },
+          "text-nowrap": { "text-wrap": "nowrap" },
+          "text-wrap-none": { "text-wrap": "nowrap" }
+        }
+      }
+    },
+    {
+      "name": "text-transform",
+      "description": "Controls capitalization of text.",
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["text-transform"],
+      "classes": ["text-uppercase", "text-lowercase", "text-capitalize", "text-normal-case"],
+      "generator": {
+        "declarations": {
+          "text-uppercase": { "text-transform": "uppercase" },
+          "text-lowercase": { "text-transform": "lowercase" },
+          "text-capitalize": { "text-transform": "capitalize" },
+          "text-normal-case": { "text-transform": "none" }
+        }
+      }
+    },
+    {
+      "name": "whitespace",
+      "description": "Controls how whitespace and line breaks inside an element are handled.",
+      "guidance": ["Use whitespace-pre or whitespace-pre-line to preserve authored line breaks (e.g. code, addresses)."],
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["white-space"],
+      "classes": ["whitespace-normal", "whitespace-nowrap", "whitespace-pre", "whitespace-pre-line", "whitespace-break-spaces"],
+      "generator": {
+        "declarations": {
+          "whitespace-normal": { "white-space": "normal" },
+          "whitespace-nowrap": { "white-space": "nowrap" },
+          "whitespace-pre": { "white-space": "pre" },
+          "whitespace-pre-line": { "white-space": "pre-line" },
+          "whitespace-break-spaces": { "white-space": "break-spaces" }
+        }
+      }
+    },
+    {
+      "name": "text-decoration",
+      "description": "Sets the line decoration of text. text-no-underline and text-underline-none are aliases for removing an underline.",
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["text-decoration-line"],
+      "classes": ["text-underline", "text-overline", "text-line-through", "text-no-underline", "text-underline-none"],
+      "generator": {
+        "declarations": {
+          "text-underline": { "text-decoration-line": "underline" },
+          "text-overline": { "text-decoration-line": "overline" },
+          "text-line-through": { "text-decoration-line": "line-through" },
+          "text-no-underline": { "text-decoration-line": "none" },
+          "text-underline-none": { "text-decoration-line": "none" }
+        }
+      }
+    },
+    {
+      "name": "font-family",
+      "description": "Sets the font family from the named font tokens.",
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["font-family"],
+      "tokens": { "group": "font-family", "varPrefix": "font-family" },
+      "pattern": {
+        "base": "font",
+        "values": ["primary", "alt", "monospace", "interface", "heading", "body", "code"]
+      }
+    },
+    {
+      "name": "font-size",
+      "description": "Sets the font size from the type scale. text-<size> is an alias of font-<size>.",
+      "guidance": ["Prefer the semantic type scale (sm, md, lg, ...) over fixed pixel sizes so text rescales with the a11y font-size dial."],
+      "a11y": "Font sizes are token-bound and rescale with the end-user font-size dial; never hard-code px font sizes.",
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["font-size"],
+      "tokens": { "group": "font-size", "varPrefix": "font-size" },
+      "pattern": {
+        "base": "font",
+        "values": ["3xs", "2xs", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl"],
+        "aliases": {
+          "text-3xs": "font-3xs",
+          "text-2xs": "font-2xs",
+          "text-xs": "font-xs",
+          "text-sm": "font-sm",
+          "text-md": "font-md",
+          "text-lg": "font-lg",
+          "text-xl": "font-xl",
+          "text-2xl": "font-2xl",
+          "text-3xl": "font-3xl",
+          "text-4xl": "font-4xl",
+          "text-5xl": "font-5xl"
+        }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "line-height",
+      "description": "Sets the line height from the line-height scale (line-height-0 collapses to 0).",
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["line-height"],
+      "tokens": { "group": "line-height", "varPrefix": "line-height" },
+      "pattern": {
+        "base": "line-height",
+        "values": ["1", "2", "3", "4", "5"],
+        "literals": { "0": "0" }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "font-weight",
+      "description": "Sets the font weight from the weight tokens. text-<weight> is an alias of font-weight-<weight>.",
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["font-weight"],
+      "tokens": { "group": "font-weight", "varPrefix": "font-weight" },
+      "pattern": {
+        "base": "font-weight",
+        "values": ["thin", "extralight", "light", "normal", "medium", "semibold", "bold", "extrabold", "black"],
+        "aliases": {
+          "text-thin": "font-weight-thin",
+          "text-extralight": "font-weight-extralight",
+          "text-light": "font-weight-light",
+          "text-normal": "font-weight-normal",
+          "text-medium": "font-weight-medium",
+          "text-semibold": "font-weight-semibold",
+          "text-bold": "font-weight-bold",
+          "text-extrabold": "font-weight-extrabold",
+          "text-black": "font-weight-black"
+        }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "tracking",
+      "description": "Sets letter-spacing (tracking) from the tracking tokens. tracking-<value> is an alias of letter-spacing-<value>.",
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["letter-spacing"],
+      "tokens": { "group": "letter-spacing", "varPrefix": "letter-spacing" },
+      "pattern": {
+        "base": "letter-spacing",
+        "values": ["tighter", "tight", "normal", "wide", "wider"],
+        "aliases": {
+          "tracking-tighter": "letter-spacing-tighter",
+          "tracking-tight": "letter-spacing-tight",
+          "tracking-normal": "letter-spacing-normal",
+          "tracking-wide": "letter-spacing-wide",
+          "tracking-wider": "letter-spacing-wider"
+        }
+      }
+    },
+    {
+      "name": "measure",
+      "description": "Constrains text line length (max-width) from the measure scale for readability (measure-0 removes the constraint).",
+      "guidance": ["Body copy reads best at roughly 45-75 characters per line; use the measure scale rather than a fixed width."],
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["max-width"],
+      "tokens": { "group": "text-measure", "varPrefix": "text-measure" },
+      "pattern": {
+        "base": "measure",
+        "values": ["1", "2", "3", "4", "5"],
+        "literals": { "0": "none" }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "line-clamp",
+      "description": "Clamps text to a fixed number of lines with an ellipsis (line-clamp-unset removes the clamp).",
+      "guidance": ["Clamping hides overflowing text visually; ensure the full text remains available (e.g. as a title/expand affordance) so no information is lost."],
+      "source": "src/tokens/typography/styles.scss",
+      "properties": ["overflow", "display", "-webkit-box-orient", "-webkit-line-clamp"],
+      "classes": ["line-clamp-unset", "line-clamp-1", "line-clamp-2", "line-clamp-3", "line-clamp-4", "line-clamp-5", "line-clamp-10", "line-clamp-15"],
+      "generator": {
+        "declarations": {
+          "line-clamp-unset": { "overflow": "visible", "display": "block", "-webkit-box-orient": "horizontal", "-webkit-line-clamp": "unset" },
+          "line-clamp-1": { "overflow": "hidden", "display": "-webkit-box", "-webkit-box-orient": "vertical", "-webkit-line-clamp": "1" },
+          "line-clamp-2": { "overflow": "hidden", "display": "-webkit-box", "-webkit-box-orient": "vertical", "-webkit-line-clamp": "2" },
+          "line-clamp-3": { "overflow": "hidden", "display": "-webkit-box", "-webkit-box-orient": "vertical", "-webkit-line-clamp": "3" },
+          "line-clamp-4": { "overflow": "hidden", "display": "-webkit-box", "-webkit-box-orient": "vertical", "-webkit-line-clamp": "4" },
+          "line-clamp-5": { "overflow": "hidden", "display": "-webkit-box", "-webkit-box-orient": "vertical", "-webkit-line-clamp": "5" },
+          "line-clamp-10": { "overflow": "hidden", "display": "-webkit-box", "-webkit-box-orient": "vertical", "-webkit-line-clamp": "10" },
+          "line-clamp-15": { "overflow": "hidden", "display": "-webkit-box", "-webkit-box-orient": "vertical", "-webkit-line-clamp": "15" }
+        }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    }
+  ]
+}

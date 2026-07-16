@@ -5,6 +5,7 @@ import { ZbkCheckbox, defineZbkCheckbox } from "./checkbox";
 import { ZbkRadio, defineZbkRadio } from "./radio";
 import { ZbkToggle, defineZbkToggle } from "./toggle";
 import { ZbkInput, defineZbkInput } from "./input";
+import { ZbkTextarea, defineZbkTextarea } from "./textarea";
 import { ZbkSelect, defineZbkSelect } from "./select";
 import { ZbkHeading, defineZbkHeading } from "./heading";
 import { ZebkitElement } from "./base/zebkit-element";
@@ -26,6 +27,8 @@ export {
   defineZbkToggle,
   ZbkInput,
   defineZbkInput,
+  ZbkTextarea,
+  defineZbkTextarea,
   ZbkSelect,
   defineZbkSelect,
   ZbkHeading,
@@ -40,6 +43,7 @@ export const defineZebkitComponents = () => {
   defineZbkRadio();
   defineZbkToggle();
   defineZbkInput();
+  defineZbkTextarea();
   defineZbkSelect();
   defineZbkHeading();
 };

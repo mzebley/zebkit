@@ -1,5 +1,1 @@
-@use 'tokens/styles/mixins/color' as color-utils;
 
-@layer utilities {
-  @include color-utils.generate-semantic-color-utilities(('caution'));
-}

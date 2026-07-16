@@ -41,6 +41,7 @@ import {
 } from '@floating-ui/dom';
 import { ZebkitElement } from '../base/zebkit-element';
 import { announce } from '../base/announce';
+import { slotContract } from './slot-contract';
 
 export type ZbkTooltipMode = 'hint' | 'toggle';
 
@@ -70,11 +71,18 @@ function matchesFocusVisible(el: Element): boolean {
  * behavior on, announcing content through the shared live region. Positioning
  * uses floating-ui with `popover="manual"` top-layer promotion where
  * supported. No custom events.
- *
- * @slot - The trigger element the tooltip describes (a focusable control).
  */
 export class ZbkTooltip extends ZebkitElement {
   static componentName = 'tooltip';
+  static slotContract = slotContract;
+
+  /**
+   * The required default content is the trigger, not an accessible name —
+   * wireTrigger() warns with trigger semantics instead.
+   */
+  protected accessibleNameWarning(): null {
+    return null;
+  }
 
   static properties: PropertyDeclarations = {
     content: { type: String },

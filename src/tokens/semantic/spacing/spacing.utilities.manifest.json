@@ -1,0 +1,59 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Page and section spacing utilities",
+  "key": "page-section-spacing",
+  "description": "Semantic spacing utilities: page gutters (page-padding-*) and section rhythm (section-margin-*), each bound to its dedicated spacing token so page-wide gutters and section spacing stay coordinated.",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "page-padding",
+      "description": "Applies the page gutter padding on the chosen edge(s), from the page-padding spacing tokens.",
+      "guidance": ["Use for the outer page/container gutter so every page shares one gutter width; don't hard-code a padding value for page edges."],
+      "source": "src/tokens/semantic/spacing/styles.scss",
+      "properties": ["padding-block", "padding-block-start", "padding-block-end", "padding-inline", "padding-inline-start", "padding-inline-end"],
+      "classes": [
+        "page-padding-block",
+        "page-padding-block-start",
+        "page-padding-block-end",
+        "page-padding-inline",
+        "page-padding-inline-start",
+        "page-padding-inline-end"
+      ],
+      "generator": {
+        "declarations": {
+          "page-padding-block": { "padding-block": "var(--zbk-spacing-page-padding-block)" },
+          "page-padding-block-start": { "padding-block-start": "var(--zbk-spacing-page-padding-block)" },
+          "page-padding-block-end": { "padding-block-end": "var(--zbk-spacing-page-padding-block)" },
+          "page-padding-inline": { "padding-inline": "var(--zbk-spacing-page-padding-inline)" },
+          "page-padding-inline-start": { "padding-inline-start": "var(--zbk-spacing-page-padding-inline)" },
+          "page-padding-inline-end": { "padding-inline-end": "var(--zbk-spacing-page-padding-inline)" }
+        }
+      }
+    },
+    {
+      "name": "section-margin",
+      "description": "Applies the section rhythm margin on the chosen edge(s), from the section-margin spacing tokens.",
+      "guidance": ["Use to separate major page sections so vertical rhythm stays consistent; prefer this over ad-hoc margins between sections."],
+      "source": "src/tokens/semantic/spacing/styles.scss",
+      "properties": ["margin-block", "margin-block-start", "margin-block-end", "margin-inline", "margin-inline-start", "margin-inline-end"],
+      "classes": [
+        "section-margin-block",
+        "section-margin-block-start",
+        "section-margin-block-end",
+        "section-margin-inline",
+        "section-margin-inline-start",
+        "section-margin-inline-end"
+      ],
+      "generator": {
+        "declarations": {
+          "section-margin-block": { "margin-block": "var(--zbk-spacing-section-margin-block)" },
+          "section-margin-block-start": { "margin-block-start": "var(--zbk-spacing-section-margin-block)" },
+          "section-margin-block-end": { "margin-block-end": "var(--zbk-spacing-section-margin-block)" },
+          "section-margin-inline": { "margin-inline": "var(--zbk-spacing-section-margin-inline)" },
+          "section-margin-inline-start": { "margin-inline-start": "var(--zbk-spacing-section-margin-inline)" },
+          "section-margin-inline-end": { "margin-inline-end": "var(--zbk-spacing-section-margin-inline)" }
+        }
+      }
+    }
+  ]
+}

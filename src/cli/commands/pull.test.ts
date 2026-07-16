@@ -12,8 +12,11 @@ describe('pull command', () => {
   const mockWriteJson = jest.fn();
   const mockEnsureDir = jest.fn();
   const mockReadConfig = jest.fn();
+  const mockReaddir = jest.fn();
+  const mockCopyFile = jest.fn();
   const mockGetZebkitDefaultsDir = jest.fn(() => '/pkg/dist/cli/defaults');
   const mockGetZebkitPackageRoot = jest.fn(() => '/pkg');
+  const mockGetZebkitContextDir = jest.fn(() => '/pkg/dist/cli/context');
   // Mirrors the real resolver: default -> defaults dir, presets -> bundled preset dir.
   const mockResolveBundledThemeTokensDir = jest.fn(
     (themeName: string, defaultsDir: string, packageRoot: string) =>
@@ -29,9 +32,12 @@ describe('pull command', () => {
     readJsonSafe: mockReadJsonSafe as PullCommandDeps['readJsonSafe'],
     writeJson: mockWriteJson as PullCommandDeps['writeJson'],
     ensureDir: mockEnsureDir as PullCommandDeps['ensureDir'],
+    readdir: mockReaddir as PullCommandDeps['readdir'],
+    copyFile: mockCopyFile as PullCommandDeps['copyFile'],
     readConfig: mockReadConfig as PullCommandDeps['readConfig'],
     getZebkitDefaultsDir: mockGetZebkitDefaultsDir,
     getZebkitPackageRoot: mockGetZebkitPackageRoot,
+    getZebkitContextDir: mockGetZebkitContextDir,
     resolveBundledThemeTokensDir: mockResolveBundledThemeTokensDir,
     log: mockLog,
   });
@@ -43,6 +49,7 @@ describe('pull command', () => {
       path: '/workspace/project/zebkit.config.json',
     });
     mockGetZebkitDefaultsDir.mockReturnValue('/pkg/dist/cli/defaults');
+    mockGetZebkitContextDir.mockReturnValue('/pkg/dist/cli/context');
   });
 
   it('writes VS Code settings after syncing new token files', async () => {
@@ -262,5 +269,51 @@ describe('pull command', () => {
 
     expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('No tokenPath set in config'));
     expect(mockWriteJson).not.toHaveBeenCalled();
+  });
+
+  it('refreshes agent context when context.path is set, honoring excluded components', async () => {
+    mockReadConfig.mockResolvedValue({
+      config: {
+        context: { path: './zebkit/context' },
+        components: { checkbox: false },
+      },
+      path: '/workspace/project/zebkit.config.json',
+    });
+    mockPathExists.mockImplementation(async (target: string) => target === '/pkg/dist/cli/context');
+    mockReaddir.mockResolvedValue([
+      'llms.txt',
+      'zbk-button.md',
+      'zbk-checkbox.md',
+    ]);
+
+    await runPullCommand(createDeps());
+
+    // llms.txt + button copied; excluded checkbox skipped.
+    expect(mockEnsureDir).toHaveBeenCalledWith('/workspace/project/zebkit/context');
+    expect(mockCopyFile).toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/llms.txt',
+      '/workspace/project/zebkit/context/llms.txt'
+    );
+    expect(mockCopyFile).toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/zbk-button.md',
+      '/workspace/project/zebkit/context/zbk-button.md'
+    );
+    expect(mockCopyFile).not.toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/zbk-checkbox.md',
+      expect.anything()
+    );
+    expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('Refreshed 2 agent context files'));
+  });
+
+  it('does not touch context when context.path is unset (opted out)', async () => {
+    mockReadConfig.mockResolvedValue({
+      config: { tokens: {} },
+      path: '/workspace/project/zebkit.config.json',
+    });
+
+    await runPullCommand(createDeps());
+
+    expect(mockReaddir).not.toHaveBeenCalled();
+    expect(mockCopyFile).not.toHaveBeenCalled();
   });
 });

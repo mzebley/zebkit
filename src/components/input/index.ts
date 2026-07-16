@@ -30,6 +30,7 @@
 import { html, nothing, type PropertyDeclarations, type PropertyValues, type TemplateResult } from 'lit';
 import { ZebkitElement } from '../base/zebkit-element';
 import { inputVariants } from './variants/index';
+import { slotContract } from './slot-contract';
 
 type MaskToken =
   | { kind: 'slot'; accepts: RegExp }
@@ -63,14 +64,11 @@ const parseMask = (mask: string): MaskToken[] => {
  * slots render aria-hidden affixes inside the field box. The optional `mask`
  * formats the value as the user types. No custom events — the native
  * `input`/`change` bubble.
- *
- * @slot - The visible label content (the accessible name via the wrapping label).
- * @slot prefix - Affix content at the field's inline start (aria-hidden, presentational).
- * @slot suffix - Affix content at the field's inline end (aria-hidden, presentational).
  */
 export class ZbkInput extends ZebkitElement {
   static componentName = 'input';
   static variantConfigs = inputVariants;
+  static slotContract = slotContract;
 
   static properties: PropertyDeclarations = {
     type: { type: String },
@@ -319,13 +317,8 @@ export class ZbkInput extends ZebkitElement {
     return super.hasAccessibleName();
   }
 
-  protected firstUpdated(changed: PropertyValues): void {
-    super.firstUpdated(changed);
-    if (!this.hasAccessibleName()) {
-      this.warn(
-        'No accessible name. Provide label text as children, or aria-label / aria-labelledby — a placeholder is not a label.'
-      );
-    }
+  protected accessibleNameWarning(): string {
+    return 'No accessible name. Provide label text as children, or aria-label / aria-labelledby — a placeholder is not a label.';
   }
 }
 

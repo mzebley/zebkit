@@ -23,28 +23,104 @@ No custom events — the native `click` bubbles, and keyboard activation
 
 Base class: `.zbk-button`. Variant classes: `.zbk-button--{variant}`. Tokens: `--zbk-button-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- The user triggers an action: submit, confirm, open, dismiss, toggle a panel.
+- Work is in flight after activation — `loading` announces it (aria-busy), suppresses re-activation, and keeps the button focusable.
+- NOT Activation navigates to another URL. → An <a> element — buttons act, links navigate.
+- NOT The control flips a persistent on/off setting. → zbk-toggle
+
+## Guidance
+
+- `type` defaults to "button" — the platform's "submit" default is a footgun inside forms; opt into submit explicitly.
+- Prefer `loading` over `disabled` for in-flight work: unlike disabled, it keeps the button focusable so keyboard and screen-reader users don't lose their place mid-operation.
+- Style variants (ghost, outline, subtle) share one axis and are alternatives; size variants (sm, lg) compose with them: variant="ghost sm".
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
 |---|---|---|---|
-| `type` | `ZbkButtonType` | `'button'` | Forwarded to the internal button. Defaults to "button" — the platform's "submit" default is a well-known footgun inside forms. |
+| `type` | `ZbkButtonType` | `"button"` | Forwarded to the internal button. Defaults to "button" — the platform's "submit" default is a well-known footgun inside forms. |
 | `disabled` | `boolean` | `false` | Native disabled: removed from the tab order, blocks all interaction. |
 | `loading` | `boolean` | `false` | Busy state (`aria-busy`): announces in-flight work, suppresses activation, and — unlike `disabled` — keeps the button focusable so keyboard and screen-reader users don't lose their place mid-operation. |
 | `name` | `string \| undefined` | — | Forwarded to the internal button for native form participation. |
 | `value` | `string \| undefined` | — |  |
 | `form` | `string \| undefined` | — |  |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The button's label content (its accessible name). |
-| `icon` | A supplementary pictogram rendered aria-hidden beside the label. Use `data-position="start\|end"` to set placement explicitly; otherwise placement is inferred from authored child order. |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The button's label content (its accessible name). | required |
+| `icon` | A supplementary pictogram rendered aria-hidden beside the label — any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `icon-size`; data-position: start\\|end |
+
+- `default`: Icon-only buttons must supply the accessible name via aria-label or aria-labelledby; dev mode warns when the computed name is empty.
+- `icon`: Use data-position="start|end" for explicit placement; when omitted, placement is inferred from authored child order.
+- `icon`: Icons inherit the label's ink (currentColor); there is no separate icon color token.
+- `icon`: The icon is aria-hidden: it can reinforce the label, never replace it — meaning must live in the accessible name.
+
+## Keyboard
+
+- `Enter / Space` — Activates the button; arrives as a native click (native behavior, preserved). Suppressed while loading.
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-button>Save</zbk-button>
+```
+
+**Explicit submit in a form**
+
+```html
+<zbk-button type="submit">Create account</zbk-button>
+```
+
+type must opt into "submit" — zebkit defaults it to "button".
+
+**Icon with label**
+
+```html
+<zbk-button variant="outline"><svg slot="icon" data-position="start" viewBox="0 0 16 16"><path d="M8 0 16 16H0z"/></svg>Save draft</zbk-button>
+```
+
+**Composed variants**
+
+```html
+<zbk-button variant="ghost sm">Cancel</zbk-button>
+```
+
+ghost (style axis) and sm (size axis) compose; two style-axis variants would conflict and warn.
+
+**Loading**
+
+```html
+<zbk-button loading>Saving…</zbk-button>
+```
+
+aria-busy announces the in-flight work; activation is suppressed but focus is kept.
+
+**Icon-only** (situational)
+
+```html
+<zbk-button aria-label="Close" variant="ghost"><svg slot="icon" viewBox="0 0 16 16"><path d="M2 2l12 12M14 2L2 14"/></svg></zbk-button>
+```
+
+Valid only with an aria-label supplying the accessible name; without one, dev mode warns.
+
+**Button as navigation** (discouraged)
+
+```html
+<zbk-button onclick="location.href='/pricing'">Pricing</zbk-button>
+```
+
+Navigation belongs to <a>: middle-click, open-in-new-tab, and link semantics for AT are all lost.
 
 ## Tokens (CSS custom properties)
 
@@ -139,6 +215,8 @@ A variant is a named, partial remapping of the token surface compiled to a class
 
 Custom variants: add a `zbk-button.variants.json` file to the base theme's token folder (component-keyed map of `{ "button": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-button--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
 
+Related: `<zbk-toggle>`.
+
 ---
 
 # <zbk-checkbox>
@@ -151,6 +229,19 @@ No custom events — the native `change`/`input` bubble.
 
 Base class: `.zbk-checkbox`. Variant classes: `.zbk-checkbox--{variant}`. Tokens: `--zbk-checkbox-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- An independent on/off choice submitted with a form ('I agree to the terms').
+- Selecting any number of items from a list — each checkbox stands alone.
+- A parent summarizing a group: `indeterminate` expresses 'some but not all'.
+- NOT Exactly one choice among mutually exclusive options. → zbk-radio
+- NOT The setting takes effect immediately, with no form submit. → zbk-toggle
+
+## Guidance
+
+- `indeterminate` is visual and AT state only — it is never submitted, and any user toggle clears it (native behavior). Set it from the group's state, don't ask users to.
+- The invisible native input stretches across the whole label: hover, press, click, and focus land on it natively anywhere — never add click handlers to fake this.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -161,20 +252,59 @@ Base class: `.zbk-checkbox`. Variant classes: `.zbk-checkbox--{variant}`. Tokens
 | `required` | `boolean` | `false` | Forwarded for native constraint validation. |
 | `name` | `string \| undefined` | — | Forwarded to the internal input for native form participation. |
 | `value` | `string` | `'on'` | The submitted value; defaults to the platform's "on". |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The label content (the accessible name via the wrapping label). |
-| `checked` | Indicator content shown while checked; replaces the drawn checkmark. Presentational (the control is aria-hidden). |
-| `unchecked` | Indicator content shown while neither checked nor indeterminate. |
-| `indeterminate` | Indicator content shown while indeterminate; replaces the drawn bar. |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The label content (the accessible name via the wrapping label). | required |
+| `checked` | Indicator content shown while checked; replaces the drawn checkmark. Any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `indicator-size`; colored by `indicator-color` |
+| `unchecked` | Indicator content shown while neither checked nor indeterminate. | aria-hidden; sized by `indicator-size`; colored by `indicator-color` |
+| `indeterminate` | Indicator content shown while indeterminate; replaces the drawn bar. | aria-hidden; sized by `indicator-size`; colored by `indicator-color` |
+
+- `checked`: The control is aria-hidden — the state is conveyed by the native input, so indicator content is purely visual.
+- `indeterminate`: Each state slot only affects its own state — a customized checkmark leaves the drawn indeterminate bar in place unless this slot is also filled.
+
+## Keyboard
+
+- `Space` — Toggles checked (native input behavior, preserved).
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-checkbox name="terms" required>I agree to the terms</zbk-checkbox>
+```
+
+**Custom indicators**
+
+```html
+<zbk-checkbox name="favorite" checked>Add to favorites<span slot="checked">★</span><span slot="unchecked">☆</span></zbk-checkbox>
+```
+
+Indicator content layers over the aria-hidden control, sized by indicator-size and colored by indicator-color; the drawn checkmark is replaced only for the states provided.
+
+**Indeterminate group parent**
+
+```html
+<zbk-checkbox indeterminate>Select all</zbk-checkbox>
+```
+
+Set indeterminate from the child checkboxes' mixed state; toggling the parent clears it natively.
+
+**Labelless checkbox** (discouraged)
+
+```html
+<zbk-checkbox name="row-1"></zbk-checkbox>
+```
+
+No accessible name. Even in dense table rows, give it label children (visually hidden if needed) or aria-label naming what it selects.
 
 ## Tokens (CSS custom properties)
 
@@ -245,6 +375,8 @@ A variant is a named, partial remapping of the token surface compiled to a class
 
 Custom variants: add a `zbk-checkbox.variants.json` file to the base theme's token folder (component-keyed map of `{ "checkbox": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-checkbox--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
 
+Related: `<zbk-radio>`, `<zbk-toggle>`.
+
 ---
 
 # <zbk-heading>
@@ -281,6 +413,21 @@ formats the value as the user types. No custom events — the native
 
 Base class: `.zbk-input`. Variant classes: `.zbk-input--{variant}`. Tokens: `--zbk-input-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- The value is a single line of free text: names, emails, search terms, URLs.
+- The value has a fixed printed format (phone, date, code) — use `mask` so the field formats as the user types.
+- The value is numeric but still text-shaped (amounts, quantities) — pair `inputmode` with the right `type`.
+- NOT Input is prose-length or multi-line. → zbk-textarea
+- NOT The user picks from a fixed set of options. → zbk-select
+- NOT The value is a boolean on/off choice. → zbk-checkbox
+
+## Guidance
+
+- A placeholder is never a substitute for label content — the accessible name comes from the default children or an aria-label.
+- With a mask, `value` is always the masked form (and what submits); read `rawValue` for the value with literals stripped.
+- For checkboxes, radios, and buttons use their own zebkit components, not `type`.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -302,19 +449,59 @@ Base class: `.zbk-input`. Variant classes: `.zbk-input--{variant}`. Tokens: `--z
 | `max` | `string \| undefined` | — |  |
 | `step` | `string \| undefined` | — |  |
 | `pattern` | `string \| undefined` | — |  |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The visible label content (the accessible name via the wrapping label). |
-| `prefix` | Affix content at the field's inline start (aria-hidden, presentational). |
-| `suffix` | Affix content at the field's inline end (aria-hidden, presentational). |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The visible label content (the accessible name via the wrapping label). | required |
+| `prefix` | Affix content at the field's inline start — any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `icon-size`; colored by `affix-ink` |
+| `suffix` | Affix content at the field's inline end — any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `icon-size`; colored by `affix-ink` |
+
+- `default`: Omit only when aria-label supplies the accessible name; the field must never be nameless.
+- `prefix`: Affixes are aria-hidden: information an affix carries must also live in the field's accessible name or description.
+- `suffix`: Affixes are aria-hidden: information an affix carries must also live in the field's accessible name or description.
+
+## Keyboard
+
+- `Enter` — Submits the owning form (native behavior, preserved).
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-input name="email" type="email" autocomplete="email" required>Email</zbk-input>
+```
+
+**Masked phone number**
+
+```html
+<zbk-input name="phone" type="tel" mask="(###) ###-####" autocomplete="tel">Phone</zbk-input>
+```
+
+The all-digit mask defaults inputmode to numeric; the masked form is the submitted value.
+
+**Currency prefix**
+
+```html
+<zbk-input name="price" inputmode="decimal">Price (USD)<span slot="prefix">$</span></zbk-input>
+```
+
+The affix is aria-hidden, so the label carries the currency — never let the prefix be the only place the unit appears.
+
+**Placeholder as label** (discouraged)
+
+```html
+<zbk-input name="q" placeholder="Search"></zbk-input>
+```
+
+No accessible name: placeholders vanish on entry and are not announced as the name. Give it label children or aria-label.
 
 ## Tokens (CSS custom properties)
 
@@ -397,6 +584,8 @@ A variant is a named, partial remapping of the token surface compiled to a class
 
 Custom variants: add a `zbk-input.variants.json` file to the base theme's token folder (component-keyed map of `{ "input": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-input--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
 
+Related: `<zbk-textarea>`, `<zbk-select>`.
+
 ---
 
 # <zbk-radio>
@@ -409,6 +598,19 @@ bubbles from the newly selected input.
 
 Base class: `.zbk-radio`. Variant classes: `.zbk-radio--{variant}`. Tokens: `--zbk-radio-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- Exactly one choice among a small set of mutually exclusive options, all visible at once.
+- The choice is submitted with a form rather than taking effect immediately.
+- NOT An independent on/off choice. → zbk-checkbox
+- NOT The setting takes effect immediately, with no form submit. → zbk-toggle
+- NOT The option list is long or space is constrained. → zbk-select
+
+## Guidance
+
+- Radios only behave as one group when they share a `name` — the group, not each radio, is the single form control.
+- A group should have a group label (a <fieldset>/<legend> or aria-labelledby on a wrapping group) in addition to each radio's own label.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -418,19 +620,53 @@ Base class: `.zbk-radio`. Variant classes: `.zbk-radio--{variant}`. Tokens: `--z
 | `required` | `boolean` | `false` | Forwarded for native constraint validation. |
 | `name` | `string \| undefined` | — | The group key. Radios only behave as one group when they share a name. |
 | `value` | `string` | `'on'` | This option's submitted value; defaults to the platform's "on". |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The label content (the accessible name via the wrapping label). |
-| `checked` | Indicator content shown while selected; replaces the drawn dot. Presentational (the control is aria-hidden). |
-| `unchecked` | Indicator content shown while not selected. |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The label content (the accessible name via the wrapping label). | required |
+| `checked` | Indicator content shown while selected; replaces the drawn dot. Any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `indicator-size`; colored by `indicator-color` |
+| `unchecked` | Indicator content shown while not selected. | aria-hidden; sized by `indicator-size`; colored by `indicator-color` |
+
+- `checked`: The control is aria-hidden — the state is conveyed by the native input, so indicator content is purely visual.
+
+## Keyboard
+
+- `ArrowDown / ArrowRight, ArrowUp / ArrowLeft` — Moves the group's selection to the next / previous radio (native behavior, preserved).
+- `Space` — Selects the focused radio (native).
+- `Tab` — The group is a single tab stop; focus lands on the selected radio (native).
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic group**
+
+```html
+<zbk-radio name="plan" value="monthly" checked>Monthly</zbk-radio><zbk-radio name="plan" value="annual">Annual</zbk-radio>
+```
+
+The shared name is what makes them one control; checked marks the group's current selection.
+
+**Custom indicator**
+
+```html
+<zbk-radio name="mood" value="good"><span slot="checked">●</span>Good</zbk-radio>
+```
+
+Indicator content layers over the aria-hidden control, sized by indicator-size and colored by indicator-color.
+
+**Lone radio** (discouraged)
+
+```html
+<zbk-radio name="agree">I agree</zbk-radio>
+```
+
+A radio without group siblings can never be unchecked once selected — an on/off choice is zbk-checkbox.
 
 ## Tokens (CSS custom properties)
 
@@ -498,6 +734,8 @@ A variant is a named, partial remapping of the token surface compiled to a class
 
 Custom variants: add a `zbk-radio.variants.json` file to the base theme's token folder (component-keyed map of `{ "radio": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-radio--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
 
+Related: `<zbk-checkbox>`, `<zbk-toggle>`, `<zbk-select>`.
+
 ---
 
 # <zbk-select>
@@ -509,6 +747,20 @@ replaced through the suffix slot. No custom events — the native
 `change`/`input` bubble.
 
 Base class: `.zbk-select`. Variant classes: `.zbk-select--{variant}`. Tokens: `--zbk-select-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
+
+## When to use
+
+- The user picks one option from a fixed list too long to lay out as radios.
+- Space is constrained and the options can collapse behind a field.
+- Several options may be picked from one list — `multiple` renders a native list box.
+- NOT A handful of options that should all be visible at once. → zbk-radio
+- NOT The value is free text. → zbk-input
+- NOT An independent on/off choice. → zbk-checkbox
+
+## Guidance
+
+- Options are real <option>/<optgroup>/<hr> children and keep their native semantics — the component adopts them into the internal select untouched.
+- Leave `value` unset for uncontrolled behavior (the platform selects the first option); include an empty-value "Choose…" option when no default should win.
 
 ## Attributes
 
@@ -522,19 +774,58 @@ Base class: `.zbk-select`. Variant classes: `.zbk-select--{variant}`. Tokens: `-
 | `name` | `string \| undefined` | — | Forwarded to the internal select for native form participation. |
 | `form` | `string \| undefined` | — |  |
 | `autocomplete` | `string \| undefined` | — | Native autofill hint, forwarded verbatim. |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | `<option>`/`<optgroup>`/`<hr>` children populate the select; everything else is the visible label content (the accessible name via the wrapping label). |
-| `prefix` | Affix content at the field's inline start (aria-hidden, presentational). |
-| `suffix` | Affix content at the field's inline end; replaces the drawn chevron (aria-hidden, presentational). |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | <option>/<optgroup>/<hr> children populate the select; everything else is the visible label content (the accessible name via the wrapping label). | required |
+| `prefix` | Affix content at the field's inline start — any markup: svg, icon-font glyph, HTML character, image. | aria-hidden; sized by `icon-size`; colored by `affix-ink` |
+| `suffix` | Affix content at the field's inline end; replaces the drawn chevron indicator. | aria-hidden; sized by `icon-size`; colored by `affix-ink` |
+
+- `prefix`: Affixes are aria-hidden: information an affix carries must also live in the field's accessible name or description.
+- `suffix`: Supplying a suffix takes over the open-indicator role — make it still read as "this opens".
+
+## Keyboard
+
+- `ArrowUp / ArrowDown` — Moves through the options (native select behavior, preserved).
+- `Enter / Space` — Opens the platform picker; details vary by OS (native).
+- `Printable characters` — Native typeahead jumps to the first matching option.
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-select name="state" required>State<option value="">Choose…</option><option value="oh">Ohio</option><option value="pa">Pennsylvania</option></zbk-select>
+```
+
+**Grouped options**
+
+```html
+<zbk-select name="instrument">Instrument<optgroup label="Strings"><option>Violin</option><option>Cello</option></optgroup><optgroup label="Brass"><option>Trumpet</option></optgroup></zbk-select>
+```
+
+**Custom open indicator**
+
+```html
+<zbk-select name="sort">Sort by<span slot="suffix">▾</span><option>Newest</option><option>Oldest</option></zbk-select>
+```
+
+A suffix replaces the drawn chevron; it is aria-hidden, so it stays purely visual.
+
+**Placeholder option as label** (discouraged)
+
+```html
+<zbk-select name="country"><option value="">Country</option><option>Portugal</option></zbk-select>
+```
+
+A disappearing first option is not an accessible name. Give the field label children or aria-label.
 
 ## Tokens (CSS custom properties)
 
@@ -615,6 +906,165 @@ A variant is a named, partial remapping of the token surface compiled to a class
 
 Custom variants: add a `zbk-select.variants.json` file to the base theme's token folder (component-keyed map of `{ "select": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-select--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
 
+Related: `<zbk-radio>`, `<zbk-input>`.
+
+---
+
+# <zbk-textarea>
+
+The zebkit multi-line text field: a light-DOM element wrapping a real
+`<textarea>` inside its own `<label>`. Default children are the visible label
+(the accessible name via the wrapping label). No affixes, no masking. No
+custom events — the native `input`/`change` bubble.
+
+Base class: `.zbk-textarea`. Variant classes: `.zbk-textarea--{variant}`. Tokens: `--zbk-textarea-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
+
+## When to use
+
+- Input is prose-length or naturally multi-line: notes, descriptions, messages, feedback.
+- NOT Single-line values: names, emails, search terms. → zbk-input
+- NOT The value has a fixed printed format. → zbk-input with mask
+
+## Guidance
+
+- A placeholder is never a substitute for label content — the accessible name comes from the default children or an aria-label.
+- `rows` sets the initial visible height; size the box for the length of answer you expect.
+
+## Attributes
+
+| Attribute | Type | Default | Description |
+|---|---|---|---|
+| `value` | `string` | `''` | The field's current value, synced from the native `input` event. |
+| `placeholder` | `string \| undefined` | — | Forwarded to the internal textarea. A placeholder is not a label — the accessible name comes from label children or aria-label. |
+| `disabled` | `boolean` | `false` | Native disabled: removed from the tab order, blocks all interaction. |
+| `readonly` | `boolean` | `false` | Native readonly: focusable and legible, value locked. |
+| `required` | `boolean` | `false` | Forwarded for native constraint validation. |
+| `name` | `string \| undefined` | — | Forwarded to the internal textarea for native form participation. |
+| `form` | `string \| undefined` | — |  |
+| `autocomplete` | `string \| undefined` | — | Native autofill hint, forwarded verbatim. |
+| `minlength` | `number \| undefined` | — | Forwarded for native constraint validation. |
+| `maxlength` | `number \| undefined` | — |  |
+| `rows` | `number \| undefined` | — | Native initial visible rows (the browser default applies when unset). |
+| `wrap` | `string \| undefined` | — | Native soft/hard wrapping mode, forwarded verbatim. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+
+## Slots
+
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The visible label content (the accessible name via the wrapping label). | required |
+
+## Keyboard
+
+- `Enter` — Inserts a newline — never submits the form (native textarea behavior, preserved).
+
+## Events
+
+No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-textarea name="notes" rows="4">Delivery notes</zbk-textarea>
+```
+
+**Length-constrained**
+
+```html
+<zbk-textarea name="bio" maxlength="280" required>Short bio</zbk-textarea>
+```
+
+minlength/maxlength forward to native constraint validation.
+
+**Placeholder as label** (discouraged)
+
+```html
+<zbk-textarea name="feedback" placeholder="Tell us what you think"></zbk-textarea>
+```
+
+No accessible name: placeholders vanish on entry and are not announced as the name. Give it label children or aria-label.
+
+## Tokens (CSS custom properties)
+
+Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)`) or structural literals. Override any of them on a selector to re-style; nothing else is needed.
+
+| Token | Default | Type | Description |
+|---|---|---|---|
+| `--zbk-textarea-display` | `contents` | display | Display mode for the <zbk-textarea> host element. |
+| `--zbk-textarea-canvas` | `{app.canvas}` | color | Background of the field box. |
+| `--zbk-textarea-canvas-hover` | `{app.canvas}` | color | Field background when hovered. |
+| `--zbk-textarea-canvas-focus` | `{app.canvas}` | color | Field background while focused. |
+| `--zbk-textarea-canvas-active` | `{textarea.canvas-focus}` | color | Field background while pressed (pointer down before focus). |
+| `--zbk-textarea-canvas-disabled` | `{disabled.canvas}` | color | Field background when disabled. |
+| `--zbk-textarea-canvas-readonly` | `{app.canvas-subtle}` | color | Field background when readonly. |
+| `--zbk-textarea-canvas-invalid` | `{textarea.canvas}` | color | Field background when the value is invalid (after interaction). |
+| `--zbk-textarea-ink` | `{app.ink}` | color | Color of the entered text. |
+| `--zbk-textarea-ink-disabled` | `{disabled.ink}` | color | Entered-text color when disabled. |
+| `--zbk-textarea-ink-readonly` | `{app.ink-muted}` | color | Entered-text color when readonly. |
+| `--zbk-textarea-ink-invalid` | `{textarea.ink}` | color | Entered-text color when the value is invalid. |
+| `--zbk-textarea-placeholder-ink` | `{app.ink-subtle}` | color | Placeholder text color. |
+| `--zbk-textarea-placeholder-ink-disabled` | `{disabled.ink}` | color | Placeholder text color when disabled. |
+| `--zbk-textarea-caret-color` | `{accent-primary.500}` | color | Color of the text insertion caret. |
+| `--zbk-textarea-border-color` | `{app.border-emphasis}` | color | Border color of the field box. |
+| `--zbk-textarea-border-color-hover` | `{accent-primary.400}` | color | Field border color when hovered. |
+| `--zbk-textarea-border-color-focus` | `{accent-primary.500}` | color | Field border color while focused. |
+| `--zbk-textarea-border-color-active` | `{textarea.border-color-focus}` | color | Field border color while pressed. |
+| `--zbk-textarea-border-color-disabled` | `{disabled.border}` | color | Field border color when disabled. |
+| `--zbk-textarea-border-color-readonly` | `{app.border-muted}` | color | Field border color when readonly. |
+| `--zbk-textarea-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the value is invalid. |
+| `--zbk-textarea-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the field box. |
+| `--zbk-textarea-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
+| `--zbk-textarea-border-radius` | `{border.radius-md}` | borderRadius | Corner radius of the field box. |
+| `--zbk-textarea-font-family` | `{font-family.interface}` | fontFamily | Font family for the entered text. |
+| `--zbk-textarea-font-size` | `{font-size.md}` | fontSize | Font size for the entered text. |
+| `--zbk-textarea-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the entered text. |
+| `--zbk-textarea-line-height` | `{line-height.2}` | lineHeight | Line height for the entered text. |
+| `--zbk-textarea-field-line-height` | `{line-height.2}` | lineHeight | Line height of the entered multi-line text. |
+| `--zbk-textarea-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the entered text. |
+| `--zbk-textarea-label-ink` | `{app.ink}` | color | Label text color. |
+| `--zbk-textarea-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
+| `--zbk-textarea-label-font-size` | `{font-size.sm}` | fontSize | Font size for the label. |
+| `--zbk-textarea-label-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for the label. |
+| `--zbk-textarea-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
+| `--zbk-textarea-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
+| `--zbk-textarea-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
+| `--zbk-textarea-resize` | `vertical` | utility | CSS resize behavior of the field (vertical, horizontal, both, none). |
+| `--zbk-textarea-width` | `auto` | sizing | Width of the field box. |
+| `--zbk-textarea-min-width` | `0` | sizing | Minimum width of the field box. |
+| `--zbk-textarea-max-width` | `100%` | sizing | Maximum width of the field box. |
+| `--zbk-textarea-min-block-size` | `44px` | sizing | Minimum field height for a multi-line box; also a tappable floor. |
+| `--zbk-textarea-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
+| `--zbk-textarea-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
+| `--zbk-textarea-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
+| `--zbk-textarea-box-shadow` | `none` | boxShadow | Default field shadow. |
+| `--zbk-textarea-box-shadow-hover` | `none` | boxShadow | Field shadow when hovered. |
+| `--zbk-textarea-box-shadow-focus` | `none` | boxShadow | Field shadow while focused (in addition to the outline). |
+| `--zbk-textarea-box-shadow-active` | `none` | boxShadow | Field shadow while pressed. |
+| `--zbk-textarea-box-shadow-invalid` | `none` | boxShadow | Field shadow when the value is invalid. |
+| `--zbk-textarea-cursor` | `text` | utility | Cursor over the editable field. |
+| `--zbk-textarea-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
+| `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
+| `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
+| `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
+| `--zbk-textarea-transition-delay` | `0` | transition | Delay before field transitions run. |
+| `--zbk-textarea-opacity` | `1` | opacity | Opacity of the field. |
+| `--zbk-textarea-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
+
+## Variants
+
+A variant is a named, partial remapping of the token surface compiled to a class. Apply via `variant="name other-name"`; different axes compose, same-axis variants are alternatives.
+
+| Variant | Axis | Class | Description | Overrides |
+|---|---|---|---|---|
+| `sm` | size | `zbk-textarea--sm` | Smaller type and padding; keeps the 44px minimum tap target. | font-size: {font-size.sm}; label-font-size: {font-size.xs}; padding-inline: {spacing.xs} |
+| `lg` | size | `zbk-textarea--lg` | Larger type and padding. | font-size: {font-size.lg}; label-font-size: {font-size.md}; padding-inline: {spacing.md}; padding-block: {spacing.xs} |
+
+Custom variants: add a `zbk-textarea.variants.json` file to the base theme's token folder (component-keyed map of `{ "textarea": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-textarea--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
+
+Related: `<zbk-input>`.
+
 ---
 
 # <zbk-toggle>
@@ -628,6 +1078,18 @@ carries an intentional token surface. No custom events — the native
 
 Base class: `.zbk-toggle`. Variant classes: `.zbk-toggle--{variant}`. Tokens: `--zbk-toggle-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- A setting applies the moment it changes, with no form submit (notifications on/off, dark mode).
+- The state reads as on/off rather than selected/unselected — screen readers announce it as a switch.
+- NOT The choice is collected and submitted with a form. → zbk-checkbox
+- NOT Exactly one choice among mutually exclusive options. → zbk-radio
+
+## Guidance
+
+- A toggle promises immediacy: flipping it must apply the change right away. If the change only lands on submit, that promise is broken — use zbk-checkbox.
+- Deliberately separate from zbk-checkbox so each carries an intentional token surface; there is no mixed/indeterminate state on a switch.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -637,17 +1099,39 @@ Base class: `.zbk-toggle`. Variant classes: `.zbk-toggle--{variant}`. Tokens: `-
 | `required` | `boolean` | `false` | Forwarded for native constraint validation. |
 | `name` | `string \| undefined` | — | Forwarded to the internal input for native form participation. |
 | `value` | `string` | `'on'` | The submitted value; defaults to the platform's "on". |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The label content (the accessible name via the wrapping label). |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The label content (the accessible name via the wrapping label). | required |
+
+- `default`: Label the setting, not the current state — "Email notifications", never "On".
+
+## Keyboard
+
+- `Space` — Flips the switch (native input behavior, preserved).
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Basic**
+
+```html
+<zbk-toggle name="notifications" checked>Email notifications</zbk-toggle>
+```
+
+**State as label** (discouraged)
+
+```html
+<zbk-toggle checked>On</zbk-toggle>
+```
+
+The switch role already announces on/off; a state word as the label reads as "On, switch, on" and goes stale the moment it flips. Name the setting instead.
 
 ## Tokens (CSS custom properties)
 
@@ -729,6 +1213,8 @@ A variant is a named, partial remapping of the token surface compiled to a class
 
 Custom variants: add a `zbk-toggle.variants.json` file to the base theme's token folder (component-keyed map of `{ "toggle": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-toggle--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
 
+Related: `<zbk-checkbox>`, `<zbk-radio>`.
+
 ---
 
 # <zbk-tooltip>
@@ -743,6 +1229,19 @@ supported. No custom events.
 
 Base class: `.zbk-tooltip`. Variant classes: `.zbk-tooltip--{variant}`. Tokens: `--zbk-tooltip-{property}[-{state}]`. Write `aria-*`/`role` on the element; they relocate to the internal native element. `focus()` forwards to the internal focusable.
 
+## When to use
+
+- A control needs a short supplementary description — most often an icon-only button.
+- Brief clarifying text should appear on click without stealing focus: mode="toggle".
+- NOT The content is interactive or rich (links, buttons, forms). → A dialog or popover pattern — tooltip content is plain text only.
+- NOT The information is essential to completing the task. → Visible text — instructions users must read cannot hide behind hover.
+
+## Guidance
+
+- `content` is plain text only: supplementary descriptions flatten to a string for assistive technology anyway.
+- The hint tooltip follows WCAG 1.4.13 — hoverable, dismissible with Escape, persistent while hovered or focused.
+- A tooltip describes its trigger; it never replaces the trigger's accessible name.
+
 ## Attributes
 
 | Attribute | Type | Default | Description |
@@ -750,17 +1249,50 @@ Base class: `.zbk-tooltip`. Variant classes: `.zbk-tooltip--{variant}`. Tokens: 
 | `content` | `string` | `''` | The tooltip text. Plain text only — supplementary description flattens to a string for AT anyway; interactive content is a different pattern. |
 | `mode` | `ZbkTooltipMode` | `'hint'` | Trigger semantics: "hint" (hover/focus) or "toggle" (click). |
 | `placement` | `Placement` | `'top'` | Preferred side, floating-ui vocabulary: top \| right \| bottom \| left (optionally `-start` / `-end`). Flips automatically when it can't fit. |
-| `variant` | `string` | `''` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
+| `variant` | `string` | `""` | Space-separated registered variant names, e.g. "ghost lg". Unknown names warn with the registered vocabulary. |
 
 ## Slots
 
-| Slot | Description |
-|---|---|
-| *(default)* | The trigger element the tooltip describes (a focusable control). |
+| Slot | Description | Notes |
+|---|---|---|
+| *(default)* | The trigger element the tooltip describes — a single focusable control. | required |
+
+- `default`: The trigger must be focusable (a button, input, link): hint tooltips show on focus, and keyboard users can never reach a tooltip on a non-focusable trigger.
+
+## Keyboard
+
+- `Escape` — Dismisses the tooltip (WCAG 1.4.13); in toggle mode, focus returns to the trigger.
+- `Tab` — Focusing the trigger shows a hint tooltip; moving focus away hides it.
 
 ## Events
 
 No custom events. Native events (`click`, `change`, `input`, ...) bubble from the internal native element in light DOM — listen on the zebkit element.
+
+## Examples
+
+**Hint on an icon-only button**
+
+```html
+<zbk-tooltip content="Copy link"><zbk-button aria-label="Copy link" variant="ghost"><svg slot="icon" viewBox="0 0 16 16"><path d="M4 4h8v8H4z"/></svg></zbk-button></zbk-tooltip>
+```
+
+The tooltip text and the aria-label say the same thing: the tooltip is the sighted-hover rendering of the name, not a substitute for it.
+
+**Toggletip**
+
+```html
+<zbk-tooltip mode="toggle" content="Charged at the end of your billing cycle." placement="bottom"><zbk-button variant="ghost" aria-label="More about billing">?</zbk-button></zbk-tooltip>
+```
+
+Click-triggered; the content announces through the shared live region instead of a description.
+
+**Essential instructions in a tooltip** (discouraged)
+
+```html
+<zbk-tooltip content="Password must contain at least 12 characters"><zbk-input type="password" required>Password</zbk-input></zbk-tooltip>
+```
+
+Requirements users must meet belong in visible text or the field's description, not behind a hover.
 
 ## Tokens (CSS custom properties)
 
@@ -798,3 +1330,5 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 No shipped variants.
 
 Custom variants: add a `zbk-tooltip.variants.json` file to the base theme's token folder (component-keyed map of `{ "tooltip": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-tooltip--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
+
+Related: `<zbk-button>`.

@@ -203,9 +203,19 @@ export type ComponentConfigEntry = boolean | { variants?: string[] };
 /** Map of component name (e.g. `"button"`) to its inclusion entry. */
 export type ComponentsConfig = Record<string, ComponentConfigEntry>;
 
+/**
+ * Agent context delivery. `path` is where `zebkit init`/`pull` write the
+ * per-component markdown + `llms.txt` (relative to the config). Omit the block,
+ * or set `path: false`, to opt out.
+ */
+export type ContextConfig = {
+  path?: string | false;
+};
+
 export type ZebkitConfig = {
   tokens?: TokensConfig;
   components?: ComponentsConfig;
+  context?: ContextConfig;
 };
 
 /**
