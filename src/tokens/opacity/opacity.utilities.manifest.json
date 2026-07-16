@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/utility-manifest.schema.json",
+  "name": "Opacity utilities",
+  "key": "opacity",
+  "description": "Element opacity utilities bound to the opacity token scale (0-100 in 5% steps up to 30, then coarser).",
+  "domain": "effects",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "opacity",
+      "description": "Sets the element's overall opacity.",
+      "guidance": [
+        "Opacity applies to the whole element, including its text and children — dimming text this way can drop it below the contrast floor. Prefer a lighter token color for text.",
+        "Do not use opacity to hide content from assistive tech; opacity-0 leaves the element focusable and in the accessibility tree."
+      ],
+      "a11y": "opacity-0 hides visually but not from screen readers or keyboard focus; use visibility/display utilities to remove content from all users.",
+      "source": "src/tokens/opacity/styles.scss",
+      "properties": ["opacity"],
+      "tokens": {
+        "group": "opacity",
+        "varPrefix": "opacity"
+      },
+      "pattern": {
+        "base": "opacity"
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    }
+  ]
+}

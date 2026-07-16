@@ -1,0 +1,117 @@
+---
+title: Radio
+description: The zebkit radio — native grouping by shared name, no custom wiring.
+layout: components
+---
+
+<script lang="ts">
+  import TokenTable from '$components/TokenTable.svelte';
+  import AgentContext from '$components/AgentContext.svelte';
+  import { compiledTokens } from '$data/compiled-tokens';
+  import { buildTokenRows } from '$lib/utils/token-docs';
+
+  const radioTokenRows = buildTokenRows('zbk-radio', compiledTokens['zbk-radio']);
+</script>
+
+`<zbk-radio>` wraps a real `<input type="radio">` inside its own `<label>`. Because the inputs live in the document — no shadow boundaries — radios sharing a `name` form a **native group**: mutual exclusion, arrow-key navigation, and form submission all come from the platform, not from zebkit.
+
+## Live examples
+
+<div class="border border-app-muted rounded-lg p-4 canvas-app-soft">
+  <fieldset style="border: none; margin: 0; padding: 0;">
+    <legend class="text-sm font-semibold ink-app-strong" style="padding: 0 0 0.5rem;">Size</legend>
+    <div class="zbk-radio-group">
+      <zbk-radio name="demo-size" value="s">Small</zbk-radio>
+      <zbk-radio name="demo-size" value="m" checked>Medium</zbk-radio>
+      <zbk-radio name="demo-size" value="l">Large</zbk-radio>
+      <zbk-radio name="demo-size" value="xl" disabled>Extra large (unavailable)</zbk-radio>
+    </div>
+  </fieldset>
+</div>
+
+Try the arrow keys with focus in the group — the roving tab stop is the platform's, not a re-implementation.
+
+## Usage
+
+A radio is never alone — group with a shared `name` inside a `fieldset`/`legend`:
+
+```html
+<fieldset>
+  <legend>Size</legend>
+  <div class="zbk-radio-group">
+    <zbk-radio name="size" value="s">Small</zbk-radio>
+    <zbk-radio name="size" value="m" checked>Medium</zbk-radio>
+    <zbk-radio name="size" value="l">Large</zbk-radio>
+  </div>
+</fieldset>
+```
+
+Each renders (light DOM, inspectable):
+
+```html
+<zbk-radio name="size" value="s">
+  <label class="zbk-radio">
+    <input type="radio" class="zbk-radio__input" name="size" value="s" />
+    <span class="zbk-radio__control" aria-hidden="true"></span>
+    <span class="zbk-radio__label">Small</span>
+  </label>
+</zbk-radio>
+```
+
+Listen for `change` on the group's container and read `event.target.value` — the native event bubbles from the newly selected input; there is no custom event. A radio without a `name` warns in dev.
+
+## State-indicator slots
+
+Replace the drawn selection dot with any authored content:
+
+```html
+<zbk-radio name="mood" value="happy">
+  <span slot="checked">✓</span>
+  <span slot="unchecked">·</span>
+  Happy
+</zbk-radio>
+```
+
+<div class="border border-app-muted rounded-lg p-4 canvas-app-soft">
+  <div class="zbk-radio-group">
+    <zbk-radio name="demo-slots" value="yes" checked>
+      <span slot="checked">✓</span>
+      <span slot="unchecked">·</span>
+      Custom indicators
+    </zbk-radio>
+    <zbk-radio name="demo-slots" value="no">
+      <span slot="checked">✓</span>
+      <span slot="unchecked">·</span>
+      Select me to move the mark
+    </zbk-radio>
+  </div>
+</div>
+
+| Slot | Shown when | Replaces |
+|---|---|---|
+| `checked` | selected | the drawn dot |
+| `unchecked` | not selected | nothing (no drawn default) |
+
+Slotted indicators size from the `indicator-size` token (em-based, so size variants rescale them), inherit `indicator-color`, and animate with the component's transition tokens. The control is aria-hidden, so indicator content is presentational.
+
+## Variants
+
+| Variant | Axis | Remaps |
+|---|---|---|
+| `sm` | size | Smaller control and label type. |
+| `lg` | size | Larger control and label type. |
+
+## Accessibility
+
+- Label text is the accessible name via the wrapping `<label>`; the group's name comes from the `fieldset`'s `<legend>`.
+- Write `aria-*`/`role` on `<zbk-radio>` — they relocate to the inner `<input>`, and `focus()` forwards to it.
+- Keyboard behavior (arrow keys, roving tab stop) is native radio-group behavior.
+- Motion uses the playful-fx transition tokens and honors `prefers-reduced-motion`.
+
+## Tokens
+
+<TokenTable rows={radioTokenRows} showSwatch={true} />
+
+## For agents
+
+<AgentContext tag="zbk-radio" />

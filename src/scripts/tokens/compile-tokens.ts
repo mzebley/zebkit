@@ -14,6 +14,7 @@ import {
   isVariantOverrideFile,
   mergeOverrideObject,
   mergeTokens,
+  validateTokenExport,
 } from './compile-token-helpers';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,6 +23,12 @@ const __dirname = path.dirname(__filename);
 export interface BuildZebkitTokensOptions {
   splitMode?: 'combined' | 'per-module';
   overridePaths?: string[];
+  /**
+   * Component names excluded by the `components` config. Their token modules
+   * never reach this compile (dropped at gather); the set is used here to give
+   * overrides that still target them a warning that names the fix.
+   */
+  excludedComponents?: ReadonlySet<string>;
 }
 
 export interface BuildZebkitTokensResult {
@@ -58,7 +65,7 @@ export async function buildZebkitTokens(
   const overridePaths = options.overridePaths ?? [];
 
   const spinner = ora('Processing Zebkit tokens...').start();
-  const coreDir = path.resolve(__dirname, '../../core');
+  const tokensDir = path.resolve(__dirname, '../../tokens');
   const componentsDir = path.resolve(__dirname, '../../components');
   // Problems that would silently produce incomplete CSS (a broken/missing token
   // module or schema). Collected across the loop, then thrown as one failure so
@@ -86,9 +93,9 @@ export async function buildZebkitTokens(
       let baseDir = '';
       let relativePath = '';
 
-      if (file.startsWith('core/')) {
-        baseDir = coreDir;
-        relativePath = file.replace('core/', '');
+      if (file.startsWith('tokens/')) {
+        baseDir = tokensDir;
+        relativePath = file.replace('tokens/', '');
       } else if (file.startsWith('components/')) {
         baseDir = componentsDir;
         relativePath = file.replace('components/', '');
@@ -124,7 +131,8 @@ export async function buildZebkitTokens(
           tokenModule.key || path.basename(path.dirname(folderName)) || path.basename(folderName);
         const tokenKey = `${ZEBKIT_PREFIX}-${moduleKey}`;
 
-        if (validateTokenExport(tokensExport, tokenSchema)) {
+        const schemaErrors = validateTokenExport(tokensExport, tokenSchema);
+        if (schemaErrors.length === 0) {
           // Merge modules that share the same logical key (e.g., primitive + semantic spacing).
           // Copy the imported export rather than aliasing it: token modules are ES singletons
           // cached for the process lifetime, so mutating one (below, or via overrides) would
@@ -162,7 +170,7 @@ export async function buildZebkitTokens(
             }
           }
         } else {
-          fatalErrors.push(`Invalid token structure in file: ${file}`);
+          fatalErrors.push(`Invalid token structure in file: ${file}\n${schemaErrors.map((issue) => `    ${issue}`).join('\n')}`);
         }
       } catch (error) {
         console.error(chalk.red(`Error importing token file ${file}:`), error);
@@ -188,10 +196,16 @@ export async function buildZebkitTokens(
   // tracked. Only `customTokenPath` is tracked into `overriddenKeys`, so an overlay build
   // can emit just the tokens that overlay itself changed (minimal emission).
   for (const overridePath of overridePaths) {
-    await applyCustomOverrides(overridePath, tokens, tokenSchemas);
+    await applyCustomOverrides(overridePath, tokens, tokenSchemas, undefined, options.excludedComponents);
   }
   if (customTokenPath) {
-    await applyCustomOverrides(customTokenPath, tokens, tokenSchemas, overriddenKeys);
+    await applyCustomOverrides(
+      customTokenPath,
+      tokens,
+      tokenSchemas,
+      overriddenKeys,
+      options.excludedComponents
+    );
   }
 
   if (Object.keys(tokens).length === 0) {
@@ -205,21 +219,12 @@ export async function buildZebkitTokens(
   return { tokens, layers, overriddenKeys };
 }
 
-function validateTokenExport(tokenExport: unknown, schema: ZodSchema): boolean {
-  try {
-    schema.parse(tokenExport);
-    return true;
-  } catch (error) {
-    console.warn(chalk.yellow('Token export failed schema validation.'));
-    return false;
-  }
-}
-
 async function applyCustomOverrides(
   overridePath: string,
   tokens: Record<string, TokenInterface>,
   tokenSchemas: Record<string, ZodSchema>,
-  touched?: Record<string, Set<string>>
+  touched?: Record<string, Set<string>>,
+  excludedComponents?: ReadonlySet<string>
 ) {
   const spinner = ora('Processing custom token overrides...').start();
   const resolvedOverridePath = path.isAbsolute(overridePath)
@@ -234,10 +239,14 @@ async function applyCustomOverrides(
       return;
     }
 
+    const excludedModuleKeys = new Set(
+      [...(excludedComponents ?? [])].map((component) => `${ZEBKIT_PREFIX}-${component}`)
+    );
+
     const stats = await fs.stat(resolvedOverridePath);
     if (stats.isFile()) {
       const customTokenData = await fs.readJson(resolvedOverridePath);
-      mergeOverrideObject(customTokenData, tokens, tokenSchemas, touched);
+      mergeOverrideObject(customTokenData, tokens, tokenSchemas, touched, excludedModuleKeys);
     } else if (stats.isDirectory()) {
       const overrideFiles = await glob('**/*.json', {
         cwd: resolvedOverridePath,
@@ -250,7 +259,7 @@ async function applyCustomOverrides(
         const inferredKey = inferTokenKeyFromFilename(file);
 
         if (Object.keys(data).some((key) => key.startsWith(`${ZEBKIT_PREFIX}-`))) {
-          mergeOverrideObject(data, tokens, tokenSchemas, touched);
+          mergeOverrideObject(data, tokens, tokenSchemas, touched, excludedModuleKeys);
         } else if (inferredKey && tokens[inferredKey]) {
           mergeOverrideObject({ [inferredKey]: data }, tokens, tokenSchemas, touched);
         } else if (isVariantOverrideFile(file)) {
@@ -259,6 +268,14 @@ async function applyCustomOverrides(
               `Detected variant override file '${path.basename(
                 file
               )}'. It will be applied during variant processing.`
+            )
+          );
+        } else if (inferredKey && excludedModuleKeys.has(inferredKey)) {
+          console.warn(
+            chalk.yellow(
+              `Override file '${path.basename(file)}' targets component ` +
+                `"${inferredKey.slice(ZEBKIT_PREFIX.length + 1)}", which is excluded by the ` +
+                `components config. Remove the file or re-include the component.`
             )
           );
         } else {

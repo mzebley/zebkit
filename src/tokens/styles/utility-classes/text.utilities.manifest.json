@@ -1,0 +1,211 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Text utilities",
+  "key": "text",
+  "description": "Control over how text behaves when it runs out of horizontal space within its container.",
+  "domain": "typography",
+  "layer": "utilities",
+  "families": [
+        {
+      "name": "truncate",
+      "description": "Shorthand for setting all necessary properties to enable ellipses on text overflow.",
+      "source": "src/tokens/styles/utility-classes/text.scss",
+      "properties": ["overflow", "text-overflow", "white-space"],
+      "classes": ["truncate"],
+      "generator": {
+        "declarations": {
+          "truncate": {
+            "overflow": "hidden",
+            "white-space": "nowrap",
+            "text-overflow": "ellipsis"
+          }
+        }
+      }
+    },
+    {
+      "name": "white-space",
+      "description": "Controls how browser layouts handle text wrapping, sequences of spaces, and raw line breaks.",
+      "guidance": [
+        "Use 'white-space-pre' or 'white-space-pre-wrap' to ensure rendered code indentation stays aligned."
+      ],
+      "source": "src/tokens/styles/utility-classes/text.scss",
+      "properties": [
+        "white-space"
+      ],
+      "pattern": {
+        "base": "white-space",
+        "values": [
+          "normal",
+          "nowrap",
+          "pre",
+          "pre-wrap",
+          "pre-line",
+          "break-spaces"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "text-overflow",
+      "description": "Dictates how hidden, overflowing text is signaled to users.",
+      "guidance": [
+        "Inline elements ignore width constraints, preventing text-overflow from working. Set to inline-block or inline-flex.",
+        "This property also does not work if not combined with overflow-hidden and white-space-no-wrap (use .truncate as a singular class to set all three properties at once with text-overflow set to 'ellipsis'"
+      ],
+      "source": "src/tokens/styles/utility-classes/text.scss",
+      "properties": [
+        "text-overflow"
+      ],
+      "pattern": {
+        "base": "text-overflow",
+        "values": [
+          "clip",
+          "ellipsis",
+          "unset"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "word-break",
+      "description": "Specifies whether or not the browser should insert line breaks within words when text overflows its container.",
+      "guidance": [
+        "word-break:break-word is deprecated. Avoid using it and implement overflow-wrap: break-word or overflow-wrap: anywhere instead"
+      ],
+      "source": "src/tokens/styles/utility-classes/text.scss",
+      "properties": [
+        "word-break"
+      ],
+      "pattern": {
+        "base": "word-break",
+        "values": [
+          "normal",
+          "all",
+          "keep",
+          "break-word"
+        ]
+      },
+      "generator": {
+        "valueMap": {
+          "all": "break-all",
+          "keep": "keep-all"
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "overflow-wrap",
+      "description": "Tells the browser whether it can split an unbreakable string of text (like a massive word or a long URL) into a new line.",
+      "guidance": [
+        "Requires the container to have a setting that permits wrapping.",
+        "Use 'overflow-wrap-break-word' to keep long unbroken links from distrupting layouts."
+      ],
+      "source": "src/tokens/styles/utility-classes/text.scss",
+      "properties": [
+        "overflow-wrap"
+      ],
+      "pattern": {
+        "base": "overflow-wrap",
+        "values": [
+          "normal",
+          "anywhere",
+          "break-word"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "hyphens",
+      "description": "Controls how words are hyphenated when text wraps across multiple lines.",
+      "guidance": [
+        "If you use hyphens-auto, you must set the lang attribute on your HTML element (or the <html> root).",
+        "Use the Unicode character &shy; to dictate where manual hyphens will occur if needed."
+      ],
+      "source": "src/tokens/styles/utility-classes/text.scss",
+      "properties": [
+        "hyphens"
+      ],
+      "pattern": {
+        "base": "hyphens",
+        "values": [
+          "none",
+          "manual",
+          "auto"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    },
+    {
+      "name": "text-wrap",
+      "description": "Controls how text breaks and flows inside an element.",
+      "guidance": [
+        "Use text-wrap-balance on headings where you want to keep an equal amount of words per line.",
+        "text-wrap-pretty keeps word orphans from occuring.",
+        "text-wrap-stable prevents jumping when text is being editted."
+      ],
+      "source": "src/tokens/styles/utility-classes/text.scss",
+      "properties": [
+        "text-wrap"
+      ],
+      "pattern": {
+        "base": "text-wrap",
+        "values": [
+          "wrap",
+          "nowrap",
+          "balance",
+          "pretty",
+          "stable"
+        ]
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    }
+  ]
+}

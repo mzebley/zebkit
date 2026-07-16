@@ -1,0 +1,479 @@
+import type { LayerName } from "@definitions/layers";
+import type { TokenObject } from "@definitions/tokens";
+
+/**
+ * Zebkit button design tokens. The module key is fixed to `button` so these
+ * values become `--zbk-button-*` CSS custom properties during the token build.
+ * Tokens stay declarative and can be referenced with dot-notation overrides.
+ */
+export const key = "button";
+export const layer: LayerName = "base";
+
+export type ButtonTokenKey =
+  'ink'
+  | 'ink-hover'
+  | 'ink-active'
+  | 'ink-disabled'
+  | 'ink-loading'
+  | 'canvas'
+  | 'canvas-hover'
+  | 'canvas-active'
+  | 'canvas-disabled'
+  | 'canvas-loading'
+  | 'border-color'
+  | 'border-color-hover'
+  | 'border-color-active'
+  | 'border-color-disabled'
+  | 'border-color-loading'
+  | 'border-width'
+  | 'border-style'
+  | 'border-radius'
+  | 'font-family'
+  | 'font-size'
+  | 'font-weight'
+  | 'line-height'
+  | 'letter-spacing'
+  | 'text-transform'
+  | 'text-decoration'
+  | 'text-align'
+  | 'padding-inline'
+  | 'padding-block'
+  | 'padding-inline-start'
+  | 'padding-block-start'
+  | 'padding-inline-end'
+  | 'padding-block-end'
+  | 'gap'
+  | 'group-gap'
+  | 'margin-block-start'
+  | 'margin-inline-end'
+  | 'margin-block-end'
+  | 'margin-inline-start'
+  | 'margin-inline'
+  | 'margin-block'
+  | 'display'
+  | 'width'
+  | 'min-width'
+  | 'max-width'
+  | 'height'
+  | 'min-height'
+  | 'max-height'
+  | 'icon-size'
+  | 'icon-end-size'
+  | 'icon-start-size'
+  | 'focus-color'
+  | 'focus-width'
+  | 'focus-offset'
+  | 'box-shadow'
+  | 'box-shadow-hover'
+  | 'box-shadow-active'
+  | 'box-shadow-focus'
+  | 'transform'
+  | 'transform-hover'
+  | 'transform-active'
+  | 'transform-focus'
+  | 'cursor'
+  | 'cursor-loading'
+  | 'flex-direction'
+  | 'justify-content'
+  | 'align-items'
+  | 'transition-duration'
+  | 'transition-timing-function'
+  | 'transition-property'
+  | 'transition-delay'
+  | 'opacity'
+  | 'opacity-loading';
+
+const tokens = {
+  // Core label colors
+  ink: {
+    value: "{app.ink}",
+    type: "color",
+    description: "Default button label color.",
+  },
+  "ink-hover": {
+    value: "{app.ink}",
+    type: "color",
+    description: "Label color when hovered.",
+  },
+  "ink-active": {
+    value: "{app.ink}",
+    type: "color",
+    description: "Label color when active or pressed.",
+  },
+  "ink-disabled": {
+    value: "{disabled.ink}",
+    type: "color",
+    description: "Label color for disabled buttons.",
+  },
+  "ink-loading": {
+    value: "{button.ink}",
+    type: "color",
+    description: "Label color while the button is in its loading state.",
+  },
+
+  // Background colors
+  canvas: {
+    value: "{brand.200}",
+    type: "color",
+    description: "Default button background.",
+  },
+  "canvas-hover": {
+    value: "{brand.300}",
+    type: "color",
+    description: "Background for hover state.",
+  },
+  "canvas-active": {
+    value: "{brand.300}",
+    type: "color",
+    description: "Background for active/pressed state.",
+  },
+  "canvas-disabled": {
+    value: "{disabled.canvas}",
+    type: "color",
+    description: "Background for disabled buttons.",
+  },
+  "canvas-loading": {
+    value: "{button.canvas}",
+    type: "color",
+    description: "Background while the button is in its loading state.",
+  },
+
+  // Border colors
+  "border-color": {
+    value: "{accent-primary.500}",
+    type: "color",
+    description: "Default button border color.",
+  },
+  "border-color-hover": {
+    value: "{accent-primary.600}",
+    type: "color",
+    description: "Border color on hover.",
+  },
+  "border-color-active": {
+    value: "{accent-primary.500}",
+    type: "color",
+    description: "Border color when the button is active/pressed.",
+  },
+  "border-color-disabled": {
+    value: "{disabled.border}",
+    type: "color",
+    description: "Border color for disabled buttons.",
+  },
+  "border-color-loading": {
+    value: "{button.border-color}",
+    type: "color",
+    description: "Border color while the button is in its loading state.",
+  },
+
+  // Border geometry
+  "border-width": {
+    value: "{border.width-sm}",
+    type: "borderWidth",
+    description: "Base border width.",
+  },
+  "border-style": {
+    value: "{border.style}",
+    type: "borderStyle",
+    description: "Border style (solid, dashed, etc) for standard buttons.",
+  },
+  "border-radius": {
+    value: "{border.radius-md}",
+    type: "borderRadius",
+    description: "Corner radius for standard buttons.",
+  },
+
+  // Typography
+  "font-family": {
+    value: "{font-family.interface}",
+    type: "fontFamily",
+    description: "Font family for button labels.",
+  },
+  "font-size": {
+    value: "{font-size.md}",
+    type: "fontSize",
+    description: "Base font size for button labels.",
+  },
+  "font-weight": {
+    value: "{font-weight.medium}",
+    type: "fontWeight",
+    description: "Font weight for button labels.",
+  },
+  "line-height": {
+    value: "{line-height.2}",
+    type: "lineHeight",
+    description: "Base line height for buttons.",
+  },
+  "letter-spacing": {
+    value: "{tracking.normal}",
+    type: "letterSpacing",
+    description: "Letter spacing for button labels.",
+  },
+  "text-transform": {
+    value: "none",
+    type: "textTransform",
+    description: "Text transform for button labels.",
+  },
+  "text-decoration": {
+    value: "none",
+    type: "textDecoration",
+    description: "Text decoration for button labels.",
+  },
+  "text-align": {
+    value: "center",
+    type: "textAlignment",
+    description: "Text alignment for button content.",
+  },
+
+  // Internal spacing (logical axes)
+  "padding-inline": {
+    value: "{spacing.1}",
+    type: "spacing",
+    description: "Inline (horizontal) padding for standard buttons.",
+  },
+  "padding-block": {
+    value: "{spacing.05}",
+    type: "spacing",
+    description: "Block (vertical) padding for standard buttons.",
+  },
+  "padding-inline-start": {
+    value: "{button.padding-inline}",
+    type: "spacing",
+    description: "Inline-start padding override when needed.",
+  },
+  "padding-inline-end": {
+    value: "{button.padding-inline}",
+    type: "spacing",
+    description: "Inline-end padding override when needed.",
+  },
+  "padding-block-start": {
+    value: "{button.padding-block}",
+    type: "spacing",
+    description: "Block-start padding override when needed.",
+  },
+  "padding-block-end": {
+    value: "{button.padding-block}",
+    type: "spacing",
+    description: "Block-end padding override when needed.",
+  },
+
+  // External spacing (margins)
+  "margin-inline": {
+    value: "0",
+    type: "spacing",
+    description: "Inline margin for standalone buttons.",
+  },
+  "margin-block": {
+    value: "0",
+    type: "spacing",
+    description: "Block margin for standalone buttons.",
+  },
+  "margin-inline-start": {
+    value: "{button.margin-inline}",
+    type: "spacing",
+    description: "Inline-start margin override when needed.",
+  },
+  "margin-inline-end": {
+    value: "{button.margin-inline}",
+    type: "spacing",
+    description: "Inline-end margin override when needed.",
+  },
+  "margin-block-start": {
+    value: "{button.margin-block}",
+    type: "spacing",
+    description: "Block-start margin override when needed.",
+  },
+  "margin-block-end": {
+    value: "{button.margin-block}",
+    type: "spacing",
+    description: "Block-end margin override when needed.",
+  },
+
+  // Gaps
+  gap: {
+    value: "{button.padding-block}",
+    type: "spacing",
+    description: "Gap between button icon and label.",
+  },
+  "group-gap": {
+    value: "{spacing.105}",
+    type: "spacing",
+    description: "Gap between buttons when rendered in a group.",
+  },
+
+  // Layout & sizing
+  display: {
+    value: "inline-flex",
+    type: "display",
+    description: "Display mode for buttons.",
+  },
+  width: {
+    value: "auto",
+    type: "sizing",
+    description: "Default button width.",
+  },
+  "min-width": {
+    value: "{a11y.min-interaction-size}",
+    type: "sizing",
+    description: "Minimum button width.",
+  },
+  "max-width": {
+    value: "none",
+    type: "sizing",
+    description: "Maximum button width.",
+  },
+  height: {
+    value: "auto",
+    type: "sizing",
+    description: "Default button height.",
+  },
+  "min-height": {
+    value: "{a11y.min-interaction-size}",
+    type: "sizing",
+    description: "Minimum height to ensure tappable area.",
+  },
+  "max-height": {
+    value: "none",
+    type: "sizing",
+    description: "Maximum button height.",
+  },
+
+  // Icon-related
+  "icon-size": {
+    value: "{button.font-size}",
+    type: "sizing",
+    description: "Default icon size within buttons.",
+  },
+    "icon-start-size": {
+    value: "{button.icon-size}",
+    type: "sizing",
+    description: "Default icon size for icons at start of buttons.",
+  },
+    "icon-end-size": {
+    value: "{button.icon-size}",
+    type: "sizing",
+    description: "Default icon size for icons at end of buttons.",
+  },
+
+  // Focus & interaction
+  "focus-color": {
+    value: "{focus.color}",
+    type: "color",
+    description: "Outline color for focus state.",
+  },
+  "focus-width": {
+    value: "{focus.width}",
+    type: "borderWidth",
+    description: "Outline width for focus state.",
+  },
+  "focus-offset": {
+    value: "{focus.offset}",
+    type: "spacing",
+    description: "Outline offset for focus state.",
+  },
+
+  // Shadow / elevation
+  "box-shadow": {
+    value: "none",
+    type: "boxShadow",
+    description: "Default box shadow for buttons.",
+  },
+  "box-shadow-hover": {
+    value: "none",
+    type: "boxShadow",
+    description: "Box shadow on hover.",
+  },
+  "box-shadow-active": {
+    value: "none",
+    type: "boxShadow",
+    description: "Box shadow when active/pressed.",
+  },
+  "box-shadow-focus": {
+    value: "none",
+    type: "boxShadow",
+    description: "Box shadow in focus state (in addition to outline).",
+  },
+
+  // Transformation
+  "transform": {
+    value: "translateY(0)",
+    type: "utility",
+    description: "Default transform property for buttons.",
+  },
+  "transform-hover": {
+    value: "translateY(-1%)",
+    type: "utility",
+    description: "Transform effect on hover.",
+  },
+  "transform-active": {
+    value: "translateY(0)",
+    type: "utility",
+    description: "Transform effect when active/pressed.",
+  },
+  "transform-focus": {
+    value: "translateY(0)",
+    type: "utility",
+    description: "Transform effect in focus state (in addition to outline).",
+  },
+
+  // Interaction behavior & layout alignment
+  cursor: {
+    value: "pointer",
+    type: "utility",
+    description: "Cursor style when hovering over buttons.",
+  },
+  "cursor-loading": {
+    value: "progress",
+    type: "utility",
+    description: "Cursor style while the button is in its loading state.",
+  },
+  "flex-direction": {
+    value: "row",
+    type: "flex",
+    description: "Direction of icon and label layout.",
+  },
+  "justify-content": {
+    value: "center",
+    type: "flex",
+    description: "Main axis alignment for button contents.",
+  },
+  "align-items": {
+    value: "center",
+    type: "flex",
+    description: "Cross axis alignment for button contents.",
+  },
+
+  // Transitions
+  "transition-duration": {
+    value: "150ms",
+    type: "transition",
+    description: "Duration for hover/active transitions.",
+    a11y: true,
+  },
+  "transition-timing-function": {
+    value: "ease-out",
+    type: "transition",
+    description: "Timing function for button transitions.",
+  },
+  "transition-property": {
+    value: "background-color, color, border-color, box-shadow, transform, outline",
+    type: "transition",
+    description: "CSS properties that should animate on interaction.",
+  },
+    "transition-delay": {
+    value: "0",
+    type: "transition",
+    description: "Delay before CSS properties run through their animate on interaction.",
+  },
+  opacity: {
+    value: 1,
+    type: "opacity",
+    description: "Visual opacity of button.",
+  },
+  "opacity-loading": {
+    value: 1,
+    type: "opacity",
+    description: "Visual opacity while the button is in its loading state.",
+  },
+} as const satisfies Record<ButtonTokenKey, TokenObject>;
+
+export default tokens;

@@ -1,0 +1,19 @@
+// Emits --zbk-color-{name}-{step} CSS custom properties for a primitive color family.
+// Usage: @include primitiveColor(red, 0, 80%);
+@use 'tokens/styles/variables/prefix' as prefix;
+
+@mixin primitiveColor($name, $hue, $saturation) {
+  --#{prefix.$cssVar}-color-#{$name}-hue: #{$hue};
+  --#{prefix.$cssVar}-color-#{$name}-saturation: #{$saturation};
+  --#{prefix.$cssVar}-color-#{$name}-50: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 98%);
+  --#{prefix.$cssVar}-color-#{$name}-100: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 93%);
+  --#{prefix.$cssVar}-color-#{$name}-200: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 87%);
+  --#{prefix.$cssVar}-color-#{$name}-300: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 78%);
+  --#{prefix.$cssVar}-color-#{$name}-400: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 69%);
+  --#{prefix.$cssVar}-color-#{$name}-500: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 58%);
+  --#{prefix.$cssVar}-color-#{$name}-600: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 48%);
+  --#{prefix.$cssVar}-color-#{$name}-700: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 36%);
+  --#{prefix.$cssVar}-color-#{$name}-800: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 26%);
+  --#{prefix.$cssVar}-color-#{$name}-900: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 18%);
+  --#{prefix.$cssVar}-color-#{$name}-950: hsl(var(--#{prefix.$cssVar}-color-#{$name}-hue), var(--#{prefix.$cssVar}-color-#{$name}-saturation), 10%);
+}

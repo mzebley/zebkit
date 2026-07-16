@@ -1,0 +1,4 @@
+@use 'tokens/styles/mixins/primitive-color' as color-utils;
+:root {
+  @include color-utils.primitiveColor("sea", 185, 70%);
+}

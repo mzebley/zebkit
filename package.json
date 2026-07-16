@@ -3,7 +3,6 @@
   "version": "0.7.0",
   "type": "module",
   "description": "A fully flexible, token-based web component library.",
-  "main": "index.ts",
   "bin": {
     "zebkit": "./dist/cli/zebkit.mjs"
   },
@@ -13,14 +12,22 @@
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js"
     },
+    "./components/*": {
+      "types": "./dist/components/*/index.d.ts",
+      "import": "./dist/components/*/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
     "dist/cli/",
     "dist/components/",
     "dist/editor/",
+    "custom-elements.json",
     "src/**/*.scss"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "test": "npm run test:unit",
     "test:unit": "jest",
@@ -28,10 +35,15 @@
     "test:watch": "jest --watch",
     "type-check": "tsc --noEmit",
     "check:docs": "npm --prefix docs run build",
-    "check": "npm run test:unit -- --runInBand && npm run type-check && npm run check:utilities && npm run lint:utilities && npm run check:docs",
+    "check": "npm run test:unit -- --runInBand && npm run type-check && npm run check:utilities && npm run lint && npm run check:cem && npm run check:context && npm run check:docs",
+    "lint": "npm run lint:components && npm run lint:utilities",
     "lint:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/lint.ts",
+    "lint:components": "tsx -r tsconfig-paths/register src/scripts/components/lint.ts",
+    "generate": "npm run generate:components && npm run generate:utilities",
+    "generate:components": "tsx -r tsconfig-paths/register src/scripts/components/generate.ts",
     "generate:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/generate.ts",
     "check:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/generate.ts --check",
+    "build": "npm run generate && npm run build:cem && npm run build:tokens -- --config zebkit.docs.config.json && npm run build:defaults && npm run build:context && npm run build:editor && npm run build:cli && npm run build:components",
     "build:components": "tsx scripts/build-components.ts",
     "build-scripts": "tsc",
     "build:tokens": "tsx -r tsconfig-paths/register src/scripts/tokens/run.ts",
@@ -42,9 +54,13 @@
     "build:editor": "tsx scripts/build-editor.ts",
     "build:cli": "tsx scripts/build-cli.ts",
     "prepare": "npm run build:defaults && npm run build:editor && npm run build:cli && npm run build:components",
-    "prepublishOnly": "npm run check:utilities && npm run build:defaults && npm run build:editor && npm run build:cli && npm run build:components",
+    "prepublishOnly": "npm run check:utilities && npm run build:defaults && npm run build:context && npm run build:editor && npm run build:cli && npm run build:components",
     "docs:dev": "cd docs && npm run dev",
-    "docs:build": "cd docs && npm run build"
+    "docs:build": "cd docs && npm run build",
+    "build:cem": "custom-elements-manifest analyze",
+    "check:cem": "custom-elements-manifest analyze && git diff --exit-code custom-elements.json",
+    "build:context": "tsx scripts/build-agent-context.ts",
+    "check:context": "npm --prefix docs run sync:tokens && npm run build:context && tsx scripts/assert-clean-paths.ts docs/static/zebkit docs/static/llms.txt docs/static/llms-full.txt docs/src/lib/data/generated"
   },
   "repository": {
     "type": "git",
@@ -60,6 +76,7 @@
   },
   "homepage": "https://github.com/mzebley/zebkit#readme",
   "dependencies": {
+    "@floating-ui/dom": "^1.7.6",
     "autoprefixer": "^10.4.20",
     "commander": "^12.0.0",
     "cssnano": "^7.0.5",
@@ -75,6 +92,7 @@
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-flow": "^7.24.7",
+    "@custom-elements-manifest/analyzer": "^0.11.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -108,5 +126,6 @@
     "tsx": "^4.19.1",
     "typescript": "^5.5.4",
     "zod": "^3.23.8"
-  }
+  },
+  "customElements": "custom-elements.json"
 }

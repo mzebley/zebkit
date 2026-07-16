@@ -1,0 +1,60 @@
+@use 'tokens/styles/variables/prefix' as prefix;
+
+@layer components {
+  // The host wraps its trigger without disturbing layout.
+  zbk-tooltip {
+    display: var(--#{prefix.$cssVar}-tooltip-display);
+  }
+
+  // The bubble. Positioned by floating-ui (inline left/top over fixed);
+  // promoted to the top layer via [popover] where the platform supports it.
+  .zbk-tooltip {
+    position: fixed;
+    inset: auto;
+    width: max-content;
+    max-width: var(--#{prefix.$cssVar}-tooltip-max-width);
+    margin: 0;
+    overflow: visible;
+
+    color: var(--#{prefix.$cssVar}-tooltip-ink);
+    background-color: var(--#{prefix.$cssVar}-tooltip-canvas);
+
+    border-color: var(--#{prefix.$cssVar}-tooltip-border-color);
+    border-width: var(--#{prefix.$cssVar}-tooltip-border-width);
+    border-style: var(--#{prefix.$cssVar}-tooltip-border-style);
+    border-radius: var(--#{prefix.$cssVar}-tooltip-border-radius);
+
+    padding-inline: var(--#{prefix.$cssVar}-tooltip-padding-inline);
+    padding-block: var(--#{prefix.$cssVar}-tooltip-padding-block);
+
+    font-family: var(--#{prefix.$cssVar}-tooltip-font-family);
+    font-size: var(--#{prefix.$cssVar}-tooltip-font-size);
+    font-weight: var(--#{prefix.$cssVar}-tooltip-font-weight);
+    line-height: var(--#{prefix.$cssVar}-tooltip-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-tooltip-letter-spacing);
+
+    box-shadow: var(--#{prefix.$cssVar}-tooltip-box-shadow);
+    z-index: var(--#{prefix.$cssVar}-tooltip-z-index);
+    opacity: var(--#{prefix.$cssVar}-tooltip-opacity);
+
+    transition-property: opacity;
+    transition-duration: var(--#{prefix.$cssVar}-tooltip-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-tooltip-transition-timing-function);
+  }
+
+  // Text sits above the arrow square.
+  .zbk-tooltip__content {
+    position: relative;
+    display: block;
+  }
+
+  // Rotated square; side offset is set inline by the element from the
+  // resolved placement.
+  .zbk-tooltip__arrow {
+    position: absolute;
+    inline-size: var(--#{prefix.$cssVar}-tooltip-arrow-size);
+    block-size: var(--#{prefix.$cssVar}-tooltip-arrow-size);
+    background-color: var(--#{prefix.$cssVar}-tooltip-canvas);
+    transform: rotate(45deg);
+  }
+}

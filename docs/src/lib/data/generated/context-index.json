@@ -1,0 +1,106 @@
+{
+  "files": [
+    {
+      "name": "zbk-button",
+      "href": "zbk-button.md",
+      "description": "A light-DOM element wrapping a real <button>: renders the token-driven skeleton, reflects variants into classes, forwards native semantics, and adds the one behavior a native button lacks (loading).",
+      "kind": "component"
+    },
+    {
+      "name": "zbk-checkbox",
+      "href": "zbk-checkbox.md",
+      "description": "A binary (or mixed-state) choice: a light-DOM element wrapping a real <input type=\"checkbox\"> inside its own label, with an aria-hidden control span visualizing its state.",
+      "kind": "component"
+    },
+    {
+      "name": "zbk-heading",
+      "href": "zbk-heading.md",
+      "description": "The zbk-heading component.",
+      "kind": "component"
+    },
+    {
+      "name": "zbk-input",
+      "href": "zbk-input.md",
+      "description": "Single-line text entry: a light-DOM element wrapping a real <input> inside its own label, with optional format-as-you-type masking.",
+      "kind": "component"
+    },
+    {
+      "name": "zbk-radio",
+      "href": "zbk-radio.md",
+      "description": "One option in a mutually exclusive group: a light-DOM element wrapping a real <input type=\"radio\"> inside its own label. Radios sharing a name form a native group — mutual exclusion, arrow-key navigation, and form submission come from the platform.",
+      "kind": "component"
+    },
+    {
+      "name": "zbk-select",
+      "href": "zbk-select.md",
+      "description": "Pick from a fixed set of options: a light-DOM element wrapping a real <select> inside its own label. Authored option content is adopted into the select; remaining default children are the visible label.",
+      "kind": "component"
+    },
+    {
+      "name": "zbk-textarea",
+      "href": "zbk-textarea.md",
+      "description": "Multi-line free-form text entry: a light-DOM element wrapping a real <textarea> inside its own label. No affixes, no masking.",
+      "kind": "component"
+    },
+    {
+      "name": "zbk-toggle",
+      "href": "zbk-toggle.md",
+      "description": "An on/off switch that takes effect immediately: a light-DOM element wrapping a real <input type=\"checkbox\" role=\"switch\"> inside its own label — the APG switch pattern on a fully native input, drawn as a track with a traveling thumb.",
+      "kind": "component"
+    },
+    {
+      "name": "zbk-tooltip",
+      "href": "zbk-tooltip.md",
+      "description": "Supplementary text beside a control: a light-DOM element that adopts its child as the trigger and renders a positioned bubble. mode=\"hint\" (default) describes the trigger on hover/focus per WCAG 1.4.13; mode=\"toggle\" is a click-triggered toggletip announced through the shared live region.",
+      "kind": "component"
+    },
+    {
+      "name": "Layout utilities",
+      "href": "utilities-layout.md",
+      "description": "flex, display, positioning, object fitting, overflow, and visibility",
+      "kind": "utility"
+    },
+    {
+      "name": "Grid utilities",
+      "href": "utilities-grid.md",
+      "description": "grid tracks, placement, alignment, and sizing",
+      "kind": "utility"
+    },
+    {
+      "name": "Spacing utilities",
+      "href": "utilities-spacing.md",
+      "description": "margins, padding, sizes, position offsets, and page or section rhythm",
+      "kind": "utility"
+    },
+    {
+      "name": "Typography utilities",
+      "href": "utilities-typography.md",
+      "description": "type scales, text behavior, and long-form prose",
+      "kind": "utility"
+    },
+    {
+      "name": "Border utilities",
+      "href": "utilities-borders.md",
+      "description": "border width, radius, style, and semantic border color",
+      "kind": "utility"
+    },
+    {
+      "name": "Effects utilities",
+      "href": "utilities-effects.md",
+      "description": "elevation, opacity, stacking order, transitions, and focus rings",
+      "kind": "utility"
+    },
+    {
+      "name": "Interaction utilities",
+      "href": "utilities-interaction.md",
+      "description": "cursor and pointer-event behavior",
+      "kind": "utility"
+    },
+    {
+      "name": "Color utilities",
+      "href": "utilities-color.md",
+      "description": "token-bound ink, canvas, border, fill, and interaction-state color surfaces",
+      "kind": "utility"
+    }
+  ]
+}

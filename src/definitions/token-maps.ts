@@ -60,7 +60,7 @@ export const tokenCompatibilityMap: {
   textTransform: ["textTransform"],
   fontStyle: ["fontStyle"],
   textAlignment: ["textAlignment"],
-  sizing: ["sizing", "dimension", "spacing", "rootSize"],
+  sizing: ["sizing", "dimension", "spacing", "rootSize", "fontSize"],
   spacing: ["spacing", "dimension", "sizing", "rootSize"],
   dimension: ["dimension", "spacing", "sizing", "rootSize"],
   rootSize: ["rootSize"],
@@ -78,7 +78,7 @@ export const tokenCompatibilityMap: {
   boxShadow: ["boxShadow"],
   flex: ["flex"],
   setting: ["setting"],
-  transition: ["transition"],
+  transition: ["transition"]
 };
 
 /**

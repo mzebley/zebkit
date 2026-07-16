@@ -1,0 +1,58 @@
+// Hide-until-upgraded — collapse the flash of unstyled slot content.
+//
+// zebkit components render their skeleton in JavaScript, so between HTML parse
+// and element upgrade the browser paints the raw light-DOM children (a bare
+// "Save" where a button should be, an unwrapped input, etc.). Hiding the custom
+// element until it is `:defined` removes that flash: the styled component
+// appears in one step instead of morphing out of unstyled markup.
+//
+// Lives in `base` (below `components`) so any component, utility, or consumer
+// rule wins once the element is defined; while it is still undefined nothing
+// else competes for these properties anyway.
+//
+// `visibility: hidden` is deliberate — not `opacity: 0`, not `display: none`:
+//   - it reserves the element's layout box, so the component reveals in place
+//     instead of shoving the page around (far less layout shift than
+//     `display: none`, which reserves nothing)
+//   - it drops the subtree from the tab order and the accessibility tree while
+//     hidden, so a half-loaded control is never focusable or announced (unlike
+//     `opacity: 0`, which leaves it both)
+//
+// Progressive-enhancement failsafe: if the runtime never loads (script blocked,
+// CDN down, CSP violation) these elements would stay hidden forever. A
+// zero-duration, delayed animation flips them back to visible after a grace
+// period, so the worst case degrades to unstyled-but-readable content rather
+// than a blank page — accessibility-first beats a clean flash (see VISION.md).
+// A normal upgrade stops matching `:not(:defined)` long before the delay
+// elapses, so on the happy path the reveal animation is discarded and never
+// fires. Because the animation only steps `visibility` it carries no motion,
+// so `prefers-reduced-motion` has nothing to suppress.
+//
+// The selector list is the full set of zebkit custom elements; a test
+// (upgrade.test.ts) fails the build if a component is added without being
+// listed here.
+
+@use 'tokens/styles/variables/prefix' as prefix;
+
+@layer base {
+  :is(
+      zbk-button,
+      zbk-checkbox,
+      zbk-heading,
+      zbk-input,
+      zbk-radio,
+      zbk-select,
+      zbk-textarea,
+      zbk-toggle,
+      zbk-tooltip
+    ):not(:defined) {
+    visibility: hidden;
+    animation: #{prefix.$cssVar}-reveal-unupgraded 0s linear 3s forwards;
+  }
+}
+
+@keyframes #{prefix.$cssVar}-reveal-unupgraded {
+  to {
+    visibility: visible;
+  }
+}

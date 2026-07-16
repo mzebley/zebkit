@@ -1,0 +1,114 @@
+---
+title: Checkbox
+description: The zebkit checkbox — a native input inside its own label, with replaceable state indicators.
+layout: components
+---
+
+<script lang="ts">
+  import TokenTable from '$components/TokenTable.svelte';
+  import AgentContext from '$components/AgentContext.svelte';
+  import { compiledTokens } from '$data/compiled-tokens';
+  import { buildTokenRows } from '$lib/utils/token-docs';
+
+  const checkboxTokenRows = buildTokenRows('zbk-checkbox', compiledTokens['zbk-checkbox']);
+</script>
+
+`<zbk-checkbox>` wraps a real `<input type="checkbox">` inside its own `<label>`. The native input stays functional but invisible, stretched across the whole label — hover, press, click, and focus land on it natively anywhere in the component — while an aria-hidden control span visualizes its state. For an on/off switch, use [`<zbk-toggle>`](/components/toggle): a checkbox is a form selection, a toggle is an immediate state change.
+
+## Live examples
+
+<div class="border border-app-muted rounded-lg p-4 canvas-app-soft">
+  <div class="zbk-checkbox-group">
+    <zbk-checkbox name="demo-basic" checked>Email me about updates</zbk-checkbox>
+    <zbk-checkbox name="demo-basic">Subscribe to the newsletter</zbk-checkbox>
+    <zbk-checkbox name="demo-basic" indeterminate>All notifications</zbk-checkbox>
+    <zbk-checkbox name="demo-basic" disabled>Locked preference</zbk-checkbox>
+    <zbk-checkbox name="demo-basic" variant="sm">Small</zbk-checkbox>
+    <zbk-checkbox name="demo-basic" variant="lg">Large</zbk-checkbox>
+  </div>
+</div>
+
+## Usage
+
+```html
+<zbk-checkbox name="terms" value="yes" checked>I agree to the terms</zbk-checkbox>
+```
+
+Renders (light DOM, inspectable):
+
+```html
+<zbk-checkbox name="terms" value="yes" checked>
+  <label class="zbk-checkbox">
+    <input type="checkbox" class="zbk-checkbox__input" name="terms" />
+    <span class="zbk-checkbox__control" aria-hidden="true"></span>
+    <span class="zbk-checkbox__label">I agree to the terms</span>
+  </label>
+</zbk-checkbox>
+```
+
+Form participation, constraint validation (`required`), and events are fully native — listen for `change` on the element; there is no custom event.
+
+## State-indicator slots
+
+Replace the drawn checkmark and indeterminate bar with any authored content — an svg, an icon-font glyph, an HTML character, an image:
+
+```html
+<zbk-checkbox name="tasks">
+  <svg slot="checked" viewBox="0 0 24 24">…</svg>
+  <span slot="indeterminate">&ndash;</span>
+  All tasks
+</zbk-checkbox>
+```
+
+<div class="border border-app-muted rounded-lg p-4 canvas-app-soft">
+  <div class="zbk-checkbox-group">
+    <zbk-checkbox name="demo-slots" checked>
+      <svg slot="checked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" /><path d="M4 17l5 5" opacity="0.4" /></svg>
+      Custom svg checkmark
+    </zbk-checkbox>
+    <zbk-checkbox name="demo-slots" checked>
+      <span slot="checked">★</span>
+      HTML character indicator
+    </zbk-checkbox>
+    <zbk-checkbox name="demo-slots" indeterminate>
+      <span slot="indeterminate">~</span>
+      Custom indeterminate mark
+    </zbk-checkbox>
+    <zbk-checkbox name="demo-slots">
+      <span slot="unchecked">·</span>
+      Unchecked indicator (no drawn default)
+    </zbk-checkbox>
+  </div>
+</div>
+
+| Slot | Shown when | Replaces |
+|---|---|---|
+| `checked` | checked (and not indeterminate) | the drawn checkmark |
+| `indeterminate` | indeterminate | the drawn bar |
+| `unchecked` | neither | nothing (no drawn default) |
+
+Slotted indicators layer over the control, size from the `indicator-size` token (`1em` by default, so size variants rescale them), inherit `indicator-color` (icon fonts and `currentColor` SVGs pick it up automatically), and animate with the component's transition tokens. The control is aria-hidden, so indicator content is presentational — state stays on the native input.
+
+## Variants
+
+| Variant | Axis | Remaps |
+|---|---|---|
+| `sm` | size | Smaller control and label type. |
+| `lg` | size | Larger control and label type. |
+
+The tap target stays generous at any size — the invisible native input covers the whole label, not just the control.
+
+## Accessibility
+
+- Label text (default children) is the accessible name via the wrapping `<label>`; text-free checkboxes must provide `aria-label` (a nameless checkbox warns in dev with the fix).
+- Write `aria-*`/`role` on `<zbk-checkbox>` — they relocate to the inner `<input>` automatically, and `focus()` forwards to it.
+- `indeterminate` is visual + assistive-tech state only, never submitted; any user toggle clears it (native behavior).
+- Motion uses the playful-fx transition tokens and honors `prefers-reduced-motion`.
+
+## Tokens
+
+<TokenTable rows={checkboxTokenRows} showSwatch={true} />
+
+## For agents
+
+<AgentContext tag="zbk-checkbox" />

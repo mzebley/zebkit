@@ -1,7 +1,7 @@
 import { compiledTokens } from './compiled-tokens';
 
 // Utility manifests are the linted source of truth for the utility surface
-// (src/core/styles/utility-classes/*.utilities.manifest.json). We import them
+// (src/tokens/styles/utility-classes/*.utilities.manifest.json). We import them
 // directly and expand each family's grammar into its class vocabulary, deriving
 // token-bound values from the same compiled token set the generator uses — so
 // these pages are generated from source and cannot silently drift.

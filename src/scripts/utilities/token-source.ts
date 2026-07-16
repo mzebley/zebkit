@@ -1,10 +1,10 @@
-// Loads zebkit token modules (src/{core,components}/**/tokens/tokens.ts) and
+// Loads zebkit token modules (src/{tokens,components}/**/tokens/tokens.ts) and
 // returns a map of module key -> (token key -> token type). Replaces the USWDS
 // project's token-template-loader: lets the lint check that a family's
 // tokens.group exists, that every pattern value is a real token key, and
 // (when tokens.types is set) that each value's declared `type` is allowed.
 //
-// Modules that share a `key` (e.g. core/spacing and semantic/spacing both
+// Modules that share a `key` (e.g. tokens/spacing and tokens/semantic/spacing both
 // export key "spacing") are merged into one group.
 
 import path from "node:path";
@@ -16,7 +16,7 @@ import type { UtilityFamily } from "./expand.js";
 export type TokenModuleMap = Map<string, Map<string, string>>;
 
 export async function loadTokenModules(rootDir: string): Promise<TokenModuleMap> {
-  const files = globSync("src/{core,components}/**/tokens/tokens.ts", { cwd: rootDir }).sort();
+  const files = globSync("src/{tokens,components}/**/tokens/tokens.ts", { cwd: rootDir }).sort();
   const modules: TokenModuleMap = new Map();
 
   for (const file of files) {
@@ -35,7 +35,7 @@ export async function loadTokenModules(rootDir: string): Promise<TokenModuleMap>
 
 /**
  * The breakpoint scale keys, in token order, derived from the breakpoint token
- * module (src/core/breakpoint) — the single source of truth for the responsive
+ * module (src/tokens/breakpoint) — the single source of truth for the responsive
  * variant axis. Generated partials carry the full grammar; per-build disabling
  * happens at compile time via SCSS `$active-breakpoints`, so all keys are
  * included here. Falls back to `fallback` when the module is unavailable.

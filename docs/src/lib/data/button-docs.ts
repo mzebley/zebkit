@@ -11,8 +11,8 @@ const buttonTokenBlueprint = [
   {
     title: 'Surface & borders',
     tokens: [
-      { token: 'background', label: 'Background', type: 'color' },
-      { token: 'background-hover', label: 'Background (hover)', type: 'color' },
+      { token: 'canvas', label: 'Canvas', type: 'color' },
+      { token: 'canvas-hover', label: 'Canvas (hover)', type: 'color' },
       { token: 'border-color', label: 'Border color', type: 'color' },
       {
         token: 'border-radius',
@@ -99,9 +99,9 @@ const buttonTokenBlueprint = [
     ],
   },
   {
-    title: 'Foreground',
+    title: 'Ink',
     tokens: [
-      { token: 'color', label: 'Label color', type: 'color' },
+      { token: 'ink', label: 'Label color', type: 'color' },
       { token: 'focus-color', label: 'Focus ring', type: 'color' },
     ],
   },

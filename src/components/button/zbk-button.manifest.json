@@ -1,0 +1,89 @@
+{
+  "$schema": "../../../schemas/component-manifest.schema.json",
+  "tag": "zbk-button",
+  "purpose": "A light-DOM element wrapping a real <button>: renders the token-driven skeleton, reflects variants into classes, forwards native semantics, and adds the one behavior a native button lacks (loading).",
+  "nativeElement": "button",
+  "useWhen": [
+    "The user triggers an action: submit, confirm, open, dismiss, toggle a panel.",
+    "Work is in flight after activation — `loading` announces it (aria-busy), suppresses re-activation, and keeps the button focusable."
+  ],
+  "notWhen": [
+    {
+      "case": "Activation navigates to another URL.",
+      "instead": "An <a> element — buttons act, links navigate."
+    },
+    {
+      "case": "The control flips a persistent on/off setting.",
+      "instead": "zbk-toggle"
+    }
+  ],
+  "guidance": [
+    "`type` defaults to \"button\" — the platform's \"submit\" default is a footgun inside forms; opt into submit explicitly.",
+    "Prefer `loading` over `disabled` for in-flight work: unlike disabled, it keeps the button focusable so keyboard and screen-reader users don't lose their place mid-operation.",
+    "Style variants (ghost, outline, subtle) share one axis and are alternatives; size variants (sm, lg) compose with them: variant=\"ghost sm\"."
+  ],
+  "slots": {
+    "default": {
+      "description": "The button's label content (its accessible name).",
+      "required": true,
+      "guidance": [
+        "Icon-only buttons must supply the accessible name via aria-label or aria-labelledby; dev mode warns when the computed name is empty."
+      ]
+    },
+    "icon": {
+      "description": "A supplementary pictogram rendered aria-hidden beside the label — any markup: svg, icon-font glyph, HTML character, image.",
+      "presentational": true,
+      "tokens": { "size": "icon-size" },
+      "positions": ["start", "end"],
+      "guidance": [
+        "Use data-position=\"start|end\" for explicit placement; when omitted, placement is inferred from authored child order.",
+        "Icons inherit the label's ink (currentColor); there is no separate icon color token.",
+        "The icon is aria-hidden: it can reinforce the label, never replace it — meaning must live in the accessible name."
+      ]
+    }
+  },
+  "keyboard": [
+    {
+      "keys": "Enter / Space",
+      "does": "Activates the button; arrives as a native click (native behavior, preserved). Suppressed while loading."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Basic",
+      "html": "<zbk-button>Save</zbk-button>"
+    },
+    {
+      "title": "Explicit submit in a form",
+      "html": "<zbk-button type=\"submit\">Create account</zbk-button>",
+      "why": "type must opt into \"submit\" — zebkit defaults it to \"button\"."
+    },
+    {
+      "title": "Icon with label",
+      "html": "<zbk-button variant=\"outline\"><svg slot=\"icon\" data-position=\"start\" viewBox=\"0 0 16 16\"><path d=\"M8 0 16 16H0z\"/></svg>Save draft</zbk-button>"
+    },
+    {
+      "title": "Composed variants",
+      "html": "<zbk-button variant=\"ghost sm\">Cancel</zbk-button>",
+      "why": "ghost (style axis) and sm (size axis) compose; two style-axis variants would conflict and warn."
+    },
+    {
+      "title": "Loading",
+      "html": "<zbk-button loading>Saving…</zbk-button>",
+      "why": "aria-busy announces the in-flight work; activation is suppressed but focus is kept."
+    },
+    {
+      "title": "Icon-only",
+      "tier": "situational",
+      "html": "<zbk-button aria-label=\"Close\" variant=\"ghost\"><svg slot=\"icon\" viewBox=\"0 0 16 16\"><path d=\"M2 2l12 12M14 2L2 14\"/></svg></zbk-button>",
+      "why": "Valid only with an aria-label supplying the accessible name; without one, dev mode warns."
+    },
+    {
+      "title": "Button as navigation",
+      "tier": "discouraged",
+      "html": "<zbk-button onclick=\"location.href='/pricing'\">Pricing</zbk-button>",
+      "why": "Navigation belongs to <a>: middle-click, open-in-new-tab, and link semantics for AT are all lost."
+    }
+  ],
+  "related": ["zbk-toggle"]
+}

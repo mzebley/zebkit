@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Visibility utilities",
+  "key": "visibility",
+  "description": "Control over whether an element is visually/accessibly rendered (without changing the document layout) and the visually-hidden accessibility pattern.",
+  "domain": "layout",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "visibility",
+      "description": "Sets visibility of an element.",
+      "guidance": [
+        "Use 'collapse' on a table cell, row, or column to hide it without the browser having to rerender the entire table.",
+        "You can reveal a child element with 'visibility:visible' even if the parent is 'hidden'"
+      ],
+      "source": "src/tokens/styles/utility-classes/visibility.scss",
+      "properties": ["visibility"],
+      "pattern": {
+        "base": "visibility",
+        "values": ["hidden", "visible", "collapse"]
+      },
+      "modifiers": {
+        "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"]
+      }
+    },
+    {
+      "name": "visually-hidden",
+      "description": "Hides content visually while keeping it available to assistive technology.",
+      "guidance": [
+        "Use for screen-reader-only text (icon button labels, skip links at rest, table caption context).",
+        "Never use on focusable elements unless focus reveals them as a focused but invisible element can strand keyboard users."
+      ],
+      "a11y": "Core accessibility primitive: content stays in the accessibility tree.",
+      "source": "src/tokens/styles/utility-classes/visibility.scss",
+      "properties": ["clip", "clip-path", "height", "overflow", "position", "white-space", "width"],
+      "classes": ["visually-hidden"],
+      "generator": {
+        "declarations": {
+          "visually-hidden": {
+            "clip": "rect(0 0 0 0)",
+            "clip-path": "inset(50%)",
+            "height": "1px",
+            "overflow": "hidden",
+            "position": "absolute",
+            "white-space": "nowrap",
+            "width": "1px"
+          }
+        }
+      }
+    }
+  ]
+}

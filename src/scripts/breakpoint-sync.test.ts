@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  *
- * The breakpoint token module (src/core/breakpoint) is the single source of
+ * The breakpoint token module (src/tokens/breakpoint) is the single source of
  * truth for the responsive axis, but three fallback copies exist for contexts
  * that can't load it: EXTENDED_TOKEN_BREAKPOINTS (config typing/validation),
  * expand.ts BREAKPOINTS (utility generator fallback), and the `!default`
@@ -11,7 +11,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import breakpointTokens from '../core/breakpoint/tokens/tokens';
+import breakpointTokens from '../tokens/breakpoint/tokens/tokens';
 import { EXTENDED_TOKEN_BREAKPOINTS } from './config';
 import { BREAKPOINTS } from './utilities/expand';
 
@@ -31,7 +31,7 @@ describe('breakpoint fallback copies stay in sync with the token module', () => 
 
   it('_breakpoints.scss defaults match the token keys and widths', () => {
     const scss = fs.readFileSync(
-      path.resolve(__dirname, '../core/styles/variables/_breakpoints.scss'),
+      path.resolve(__dirname, '../tokens/styles/variables/_breakpoints.scss'),
       'utf8'
     );
 

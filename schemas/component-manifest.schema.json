@@ -1,150 +1,181 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://uswds.plus/schemas/component-manifest.schema.json",
-  "title": "USWDS+ Component Manifest",
-  "description": "Canonical, hand-authored contract for one component. Lives beside tokenTemplate.ts / tokenSchema.ts / styles.scss. Validated against code by lint-manifest; consumed by the Figma bridge, the Claude Design skill, docs, editor support, and CMS integrations.",
+  "$id": "https://zebkit.markzebley.com/schemas/component-manifest.schema.json",
+  "title": "Zebkit Component Manifest",
+  "description": "Hand-authored guidance layer of a component's contract: the slot vocabulary and semantics, usage guidance, and canonical examples. It never restates what code already declares — attributes, tokens, events, and variants stay derived from the Custom Elements Manifest, token modules, and variant registry. build:context merges this manifest with those derived sources into the per-component agent context; a build step emits each component's runtime slot-name list from it so unknown-slot warnings share one source of truth. lint:components keeps the round trip honest.",
   "type": "object",
-  "required": ["name", "key", "status", "semantics", "markup", "tokens"],
+  "required": ["tag", "purpose", "slots", "examples"],
   "additionalProperties": false,
   "properties": {
     "$schema": { "type": "string" },
-    "name": { "type": "string", "description": "Human-readable name, e.g. 'Button'." },
-    "key": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "description": "Module + token group key. Must match the module's tokenTemplate export." },
-    "status": { "enum": ["stable", "pilot", "deprecated"] },
-    "semantics": {
+    "tag": {
+      "type": "string",
+      "pattern": "^zbk-[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "The custom element tag. Must have a declaration in custom-elements.json (the lint flags a manifest for a component that does not exist)."
+    },
+    "purpose": {
+      "type": "string",
+      "description": "One or two sentences: what the component is for. The first thing an agent reads when choosing a component."
+    },
+    "nativeElement": {
+      "type": "string",
+      "description": "The native element at the component's core (GRAMMAR.md §8), e.g. 'input', 'button'. Stated structurally so tooling need not parse it out of prose."
+    },
+    "useWhen": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Situations this component is the right choice for, e.g. 'Input is prose-length or multi-line'."
+    },
+    "notWhen": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["case"],
+        "additionalProperties": false,
+        "properties": {
+          "case": {
+            "type": "string",
+            "description": "The situation where this component is the wrong choice."
+          },
+          "instead": {
+            "type": "string",
+            "description": "What to reach for instead. When it starts with 'zbk-' the lint checks it is a real component tag."
+          }
+        }
+      },
+      "description": "Situations where another pattern is correct. The component-selection half of the contract."
+    },
+    "guidance": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Component-level usage rules a design tool or AI must respect, e.g. 'A placeholder is never a substitute for label content.'"
+    },
+    "slots": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "enum": [
+          "default",
+          "icon",
+          "prefix",
+          "suffix",
+          "checked",
+          "unchecked",
+          "indeterminate"
+        ]
+      },
+      "additionalProperties": { "$ref": "#/$defs/slot" },
+      "description": "The component's slot contract, keyed by slot name ('default' = unnamed children). The manifest is the source of truth: build:context renders the Slots section from here (no @slot JSDoc), the generated runtime name list drives unknown-slot warnings, and the lint diffs declared names against the slot names the component source actually delivers (slotted()/renderIcon/affix call sites) in both directions. The enum above IS the shared vocabulary from GRAMMAR.md §7 — adding a name here is amending the spec."
+    },
+    "keyboard": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["keys", "does"],
+        "additionalProperties": false,
+        "properties": {
+          "keys": {
+            "type": "string",
+            "description": "The key or combination, e.g. 'Space', 'ArrowDown', 'Escape'."
+          },
+          "does": {
+            "type": "string",
+            "description": "What happens, noting when it is native behavior the component preserves rather than implements."
+          }
+        }
+      },
+      "description": "The keyboard interaction contract (GRAMMAR.md §8). Omit only when the component adds nothing beyond ordinary native text editing."
+    },
+    "examples": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/example" },
+      "description": "Canonical markup, rendered into docs and agent context. The lint parses each html string and validates it: tags exist in custom-elements.json, attributes exist on the component, slot attributes name declared slots, variant values are registered. Examples are executable documentation — a renamed attribute breaks the build instead of silently lying to every reader."
+    },
+    "variantTiers": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": ["recommended", "situational", "discouraged"]
+      },
+      "description": "Usage tier per shipped variant, keyed by variant name (lint-checked against the variant registry). Only list variants that differ from the 'recommended' default. Advisory metadata for tooling — never changes generated CSS, mirroring utility-family tiers."
+    },
+    "related": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^zbk-[a-z0-9]+(?:-[a-z0-9]+)*$"
+      },
+      "description": "Components commonly considered alongside or composed with this one. Each must be a real component tag."
+    }
+  },
+  "$defs": {
+    "slot": {
       "type": "object",
       "required": ["description"],
       "additionalProperties": false,
       "properties": {
-        "description": { "type": "string", "description": "What this component IS, in one or two sentences. Written for both humans and the Claude Design skill." },
-        "nativeElement": { "type": "string", "description": "The semantic HTML element at the component's core, e.g. 'button', 'dialog'." },
-        "role": { "type": ["string", "null"], "description": "Required ARIA role, if the native element doesn't supply it." },
-        "guidance": { "type": "array", "items": { "type": "string" }, "description": "Usage rules a design tool or AI must respect ('never use for navigation')." }
-      }
-    },
-    "markup": {
-      "type": "object",
-      "required": ["baseClass"],
-      "additionalProperties": false,
-      "properties": {
-        "baseClass": { "type": "string", "description": "Canonical USWDS-compatible class, e.g. 'usa-button'." },
-        "elementClasses": { "type": "array", "items": { "type": "string" }, "description": "Child-element classes, e.g. 'usa-button-group__item'." },
-        "example": { "type": "string", "description": "Minimal correct HTML." }
-      }
-    },
-    "webComponent": {
-      "type": "object",
-      "required": ["tag", "attributes"],
-      "additionalProperties": false,
-      "description": "Omit entirely for modules with no web component yet. The lint cross-checks every field against the element source; a standard custom-elements.json is generated from this section.",
-      "properties": {
-        "tag": { "type": "string", "pattern": "^[a-z][a-z0-9]*-[a-z0-9-]+$" },
-        "module": { "type": "string", "description": "Package import path, e.g. 'aem-uswds-plus/web-components/button'." },
-        "attributes": {
+        "description": {
+          "type": "string",
+          "description": "What content belongs here and what the component does with it."
+        },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the component computes an empty accessible name without this slot's content (unless an aria-* attribute supplies the name). Feeds the dev-mode accessible-name warning — one declaration, two renderings."
+        },
+        "presentational": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the slot's rendered container is aria-hidden. Information presentational content carries must also live in the accessible name or description (GRAMMAR.md §7)."
+        },
+        "tokens": {
           "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "required": ["type"],
-            "additionalProperties": false,
-            "properties": {
-              "type": { "enum": ["string", "boolean", "enum"] },
-              "values": { "type": "array", "items": { "type": "string" }, "description": "Required when type is 'enum'. Must match the .types.ts union." },
-              "default": { "type": ["string", "boolean"] },
-              "description": { "type": "string" },
-              "classMap": {
-                "type": "object",
-                "additionalProperties": { "type": ["string", "null"] },
-                "description": "enum value -> CSS class applied (null = no class). Must match the element's class map."
-              },
-              "requiredWhen": { "type": "string", "description": "Condition under which this attribute becomes required, e.g. 'icon-only'." },
-              "a11y": { "type": "boolean", "description": "True when the attribute exists for accessibility." }
+          "additionalProperties": false,
+          "description": "Component tokens that govern slotted content. Each value must be a key in the component's token module (lint-checked).",
+          "properties": {
+            "size": {
+              "type": "string",
+              "description": "Token key sizing the slotted content, e.g. 'icon-size', 'indicator-size'."
+            },
+            "color": {
+              "type": "string",
+              "description": "Token key coloring the slotted content, e.g. 'affix-ink', 'indicator-color'."
             }
           }
         },
-        "slots": {
+        "positions": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "required": ["name"],
-            "additionalProperties": false,
-            "properties": {
-              "name": { "type": "string" },
-              "kind": { "enum": ["icon", "content", "actions"] },
-              "description": { "type": "string" }
-            }
-          }
+          "items": { "enum": ["start", "end"] },
+          "description": "Placements the slot honors via data-position (icon slots). Omit for slots with a fixed position."
         },
-        "events": { "type": "array", "items": { "type": "string" } }
-      }
-    },
-    "states": {
-      "type": "array",
-      "items": { "enum": ["default", "hover", "active", "focus", "visited", "disabled", "checked", "error", "expanded", "selected"] },
-      "description": "Interactive states the component styles. Tokens follow the '<token>-<state>' convention for each."
-    },
-    "variants": {
-      "type": "object",
-      "description": "Keyed by variant value (must be a subset of webComponent.attributes.variant.values when present). tokenPrefix declares the convention: tokens for this variant are '<tokenPrefix>-*' keys in the token template. null = variant restyles via existing default tokens only.",
-      "additionalProperties": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "tokenPrefix": { "type": ["string", "null"] },
-          "description": { "type": "string" }
+        "guidance": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Slot-specific usage rules, e.g. the presentational-content rule spelled out for this slot."
         }
       }
     },
-    "tokens": {
+    "example": {
       "type": "object",
-      "required": ["group"],
+      "required": ["title", "html"],
       "additionalProperties": false,
       "properties": {
-        "group": { "type": "string", "description": "Token template key this component draws from. Must equal an existing tokenTemplate export (usually = key)." }
-      }
-    },
-    "a11y": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "forwarded": { "type": "array", "items": { "type": "string" }, "description": "ARIA attributes the web component forwards to the native element." },
-        "rules": { "type": "array", "items": { "type": "string" }, "description": "Hard requirements ('icon-only requires an accessible name')." }
-      }
-    },
-    "figma": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "componentSetName": { "type": "string" },
-        "page": { "type": "string" },
-        "variantProperties": {
-          "type": "object",
-          "additionalProperties": {
-            "type": ["string", "array"],
-            "description": "Either '@attributes.<name>' to mirror an attribute enum (linted for equality), or an explicit value list for Figma-only axes like 'state'."
-          }
+        "title": {
+          "type": "string",
+          "description": "Short label, e.g. 'Basic', 'Custom indicators'."
         },
-        "componentProperties": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "required": ["type"],
-            "additionalProperties": false,
-            "properties": {
-              "type": { "enum": ["text", "boolean", "instance-swap"] },
-              "attribute": { "type": "string", "description": "Web-component attribute this Figma property round-trips to." },
-              "default": {}
-            }
-          }
+        "html": {
+          "type": "string",
+          "description": "The authored markup as a consumer would write it (pre-upgrade light DOM). Parsed and validated by the lint."
         },
-        "anatomy": { "type": "array", "items": { "type": "string" }, "description": "Ordered Figma layer names for MCP generation." }
-      }
-    },
-    "handoff": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "contentModel": { "enum": ["attribute-or-inline-label", "named-slots", "light-dom-children"] },
-        "notes": { "type": "string" }
+        "tier": {
+          "enum": ["recommended", "situational", "discouraged"],
+          "description": "Omit = recommended. 'discouraged' examples exist to show the anti-pattern by name; pair with 'why'."
+        },
+        "why": {
+          "type": "string",
+          "description": "Why this example is tiered as it is. Required in spirit for anything below recommended — say what breaks."
+        }
       }
     }
   }

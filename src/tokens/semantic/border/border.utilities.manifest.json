@@ -1,0 +1,90 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Border utilities",
+  "key": "border",
+  "description": "Border width, radius and style utilities. Width and radius bind to the border token scale per side/corner; the values are emitted verbatim because the border tokens are keyed width-<size>/radius-<size> rather than <size>.",
+  "domain": "border",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "border-width",
+      "description": "Sets border width on all sides or a specific side/axis, from the border-width token scale.",
+      "guidance": ["Border width alone does not draw a border — pair with a border-style utility (border-solid) and a border color."],
+      "source": "src/tokens/semantic/border/styles.scss",
+      "properties": ["border-width", "border-top-width", "border-bottom-width", "border-left-width", "border-right-width"],
+      "pattern": {
+        "base": "border-width",
+        "edges": ["y", "x", "top", "bottom", "left", "right"],
+        "values": ["0", "xs", "sm", "md", "lg", "xl"]
+      },
+      "generator": {
+        "edgeProperties": {
+          "": ["border-width"],
+          "y": ["border-top-width", "border-bottom-width"],
+          "x": ["border-left-width", "border-right-width"],
+          "top": ["border-top-width"],
+          "bottom": ["border-bottom-width"],
+          "left": ["border-left-width"],
+          "right": ["border-right-width"]
+        },
+        "valueMap": {
+          "0": "0",
+          "xs": "var(--zbk-border-width-xs)",
+          "sm": "var(--zbk-border-width-sm)",
+          "md": "var(--zbk-border-width-md)",
+          "lg": "var(--zbk-border-width-lg)",
+          "xl": "var(--zbk-border-width-xl)"
+        }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "radius",
+      "description": "Sets border radius on all corners or a specific corner/edge, from the border-radius token scale. radius-pill is a fully rounded (99rem) value.",
+      "source": "src/tokens/semantic/border/styles.scss",
+      "properties": ["border-radius", "border-top-left-radius", "border-top-right-radius", "border-bottom-left-radius", "border-bottom-right-radius"],
+      "pattern": {
+        "base": "radius",
+        "edges": ["top", "bottom", "left", "right", "top-left", "top-right", "bottom-left", "bottom-right"],
+        "values": ["0", "xs", "sm", "md", "lg", "xl", "pill"]
+      },
+      "generator": {
+        "edgeProperties": {
+          "": ["border-radius"],
+          "top": ["border-top-left-radius", "border-top-right-radius"],
+          "bottom": ["border-bottom-left-radius", "border-bottom-right-radius"],
+          "left": ["border-top-left-radius", "border-bottom-left-radius"],
+          "right": ["border-top-right-radius", "border-bottom-right-radius"],
+          "top-left": ["border-top-left-radius"],
+          "top-right": ["border-top-right-radius"],
+          "bottom-left": ["border-bottom-left-radius"],
+          "bottom-right": ["border-bottom-right-radius"]
+        },
+        "valueMap": {
+          "0": "0",
+          "xs": "var(--zbk-border-radius-xs)",
+          "sm": "var(--zbk-border-radius-sm)",
+          "md": "var(--zbk-border-radius-md)",
+          "lg": "var(--zbk-border-radius-lg)",
+          "xl": "var(--zbk-border-radius-xl)",
+          "pill": "99rem"
+        }
+      },
+      "modifiers": { "responsive": ["tablet", "tablet-lg", "desktop", "desktop-lg", "widescreen"] }
+    },
+    {
+      "name": "border-style",
+      "description": "Sets the border line style.",
+      "source": "src/tokens/semantic/border/styles.scss",
+      "properties": ["border-style"],
+      "classes": ["border-solid", "border-dashed", "border-dotted"],
+      "generator": {
+        "declarations": {
+          "border-solid": { "border-style": "solid" },
+          "border-dashed": { "border-style": "dashed" },
+          "border-dotted": { "border-style": "dotted" }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+---
+title: Select
+description: The zebkit select — a native select inside its own label, with affix slots and a replaceable chevron.
+layout: components
+---
+
+<script lang="ts">
+  import TokenTable from '$components/TokenTable.svelte';
+  import AgentContext from '$components/AgentContext.svelte';
+  import { compiledTokens } from '$data/compiled-tokens';
+  import { buildTokenRows } from '$lib/utils/token-docs';
+
+  const selectTokenRows = buildTokenRows('zbk-select', compiledTokens['zbk-select']);
+</script>
+
+`<zbk-select>` wraps a real `<select>` inside its own `<label>`. Authored `<option>`, `<optgroup>`, and `<hr>` children are adopted into the native select; every other default child is the visible label. The field draws a chevron indicator that slotted suffix content replaces. For free text, use [`<zbk-input>`](/components/input).
+
+## Live examples
+
+<div class="border border-app-muted rounded-lg p-4 canvas-app-soft">
+  <div class="zbk-select-group">
+    <zbk-select name="demo-country" value="ca">
+      Country
+      <option value="us">United States</option>
+      <option value="ca">Canada</option>
+      <option value="mx">Mexico</option>
+    </zbk-select>
+    <zbk-select name="demo-lang">
+      <svg slot="prefix" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18" /></svg>
+      Language
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="fr">Français</option>
+    </zbk-select>
+    <zbk-select name="demo-disabled" disabled>
+      Locked selection
+      <option value="one">Only option</option>
+    </zbk-select>
+    <zbk-select name="demo-sm" variant="sm">
+      Small
+      <option value="a">Option A</option>
+    </zbk-select>
+    <zbk-select name="demo-lg" variant="lg">
+      Large
+      <option value="a">Option A</option>
+    </zbk-select>
+  </div>
+</div>
+
+## Usage
+
+```html
+<zbk-select name="country" value="ca">
+  Country
+  <option value="us">United States</option>
+  <option value="ca">Canada</option>
+</zbk-select>
+```
+
+Renders (light DOM, inspectable):
+
+```html
+<zbk-select name="country" value="ca">
+  <label class="zbk-select">
+    <span class="zbk-select__label">Country</span>
+    <span class="zbk-select__field">
+      <select class="zbk-select__select" name="country">
+        <option value="us">United States</option>
+        <option value="ca">Canada</option>
+      </select>
+    </span>
+  </label>
+</zbk-select>
+```
+
+Default children partition by what a native select accepts: `<option>`, `<optgroup>`, and `<hr>` go into the select; everything else is the visible label. Form participation, constraint validation (`required`), and events are fully native — listen for `change` on the element; there is no custom event.
+
+## Affix slots and the chevron
+
+Put any authored content at the field's inline start or end; suffix content replaces the drawn chevron:
+
+```html
+<zbk-select name="lang">
+  <svg slot="prefix" viewBox="0 0 24 24">…</svg>
+  <i class="ti ti-caret-down" slot="suffix"></i>
+  Language
+  <option value="en">English</option>
+</zbk-select>
+```
+
+Affixes size from the `icon-size` token (`1em` by default, so size variants rescale them) and inherit `affix-ink` (icon fonts and `currentColor` SVGs pick it up automatically). They render aria-hidden — presentational only. The drawn chevron is pure structure colored by `indicator-color`; it retires when a suffix is slotted or when `multiple` makes the select a list box.
+
+## Variants
+
+| Variant | Axis | Remaps |
+|---|---|---|
+| `sm` | size | Smaller type and padding; keeps the 44px minimum tap target. |
+| `lg` | size | Larger type and padding. |
+
+## Accessibility
+
+- Non-option label content (default children) is the accessible name via the wrapping `<label>`; option text is never the name. Label-free selects must provide `aria-label` — a nameless select warns in dev with the fix.
+- Write `aria-*`/`role` on `<zbk-select>` — they relocate to the inner `<select>` automatically, and `focus()` forwards to it.
+- Keyboard behavior is the platform's own: arrow keys, type-ahead, and the picker itself are all native.
+- `:user-invalid` (invalid after interaction) and `[aria-invalid="true"]` drive the `-invalid` tokens.
+- Motion uses the calm-fx transition tokens and honors `prefers-reduced-motion`.
+
+## Tokens
+
+<TokenTable rows={selectTokenRows} showSwatch={true} />
+
+## For agents
+
+<AgentContext tag="zbk-select" />

@@ -30,7 +30,7 @@ function buildBreakpointsUse(activeBreakpoints: Record<string, string>): string 
     entries.length === 0
       ? '()'
       : `(${entries.map(([bp, width]) => `'${bp}': ${width}`).join(', ')})`;
-  return `@use 'core/styles/variables/breakpoints' with ($active-breakpoints: ${map});\n`;
+  return `@use 'tokens/styles/variables/breakpoints' with ($active-breakpoints: ${map});\n`;
 }
 
 const LAYER_ORDERING = '@layer theme, base, components, utilities;';
@@ -155,9 +155,9 @@ export async function compileSass(options: CompileSassOptions): Promise<CompileS
     projectName,
     sassVariables = {},
     utilityStylesheetPatterns = [
-      'core/styles/utility-classes/',
-      'core/colors/',
-      'core/semantic/color/',
+      'tokens/styles/utility-classes/',
+      'tokens/colors/',
+      'tokens/semantic/color/',
     ],
     variantCss = '',
     zebkitPackageRoot,
@@ -218,7 +218,7 @@ export async function compileSass(options: CompileSassOptions): Promise<CompileS
 
     const includePaths = [
       path.join(zbkRoot, 'src'),
-      path.join(zbkRoot, 'src', 'core'),
+      path.join(zbkRoot, 'src', 'tokens'),
       path.join(zbkRoot, 'src', 'components'),
       zbkRoot,
     ];

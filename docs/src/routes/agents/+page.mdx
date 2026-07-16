@@ -1,0 +1,40 @@
+---
+title: For agents
+description: Zebkit's compiled component contract, formatted for LLM context windows.
+layout: editorial
+---
+
+<script lang="ts">
+  import contextIndex from '$lib/data/generated/context-index.json';
+</script>
+
+Zebkit optimizes for the developer with no memory — human or machine. The same discipline that makes components guessable for people (one spelling per intent, one grammar across components) makes them reliable for agents: a model that has seen one zebkit component has effectively seen them all.
+
+The contract is compiled, never hand-written. `npm run build:context` distills the Custom Elements Manifest, token modules, variant registry, and utility manifests into focused files plus an index. The docs site, the TypeScript types, and these files are three renderings of one dataset.
+
+## The files
+
+Everything zebkit ships lives under `/zebkit/context/`. The standard discovery files are also available at [`/llms.txt`](/llms.txt) and [`/llms-full.txt`](/llms-full.txt).
+
+<table>
+  <thead>
+    <tr><th>File</th><th>Contents</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><a href="/zebkit/context/llms.txt"><code>llms.txt</code></a></td><td>A compact index for selecting the relevant component or utility context.</td></tr>
+    <tr><td><a href="/zebkit/context/llms-full.txt"><code>llms-full.txt</code></a></td><td>Every component and utility file concatenated for full-library context.</td></tr>
+    {#each contextIndex.files as file}
+      <tr><td><a href={`/zebkit/context/${file.href}`}><code>{file.name}</code></a></td><td>{file.description}</td></tr>
+    {/each}
+  </tbody>
+</table>
+
+Each component page also embeds its own file under "For agents", with copy and download buttons.
+
+## What an agent can rely on
+
+- **One entry point.** The custom element is the documented API. `<zbk-button variant="ghost lg">` — attributes are kebab-case, booleans are presence-based, native attributes pass through.
+- **One naming scheme.** `zbk-{component}` elements, `.zbk-{component}--{variant}` classes, `--zbk-{component}-{property}[-{state}]` tokens. State suffixes are fixed: `-hover`, `-active`, `-focus`, `-disabled`, plus semantic states where the pattern has them.
+- **No custom events for native things.** `click`, `change`, and `input` bubble from the internal native element — listen on the zebkit element.
+- **ARIA lands where AT looks.** Write `aria-*` on the zebkit element; it relocates to the internal native control.
+- **Feedback names the fix.** Dev-mode warnings state the component, the problem, and the valid vocabulary — an agent in a fix loop can act on the message text directly.

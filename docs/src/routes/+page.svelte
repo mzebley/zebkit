@@ -19,6 +19,14 @@
       Every visual decision in zebkit is a token, and every token is data you
       can swap. Change the tokens and the whole product takes on <strong><em>your look</em></strong>: same HTML, same behavior, <strong><em>new everything</em></strong>.
     </p>
+    <zbk-button>
+      Hi
+      <i
+        slot="icon"
+        data-position="start"
+        class="ri-arrow-left-long-line"
+      ></i>
+    </zbk-button>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 13.35 72.337 35.1"

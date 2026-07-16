@@ -1,5 +1,5 @@
 // Docs viewport regime — mirrors zebkit's own breakpoint tokens so the docs
-// site reflows on the same scale it documents (see src/core/styles/variables/
+// site reflows on the same scale it documents (see src/tokens/styles/variables/
 // _breakpoints.scss: tablet-lg 50rem, desktop-lg 80rem).
 //
 //   compact  < 50rem  (below tablet-lg) — nav drawer, inspector bottom-sheet

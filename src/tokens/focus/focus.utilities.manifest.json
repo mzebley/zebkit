@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/utility-manifest.schema.json",
+  "name": "Focus utilities",
+  "key": "focus",
+  "description": "Opt-in focus-ring utility. The .focusable class draws the token-driven focus outline on :focus / :focus-within / :focus-visible.",
+  "domain": "effects",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "focusable",
+      "description": "Draws the design-system focus ring (outline width, offset and color from the focus tokens) when the element or a descendant is focused.",
+      "guidance": [
+        "Never remove the focus ring without providing an equally visible replacement; keyboard users rely on it.",
+        "Interactive zebkit components already manage their own focus visibility — reach for .focusable on custom interactive elements."
+      ],
+      "a11y": "This IS the accessible focus indicator; the outline width/offset/color are token-bound so they respond to the contrast and spacing dials.",
+      "source": "src/tokens/focus/styles.scss",
+      "properties": ["outline-width", "outline-offset", "outline-color"],
+      "rules": [
+        {
+          "selector": ".focusable:focus, .focusable:focus-within, .focusable:focus-visible",
+          "declarations": {
+            "outline-width": "var(--zbk-focus-width)",
+            "outline-offset": "var(--zbk-focus-offset)",
+            "outline-color": "var(--zbk-focus-color)"
+          }
+        }
+      ]
+    }
+  ]
+}

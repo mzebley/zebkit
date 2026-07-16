@@ -1,16 +1,16 @@
 import path from 'path';
 import type { ZebkitConfig } from '../../scripts/config';
-import { writeVscodeSettings } from './init-command';
+import { resolveComponentsFilter } from '../../scripts/components-config';
+import { copyAgentContext, writeVscodeSettings, type ContextCopyDeps } from './init-command';
 
-export interface PullCommandDeps {
-  pathExists: (path: string) => Promise<boolean>;
+export interface PullCommandDeps extends ContextCopyDeps {
   readJson: (path: string) => Promise<any>;
   readJsonSafe: (path: string) => Promise<any>;
   writeJson: (path: string, data: any, options?: any) => Promise<void>;
-  ensureDir: (path: string) => Promise<void>;
   readConfig: () => Promise<{ config: ZebkitConfig; path: string } | undefined>;
   getZebkitDefaultsDir: () => string;
   getZebkitPackageRoot: () => string;
+  getZebkitContextDir: () => string;
   /** Maps a base preset name to its bundled token snapshot dir (defaults dir for `default`). */
   resolveBundledThemeTokensDir: (
     themeName: string,
@@ -18,6 +18,33 @@ export interface PullCommandDeps {
     packageRoot: string
   ) => string;
   log: (message: string) => void;
+}
+
+/**
+ * Refreshes the consumer's agent-context directory from the bundled context,
+ * when `context.path` is configured. Honors the components include/exclude block
+ * (per-component docs for excluded components are skipped; llms.txt is always
+ * copied). Independent of token sync.
+ */
+async function refreshAgentContext(
+  config: ZebkitConfig,
+  configPath: string,
+  deps: PullCommandDeps
+): Promise<void> {
+  const contextPath = config.context?.path;
+  if (!contextPath) return; // omitted or false = opted out
+
+  const { excluded } = resolveComponentsFilter(config.components);
+  const targetDir = path.resolve(path.dirname(configPath), contextPath);
+  const copied = await copyAgentContext(
+    targetDir,
+    deps.getZebkitContextDir(),
+    excluded,
+    deps
+  );
+  if (copied > 0) {
+    deps.log(`Refreshed ${copied} agent context file${copied === 1 ? '' : 's'} in ${contextPath}`);
+  }
 }
 
 async function countNewKeys(
@@ -80,6 +107,10 @@ export async function runPullCommand(deps: PullCommandDeps) {
   }
 
   const { config, path: configPath } = configResult;
+
+  // Agent context is independent of tokens — refresh it before the tokenPath gate.
+  await refreshAgentContext(config, configPath, deps);
+
   const customTokenPath = config.tokens?.tokenPath;
 
   if (!customTokenPath) {

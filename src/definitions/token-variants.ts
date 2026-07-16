@@ -19,6 +19,20 @@ export interface VariantConfig<
   name: string;
 
   /**
+   * Optional, advisory composition axis (e.g. "style", "size"). Variants on
+   * different axes compose (`variant="ghost lg"`); the build and dev runtime
+   * warn when two same-axis variants override overlapping tokens. Nothing is
+   * ever blocked — the vocabulary stays complete.
+   */
+  axis?: string;
+
+  /**
+   * One-line human/agent-readable summary of what the variant remaps. Surfaces
+   * in the variant registry, docs, and generated agent context.
+   */
+  description?: string;
+
+  /**
    * Optional custom class name override.
    * If omitted, the build pipeline will generate:
    *    zbk-{component}--{name}
@@ -48,7 +62,7 @@ export interface VariantConfig<
      * One or more stylesheet paths (relative to project root or src)
      * that should be included when building Zebkit CSS.
      *
-     * Example: ["src/core/button/variants/outline.styles.scss"]
+     * Example: ["src/components/button/variants/outline.styles.scss"]
      */
     stylesheetPaths?: string[];
 

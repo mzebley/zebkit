@@ -9,6 +9,7 @@ import {
   inferTokenKeyFromFilename,
   isVariantOverrideFile,
   mergeTokens,
+  validateTokenExport,
 } from './compile-token-helpers';
 
 describe('compile-tokens helpers', () => {
@@ -73,4 +74,17 @@ describe('compile-tokens helpers', () => {
       'Unsupported format: yaml'
     );
   });
+
+  it('reports the exact nested path for schema failures', () => {
+    expect(
+      validateTokenExport(
+        {
+          canvas: { value: 123, type: 'color' },
+          radius: { value: '4px', type: 'dimension' },
+        },
+        tokenSchema
+      )
+    ).toEqual(expect.arrayContaining([expect.stringContaining('canvas.value →')]));
+  });
+
 });

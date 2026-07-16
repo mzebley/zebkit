@@ -1,0 +1,195 @@
+{
+  "button": {
+    "ghost": {
+      "axis": "style",
+      "description": "Transparent canvas and border; ink takes the action role with a subtle hover wash.",
+      "overrides": {
+        "canvas": "transparent",
+        "canvas-hover": "{action.canvas-subtle}",
+        "canvas-active": "{action.canvas-muted}",
+        "canvas-disabled": "transparent",
+        "ink": "{action.ink}",
+        "ink-hover": "{action.ink-emphasis}",
+        "ink-active": "{action.ink-emphasis}",
+        "border-color": "transparent",
+        "border-color-hover": "transparent",
+        "border-color-active": "transparent",
+        "border-color-disabled": "transparent"
+      }
+    },
+    "lg": {
+      "axis": "size",
+      "description": "Larger type and padding.",
+      "overrides": {
+        "font-size": "{font-size.lg}",
+        "padding-inline": "{spacing.lg}",
+        "padding-block": "{spacing.sm}",
+        "icon-size": "1.5rem"
+      }
+    },
+    "outline": {
+      "axis": "style",
+      "description": "Transparent canvas with an action-colored border; subtle wash on hover.",
+      "overrides": {
+        "canvas": "transparent",
+        "canvas-hover": "{action.canvas-subtle}",
+        "canvas-active": "{action.canvas-muted}",
+        "canvas-disabled": "transparent",
+        "ink": "{action.ink}",
+        "ink-hover": "{action.ink-emphasis}",
+        "ink-active": "{action.ink-emphasis}",
+        "border-color": "{action.border}",
+        "border-color-hover": "{action.border-emphasis}",
+        "border-color-active": "{action.border-emphasis}"
+      }
+    },
+    "sm": {
+      "axis": "size",
+      "description": "Smaller type and padding; keeps the 44px minimum tap target.",
+      "overrides": {
+        "font-size": "{font-size.sm}",
+        "padding-inline": "{spacing.xs}",
+        "padding-block": "{spacing.2xs}",
+        "icon-size": "1rem"
+      }
+    },
+    "subtle": {
+      "axis": "style",
+      "description": "Low-emphasis fill on the subtle action canvas; no border.",
+      "overrides": {
+        "canvas": "{action.canvas-subtle}",
+        "canvas-hover": "{action.canvas-muted}",
+        "canvas-active": "{action.canvas-muted}",
+        "ink": "{action.ink}",
+        "ink-hover": "{action.ink-emphasis}",
+        "ink-active": "{action.ink-emphasis}",
+        "border-color": "transparent",
+        "border-color-hover": "transparent",
+        "border-color-active": "transparent"
+      }
+    }
+  },
+  "checkbox": {
+    "lg": {
+      "axis": "size",
+      "description": "Larger control and label type.",
+      "overrides": {
+        "control-width": "{spacing.lg}",
+        "control-height": "{spacing.lg}",
+        "font-size": "{font-size.lg}"
+      }
+    },
+    "sm": {
+      "axis": "size",
+      "description": "Smaller control and label type.",
+      "overrides": {
+        "control-width": "{spacing.md}",
+        "control-height": "{spacing.md}",
+        "font-size": "{font-size.sm}"
+      }
+    }
+  },
+  "input": {
+    "lg": {
+      "axis": "size",
+      "description": "Larger type and padding.",
+      "overrides": {
+        "font-size": "{font-size.lg}",
+        "label-font-size": "{font-size.md}",
+        "padding-inline": "{spacing.md}",
+        "padding-block": "{spacing.xs}"
+      }
+    },
+    "sm": {
+      "axis": "size",
+      "description": "Smaller type and padding; keeps the 44px minimum tap target.",
+      "overrides": {
+        "font-size": "{font-size.sm}",
+        "label-font-size": "{font-size.xs}",
+        "padding-inline": "{spacing.xs}"
+      }
+    }
+  },
+  "radio": {
+    "lg": {
+      "axis": "size",
+      "description": "Larger control and label type.",
+      "overrides": {
+        "control-width": "{spacing.lg}",
+        "control-height": "{spacing.lg}",
+        "font-size": "{font-size.lg}"
+      }
+    },
+    "sm": {
+      "axis": "size",
+      "description": "Smaller control and label type.",
+      "overrides": {
+        "control-width": "{spacing.md}",
+        "control-height": "{spacing.md}",
+        "font-size": "{font-size.sm}"
+      }
+    }
+  },
+  "select": {
+    "lg": {
+      "axis": "size",
+      "description": "Larger type and padding.",
+      "overrides": {
+        "font-size": "{font-size.lg}",
+        "label-font-size": "{font-size.md}",
+        "padding-inline": "{spacing.md}",
+        "padding-block": "{spacing.xs}"
+      }
+    },
+    "sm": {
+      "axis": "size",
+      "description": "Smaller type and padding; keeps the 44px minimum tap target.",
+      "overrides": {
+        "font-size": "{font-size.sm}",
+        "label-font-size": "{font-size.xs}",
+        "padding-inline": "{spacing.xs}"
+      }
+    }
+  },
+  "textarea": {
+    "lg": {
+      "axis": "size",
+      "description": "Larger type and padding.",
+      "overrides": {
+        "font-size": "{font-size.lg}",
+        "label-font-size": "{font-size.md}",
+        "padding-inline": "{spacing.md}",
+        "padding-block": "{spacing.xs}"
+      }
+    },
+    "sm": {
+      "axis": "size",
+      "description": "Smaller type and padding; keeps the 44px minimum tap target.",
+      "overrides": {
+        "font-size": "{font-size.sm}",
+        "label-font-size": "{font-size.xs}",
+        "padding-inline": "{spacing.xs}"
+      }
+    }
+  },
+  "toggle": {
+    "lg": {
+      "axis": "size",
+      "description": "Larger track and label type; thumb follows the track.",
+      "overrides": {
+        "track-width": "{spacing.xl}",
+        "track-height": "{spacing.lg}",
+        "font-size": "{font-size.lg}"
+      }
+    },
+    "sm": {
+      "axis": "size",
+      "description": "Smaller track and label type; thumb follows the track.",
+      "overrides": {
+        "track-width": "{spacing.lg}",
+        "track-height": "{spacing.md}",
+        "font-size": "{font-size.sm}"
+      }
+    }
+  }
+}

@@ -44,7 +44,7 @@ const config = {
     },
     alias: {
       $definitions: '../src/definitions',
-      $core: '../src/core',
+      $core: '../src/tokens',
       $data: './src/lib/data',
       $components: './src/lib/components',
       $utils: './src/lib/utils'

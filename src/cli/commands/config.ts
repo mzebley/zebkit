@@ -1,11 +1,12 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { loadZebkitConfig } from '../../scripts/config.js';
-import { getZebkitPackageRoot } from '../resolve-package-root.js';
+import { getZebkitDefaultsDir, getZebkitPackageRoot } from '../resolve-package-root.js';
 import {
   getBuiltInThemeNames,
   getThemePromptChoices,
 } from '../../scripts/theme-presets.js';
+import { getKnownComponents } from '../../scripts/known-components.js';
 import { writeConfigToPath } from '../config-paths.js';
 import { handlePromptCancel, isPromptCancelError } from '../prompt-cancel.js';
 import {
@@ -23,6 +24,7 @@ function createDeps(): ConfigCommandDeps {
     getZebkitPackageRoot,
     getBuiltInThemeNames,
     getThemePromptChoices,
+    getKnownComponents: () => getKnownComponents(getZebkitDefaultsDir()),
     handlePromptCancel,
     isPromptCancelError,
     log: (message: string) => console.log(message),

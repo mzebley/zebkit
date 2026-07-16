@@ -77,7 +77,16 @@ export const navigation: NavSection[] = [
   },
   {
     label: 'Components',
-    items: [{ label: 'Button', link: '/components/button' }]
+    items: [
+      { label: 'Button', link: '/components/button' },
+      { label: 'Checkbox', link: '/components/checkbox' },
+      { label: 'Input', link: '/components/input' },
+      { label: 'Radio', link: '/components/radio' },
+      { label: 'Select', link: '/components/select' },
+      { label: 'Textarea', link: '/components/textarea' },
+      { label: 'Toggle', link: '/components/toggle' },
+      { label: 'Tooltip', link: '/components/tooltip' }
+    ]
   },
   {
     label: 'Utilities',

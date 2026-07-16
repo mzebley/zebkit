@@ -16,6 +16,7 @@ import {
 import {
   buildZebkitVariants,
   VariantRegistry,
+  writeVariantScaffolds,
 } from "@token-scripts/compile-variants";
 import {
   convertTokensToCssVars,
@@ -37,8 +38,15 @@ import {
   PruneConfig,
   resolveOverlayRootSelector,
   TokensConfig,
+  validateComponentsConfig,
   ZebkitConfig,
 } from "../config";
+import {
+  ComponentsFilter,
+  resolveComponentsFilter,
+  warnUnknownComponents,
+} from "../components-config";
+import { getKnownComponents } from "../known-components";
 import { extractZbkTokens, loadComponentTokens, scanContent } from "../prune/content-scan";
 import { assembleReport } from "../prune/report";
 import type { PruneMode } from "../prune/types";
@@ -89,16 +97,6 @@ function displayWelcome() {
   console.log(chalk.cyan("============================"));
 }
 
-async function getComponents(componentsDir?: string): Promise<string[]> {
-  const dir = componentsDir ?? path.resolve(__dirname, "../../components");
-  if (!(await fs.pathExists(dir))) return [];
-
-  const items = await fs.readdir(dir, { withFileTypes: true });
-  return items
-    .filter((item: Dirent) => item.isDirectory() && !item.name.startsWith("."))
-    .map((item: Dirent) => item.name);
-}
-
 export interface RunTokenBuildOptions {
   /** Config to use instead of loading from disk. */
   overrideConfig?: ZebkitConfig;
@@ -143,6 +141,15 @@ export async function runTokenBuild(
     console.log(chalk.green(`Using config from ${loadedConfig.path}`));
   }
 
+  // Declared component intent: excluded components and shipped-variant allowlists.
+  // Filters at gather time; prune (evidence-based) runs after and only removes more.
+  const componentsConfig = loadedConfig?.config.components;
+  validateComponentsConfig(componentsConfig);
+  const componentsFilter: ComponentsFilter = resolveComponentsFilter(componentsConfig);
+  if (componentsConfig && Object.keys(componentsConfig).length > 0) {
+    warnUnknownComponents(componentsConfig, await getKnownComponents(tokenDefaultsDir));
+  }
+
   // Flag overrides (`--theme`, `--dest`) layer on top of the loaded config. When no
   // config exists they establish one, which intentionally skips the interactive
   // prompts for anything they don't cover (defaults apply).
@@ -156,44 +163,12 @@ export async function runTokenBuild(
     };
   }
 
-  const componentsDir = zebkitPackageRoot
-    ? path.join(zebkitPackageRoot, "src", "components")
-    : undefined;
   const builtInThemeNames = getThemePromptChoices(
     await getBuiltInThemeNames(zebkitPackageRoot)
   );
   const buildStart = Date.now();
 
   try {
-    const components = await getComponents(componentsDir);
-    const includeAllComponents = tokensConfig?.includeAllComponents;
-    const selectedComponents = includeAllComponents
-      ? components
-      : tokensConfig?.selectedComponents
-      ? tokensConfig.selectedComponents.filter((component) => {
-          const exists = components.includes(component);
-          if (!exists) {
-            console.warn(
-              chalk.yellow(
-                `Component "${component}" not found. Ignoring this entry from config.`
-              )
-            );
-          }
-          return exists;
-        })
-      : components.length > 0
-      ? (
-          await inquirer.prompt([
-            {
-              type: "checkbox",
-              name: "selectedComponents",
-              message: "Select components to include:",
-              choices: components,
-            },
-          ])
-        ).selectedComponents
-      : [];
-
     const { destinationPath, assetFilePath } = tokensConfig
       ? {
           destinationPath: tokensConfig.destinationPath ?? "./dist",
@@ -379,19 +354,22 @@ export async function runTokenBuild(
       );
     }
 
-    const gatherOptions = zebkitPackageRoot
-      ? {
-          coreDir: path.join(zebkitPackageRoot, "src", "core"),
-          componentsDir: path.join(zebkitPackageRoot, "src", "components"),
-          tokenDefaultsDir:
-            selectedTokenDefaultsDir &&
-            (await fs.pathExists(selectedTokenDefaultsDir))
-              ? selectedTokenDefaultsDir
-              : tokenDefaultsDir,
-        }
-      : undefined;
+    const gatherOptions = {
+      ...(zebkitPackageRoot
+        ? {
+            tokensDir: path.join(zebkitPackageRoot, "src", "tokens"),
+            componentsDir: path.join(zebkitPackageRoot, "src", "components"),
+            tokenDefaultsDir:
+              selectedTokenDefaultsDir &&
+              (await fs.pathExists(selectedTokenDefaultsDir))
+                ? selectedTokenDefaultsDir
+                : tokenDefaultsDir,
+          }
+        : {}),
+      excludedComponents: componentsFilter.excluded,
+    };
 
-    const files = await gatherZebkitFiles(selectedComponents, gatherOptions);
+    const files = await gatherZebkitFiles(gatherOptions);
 
     const resolvedSplitMode =
       splitMode as BuildZebkitTokensOptions["splitMode"];
@@ -402,7 +380,11 @@ export async function runTokenBuild(
       resolvedDestinationPath,
       customTokenPath,
       outputFormats,
-      { splitMode: resolvedSplitMode, overridePaths },
+      {
+        splitMode: resolvedSplitMode,
+        overridePaths,
+        excludedComponents: componentsFilter.excluded,
+      },
       exportTokens
     );
 
@@ -496,6 +478,7 @@ export async function runTokenBuild(
       {
         snapshotPath: variantSnapshotPath,
         packageRoot: zebkitPackageRoot,
+        componentsFilter,
       }
     );
     if (writeVariantRegistry) {
@@ -504,6 +487,18 @@ export async function runTokenBuild(
         resolvedDestinationPath,
         themeName,
         resolvedSplitMode
+      );
+    }
+
+    // Editable variant definitions ride along with the token exports — same
+    // splitMode/format knobs, authorable shape (round-trips as override input).
+    if (exportTokens) {
+      await writeVariantScaffolds(
+        variantRegistry,
+        resolvedDestinationPath,
+        outputFormats,
+        themeName,
+        resolvedSplitMode ?? "combined"
       );
     }
 
@@ -524,7 +519,7 @@ export async function runTokenBuild(
         .sort()
         .map(
           (family, i) =>
-            `@use 'core/colors/palette/${family}' as zbk_smart_palette_${i};\n`
+            `@use 'tokens/colors/palette/${family}' as zbk_smart_palette_${i};\n`
         )
         .join("");
       finalVariantCss = `${inlineCss}\n${paletteGlobalColors()}`;
@@ -573,6 +568,7 @@ export async function runTokenBuild(
           useStaticTypeScale,
           useStaticSpaceScale,
           minify,
+          excludedComponents: componentsFilter.excluded,
         });
         if (output) overlayOutputs.push(output);
       }
@@ -814,6 +810,8 @@ interface BuildOverlayCssOptions {
   useStaticSpaceScale: boolean;
   /** Minify the overlay stylesheet (follows the base theme's `tokens.minify`). */
   minify: boolean;
+  /** Components excluded by the components config; overlay overrides targeting them warn. */
+  excludedComponents?: ReadonlySet<string>;
 }
 
 /** A computed overlay stylesheet, ready to write. */
@@ -863,7 +861,11 @@ async function computeOverlayCss(
     destination,
     overlay.tokenPath,
     [],
-    { splitMode: "combined", overridePaths: options.contextOverridePaths },
+    {
+      splitMode: "combined",
+      overridePaths: options.contextOverridePaths,
+      excludedComponents: options.excludedComponents,
+    },
     false
   );
 

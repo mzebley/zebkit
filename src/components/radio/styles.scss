@@ -1,0 +1,192 @@
+@use 'tokens/styles/variables/prefix'as prefix;
+
+@layer components {
+  // The host stays out of layout; the label is the component's layout root.
+  zbk-radio {
+    display: var(--#{prefix.$cssVar}-radio-display);
+  }
+
+  // The one styling contract for radios. <zbk-radio> renders exactly this
+  // markup in light DOM; the classes also work standalone on a native
+  // label + input pair.
+  label.zbk-radio {
+    position: relative;
+    display: inline-flex;
+    align-items: var(--#{prefix.$cssVar}-radio-align-items);
+    gap: var(--#{prefix.$cssVar}-radio-gap);
+
+    /* Label typography */
+    color: var(--#{prefix.$cssVar}-radio-ink);
+    font-family: var(--#{prefix.$cssVar}-radio-font-family);
+    font-size: var(--#{prefix.$cssVar}-radio-font-size);
+    font-weight: var(--#{prefix.$cssVar}-radio-font-weight);
+    line-height: var(--#{prefix.$cssVar}-radio-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-radio-letter-spacing);
+
+    cursor: var(--#{prefix.$cssVar}-radio-cursor);
+    opacity: var(--#{prefix.$cssVar}-radio-opacity);
+    user-select: none;
+  }
+
+  /* The native input: functional but invisible, stretched across the whole
+     label so hover, press, click, and focus land on it natively anywhere in
+     the component. It stays in the DOM (focusable, announced, submitted). */
+  label.zbk-radio .zbk-radio__input {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+
+  label.zbk-radio .zbk-radio__input:disabled {
+    cursor: var(--#{prefix.$cssVar}-radio-cursor-disabled);
+  }
+
+  /* The visual control the input's state drives via sibling selectors. */
+  label.zbk-radio .zbk-radio__control {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    inline-size: var(--#{prefix.$cssVar}-radio-control-width);
+    block-size: var(--#{prefix.$cssVar}-radio-control-height);
+    background-color: var(--#{prefix.$cssVar}-radio-canvas);
+    border-color: var(--#{prefix.$cssVar}-radio-border-color);
+    border-style: var(--#{prefix.$cssVar}-radio-border-style);
+    border-width: var(--#{prefix.$cssVar}-radio-border-width);
+    border-radius: var(--#{prefix.$cssVar}-radio-border-radius);
+    box-shadow: var(--#{prefix.$cssVar}-radio-box-shadow);
+    transition-property: var(--#{prefix.$cssVar}-radio-transition-property);
+    transition-duration: var(--#{prefix.$cssVar}-radio-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-radio-transition-timing-function);
+    transition-delay: var(--#{prefix.$cssVar}-radio-transition-delay);
+  }
+
+  /* The selection dot. */
+  label.zbk-radio .zbk-radio__control::before {
+    content: '';
+    grid-area: 1 / 1;
+    inline-size: var(--#{prefix.$cssVar}-radio-indicator-size);
+    block-size: var(--#{prefix.$cssVar}-radio-indicator-size);
+    background-color: var(--#{prefix.$cssVar}-radio-indicator-color);
+    border-radius: var(--#{prefix.$cssVar}-radio-indicator-radius);
+    transform: scale(0);
+    transition: transform var(--#{prefix.$cssVar}-radio-transition-duration)
+      var(--#{prefix.$cssVar}-radio-transition-timing-function);
+  }
+
+  /* Slotted state indicators (slot="checked|unchecked"): any authored
+     content — svg, icon-font glyph, HTML character, image — layered over the
+     control, sized by the indicator-size token, colored by indicator-color
+     (fonts and currentColor SVGs inherit), and animated with the component's
+     transition tokens. */
+  label.zbk-radio .zbk-radio__indicator {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    font-size: var(--#{prefix.$cssVar}-radio-indicator-size);
+    line-height: 1;
+    color: var(--#{prefix.$cssVar}-radio-indicator-color);
+    opacity: 0;
+    transform: scale(0);
+    transition: transform var(--#{prefix.$cssVar}-radio-transition-duration)
+        var(--#{prefix.$cssVar}-radio-transition-timing-function),
+      opacity var(--#{prefix.$cssVar}-radio-transition-duration)
+        var(--#{prefix.$cssVar}-radio-transition-timing-function);
+  }
+
+  label.zbk-radio .zbk-radio__indicator :is(svg, img) {
+    inline-size: var(--#{prefix.$cssVar}-radio-indicator-size);
+    block-size: auto;
+    max-block-size: 100%;
+  }
+
+  /* Authored indicators retire the drawn dot they replace. */
+  label.zbk-radio .zbk-radio__control--slotted-checked::before {
+    content: none;
+  }
+
+  /* Each indicator shows for exactly its state. */
+  label.zbk-radio .zbk-radio__input:not(:checked) + .zbk-radio__control .zbk-radio__indicator--unchecked,
+  label.zbk-radio .zbk-radio__input:checked + .zbk-radio__control .zbk-radio__indicator--checked {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Hover (only on devices where hover is a real signal) */
+  @media (hover: hover) and (pointer: fine) {
+    label.zbk-radio .zbk-radio__input:hover:not(:disabled) + .zbk-radio__control {
+      background-color: var(--#{prefix.$cssVar}-radio-canvas-hover);
+      border-color: var(--#{prefix.$cssVar}-radio-border-color-hover);
+      box-shadow: var(--#{prefix.$cssVar}-radio-box-shadow-hover);
+    }
+  }
+
+  /* Active / pressed */
+  label.zbk-radio .zbk-radio__input:active:not(:disabled) + .zbk-radio__control {
+    background-color: var(--#{prefix.$cssVar}-radio-canvas-active);
+    border-color: var(--#{prefix.$cssVar}-radio-border-color-active);
+    box-shadow: var(--#{prefix.$cssVar}-radio-box-shadow-active);
+  }
+
+  /* Focus-visible (keyboard focus) */
+  label.zbk-radio .zbk-radio__input:focus-visible + .zbk-radio__control {
+    outline: var(--#{prefix.$cssVar}-radio-focus-width) solid
+      var(--#{prefix.$cssVar}-radio-focus-color);
+    outline-offset: var(--#{prefix.$cssVar}-radio-focus-offset);
+    box-shadow: var(--#{prefix.$cssVar}-radio-box-shadow-focus);
+  }
+
+  /* Checked / selected */
+  label.zbk-radio .zbk-radio__input:checked + .zbk-radio__control {
+    background-color: var(--#{prefix.$cssVar}-radio-canvas-checked);
+    border-color: var(--#{prefix.$cssVar}-radio-border-color-checked);
+    box-shadow: var(--#{prefix.$cssVar}-radio-box-shadow-checked);
+  }
+
+  label.zbk-radio .zbk-radio__input:checked + .zbk-radio__control::before {
+    transform: scale(1);
+  }
+
+  /* Disabled */
+  label.zbk-radio .zbk-radio__input:disabled + .zbk-radio__control {
+    background-color: var(--#{prefix.$cssVar}-radio-canvas-disabled);
+    border-color: var(--#{prefix.$cssVar}-radio-border-color-disabled);
+    box-shadow: none;
+    opacity: var(--#{prefix.$cssVar}-radio-opacity-disabled);
+  }
+
+  label.zbk-radio .zbk-radio__input:disabled + .zbk-radio__control::before {
+    background-color: var(--#{prefix.$cssVar}-radio-indicator-color-disabled);
+  }
+
+  label.zbk-radio .zbk-radio__input:disabled + .zbk-radio__control .zbk-radio__indicator {
+    color: var(--#{prefix.$cssVar}-radio-indicator-color-disabled);
+  }
+
+  label.zbk-radio .zbk-radio__input:disabled ~ .zbk-radio__label {
+    color: var(--#{prefix.$cssVar}-radio-ink-disabled);
+  }
+
+  /* Radio groups */
+  .zbk-radio-group {
+    display: flex;
+    flex-direction: var(--#{prefix.$cssVar}-radio-group-direction);
+    gap: var(--#{prefix.$cssVar}-radio-group-gap);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    label.zbk-radio .zbk-radio__control,
+    label.zbk-radio .zbk-radio__control::before,
+    label.zbk-radio .zbk-radio__indicator {
+      transition: none;
+    }
+  }
+}

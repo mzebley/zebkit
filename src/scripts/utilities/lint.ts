@@ -15,8 +15,15 @@
 //       predicts exists; every utility class in the file is claimed by a
 //       family (knownExceptions absorb documented irregularities)
 //   U4  no utility class is defined in more than one covered SCSS file
-//   U5  every src/core/styles/mixins/_*.scss partial is covered by a
-//       manifest (legacy mixin-driven partials are allowlisted until migrated)
+//   U5  every class-emitting token SCSS file is covered by a manifest — the
+//       mixin partials, the generated utility partials, and the per-module +
+//       prose styles.scss (legacy mixin-driven files are allowlisted until
+//       migrated)
+//
+// A `rules` family carries verbatim rule blocks (compound/pseudo/element
+// selectors) instead of a class grammar; U2 also checks that every
+// var(--zbk-...) a rule references resolves to a token or a cascade variable a
+// rules family sets.
 //
 // knownExceptions and LEGACY_PARTIALS are the debt ledger: shrink them,
 // never grow them to make a build pass.
@@ -33,27 +40,67 @@ import {
   loadTokenModules,
   resolvePatternValues,
 } from "./token-source.js";
-import { BREAKPOINTS, MANIFEST_GLOB, expandFamily, type UtilityFamily } from "./expand.js";
+import {
+  BREAKPOINTS,
+  MANIFEST_GLOB,
+  STATE_PATTERN_STATES,
+  classesInSelector,
+  expandFamily,
+  instantiateTemplate,
+  type StatePatternStateName,
+  type UtilityFamily,
+  type UtilityRule,
+} from "./expand.js";
 
 type Finding = { rule: string; file: string; subject: string; message: string };
 
 const SCHEMA_PATH = "schemas/utility-manifest.schema.json";
-const UTILITIES_PARTIALS_GLOB = "src/core/styles/mixins/_*.scss";
-const KNOWN_LAYERS = new Set(["utilities"]);
+
+// Every class-emitting token SCSS file is in scope for U5. Content-based
+// detection over the whole tree makes per-directory glob exceptions unnecessary:
+// a file with no literal class selectors (mixin-only emitters, token-var files,
+// prose sub-trees after migration) passes naturally without being listed.
+// Excludes base/ (element/reset styles) and variables/ (var definitions only).
+const UTILITIES_PARTIALS_GLOB = "src/tokens/**/*.scss";
+const UTILITIES_PARTIALS_EXCLUDE = /^src\/tokens\/styles\/(base|variables)\//;
+const KNOWN_LAYERS = new Set(["utilities", "base"]);
 
 // Mixin/variable libraries — they define no classes themselves.
-const IGNORED_PARTIALS = new Set(["_generators.scss", "_index.scss"]);
+const IGNORED_PARTIALS = new Set(["_generators.scss", "_index.scss", "_primitive-color.scss"]);
 
-// Pre-manifest partials whose classes are emitted via Sass mixins (static
-// extraction can't see them). Migrate each by authoring a manifest family and
-// running generate:utilities, then DELETE it from this list. Never add to it.
-const LEGACY_PARTIALS = new Set([
-  "_border.scss",
-  "_color.scss",
-  "_font.scss",
-  "_position.scss",
-  "_spacing.scss",
+// Pre-manifest SCSS (repo-relative paths) whose classes are emitted via Sass
+// mixins (static extraction can't see them). Migrate each by authoring a manifest
+// family and running generate:utilities, then DELETE it from this list. This list
+// only shrinks — never grow it to make a build pass.
+const LEGACY_PARTIALS = new Set<string>([
+  // empty — all color utilities migrated to color.utilities.manifest.json
 ]);
+
+// var(--zbk-<name>) reference inside a rules-family declaration value.
+const RULE_VAR_REF_RE = /var\(\s*--zbk-([a-zA-Z0-9-]+)/g;
+// A --zbk-<name> custom property being *set* (declaration key).
+const RULE_CUSTOM_PROP_RE = /^--zbk-([a-zA-Z0-9-]+)$/;
+
+/** Collect every --zbk-<name> custom property a rules tree sets (name only). */
+function collectCustomPropsSet(rules: UtilityRule[], out: Set<string>): void {
+  for (const rule of rules) {
+    for (const prop of Object.keys(rule.declarations)) {
+      const match = prop.match(RULE_CUSTOM_PROP_RE);
+      if (match) out.add(match[1]);
+    }
+    if (rule.nested) collectCustomPropsSet(rule.nested, out);
+  }
+}
+
+/** Collect every var(--zbk-<name>) referenced in a rules tree's values. */
+function collectVarRefs(rules: UtilityRule[], out: string[]): void {
+  for (const rule of rules) {
+    for (const value of Object.values(rule.declarations)) {
+      for (const match of value.matchAll(RULE_VAR_REF_RE)) out.push(match[1]);
+    }
+    if (rule.nested) collectVarRefs(rule.nested, out);
+  }
+}
 
 /** Extract every class name defined in an SCSS file (escaped ':' prefixes unescaped). */
 function extractClasses(scss: string): Set<string> {
@@ -65,9 +112,7 @@ function extractClasses(scss: string): Set<string> {
   const selectorChunk = /(^|[}{;])\s*([^{}@;]+)\{/g;
   let match: RegExpExecArray | null;
   while ((match = selectorChunk.exec(css))) {
-    for (const cls of match[2].matchAll(/\.((?:[a-zA-Z]|\\:)(?:[a-zA-Z0-9_-]|\\:)*)/g)) {
-      classes.add(cls[1].replace(/\\:/g, ":"));
-    }
+    for (const cls of classesInSelector(match[2])) classes.add(cls);
   }
   return classes;
 }
@@ -82,6 +127,13 @@ async function main() {
   const tokenModules = await loadTokenModules(rootDir);
   const breakpointKeys = new Set(breakpointKeysFromModules(tokenModules, BREAKPOINTS));
 
+  // Every valid token CSS-var suffix, as --zbk-<group>-<key> (the naming the
+  // token build emits). Used to check rules-family var() references.
+  const tokenVarNames = new Set<string>();
+  for (const [group, keys] of tokenModules) {
+    for (const key of keys.keys()) tokenVarNames.add(`${group}-${key}`);
+  }
+
   const manifestFiles = globSync(MANIFEST_GLOB, { cwd: rootDir }).sort();
   if (manifestFiles.length === 0) {
     console.log(chalk.yellow("No utility manifests found."));
@@ -90,6 +142,10 @@ async function main() {
 
   const familyNames = new Map<string, string>();
   const bySource = new Map<string, { family: UtilityFamily; file: string }[]>();
+  // Rules families and the --zbk- cascade variables they define, so a rule that
+  // references a runtime var another rules family sets isn't flagged as unresolved.
+  const rulesFamilies: { family: UtilityFamily; file: string; subject: string }[] = [];
+  const declaredRuntimeVars = new Set<string>();
   let manifestCount = 0;
   let familyCount = 0;
   let exceptionCount = 0;
@@ -115,6 +171,15 @@ async function main() {
       // negativeValues: true, apply exclude) in place, so the rest of the lint
       // and the generator see the same concrete lists. No-op when no tokens.
       resolvePatternValues(family, tokenModules);
+
+      if (family.rules) {
+        rulesFamilies.push({ family, file, subject });
+        collectCustomPropsSet(family.rules, declaredRuntimeVars);
+      }
+      // `unlayered` only means anything on rules families (it steers generation).
+      if (family.unlayered && !family.rules) {
+        findings.push({ rule: "U2", file, subject, message: `unlayered is only valid on rules families.` });
+      }
 
       if (family.pattern) {
         // A pattern family with no values that cannot be auto-derived emits
@@ -227,6 +292,65 @@ async function main() {
     }
   }
 
+  // U2 — statePattern var integrity: every instantiated --zbk- var must resolve
+  // in tokenVarNames. Skipped when varSource === "scss" (vars emitted by Sass
+  // mixin, not a TS token module, and therefore absent from tokenVarNames).
+  for (const file of manifestFiles) {
+    const manifest: any = await fs.readJson(path.resolve(rootDir, file));
+    const subjectBase = manifest.name ?? file;
+    for (const family of manifest.families as UtilityFamily[]) {
+      const sp = family.statePattern;
+      if (!sp || sp.varSource === "scss") continue;
+      const subject = `${subjectBase}.${family.name}`;
+      const axisNames = Object.keys(sp.axes);
+      const combos: Array<Record<string, string | null>> = Object.keys(sp.axes)
+        .map((n) => sp.axes[n])
+        .reduce<Array<(string | null)[]>>(
+          (acc, arr) => acc.flatMap((c) => arr.map((v) => [...c, v])),
+          [[]]
+        )
+        .map((combo) => {
+          const b: Record<string, string | null> = {};
+          axisNames.forEach((name, i) => { b[name] = combo[i]; });
+          return b;
+        });
+      for (const [roleName] of Object.entries(sp.roles)) {
+        for (const axisBindings of combos) {
+          const bindings = { role: roleName, ...axisBindings };
+          const varFull = instantiateTemplate(sp.var, bindings);
+          if (!varFull) continue;
+          const varName = varFull.replace(/^--zbk-/, "");
+          if (!tokenVarNames.has(varName)) {
+            findings.push({
+              rule: "U2",
+              file,
+              subject,
+              message: `statePattern var '${varFull}' (suffix '${varName}') does not resolve to any known token. Check that the token module is loaded and the var template is correct.`,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // U2 — rules-family var integrity: every var(--zbk-<name>) in a rule
+  // declaration resolves to a real token or to a --zbk- cascade variable that
+  // some rules family sets (its own runtime machinery). Runs after the full
+  // manifest sweep so a var set in one family and referenced in another resolves.
+  for (const { family, file, subject } of rulesFamilies) {
+    const refs: string[] = [];
+    collectVarRefs(family.rules!, refs);
+    for (const ref of new Set(refs)) {
+      if (tokenVarNames.has(ref) || declaredRuntimeVars.has(ref)) continue;
+      findings.push({
+        rule: "U2",
+        file,
+        subject,
+        message: `var(--zbk-${ref}) resolves to neither a token (no --zbk-<group>-<key> named '${ref}') nor a --zbk- cascade variable any rules family sets.`,
+      });
+    }
+  }
+
   // Read each covered SCSS file once
   const fileClasses = new Map<string, Set<string>>();
   const definedIn = new Map<string, string[]>(); // class -> source files (for U4)
@@ -281,11 +405,18 @@ async function main() {
     }
   }
 
-  // U5 — every utilities partial is covered (or on the legacy migration list)
-  for (const partial of globSync(UTILITIES_PARTIALS_GLOB, { cwd: rootDir }).sort()) {
+  // U5 — every class-emitting token SCSS file is covered (or on the legacy
+  // migration list). Content-based: a file is only flagged when it actually
+  // defines literal class selectors (mixin-only emitters pass naturally).
+  const allScssFiles = globSync(UTILITIES_PARTIALS_GLOB, { cwd: rootDir }).filter(
+    (f) => !UTILITIES_PARTIALS_EXCLUDE.test(f)
+  );
+  for (const partial of allScssFiles.sort()) {
     const basename = path.basename(partial);
-    if (bySource.has(partial) || IGNORED_PARTIALS.has(basename) || LEGACY_PARTIALS.has(basename)) continue;
-    findings.push({ rule: "U5", file: partial, subject: partial, message: "Utility partial is not covered by any utilities manifest family." });
+    if (bySource.has(partial) || IGNORED_PARTIALS.has(basename) || LEGACY_PARTIALS.has(partial)) continue;
+    const scss = await fs.readFile(path.resolve(rootDir, partial), "utf8");
+    if (extractClasses(scss).size === 0) continue; // no literal class selectors — passes naturally
+    findings.push({ rule: "U5", file: partial, subject: partial, message: "Class-emitting token SCSS is not covered by any utilities manifest family." });
   }
 
   if (findings.length === 0) {

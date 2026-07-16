@@ -1,5 +1,9 @@
 import type { ZebkitConfig } from '../scripts/config';
-import { DEFAULT_PRUNE_CONTENT, EXTENDED_TOKEN_BREAKPOINTS } from '../scripts/config';
+import {
+  DEFAULT_PRUNE_CONTENT,
+  EXTENDED_TOKEN_BREAKPOINTS,
+  validateComponentsConfig,
+} from '../scripts/config';
 import { getAtPath, setAtPath } from './config-paths';
 
 /**
@@ -13,6 +17,8 @@ export type OptionTier = 'quick' | 'standard' | 'advanced';
 export interface PromptContext {
   themeChoices?: string[];
   defaultProjectName?: string;
+  /** Component vocabulary for the `components` include checkbox. */
+  componentChoices?: string[];
 }
 
 /** A minimal inquirer-compatible question shape (avoids a hard inquirer type dep). */
@@ -47,7 +53,7 @@ export interface ConfigOption {
   /** Map a stored config value to the prompt's default answer (for inverted confirms). */
   configToPrompt?: (configValue: unknown) => unknown;
   /** Map a prompt answer back to the stored config value. */
-  promptToConfig?: (answer: unknown) => unknown;
+  promptToConfig?: (answer: unknown, ctx: PromptContext, currentValue?: unknown) => unknown;
   /** Only ask interactively when this returns true (gates sub-options). */
   when?: (answers: Record<string, unknown>) => boolean;
 }
@@ -220,6 +226,55 @@ export const CONFIG_OPTIONS: ConfigOption[] = [
         { name: 'per-module — one file per token module', value: 'per-module' },
       ],
       default: def,
+    }),
+  },
+
+  {
+    // Top-level `components` block: per-component build inclusion. The prompt
+    // covers include/exclude only; shipped-variant allowlists
+    // (`{ "variants": [...] }`) are a config-file edit — see the docs.
+    path: 'components',
+    id: 'components',
+    tier: 'standard',
+    default: {},
+    resolveDefault: (ctx) =>
+      Object.fromEntries((ctx.componentChoices ?? []).map((name) => [name, true])),
+    parse: (raw) => {
+      const parsed = JSON.parse(raw) as ZebkitConfig['components'];
+      validateComponentsConfig(parsed);
+      return parsed;
+    },
+    configToPrompt: (configValue) =>
+      Object.entries((configValue ?? {}) as Record<string, unknown>)
+        .filter(([, entry]) => entry !== false)
+        .map(([name]) => name),
+    promptToConfig: (answer, ctx, currentValue) => {
+      const selected = new Set((answer as string[]) ?? []);
+      const current = (currentValue ?? {}) as Record<string, unknown>;
+      const names = new Set([...(ctx.componentChoices ?? []), ...Object.keys(current)]);
+      const next: Record<string, unknown> = {};
+      for (const name of [...names].sort()) {
+        if (!selected.has(name)) {
+          next[name] = false;
+          continue;
+        }
+        // Re-including keeps a richer entry (e.g. a variant allowlist) intact.
+        const existing = current[name];
+        next[name] = existing !== undefined && existing !== false ? existing : true;
+      }
+      return next;
+    },
+    buildQuestion: (def, ctx) => ({
+      type: 'checkbox',
+      name: 'components',
+      message:
+        'Components to include in the build (per-component variant allowlists are a config-file edit):',
+      choices: (ctx.componentChoices ?? []).map((name) => ({
+        name,
+        value: name,
+        checked: Array.isArray(def) && (def as string[]).includes(name),
+      })),
+      when: () => (ctx.componentChoices ?? []).length > 0,
     }),
   },
 
@@ -514,11 +569,13 @@ export function applyOptionValues(
 ): ZebkitConfig {
   for (const option of CONFIG_OPTIONS) {
     let value: unknown;
+    const currentValue = getAtPath(config, option.path);
     if (Object.prototype.hasOwnProperty.call(answers, option.id)) {
       const answer = answers[option.id];
-      value = option.promptToConfig ? option.promptToConfig(answer) : answer;
+      value = option.promptToConfig
+        ? option.promptToConfig(answer, ctx, currentValue)
+        : answer;
     } else {
-      const currentValue = getAtPath(config, option.path);
       value = currentValue !== undefined ? currentValue : resolveDefault(option, ctx);
     }
     setAtPath(config, option.path, value);

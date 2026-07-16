@@ -1,0 +1,100 @@
+{
+  "$schema": "../../../../schemas/utility-manifest.schema.json",
+  "name": "Padding utilities",
+  "key": "padding",
+  "description": "Dictates spacing inside of the defined border of an element, separating content from the edge of the element.",
+  "domain": "spacing",
+  "layer": "utilities",
+  "families": [
+    {
+      "name": "padding",
+      "description": "Sets the empty space inside an element.",
+      "guidance": [
+        "Zebkit uses logical padding operators (inline/block) for improved international accessibility. 'block' is vertical, 'inline' is horizontal."
+      ],
+      "source": "src/tokens/styles/utility-classes/padding.scss",
+      "properties": [
+        "padding",
+        "padding-block",
+        "padding-block-start",
+        "padding-block-end",
+        "padding-inline",
+        "padding-inline-start",
+        "padding-inline-end"
+      ],
+      "tokens": {
+        "group": "spacing",
+        "varPrefix": "spacing",
+        "types": [
+          "spacing",
+          "rootSize"
+        ]
+      },
+      "pattern": {
+        "base": "padding",
+        "edges": [
+          "block",
+          "inline",
+          "block-start",
+          "block-end",
+          "inline-start",
+          "inline-end"
+        ],
+        "literals": {
+          "unset": "unset"
+
+        },
+        "exclude": [
+          "page-padding-block",
+          "page-padding-inline",
+          "section-margin-block",
+          "section-margin-inline",
+          "section",
+          "aside",
+          "card",
+          "mobile",
+          "mobile-lg",
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      },
+      "generator": {
+        "edgeProperties": {
+          "": [
+            "padding"
+          ],
+          "block": [
+            "padding-block"
+          ],
+          "inline": [
+            "padding-inline"
+          ],
+          "inline-start": [
+            "padding-inline-start"
+          ],
+          "inline-end": [
+            "padding-inline-end"
+          ],
+          "block-start": [
+            "padding-block-start"
+          ],
+          "block-end": [
+            "padding-block-end"
+          ]
+        }
+      },
+      "modifiers": {
+        "responsive": [
+          "tablet",
+          "tablet-lg",
+          "desktop",
+          "desktop-lg",
+          "widescreen"
+        ]
+      }
+    }
+  ]
+}

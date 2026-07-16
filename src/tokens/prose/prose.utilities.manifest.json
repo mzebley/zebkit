@@ -1,0 +1,179 @@
+{
+  "$schema": "../../../schemas/utility-manifest.schema.json",
+  "name": "Prose utilities",
+  "key": "prose",
+  "description": "Opt-in long-form typographic context. Descendants of .prose (or elements that also carry .prose) get token-driven heading/paragraph styling and vertical rhythm. Element styles, emitted in @layer base so authored/component styles can still override.",
+  "domain": "typography",
+  "layer": "base",
+  "families": [
+    {
+      "name": "prose-h1",
+      "description": "Heading level 1 styling and sibling spacing inside a .prose context.",
+      "source": "src/tokens/prose/styles.scss",
+      "properties": ["font-family", "font-size", "font-weight", "line-height", "letter-spacing", "max-width", "color", "font-style", "text-transform", "margin-top"],
+      "rules": [
+        {
+          "selector": ".prose > h1, h1.prose",
+          "declarations": {
+            "font-family": "var(--zbk-h1-font-family)",
+            "font-size": "var(--zbk-h1-font-size)",
+            "font-weight": "var(--zbk-h1-font-weight)",
+            "line-height": "var(--zbk-h1-line-height)",
+            "letter-spacing": "var(--zbk-h1-letter-spacing)",
+            "max-width": "var(--zbk-h1-measure)",
+            "color": "var(--zbk-h1-color)",
+            "font-style": "var(--zbk-h1-font-style)",
+            "text-transform": "var(--zbk-h1-text-transform)"
+          }
+        },
+        { "selector": ".prose>*+h1", "declarations": { "margin-top": "var(--zbk-h1-spacing-before)" } },
+        { "selector": ".prose>h1+*, h1.prose+*", "declarations": { "margin-top": "var(--zbk-h1-spacing-after)" } }
+      ]
+    },
+    {
+      "name": "prose-h2",
+      "description": "Heading level 2 styling and sibling spacing inside a .prose context.",
+      "source": "src/tokens/prose/styles.scss",
+      "properties": ["font-family", "font-size", "font-weight", "line-height", "letter-spacing", "max-width", "color", "font-style", "text-transform", "margin-top"],
+      "rules": [
+        {
+          "selector": ".prose > h2, h2.prose",
+          "declarations": {
+            "font-family": "var(--zbk-h2-font-family)",
+            "font-size": "var(--zbk-h2-font-size)",
+            "font-weight": "var(--zbk-h2-font-weight)",
+            "line-height": "var(--zbk-h2-line-height)",
+            "letter-spacing": "var(--zbk-h2-letter-spacing)",
+            "max-width": "var(--zbk-h2-measure)",
+            "color": "var(--zbk-h2-color)",
+            "font-style": "var(--zbk-h2-font-style)",
+            "text-transform": "var(--zbk-h2-text-transform)"
+          }
+        },
+        { "selector": ".prose>*+h2", "declarations": { "margin-top": "var(--zbk-h2-spacing-before)" } },
+        { "selector": ".prose>h2+*, h2.prose+*", "declarations": { "margin-top": "var(--zbk-h2-spacing-after)" } }
+      ]
+    },
+    {
+      "name": "prose-h3",
+      "description": "Heading level 3 styling and sibling spacing inside a .prose context.",
+      "source": "src/tokens/prose/styles.scss",
+      "properties": ["font-family", "font-size", "font-weight", "line-height", "letter-spacing", "max-width", "color", "font-style", "text-transform", "margin-top"],
+      "rules": [
+        {
+          "selector": ".prose > h3, h3.prose",
+          "declarations": {
+            "font-family": "var(--zbk-h3-font-family)",
+            "font-size": "var(--zbk-h3-font-size)",
+            "font-weight": "var(--zbk-h3-font-weight)",
+            "line-height": "var(--zbk-h3-line-height)",
+            "letter-spacing": "var(--zbk-h3-letter-spacing)",
+            "max-width": "var(--zbk-h3-measure)",
+            "color": "var(--zbk-h3-color)",
+            "font-style": "var(--zbk-h3-font-style)",
+            "text-transform": "var(--zbk-h3-text-transform)"
+          }
+        },
+        { "selector": ".prose>*+h3", "declarations": { "margin-top": "var(--zbk-h3-spacing-before)" } },
+        { "selector": ".prose>h3+*, h3.prose+*", "declarations": { "margin-top": "var(--zbk-h3-spacing-after)" } }
+      ]
+    },
+    {
+      "name": "prose-h4",
+      "description": "Heading level 4 styling and sibling spacing inside a .prose context.",
+      "source": "src/tokens/prose/styles.scss",
+      "properties": ["font-family", "font-size", "font-weight", "line-height", "letter-spacing", "max-width", "color", "font-style", "text-transform", "margin-top"],
+      "rules": [
+        {
+          "selector": ".prose > h4, h4.prose",
+          "declarations": {
+            "font-family": "var(--zbk-h4-font-family)",
+            "font-size": "var(--zbk-h4-font-size)",
+            "font-weight": "var(--zbk-h4-font-weight)",
+            "line-height": "var(--zbk-h4-line-height)",
+            "letter-spacing": "var(--zbk-h4-letter-spacing)",
+            "max-width": "var(--zbk-h4-measure)",
+            "color": "var(--zbk-h4-color)",
+            "font-style": "var(--zbk-h4-font-style)",
+            "text-transform": "var(--zbk-h4-text-transform)"
+          }
+        },
+        { "selector": ".prose>*+h4", "declarations": { "margin-top": "var(--zbk-h4-spacing-before)" } },
+        { "selector": ".prose>h4+*, h4.prose+*", "declarations": { "margin-top": "var(--zbk-h4-spacing-after)" } }
+      ]
+    },
+    {
+      "name": "prose-h5",
+      "description": "Heading level 5 styling and sibling spacing inside a .prose context.",
+      "source": "src/tokens/prose/styles.scss",
+      "properties": ["font-family", "font-size", "font-weight", "line-height", "letter-spacing", "max-width", "color", "font-style", "text-transform", "margin-top"],
+      "rules": [
+        {
+          "selector": ".prose > h5, h5.prose",
+          "declarations": {
+            "font-family": "var(--zbk-h5-font-family)",
+            "font-size": "var(--zbk-h5-font-size)",
+            "font-weight": "var(--zbk-h5-font-weight)",
+            "line-height": "var(--zbk-h5-line-height)",
+            "letter-spacing": "var(--zbk-h5-letter-spacing)",
+            "max-width": "var(--zbk-h5-measure)",
+            "color": "var(--zbk-h5-color)",
+            "font-style": "var(--zbk-h5-font-style)",
+            "text-transform": "var(--zbk-h5-text-transform)"
+          }
+        },
+        { "selector": ".prose>*+h5", "declarations": { "margin-top": "var(--zbk-h5-spacing-before)" } },
+        { "selector": ".prose>h5+*, h5.prose+*", "declarations": { "margin-top": "var(--zbk-h5-spacing-after)" } }
+      ]
+    },
+    {
+      "name": "prose-h6",
+      "description": "Heading level 6 styling and sibling spacing inside a .prose context.",
+      "source": "src/tokens/prose/styles.scss",
+      "properties": ["font-family", "font-size", "font-weight", "line-height", "letter-spacing", "max-width", "color", "font-style", "text-transform", "margin-top"],
+      "rules": [
+        {
+          "selector": ".prose > h6, h6.prose",
+          "declarations": {
+            "font-family": "var(--zbk-h6-font-family)",
+            "font-size": "var(--zbk-h6-font-size)",
+            "font-weight": "var(--zbk-h6-font-weight)",
+            "line-height": "var(--zbk-h6-line-height)",
+            "letter-spacing": "var(--zbk-h6-letter-spacing)",
+            "max-width": "var(--zbk-h6-measure)",
+            "color": "var(--zbk-h6-color)",
+            "font-style": "var(--zbk-h6-font-style)",
+            "text-transform": "var(--zbk-h6-text-transform)"
+          }
+        },
+        { "selector": ".prose>*+h6", "declarations": { "margin-top": "var(--zbk-h6-spacing-before)" } },
+        { "selector": ".prose>h6+*, h6.prose+*", "declarations": { "margin-top": "var(--zbk-h6-spacing-after)" } }
+      ]
+    },
+    {
+      "name": "prose-p",
+      "description": "Paragraph styling and sibling spacing inside a .prose context.",
+      "guidance": ["Prose paragraphs are max-width constrained (measure) for readability; wrap long-form copy in a .prose container rather than styling paragraphs ad hoc."],
+      "source": "src/tokens/prose/styles.scss",
+      "properties": ["font-family", "font-size", "font-weight", "line-height", "letter-spacing", "max-width", "color", "font-style", "text-transform", "margin-top"],
+      "rules": [
+        {
+          "selector": ".prose > p, p.prose",
+          "declarations": {
+            "font-family": "var(--zbk-p-font-family)",
+            "font-size": "var(--zbk-p-font-size)",
+            "font-weight": "var(--zbk-p-font-weight)",
+            "line-height": "var(--zbk-p-line-height)",
+            "letter-spacing": "var(--zbk-p-letter-spacing)",
+            "max-width": "var(--zbk-p-measure)",
+            "color": "var(--zbk-p-color)",
+            "font-style": "var(--zbk-p-font-style)",
+            "text-transform": "var(--zbk-p-text-transform)"
+          }
+        },
+        { "selector": ".prose>*+p", "declarations": { "margin-top": "var(--zbk-p-spacing-before)" } },
+        { "selector": ".prose>p+*, p.prose+*", "declarations": { "margin-top": "var(--zbk-p-spacing-after)" } }
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   "title": "Zebkit Utility Class Manifest",
   "description": "Canonical, hand-authored contract for a group of utility-class families. Encodes the grammar (base x edges x values expanded against token scales) rather than enumerating classes, except for keyword families whose values are hardcoded CSS keywords by design. generate:utilities renders each family's source SCSS partial from this contract; lint:utilities keeps the round trip honest. Consumed by docs and editor support.",
   "type": "object",
-  "required": ["name", "key", "description", "families"],
+  "required": ["name", "key", "description", "domain", "families"],
   "additionalProperties": false,
   "properties": {
     "$schema": { "type": "string" },
@@ -21,6 +21,10 @@
       "type": "string",
       "description": "What this group of utilities is for, written for both humans and tooling."
     },
+    "domain": {
+      "enum": ["layout", "spacing", "typography", "color", "border", "effects", "interaction"],
+      "description": "Agent-context domain this manifest belongs to. Domain files group related utility grammar without fragmenting it per manifest."
+    },
     "layer": {
       "type": "string",
       "description": "CSS @layer the generated rules are wrapped in (default for all families; a family can override). Zebkit currently emits all utilities into 'utilities'."
@@ -32,6 +36,30 @@
     }
   },
   "$defs": {
+    "rule": {
+      "type": "object",
+      "required": ["selector", "declarations"],
+      "additionalProperties": false,
+      "description": "One CSS rule emitted verbatim: a free-form selector, its declarations, and optional nested rules ('&' allowed).",
+      "properties": {
+        "selector": {
+          "type": "string",
+          "description": "Free-form CSS/SCSS selector, e.g. \".focusable:focus, .focusable:focus-visible\", \"[class^='transition-']\", \":root\", or a nested \"&.transition-slow\". Any '.class' token contributes to the predicted class set; element/attribute/pseudo selectors predict nothing."
+        },
+        "declarations": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "string" },
+          "description": "property -> value, emitted literally. Custom properties (--zbk-*) may be set (defining local cascade variables) and referenced via var(--zbk-*); generate rewrites the --zbk- prefix to the configurable prefix var at emit time. Every var(--zbk-*) reference must resolve to a real token or a --zbk-* custom property the family itself sets (lint U2)."
+        },
+        "nested": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/rule" },
+          "description": "Nested rules, typically using '&' for compound state overrides (e.g. '&.transition-slow')."
+        }
+      }
+    },
     "family": {
       "type": "object",
       "required": ["name", "description", "source", "properties"],
@@ -89,7 +117,71 @@
         "classes": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Explicit class list for keyword families whose values are hardcoded CSS keywords (display-flex, position-sticky). Mutually exclusive with 'pattern'."
+          "description": "Explicit class list for keyword families whose values are hardcoded CSS keywords (display-flex, position-sticky). Mutually exclusive with 'pattern' and 'rules'."
+        },
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/rule" },
+          "description": "Verbatim CSS/SCSS rule blocks for families whose grammar is not class x value: CSS-variable-setting classes with compound/nested selectors, pseudo-class rules (.focusable:focus), and element-selector prose in @layer base. Mutually exclusive with 'classes' and 'pattern'. Rendered verbatim; the predicted class set is every '.class' token appearing in the selectors (element/attribute/pseudo selectors predict nothing). 'modifiers' is not supported on rules families."
+        },
+        "unlayered": {
+          "type": "boolean",
+          "default": false,
+          "description": "Rules families only: emit these rules outside any @layer, for foundational :root cascade-variable defaults that sit outside the layer stack (e.g. the transition timing/duration defaults). Ignored by 'classes'/'pattern' families."
+        },
+        "statePattern": {
+          "type": "object",
+          "required": ["roles", "axes", "class", "var", "states"],
+          "additionalProperties": false,
+          "description": "Grammar for color-role families that emit base classes and interaction-state prefixed forms. Roles map to CSS properties; axes define value dimensions; class/var templates declare naming (segment order may differ). modifiers is forbidden — state coverage is controlled by states.",
+          "properties": {
+            "roles": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "anyOf": [
+                  { "type": "string" },
+                  { "type": "array", "minItems": 1, "items": { "type": "string" } }
+                ]
+              },
+              "description": "Maps role name to CSS property or array of properties. e.g. {\"canvas\": [\"background-color\",\"background\"], \"ink\": \"color\"}."
+            },
+            "axes": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": ["string", "null"] }
+              },
+              "description": "Named value axes (excluding role). null in a value array marks an optional axis (maps to the {-axis} placeholder in templates); the axis is omitted when null."
+            },
+            "class": {
+              "type": "string",
+              "description": "Class name template. {axis} = required segment; {-axis} = optional (omitted with its dash when null). Must include {role}. e.g. \"{role}-{family}-{step}\" or \"{role}-{family}{-intensity}{-variant}\"."
+            },
+            "var": {
+              "type": "string",
+              "description": "CSS variable template (full --zbk- prefix). Same placeholder syntax as class. Segment order may differ from class. e.g. \"--zbk-color-{family}-{step}\" or \"--zbk-{family}-{role}{-variant}{-intensity}\"."
+            },
+            "varSource": {
+              "type": "string",
+              "enum": ["scss"],
+              "description": "When 'scss', U2 var integrity checking is skipped — the variables are emitted by a Sass mixin rather than a TypeScript token module and cannot be verified against tokenVarNames."
+            },
+            "states": {
+              "anyOf": [
+                { "type": "boolean", "const": true },
+                {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "enum": ["base", "focus", "hover", "active", "disabled"] }
+                }
+              ],
+              "description": "true = all five canonical interaction states (base, focus, hover, active, disabled). An array restricts to the named subset."
+            }
+          }
         },
         "pattern": {
           "type": "object",
@@ -239,8 +331,20 @@
         }
       },
       "oneOf": [
-        { "required": ["classes"], "not": { "required": ["pattern"] } },
-        { "required": ["pattern"], "not": { "required": ["classes"] } }
+        { "required": ["classes"], "not": { "anyOf": [{ "required": ["pattern"] }, { "required": ["rules"] }, { "required": ["statePattern"] }] } },
+        { "required": ["pattern"], "not": { "anyOf": [{ "required": ["classes"] }, { "required": ["rules"] }, { "required": ["statePattern"] }] } },
+        { "required": ["rules"], "not": { "anyOf": [{ "required": ["classes"] }, { "required": ["pattern"] }, { "required": ["statePattern"] }] } },
+        { "required": ["statePattern"], "not": { "anyOf": [{ "required": ["classes"] }, { "required": ["pattern"] }, { "required": ["rules"] }] } }
+      ],
+      "allOf": [
+        {
+          "if": { "required": ["rules"] },
+          "then": { "not": { "required": ["modifiers"] } }
+        },
+        {
+          "if": { "required": ["statePattern"] },
+          "then": { "not": { "required": ["modifiers"] } }
+        }
       ]
     }
   }

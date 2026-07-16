@@ -123,6 +123,21 @@ This also reframes what a "redesign" is. Not a rebuild — a new token set again
 
 ---
 
+## The developer with no memory
+
+Zebkit's newest consumer is one who remembers nothing between projects: the AI agent generating UI. But that consumer isn't new at all — it is every developer on day one, every developer returning after six months, every developer who half-remembers whether the attribute was `variant` or `kind`. The properties that make a framework effortless for human muscle memory and the properties that make it reliable for a pattern-completing model are the same properties. So zebkit doesn't bolt on "AI support"; it optimizes for the developer with no memory, and both audiences fall out of the same discipline:
+
+1. **One spelling per intent.** Every synonym — an attribute alias, a second way to apply a variant, a prop that duplicates an attribute — is a place where codebases diverge and generations drift. When there is exactly one documented spelling, the likely completion *is* the correct completion.
+2. **Grammar over vocabulary.** Components share one grammar — the same `variant` attribute, the same token pattern, the same state suffixes, the same slot names — so knowing one component means knowing all of them. A correct guess about a component you've never seen is the expected case, not luck. The grammar is specified in [GRAMMAR.md](GRAMMAR.md), and it is binding.
+3. **The contract is compiled to data.** Component manifests, token schemas, and variant registries generate the docs, the types, and the agent context from one source. Nothing an agent is told about the system is hand-written, so nothing it is told can drift from what ships.
+4. **The system talks back.** Every diagnostic — build-time or dev-mode — names the fix: what's wrong, and the valid vocabulary. Generate, check, correct is the working loop of both audiences; a message without the fix in it wastes a turn.
+
+The bar, stated so it can be held to account: **zebkit optimizes for the developer with no memory — human or machine — through one spelling per intent, one grammar across components, a contract compiled to data, and a system that corrects you in words that name the fix.**
+
+And the "platonic component" belief is what makes this compound: finished components don't churn, so anything ever learned about zebkit — by a person or a training run — stays true. Finished isn't just an engineering aesthetic. It is what makes the system learnable at all.
+
+---
+
 ## Anti-goals: what zebkit refuses to do
 
 A vision is defined as much by its refusals. Each of these is a hard rule with a reason; an agent or contributor proposing to violate one should expect to lose the argument.
@@ -132,6 +147,7 @@ A vision is defined as much by its refusals. Each of these is a hard rule with a
 - **Zebkit will never require `!important`.** Cascade layers are the override story. A system that needs `!important` to win has already lost control of its own cascade, and it steals the final word from the consumer, who should always have it.
 - **Zebkit will never break the semantic HTML contract for visual convenience.** Structure is meaning. If a visual effect requires wrong semantics, the effect is wrong.
 - **Zebkit will never make a developer hand-bind CSS variables to get system behavior.** Remembering the right variable name is exactly the kind of human-memory dependency the system exists to eliminate. If correct usage requires remembering, the system has failed; provide the utility or the token surface.
+- **Zebkit will never offer two spellings for the same intent.** Every synonym — attribute alias, duplicate prop, alternate call pattern — splits the pattern the next reader (or model) learns from, and the value of a second spelling is always smaller than the cost of the fork. One intent, one form.
 - **Zebkit will never inherit constraints from another design language.** No upstream's compliance requirements, naming conventions, or visual assumptions get a vote. Decisions are argued from this document's principles, not from precedent elsewhere.
 - **Zebkit will never let documentation drift from truth.** Sources of truth are machine-validated against what ships (manifests linted against generated SCSS, schemas validating token modules). A claim about the system that can't be checked mechanically should be treated as a claim waiting to become a lie.
 - **Zebkit will never trade keyboard, screen reader, or reduced-motion support for aesthetics.** Non-negotiable, and prior to every other consideration in this list.
@@ -143,6 +159,7 @@ A vision is defined as much by its refusals. Each of these is a hard rule with a
 Zebkit is built with the explicit expectation that AI agents are first-class consumers — generating UIs, authoring themes, extending the system. If you are one:
 
 - **Manifests and token modules are the source of truth.** Not your training priors about CSS frameworks, not patterns from other design systems. Read the contract that exists.
+- **The component grammar ([GRAMMAR.md](GRAMMAR.md)) is guessable by design, and that is a promise.** Inferring an unfamiliar component's API from the grammar is the expected workflow. If a grammatical guess turns out wrong, the component is violating the grammar — report it as a defect rather than working around it.
 - **`guidance` fields are constraints, not flavor text.** When a utility family says prefer `pointer` for interactive elements, generate accordingly. Deviate only when the human's stated requirement genuinely demands it — the vocabulary exists for those cases — and say that you are deviating and why.
 - **Never emit a raw visual value where a token exists.** If you find yourself writing a custom class with a hard-coded value, you are building an exit ramp. Stop, find the token or utility, and if it truly doesn't exist, surface that as a gap in the system rather than working around it.
 - **The component contract is load-bearing.** Do not restructure component HTML or class bindings to achieve a visual outcome. Visual outcomes are the token layer's job; if tokens can't reach the property you need, that's a component token-surface gap to report.
@@ -153,7 +170,7 @@ Zebkit is built with the explicit expectation that AI agents are first-class con
 
 ## The dream, restated
 
-A finished set of semantically perfect components that never need to change. A token language rich enough to describe any visual identity. Utilities exhaustive enough that no one ever needs to leave. Accessibility that end users hold in their own hands at runtime. Design handoff with zero translation loss. Consistency without imposed opinion.
+A finished set of semantically perfect components that never need to change. A token language rich enough to describe any visual identity. Utilities exhaustive enough that no one ever needs to leave. A grammar so regular that learning one component is learning them all. Accessibility that end users hold in their own hands at runtime. Design handoff with zero translation loss. Consistency without imposed opinion.
 
 Style it to look like basically anything. Change everything; rewrite nothing.
 

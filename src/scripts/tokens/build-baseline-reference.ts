@@ -22,7 +22,7 @@ async function main(): Promise<void> {
   console.log(chalk.cyan("Building baseline token reference (per-family)..."));
 
   // No components, no overrides — pure zebkit base.
-  const { tokenFiles } = await gatherZebkitFiles([]);
+  const { tokenFiles } = await gatherZebkitFiles();
 
   await buildZebkitTokens(
     "baseline",

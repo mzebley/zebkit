@@ -1,0 +1,120 @@
+---
+title: Input
+description: The zebkit text field — a native input inside its own label, with affix slots and format-as-you-type masking.
+layout: components
+---
+
+<script lang="ts">
+  import TokenTable from '$components/TokenTable.svelte';
+  import AgentContext from '$components/AgentContext.svelte';
+  import { compiledTokens } from '$data/compiled-tokens';
+  import { buildTokenRows } from '$lib/utils/token-docs';
+
+  const inputTokenRows = buildTokenRows('zbk-input', compiledTokens['zbk-input']);
+</script>
+
+`<zbk-input>` wraps a real `<input>` inside its own `<label>`. Default children are the visible label — the accessible name via the wrapping label, the same spelling as [`<zbk-checkbox>`](/components/checkbox) — and the field box carries optional prefix/suffix affixes around the native input. For multi-line text, use [`<zbk-textarea>`](/components/textarea); for a picker over fixed options, use [`<zbk-select>`](/components/select).
+
+## Live examples
+
+<div class="border border-app-muted rounded-lg p-4 canvas-app-soft">
+  <div class="zbk-input-group">
+    <zbk-input name="demo-name" placeholder="Ada Lovelace">Full name</zbk-input>
+    <zbk-input name="demo-email" type="email" placeholder="you@example.com" required>
+      <svg slot="prefix" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
+      Email address
+    </zbk-input>
+    <zbk-input name="demo-price" inputmode="decimal">
+      <span slot="prefix">$</span>
+      <span slot="suffix">USD</span>
+      Price
+    </zbk-input>
+    <zbk-input name="demo-readonly" value="ZBK-00423" readonly>Order reference (readonly)</zbk-input>
+    <zbk-input name="demo-disabled" value="Locked" disabled>Disabled field</zbk-input>
+    <zbk-input name="demo-sm" variant="sm">Small</zbk-input>
+    <zbk-input name="demo-lg" variant="lg">Large</zbk-input>
+  </div>
+</div>
+
+## Usage
+
+```html
+<zbk-input name="email" type="email" placeholder="you@example.com" required>
+  Email address
+</zbk-input>
+```
+
+Renders (light DOM, inspectable):
+
+```html
+<zbk-input name="email" type="email" required>
+  <label class="zbk-input">
+    <span class="zbk-input__label">Email address</span>
+    <span class="zbk-input__field">
+      <input class="zbk-input__input" type="email" name="email" required />
+    </span>
+  </label>
+</zbk-input>
+```
+
+Form participation, constraint validation (`required`, `pattern`, `minlength`, ...), and events are fully native — listen for `input`/`change` on the element; there is no custom event. Write `aria-*`/`role` on `<zbk-input>` and they relocate to the inner `<input>` automatically.
+
+## Affix slots
+
+Put any authored content — an svg, an icon-font glyph, an HTML character, an image — at the field's inline start or end:
+
+```html
+<zbk-input name="price" inputmode="decimal">
+  <span slot="prefix">$</span>
+  <span slot="suffix">USD</span>
+  Price
+</zbk-input>
+```
+
+Affixes size from the `icon-size` token (`1em` by default, so size variants rescale them) and inherit `affix-ink` (icon fonts and `currentColor` SVGs pick it up automatically). They render aria-hidden — presentational only. Information an affix carries must also live in the accessible name or description.
+
+## Masking
+
+`mask` formats the value as the user types: `#` accepts a digit, `a` a letter, `*` a letter or digit; every other character is a literal the mask inserts automatically (escape a token character with `\`).
+
+```html
+<zbk-input name="phone" mask="(###) ###-####">Phone</zbk-input>
+<zbk-input name="expiry" mask="##/##">Expiry (MM/YY)</zbk-input>
+<zbk-input name="plate" mask="aaa-####">License plate</zbk-input>
+```
+
+<div class="border border-app-muted rounded-lg p-4 canvas-app-soft">
+  <div class="zbk-input-group">
+    <zbk-input name="demo-phone" mask="(###) ###-####" placeholder="(555) 123-4567">Phone</zbk-input>
+    <zbk-input name="demo-expiry" mask="##/##" placeholder="MM/YY">Card expiry</zbk-input>
+    <zbk-input name="demo-plate" mask="aaa-####" placeholder="ABC-1234">License plate</zbk-input>
+  </div>
+</div>
+
+- **The masked value is the value** — what you see is what submits. Read `el.rawValue` for the value with literals stripped.
+- Characters no slot accepts are dropped; input caps at the mask's length; deletions reflow through the mask.
+- The caret stays where the user's edit put it, and IME composition is left alone until it commits.
+- An all-digit mask defaults `inputmode="numeric"` so touch keyboards match — an authored `inputmode` wins.
+- Programmatic `value` writes pass through the mask too; the element never renders an unmasked value.
+
+## Variants
+
+| Variant | Axis | Remaps |
+|---|---|---|
+| `sm` | size | Smaller type and padding; keeps the 44px minimum tap target. |
+| `lg` | size | Larger type and padding. |
+
+## Accessibility
+
+- Label text (default children) is the accessible name via the wrapping `<label>`; label-free fields must provide `aria-label` — a placeholder is not a label, and a nameless field warns in dev with the fix.
+- Write `aria-*`/`role` on `<zbk-input>` — they relocate to the inner `<input>` automatically, and `focus()` forwards to it.
+- `:user-invalid` (invalid after interaction) and `[aria-invalid="true"]` drive the `-invalid` tokens; `readonly` drives the `-readonly` tokens.
+- Motion uses the calm-fx transition tokens and honors `prefers-reduced-motion`.
+
+## Tokens
+
+<TokenTable rows={inputTokenRows} showSwatch={true} />
+
+## For agents
+
+<AgentContext tag="zbk-input" />

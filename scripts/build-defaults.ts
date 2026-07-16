@@ -13,6 +13,8 @@ import { fileURLToPath } from 'node:url';
 import { gatherZebkitFiles } from '../src/scripts/tokens/gather-files.js';
 import { buildZebkitTokens } from '../src/scripts/tokens/compile-tokens.js';
 import { discoverVariantConfigs } from '../src/scripts/tokens/compile-variants.js';
+import { isVariantOverrideFile } from '../src/scripts/tokens/compile-variant-helpers.js';
+import { getKnownComponents } from '../src/scripts/known-components.js';
 import type { LayerName } from '../src/definitions/layers.js';
 import { getBuiltInThemeNames, DEFAULT_THEME_NAME, resolveSourceThemeOverridePath } from '../src/scripts/theme-presets.js';
 
@@ -34,7 +36,7 @@ async function buildDefaults() {
   await fs.ensureDir(presetsDir);
 
   // Gather all core token files (no components, no SCSS needed)
-  const files = await gatherZebkitFiles([]);
+  const files = await gatherZebkitFiles();
 
   // Run the full token pipeline in-memory (no CSS compilation, no file export)
   const { tokens, layers } = await buildZebkitTokens(DEFAULT_THEME_NAME, files.tokenFiles, defaultsDir, undefined, [], { splitMode: 'combined' }, false);
@@ -53,6 +55,13 @@ async function buildDefaults() {
   const variantsPath = path.join(defaultsDir, 'variants.json');
   await fs.writeJson(variantsPath, variantConfigs, { spaces: 2 });
   console.log(`Wrote ${variantConfigs.length} built-in variant config(s) to ${variantsPath}`);
+
+  // Snapshot the component vocabulary so the installed CLI can validate the
+  // `components` config block and offer init choices without the TS sources.
+  const componentNames = await getKnownComponents();
+  const componentsPath = path.join(defaultsDir, 'components.json');
+  await fs.writeJson(componentsPath, componentNames, { spaces: 2 });
+  console.log(`Wrote ${componentNames.length} component name(s) to ${componentsPath}`);
 
   const builtInThemes = await getBuiltInThemeNames();
   const presetThemeNames = builtInThemes.filter((theme) => theme !== DEFAULT_THEME_NAME);
@@ -97,10 +106,7 @@ async function copyVariantOverrideFiles(sourceDir: string, outputDir: string) {
     nodir: true,
   });
 
-  const matchingFiles = variantFiles.filter((file) =>
-    /-variants$/i.test(path.basename(file, path.extname(file))) ||
-    /\.variant\./i.test(path.basename(file))
-  );
+  const matchingFiles = variantFiles.filter(isVariantOverrideFile);
 
   if (matchingFiles.length === 0) {
     return;

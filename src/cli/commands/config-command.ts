@@ -16,6 +16,7 @@ export interface ConfigCommandDeps {
   getZebkitPackageRoot: () => string;
   getBuiltInThemeNames: (packageRoot?: string) => Promise<string[]>;
   getThemePromptChoices: (themeNames: string[]) => string[];
+  getKnownComponents: () => Promise<string[]>;
   handlePromptCancel: (commandName: string) => void;
   isPromptCancelError: (error: unknown) => error is { name: string };
   log: (message: string) => void;
@@ -48,6 +49,7 @@ export async function runConfigGuided(deps: ConfigCommandDeps): Promise<void> {
         await deps.getBuiltInThemeNames(packageRoot)
       ),
       defaultProjectName: path.basename(process.cwd()),
+      componentChoices: await deps.getKnownComponents(),
     };
 
     const questions: any[] = buildQuestions(['quick', 'standard'], config, ctx);

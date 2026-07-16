@@ -1,5 +1,6 @@
 import path from 'path';
 import type { ZebkitConfig } from '../../scripts/config';
+import { resolveComponentsFilter } from '../../scripts/components-config';
 import {
   applyOptionValues,
   buildQuestions,
@@ -7,17 +8,32 @@ import {
   type PromptContext,
 } from '../config-options';
 
-export interface InitCommandDeps {
+/** Default consumer location for the pulled agent context. */
+export const DEFAULT_CONTEXT_PATH = './zebkit/context';
+
+/** Minimal fs surface for copying the agent context (shared by init + pull). */
+export interface ContextCopyDeps {
   pathExists: (path: string) => Promise<boolean>;
+  ensureDir: (path: string) => Promise<void>;
+  readdir: (path: string) => Promise<string[]>;
+  copyFile: (src: string, dest: string) => Promise<void>;
+  remove: (path: string) => Promise<void>;
+  readFile: (path: string, encoding: 'utf8') => Promise<string>;
+  writeFile: (path: string, data: string) => Promise<void>;
+  log?: (message: string) => void;
+}
+
+export interface InitCommandDeps extends ContextCopyDeps {
   writeJson: (...args: any[]) => Promise<void>;
   readJson: (path: string) => Promise<any>;
   readJsonSafe: (path: string) => Promise<any>;
-  ensureDir: (path: string) => Promise<void>;
   prompt: (...args: any[]) => Promise<any>;
   getZebkitPackageRoot: () => string;
   getZebkitDefaultsDir: () => string;
+  getZebkitContextDir: () => string;
   getBuiltInThemeNames: (packageRoot?: string) => Promise<string[]>;
   getThemePromptChoices: (themeNames: string[]) => string[];
+  getKnownComponents: (tokenDefaultsDir?: string) => Promise<string[]>;
   resolveBundledThemeTokensDir: (
     themeName: string,
     defaultsDir: string,
@@ -25,6 +41,89 @@ export interface InitCommandDeps {
   ) => string;
   handlePromptCancel: (commandName: string) => void;
   isPromptCancelError: (error: unknown) => error is { name: string };
+}
+
+// A per-component context doc is named zbk-<component>.md. The full-library
+// aggregate deliberately stays docs-site-only: it would expose excluded component docs.
+const CONTEXT_COMPONENT_RE = /^zbk-(.+)\.md$/;
+const CONTEXT_UTILITY_RE = /^utilities-.+\.md$/;
+const CONTEXT_DOCS_ONLY_FILES = new Set(['llms-full.txt']);
+
+function isManagedContextFile(file: string): boolean {
+  return (
+    file === 'llms.txt' ||
+    CONTEXT_DOCS_ONLY_FILES.has(file) ||
+    CONTEXT_COMPONENT_RE.test(file) ||
+    CONTEXT_UTILITY_RE.test(file)
+  );
+}
+
+function filterContextIndex(content: string, excluded: ReadonlySet<string>): string {
+  return content
+    .split('\n')
+    .filter((line) => {
+      const component = line.match(/\]\(zbk-(.+)\.md\)/)?.[1]?.toLowerCase();
+      return !component || !excluded.has(component);
+    })
+    .join('\n');
+}
+
+/**
+ * Copies the agent context (per-component markdown + llms.txt) from the bundled
+ * context dir into `targetDir`, skipping per-component docs for components the
+ * consumer excluded. Returns the number of files written. Shared by init + pull.
+ */
+export async function copyAgentContext(
+  targetDir: string,
+  sourceDir: string,
+  excluded: ReadonlySet<string>,
+  deps: ContextCopyDeps
+): Promise<number> {
+  if (!(await deps.pathExists(sourceDir))) {
+    deps.log?.(
+      `Agent context not found at ${sourceDir} — this zebkit build did not ship dist/cli/context/. Skipping.`
+    );
+    return 0;
+  }
+
+  await deps.ensureDir(targetDir);
+  const files = (await deps.readdir(sourceDir)).sort();
+  const desired = new Set(
+    files.filter((file) => {
+      if (CONTEXT_DOCS_ONLY_FILES.has(file)) return false;
+      const match = file.match(CONTEXT_COMPONENT_RE);
+      return !match || !excluded.has(match[1].toLowerCase());
+    })
+  );
+
+  // Reconcile only files owned by Zebkit. This removes docs for components that
+  // became excluded and retired generated files without touching consumer notes.
+  for (const file of await deps.readdir(targetDir)) {
+    if (isManagedContextFile(file) && !desired.has(file)) {
+      await deps.remove(path.join(targetDir, file));
+    }
+  }
+
+  let copied = 0;
+
+  for (const file of files) {
+    if (CONTEXT_DOCS_ONLY_FILES.has(file)) continue;
+    if (file === 'llms.txt') {
+      const content = await deps.readFile(path.join(sourceDir, file), 'utf8');
+      await deps.writeFile(
+        path.join(targetDir, file),
+        filterContextIndex(content, excluded)
+      );
+      copied++;
+      continue;
+    }
+    const match = file.match(CONTEXT_COMPONENT_RE);
+    if (match && excluded.has(match[1].toLowerCase())) continue;
+    await deps.copyFile(path.join(sourceDir, file), path.join(targetDir, file));
+    copied++;
+  }
+
+  return copied;
 }
 
 export function getDefaultProjectName(projectDir: string): string {
@@ -143,6 +242,7 @@ export async function runInitCommand(
     const ctx: PromptContext = {
       themeChoices,
       defaultProjectName: getDefaultProjectName(process.cwd()),
+      componentChoices: await deps.getKnownComponents(defaultsDir),
     };
 
     if (await deps.pathExists(configPath)) {
@@ -168,7 +268,15 @@ export async function runInitCommand(
       message: 'Copy default token files to ./tokens/ for customization?',
       default: true,
     });
+    // --quick assumes yes; standard init asks (default yes).
     if (!options.quick) {
+      questions.push({
+        type: 'confirm',
+        name: 'copyContext',
+        message:
+          'Copy agent context (per-component markdown + llms.txt for local LLMs/agents)?',
+        default: true,
+      });
       questions.push({
         type: 'confirm',
         name: 'configureAdvanced',
@@ -196,6 +304,21 @@ export async function runInitCommand(
         packageRoot
       );
       await copyThemeTokens(process.cwd(), selectedThemeDir, deps);
+    }
+
+    const copyContext = options.quick ? true : answers.copyContext;
+    if (copyContext) {
+      config.context = { path: DEFAULT_CONTEXT_PATH };
+      const { excluded } = resolveComponentsFilter(config.components);
+      const copied = await copyAgentContext(
+        path.resolve(process.cwd(), DEFAULT_CONTEXT_PATH),
+        deps.getZebkitContextDir(),
+        excluded,
+        deps
+      );
+      if (copied > 0) {
+        console.log(`\nCopied ${copied} agent context files to ${DEFAULT_CONTEXT_PATH}/`);
+      }
     }
 
     await deps.writeJson(configPath, config, { spaces: 2 });

@@ -120,6 +120,84 @@ fluid type/space overrides come out as correct <code>clamp()</code> values — t
 anchors are present.
 </aside>
 
+## Custom variants
+
+A theme can restyle a shipped variant or add entirely new ones — the same JSON-overlay idea,
+scoped to a class instead of a theme selector. Drop a variant file anywhere under your base
+theme's `tokenPath` (loose next to your token files, or grouped in a `variants/` subfolder);
+the build detects it **by filename** and routes it to variant processing instead of token
+merging:
+
+| Filename | Contains |
+|---|---|
+| `zbk-{component}.variants.json` | All custom variants for one component — sits naturally next to `zbk-{component}.tokens.json` |
+| `zbk-{component}.variant.{name}.json` | A single variant |
+| `*-variants.json` (e.g. `acme-variants.json`) | A multi-component collection |
+
+A file is one entry, an array of entries, or a component-keyed map. A `theme/acme/zbk-button.variants.json`:
+
+```json
+{
+  "button": {
+    "pill": {
+      "axis": "style",
+      "description": "Fully rounded button.",
+      "overrides": {
+        "border-radius": "{border.radius-xl}"
+      }
+    },
+    "ghost": {
+      "overrides": { "ink": "{accent-secondary.600}" }
+    }
+  }
+}
+```
+
+The rules are the same as shipped variants ([GRAMMAR.md §6](https://github.com/mzebley/zebkit/blob/main/GRAMMAR.md)):
+
+- **Token keys must exist on the component's surface** — an unknown key warns and is dropped.
+- **Values are alias references or structural literals** (`{action.canvas}`, `transparent`,
+  `0`) — never raw visual values, so re-theming the aliases re-themes your variant too.
+- **A shipped name patches that variant** (`ghost` above merges over the built-in ghost).
+  **A new name creates a new variant**, compiled to `.zbk-button--pill` with the same
+  dependent-token re-emission overlays get.
+- Variant CSS is global — it's emitted with the **base** theme build, so variant files belong
+  in the base `tokenPath`, not an overlay's.
+
+### Using a new variant
+
+Patched shipped variants work immediately — the name is already registered. A **new** name
+needs one runtime call so `variant="pill"` validates and applies the class; the same JSON file
+feeds it:
+
+```js
+import { ZebkitElement, defineZebkitComponents } from "zebkit/components";
+import acmeVariants from "./theme/acme/zbk-button.variants.json";
+
+ZebkitElement.registerVariants(acmeVariants); // before elements upgrade
+defineZebkitComponents();
+```
+
+```html
+<zbk-button variant="pill">Save</zbk-button>
+```
+
+Registration only teaches the runtime the vocabulary — the visuals come from the compiled CSS.
+Skip it and the class still exists; you'd just have to apply `class="zbk-button--pill"` by hand
+and forgo validation.
+
+### Starting points
+
+You don't have to write variant files from scratch. With `tokens.exportTokens` on, every build
+exports the effective variant definitions in this same authorable shape — one
+`zbk-{component}.variants.json` per component (`per-module` split mode) or a single
+`{theme}-variants.json` (`combined`). Copy one into your `tokenPath`, delete what you don't
+want to change, and edit the rest.
+
+If you curate which components and shipped variants build at all, that's
+[the `components` config block](/cli#the-components-block) — exports respect it, and custom
+variant files that patch something it excluded warn instead of resurrecting it.
+
 ## Notes
 
 - **Never scope to `:root`.** An overlay at `:root` would overwrite the base instead of

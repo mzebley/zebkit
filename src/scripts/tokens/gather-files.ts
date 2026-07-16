@@ -9,37 +9,52 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export interface GatherOptions {
-  /** Override for core SCSS/token source directory (defaults to src/core relative to this file) */
-  coreDir?: string;
-  /** Override for components directory */
+  /** Override for the token-module source directory (defaults to src/tokens relative to this file) */
+  tokensDir?: string;
+  /** Override for the components directory (defaults to src/components) */
   componentsDir?: string;
   /**
    * When set, loads pre-compiled JSON token defaults from this directory instead of
    * dynamically importing TS token modules. Used by the installed CLI.
    */
   tokenDefaultsDir?: string;
+  /**
+   * Component names excluded by the `components` config block. Their styles.scss
+   * and token modules are dropped here, before the compile.
+   */
+  excludedComponents?: ReadonlySet<string>;
 }
 
 /**
  * Collects Zebkit token sources and SCSS entry points.
- * Expects token files at src/core/.../tokens.ts and src/components/.../tokens.ts.
+ *
+ * Token modules live at src/tokens/.../tokens/tokens.ts (the token language) and
+ * src/components/{name}/tokens/tokens.ts (per-component surfaces). Component
+ * tokens are part of the default vocabulary; the shipped surface shrinks in two
+ * ways that compose: the `components` config (declared intent, filtered here at
+ * gather time) and `zebkit prune` (evidence-based, runs after the compile and
+ * can only ever remove more).
+ *
  * In installed CLI mode, pass tokenDefaultsDir to load pre-compiled JSON defaults instead.
  */
-export async function gatherZebkitFiles(components: string[], options?: GatherOptions) {
+export async function gatherZebkitFiles(options?: GatherOptions) {
   const stylesheets: string[] = [];
   const tokenFiles: string[] = [];
 
   const spinner = ora('Gathering Zebkit token files...').start();
 
   try {
-    const coreDir = options?.coreDir ?? path.resolve(__dirname, '../../core');
+    const tokensDir = options?.tokensDir ?? path.resolve(__dirname, '../../tokens');
     const componentsDir = options?.componentsDir ?? path.resolve(__dirname, '../../components');
+    const excluded = options?.excludedComponents ?? new Set<string>();
+    const componentNameOf = (file: string): string =>
+      path.relative(componentsDir, file).split(path.sep)[0]?.toLowerCase() ?? '';
 
-    // Core stylesheets: entry styles.scss plus nested styles/*.scss
-    const coreStyles = await glob(
+    // Token-language stylesheets: entry styles.scss plus nested styles/*.scss
+    const tokenStyles = await glob(
       ['**/styles.scss', 'styles/**/*.scss'],
       {
-        cwd: coreDir,
+        cwd: tokensDir,
         absolute: true,
         nodir: true,
       }
@@ -47,7 +62,18 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
     // glob order follows filesystem readdir and varies between machines/runs.
     // Sort every discovery so the compiled CSS (and thus a pruned build) is
     // byte-reproducible.
-    stylesheets.push(...coreStyles.sort());
+    stylesheets.push(...tokenStyles.sort());
+
+    if (await fs.pathExists(componentsDir)) {
+      const componentStyles = await glob('**/styles.scss', {
+        cwd: componentsDir,
+        absolute: true,
+        nodir: true,
+      });
+      stylesheets.push(
+        ...componentStyles.filter((file) => !excluded.has(componentNameOf(file))).sort()
+      );
+    }
 
     if (options?.tokenDefaultsDir) {
       // Installed CLI mode: load pre-compiled JSON token defaults
@@ -55,45 +81,39 @@ export async function gatherZebkitFiles(components: string[], options?: GatherOp
         cwd: options.tokenDefaultsDir,
         absolute: true,
         nodir: true,
-        // variants.json is the built-in variant snapshot, not a token module.
-        ignore: ['manifest.json', 'variants.json'],
+        // manifest/variants/components are pipeline snapshots and
+        // component-tokens.json is the component-consumed-vars list for prune —
+        // none of them is a token module.
+        ignore: ['manifest.json', 'variants.json', 'components.json', 'component-tokens.json'],
       });
-      tokenFiles.push(...jsonFiles.sort());
+      const excludedModuleKeys = new Set(
+        [...excluded].map((component) => `zbk-${component}`)
+      );
+      tokenFiles.push(
+        ...jsonFiles
+          .filter(
+            (file) => !excludedModuleKeys.has(path.basename(file, '.json').toLowerCase())
+          )
+          .sort()
+      );
     } else {
       // Dev mode: discover TypeScript token modules
-      const coreTokens = await glob('**/tokens/tokens.ts', {
-        cwd: coreDir,
+      const languageTokens = await glob('**/tokens/tokens.ts', {
+        cwd: tokensDir,
         nodir: true,
       });
-      tokenFiles.push(...coreTokens.sort().map((file) => path.join('core', file)));
-    }
+      tokenFiles.push(...languageTokens.sort().map((file) => path.join('tokens', file)));
 
-    if (components.length > 0 && (await fs.pathExists(componentsDir))) {
-      for (const component of components) {
-        const componentDir = path.join(componentsDir, component);
-        if (!(await fs.pathExists(componentDir))) {
-          console.warn(
-            chalk.yellow(`Component directory does not exist: ${componentDir}`)
-          );
-          continue;
-        }
-
-        const componentStyles = await glob(
-          ['**/styles.scss', 'styles/**/*.scss'],
-          {
-            cwd: componentDir,
-            absolute: true,
-            nodir: true,
-          }
-        );
-        stylesheets.push(...componentStyles.sort());
-
+      if (await fs.pathExists(componentsDir)) {
         const componentTokens = await glob('**/tokens/tokens.ts', {
-          cwd: componentDir,
+          cwd: componentsDir,
           nodir: true,
         });
         tokenFiles.push(
-          ...componentTokens.sort().map((file) => path.join('components', component, file))
+          ...componentTokens
+            .filter((file) => !excluded.has(file.split(/[\\/]/)[0]?.toLowerCase() ?? ''))
+            .sort()
+            .map((file) => path.join('components', file))
         );
       }
     }

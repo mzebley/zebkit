@@ -4,7 +4,7 @@
 
 import type { TokenInterface } from '@definitions/tokens';
 import { EXTENDED_TOKEN_BREAKPOINTS } from '../config';
-import breakpointTokens from '../../core/breakpoint/tokens/tokens';
+import breakpointTokens from '../../tokens/breakpoint/tokens/tokens';
 import {
   buildEnabledBreakpointsList,
   buildTokenLookup,
@@ -167,6 +167,27 @@ describe('build-tokens helpers', () => {
       });
       expect(closure.has('zbk-spacing.sm')).toBe(true);
       expect(closure.has('zbk-font-size.md')).toBe(false);
+    });
+
+    it('follows self-referencing component tokens (the variant-scope re-anchor case)', () => {
+      // The variant compiler feeds a variant's overridden keys through this
+      // closure so derived tokens (thumb follows track) re-resolve inside the
+      // variant class instead of staying locked to their :root substitution.
+      const componentTokens = {
+        'zbk-toggle': {
+          'track-height': { value: '{spacing.105}', type: 'sizing', description: '' },
+          'thumb-size': { value: '{toggle.track-height}', type: 'sizing', description: '' },
+          'border-radius': { value: '{toggle.track-height}', type: 'borderRadius', description: '' },
+          'thumb-inset': { value: '{spacing.neg-2px}', type: 'spacing', description: '' },
+        },
+      } as unknown as Record<string, TokenInterface>;
+
+      const closure = computeEmissionClosure(componentTokens, {
+        'zbk-toggle': new Set(['track-height']),
+      });
+      expect(closure.has('zbk-toggle.thumb-size')).toBe(true);
+      expect(closure.has('zbk-toggle.border-radius')).toBe(true);
+      expect(closure.has('zbk-toggle.thumb-inset')).toBe(false);
     });
   });
 });

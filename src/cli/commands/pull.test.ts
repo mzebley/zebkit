@@ -12,8 +12,14 @@ describe('pull command', () => {
   const mockWriteJson = jest.fn();
   const mockEnsureDir = jest.fn();
   const mockReadConfig = jest.fn();
+  const mockReaddir = jest.fn();
+  const mockCopyFile = jest.fn();
+  const mockRemove = jest.fn();
+  const mockReadFile = jest.fn();
+  const mockWriteFile = jest.fn();
   const mockGetZebkitDefaultsDir = jest.fn(() => '/pkg/dist/cli/defaults');
   const mockGetZebkitPackageRoot = jest.fn(() => '/pkg');
+  const mockGetZebkitContextDir = jest.fn(() => '/pkg/dist/cli/context');
   // Mirrors the real resolver: default -> defaults dir, presets -> bundled preset dir.
   const mockResolveBundledThemeTokensDir = jest.fn(
     (themeName: string, defaultsDir: string, packageRoot: string) =>
@@ -29,9 +35,15 @@ describe('pull command', () => {
     readJsonSafe: mockReadJsonSafe as PullCommandDeps['readJsonSafe'],
     writeJson: mockWriteJson as PullCommandDeps['writeJson'],
     ensureDir: mockEnsureDir as PullCommandDeps['ensureDir'],
+    readdir: mockReaddir as PullCommandDeps['readdir'],
+    copyFile: mockCopyFile as PullCommandDeps['copyFile'],
+    remove: mockRemove as PullCommandDeps['remove'],
+    readFile: mockReadFile as PullCommandDeps['readFile'],
+    writeFile: mockWriteFile as PullCommandDeps['writeFile'],
     readConfig: mockReadConfig as PullCommandDeps['readConfig'],
     getZebkitDefaultsDir: mockGetZebkitDefaultsDir,
     getZebkitPackageRoot: mockGetZebkitPackageRoot,
+    getZebkitContextDir: mockGetZebkitContextDir,
     resolveBundledThemeTokensDir: mockResolveBundledThemeTokensDir,
     log: mockLog,
   });
@@ -43,6 +55,7 @@ describe('pull command', () => {
       path: '/workspace/project/zebkit.config.json',
     });
     mockGetZebkitDefaultsDir.mockReturnValue('/pkg/dist/cli/defaults');
+    mockGetZebkitContextDir.mockReturnValue('/pkg/dist/cli/context');
   });
 
   it('writes VS Code settings after syncing new token files', async () => {
@@ -262,5 +275,73 @@ describe('pull command', () => {
 
     expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('No tokenPath set in config'));
     expect(mockWriteJson).not.toHaveBeenCalled();
+  });
+
+  it('refreshes agent context when context.path is set, honoring excluded components', async () => {
+    mockReadConfig.mockResolvedValue({
+      config: {
+        context: { path: './zebkit/context' },
+        components: { checkbox: false },
+      },
+      path: '/workspace/project/zebkit.config.json',
+    });
+    mockPathExists.mockImplementation(async (target: string) => target === '/pkg/dist/cli/context');
+    mockReaddir.mockImplementation(async (target: string) =>
+      target === '/pkg/dist/cli/context'
+        ? [
+            'llms.txt',
+            'llms-full.txt',
+            'utilities-spacing.md',
+            'zbk-button.md',
+            'zbk-checkbox.md',
+          ]
+        : ['llms-full.txt', 'utilities-border.md', 'zbk-checkbox.md', 'project-notes.md']
+    );
+    mockReadFile.mockResolvedValue(
+      '# Index\n\n- [zbk-button](zbk-button.md): Button.\n- [zbk-checkbox](zbk-checkbox.md): Checkbox.\n'
+    );
+
+    await runPullCommand(createDeps());
+
+    // The index is filtered, utility docs are copied, the full aggregate stays hosted,
+    // and the excluded component doc is skipped.
+    expect(mockEnsureDir).toHaveBeenCalledWith('/workspace/project/zebkit/context');
+    expect(mockWriteFile).toHaveBeenCalledWith(
+      '/workspace/project/zebkit/context/llms.txt',
+      '# Index\n\n- [zbk-button](zbk-button.md): Button.\n'
+    );
+    expect(mockCopyFile).toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/zbk-button.md',
+      '/workspace/project/zebkit/context/zbk-button.md'
+    );
+    expect(mockCopyFile).not.toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/zbk-checkbox.md',
+      expect.anything()
+    );
+    expect(mockCopyFile).toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/utilities-spacing.md',
+      '/workspace/project/zebkit/context/utilities-spacing.md'
+    );
+    expect(mockCopyFile).not.toHaveBeenCalledWith(
+      '/pkg/dist/cli/context/llms-full.txt',
+      expect.anything()
+    );
+    expect(mockRemove).toHaveBeenCalledWith('/workspace/project/zebkit/context/llms-full.txt');
+    expect(mockRemove).toHaveBeenCalledWith('/workspace/project/zebkit/context/utilities-border.md');
+    expect(mockRemove).toHaveBeenCalledWith('/workspace/project/zebkit/context/zbk-checkbox.md');
+    expect(mockRemove).not.toHaveBeenCalledWith('/workspace/project/zebkit/context/project-notes.md');
+    expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('Refreshed 3 agent context files'));
+  });
+
+  it('does not touch context when context.path is unset (opted out)', async () => {
+    mockReadConfig.mockResolvedValue({
+      config: { tokens: {} },
+      path: '/workspace/project/zebkit.config.json',
+    });
+
+    await runPullCommand(createDeps());
+
+    expect(mockReaddir).not.toHaveBeenCalled();
+    expect(mockCopyFile).not.toHaveBeenCalled();
   });
 });

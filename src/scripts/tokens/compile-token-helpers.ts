@@ -3,6 +3,20 @@ import { z, ZodSchema } from 'zod';
 import type { TokenInterface } from '@definitions/tokens';
 import { ZEBKIT_PREFIX } from '@config';
 
+export { isVariantOverrideFile } from './compile-variant-helpers';
+
+export function validateTokenExport(tokenExport: unknown, schema: ZodSchema): string[] {
+  try {
+    schema.parse(tokenExport);
+    return [];
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return error.issues.map((issue) => `${issue.path.join('.') || '(root)'} → ${issue.message}`);
+    }
+    return [`(root) → ${error instanceof Error ? error.message : String(error)}`];
+  }
+}
+
 export function inferTokenKeyFromFilename(filePath: string): string | undefined {
   const baseName = path.basename(filePath, path.extname(filePath));
   if (!baseName) return undefined;
@@ -24,21 +38,25 @@ export function inferTokenKeyFromFilename(filePath: string): string | undefined 
     : `${ZEBKIT_PREFIX}-${normalized}`;
 }
 
-export function isVariantOverrideFile(filePath: string): boolean {
-  const baseName = path.basename(filePath, path.extname(filePath));
-  return /-variants$/i.test(baseName) || /\.variant\./i.test(path.basename(filePath));
-}
-
 export function mergeOverrideObject(
   overrideData: Record<string, any>,
   tokens: Record<string, TokenInterface>,
   tokenSchemas: Record<string, ZodSchema>,
-  touched?: Record<string, Set<string>>
+  touched?: Record<string, Set<string>>,
+  /** Module keys (e.g. `zbk-accordion`) removed by the components config. */
+  excludedModuleKeys?: ReadonlySet<string>
 ) {
   const validKeys = Object.keys(tokens);
   for (const key of Object.keys(overrideData)) {
     if (!validKeys.includes(key)) {
-      console.warn(`Custom tokens contain an unrecognized key '${key}'. Skipping.`);
+      if (excludedModuleKeys?.has(key)) {
+        console.warn(
+          `Custom tokens target '${key}', which is excluded by the components config. ` +
+            `Remove the override or re-include the component.`
+        );
+      } else {
+        console.warn(`Custom tokens contain an unrecognized key '${key}'. Skipping.`);
+      }
       continue;
     }
 
