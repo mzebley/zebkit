@@ -142,4 +142,24 @@
   .prose>p+*, p.prose+* {
     margin-top: var(--#{prefix.$cssVar}-p-spacing-after);
   }
+
+  .prose > .lede, .lede.prose {
+    font-family: var(--#{prefix.$cssVar}-lede-font-family);
+    font-size: var(--#{prefix.$cssVar}-lede-font-size);
+    font-weight: var(--#{prefix.$cssVar}-lede-font-weight);
+    line-height: var(--#{prefix.$cssVar}-lede-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-lede-letter-spacing);
+    max-width: var(--#{prefix.$cssVar}-lede-measure);
+    color: var(--#{prefix.$cssVar}-lede-color);
+    font-style: var(--#{prefix.$cssVar}-lede-font-style);
+    text-transform: var(--#{prefix.$cssVar}-lede-text-transform);
+  }
+
+  .prose>*+.lede {
+    margin-top: var(--#{prefix.$cssVar}-lede-spacing-before);
+  }
+
+  .prose>.lede+*, .lede.prose+* {
+    margin-top: var(--#{prefix.$cssVar}-lede-spacing-after);
+  }
 }

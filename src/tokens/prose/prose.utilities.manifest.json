@@ -174,6 +174,31 @@
         { "selector": ".prose>*+p", "declarations": { "margin-top": "var(--zbk-p-spacing-before)" } },
         { "selector": ".prose>p+*, p.prose+*", "declarations": { "margin-top": "var(--zbk-p-spacing-after)" } }
       ]
+    },
+    {
+      "name": "prose-lede",
+      "description": "Introductory lede styling and sibling spacing inside a .prose context.",
+      "guidance": ["Use .lede for the short introductory paragraph that summarizes or frames a page, article, or section."],
+      "source": "src/tokens/prose/styles.scss",
+      "properties": ["font-family", "font-size", "font-weight", "line-height", "letter-spacing", "max-width", "color", "font-style", "text-transform", "margin-top"],
+      "rules": [
+        {
+          "selector": ".prose > .lede, .lede.prose",
+          "declarations": {
+            "font-family": "var(--zbk-lede-font-family)",
+            "font-size": "var(--zbk-lede-font-size)",
+            "font-weight": "var(--zbk-lede-font-weight)",
+            "line-height": "var(--zbk-lede-line-height)",
+            "letter-spacing": "var(--zbk-lede-letter-spacing)",
+            "max-width": "var(--zbk-lede-measure)",
+            "color": "var(--zbk-lede-color)",
+            "font-style": "var(--zbk-lede-font-style)",
+            "text-transform": "var(--zbk-lede-text-transform)"
+          }
+        },
+        { "selector": ".prose>*+.lede", "declarations": { "margin-top": "var(--zbk-lede-spacing-before)" } },
+        { "selector": ".prose>.lede+*, .lede.prose+*", "declarations": { "margin-top": "var(--zbk-lede-spacing-after)" } }
+      ]
     }
   ]
 }

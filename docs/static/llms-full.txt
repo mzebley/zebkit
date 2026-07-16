@@ -1901,6 +1901,15 @@ The prose context styles matching descendant elements; use it for long-form cont
 
 - Prose paragraphs are max-width constrained (measure) for readability; wrap long-form copy in a .prose container rather than styling paragraphs ad hoc.
 
+### prose-lede
+
+Introductory lede styling and sibling spacing inside a .prose context.
+
+Defines: `prose`, `lede`.
+The prose context styles matching descendant elements; use it for long-form content rather than as an element-by-element utility.
+
+- Use .lede for the short introductory paragraph that summarizes or frames a page, article, or section.
+
 ## Text utilities
 
 Control over how text behaves when it runs out of horizontal space within its container.
