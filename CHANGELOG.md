@@ -9,6 +9,7 @@ All notable changes to zebkit are documented here. Format follows [Keep a Change
 Repository housekeeping (internal structure/tooling — no effect on the published package surface):
 
 ### Changed
+- Cleared all `npm audit` findings (was 35: 1 critical, 13 high). Safe transitive bumps plus dev/build-tooling majors: `inquirer` 10→14 (annotated the one `default` callback that lost cross-question inference), `esbuild` 0.23→0.25, `@rollup/plugin-terser` 0.4→1.0, and the doc-site toolchain `vite` 5→7 / `@sveltejs/vite-plugin-svelte` 4→6 / `@sveltejs/kit` + `adapter-static` refreshed. Added a `cookie` `^0.7.0` override (kit still pins the vulnerable `^0.6.0`) and dropped the obsolete `@types/inquirer` (v14 bundles its own types). No change to the published package runtime — all affected deps are dev/build/docs only
 - Grouped the binding concept docs into `foundations/` — `VISION.md`, `GRAMMAR.md`, `COMPONENT-VISION.md` (root markdown is now just README/CHANGELOG/INSTALL/CLAUDE/AGENTS)
 - Renamed the documentation-site directory `docs/` → `doc-site/`; updated every build, config, and CI path (npm workspace, token + hero-theme output dirs, agent-context and CLI copy paths, `svelte.config.js`, Vercel `outputDirectory`)
 - Moved theme build configs next to their tokens in `theme/` (`zebkit.docs.config.json`, `dynamowaves.config.json`, `markdown.config.json`)

@@ -220,7 +220,8 @@ export async function runTokenBuild(
             type: "input",
             name: "customThemeName",
             message: "Output theme name:",
-            default: (answers) => answers.theme || DEFAULT_THEME_NAME,
+            default: (answers: { theme?: string }) =>
+              answers.theme || DEFAULT_THEME_NAME,
           },
         ]);
 
