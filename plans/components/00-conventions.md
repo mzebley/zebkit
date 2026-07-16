@@ -35,8 +35,8 @@ src/components/{name}/
 Plus these edits outside the directory:
 
 1. `src/components/index.ts` — import, re-export, and call `defineZbk{Name}()` inside `defineZebkitComponents()` (keep existing ordering style).
-2. `docs/src/routes/components/{name}/+page.mdx` — copy the structure of `docs/src/routes/components/input/+page.mdx` (frontmatter, script block building token rows, Live examples, Usage with rendered-skeleton block, attribute/token tables, AgentContext footer).
-3. `docs/src/lib/data/navigation.ts` — add `{ label: '{Name}', link: '/components/{name}' }` to the Components group, alphabetically.
+2. `doc-site/src/routes/components/{name}/+page.mdx` — copy the structure of `doc-site/src/routes/components/input/+page.mdx` (frontmatter, script block building token rows, Live examples, Usage with rendered-skeleton block, attribute/token tables, AgentContext footer).
+3. `doc-site/src/lib/data/navigation.ts` — add `{ label: '{Name}', link: '/components/{name}' }` to the Components group, alphabetically.
 4. If the plan has a **GRAMMAR.md amendment** section, apply it exactly as written.
 
 ## index.ts shape
@@ -116,11 +116,11 @@ npm test
 npm run type-check
 npm run build:defaults      # regenerates token/variant JSON snapshots
 npm run build:cem           # regenerates custom-elements.json
-npm run build:context       # regenerates docs/static/zebkit/context/*
+npm run build:context       # regenerates doc-site/static/zebkit/context/*
 npm run check               # full gate: tests, types, utilities, cem/context/docs drift
 ```
 
-Commit regenerated artifacts (`custom-elements.json`, `docs/static/zebkit/context/*`, generated token JSON) together with the source. `npm run check` failing on "drift" means a generator wasn't re-run — its output names the command.
+Commit regenerated artifacts (`custom-elements.json`, `doc-site/static/zebkit/context/*`, generated token JSON) together with the source. `npm run check` failing on "drift" means a generator wasn't re-run — its output names the command.
 
 ## Definition of done (every component)
 

@@ -2,7 +2,7 @@
 
 A light-DOM custom element wrapping a real `<input>` inside its own `<label>`. Default children are the visible label (the accessible name via the wrapping label — the same spelling as `<zbk-checkbox>`); the field box carries optional prefix/suffix affixes around the native input. Every visual property is a `--zbk-input-*` token.
 
-Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../GRAMMAR.md). For a picker over fixed options, use [`<zbk-select>`](../select/README.md).
+Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../foundations/GRAMMAR.md). For a picker over fixed options, use [`<zbk-select>`](../select/README.md).
 
 ## Usage
 

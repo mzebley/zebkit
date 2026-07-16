@@ -4,9 +4,9 @@ import { mdsvex } from 'mdsvex';
 import rehypeSlug from 'rehype-slug';
 import path from 'node:path';
 
-const docsRoot = process.cwd().endsWith(`${path.sep}docs`)
+const docsRoot = process.cwd().endsWith(`${path.sep}doc-site`)
   ? process.cwd()
-  : path.join(process.cwd(), 'docs');
+  : path.join(process.cwd(), 'doc-site');
 
 const layoutPath = (relativePath) => path.join(docsRoot, relativePath);
 

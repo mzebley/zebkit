@@ -1,6 +1,6 @@
 # Component Authoring
 
-A zebkit component is a finished semantic pattern with light-DOM behavior and a complete token surface, not a visual preset. Read the [component vision](../../COMPONENT-VISION.md) for the why and [GRAMMAR.md](../../GRAMMAR.md) for the binding contract.
+A zebkit component is a finished semantic pattern with light-DOM behavior and a complete token surface, not a visual preset. Read the [component vision](../../foundations/COMPONENT-VISION.md) for the why and [GRAMMAR.md](../../foundations/GRAMMAR.md) for the binding contract.
 
 ## Build a component
 
@@ -12,6 +12,6 @@ Component manifests own slot semantics and authoring guidance. Follow the [compo
 
 ## Verify
 
-Run `npm run generate && npm run lint && npm run check`. In dev mode, diagnostics name the correction and valid vocabulary as required by [GRAMMAR.md §9](../../GRAMMAR.md#9-feedback-names-the-fix).
+Run `npm run generate && npm run lint && npm run check`. In dev mode, diagnostics name the correction and valid vocabulary as required by [GRAMMAR.md §9](../../foundations/GRAMMAR.md#9-feedback-names-the-fix).
 
 For implementation patterns, use the [reference implementation table](../../plans/components/00-conventions.md#reference-implementations) rather than copying a checklist into this guide.

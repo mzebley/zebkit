@@ -14,7 +14,7 @@ Respect the build order below — later plans assume earlier ones landed.
 
 | Order | File | Component | Depends on |
 |---|---|---|---|
-| 1 | [01-zbk-textarea.md](01-zbk-textarea.md) | `<zbk-textarea>` | — |
+| ✓ | [01-zbk-textarea.md](01-zbk-textarea.md) | `<zbk-textarea>` — **shipped in 0.8.0** | — |
 | 2 | [02-zbk-link.md](02-zbk-link.md) | `<zbk-link>` | — |
 | 3 | [03-zbk-badge.md](03-zbk-badge.md) | `<zbk-badge>` | — |
 | 4 | [04-zbk-tag.md](04-zbk-tag.md) | `<zbk-tag>` | badge (pattern precedent) |

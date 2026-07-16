@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "sync:generated": "node ./scripts/copy-tokens.js",
-    "sync:tokens": "npm run build:tokens --prefix .. -- --config zebkit.docs.config.json && npm run build:hero-themes --prefix .. && npm run sync:generated",
+    "sync:tokens": "npm run build:tokens --prefix .. -- --config theme/zebkit.docs.config.json && npm run build:hero-themes --prefix .. && npm run sync:generated",
     "refresh": "npm run build --prefix ..",
     "predev": "npm run refresh && svelte-kit sync",
     "dev": "vite dev",

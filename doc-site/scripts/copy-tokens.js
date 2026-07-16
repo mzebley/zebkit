@@ -1,16 +1,22 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const staticDir = path.resolve('static', 'zebkit');
-const targetDir = path.resolve('src', 'lib', 'data', 'generated');
+// Resolve everything from the script's own location so the script works
+// regardless of cwd (doc-site/ via npm, or the repo root directly).
+const docsDir = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const repoRoot = path.resolve(docsDir, '..');
+
+const staticDir = path.join(docsDir, 'static', 'zebkit');
+const targetDir = path.join(docsDir, 'src', 'lib', 'data', 'generated');
 
 // The component bundle the docs serve at /zebkit/zebkit.js comes straight from
 // the library build (`npm run build:components`).
-const componentsDist = path.resolve('..', 'dist', 'components');
+const componentsDist = path.join(repoRoot, 'dist', 'components');
 
 // Sources for the primitive palette (live in the library, not the token JSON).
-const paletteDir = path.resolve('..', 'src', 'tokens', 'colors', 'palette');
-const colorMixin = path.resolve('..', 'src', 'tokens', 'styles', 'mixins', '_primitive-color.scss');
+const paletteDir = path.join(repoRoot, 'src', 'tokens', 'colors', 'palette');
+const colorMixin = path.join(repoRoot, 'src', 'tokens', 'styles', 'mixins', '_primitive-color.scss');
 
 const tokenFiles = [
   'default-tokens.json',

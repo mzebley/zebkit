@@ -1,7 +1,7 @@
 {
   "tokens": {
     "includeAllComponents": true,
-    "destinationPath": "./docs/static/zebkit",
+    "destinationPath": "./doc-site/static/zebkit",
     "assetFilePath": "/zebkit/",
     "basePreset": "default",
     "tokenPath": "./theme/zebkit-docs",
@@ -11,37 +11,37 @@
     "writeVariantRegistry": true,
     "writeTokenLookup": true,
     "writeAllowedTokenTypes": true,
-    "tokenLookupOutputPath": "./docs/static/zebkit/token-lookup.json",
+    "tokenLookupOutputPath": "./doc-site/static/zebkit/token-lookup.json",
     "overlays": [
       {
         "themeName": "apple",
         "tokenPath": "./theme/zebkit-hero-apple",
-        "destinationPath": "./docs/static/zebkit/themes"
+        "destinationPath": "./doc-site/static/zebkit/themes"
       },
       {
         "themeName": "material",
         "tokenPath": "./theme/zebkit-hero-material",
-        "destinationPath": "./docs/static/zebkit/themes"
+        "destinationPath": "./doc-site/static/zebkit/themes"
       },
       {
         "themeName": "atlassian",
         "tokenPath": "./theme/zebkit-hero-atlassian",
-        "destinationPath": "./docs/static/zebkit/themes"
+        "destinationPath": "./doc-site/static/zebkit/themes"
       },
       {
         "themeName": "carbon",
         "tokenPath": "./theme/zebkit-hero-carbon",
-        "destinationPath": "./docs/static/zebkit/themes"
+        "destinationPath": "./doc-site/static/zebkit/themes"
       },
       {
         "themeName": "uber",
         "tokenPath": "./theme/zebkit-hero-uber",
-        "destinationPath": "./docs/static/zebkit/themes"
+        "destinationPath": "./doc-site/static/zebkit/themes"
       },
       {
         "themeName": "fluent",
         "tokenPath": "./theme/zebkit-hero-fluent",
-        "destinationPath": "./docs/static/zebkit/themes"
+        "destinationPath": "./doc-site/static/zebkit/themes"
       }
     ]
   }

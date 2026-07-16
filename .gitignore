@@ -50,3 +50,15 @@ temp/
 # custom-output/
 # generated-docs/
 .vercel
+
+# Agent handoff plans are local working docs, never committed
+HANDOFF-*.md
+
+# Compiled CSS written into theme workspaces (real outputs live in dist/ or doc-site/static)
+theme/**/*.css
+
+# Generated baseline reference — regenerate via `npm run build:baseline-ref`
+theme/zebkit-baseline/
+
+# Claude Code local settings
+.claude/settings.local.json

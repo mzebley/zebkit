@@ -1,6 +1,6 @@
 # Zebkit Docs — Design Brief
 
-> Companion to [DOCS-BUILD-PLAN.md](DOCS-BUILD-PLAN.md). This brief defines *what the site should look, feel, and behave like*. The build plan defines *how to construct it*. Read [VISION.md](VISION.md) first — every decision below traces back to it.
+> This brief defines *what the site should look, feel, and behave like*. Read [VISION.md](../../VISION.md) first — every decision below traces back to it.
 
 ---
 

@@ -233,7 +233,7 @@ describe('build smoke tests', () => {
     );
 
     try {
-      // build:cli copies docs/static/zebkit/context -> dist/cli/context and bundles the CLI.
+      // build:cli copies doc-site/static/zebkit/context -> dist/cli/context and bundles the CLI.
       await execFileAsync('npm', ['run', 'build:cli'], {
         cwd: PROJECT_ROOT,
         env: { ...process.env, CI: 'true', FORCE_COLOR: '0' },

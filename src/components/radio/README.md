@@ -2,7 +2,7 @@
 
 A light-DOM custom element wrapping a real `<input type="radio">` inside its own `<label>`. Because the inputs live in the document (no shadow boundaries), radios sharing a `name` form a **native group**: mutual exclusion, arrow-key navigation, and form submission all come from the platform, not from zebkit. Every visual property is a `--zbk-radio-*` token.
 
-Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../GRAMMAR.md).
+Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../foundations/GRAMMAR.md).
 
 ## Usage
 

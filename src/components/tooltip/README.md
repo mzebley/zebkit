@@ -2,7 +2,7 @@
 
 One component, two trigger modes, one token surface. A light-DOM custom element that wraps its trigger and renders a positioned bubble — the invisible 90% (ARIA wiring, WCAG 1.4.13 behavior, focus/touch handling, positioning) done once.
 
-Contract details live in [GRAMMAR.md](../../../GRAMMAR.md).
+Contract details live in [GRAMMAR.md](../../../foundations/GRAMMAR.md).
 
 ## Usage
 

@@ -2,7 +2,7 @@
 
 A light-DOM custom element wrapping a real `<input type="checkbox" role="switch">` inside its own `<label>` — the APG switch pattern on a fully native input. Deliberately a separate component from [`<zbk-checkbox>`](../checkbox/README.md): a switch is a track with a traveling thumb, announces as on/off, and represents an immediate state change rather than a form selection, so it carries its own token surface (track and thumb each get per-state tokens) instead of contorting the checkbox's.
 
-Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../GRAMMAR.md).
+Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../foundations/GRAMMAR.md).
 
 ## Usage
 

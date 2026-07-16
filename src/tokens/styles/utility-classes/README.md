@@ -5,7 +5,7 @@ description: Zebkit's utility class system and token-driven approach to responsi
 
 Zebkit generates utility classes with [manifests](../../../scripts/utilities/README.md). Every utility that can be is token-driven — classes like ```.visibility-hidden``` are hardcoded to ```visibility:hidden``` while things like ```.gap-05``` are set to ```gap: var(--zbk-spacing-05)``` — and supports responsive variants and state-based styling.
 
-Learn why we use as many utility classes as we do in the [manifesto](/VISION.md).
+Learn why we use as many utility classes as we do in the [manifesto](../../../../foundations/VISION.md).
 
 ## How Utilities Are Generated
 

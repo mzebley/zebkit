@@ -5,8 +5,8 @@
 //
 // Inputs are tracked build artifacts plus the hand-authored manifests:
 //   - custom-elements.json                                  (build:cem)
-//   - docs/src/lib/data/generated/default-tokens.json       (build:defaults)
-//   - docs/static/zebkit/zbk-default-variants.json          (build:defaults)
+//   - doc-site/src/lib/data/generated/default-tokens.json       (build:defaults)
+//   - doc-site/static/zebkit/zbk-default-variants.json          (build:defaults)
 //   - src/components/*/zbk-*.manifest.json                  (hand-authored;
 //     the guidance layer: slots, usage, keyboard, examples — lint:components
 //     keeps them honest against the code)
@@ -30,9 +30,9 @@ import {
 } from '../src/scripts/utilities/token-source.js';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const outDir = path.join(repoRoot, 'docs', 'static', 'zebkit', 'context');
-const generatedDataDir = path.join(repoRoot, 'docs', 'src', 'lib', 'data', 'generated');
-const docsStaticDir = path.join(repoRoot, 'docs', 'static');
+const outDir = path.join(repoRoot, 'doc-site', 'static', 'zebkit', 'context');
+const generatedDataDir = path.join(repoRoot, 'doc-site', 'src', 'lib', 'data', 'generated');
+const docsStaticDir = path.join(repoRoot, 'doc-site', 'static');
 
 const DOMAIN_META = {
   layout: { title: 'Layout utilities', summary: 'flex, grid, display, positioning, object fitting, overflow, and visibility' },
@@ -520,11 +520,11 @@ async function main(): Promise<void> {
     'custom-elements.json'
   );
   const tokenRegistry = readJson<Record<string, Record<string, TokenEntry>>>(
-    'docs/src/lib/data/generated/default-tokens.json'
+    'doc-site/src/lib/data/generated/default-tokens.json'
   );
   const variantRegistry = readJson<
     Record<string, Record<string, VariantEntry>>
-  >('docs/static/zebkit/zbk-default-variants.json');
+  >('doc-site/static/zebkit/zbk-default-variants.json');
   const variants = Object.values(variantRegistry).flatMap((byName) =>
     Object.values(byName)
   );

@@ -3,7 +3,7 @@
  * Builds the docs "Reskin hero" token-diff manifest (`generated/hero-themes.json`).
  *
  * The hero stylesheets themselves are now compiled by the standard token build as scoped
- * overlay themes — see the `overlays` array in `zebkit.docs.config.json`. This script is the
+ * overlay themes — see the `overlays` array in `theme/zebkit.docs.config.json`. This script is the
  * docs-only remainder: it reads each hero preset's `theme/zebkit-hero-<name>` override files
  * and flattens them into the `{ "<token-key>": "<pretty value>" }` diff the hero's token-diff
  * panel renders. It reads the same source files the overlay CSS was compiled from, so the
@@ -17,7 +17,7 @@ const REPO_ROOT = path.resolve(process.cwd());
 const THEME_DIR = path.join(REPO_ROOT, "theme");
 const DIFF_OUTPUT = path.join(
   REPO_ROOT,
-  "docs",
+  "doc-site",
   "src",
   "lib",
   "data",

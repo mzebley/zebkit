@@ -8,7 +8,7 @@ Tracks zebkit's utility-class surface against Tailwind's catalog so we can see h
 - `[x] LEGACY` — works via an un-migrated mixin; **owes a manifest migration**
 - `[~]` — partial coverage; see note
 - `[ ]` — missing
-- `(scope?)` — needs an explicit keep/drop decision against [VISION.md](../../../../VISION.md)
+- `(scope?)` — needs an explicit keep/drop decision against [VISION.md](../../../../foundations/VISION.md)
 
 Migrating a `LEGACY` family does **not** add coverage — it moves the tag to a plain `[x]`.
 

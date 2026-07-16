@@ -1,8 +1,8 @@
 {
   "name": "zebkit",
-  "version": "0.7.0",
+  "version": "0.8.1",
   "workspaces": [
-    "docs"
+    "doc-site"
   ],
   "type": "module",
   "description": "A fully flexible, token-based web component library.",
@@ -37,7 +37,7 @@
     "test:integration": "jest --config jest.integration.config.js --runInBand",
     "test:watch": "jest --watch",
     "type-check": "tsc --noEmit",
-    "check:docs": "npm --prefix docs run build",
+    "check:docs": "npm --prefix doc-site run build",
     "check": "npm run test:unit -- --runInBand && npm run type-check && npm run check:utilities && npm run lint && npm run check:cem && npm run check:context && npm run check:docs",
     "lint": "npm run lint:components && npm run lint:utilities",
     "lint:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/lint.ts",
@@ -46,7 +46,7 @@
     "generate:components": "tsx -r tsconfig-paths/register src/scripts/components/generate.ts",
     "generate:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/generate.ts",
     "check:utilities": "tsx -r tsconfig-paths/register src/scripts/utilities/generate.ts --check",
-    "build": "npm run generate && npm run build:cem && npm run build:tokens -- --config zebkit.docs.config.json && npm run build:hero-themes && npm run build:defaults && npm run build:components && npm --prefix docs run sync:generated && npm run build:context && npm run build:editor && npm run build:cli",
+    "build": "npm run generate && npm run build:cem && npm run build:tokens -- --config theme/zebkit.docs.config.json && npm run build:hero-themes && npm run build:defaults && npm run build:components && npm --prefix doc-site run sync:generated && npm run build:context && npm run build:editor && npm run build:cli",
     "build:components": "tsx scripts/build-components.ts",
     "build-scripts": "tsc",
     "build:tokens": "tsx -r tsconfig-paths/register src/scripts/tokens/run.ts",
@@ -58,12 +58,12 @@
     "build:cli": "tsx scripts/build-cli.ts",
     "prepare": "npm run build:defaults && npm run build:editor && npm run build:cli && npm run build:components",
     "prepublishOnly": "npm run check:utilities && npm run build:defaults && npm run build:context && npm run build:editor && npm run build:cli && npm run build:components",
-    "docs:dev": "cd docs && npm run dev",
-    "docs:build": "cd docs && npm run build",
+    "docs:dev": "cd doc-site && npm run dev",
+    "docs:build": "cd doc-site && npm run build",
     "build:cem": "custom-elements-manifest analyze",
     "check:cem": "custom-elements-manifest analyze && git diff --exit-code custom-elements.json",
     "build:context": "tsx scripts/build-agent-context.ts",
-    "check:context": "npm --prefix docs run sync:tokens && npm run build:context && tsx scripts/assert-clean-paths.ts docs/static/zebkit docs/static/llms.txt docs/static/llms-full.txt docs/src/lib/data/generated"
+    "check:context": "npm --prefix doc-site run sync:tokens && npm run build:context && tsx scripts/assert-clean-paths.ts doc-site/static/zebkit doc-site/static/llms.txt doc-site/static/llms-full.txt doc-site/src/lib/data/generated"
   },
   "repository": {
     "type": "git",

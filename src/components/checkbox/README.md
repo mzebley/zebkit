@@ -2,7 +2,7 @@
 
 A light-DOM custom element wrapping a real `<input type="checkbox">` inside its own `<label>`. The native input stays functional but invisible, stretched across the whole label so hover, press, click, and focus land on it natively anywhere in the component; an aria-hidden control span visualizes its state through sibling selectors. Every visual property is a `--zbk-checkbox-*` token.
 
-Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../GRAMMAR.md). For an on/off switch, use [`<zbk-toggle>`](../toggle/README.md) — a checkbox is a form selection, a toggle is an immediate state change, and each carries its own token surface.
+Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../foundations/GRAMMAR.md). For an on/off switch, use [`<zbk-toggle>`](../toggle/README.md) — a checkbox is a form selection, a toggle is an immediate state change, and each carries its own token surface.
 
 ## Usage
 

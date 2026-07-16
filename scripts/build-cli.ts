@@ -56,8 +56,8 @@ console.log('CLI bundle written to dist/cli/zebkit.mjs');
 
 // Ship the generated agent context (per-component markdown + llms.txt) beside
 // the CLI so `zebkit init`/`pull` can deliver it into consumer repos. The canonical
-// tracked copy lives in docs/static/zebkit/context/ (see build:context); this is a copy.
-const contextSrc = path.resolve(__dirname, '../docs/static/zebkit/context');
+// tracked copy lives in doc-site/static/zebkit/context/ (see build:context); this is a copy.
+const contextSrc = path.resolve(__dirname, '../doc-site/static/zebkit/context');
 const contextDest = path.resolve(__dirname, '../dist/cli/context');
 if (await fs.pathExists(contextSrc)) {
   await fs.emptyDir(contextDest);

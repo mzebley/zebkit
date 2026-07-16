@@ -2,7 +2,7 @@
 
 A light-DOM custom element wrapping a real `<select>` inside its own `<label>`. Authored `<option>`, `<optgroup>`, and `<hr>` children are adopted into the native select; every other default child is the visible label. The field box carries optional prefix/suffix affixes and draws a chevron indicator that slotted suffix content replaces. Every visual property is a `--zbk-select-*` token.
 
-Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../GRAMMAR.md). For free text, use [`<zbk-input>`](../input/README.md).
+Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../foundations/GRAMMAR.md). For free text, use [`<zbk-input>`](../input/README.md).
 
 ## Usage
 

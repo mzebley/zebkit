@@ -2,7 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-**Read [VISION.md](VISION.md) before making design decisions.** It is the project manifesto: the core beliefs, principles, and anti-goals that every architectural and design choice must trace back to. Its "For AI agents and tooling" section is binding. **[GRAMMAR.md](GRAMMAR.md) is the binding component contract** — naming, attributes, states, variants, content model — for any component work.
+**Read [VISION.md](foundations/VISION.md) before making design decisions.** It is the project manifesto: the core beliefs, principles, and anti-goals that every architectural and design choice must trace back to. Its "For AI agents and tooling" section is binding. **[GRAMMAR.md](foundations/GRAMMAR.md) is the binding component contract** — naming, attributes, states, variants, content model — for any component work.
+
+**Log notable changes in [CHANGELOG.md](CHANGELOG.md) as you complete them.** Add bullets under `## [Unreleased]` using Keep a Changelog subsections (Added/Changed/Fixed/Removed); this project tracks changes toward v1. Bump the `package.json` version only when cutting a release — do not create a new version heading for uncommitted work.
 
 ## Build & Development Commands
 
@@ -15,7 +17,7 @@ npm run build:components    # Build web components
 npm run generate            # Regenerate all manifest-derived source (utilities + components)
 npm run generate:utilities  # Utility SCSS from utility manifests
 npm run generate:components # Component slot-contract.ts from component manifests
-npm run build               # Full build: generate -> CEM -> tokens/CSS -> components -> docs/context -> editor/CLI
+npm run build               # Full build: generate -> CEM -> tokens/CSS -> components -> doc-site/context -> editor/CLI
 npm run lint                # Lint components + utilities
 npm run lint:utilities      # Lint utility manifests against generated SCSS
 npm run lint:components     # Lint component manifests against code (slots, examples)
@@ -48,7 +50,7 @@ All CSS variables use the `--zbk-` prefix. Interaction-state suffixes (default s
 - `src/components/base/` - `ZebkitElement` (light-DOM Lit base class) and the shared live-region announcer
 - `src/definitions/` - Shared token types, maps, and Zod schemas
 - `src/scripts/tokens/` - Token build pipeline (gather, compile, convert to CSS vars)
-- `docs/` - SvelteKit documentation site
+- `doc-site/` - SvelteKit documentation site
 
 ### Token Module Structure
 

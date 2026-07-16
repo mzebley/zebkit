@@ -30,14 +30,14 @@ Each module must have its sibling schema. A missing schema, failed Zod parse, or
 
 ## Keys and utility bindings
 
-Modules with the same `key` merge into one logical group, with a warning when a later module overwrites a token. For example, primitive and semantic spacing modules both use `spacing`; put semantic aliases in [`semantic/`](semantic/) and keep the token strata in the [manifesto](../../VISION.md#the-token-strata-a-theory-of-change).
+Modules with the same `key` merge into one logical group, with a warning when a later module overwrites a token. For example, primitive and semantic spacing modules both use `spacing`; put semantic aliases in [`semantic/`](semantic/) and keep the token strata in the [manifesto](../../foundations/VISION.md#the-token-strata-a-theory-of-change).
 
 Utility manifests bind `tokens.group` to this key. When a token-bound family derives its values automatically, new tokens become utility values without a manifest edit; see [Token binding](../scripts/utilities/README.md#token-binding).
 
 ## Workflow
 
 1. Add `tokens/tokens.ts` and `tokens/token-schema.ts` anywhere under `src/tokens/`.
-2. Build the docs token set: `npm run build:tokens -- --config zebkit.docs.config.json`.
+2. Build the docs token set: `npm run build:tokens -- --config theme/zebkit.docs.config.json`.
 3. Run `npm run check` before handing off the change.
 
-The docs token build writes the static token artifacts; `docs/scripts/copy-tokens.js` syncs them into the generated docs data. `npm run build:defaults` only creates the snapshots bundled with the CLI.
+The docs token build writes the static token artifacts; `doc-site/scripts/copy-tokens.js` syncs them into the generated docs data. `npm run build:defaults` only creates the snapshots bundled with the CLI.

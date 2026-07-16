@@ -2,7 +2,7 @@
 
 A light-DOM custom element wrapping a real `<button>`. The platform already ships the platonic button; `<zbk-button>` completes the pattern: it renders the token-driven skeleton, reflects `variant` into classes, forwards native semantics, and adds the one behavior a native button lacks (`loading`). It carries zero visual opinion — every visual property is a `--zbk-button-*` token.
 
-Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../GRAMMAR.md).
+Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../foundations/GRAMMAR.md).
 
 ## Usage
 

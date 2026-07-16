@@ -2,7 +2,7 @@
 
 A light-DOM custom element wrapping a real `<textarea>` inside its own `<label>`. It is [`<zbk-input>`](../input/README.md) for multi-line text: default children are the visible label (the accessible name via the wrapping label), and the field box carries the native textarea. No affixes, no masking — it is not a rich-text editor. Every visual property is a `--zbk-textarea-*` token.
 
-Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../GRAMMAR.md). For single-line text, use [`<zbk-input>`](../input/README.md).
+Contract details (naming, states, ARIA relocation, content model) live in [GRAMMAR.md](../../../foundations/GRAMMAR.md). For single-line text, use [`<zbk-input>`](../input/README.md).
 
 ## Usage
 

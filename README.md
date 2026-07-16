@@ -6,10 +6,10 @@ Style it to look like basically anything. Change everything; rewrite nothing.
 
 That's zebkit.
 
-Read the [manifesto](VISION.md).
+Read the [manifesto](foundations/VISION.md).
 
 ## Start here
 
-- Using zebkit: [INSTALL.md](INSTALL.md), the [docs site](docs/), and [agent context](docs/static/zebkit/context/llms.txt).
-- Understanding it: [VISION.md](VISION.md), [GRAMMAR.md](GRAMMAR.md), and [COMPONENT-VISION.md](COMPONENT-VISION.md).
+- Using zebkit: [INSTALL.md](INSTALL.md), the [docs site](doc-site/), and [agent context](doc-site/static/zebkit/context/llms.txt).
+- Understanding it: [VISION.md](foundations/VISION.md), [GRAMMAR.md](foundations/GRAMMAR.md), and [COMPONENT-VISION.md](foundations/COMPONENT-VISION.md).
 - Extending it: [token modules](src/tokens/README.md), [components](src/components/README.md), [component manifests](src/scripts/components/README.md), and [utility manifests](src/scripts/utilities/README.md).
