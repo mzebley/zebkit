@@ -1,35 +1,94 @@
 {
-  "toggle": {
-    "sm": {
-      "component": "toggle",
-      "name": "sm",
-      "className": "zbk-toggle--sm",
+  "button": {
+    "ghost": {
+      "component": "button",
+      "name": "ghost",
+      "className": "zbk-button--ghost",
       "overrides": {
-        "track-width": "{spacing.lg}",
-        "track-height": "{spacing.md}",
-        "font-size": "{font-size.sm}"
+        "canvas": "transparent",
+        "canvas-hover": "{action.canvas-subtle}",
+        "canvas-active": "{action.canvas-muted}",
+        "canvas-disabled": "transparent",
+        "ink": "{action.ink}",
+        "ink-hover": "{action.ink-emphasis}",
+        "ink-active": "{action.ink-emphasis}",
+        "border-color": "transparent",
+        "border-color-hover": "transparent",
+        "border-color-active": "transparent",
+        "border-color-disabled": "transparent"
+      },
+      "axis": "style",
+      "description": "Transparent canvas and border; ink takes the action role with a subtle hover wash."
+    },
+    "outline": {
+      "component": "button",
+      "name": "outline",
+      "className": "zbk-button--outline",
+      "overrides": {
+        "canvas": "transparent",
+        "canvas-hover": "{action.canvas-subtle}",
+        "canvas-active": "{action.canvas-muted}",
+        "canvas-disabled": "transparent",
+        "ink": "{action.ink}",
+        "ink-hover": "{action.ink-emphasis}",
+        "ink-active": "{action.ink-emphasis}",
+        "border-color": "{action.border}",
+        "border-color-hover": "{action.border-emphasis}",
+        "border-color-active": "{action.border-emphasis}"
+      },
+      "axis": "style",
+      "description": "Transparent canvas with an action-colored border; subtle wash on hover."
+    },
+    "subtle": {
+      "component": "button",
+      "name": "subtle",
+      "className": "zbk-button--subtle",
+      "overrides": {
+        "canvas": "{action.canvas-subtle}",
+        "canvas-hover": "{action.canvas-muted}",
+        "canvas-active": "{action.canvas-muted}",
+        "ink": "{action.ink}",
+        "ink-hover": "{action.ink-emphasis}",
+        "ink-active": "{action.ink-emphasis}",
+        "border-color": "transparent",
+        "border-color-hover": "transparent",
+        "border-color-active": "transparent"
+      },
+      "axis": "style",
+      "description": "Low-emphasis fill on the subtle action canvas; no border."
+    },
+    "sm": {
+      "component": "button",
+      "name": "sm",
+      "className": "zbk-button--sm",
+      "overrides": {
+        "font-size": "{font-size.sm}",
+        "padding-inline": "{spacing.xs}",
+        "padding-block": "{spacing.2xs}",
+        "icon-size": "1rem"
       },
       "axis": "size",
-      "description": "Smaller track and label type; thumb follows the track."
+      "description": "Smaller type and padding; keeps the 44px minimum tap target."
     },
     "lg": {
-      "component": "toggle",
+      "component": "button",
       "name": "lg",
-      "className": "zbk-toggle--lg",
+      "className": "zbk-button--lg",
       "overrides": {
-        "track-width": "{spacing.xl}",
-        "track-height": "{spacing.lg}",
-        "font-size": "{font-size.lg}"
+        "font-size": "{font-size.lg}",
+        "padding-inline": "{spacing.lg}",
+        "padding-block": "{spacing.sm}",
+        "icon-size": "1.5rem"
       },
       "axis": "size",
-      "description": "Larger track and label type; thumb follows the track."
+      "description": "Larger type and padding."
     }
   },
-  "radio": {
+  "checkbox": {
     "sm": {
-      "component": "radio",
+      "component": "checkbox",
       "name": "sm",
-      "className": "zbk-radio--sm",
+      "className": "zbk-checkbox--sm",
       "overrides": {
         "control-size": "{spacing.md}",
         "font-size": "{font-size.sm}"
@@ -38,9 +97,9 @@
       "description": "Smaller control and label type."
     },
     "lg": {
-      "component": "radio",
+      "component": "checkbox",
       "name": "lg",
-      "className": "zbk-radio--lg",
+      "className": "zbk-checkbox--lg",
       "overrides": {
         "control-size": "{spacing.lg}",
         "font-size": "{font-size.lg}"
@@ -76,11 +135,11 @@
       "description": "Larger type and padding."
     }
   },
-  "checkbox": {
+  "radio": {
     "sm": {
-      "component": "checkbox",
+      "component": "radio",
       "name": "sm",
-      "className": "zbk-checkbox--sm",
+      "className": "zbk-radio--sm",
       "overrides": {
         "control-size": "{spacing.md}",
         "font-size": "{font-size.sm}"
@@ -89,9 +148,9 @@
       "description": "Smaller control and label type."
     },
     "lg": {
-      "component": "checkbox",
+      "component": "radio",
       "name": "lg",
-      "className": "zbk-checkbox--lg",
+      "className": "zbk-radio--lg",
       "overrides": {
         "control-size": "{spacing.lg}",
         "font-size": "{font-size.lg}"
@@ -154,89 +213,30 @@
       "description": "Larger type and padding."
     }
   },
-  "button": {
-    "subtle": {
-      "component": "button",
-      "name": "subtle",
-      "className": "zbk-button--subtle",
-      "overrides": {
-        "canvas": "{action.canvas-subtle}",
-        "canvas-hover": "{action.canvas-muted}",
-        "canvas-active": "{action.canvas-muted}",
-        "ink": "{action.ink}",
-        "ink-hover": "{action.ink-emphasis}",
-        "ink-active": "{action.ink-emphasis}",
-        "border-color": "transparent",
-        "border-color-hover": "transparent",
-        "border-color-active": "transparent"
-      },
-      "axis": "style",
-      "description": "Low-emphasis fill on the subtle action canvas; no border."
-    },
+  "toggle": {
     "sm": {
-      "component": "button",
+      "component": "toggle",
       "name": "sm",
-      "className": "zbk-button--sm",
+      "className": "zbk-toggle--sm",
       "overrides": {
-        "font-size": "{font-size.sm}",
-        "padding-inline": "{spacing.xs}",
-        "padding-block": "{spacing.2xs}",
-        "icon-size": "1rem"
+        "track-width": "{spacing.lg}",
+        "track-height": "{spacing.md}",
+        "font-size": "{font-size.sm}"
       },
       "axis": "size",
-      "description": "Smaller type and padding; keeps the 44px minimum tap target."
-    },
-    "outline": {
-      "component": "button",
-      "name": "outline",
-      "className": "zbk-button--outline",
-      "overrides": {
-        "canvas": "transparent",
-        "canvas-hover": "{action.canvas-subtle}",
-        "canvas-active": "{action.canvas-muted}",
-        "canvas-disabled": "transparent",
-        "ink": "{action.ink}",
-        "ink-hover": "{action.ink-emphasis}",
-        "ink-active": "{action.ink-emphasis}",
-        "border-color": "{action.border}",
-        "border-color-hover": "{action.border-emphasis}",
-        "border-color-active": "{action.border-emphasis}"
-      },
-      "axis": "style",
-      "description": "Transparent canvas with an action-colored border; subtle wash on hover."
+      "description": "Smaller track and label type; thumb follows the track."
     },
     "lg": {
-      "component": "button",
+      "component": "toggle",
       "name": "lg",
-      "className": "zbk-button--lg",
+      "className": "zbk-toggle--lg",
       "overrides": {
-        "font-size": "{font-size.lg}",
-        "padding-inline": "{spacing.lg}",
-        "padding-block": "{spacing.sm}",
-        "icon-size": "1.5rem"
+        "track-width": "{spacing.xl}",
+        "track-height": "{spacing.lg}",
+        "font-size": "{font-size.lg}"
       },
       "axis": "size",
-      "description": "Larger type and padding."
-    },
-    "ghost": {
-      "component": "button",
-      "name": "ghost",
-      "className": "zbk-button--ghost",
-      "overrides": {
-        "canvas": "transparent",
-        "canvas-hover": "{action.canvas-subtle}",
-        "canvas-active": "{action.canvas-muted}",
-        "canvas-disabled": "transparent",
-        "ink": "{action.ink}",
-        "ink-hover": "{action.ink-emphasis}",
-        "ink-active": "{action.ink-emphasis}",
-        "border-color": "transparent",
-        "border-color-hover": "transparent",
-        "border-color-active": "transparent",
-        "border-color-disabled": "transparent"
-      },
-      "axis": "style",
-      "description": "Transparent canvas and border; ink takes the action role with a subtle hover wash."
+      "description": "Larger track and label type; thumb follows the track."
     }
   }
 }

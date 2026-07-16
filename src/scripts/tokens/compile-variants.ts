@@ -120,7 +120,10 @@ export async function discoverVariantConfigs(): Promise<VariantConfig[]> {
       nodir: true,
       absolute: true,
     });
-    variantFiles.push(...matches);
+    // glob order follows filesystem readdir and varies between machines/runs.
+    // Sort so config discovery order — and thus the registry insertion order that
+    // drives the emitted variant CSS block order — is byte-reproducible.
+    variantFiles.push(...matches.sort());
   }
 
   const configs: VariantConfig[] = [];

@@ -1,5 +1,38 @@
 {
   "button": {
+    "ghost": {
+      "axis": "style",
+      "description": "Transparent canvas and border; ink takes the action role with a subtle hover wash.",
+      "overrides": {
+        "canvas": "transparent",
+        "canvas-hover": "{action.canvas-subtle}",
+        "canvas-active": "{action.canvas-muted}",
+        "canvas-disabled": "transparent",
+        "ink": "{action.ink}",
+        "ink-hover": "{action.ink-emphasis}",
+        "ink-active": "{action.ink-emphasis}",
+        "border-color": "transparent",
+        "border-color-hover": "transparent",
+        "border-color-active": "transparent",
+        "border-color-disabled": "transparent"
+      }
+    },
+    "outline": {
+      "axis": "style",
+      "description": "Transparent canvas with an action-colored border; subtle wash on hover.",
+      "overrides": {
+        "canvas": "transparent",
+        "canvas-hover": "{action.canvas-subtle}",
+        "canvas-active": "{action.canvas-muted}",
+        "canvas-disabled": "transparent",
+        "ink": "{action.ink}",
+        "ink-hover": "{action.ink-emphasis}",
+        "ink-active": "{action.ink-emphasis}",
+        "border-color": "{action.border}",
+        "border-color-hover": "{action.border-emphasis}",
+        "border-color-active": "{action.border-emphasis}"
+      }
+    },
     "subtle": {
       "axis": "style",
       "description": "Low-emphasis fill on the subtle action canvas; no border.",
@@ -25,22 +58,6 @@
         "icon-size": "1rem"
       }
     },
-    "outline": {
-      "axis": "style",
-      "description": "Transparent canvas with an action-colored border; subtle wash on hover.",
-      "overrides": {
-        "canvas": "transparent",
-        "canvas-hover": "{action.canvas-subtle}",
-        "canvas-active": "{action.canvas-muted}",
-        "canvas-disabled": "transparent",
-        "ink": "{action.ink}",
-        "ink-hover": "{action.ink-emphasis}",
-        "ink-active": "{action.ink-emphasis}",
-        "border-color": "{action.border}",
-        "border-color-hover": "{action.border-emphasis}",
-        "border-color-active": "{action.border-emphasis}"
-      }
-    },
     "lg": {
       "axis": "size",
       "description": "Larger type and padding.",
@@ -49,23 +66,6 @@
         "padding-inline": "{spacing.lg}",
         "padding-block": "{spacing.sm}",
         "icon-size": "1.5rem"
-      }
-    },
-    "ghost": {
-      "axis": "style",
-      "description": "Transparent canvas and border; ink takes the action role with a subtle hover wash.",
-      "overrides": {
-        "canvas": "transparent",
-        "canvas-hover": "{action.canvas-subtle}",
-        "canvas-active": "{action.canvas-muted}",
-        "canvas-disabled": "transparent",
-        "ink": "{action.ink}",
-        "ink-hover": "{action.ink-emphasis}",
-        "ink-active": "{action.ink-emphasis}",
-        "border-color": "transparent",
-        "border-color-hover": "transparent",
-        "border-color-active": "transparent",
-        "border-color-disabled": "transparent"
       }
     }
   },
