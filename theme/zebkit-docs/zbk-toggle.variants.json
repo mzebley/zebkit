@@ -1,0 +1,22 @@
+{
+  "toggle": {
+    "lg": {
+      "axis": "size",
+      "description": "Larger track and label type; thumb follows the track.",
+      "overrides": {
+        "track-width": "{spacing.xl}",
+        "track-height": "{spacing.lg}",
+        "font-size": "{font-size.lg}"
+      }
+    },
+    "sm": {
+      "axis": "size",
+      "description": "Smaller track and label type; thumb follows the track.",
+      "overrides": {
+        "track-width": "{spacing.lg}",
+        "track-height": "{spacing.md}",
+        "font-size": "{font-size.sm}"
+      }
+    }
+  }
+}

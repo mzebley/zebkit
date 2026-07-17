@@ -388,7 +388,7 @@
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-xs);
     color: var(--zbk-app-ink);
-    background: var(--zbk-app-canvas-soft);
+    background: var(--zbk-app-canvas-subtle);
     border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-xs);
     padding: var(--zbk-spacing-05) var(--zbk-spacing-1);
@@ -410,7 +410,7 @@
   }
 
   .rail-input.error {
-    border-color: var(--zbk-critical-border-strong);
+    border-color: var(--zbk-critical-border-emphasis);
   }
 
   .rail-error {
@@ -532,7 +532,7 @@
     margin: 0;
     padding: var(--zbk-spacing-1);
     overflow-x: auto;
-    background: var(--zbk-app-canvas-soft);
+    background: var(--zbk-app-canvas-subtle);
     border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-xs);
   }

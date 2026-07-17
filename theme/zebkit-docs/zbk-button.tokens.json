@@ -1,6 +1,6 @@
 {
   "ink": {
-    "value": "{app.ink}",
+    "value": "{action.ink-emphasis}",
     "type": "color",
     "description": "Default button label color."
   },
@@ -10,7 +10,7 @@
     "description": "Label color when hovered."
   },
   "ink-active": {
-    "value": "{app.ink}",
+    "value": "{action.ink-emphasis}",
     "type": "color",
     "description": "Label color when active or pressed."
   },
@@ -20,17 +20,17 @@
     "description": "Label color for disabled buttons."
   },
   "ink-loading": {
-    "value": "{button.ink}",
+    "value": "{action.ink-emphasis}",
     "type": "color",
     "description": "Label color while the button is in its loading state."
   },
   "canvas": {
-    "value": "{app.canvas}",
+    "value": "{action.canvas-muted}",
     "type": "color",
     "description": "Default button background."
   },
   "canvas-hover": {
-    "value": "{app.canvas}",
+    "value": "{action.canvas-subtle}",
     "type": "color",
     "description": "Background for hover state."
   },
@@ -45,22 +45,22 @@
     "description": "Background for disabled buttons."
   },
   "canvas-loading": {
-    "value": "{button.canvas}",
+    "value": "{action.canvas-subtle}",
     "type": "color",
     "description": "Background while the button is in its loading state."
   },
   "border-color": {
-    "value": "{app.border}",
+    "value": "{action.canvas-subtle}",
     "type": "color",
     "description": "Default button border color."
   },
   "border-color-hover": {
-    "value": "{app.ink}",
+    "value": "{button.border-color}",
     "type": "color",
     "description": "Border color on hover."
   },
   "border-color-active": {
-    "value": "{action.canvas}",
+    "value": "{button.border-color}",
     "type": "color",
     "description": "Border color when the button is active/pressed."
   },
@@ -70,12 +70,12 @@
     "description": "Border color for disabled buttons."
   },
   "border-color-loading": {
-    "value": "{button.border-color}",
+    "value": "{button.border-color-hover}",
     "type": "color",
     "description": "Border color while the button is in its loading state."
   },
   "border-width": {
-    "value": "{border.width-sm}",
+    "value": "0px",
     "type": "borderWidth",
     "description": "Base border width."
   },
@@ -95,22 +95,22 @@
     "description": "Font family for button labels."
   },
   "font-size": {
-    "value": "{font-size.xs}",
+    "value": "{font-size.sm}",
     "type": "fontSize",
     "description": "Base font size for button labels."
   },
   "font-weight": {
-    "value": "{font-weight.medium}",
+    "value": "{font-weight.normal}",
     "type": "fontWeight",
     "description": "Font weight for button labels."
   },
   "line-height": {
-    "value": "{line-height.1}",
+    "value": "{line-height.3}",
     "type": "lineHeight",
     "description": "Base line height for buttons."
   },
   "letter-spacing": {
-    "value": "{tracking.normal}",
+    "value": "{letter-spacing.normal}",
     "type": "letterSpacing",
     "description": "Letter spacing for button labels."
   },
@@ -130,12 +130,12 @@
     "description": "Text alignment for button content."
   },
   "padding-inline": {
-    "value": "{spacing.1}",
+    "value": "{spacing.md}",
     "type": "spacing",
     "description": "Inline (horizontal) padding for standard buttons."
   },
   "padding-block": {
-    "value": "{spacing.05}",
+    "value": "{spacing.sm}",
     "type": "spacing",
     "description": "Block (vertical) padding for standard buttons."
   },
@@ -270,7 +270,7 @@
     "description": "Default box shadow for buttons."
   },
   "box-shadow-hover": {
-    "value": "0 var(--zbk-spacing-2px) 0 var(--zbk-button-border-color-hover)",
+    "value": "0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)",
     "type": "boxShadow",
     "description": "Box shadow on hover."
   },

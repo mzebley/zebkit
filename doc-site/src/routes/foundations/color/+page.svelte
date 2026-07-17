@@ -135,10 +135,10 @@
           <span class="card-name">{f.family}</span>
           <span class="card-strip">
             <span style="background: var(--{f.key}-canvas)"></span>
-            <span style="background: var(--{f.key}-canvas-soft)"></span>
+            <span style="background: var(--{f.key}-canvas-subtle)"></span>
             <span style="background: var(--{f.key}-ink)"></span>
             <span style="background: var(--{f.key}-border)"></span>
-            <span style="background: var(--{f.key}-canvas-strong)"></span>
+            <span style="background: var(--{f.key}-canvas-emphasis)"></span>
           </span>
         </a>
       {/each}
@@ -272,7 +272,7 @@
     color: var(--zbk-app-ink-muted);
   }
   .chip:hover .chip-bands {
-    border-color: var(--zbk-app-border-strong);
+    border-color: var(--zbk-app-border-emphasis);
   }
   .chip:hover .chip-name {
     text-decoration: underline;
@@ -294,8 +294,8 @@
     color: var(--zbk-app-ink);
   }
   .card:hover {
-    border-color: var(--zbk-app-border-strong);
-    background: var(--zbk-app-canvas-soft);
+    border-color: var(--zbk-app-border-emphasis);
+    background: var(--zbk-app-canvas-subtle);
   }
   .card-name {
     font-family: var(--zbk-font-family-code);

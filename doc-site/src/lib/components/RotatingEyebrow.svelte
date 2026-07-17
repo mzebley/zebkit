@@ -3,9 +3,10 @@
   // touching the animation below.
   export const HOME_EYEBROW_LINES = [
     "The design is the variable.",
-    "A permanent system for changing design.",
-    "Components hold still. Design moves.",
-    "Strong opinions. None about your aesthetic.",
+    "It's tokens the whole way down.",
+    "A permanent system for everchanging design.",
+    "Components that hold steady. Design that's free as a bird.",
+    "Strongly held opinions. None about your aesthetic.",
     "The design system designed to disappear.",
   ] as const;
 </script>
@@ -155,9 +156,11 @@
 
 <p class="eyebrow">
   <span class="visually-hidden">{accessibleText}</span>
-  <span class="type-stage" aria-hidden="true">
-    <span class="measure">{longestLine}<span class="cursor-space">|</span></span>
-    <span class="animated-text"
+  <span class="type-stage display-grid width-full" aria-hidden="true">
+    <span class="measure overflow-wrap-anywhere"
+      >{longestLine}<span class="cursor-space">|</span></span
+    >
+    <span class="animated-text overflow-wrap-anywhere"
       >{renderedText}{#if showCursor}<span class="type-cursor">|</span>{/if}</span
     >
   </span>
@@ -175,7 +178,7 @@
   }
 
   .type-stage {
-    display: inline-grid;
+    min-width: 0;
   }
 
   .measure,

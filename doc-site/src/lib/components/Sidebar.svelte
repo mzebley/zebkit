@@ -11,7 +11,7 @@
   let collapsedSections = new Set(['Color families']);
 
   const baseLinkClass =
-    'display-block padding-inline-1 padding-block-05 radius-md transition-colors hover:canvas-brand-100';
+    'display-block padding-inline-1 padding-block-05 radius-md hover:canvas-brand-100';
 
   const sectionId = (label: string) =>
     `section-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
@@ -32,7 +32,7 @@
 </script>
 
 <aside
-  class={`canvas-app-soft border-app-muted padding-05 overflow-y-auto border-width-right-2xs ${className}`}
+  class={`canvas-app-subtle padding-05 overflow-y-auto ${className}`}
 >
   <nav class="display-flex flex-direction-column gap-6" aria-label="Documentation">
     {#each navigation as section}
@@ -42,13 +42,13 @@
         {#if isCollapsible}
           <button
             type="button"
-            class="width-full text-left text-2xs font-weight-semibold text-uppercase letter-spacing-wider ink-app-muted hover:ink-app-strong transition-colors"
+            class="width-full display-flex align-items-center justify-content-between text-left text-2xs font-weight-semibold text-uppercase letter-spacing-wider ink-app-muted hover:ink-app-emphasis"
             on:click={() => toggleSection(section.label)}
             aria-controls={id}
             aria-expanded={!collapsedSections.has(section.label)}
           >
             {section.label}
-            <span class="float-right">
+            <span>
               {collapsedSections.has(section.label) ? '▸' : '▾'}
             </span>
           </button>
@@ -81,3 +81,19 @@
     {/each}
   </nav>
 </aside>
+
+<style>
+  aside {
+    border-inline-end: var(--zbk-border-width-xs) solid var(--zbk-app-border-muted);
+  }
+
+  nav :is(a, button) {
+    transition:
+      color var(--zbk-transition-calm-fx-duration-default) var(--zbk-transition-calm-fx-function-default),
+      background-color var(--zbk-transition-calm-fx-duration-default) var(--zbk-transition-calm-fx-function-default);
+  }
+
+  nav a {
+    border-inline-start-style: solid;
+  }
+</style>

@@ -26,7 +26,7 @@
   };
 
   const VARIANTS: ColorVariant[] = ['base', 'inverse'];
-  const INTENSITY_ORDER: ColorIntensity[] = ['base', 'soft', 'muted', 'strong'];
+  const INTENSITY_ORDER: ColorIntensity[] = ['base', 'subtle', 'muted', 'emphasis'];
 
   function byIntensity(swatches: SemanticSwatch[], variant: ColorVariant): SemanticSwatch[] {
     return swatches
@@ -115,7 +115,7 @@
   }
   .row[data-variant='inverse'] .var,
   .row[data-variant='inverse'] .ref {
-    color: var(--zbk-app-ink-inverse-soft);
+    color: var(--zbk-app-ink-inverse-subtle);
   }
 
   .row {
@@ -140,7 +140,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--zbk-app-canvas-soft);
+    background: var(--zbk-app-canvas-subtle);
     font-family: var(--zbk-font-family-alt);
     font-size: var(--zbk-font-size-lg);
     font-weight: var(--zbk-font-weight-bold);

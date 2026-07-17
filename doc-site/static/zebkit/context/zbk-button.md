@@ -115,29 +115,29 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 
 | Token | Default | Type | Description |
 |---|---|---|---|
-| `--zbk-button-ink` | `{app.ink}` | color | Default button label color. |
-| `--zbk-button-ink-hover` | `{app.ink}` | color | Label color when hovered. |
-| `--zbk-button-ink-active` | `{app.ink}` | color | Label color when active or pressed. |
+| `--zbk-button-ink` | `{action.ink-inverse}` | color | Default button label color. |
+| `--zbk-button-ink-hover` | `{action.ink-inverse}` | color | Label color when hovered. |
+| `--zbk-button-ink-active` | `{action.ink-inverse}` | color | Label color when active or pressed. |
 | `--zbk-button-ink-disabled` | `{disabled.ink}` | color | Label color for disabled buttons. |
-| `--zbk-button-ink-loading` | `{button.ink}` | color | Label color while the button is in its loading state. |
-| `--zbk-button-canvas` | `{app.canvas}` | color | Default button background. |
-| `--zbk-button-canvas-hover` | `{app.canvas}` | color | Background for hover state. |
-| `--zbk-button-canvas-active` | `{action.canvas-muted}` | color | Background for active/pressed state. |
+| `--zbk-button-ink-loading` | `{action.ink-inverse}` | color | Label color while the button is in its loading state. |
+| `--zbk-button-canvas` | `{action.canvas-inverse}` | color | Default button background. |
+| `--zbk-button-canvas-hover` | `{action.canvas-inverse-emphasis}` | color | Background for hover state. |
+| `--zbk-button-canvas-active` | `{action.canvas-inverse}` | color | Background for active/pressed state. |
 | `--zbk-button-canvas-disabled` | `{disabled.canvas}` | color | Background for disabled buttons. |
-| `--zbk-button-canvas-loading` | `{button.canvas}` | color | Background while the button is in its loading state. |
-| `--zbk-button-border-color` | `{app.border}` | color | Default button border color. |
-| `--zbk-button-border-color-hover` | `{app.ink}` | color | Border color on hover. |
-| `--zbk-button-border-color-active` | `{action.canvas}` | color | Border color when the button is active/pressed. |
+| `--zbk-button-canvas-loading` | `{action.canvas-inverse}` | color | Background while the button is in its loading state. |
+| `--zbk-button-border-color` | `{action.border-inverse-subtle}` | color | Default button border color. |
+| `--zbk-button-border-color-hover` | `{action.border-inverse}` | color | Border color on hover. |
+| `--zbk-button-border-color-active` | `{action.border-inverse-subtle}` | color | Border color when the button is active/pressed. |
 | `--zbk-button-border-color-disabled` | `{disabled.border}` | color | Border color for disabled buttons. |
-| `--zbk-button-border-color-loading` | `{button.border-color}` | color | Border color while the button is in its loading state. |
-| `--zbk-button-border-width` | `{border.width-sm}` | borderWidth | Base border width. |
+| `--zbk-button-border-color-loading` | `{button.border-color-hover}` | color | Border color while the button is in its loading state. |
+| `--zbk-button-border-width` | `0px` | borderWidth | Base border width. |
 | `--zbk-button-border-style` | `{border.style}` | borderStyle | Border style (solid, dashed, etc) for standard buttons. |
-| `--zbk-button-border-radius` | `{border.radius-sm}` | borderRadius | Corner radius for standard buttons. |
+| `--zbk-button-border-radius` | `{border.radius-md}` | borderRadius | Corner radius for standard buttons. |
 | `--zbk-button-font-family` | `{font-family.interface}` | fontFamily | Font family for button labels. |
-| `--zbk-button-font-size` | `{font-size.xs}` | fontSize | Base font size for button labels. |
+| `--zbk-button-font-size` | `{font-size.sm}` | fontSize | Base font size for button labels. |
 | `--zbk-button-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for button labels. |
 | `--zbk-button-line-height` | `{line-height.1}` | lineHeight | Base line height for buttons. |
-| `--zbk-button-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for button labels. |
+| `--zbk-button-letter-spacing` | `{letter-spacing.normal}` | letterSpacing | Letter spacing for button labels. |
 | `--zbk-button-text-transform` | `none` | textTransform | Text transform for button labels. |
 | `--zbk-button-text-decoration` | `none` | textDecoration | Text decoration for button labels. |
 | `--zbk-button-text-align` | `center` | textAlignment | Text alignment for button content. |

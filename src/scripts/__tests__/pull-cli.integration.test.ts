@@ -73,6 +73,22 @@ describe('published pull command', () => {
       ).toEqual(customValue);
       expect(await fs.pathExists(path.join(projectDir, '.zebkit', 'pull-state.json'))).toBe(true);
 
+      const buttonVariants = await fs.readJson(
+        path.join(tokensDir, 'zbk-button.variants.json')
+      );
+      expect(buttonVariants.button).toEqual(
+        expect.objectContaining({
+          ghost: expect.objectContaining({
+            axis: 'style',
+            overrides: expect.objectContaining({ canvas: 'transparent' }),
+          }),
+          outline: expect.any(Object),
+          subtle: expect.any(Object),
+          sm: expect.any(Object),
+          lg: expect.any(Object),
+        })
+      );
+
       const settings = await fs.readJson(path.join(projectDir, '.vscode', 'settings.json'));
       expect(settings['json.schemas']).toHaveLength(manifest.modules.length);
 

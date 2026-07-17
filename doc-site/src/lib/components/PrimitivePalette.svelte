@@ -247,7 +247,7 @@
   }
 
   .global:hover {
-    border-color: var(--zbk-app-border-strong);
+    border-color: var(--zbk-app-border-emphasis);
   }
 
   .global-chip {

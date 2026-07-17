@@ -379,6 +379,6 @@
   }
 
   .dials-trigger[aria-expanded="true"] {
-    background: var(--zbk-action-canvas-soft);
+    background: var(--zbk-action-canvas-subtle);
   }
 </style>

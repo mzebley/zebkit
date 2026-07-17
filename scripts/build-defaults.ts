@@ -100,6 +100,10 @@ async function buildDefaults() {
 }
 
 async function copyVariantOverrideFiles(sourceDir: string, outputDir: string) {
+  // Rebuild the shipped preset snapshot exactly. Without clearing this folder,
+  // a renamed or retired override can survive into published CLI pulls.
+  await fs.emptyDir(outputDir);
+
   const variantFiles = await glob('**/*.json', {
     cwd: sourceDir,
     absolute: true,
@@ -111,8 +115,6 @@ async function copyVariantOverrideFiles(sourceDir: string, outputDir: string) {
   if (matchingFiles.length === 0) {
     return;
   }
-
-  await fs.ensureDir(outputDir);
 
   for (const file of matchingFiles) {
     await fs.copy(file, path.join(outputDir, path.basename(file)));

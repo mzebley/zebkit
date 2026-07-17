@@ -556,7 +556,7 @@
   .section-card {
     display: flex;
     flex-direction: column;
-    background: var(--zbk-app-canvas-soft);
+    background: var(--zbk-app-canvas-subtle);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-lg);
     overflow: clip;
@@ -676,7 +676,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--zbk-spacing-075, var(--zbk-spacing-05));
+    gap: var(--zbk-spacing-05);
     inline-size: 74%;
   }
   .m-btn {
@@ -732,13 +732,13 @@
   .accent-lede {
     margin: 0;
     max-inline-size: var(--zbk-text-measure-2);
-    color: var(--zbk-action-ink-inverse-soft);
+    color: var(--zbk-action-ink-inverse-subtle);
   }
   .accent-cta {
     align-self: start;
     margin-block-start: var(--zbk-spacing-05);
     padding-inline: var(--zbk-spacing-105);
-    padding-block: var(--zbk-spacing-075, var(--zbk-spacing-05));
+    padding-block: var(--zbk-spacing-05);
     color: var(--zbk-action-ink-inverse);
     border: var(--zbk-border-width-sm) solid var(--zbk-action-ink-inverse);
     border-radius: var(--zbk-border-radius-sm);
@@ -771,7 +771,7 @@
   }
   .next-link {
     padding-inline: var(--zbk-spacing-105);
-    padding-block: var(--zbk-spacing-075, var(--zbk-spacing-05));
+    padding-block: var(--zbk-spacing-05);
     color: var(--zbk-action-ink-inverse);
     background: var(--zbk-action-canvas);
     border: var(--zbk-border-width-sm) solid var(--zbk-action-canvas);
@@ -783,8 +783,8 @@
       border-color var(--zbk-transition-duration-fast);
   }
   .next-link:hover {
-    background: var(--zbk-action-canvas-strong);
-    border-color: var(--zbk-action-canvas-strong);
+    background: var(--zbk-action-canvas-emphasis);
+    border-color: var(--zbk-action-canvas-emphasis);
   }
   .next-link:focus-visible {
     outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
@@ -798,7 +798,7 @@
     align-items: baseline;
     gap: var(--zbk-spacing-1) var(--zbk-spacing-3);
     padding: var(--zbk-spacing-105) var(--zbk-spacing-2);
-    background: var(--zbk-app-canvas-soft);
+    background: var(--zbk-app-canvas-subtle);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-md);
   }

@@ -63,12 +63,12 @@ export function getColorFamily(slug: string): ColorFamilyData | undefined {
 
 export type ColorRole = 'canvas' | 'ink' | 'border';
 export type ColorVariant = 'base' | 'inverse';
-export type ColorIntensity = 'base' | 'soft' | 'muted' | 'strong';
+export type ColorIntensity = 'base' | 'subtle' | 'muted' | 'emphasis';
 
 export interface SemanticSwatch {
-  /** Slot name, e.g. `canvas-inverse-soft`. */
+  /** Slot name, e.g. `canvas-inverse-subtle`. */
   slot: string;
-  /** Full CSS custom property, e.g. `--zbk-action-canvas-inverse-soft`. */
+  /** Full CSS custom property, e.g. `--zbk-action-canvas-inverse-subtle`. */
   cssVar: string;
   /** Source reference value, e.g. `{color.blue-50}`, or `''` when unset. */
   value: string;
@@ -92,8 +92,8 @@ export interface SemanticColorFamilyData {
   roles: SemanticRoleGroup[];
 }
 
-/** `canvas` | `canvas-soft` | `canvas-inverse` | `canvas-inverse-strong` … */
-const ROLE_SLOT_RE = /^(canvas|ink|border)(?:-(inverse))?(?:-(soft|muted|strong))?$/;
+/** `canvas` | `canvas-subtle` | `canvas-inverse` | `canvas-inverse-emphasis` … */
+const ROLE_SLOT_RE = /^(canvas|ink|border)(?:-(inverse))?(?:-(subtle|muted|emphasis))?$/;
 const ROLE_ORDER: ColorRole[] = ['canvas', 'ink', 'border'];
 
 /** A group is a semantic color family when every entry is a color keyed by a role slot. */

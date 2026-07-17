@@ -43,21 +43,21 @@
   }
 </script>
 
-<section class="border border-app-muted rounded-lg p-4 flex flex-col gap-3 canvas-app-soft">
+<section class="border-solid border-width-xs border-app-muted radius-md padding-1 display-flex flex-direction-column gap-05 canvas-app-subtle">
   <header>
-    <h3 class="text-lg font-semibold ink-app-strong">{title}</h3>
+    <h3 class="text-lg text-semibold ink-app-emphasis">{title}</h3>
     {#if description}
-      <p class="text-sm ink-app-muted mt-1">{description}</p>
+      <p class="text-sm ink-app-muted margin-block-start-025">{description}</p>
     {/if}
   </header>
 
-  <label class="flex flex-col gap-2">
-    <span class="text-sm font-medium ink-app-strong">{label}</span>
+  <label class="display-flex flex-direction-column gap-05">
+    <span class="text-sm text-medium ink-app-emphasis">{label}</span>
     <select
       bind:value={selectedAlias}
       on:change={(event) => selectToken((event.currentTarget as HTMLSelectElement).value)}
       disabled={loading}
-      class="p-2 rounded border border-app-muted canvas-app ink-app"
+      class="padding-05 radius-sm border-solid border-width-xs border-app-muted canvas-app ink-app"
     >
       {#if loading}
         <option>Loading {label.toLowerCase()}...</option>
@@ -70,16 +70,16 @@
   </label>
 
   <div
-    class="grid gap-3 canvas-app rounded-lg p-3 border border-app-muted"
+    class="display-grid gap-05 canvas-app radius-md padding-1 border-solid border-width-xs border-app-muted"
     style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));"
   >
     <div>
-      <span class="text-xs ink-app-muted block mb-1">Reference</span>
-      <code class="block text-sm ink-app-strong">{selectedAlias || '-'}</code>
+      <span class="text-xs ink-app-muted display-block margin-block-end-025">Reference</span>
+      <code class="display-block text-sm ink-app-emphasis">{selectedAlias || '-'}</code>
     </div>
     <div>
-      <span class="text-xs ink-app-muted block mb-1">CSS custom property</span>
-      <code class="block text-sm break-all ink-app-strong">
+      <span class="text-xs ink-app-muted display-block margin-block-end-025">CSS custom property</span>
+      <code class="display-block text-sm word-break-all ink-app-emphasis">
         {selectedCssVar ? `var(${selectedCssVar})` : 'var(--zbk-...)'}
       </code>
     </div>

@@ -1389,122 +1389,122 @@
   },
   "zbk-action": {
     "canvas": {
-      "value": "{color.ember-400}",
+      "value": "{color.ember-700}",
       "type": "color",
       "description": "Base action canvas color for primary surfaces."
     },
     "canvas-subtle": {
-      "value": "{color.ember-200}",
+      "value": "{color.ember-800}",
       "type": "color",
       "description": "Subtle action canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
-      "value": "{color.ember-100}",
+      "value": "{color.ember-900}",
       "type": "color",
       "description": "Muted action canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
-      "value": "",
+      "value": "{color.ember-600}",
       "type": "color",
       "description": "Emphasis action canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
-      "value": "",
+      "value": "{color.ember-300}",
       "type": "color",
       "description": "Base inverse action canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
-      "value": "",
+      "value": "{color.ember-400}",
       "type": "color",
       "description": "Subtle inverse action canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
-      "value": "",
+      "value": "{color.ember-600}",
       "type": "color",
       "description": "Muted inverse action canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
-      "value": "",
+      "value": "{color.ember-200}",
       "type": "color",
       "description": "Emphasis inverse action canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
-      "value": "{color.ember-600}",
+      "value": "{color.ember-300}",
       "type": "color",
       "description": "Base action ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
-      "value": "{color.ember-400}",
+      "value": "{color.ember-200}",
       "type": "color",
       "description": "Subtle action ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
-      "value": "{color.ember-300}",
+      "value": "{color.ember-400}",
       "type": "color",
       "description": "Muted action ink color for secondary text and icons."
     },
     "ink-emphasis": {
-      "value": "{color.blue-800}",
+      "value": "{color.ember-100}",
       "type": "color",
       "description": "Emphasis action ink color for high-prominence text and icons."
     },
     "ink-inverse": {
-      "value": "",
+      "value": "{color.ember-900}",
       "type": "color",
       "description": "Base inverse action ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
-      "value": "",
+      "value": "{color.ember-800}",
       "type": "color",
       "description": "Subtle inverse action ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
-      "value": "",
+      "value": "{color.ember-700}",
       "type": "color",
       "description": "Muted inverse action ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
-      "value": "{color.blue-200}",
+      "value": "{color.ember-950}",
       "type": "color",
       "description": "Emphasis inverse action ink color for high-prominence text on inverse canvases."
     },
     "border": {
-      "value": "",
+      "value": "{color.ember-600}",
       "type": "color",
       "description": "Base action border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
-      "value": "",
+      "value": "{color.ember-500}",
       "type": "color",
       "description": "Subtle action border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
-      "value": "",
+      "value": "{color.ember-700}",
       "type": "color",
       "description": "Muted action border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
-      "value": "",
+      "value": "{color.ember-200}",
       "type": "color",
       "description": "Emphasis action border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
-      "value": "",
+      "value": "{color.ember-700}",
       "type": "color",
       "description": "Base inverse action border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
-      "value": "",
+      "value": "{color.ember-800}",
       "type": "color",
       "description": "Subtle inverse action border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
-      "value": "",
+      "value": "{color.ember-900}",
       "type": "color",
       "description": "Muted inverse action border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
-      "value": "",
+      "value": "{color.ember-500}",
       "type": "color",
       "description": "Emphasis inverse action border color for high-prominence outlines on inverse canvases."
     }
@@ -2841,7 +2841,7 @@
       "source": "system"
     },
     "interface": {
-      "value": "{font-family.monospace}",
+      "value": "{font-family.primary}",
       "description": "Font family used for things like buttons or input fields.",
       "type": "fontFamily"
     },
@@ -3205,7 +3205,7 @@
   },
   "zbk-button": {
     "ink": {
-      "value": "{app.ink}",
+      "value": "{action.ink-emphasis}",
       "type": "color",
       "description": "Default button label color."
     },
@@ -3215,7 +3215,7 @@
       "description": "Label color when hovered."
     },
     "ink-active": {
-      "value": "{app.ink}",
+      "value": "{action.ink-emphasis}",
       "type": "color",
       "description": "Label color when active or pressed."
     },
@@ -3225,17 +3225,17 @@
       "description": "Label color for disabled buttons."
     },
     "ink-loading": {
-      "value": "{button.ink}",
+      "value": "{action.ink-emphasis}",
       "type": "color",
       "description": "Label color while the button is in its loading state."
     },
     "canvas": {
-      "value": "{app.canvas}",
+      "value": "{action.canvas-muted}",
       "type": "color",
       "description": "Default button background."
     },
     "canvas-hover": {
-      "value": "{app.canvas}",
+      "value": "{action.canvas-subtle}",
       "type": "color",
       "description": "Background for hover state."
     },
@@ -3250,22 +3250,22 @@
       "description": "Background for disabled buttons."
     },
     "canvas-loading": {
-      "value": "{button.canvas}",
+      "value": "{action.canvas-subtle}",
       "type": "color",
       "description": "Background while the button is in its loading state."
     },
     "border-color": {
-      "value": "{app.border}",
+      "value": "{action.canvas-subtle}",
       "type": "color",
       "description": "Default button border color."
     },
     "border-color-hover": {
-      "value": "{app.ink}",
+      "value": "{button.border-color}",
       "type": "color",
       "description": "Border color on hover."
     },
     "border-color-active": {
-      "value": "{action.canvas}",
+      "value": "{button.border-color}",
       "type": "color",
       "description": "Border color when the button is active/pressed."
     },
@@ -3275,12 +3275,12 @@
       "description": "Border color for disabled buttons."
     },
     "border-color-loading": {
-      "value": "{button.border-color}",
+      "value": "{button.border-color-hover}",
       "type": "color",
       "description": "Border color while the button is in its loading state."
     },
     "border-width": {
-      "value": "{border.width-sm}",
+      "value": "0px",
       "type": "borderWidth",
       "description": "Base border width."
     },
@@ -3300,22 +3300,22 @@
       "description": "Font family for button labels."
     },
     "font-size": {
-      "value": "{font-size.xs}",
+      "value": "{font-size.sm}",
       "type": "fontSize",
       "description": "Base font size for button labels."
     },
     "font-weight": {
-      "value": "{font-weight.medium}",
+      "value": "{font-weight.normal}",
       "type": "fontWeight",
       "description": "Font weight for button labels."
     },
     "line-height": {
-      "value": "{line-height.1}",
+      "value": "{line-height.3}",
       "type": "lineHeight",
       "description": "Base line height for buttons."
     },
     "letter-spacing": {
-      "value": "{tracking.normal}",
+      "value": "{letter-spacing.normal}",
       "type": "letterSpacing",
       "description": "Letter spacing for button labels."
     },
@@ -3335,12 +3335,12 @@
       "description": "Text alignment for button content."
     },
     "padding-inline": {
-      "value": "{spacing.1}",
+      "value": "{spacing.md}",
       "type": "spacing",
       "description": "Inline (horizontal) padding for standard buttons."
     },
     "padding-block": {
-      "value": "{spacing.05}",
+      "value": "{spacing.sm}",
       "type": "spacing",
       "description": "Block (vertical) padding for standard buttons."
     },
@@ -3475,7 +3475,7 @@
       "description": "Default box shadow for buttons."
     },
     "box-shadow-hover": {
-      "value": "0 var(--zbk-spacing-2px) 0 var(--zbk-button-border-color-hover)",
+      "value": "0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)",
       "type": "boxShadow",
       "description": "Box shadow on hover."
     },

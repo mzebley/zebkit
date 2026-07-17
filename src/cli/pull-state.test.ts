@@ -10,10 +10,12 @@ import {
   getAuthorableTokenData,
   getPullStatePath,
   readTokenSnapshot,
+  readVariantSnapshot,
   syncTokenSnapshot,
   writePullState,
   type PullStateDeps,
   type TokenSnapshot,
+  type VariantSnapshot,
 } from './pull-state';
 
 const token = (value: string) => ({ value, type: 'color' });
@@ -27,6 +29,19 @@ function snapshot(modules: Record<string, Record<string, unknown>>): TokenSnapsh
       Object.entries(modules).map(([key, tokens]) => [
         key,
         { file: `${key}.tokens.json`, tokens },
+      ])
+    ),
+  };
+}
+
+function variantSnapshot(
+  components: Record<string, Record<string, unknown>>
+): VariantSnapshot {
+  return {
+    components: Object.fromEntries(
+      Object.entries(components).map(([component, variants]) => [
+        component,
+        { file: `zbk-${component}.variants.json`, variants },
       ])
     ),
   };
@@ -83,6 +98,62 @@ describe('pull state reconciliation', () => {
     await expect(readTokenSnapshot(sourceDir, deps)).rejects.toThrow(
       'Invalid bundled token manifest'
     );
+  });
+
+  it('reads effective shipped variants, including preset patches and component filters', async () => {
+    const defaultsDir = path.join(projectDir, 'defaults');
+    const presetDir = path.join(projectDir, 'preset');
+    const presetOverridesDir = path.join(presetDir, 'variant-overrides');
+    await fs.ensureDir(defaultsDir);
+    await fs.ensureDir(presetOverridesDir);
+    await fs.writeJson(path.join(defaultsDir, 'variants.json'), [
+      {
+        component: 'button',
+        name: 'ghost',
+        axis: 'style',
+        overrides: { canvas: 'transparent', ink: '{action.ink}' },
+      },
+      {
+        component: 'button',
+        name: 'lg',
+        axis: 'size',
+        overrides: { 'font-size': '{font-size.lg}' },
+      },
+      {
+        component: 'checkbox',
+        name: 'sm',
+        overrides: { size: '{spacing.sm}' },
+      },
+    ]);
+    await fs.writeJson(path.join(presetOverridesDir, 'zbk-button.variant.ghost.json'), {
+      component: 'button',
+      name: 'ghost',
+      overrides: { ink: '{accent-primary.ink}' },
+    });
+
+    const result = await readVariantSnapshot(
+      defaultsDir,
+      presetDir,
+      {
+        excluded: new Set(['checkbox']),
+        variantAllowlists: new Map([['button', new Set(['ghost'])]]),
+      },
+      { pathExists: fs.pathExists, readJson: fs.readJson, readdir: fs.readdir }
+    );
+
+    expect(result).toEqual({
+      components: {
+        button: {
+          file: 'zbk-button.variants.json',
+          variants: {
+            ghost: {
+              axis: 'style',
+              overrides: { canvas: 'transparent', ink: '{accent-primary.ink}' },
+            },
+          },
+        },
+      },
+    });
   });
 
   it('keeps a customization, adds missing keys, and establishes a baseline', async () => {
@@ -159,6 +230,91 @@ describe('pull state reconciliation', () => {
       token('#custom-retired')
     );
     expect(result.preservedRetired).toEqual(['zbk-app.retired']);
+  });
+
+  it('reconciles component variant files without overwriting customized variants', async () => {
+    const oldTokens = snapshot({ 'zbk-button': { canvas: token('#fff') } });
+    const oldVariants = variantSnapshot({
+      button: {
+        ghost: { axis: 'style', overrides: { canvas: 'transparent' } },
+        retired: { overrides: { ink: '{action.ink}' } },
+      },
+    });
+    const currentVariants = variantSnapshot({
+      button: {
+        ghost: { axis: 'style', overrides: { canvas: '{action.canvas-subtle}' } },
+        outline: { axis: 'style', overrides: { canvas: 'transparent' } },
+      },
+    });
+    await writePullState(
+      configPath,
+      createPullState('default', oldTokens, oldVariants),
+      deps
+    );
+    await fs.writeJson(path.join(tokensDir, 'zbk-button.tokens.json'), {
+      canvas: token('#fff'),
+    });
+    await fs.writeJson(path.join(tokensDir, 'zbk-button.variants.json'), {
+      button: {
+        ghost: { axis: 'style', overrides: { canvas: 'transparent' } },
+        retired: { overrides: { ink: '{custom.ink}' } },
+      },
+    });
+
+    const result = await syncTokenSnapshot({
+      tokensDir,
+      configPath,
+      basePreset: 'default',
+      snapshot: oldTokens,
+      variantSnapshot: currentVariants,
+      deps,
+    });
+
+    expect(await fs.readJson(path.join(tokensDir, 'zbk-button.variants.json'))).toEqual({
+      button: {
+        ghost: { axis: 'style', overrides: { canvas: '{action.canvas-subtle}' } },
+        outline: { axis: 'style', overrides: { canvas: 'transparent' } },
+        retired: { overrides: { ink: '{custom.ink}' } },
+      },
+    });
+    expect(result).toMatchObject({
+      variantsAdded: 1,
+      variantDefaultsUpdated: 1,
+      variantsRemoved: 0,
+      preservedRetiredVariants: ['button.retired'],
+    });
+  });
+
+  it('preserves variant files and their baseline when a package has no variant snapshot', async () => {
+    const currentTokens = snapshot({ 'zbk-button': { canvas: token('#fff') } });
+    const currentVariants = variantSnapshot({
+      button: { ghost: { overrides: { canvas: 'transparent' } } },
+    });
+    await writePullState(
+      configPath,
+      createPullState('default', currentTokens, currentVariants),
+      deps
+    );
+    await fs.writeJson(path.join(tokensDir, 'zbk-button.tokens.json'), {
+      canvas: token('#fff'),
+    });
+    await fs.writeJson(path.join(tokensDir, 'zbk-button.variants.json'), {
+      button: { ghost: { overrides: { canvas: 'transparent' } } },
+    });
+
+    await syncTokenSnapshot({
+      tokensDir,
+      configPath,
+      basePreset: 'default',
+      snapshot: currentTokens,
+      deps,
+    });
+
+    expect(await fs.pathExists(path.join(tokensDir, 'zbk-button.variants.json'))).toBe(true);
+    const state = await fs.readJson(getPullStatePath(configPath));
+    expect(state.variants.button.variants.ghost).toBe(
+      createPullState('default', currentTokens, currentVariants).variants?.button.variants.ghost
+    );
   });
 
   it('rejects non-canonical filenames in pull state before touching token files', async () => {

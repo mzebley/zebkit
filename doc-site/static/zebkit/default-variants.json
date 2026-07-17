@@ -5,26 +5,30 @@
       "description": "Transparent canvas and border; ink takes the action role with a subtle hover wash.",
       "overrides": {
         "canvas": "transparent",
-        "canvas-hover": "{action.canvas-subtle}",
-        "canvas-active": "{action.canvas-muted}",
+        "canvas-hover": "transparent",
+        "canvas-active": "transparent",
         "canvas-disabled": "transparent",
         "ink": "{action.ink}",
         "ink-hover": "{action.ink-emphasis}",
-        "ink-active": "{action.ink-emphasis}",
+        "ink-active": "{action.ink}",
         "border-color": "transparent",
         "border-color-hover": "transparent",
         "border-color-active": "transparent",
-        "border-color-disabled": "transparent"
+        "border-color-disabled": "transparent",
+        "box-shadow-hover": "none",
+        "transform-hover": "translateY(0)"
       }
     },
     "lg": {
       "axis": "size",
       "description": "Larger type and padding.",
       "overrides": {
-        "font-size": "{font-size.lg}",
+        "font-size": "{font-size.md}",
         "padding-inline": "{spacing.lg}",
         "padding-block": "{spacing.sm}",
-        "icon-size": "1.5rem"
+        "icon-size": "1.5rem",
+        "border-radius": "{border.radius-md}",
+        "line-height": "{line-height.5}"
       }
     },
     "outline": {
@@ -32,24 +36,32 @@
       "description": "Transparent canvas with an action-colored border; subtle wash on hover.",
       "overrides": {
         "canvas": "transparent",
-        "canvas-hover": "{action.canvas-subtle}",
-        "canvas-active": "{action.canvas-muted}",
+        "canvas-hover": "{button.canvas}",
+        "canvas-active": "{action.ink-inverse-emphasis}",
         "canvas-disabled": "transparent",
         "ink": "{action.ink}",
         "ink-hover": "{action.ink-emphasis}",
         "ink-active": "{action.ink-emphasis}",
-        "border-color": "{action.border}",
-        "border-color-hover": "{action.border-emphasis}",
-        "border-color-active": "{action.border-emphasis}"
+        "border-color": "{button.ink}",
+        "border-color-hover": "{button.ink-hover}",
+        "border-color-active": "{button.ink-active}",
+        "ink-disabled": "{disabled.ink-inverse-muted}",
+        "border-width": "{border.width-sm}",
+        "border-radius": "{border.radius-md}",
+        "border-color-disabled": "{button.ink-disabled}",
+        "box-shadow-hover": "none",
+        "transform": "scale(1)",
+        "transform-hover": "translateY(0) scale(1)",
+        "transform-active": "scale(.9725)"
       }
     },
     "sm": {
       "axis": "size",
       "description": "Smaller type and padding; keeps the 44px minimum tap target.",
       "overrides": {
-        "font-size": "{font-size.sm}",
-        "padding-inline": "{spacing.xs}",
-        "padding-block": "{spacing.2xs}",
+        "font-size": "{font-size.xs}",
+        "padding-inline": "{spacing.sm}",
+        "padding-block": "{spacing.xs}",
         "icon-size": "1rem"
       }
     },

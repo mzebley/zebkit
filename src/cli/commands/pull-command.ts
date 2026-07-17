@@ -1,7 +1,12 @@
 import path from 'path';
 import type { ZebkitConfig } from '../../scripts/config';
 import { resolveComponentsFilter } from '../../scripts/components-config';
-import { getPullStatePath, readTokenSnapshot, syncTokenSnapshot } from '../pull-state';
+import {
+  getPullStatePath,
+  readTokenSnapshot,
+  readVariantSnapshot,
+  syncTokenSnapshot,
+} from '../pull-state';
 import { copyAgentContext, writeVscodeSettings, type ContextCopyDeps } from './init-command';
 
 export interface PullCommandDeps extends ContextCopyDeps {
@@ -101,11 +106,27 @@ export async function runPullCommand(deps: PullCommandDeps) {
   await deps.ensureDir(tokensDir);
 
   const snapshot = await readTokenSnapshot(sourceDir, deps);
+  const variantSnapshotPath = path.join(defaultsDir, 'variants.json');
+  const variantSnapshot = (await deps.pathExists(variantSnapshotPath))
+    ? await readVariantSnapshot(
+        defaultsDir,
+        sourceDir,
+        resolveComponentsFilter(config.components),
+        deps
+      )
+    : undefined;
+  if (!variantSnapshot) {
+    deps.log(
+      `Built-in variant snapshot not found at ${variantSnapshotPath}; component variant files were not pulled. ` +
+        'Run `npm run build:defaults` in zebkit.'
+    );
+  }
   const summary = await syncTokenSnapshot({
     tokensDir,
     configPath,
     basePreset,
     snapshot,
+    variantSnapshot,
     deps,
   });
 
@@ -114,7 +135,12 @@ export async function runPullCommand(deps: PullCommandDeps) {
     summary.filesRemoved.length +
     summary.keysAdded +
     summary.defaultsUpdated +
-    summary.keysRemoved;
+    summary.keysRemoved +
+    summary.variantFilesAdded.length +
+    summary.variantFilesRemoved.length +
+    summary.variantsAdded +
+    summary.variantDefaultsUpdated +
+    summary.variantsRemoved;
 
   if (changedCount === 0) {
     deps.log('Already up to date.');
@@ -125,6 +151,11 @@ export async function runPullCommand(deps: PullCommandDeps) {
       summary.keysAdded && `${summary.keysAdded} new key${summary.keysAdded === 1 ? '' : 's'} added`,
       summary.defaultsUpdated && `${summary.defaultsUpdated} untouched default${summary.defaultsUpdated === 1 ? '' : 's'} updated`,
       summary.keysRemoved && `${summary.keysRemoved} untouched retired key${summary.keysRemoved === 1 ? '' : 's'} removed`,
+      summary.variantFilesAdded.length && `${summary.variantFilesAdded.length} variant file${summary.variantFilesAdded.length === 1 ? '' : 's'} added`,
+      summary.variantFilesRemoved.length && `${summary.variantFilesRemoved.length} untouched retired variant file${summary.variantFilesRemoved.length === 1 ? '' : 's'} removed`,
+      summary.variantsAdded && `${summary.variantsAdded} variant${summary.variantsAdded === 1 ? '' : 's'} added`,
+      summary.variantDefaultsUpdated && `${summary.variantDefaultsUpdated} untouched variant default${summary.variantDefaultsUpdated === 1 ? '' : 's'} updated`,
+      summary.variantsRemoved && `${summary.variantsRemoved} untouched retired variant${summary.variantsRemoved === 1 ? '' : 's'} removed`,
     ].filter(Boolean);
     deps.log(parts.join(', ') + '.');
   }
@@ -135,6 +166,9 @@ export async function runPullCommand(deps: PullCommandDeps) {
   }
   for (const token of summary.preservedRetired) {
     deps.log(`Warning: preserved customized retired token ${token}; migrate or remove it manually.`);
+  }
+  for (const variant of summary.preservedRetiredVariants) {
+    deps.log(`Warning: preserved customized retired variant ${variant}; migrate or remove it manually.`);
   }
 
   await writeVscodeSettings(projectDir, customTokenPath, snapshot.manifest.modules, deps);

@@ -58,42 +58,42 @@
 </script>
 
 <section
-  class="canvas-app-soft border border-app-muted rounded-lg p-6 flex flex-col gap-5"
+  class="canvas-app-subtle border-solid border-width-xs border-app-muted radius-md padding-105 display-flex flex-direction-column gap-1"
   data-scope-selector={scopeSelector}
 >
-  <div class="flex flex-wrap items-center justify-between gap-4">
+  <div class="display-flex flex-wrap align-items-center justify-content-between gap-1">
     <div>
-      <p class="text-xs uppercase tracking-wider mb-1 ink-app-muted">Live overrides</p>
-      <h3 class="text-lg font-semibold ink-app-strong">{title}</h3>
+      <p class="text-xs text-uppercase letter-spacing-wider margin-block-end-025 ink-app-muted">Live overrides</p>
+      <h3 class="text-lg text-semibold ink-app-emphasis">{title}</h3>
       {#if description}
-        <p class="text-sm ink-app-muted mt-1">{description}</p>
+        <p class="text-sm ink-app-muted margin-block-start-025">{description}</p>
       {/if}
     </div>
-    <div class="flex gap-2">
+    <div class="display-flex gap-05">
       <button
         type="button"
         on:click={resetAll}
-        class="px-4 py-2 canvas-app-muted hover:canvas-app-strong rounded transition-colors ink-app font-medium text-sm"
+        class="playground-action padding-inline-1 padding-block-05 canvas-app-muted hover:canvas-app-emphasis radius-sm ink-app text-medium text-sm"
       >
         Reset all
       </button>
       <button
         type="button"
         on:click={copyCSS}
-        class="px-4 py-2 canvas-action hover:canvas-action-strong rounded transition-colors ink-action-inverse font-medium text-sm"
+        class="playground-action padding-inline-1 padding-block-05 canvas-action hover:canvas-action-emphasis radius-sm ink-action-inverse text-medium text-sm"
       >
         Copy CSS
       </button>
     </div>
   </div>
 
-  <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-    <div class="flex flex-col gap-4">
+  <div class="display-grid gap-1" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+    <div class="display-flex flex-direction-column gap-1">
       {#each groups as group}
-        <div class="flex flex-col gap-2">
-          <h4 class="text-sm font-semibold ink-app-strong">{group.label}</h4>
+        <div class="display-flex flex-direction-column gap-05">
+          <h4 class="text-sm text-semibold ink-app-emphasis">{group.label}</h4>
           {#each group.controls || [] as control}
-            <label class="flex flex-col gap-1">
+            <label class="display-flex flex-direction-column gap-025">
               <span class="text-xs ink-app-muted">{control.label}</span>
               {#if control.type === 'color'}
                 <input
@@ -101,7 +101,7 @@
                   value={control.default}
                   on:input={(event) =>
                     updateToken(control.token, (event.currentTarget as HTMLInputElement).value)}
-                  class="h-10 w-full rounded border border-app-muted cursor-pointer"
+                  class="height-205 width-full radius-sm border-solid border-width-xs border-app-muted cursor-pointer"
                 />
               {:else if control.type === 'range'}
                 <input
@@ -115,7 +115,7 @@
                       control.token,
                       (event.currentTarget as HTMLInputElement).value + (control.unit || '')
                     )}
-                  class="w-full"
+                  class="width-full"
                 />
               {:else}
                 <input
@@ -123,7 +123,7 @@
                   value={control.default}
                   on:input={(event) =>
                     updateToken(control.token, (event.currentTarget as HTMLInputElement).value)}
-                  class="p-2 rounded border border-app-muted canvas-app ink-app"
+                  class="padding-05 radius-sm border-solid border-width-xs border-app-muted canvas-app ink-app"
                 />
               {/if}
             </label>
@@ -134,9 +134,17 @@
 
     <div
       bind:this={scopeElement}
-      class="border-2 border-dashed border-app-muted rounded-lg p-5 canvas-app-soft"
+      class="border-dashed border-width-sm border-app-muted radius-md padding-1 canvas-app-subtle"
     >
       <slot />
     </div>
   </div>
 </section>
+
+<style>
+  .playground-action {
+    transition:
+      color var(--zbk-transition-calm-fx-duration-default) var(--zbk-transition-calm-fx-function-default),
+      background-color var(--zbk-transition-calm-fx-duration-default) var(--zbk-transition-calm-fx-function-default);
+  }
+</style>

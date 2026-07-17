@@ -1,5 +1,10 @@
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import type { ComponentsFilter } from '../scripts/components-config';
+import {
+  extractVariantOverrideEntries,
+  isVariantOverrideFile,
+} from '../scripts/tokens/compile-variant-helpers';
 
 export const PULL_STATE_VERSION = 1;
 export const PULL_STATE_RELATIVE_PATH = '.zebkit/pull-state.json';
@@ -10,11 +15,16 @@ export type PullState = {
   stateVersion: typeof PULL_STATE_VERSION;
   basePreset: string;
   modules: Record<string, { file: string; tokens: Record<string, string> }>;
+  variants?: Record<string, { file: string; variants: Record<string, string> }>;
 };
 
 export type TokenSnapshot = {
   manifest: { modules: TokenModuleManifestEntry[] };
   modules: Record<string, { file: string; tokens: Record<string, unknown> }>;
+};
+
+export type VariantSnapshot = {
+  components: Record<string, { file: string; variants: Record<string, unknown> }>;
 };
 
 export type PullSyncSummary = {
@@ -24,6 +34,12 @@ export type PullSyncSummary = {
   defaultsUpdated: number;
   keysRemoved: number;
   preservedRetired: string[];
+  variantFilesAdded: string[];
+  variantFilesRemoved: string[];
+  variantsAdded: number;
+  variantDefaultsUpdated: number;
+  variantsRemoved: number;
+  preservedRetiredVariants: string[];
   establishedBaseline: boolean;
 };
 
@@ -34,6 +50,12 @@ export interface PullStateDeps {
   writeJson: (path: string, data: any, options?: any) => Promise<void>;
   ensureDir: (path: string) => Promise<void>;
   remove: (path: string) => Promise<void>;
+}
+
+export interface VariantSnapshotDeps {
+  pathExists: (path: string) => Promise<boolean>;
+  readJson: (path: string) => Promise<any>;
+  readdir: (path: string) => Promise<string[]>;
 }
 
 function isRecord(value: unknown): value is Record<string, any> {
@@ -55,6 +77,14 @@ function isSafeTokenFile(file: unknown): file is string {
   return (
     typeof file === 'string' &&
     /^zbk-[a-z0-9-]+\.tokens\.json$/.test(file) &&
+    path.basename(file) === file
+  );
+}
+
+function isSafeVariantFile(file: unknown): file is string {
+  return (
+    typeof file === 'string' &&
+    /^zbk-[a-z0-9-]+\.variants\.json$/.test(file) &&
     path.basename(file) === file
   );
 }
@@ -114,7 +144,114 @@ export async function readTokenSnapshot(
   return { manifest: manifest as TokenSnapshot['manifest'], modules };
 }
 
-export function createPullState(basePreset: string, snapshot: TokenSnapshot): PullState {
+function toAuthorableVariant(entry: Record<string, any>): Record<string, unknown> {
+  const defaultClassName = `zbk-${entry.component}--${entry.name}`;
+  return {
+    ...(typeof entry.axis === 'string' && entry.axis ? { axis: entry.axis } : {}),
+    ...(typeof entry.description === 'string' && entry.description
+      ? { description: entry.description }
+      : {}),
+    ...(typeof entry.className === 'string' &&
+      entry.className &&
+      entry.className !== defaultClassName
+      ? { className: entry.className }
+      : typeof entry.classNameOverride === 'string' && entry.classNameOverride
+        ? { className: entry.classNameOverride }
+        : {}),
+    overrides: isRecord(entry.overrides) ? entry.overrides : {},
+    ...(isRecord(entry.styles) ? { styles: entry.styles } : {}),
+  };
+}
+
+/**
+ * Builds the editable, effective shipped-variant snapshot used by pull. The
+ * default package snapshot is patched by any bundled base-preset overrides,
+ * then filtered through the consumer's components config.
+ */
+export async function readVariantSnapshot(
+  defaultsDir: string,
+  sourceDir: string,
+  componentsFilter: ComponentsFilter,
+  deps: VariantSnapshotDeps
+): Promise<VariantSnapshot> {
+  const snapshotPath = path.join(defaultsDir, 'variants.json');
+  const raw = await deps.readJson(snapshotPath);
+  if (!Array.isArray(raw)) {
+    throw new Error(`Invalid bundled variant snapshot at ${snapshotPath}.`);
+  }
+
+  const shippedNames = new Set<string>();
+  const effective = new Map<string, Record<string, any>>();
+
+  for (const rawEntry of raw) {
+    const [entry] = extractVariantOverrideEntries(rawEntry);
+    if (!entry) {
+      throw new Error(`Invalid bundled variant entry in ${snapshotPath}.`);
+    }
+    const component = entry.component.toLowerCase();
+    const name = entry.name.toLowerCase();
+    const key = `${component}::${name}`;
+    shippedNames.add(key);
+    effective.set(key, {
+      ...entry,
+      component,
+      name,
+      ...(typeof rawEntry.classNameOverride === 'string' && rawEntry.classNameOverride
+        ? { className: rawEntry.classNameOverride }
+        : {}),
+    });
+  }
+
+  const presetOverridesDir = path.join(sourceDir, 'variant-overrides');
+  if (await deps.pathExists(presetOverridesDir)) {
+    const files = (await deps.readdir(presetOverridesDir))
+      .filter(isVariantOverrideFile)
+      .sort((left, right) => left.localeCompare(right));
+    for (const file of files) {
+      const data = await deps.readJson(path.join(presetOverridesDir, file));
+      for (const entry of extractVariantOverrideEntries(data)) {
+        const component = entry.component.toLowerCase();
+        const name = entry.name.toLowerCase();
+        const key = `${component}::${name}`;
+        const existing = effective.get(key);
+        effective.set(key, {
+          ...existing,
+          ...entry,
+          component,
+          name,
+          overrides: {
+            ...(existing?.overrides ?? {}),
+            ...(entry.overrides ?? {}),
+          },
+        });
+      }
+    }
+  }
+
+  const components: VariantSnapshot['components'] = {};
+  for (const [key, entry] of effective) {
+    const component = entry.component as string;
+    const name = entry.name as string;
+    if (componentsFilter.excluded.has(component)) continue;
+    const allowlist = componentsFilter.variantAllowlists.get(component);
+    if (shippedNames.has(key) && allowlist && !allowlist.has(name)) continue;
+
+    const componentSnapshot = components[component] ?? {
+      file: `zbk-${component}.variants.json`,
+      variants: {},
+    };
+    componentSnapshot.variants[name] = toAuthorableVariant(entry);
+    components[component] = componentSnapshot;
+  }
+
+  return { components };
+}
+
+export function createPullState(
+  basePreset: string,
+  snapshot: TokenSnapshot,
+  variantSnapshot?: VariantSnapshot
+): PullState {
   return {
     stateVersion: PULL_STATE_VERSION,
     basePreset,
@@ -129,6 +266,21 @@ export function createPullState(basePreset: string, snapshot: TokenSnapshot): Pu
         },
       ])
     ),
+    ...(variantSnapshot
+      ? {
+          variants: Object.fromEntries(
+            Object.entries(variantSnapshot.components).map(([component, data]) => [
+              component,
+              {
+                file: data.file,
+                variants: Object.fromEntries(
+                  Object.entries(data.variants).map(([name, value]) => [name, hashToken(value)])
+                ),
+              },
+            ])
+          ),
+        }
+      : {}),
   };
 }
 
@@ -167,10 +319,21 @@ export async function readPullState(
         isRecord(module.tokens) &&
         Object.values(module.tokens).every((hash) => typeof hash === 'string')
     );
+  const validVariants =
+    value?.variants === undefined ||
+    (isRecord(value.variants) &&
+      Object.values(value.variants).every(
+        (component) =>
+          isRecord(component) &&
+          isSafeVariantFile(component.file) &&
+          isRecord(component.variants) &&
+          Object.values(component.variants).every((hash) => typeof hash === 'string')
+      ));
   if (
     value?.stateVersion !== PULL_STATE_VERSION ||
     typeof value?.basePreset !== 'string' ||
-    !validModules
+    !validModules ||
+    !validVariants
   ) {
     throw new Error(
       `Invalid pull state at ${statePath}. Remove it and run pull to establish a fresh baseline.`
@@ -184,9 +347,10 @@ export async function syncTokenSnapshot(options: {
   configPath: string;
   basePreset: string;
   snapshot: TokenSnapshot;
+  variantSnapshot?: VariantSnapshot;
   deps: PullStateDeps;
 }): Promise<PullSyncSummary> {
-  const { tokensDir, configPath, basePreset, snapshot, deps } = options;
+  const { tokensDir, configPath, basePreset, snapshot, variantSnapshot, deps } = options;
   const priorState = await readPullState(configPath, deps);
   const summary: PullSyncSummary = {
     filesAdded: [],
@@ -195,6 +359,12 @@ export async function syncTokenSnapshot(options: {
     defaultsUpdated: 0,
     keysRemoved: 0,
     preservedRetired: [],
+    variantFilesAdded: [],
+    variantFilesRemoved: [],
+    variantsAdded: 0,
+    variantDefaultsUpdated: 0,
+    variantsRemoved: 0,
+    preservedRetiredVariants: [],
     establishedBaseline: !priorState,
   };
 
@@ -271,6 +441,93 @@ export async function syncTokenSnapshot(options: {
     }
   }
 
-  await writePullState(configPath, createPullState(basePreset, snapshot), deps);
+  for (const [component, currentComponent] of Object.entries(
+    variantSnapshot?.components ?? {}
+  )) {
+    const filePath = path.join(tokensDir, currentComponent.file);
+    const exists = await deps.pathExists(filePath);
+    const projectData = exists ? await deps.readJson(filePath) : { [component]: {} };
+    if (!isRecord(projectData) || !isRecord(projectData[component])) {
+      throw new Error(
+        `Variant file ${filePath} must contain a component-keyed object such as { "${component}": { ... } }.`
+      );
+    }
+    if (!exists) summary.variantFilesAdded.push(currentComponent.file);
+
+    const projectVariants = projectData[component] as Record<string, unknown>;
+    let dirty = !exists;
+    for (const [name, currentValue] of Object.entries(currentComponent.variants)) {
+      if (!(name in projectVariants)) {
+        projectVariants[name] = currentValue;
+        summary.variantsAdded += 1;
+        dirty = true;
+        continue;
+      }
+
+      const oldHash = priorState?.variants?.[component]?.variants[name];
+      if (
+        oldHash &&
+        hashToken(projectVariants[name]) === oldHash &&
+        hashToken(currentValue) !== oldHash
+      ) {
+        projectVariants[name] = currentValue;
+        summary.variantDefaultsUpdated += 1;
+        dirty = true;
+      }
+    }
+
+    for (const [name, oldHash] of Object.entries(
+      priorState?.variants?.[component]?.variants ?? {}
+    )) {
+      if (name in currentComponent.variants || !(name in projectVariants)) continue;
+      if (hashToken(projectVariants[name]) === oldHash) {
+        delete projectVariants[name];
+        summary.variantsRemoved += 1;
+        dirty = true;
+      } else {
+        summary.preservedRetiredVariants.push(`${component}.${name}`);
+      }
+    }
+
+    if (dirty) await deps.writeJson(filePath, projectData, { spaces: 2 });
+  }
+
+  for (const [component, oldComponent] of Object.entries(
+    variantSnapshot ? (priorState?.variants ?? {}) : {}
+  )) {
+    if (Object.prototype.hasOwnProperty.call(variantSnapshot?.components ?? {}, component)) continue;
+    const filePath = path.join(tokensDir, oldComponent.file);
+    if (!(await deps.pathExists(filePath))) continue;
+    const projectData = await deps.readJson(filePath);
+    if (!isRecord(projectData) || !isRecord(projectData[component])) {
+      throw new Error(
+        `Variant file ${filePath} must contain a component-keyed object such as { "${component}": { ... } }.`
+      );
+    }
+    const projectVariants = projectData[component] as Record<string, unknown>;
+
+    for (const [name, oldHash] of Object.entries(oldComponent.variants)) {
+      if (!(name in projectVariants)) continue;
+      if (hashToken(projectVariants[name]) === oldHash) {
+        delete projectVariants[name];
+        summary.variantsRemoved += 1;
+      } else {
+        summary.preservedRetiredVariants.push(`${component}.${name}`);
+      }
+    }
+
+    if (Object.keys(projectVariants).length === 0) {
+      await deps.remove(filePath);
+      summary.variantFilesRemoved.push(oldComponent.file);
+    } else {
+      await deps.writeJson(filePath, projectData, { spaces: 2 });
+    }
+  }
+
+  const nextState = createPullState(basePreset, snapshot, variantSnapshot);
+  if (!variantSnapshot && priorState?.variants) {
+    nextState.variants = priorState.variants;
+  }
+  await writePullState(configPath, nextState, deps);
   return summary;
 }

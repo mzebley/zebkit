@@ -116,12 +116,14 @@ upgrading zebkit to pick up new or changed default tokens without clobbering you
 zebkit pull
 ```
 
-`pull` also validates `zebkit.config.json`, refreshes `.vscode/settings.json`, and writes a small
-`.zebkit/pull-state.json` baseline. Commit that state file. Pull updates untouched defaults and
-removes retired defaults while preserving and warning about customized retired values. Every
-user-editable token file follows one contract: unwrapped `zbk-<module>.tokens.json`. Passing
-`--config` uses this exact same validation and synchronization path. Builds reject plain
-`zbk-<module>.json` token names and wrapped token objects with an explicit correction.
+`pull` also writes editable `zbk-<component>.variants.json` files for the shipped variants allowed
+by your [`components` block](#the-components-block), validates `zebkit.config.json`, refreshes
+`.vscode/settings.json`, and writes a small `.zebkit/pull-state.json` baseline. Commit that state
+file. Pull updates untouched token and variant defaults and removes untouched retirements while
+preserving and warning about customized retired values. Every user-editable token file follows
+one contract: unwrapped `zbk-<module>.tokens.json`. Passing `--config` uses this exact same
+validation and synchronization path. Builds reject plain `zbk-<module>.json` token names and
+wrapped token objects with an explicit correction.
 
 If your config has a `context.path`, `pull` also refreshes that directory with the latest agent
 context (component and utility markdown plus the `llms.txt` index). Per-component docs for

@@ -38,7 +38,7 @@
         <LeftNav fill />
       </CollapsiblePanel>
     {/if}
-    <main class="app-main">
+    <main class="app-main min-width-0">
       {@render children()}
     </main>
   </div>

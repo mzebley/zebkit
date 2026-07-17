@@ -35,16 +35,16 @@
   }
 </script>
 
-<section class="border border-app-muted rounded-lg canvas-app-soft flex flex-col">
-  <header class="flex flex-wrap items-center justify-between gap-3 p-4 border-b border-app-muted">
-    <div class="flex flex-col gap-1">
-      <h3 class="text-base font-semibold ink-app-strong">Agent context</h3>
+<section class="border-solid border-width-xs border-app-muted radius-md canvas-app-subtle display-flex flex-direction-column">
+  <header class="agent-context-header display-flex flex-wrap align-items-center justify-content-between gap-05 padding-1">
+    <div class="display-flex flex-direction-column gap-025">
+      <h3 class="text-md text-semibold ink-app-emphasis">Agent context</h3>
       <p class="text-sm ink-app-muted">
         The compiled contract for <code>&lt;{tag}&gt;</code> — attributes, slots, tokens, and
         variants in one file. Paste it into an agent's context or point tooling at the URL.
       </p>
     </div>
-    <div class="flex gap-2">
+    <div class="display-flex gap-05">
       <button
         class="zbk-button zbk-button--outline zbk-button--sm"
         onclick={copy}
@@ -59,12 +59,12 @@
   </header>
 
   {#if error}
-    <p class="p-4 text-sm ink-app-muted">
+    <p class="padding-1 text-sm ink-app-muted">
       Context file not found. Run <code>npm run build:context</code> to generate it.
     </p>
   {:else}
     <details class="agent-context-details">
-      <summary class="p-4 text-sm ink-app-muted cursor-pointer select-none">
+      <summary class="padding-1 text-sm ink-app-muted cursor-pointer user-select-none">
         Show the full context ({contextUrl})
       </summary>
       <pre class="agent-context-pre">{context}</pre>
@@ -73,6 +73,10 @@
 </section>
 
 <style>
+  .agent-context-header {
+    border-block-end: var(--zbk-border-width-xs) solid var(--zbk-app-border-muted);
+  }
+
   .agent-context-pre {
     margin: 0;
     padding: var(--zbk-spacing-1);
