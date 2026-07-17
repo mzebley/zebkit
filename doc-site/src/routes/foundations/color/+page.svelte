@@ -1,13 +1,44 @@
 <script lang="ts">
   import ReferenceLayout from '$lib/layouts/ReferenceLayout.svelte';
   import { colorFamilies, semanticColorFamilies } from '$data/color-families';
-  import { primitivePalette, onColor } from '$data/primitive-palette';
+  import { primitivePalette, type PrimitiveFamily } from '$data/primitive-palette';
 
-  // One representative chip per primitive family for the overview teaser.
-  const primitiveTeaser = primitivePalette.families.map((f) => {
-    const mid = f.swatches.find((s) => s.step === 500) ?? f.swatches[Math.floor(f.swatches.length / 2)];
-    return { name: f.name, cssVar: mid.cssVar, on: onColor(mid.lightness) };
+  // Tri-band teaser chips (500 / 300 / 700) grouped into vivid and muted registers.
+  const MUTED_MAX_SATURATION = 50;
+  const BAND_STEPS = [500, 300, 700];
+
+  const toChip = (f: PrimitiveFamily) => ({
+    name: f.name,
+    hue: f.hue,
+    saturation: f.saturation,
+    bands: BAND_STEPS.map(
+      (step) => (f.swatches.find((s) => s.step === step) ?? f.swatches[0]).cssVar
+    )
   });
+
+  const byHue = (a: PrimitiveFamily, b: PrimitiveFamily) =>
+    a.hue - b.hue || a.saturation - b.saturation;
+
+  const primitiveRegisters = [
+    {
+      key: 'vivid',
+      label: 'vivid',
+      chips: primitivePalette.families
+        .filter((f) => f.saturation >= MUTED_MAX_SATURATION)
+        .toSorted(byHue)
+        .map(toChip)
+    },
+    {
+      key: 'muted',
+      label: 'muted',
+      chips: primitivePalette.families
+        .filter((f) => f.saturation < MUTED_MAX_SATURATION)
+        .toSorted(byHue)
+        .map(toChip)
+    }
+  ].filter((r) => r.chips.length > 0);
+
+  const familyCount = primitivePalette.families.length;
 </script>
 
 <ReferenceLayout
@@ -58,15 +89,26 @@
   <section class="block">
     <div class="block-head">
       <h2>Primitive palette</h2>
-      <a class="more" href="/foundations/color/primitives">View all {primitiveTeaser.length} families →</a>
+      <a class="more" href="/foundations/color/primitives">View all {familyCount} families →</a>
     </div>
-    <div class="teaser">
-      {#each primitiveTeaser as p (p.name)}
-        <a class="chip" href="/foundations/color/primitives" data-on={p.on} style="background: var({p.cssVar})">
-          {p.name}
-        </a>
-      {/each}
-    </div>
+    {#each primitiveRegisters as register (register.key)}
+      <div class="teaser-group">
+        <span class="teaser-label">{register.label}</span>
+        <div class="teaser">
+          {#each register.chips as chip (chip.name)}
+            <a class="chip" href={`/foundations/color/primitives#family-${chip.name}`}>
+              <span class="chip-bands" aria-hidden="true">
+                {#each chip.bands as band (band)}
+                  <span style={`background: var(${band})`}></span>
+                {/each}
+              </span>
+              <span class="chip-name">{chip.name}</span>
+              <span class="chip-meta">{chip.hue}&deg; &middot; {chip.saturation}%</span>
+            </a>
+          {/each}
+        </div>
+      </div>
+    {/each}
   </section>
 
   <section class="block">
@@ -135,8 +177,8 @@
   }
   .strata-num {
     flex: none;
-    width: var(--zbk-spacing-4, 1.5rem);
-    height: var(--zbk-spacing-4, 1.5rem);
+    width: var(--zbk-spacing-105, 1.5rem);
+    height: var(--zbk-spacing-105, 1.5rem);
     display: grid;
     place-items: center;
     border-radius: var(--zbk-border-radius-full, 999px);
@@ -184,24 +226,56 @@
     text-decoration: underline;
   }
 
-  .teaser {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--zbk-spacing-1);
+  .teaser-group {
+    margin-bottom: var(--zbk-spacing-2);
   }
-  .chip {
-    padding: var(--zbk-spacing-1) var(--zbk-spacing-2);
-    border-radius: var(--zbk-border-radius-sm);
-    border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
+  .teaser-label {
+    display: block;
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-2xs);
+    text-transform: uppercase;
+    letter-spacing: var(--zbk-letter-spacing-2, 0.05em);
+    color: var(--zbk-app-ink-muted);
+    margin-bottom: var(--zbk-spacing-05);
+  }
+  .teaser {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    gap: var(--zbk-spacing-05);
+  }
+  .chip {
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
+    border-radius: var(--zbk-border-radius-sm);
   }
-  .chip[data-on='dark'] {
-    color: var(--zbk-color-global-white);
+  .chip-bands {
+    display: flex;
+    height: var(--zbk-spacing-205, 2.5rem);
+    border-radius: var(--zbk-border-radius-sm);
+    border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
+    overflow: hidden;
   }
-  .chip[data-on='light'] {
-    color: var(--zbk-color-global-black);
+  .chip-bands span {
+    flex: 1;
+  }
+  .chip-name {
+    font-family: var(--zbk-font-family-code);
+    font-size: var(--zbk-font-size-xs);
+    font-weight: var(--zbk-font-weight-semibold);
+    color: var(--zbk-app-ink);
+    margin-top: var(--zbk-spacing-05);
+  }
+  .chip-meta {
+    font-family: var(--zbk-font-family-code);
+    font-size: var(--zbk-font-size-2xs);
+    color: var(--zbk-app-ink-muted);
+  }
+  .chip:hover .chip-bands {
+    border-color: var(--zbk-app-border-strong);
+  }
+  .chip:hover .chip-name {
+    text-decoration: underline;
   }
 
   .cards {

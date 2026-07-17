@@ -20,6 +20,7 @@ const paletteFamilies = [
   'orange',
   'gold',
   'yellow',
+  'lime',
   'green',
   'teal',
   'cyan',
@@ -39,6 +40,8 @@ const paletteFamilies = [
   'rosewater',
   'ember',
   'deepcurrent',
+  'foxglove',
+  'chestnut',
 ] as const;
 
 /**
