@@ -31,6 +31,7 @@ Primitive palette redesign plus repository housekeeping (the palette change affe
 - Normalized a root-absolute manifesto link (`/foundations/VISION.md`) to a repo-relative path
 
 ### Added
+- DTCG alignment proposal under `plans/dtcg-alignment/`: findings/review (gap analysis against the stable 2025.10 Design Tokens Format Module, level of effort, pros/cons, considerations) and a drift-proof phased implementation plan with output-invariance gates. Assessment only — no token format changes yet
 - Rotating homepage eyebrow that starts from a random manifesto line, types through an easily editable collection, and becomes static when reduced motion is enabled
 - Homepage morph track: a slow, asynchronous, token-colored procession of minimalist geometric primitives and recognizable UI forms that flexes between the hero headline and viewport-bottom call to action, with a composed reduced-motion state
 - Three new primitive palette families filling the empty hue arcs (22 → 25 families): `lime` (96&deg;/65%, the yellow→green gap), `foxglove` (298&deg;/62%, magenta-orchid in the violet→merlot gap), and `chestnut` (26&deg;/42%, a true muted brown distinct from `stone`'s gray-tan). Each ships the full 50–950 step scale, CSS variables, and ink/canvas/border/fill/stroke utilities
