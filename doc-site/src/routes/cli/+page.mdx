@@ -51,8 +51,9 @@ complete config. It asks about:
 - a gate for **token-export / advanced options** (artifact formats, lookup/registry JSON,
   breakpoint vars and the responsive breakpoint set)
 
-It also writes `.vscode/settings.json` so the editor gets token schema validation and CSS
-custom-property hints. The generated config's `$schema` field separately enables config-key
+It also writes `.vscode/settings.json` so the editor gets token schema validation for the
+canonical unwrapped `zbk-*.tokens.json` files created by `init` and maintained by `pull`, plus
+CSS custom-property hints. The generated config's `$schema` field separately enables config-key
 completion, option suggestions, hover descriptions, and inline errors in JSON Schema-aware
 editors. This works inside the zebkit repository too; the checked-in theme configs point at the
 tracked schema in `schemas/`. When you accept the context copy, the location is recorded as
@@ -114,6 +115,13 @@ upgrading zebkit to pick up new or changed default tokens without clobbering you
 ```bash
 zebkit pull
 ```
+
+`pull` also validates `zebkit.config.json`, refreshes `.vscode/settings.json`, and writes a small
+`.zebkit/pull-state.json` baseline. Commit that state file. Pull updates untouched defaults and
+removes retired defaults while preserving and warning about customized retired values. Every
+user-editable token file follows one contract: unwrapped `zbk-<module>.tokens.json`. Passing
+`--config` uses this exact same validation and synchronization path. Builds reject plain
+`zbk-<module>.json` token names and wrapped token objects with an explicit correction.
 
 If your config has a `context.path`, `pull` also refreshes that directory with the latest agent
 context (component and utility markdown plus the `llms.txt` index). Per-component docs for

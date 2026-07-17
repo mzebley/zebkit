@@ -340,7 +340,22 @@
     "type": "opacity",
     "description": "Visual opacity while the button is in its loading state."
   },
-    "transform-hover": {
+  "transform-hover": {
     "value": "translateY(-2%)"
+  },
+  "transform": {
+    "value": "translateY(0)",
+    "type": "utility",
+    "description": "Default transform property for buttons."
+  },
+  "transform-active": {
+    "value": "translateY(0)",
+    "type": "utility",
+    "description": "Transform effect when active/pressed."
+  },
+  "transform-focus": {
+    "value": "translateY(0)",
+    "type": "utility",
+    "description": "Transform effect in focus state (in addition to outline)."
   }
 }

@@ -23,6 +23,7 @@ Primitive palette redesign plus repository housekeeping (the palette change affe
 - Completed `HANDOFF-*.md` coordination docs, stale compiled theme CSS, the generated `theme/zebkit-baseline/` reference set, the redundant nested docs `package-lock.json`, and the obsolete `.babelrc`
 
 ### Fixed
+- Token editor schemas now enforce one user-editable format: unwrapped `zbk-*.tokens.json` files created by `zebkit init`, maintained by `zebkit pull`, and used by repository themes; valid font metadata and type-scale entries no longer produce false diagnostics
 - Config files now fail fast on unknown keys with the full dotted path, valid keys, and a specific move or typo suggestion when one can be inferred, instead of silently ignoring the item and falling back to defaults
 - Dead CSS variable references across the doc site that silently fell back to inherited values: `--zbk-app-ink-soft`/`--zbk-disabled-ink-soft` → `-subtle` (a dozen components incl. TopBar, LeftNav, Inspector, TokenTable), `--zbk-line-height-relaxed` → numbered scale, `--zbk-font-family-mono` → `-code`, `--zbk-radius-sm` → `--zbk-border-radius-sm`, `--zbk-action` → `--zbk-action-ink`, `--zbk-app-canvas-soft` → `-subtle`, `--zbk-font-size-base` → `-md`
 - Removed `EditorialLayout`'s grid rail + `marginalia` snippet: mdsvex pages can't fill Svelte snippets, so the rail sat permanently empty while every inline aside stacked at 24ch inside the reading column (with a stray rail `padding-top` inflating the gaps around it)
@@ -30,8 +31,11 @@ Primitive palette redesign plus repository housekeeping (the palette change affe
 - Normalized a root-absolute manifesto link (`/foundations/VISION.md`) to a repo-relative path
 
 ### Added
+- Rotating homepage eyebrow that starts from a random manifesto line, types through an easily editable collection, and becomes static when reduced motion is enabled
+- Homepage morph track: a slow, asynchronous, token-colored procession of minimalist geometric primitives and recognizable UI forms that flexes between the hero headline and viewport-bottom call to action, with a composed reduced-motion state
 - Three new primitive palette families filling the empty hue arcs (22 → 25 families): `lime` (96&deg;/65%, the yellow→green gap), `foxglove` (298&deg;/62%, magenta-orchid in the violet→merlot gap), and `chestnut` (26&deg;/42%, a true muted brown distinct from `stone`'s gray-tan). Each ships the full 50–950 step scale, CSS variables, and ink/canvas/border/fill/stroke utilities
 - `zebkit.config.json` JSON Schema with property completion, hover descriptions, enum suggestions, and inline validation; `zebkit init` adds a portable `$schema` pointer, while repository theme configs use the tracked source schema
+- Hardened `zebkit pull`: config validation, committed default-hash baselines, safe untouched-default updates and retirements, refreshed editor schemas/context, and compiled-CLI integration coverage
 - Responsive docs "On this page" navigation: a sticky, backdrop-blurred reading lens shares the editorial marginalia rail without displacing notes, falling back to a focus-trapped anchored popover when the rail is too narrow and a bottom sheet only on compact viewports; section jumps scroll smoothly unless reduced motion is active, and the navbar accessibility popover now shares the same keyboard focus containment
 - `.gitignore` rules for handoff docs, compiled theme CSS, the generated baseline reference, and local Claude settings
 

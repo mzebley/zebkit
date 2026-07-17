@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-line-height Token Overrides",
+  "description": "Authorable overrides for the zbk-line-height token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "lineHeightValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{h1.line-height}",
+        "{h2.line-height}",
+        "{h3.line-height}",
+        "{h4.line-height}",
+        "{h5.line-height}",
+        "{h6.line-height}",
+        "{lede.line-height}",
+        "{list.line-height}",
+        "{p.line-height}",
+        "{line-height.1}",
+        "{line-height.2}",
+        "{line-height.3}",
+        "{line-height.4}",
+        "{line-height.5}",
+        "{button.line-height}",
+        "{checkbox.line-height}",
+        "{input.line-height}",
+        "{radio.line-height}",
+        "{select.line-height}",
+        "{textarea.field-line-height}",
+        "{toggle.line-height}",
+        "{tooltip.line-height}"
+      ]
+    }
+  },
+  "properties": {
+    "1": {
+      "type": "object",
+      "description": "Smallest line height.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/lineHeightValue"
+        },
+        "type": {
+          "const": "lineHeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "2": {
+      "type": "object",
+      "description": "Smaller line height.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/lineHeightValue"
+        },
+        "type": {
+          "const": "lineHeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "3": {
+      "type": "object",
+      "description": "Base line height.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/lineHeightValue"
+        },
+        "type": {
+          "const": "lineHeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "4": {
+      "type": "object",
+      "description": "Larger line height.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/lineHeightValue"
+        },
+        "type": {
+          "const": "lineHeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "5": {
+      "type": "object",
+      "description": "Largest line height.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/lineHeightValue"
+        },
+        "type": {
+          "const": "lineHeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}

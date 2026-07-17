@@ -78,7 +78,11 @@ describe('buildQuestions', () => {
 
 describe('applyOptionValues', () => {
   it('writes a complete, self-documenting config with defaults for unanswered options', () => {
-    const config = applyOptionValues({}, { destinationPath: './build' }, { defaultProjectName: 'app' });
+    const config = applyOptionValues(
+      { configVersion: 1 },
+      { destinationPath: './build' },
+      { defaultProjectName: 'app' }
+    );
     expect(config.tokens?.destinationPath).toBe('./build');
     // unanswered standard/advanced options get their defaults
     expect(config.tokens?.fonts?.strategy).toBe('import');
@@ -92,7 +96,7 @@ describe('applyOptionValues', () => {
 
   it('maps inverted and union answers back to config shape', () => {
     const config = applyOptionValues(
-      {},
+      { configVersion: 1 },
       { typeScaleFluid: false, breakpoints: ['tablet', 'desktop'] },
       {}
     );
@@ -101,7 +105,7 @@ describe('applyOptionValues', () => {
   });
 
   it('writes a self-documenting prune block with defaults', () => {
-    const config = applyOptionValues({}, {}, {});
+    const config = applyOptionValues({ configVersion: 1 }, {}, {});
     expect(config.tokens?.prune?.enabled).toBe(false);
     expect(config.tokens?.prune?.content).toEqual(DEFAULT_PRUNE_CONTENT);
     expect(config.tokens?.prune?.output?.mode).toBe('replace');
@@ -110,7 +114,7 @@ describe('applyOptionValues', () => {
 
   it('maps a prune content string answer back to a glob array', () => {
     const config = applyOptionValues(
-      {},
+      { configVersion: 1 },
       { pruneEnabled: true, pruneContent: 'src/**/*.svelte,app/**/*.tsx' },
       {}
     );

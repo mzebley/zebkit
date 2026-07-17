@@ -1,0 +1,647 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-z-index Token Overrides",
+  "description": "Authorable overrides for the zbk-z-index token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "zIndexValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{z-index.0}",
+        "{z-index.10}",
+        "{z-index.20}",
+        "{z-index.30}",
+        "{z-index.40}",
+        "{z-index.50}",
+        "{z-index.60}",
+        "{z-index.70}",
+        "{z-index.80}",
+        "{z-index.90}",
+        "{z-index.100}",
+        "{z-index.auto}",
+        "{z-index.dropdown}",
+        "{z-index.sticky}",
+        "{z-index.fixed}",
+        "{z-index.modal-backdrop}",
+        "{z-index.modal}",
+        "{z-index.popover}",
+        "{z-index.tooltip}",
+        "{tooltip.z-index}"
+      ]
+    }
+  },
+  "properties": {
+    "0": {
+      "type": "object",
+      "description": "Base stacking level.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "10": {
+      "type": "object",
+      "description": "Low elevation stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "20": {
+      "type": "object",
+      "description": "Slight elevation stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "30": {
+      "type": "object",
+      "description": "Medium-low elevation stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "40": {
+      "type": "object",
+      "description": "Medium elevation stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "50": {
+      "type": "object",
+      "description": "Medium-high elevation stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "60": {
+      "type": "object",
+      "description": "High elevation stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "70": {
+      "type": "object",
+      "description": "Higher elevation stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "80": {
+      "type": "object",
+      "description": "Very high elevation stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "90": {
+      "type": "object",
+      "description": "Near-top elevation stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "100": {
+      "type": "object",
+      "description": "Top-level elevation stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "auto": {
+      "type": "object",
+      "description": "Auto z-index, lets browser determine stacking.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "dropdown": {
+      "type": "object",
+      "description": "Semantic z-index for dropdown menus.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "sticky": {
+      "type": "object",
+      "description": "Semantic z-index for sticky positioned elements.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "fixed": {
+      "type": "object",
+      "description": "Semantic z-index for fixed positioned elements.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "modal-backdrop": {
+      "type": "object",
+      "description": "Semantic z-index for modal backdrops/overlays.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "modal": {
+      "type": "object",
+      "description": "Semantic z-index for modal dialogs.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "popover": {
+      "type": "object",
+      "description": "Semantic z-index for popovers.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "tooltip": {
+      "type": "object",
+      "description": "Semantic z-index for tooltips (highest).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/zIndexValue"
+        },
+        "type": {
+          "const": "zIndex"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}

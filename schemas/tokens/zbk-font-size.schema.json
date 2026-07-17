@@ -1,0 +1,622 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-font-size Token Overrides",
+  "description": "Authorable overrides for the zbk-font-size token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "settingValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{spacing.max-scale}",
+        "{font-size.min-viewport}",
+        "{font-size.max-viewport}",
+        "{font-size.min-base}",
+        "{font-size.max-base}",
+        "{font-size.min-ratio}",
+        "{font-size.max-ratio}"
+      ]
+    },
+    "rootFontSizeValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{font-size.3xs}",
+        "{font-size.2xs}",
+        "{font-size.xs}",
+        "{font-size.sm}",
+        "{font-size.md}",
+        "{font-size.lg}",
+        "{font-size.xl}",
+        "{font-size.2xl}",
+        "{font-size.3xl}",
+        "{font-size.4xl}",
+        "{font-size.5xl}"
+      ]
+    }
+  },
+  "properties": {
+    "min-viewport": {
+      "type": "object",
+      "description": "Lower anchor viewport for fluid type sizing.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/settingValue"
+        },
+        "type": {
+          "const": "setting"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "max-viewport": {
+      "type": "object",
+      "description": "Upper anchor viewport for fluid type sizing.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/settingValue"
+        },
+        "type": {
+          "const": "setting"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "min-base": {
+      "type": "object",
+      "description": "Base (md) font size at the min viewport.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/settingValue"
+        },
+        "type": {
+          "const": "setting"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "max-base": {
+      "type": "object",
+      "description": "Base (md) font size at the max viewport.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/settingValue"
+        },
+        "type": {
+          "const": "setting"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "min-ratio": {
+      "type": "object",
+      "description": "Type scale ratio at the min viewport (minor third).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/settingValue"
+        },
+        "type": {
+          "const": "setting"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "max-ratio": {
+      "type": "object",
+      "description": "Type scale ratio at the max viewport (major third).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/settingValue"
+        },
+        "type": {
+          "const": "setting"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "3xs": {
+      "type": "object",
+      "description": "Smallest font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    },
+    "2xs": {
+      "type": "object",
+      "description": "Second smallest font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    },
+    "xs": {
+      "type": "object",
+      "description": "Extra small font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    },
+    "sm": {
+      "type": "object",
+      "description": "Small font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    },
+    "md": {
+      "type": "object",
+      "description": "Base / body font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    },
+    "lg": {
+      "type": "object",
+      "description": "Large font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    },
+    "xl": {
+      "type": "object",
+      "description": "Extra large font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    },
+    "2xl": {
+      "type": "object",
+      "description": "Double extra large font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    },
+    "3xl": {
+      "type": "object",
+      "description": "Triple extra large font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    },
+    "4xl": {
+      "type": "object",
+      "description": "Quadruple extra large font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    },
+    "5xl": {
+      "type": "object",
+      "description": "Quintuple extra large font size.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/rootFontSizeValue"
+        },
+        "type": {
+          "const": "rootFontSize"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}

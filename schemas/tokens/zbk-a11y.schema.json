@@ -1,0 +1,357 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-a11y Token Overrides",
+  "description": "Authorable overrides for the zbk-a11y token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "utilityValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{a11y.spacing-modifier}",
+        "{a11y.spacing-text-coupling}",
+        "{a11y.line-height-modifier}",
+        "{a11y.letter-spacing-modifier}",
+        "{a11y.fallback-font-size-modifier}",
+        "{a11y.transition-duration-modifier}",
+        "{button.transform}",
+        "{button.transform-hover}",
+        "{button.transform-active}",
+        "{button.transform-focus}",
+        "{button.cursor}",
+        "{button.cursor-loading}",
+        "{checkbox.cursor}",
+        "{checkbox.cursor-disabled}",
+        "{input.cursor}",
+        "{input.cursor-disabled}",
+        "{radio.cursor}",
+        "{radio.cursor-disabled}",
+        "{select.cursor}",
+        "{select.cursor-disabled}",
+        "{textarea.resize}",
+        "{textarea.cursor}",
+        "{textarea.cursor-disabled}",
+        "{toggle.thumb-transform}",
+        "{toggle.thumb-transform-hover}",
+        "{toggle.thumb-transform-active}",
+        "{toggle.thumb-transform-checked}",
+        "{toggle.cursor}",
+        "{toggle.cursor-disabled}"
+      ]
+    },
+    "spacingValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{a11y.min-interaction-size}",
+        "{focus.offset}",
+        "{h1.spacing-before}",
+        "{h1.spacing-after}",
+        "{h2.spacing-before}",
+        "{h2.spacing-after}",
+        "{h3.spacing-before}",
+        "{h3.spacing-after}",
+        "{h4.spacing-before}",
+        "{h4.spacing-after}",
+        "{h5.spacing-before}",
+        "{h5.spacing-after}",
+        "{h6.spacing-before}",
+        "{h6.spacing-after}",
+        "{lede.spacing-before}",
+        "{lede.spacing-after}",
+        "{list.spacing-before}",
+        "{list.spacing-after}",
+        "{list.padding-block-start}",
+        "{list.padding-block-end}",
+        "{p.spacing-before}",
+        "{p.spacing-after}",
+        "{spacing.2xs}",
+        "{spacing.xs}",
+        "{spacing.sm}",
+        "{spacing.md}",
+        "{spacing.lg}",
+        "{spacing.xl}",
+        "{spacing.2xl}",
+        "{spacing.3xl}",
+        "{spacing.section-margin-block}",
+        "{spacing.section-margin-inline}",
+        "{spacing.page-padding-block}",
+        "{spacing.page-padding-inline}",
+        "{button.padding-inline}",
+        "{button.padding-block}",
+        "{button.padding-inline-start}",
+        "{button.padding-inline-end}",
+        "{button.padding-block-start}",
+        "{button.padding-block-end}",
+        "{button.margin-inline}",
+        "{button.margin-block}",
+        "{button.margin-inline-start}",
+        "{button.margin-inline-end}",
+        "{button.margin-block-start}",
+        "{button.margin-block-end}",
+        "{button.gap}",
+        "{button.group-gap}",
+        "{button.focus-offset}",
+        "{checkbox.gap}",
+        "{checkbox.group-gap}",
+        "{checkbox.focus-offset}",
+        "{input.label-gap}",
+        "{input.padding-inline}",
+        "{input.padding-block}",
+        "{input.gap}",
+        "{input.group-gap}",
+        "{input.focus-offset}",
+        "{radio.gap}",
+        "{radio.group-gap}",
+        "{radio.focus-offset}",
+        "{select.label-gap}",
+        "{select.padding-inline}",
+        "{select.padding-block}",
+        "{select.gap}",
+        "{select.group-gap}",
+        "{select.focus-offset}",
+        "{textarea.label-gap}",
+        "{textarea.padding-inline}",
+        "{textarea.padding-block}",
+        "{textarea.focus-offset}",
+        "{toggle.thumb-inset}",
+        "{toggle.gap}",
+        "{toggle.group-gap}",
+        "{toggle.focus-offset}",
+        "{tooltip.padding-inline}",
+        "{tooltip.padding-block}"
+      ]
+    }
+  },
+  "properties": {
+    "spacing-modifier": {
+      "type": "object",
+      "description": "Amount to multiply spacing variables by (independent density dial).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/utilityValue"
+        },
+        "type": {
+          "const": "utility"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "spacing-text-coupling": {
+      "type": "object",
+      "description": "How hard spacing follows body (md) font-size growth: 1 = 1:1, 0 = decoupled. Lets containers grow with text without a separate density bump.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/utilityValue"
+        },
+        "type": {
+          "const": "utility"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "line-height-modifier": {
+      "type": "object",
+      "description": "Amount to multiply line height variables by.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/utilityValue"
+        },
+        "type": {
+          "const": "utility"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "letter-spacing-modifier": {
+      "type": "object",
+      "description": "Amount to multiply letter spacing variables by.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/utilityValue"
+        },
+        "type": {
+          "const": "utility"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "fallback-font-size-modifier": {
+      "type": "object",
+      "description": "Fallback amount to multiply font size variables by in the event their specific modifier isn't set.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/utilityValue"
+        },
+        "type": {
+          "const": "utility"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "transition-duration-modifier": {
+      "type": "object",
+      "description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/utilityValue"
+        },
+        "type": {
+          "const": "utility"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "min-interaction-size": {
+      "type": "object",
+      "description": "Minimum height and width for interactive elements like links or buttons. WCAG AA is >= 24px, AAA is 44px",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/spacingValue"
+        },
+        "type": {
+          "const": "spacing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,388 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-elevation Token Overrides",
+  "description": "Authorable overrides for the zbk-elevation token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "boxShadowValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{elevation.none}",
+        "{elevation.xs}",
+        "{elevation.sm}",
+        "{elevation.md}",
+        "{elevation.lg}",
+        "{elevation.xl}",
+        "{elevation.2xl}",
+        "{elevation.inner}",
+        "{elevation.inner-sm}",
+        "{elevation.inner-lg}",
+        "{button.box-shadow}",
+        "{button.box-shadow-hover}",
+        "{button.box-shadow-active}",
+        "{button.box-shadow-focus}",
+        "{checkbox.box-shadow}",
+        "{checkbox.box-shadow-hover}",
+        "{checkbox.box-shadow-active}",
+        "{checkbox.box-shadow-checked}",
+        "{checkbox.box-shadow-focus}",
+        "{input.box-shadow}",
+        "{input.box-shadow-hover}",
+        "{input.box-shadow-focus}",
+        "{input.box-shadow-active}",
+        "{input.box-shadow-invalid}",
+        "{radio.box-shadow}",
+        "{radio.box-shadow-hover}",
+        "{radio.box-shadow-active}",
+        "{radio.box-shadow-checked}",
+        "{radio.box-shadow-focus}",
+        "{select.box-shadow}",
+        "{select.box-shadow-hover}",
+        "{select.box-shadow-focus}",
+        "{select.box-shadow-active}",
+        "{select.box-shadow-invalid}",
+        "{textarea.box-shadow}",
+        "{textarea.box-shadow-hover}",
+        "{textarea.box-shadow-focus}",
+        "{textarea.box-shadow-active}",
+        "{textarea.box-shadow-invalid}",
+        "{toggle.box-shadow}",
+        "{toggle.box-shadow-hover}",
+        "{toggle.box-shadow-active}",
+        "{toggle.box-shadow-checked}",
+        "{toggle.box-shadow-focus}",
+        "{toggle.thumb-shadow}",
+        "{toggle.thumb-shadow-hover}",
+        "{toggle.thumb-shadow-active}",
+        "{toggle.thumb-shadow-checked}",
+        "{tooltip.box-shadow}"
+      ]
+    }
+  },
+  "properties": {
+    "none": {
+      "type": "object",
+      "description": "No shadow.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/boxShadowValue"
+        },
+        "type": {
+          "const": "boxShadow"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "xs": {
+      "type": "object",
+      "description": "Extra-small shadow for subtle elevation.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/boxShadowValue"
+        },
+        "type": {
+          "const": "boxShadow"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "sm": {
+      "type": "object",
+      "description": "Small shadow for low elevation.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/boxShadowValue"
+        },
+        "type": {
+          "const": "boxShadow"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "md": {
+      "type": "object",
+      "description": "Medium shadow for moderate elevation.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/boxShadowValue"
+        },
+        "type": {
+          "const": "boxShadow"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "lg": {
+      "type": "object",
+      "description": "Large shadow for high elevation.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/boxShadowValue"
+        },
+        "type": {
+          "const": "boxShadow"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "xl": {
+      "type": "object",
+      "description": "Extra-large shadow for very high elevation.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/boxShadowValue"
+        },
+        "type": {
+          "const": "boxShadow"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "2xl": {
+      "type": "object",
+      "description": "2XL shadow for maximum elevation.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/boxShadowValue"
+        },
+        "type": {
+          "const": "boxShadow"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "inner": {
+      "type": "object",
+      "description": "Inner shadow for inset/pressed effect.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/boxShadowValue"
+        },
+        "type": {
+          "const": "boxShadow"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "inner-sm": {
+      "type": "object",
+      "description": "Small inner shadow.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/boxShadowValue"
+        },
+        "type": {
+          "const": "boxShadow"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "inner-lg": {
+      "type": "object",
+      "description": "Large inner shadow.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/boxShadowValue"
+        },
+        "type": {
+          "const": "boxShadow"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}

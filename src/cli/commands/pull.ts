@@ -1,4 +1,3 @@
-import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import {
@@ -25,21 +24,11 @@ export async function pull(options: { config?: string }) {
       remove: fs.remove,
       readFile: fs.readFile,
       writeFile: fs.writeFile,
-      readConfig: async () => {
-        if (options.config) {
-          const resolved = path.resolve(options.config);
-          if (!(await fs.pathExists(resolved))) {
-            console.error(chalk.red(`Config file not found at ${resolved}.`));
-            process.exit(1);
-          }
-          const content = await fs.readFile(resolved, 'utf-8');
-          return { config: JSON.parse(content), path: resolved };
-        }
-        return loadZebkitConfig();
-      },
+      readConfig: () => loadZebkitConfig(options.config),
       getZebkitDefaultsDir,
       getZebkitPackageRoot,
       getZebkitContextDir,
+      getProjectDir: () => process.cwd(),
       resolveBundledThemeTokensDir,
       log: (message: string) => console.log(message),
     });

@@ -22,6 +22,7 @@ describe('build smoke tests', () => {
     const themeName = 'new-test';
 
     const config = {
+      configVersion: 1,
       tokens: {
         destinationPath,
         assetFilePath: '/assets/',
@@ -75,19 +76,18 @@ describe('build smoke tests', () => {
     await fs.writeJson(
       path.join(overlayDir, 'zbk-font-family.tokens.json'),
       {
-        'zbk-font-family': {
-          alt: {
-            value: '"Inter"',
-            type: 'fontFamily',
-            source: 'system',
-            fallback: 'sans',
-          },
+        alt: {
+          value: '"Inter"',
+          type: 'fontFamily',
+          source: 'system',
+          fallback: 'sans',
         },
       },
       { spaces: 2 }
     );
 
     const config = {
+      configVersion: 1,
       tokens: {
         destinationPath,
         assetFilePath: '/assets/',
@@ -156,16 +156,15 @@ describe('build smoke tests', () => {
     await fs.writeJson(
       path.join(overrideDir, 'zbk-button.tokens.json'),
       {
-        'zbk-button': {
-          'font-size': {
-            value: '{font-size.3xl}',
-          },
+        'font-size': {
+          value: '{font-size.3xl}',
         },
       },
       { spaces: 2 }
     );
 
     const config = {
+      configVersion: 1,
       tokens: {
         destinationPath,
         assetFilePath: '/assets/',
@@ -221,6 +220,39 @@ describe('build smoke tests', () => {
     }
   });
 
+  it('rejects non-canonical token override filenames with a rename instruction', async () => {
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-invalid-token-name-'));
+    const configPath = path.join(tmpDir, 'zebkit.config.json');
+    const overrideDir = path.join(tmpDir, 'tokens');
+    await fs.ensureDir(overrideDir);
+    await fs.writeJson(path.join(overrideDir, 'zbk-button.json'), {
+      'font-size': { value: '{font-size.3xl}' },
+    });
+    await fs.writeJson(configPath, {
+      configVersion: 1,
+      tokens: {
+        destinationPath: path.join(tmpDir, 'dist'),
+        tokenPath: overrideDir,
+        themeName: 'invalid-name',
+      },
+    });
+
+    try {
+      await expect(
+        execFileAsync('npm', ['run', 'build:tokens', '--', '--config', configPath], {
+          cwd: PROJECT_ROOT,
+          env: { ...process.env, CI: 'true', FORCE_COLOR: '0' },
+        })
+      ).rejects.toMatchObject({
+        stderr: expect.stringContaining(
+          "Token override files must use 'zbk-<module>.tokens.json'; rename it to 'zbk-button.tokens.json'."
+        ),
+      });
+    } finally {
+      await fs.remove(tmpDir);
+    }
+  });
+
   it('delivers the agent context through the bundled CLI pull', async () => {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-context-pull-'));
     const configPath = path.join(tmpDir, 'zebkit.config.json');
@@ -228,7 +260,11 @@ describe('build smoke tests', () => {
     // Simulates what `zebkit init` records; pull refreshes this directory.
     await fs.writeJson(
       configPath,
-      { context: { path: './zebkit/context' }, components: { checkbox: false } },
+      {
+        configVersion: 1,
+        context: { path: './zebkit/context' },
+        components: { checkbox: false },
+      },
       { spaces: 2 }
     );
 

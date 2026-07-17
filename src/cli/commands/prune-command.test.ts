@@ -154,6 +154,7 @@ describe('runPruneCommand (fixture project)', () => {
   beforeEach(async () => {
     dir = await fs.mkdtemp(path.join(os.tmpdir(), 'zbk-prune-'));
     await fs.outputJson(configPath(), {
+      configVersion: 1,
       tokens: {
         destinationPath: './dist',
         themeName: theme,
@@ -237,6 +238,7 @@ describe('runPruneCommand (fixture project)', () => {
     ].join('\n');
     await fs.outputFile(inputPath(), baseCss);
     await fs.outputJson(configPath(), {
+      configVersion: 1,
       tokens: {
         destinationPath: './dist',
         themeName: theme,
@@ -262,6 +264,7 @@ describe('runPruneCommand (fixture project)', () => {
 
   it('respects the report:false config (no report file)', async () => {
     await fs.outputJson(configPath(), {
+      configVersion: 1,
       tokens: {
         destinationPath: './dist',
         themeName: theme,

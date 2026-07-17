@@ -1,0 +1,436 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-border Token Overrides",
+  "description": "Authorable overrides for the zbk-border token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "borderWidthValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{border.width-xs}",
+        "{border.width-sm}",
+        "{border.width-md}",
+        "{border.width-lg}",
+        "{border.width-xl}",
+        "{button.border-width}",
+        "{button.focus-width}",
+        "{checkbox.border-width}",
+        "{checkbox.indicator-stroke-width}",
+        "{checkbox.focus-width}",
+        "{input.border-width}",
+        "{input.focus-width}",
+        "{radio.border-width}",
+        "{radio.focus-width}",
+        "{select.border-width}",
+        "{select.indicator-stroke-width}",
+        "{select.focus-width}",
+        "{textarea.border-width}",
+        "{textarea.focus-width}",
+        "{toggle.border-width}",
+        "{toggle.thumb-border-width}",
+        "{toggle.focus-width}",
+        "{tooltip.border-width}"
+      ]
+    },
+    "borderStyleValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{border.style}",
+        "{button.border-style}",
+        "{checkbox.border-style}",
+        "{input.border-style}",
+        "{radio.border-style}",
+        "{select.border-style}",
+        "{textarea.border-style}",
+        "{toggle.border-style}",
+        "{toggle.thumb-border-style}",
+        "{tooltip.border-style}"
+      ]
+    },
+    "borderRadiusValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{border.radius-xs}",
+        "{border.radius-sm}",
+        "{border.radius-md}",
+        "{border.radius-lg}",
+        "{border.radius-xl}",
+        "{button.border-radius}",
+        "{checkbox.border-radius}",
+        "{checkbox.indicator-radius}",
+        "{input.border-radius}",
+        "{radio.border-radius}",
+        "{radio.indicator-radius}",
+        "{select.border-radius}",
+        "{textarea.border-radius}",
+        "{toggle.border-radius}",
+        "{toggle.thumb-radius}",
+        "{tooltip.border-radius}"
+      ]
+    }
+  },
+  "properties": {
+    "width-xs": {
+      "type": "object",
+      "description": "Smallest semantic border width.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderWidthValue"
+        },
+        "type": {
+          "const": "borderWidth"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "width-sm": {
+      "type": "object",
+      "description": "Small semantic border width.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderWidthValue"
+        },
+        "type": {
+          "const": "borderWidth"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "width-md": {
+      "type": "object",
+      "description": "Base semantic border width.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderWidthValue"
+        },
+        "type": {
+          "const": "borderWidth"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "width-lg": {
+      "type": "object",
+      "description": "Larger semantic border width.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderWidthValue"
+        },
+        "type": {
+          "const": "borderWidth"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "width-xl": {
+      "type": "object",
+      "description": "Largest semantic border width.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderWidthValue"
+        },
+        "type": {
+          "const": "borderWidth"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "style": {
+      "type": "object",
+      "description": "Standarized border style for project.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderStyleValue"
+        },
+        "type": {
+          "const": "borderStyle"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "radius-xs": {
+      "type": "object",
+      "description": "Smallest semantic corner radius.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderRadiusValue"
+        },
+        "type": {
+          "const": "borderRadius"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "radius-sm": {
+      "type": "object",
+      "description": "Small semantic corner radius.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderRadiusValue"
+        },
+        "type": {
+          "const": "borderRadius"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "radius-md": {
+      "type": "object",
+      "description": "Base semantic corner radius.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderRadiusValue"
+        },
+        "type": {
+          "const": "borderRadius"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "radius-lg": {
+      "type": "object",
+      "description": "Larger semantic corner radius.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderRadiusValue"
+        },
+        "type": {
+          "const": "borderRadius"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "radius-xl": {
+      "type": "object",
+      "description": "Largest semantic corner radius.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/borderRadiusValue"
+        },
+        "type": {
+          "const": "borderRadius"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}

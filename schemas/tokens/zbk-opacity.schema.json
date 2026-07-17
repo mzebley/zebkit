@@ -1,0 +1,595 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-opacity Token Overrides",
+  "description": "Authorable overrides for the zbk-opacity token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "opacityValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{opacity.0}",
+        "{opacity.5}",
+        "{opacity.10}",
+        "{opacity.15}",
+        "{opacity.20}",
+        "{opacity.25}",
+        "{opacity.30}",
+        "{opacity.40}",
+        "{opacity.50}",
+        "{opacity.60}",
+        "{opacity.70}",
+        "{opacity.75}",
+        "{opacity.80}",
+        "{opacity.85}",
+        "{opacity.90}",
+        "{opacity.95}",
+        "{opacity.100}",
+        "{button.opacity}",
+        "{button.opacity-loading}",
+        "{checkbox.opacity}",
+        "{checkbox.opacity-disabled}",
+        "{input.opacity}",
+        "{input.opacity-disabled}",
+        "{radio.opacity}",
+        "{radio.opacity-disabled}",
+        "{select.opacity}",
+        "{select.opacity-disabled}",
+        "{textarea.opacity}",
+        "{textarea.opacity-disabled}",
+        "{toggle.opacity}",
+        "{toggle.opacity-disabled}",
+        "{tooltip.opacity}"
+      ]
+    }
+  },
+  "properties": {
+    "0": {
+      "type": "object",
+      "description": "Fully transparent (invisible).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "5": {
+      "type": "object",
+      "description": "5% opacity - barely visible.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "10": {
+      "type": "object",
+      "description": "10% opacity - very faint.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "15": {
+      "type": "object",
+      "description": "15% opacity - faint.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "20": {
+      "type": "object",
+      "description": "20% opacity - subtle.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "25": {
+      "type": "object",
+      "description": "25% opacity - quarter visible.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "30": {
+      "type": "object",
+      "description": "30% opacity - light.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "40": {
+      "type": "object",
+      "description": "40% opacity - moderate-light.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "50": {
+      "type": "object",
+      "description": "50% opacity - half visible.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "60": {
+      "type": "object",
+      "description": "60% opacity - moderate.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "70": {
+      "type": "object",
+      "description": "70% opacity - mostly visible.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "75": {
+      "type": "object",
+      "description": "75% opacity - three-quarters visible.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "80": {
+      "type": "object",
+      "description": "80% opacity - largely visible.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "85": {
+      "type": "object",
+      "description": "85% opacity - mostly opaque.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "90": {
+      "type": "object",
+      "description": "90% opacity - nearly opaque.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "95": {
+      "type": "object",
+      "description": "95% opacity - almost fully opaque.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "100": {
+      "type": "object",
+      "description": "Fully opaque (default).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/opacityValue"
+        },
+        "type": {
+          "const": "opacity"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}

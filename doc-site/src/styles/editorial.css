@@ -72,7 +72,7 @@ h1.display {
    wins is a source-order coin flip. Wire the same tokens from the heading's own
    edges here (unlayered, so they win deterministically); adjacent margins
    collapse to the larger value, which is the intended semantic. */
-.editorial-main > h1 { margin-block-end: var(--zbk-h1-spacing-after); }
+.editorial-main > h1:not(.display) { margin-block-end: var(--zbk-h1-spacing-after); }
 .editorial-main > h2 { margin-block-end: var(--zbk-h2-spacing-after); }
 .editorial-main > h3 { margin-block-end: var(--zbk-h3-spacing-after); }
 .editorial-main > h4 { margin-block-end: var(--zbk-h4-spacing-after); }

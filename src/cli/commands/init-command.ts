@@ -1,7 +1,15 @@
 import path from 'path';
 import type { ZebkitConfig } from '../../scripts/config';
-import { ZEBKIT_CONFIG_CONSUMER_SCHEMA_PATH } from '../../scripts/config-schema';
+import {
+  CURRENT_ZEBKIT_CONFIG_VERSION,
+  ZEBKIT_CONFIG_CONSUMER_SCHEMA_PATH,
+} from '../../scripts/config-schema';
 import { resolveComponentsFilter } from '../../scripts/components-config';
+import {
+  createPullState,
+  readTokenSnapshot,
+  writePullState,
+} from '../pull-state';
 import {
   applyOptionValues,
   buildQuestions,
@@ -144,26 +152,20 @@ export async function copyThemeTokens(
       `Theme token manifest not found at ${manifestPath} — skipping token copy.\n` +
         'Run `npm run build:defaults` in the zebkit package to generate bundled theme presets.'
     );
-    return;
+    return false;
   }
 
   await deps.ensureDir(tokensDir);
 
-  const manifest = (await deps.readJson(manifestPath)) as {
-    modules: Array<{ key: string; file: string }>;
-  };
+  const snapshot = await readTokenSnapshot(sourceDir, deps);
   let copied = 0;
 
-  for (const mod of manifest.modules) {
-    const destFile = path.join(tokensDir, mod.file);
+  for (const module of Object.values(snapshot.modules)) {
+    const destFile = path.join(tokensDir, module.file);
 
     if (await deps.pathExists(destFile)) continue;
 
-    const srcFile = path.join(sourceDir, mod.file);
-    const raw = (await deps.readJson(srcFile)) as Record<string, unknown>;
-    const { _key, _layer, ...tokenData } = raw;
-
-    await deps.writeJson(destFile, { [mod.key]: tokenData }, { spaces: 2 });
+    await deps.writeJson(destFile, module.tokens, { spaces: 2 });
     copied++;
   }
 
@@ -172,6 +174,7 @@ export async function copyThemeTokens(
   } else {
     console.log('\n./tokens/ is already up to date.');
   }
+  return true;
 }
 
 export async function writeVscodeSettings(
@@ -195,30 +198,39 @@ export async function writeVscodeSettings(
   jsonSchemas = jsonSchemas.filter(
     (s: any) => !s.url || !s.url.includes('zebkit/dist/editor')
   );
+  const usesRepositorySchemas = jsonSchemas.some((schema: any) =>
+    schema.url?.startsWith('./schemas/tokens/')
+  );
 
-  // Add per-module schema entries
+  // All user-editable token files use the same unwrapped *.tokens.json contract.
   const tokenPathNormalized = customTokenPath.replace(/^\.\//, '');
   for (const module of modules) {
-    const tokenSchemaEntry = {
-      fileMatch: [`/${tokenPathNormalized}/${module.file}`],
-      url: `./node_modules/zebkit/dist/editor/schemas/${module.key}.schema.json`,
-    };
-    jsonSchemas.push(tokenSchemaEntry);
+    const repositoryUrl = `./schemas/tokens/${module.key}.schema.json`;
+    if (!jsonSchemas.some((schema: any) => schema.url === repositoryUrl)) {
+      jsonSchemas.push({
+        fileMatch: [`/${tokenPathNormalized}/${module.key}.tokens.json`],
+        url: `./node_modules/zebkit/dist/editor/schemas/${module.key}.schema.json`,
+      });
+    }
   }
 
   // Merge css.customData
-  const cssCustomData = existingSettings['css.customData'] || [];
+  const cssCustomData = (existingSettings['css.customData'] || []).filter(
+    (entry: string) => !usesRepositorySchemas || !entry.includes('zebkit/dist/editor')
+  );
   const zebkitCssData = './node_modules/zebkit/dist/editor/zebkit.css-data.json';
 
-  if (!cssCustomData.includes(zebkitCssData)) {
+  if (!usesRepositorySchemas && !cssCustomData.includes(zebkitCssData)) {
     cssCustomData.push(zebkitCssData);
   }
 
   // Write merged settings
+  const { 'css.customData': _existingCssCustomData, ...settingsWithoutCssCustomData } =
+    existingSettings;
   const mergedSettings = {
-    ...existingSettings,
+    ...settingsWithoutCssCustomData,
     'json.schemas': jsonSchemas,
-    'css.customData': cssCustomData,
+    ...(cssCustomData.length > 0 ? { 'css.customData': cssCustomData } : {}),
   };
 
   await deps.writeJson(settingsPath, mergedSettings, { spaces: 2 });
@@ -295,6 +307,7 @@ export async function runInitCommand(
 
     // Write a complete, self-documenting token config (defaults are not omitted).
     const config: ZebkitConfig = {
+      configVersion: CURRENT_ZEBKIT_CONFIG_VERSION,
       $schema: ZEBKIT_CONFIG_CONSUMER_SCHEMA_PATH,
       tokens: {},
     };
@@ -307,7 +320,15 @@ export async function runInitCommand(
         defaultsDir,
         packageRoot
       );
-      await copyThemeTokens(process.cwd(), selectedThemeDir, deps);
+      const copiedFromSnapshot = await copyThemeTokens(process.cwd(), selectedThemeDir, deps);
+      if (copiedFromSnapshot) {
+        const snapshot = await readTokenSnapshot(selectedThemeDir, deps);
+        await writePullState(
+          configPath,
+          createPullState(config.tokens!.basePreset ?? 'default', snapshot),
+          deps
+        );
+      }
     }
 
     const copyContext = options.quick ? true : answers.copyContext;

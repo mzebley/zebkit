@@ -1,0 +1,184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-breakpoint Token Overrides",
+  "description": "Authorable overrides for the zbk-breakpoint token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "dimensionValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{breakpoint.tablet}",
+        "{breakpoint.tablet-lg}",
+        "{breakpoint.desktop}",
+        "{breakpoint.desktop-lg}",
+        "{breakpoint.widescreen}"
+      ]
+    }
+  },
+  "properties": {
+    "tablet": {
+      "type": "object",
+      "description": "Small tablets and large phones in landscape (640px).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/dimensionValue"
+        },
+        "type": {
+          "const": "dimension"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "tablet-lg": {
+      "type": "object",
+      "description": "Large tablets (800px).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/dimensionValue"
+        },
+        "type": {
+          "const": "dimension"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "desktop": {
+      "type": "object",
+      "description": "Small desktops and laptops (1120px).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/dimensionValue"
+        },
+        "type": {
+          "const": "dimension"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "desktop-lg": {
+      "type": "object",
+      "description": "Large desktops (1280px).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/dimensionValue"
+        },
+        "type": {
+          "const": "dimension"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "widescreen": {
+      "type": "object",
+      "description": "Widescreen and ultra-wide displays (1600px).",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/dimensionValue"
+        },
+        "type": {
+          "const": "dimension"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}

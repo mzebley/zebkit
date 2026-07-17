@@ -3,9 +3,10 @@
  * Build editor support artifacts for Zebkit.
  *
  * Generates:
- * 1. dist/editor/schemas/{key}.schema.json — Per-module JSON Schemas for token files
- * 2. schemas/zebkit.config.schema.json + dist/editor copy — Config completion/validation
- * 3. dist/editor/zebkit.css-data.json — VS Code CSS custom data for autocomplete
+ * 1. schemas/tokens/{key}.schema.json + dist copies — Authorable token override schemas
+ * 2. .vscode/settings.json — Repository token-file schema associations
+ * 3. schemas/zebkit.config.schema.json + dist/editor copy — Config completion/validation
+ * 4. dist/editor/zebkit.css-data.json — VS Code CSS custom data for autocomplete
  */
 
 import path from 'path';
@@ -22,6 +23,8 @@ const __dirname = path.dirname(__filename);
 const defaultsDir = path.resolve(__dirname, '../dist/cli/defaults');
 const editorDir = path.resolve(__dirname, '../dist/editor');
 const schemasDir = path.resolve(editorDir, 'schemas');
+const sourceTokenSchemasDir = path.resolve(__dirname, '../schemas/tokens');
+const repositorySettingsPath = path.resolve(__dirname, '../.vscode/settings.json');
 const sourceConfigSchemaPath = path.resolve(
   __dirname,
   '../schemas',
@@ -64,65 +67,133 @@ async function extractAllowedTokenTypes(): Promise<string[]> {
   return values.map(v => v.replace(/'/g, ''));
 }
 
-/**
- * Generate per-module JSON Schema for a specific token file
- */
-function generateModuleSchema(
-  module: ManifestModule,
-  tokenData: TokenData,
-  refsByType: Record<string, string[]>
-): object {
-  // Build properties for each token key
+function fontMetadataProperties() {
+  return {
+    source: {
+      type: 'string',
+      enum: ['system', 'google', 'local'],
+      description: 'Where this font family is loaded from.',
+    },
+    fallback: {
+      type: 'string',
+      enum: ['sans', 'serif', 'mono'],
+      description: 'Fallback stack category appended to the authored family.',
+    },
+    weights: {
+      description: 'Static font weights or a variable-font range such as 200..800.',
+      oneOf: [
+        { type: 'string' },
+        { type: 'array', items: { type: ['string', 'number'] }, uniqueItems: true },
+      ],
+    },
+    styles: {
+      type: 'array',
+      items: { type: 'string', enum: ['normal', 'italic'] },
+      uniqueItems: true,
+    },
+    faces: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['src'],
+        additionalProperties: false,
+        properties: {
+          src: { type: 'string' },
+          weight: { type: ['string', 'number'] },
+          style: { type: 'string', enum: ['normal', 'italic', 'oblique'] },
+          display: {
+            type: 'string',
+            enum: ['auto', 'block', 'swap', 'fallback', 'optional'],
+          },
+          format: { type: 'string' },
+          unicodeRange: { type: 'string' },
+        },
+      },
+    },
+    display: {
+      type: 'string',
+      enum: ['auto', 'block', 'swap', 'fallback', 'optional'],
+    },
+  };
+}
+
+function generateTokenProperties(
+  tokenData: TokenData
+): Record<string, any> {
   const properties: Record<string, any> = {};
 
   for (const [tokenName, tokenObj] of Object.entries(tokenData)) {
     if (tokenName.startsWith('_')) continue; // Skip _key, _layer
 
     const token = tokenObj as TokenObject;
-    const valueSchema: any = {
-      type: ['string', 'number'],
+    const tokenProperties: Record<string, any> = {
+      value: { $ref: `#/definitions/${token.type}Value` },
+      type: {
+        const: token.type,
+      },
+      description: {
+        type: 'string',
+      },
+      a11y: {
+        type: ['boolean', 'string'],
+      },
+      additional: {
+        type: ['string', 'number', 'boolean'],
+      },
     };
 
-    // Add examples for matching token type references
-    const examples = refsByType[token.type];
-    if (examples && examples.length > 0) {
-      valueSchema.examples = examples;
+    if ('index' in token || token.type === 'rootFontSize') {
+      tokenProperties.index = { type: 'number' };
+    }
+    if (token.type === 'fontFamily') {
+      Object.assign(tokenProperties, fontMetadataProperties());
     }
 
     properties[tokenName] = {
       type: 'object',
       description: token.description,
-      required: ['value', 'type', 'description'],
+      required: ['value'],
       additionalProperties: false,
-      properties: {
-        value: valueSchema,
-        type: {
-          const: token.type,
-        },
-        description: {
-          type: 'string',
-        },
-        a11y: {
-          type: ['boolean', 'string'],
-        },
-      },
+      properties: tokenProperties,
     };
   }
 
-  // Build the module schema
+  return properties;
+}
+
+function generateValueDefinitions(
+  tokenData: TokenData,
+  refsByType: Record<string, string[]>
+): Record<string, any> {
+  const definitions: Record<string, any> = {};
+
+  for (const tokenObj of Object.values(tokenData)) {
+    if (!tokenObj || typeof tokenObj !== 'object' || !('type' in tokenObj)) continue;
+    const type = String((tokenObj as TokenObject).type);
+    const key = `${type}Value`;
+    if (definitions[key]) continue;
+
+    definitions[key] = { type: ['string', 'number'] };
+    if (refsByType[type]?.length) definitions[key].examples = refsByType[type];
+  }
+
+  return definitions;
+}
+
+/** Unwrapped `zbk-*.tokens.json` files authored by consumers and repository themes. */
+function generateTokenSchema(
+  module: ManifestModule,
+  tokenData: TokenData,
+  refsByType: Record<string, string[]>
+): object {
   return {
     $schema: 'http://json-schema.org/draft-07/schema',
-    title: `Zebkit ${module.key} Tokens`,
+    title: `Zebkit ${module.key} Token Overrides`,
+    description: `Authorable overrides for the ${module.key} token module.`,
     type: 'object',
-    required: [module.key],
     additionalProperties: false,
-    properties: {
-      [module.key]: {
-        type: 'object',
-        additionalProperties: false,
-        properties,
-      },
-    },
+    definitions: generateValueDefinitions(tokenData, refsByType),
+    properties: generateTokenProperties(tokenData),
   };
 }
 
@@ -204,7 +275,9 @@ async function buildEditor() {
 
   try {
     await fs.ensureDir(editorDir);
-    await fs.ensureDir(schemasDir);
+    await fs.emptyDir(schemasDir);
+    await fs.emptyDir(sourceTokenSchemasDir);
+    await fs.ensureDir(path.dirname(repositorySettingsPath));
 
     const manifestPath = path.join(defaultsDir, 'manifest.json');
     const manifest = await fs.readJson(manifestPath) as { modules: ManifestModule[] };
@@ -243,18 +316,35 @@ async function buildEditor() {
       console.log(`  Found ${refs.length} ${type} references`);
     }
 
-    // PASS 2: Generate and write per-module schemas
+    // PASS 2: Generate the one canonical schema used by every *.tokens.json file.
     console.log('\nGenerating per-module schemas...');
+
+    const repositorySchemaAssociations: Array<{ fileMatch: string[]; url: string }> = [];
 
     for (const module of manifest.modules) {
       const tokenFilePath = path.join(defaultsDir, module.file);
       const tokenData = await fs.readJson(tokenFilePath) as TokenData;
 
-      const moduleSchema = generateModuleSchema(module, tokenData, refsByType);
-      const schemaPath = path.join(schemasDir, `${module.key}.schema.json`);
-      await fs.writeJson(schemaPath, moduleSchema, { spaces: 2 });
-      console.log(`  Written: ${schemaPath}`);
+      const tokenSchema = generateTokenSchema(module, tokenData, refsByType);
+      const schemaFileName = `${module.key}.schema.json`;
+      const distSchemaPath = path.join(schemasDir, schemaFileName);
+      const sourceSchemaPath = path.join(sourceTokenSchemasDir, schemaFileName);
+      await fs.writeJson(distSchemaPath, tokenSchema, { spaces: 2 });
+      await fs.writeJson(sourceSchemaPath, tokenSchema, { spaces: 2 });
+      console.log(`  Written: ${distSchemaPath}`);
+
+      repositorySchemaAssociations.push({
+        fileMatch: [`/theme/**/${module.key}.tokens.json`],
+        url: `./schemas/tokens/${schemaFileName}`,
+      });
     }
+
+    await fs.writeJson(
+      repositorySettingsPath,
+      { 'json.schemas': repositorySchemaAssociations },
+      { spaces: 2 }
+    );
+    console.log(`  Written: ${repositorySettingsPath}`);
 
     // The tracked source copy powers this repository's own configs; the dist copy ships
     // with the package. Both come from the runtime schema object used by config.ts.

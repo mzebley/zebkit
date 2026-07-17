@@ -1,6 +1,7 @@
 export const ZEBKIT_CONFIG_SCHEMA_FILENAME = 'zebkit.config.schema.json';
 export const ZEBKIT_CONFIG_CONSUMER_SCHEMA_PATH =
   './node_modules/zebkit/dist/editor/schemas/zebkit.config.schema.json';
+export const CURRENT_ZEBKIT_CONFIG_VERSION = 1;
 
 const stringArray = (description: string) => ({
   type: 'array',
@@ -74,8 +75,15 @@ export const ZEBKIT_CONFIG_SCHEMA = {
   title: 'Zebkit configuration',
   description: 'Build, theme, component, pruning, and agent-context settings for Zebkit.',
   type: 'object',
+  required: ['configVersion'],
   additionalProperties: false,
   properties: {
+    configVersion: {
+      type: 'integer',
+      const: CURRENT_ZEBKIT_CONFIG_VERSION,
+      description:
+        'Zebkit config format version required by this release.',
+    },
     $schema: {
       type: 'string',
       description: 'Path or URL to the Zebkit config JSON Schema used by the editor.',

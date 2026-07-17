@@ -1,6 +1,7 @@
 import path from 'path';
 import type { ZebkitConfig } from '../../scripts/config';
 import { resolveComponentsFilter } from '../../scripts/components-config';
+import { getPullStatePath, readTokenSnapshot, syncTokenSnapshot } from '../pull-state';
 import { copyAgentContext, writeVscodeSettings, type ContextCopyDeps } from './init-command';
 
 export interface PullCommandDeps extends ContextCopyDeps {
@@ -11,6 +12,7 @@ export interface PullCommandDeps extends ContextCopyDeps {
   getZebkitDefaultsDir: () => string;
   getZebkitPackageRoot: () => string;
   getZebkitContextDir: () => string;
+  getProjectDir: () => string;
   /** Maps a base preset name to its bundled token snapshot dir (defaults dir for `default`). */
   resolveBundledThemeTokensDir: (
     themeName: string,
@@ -28,14 +30,14 @@ export interface PullCommandDeps extends ContextCopyDeps {
  */
 async function refreshAgentContext(
   config: ZebkitConfig,
-  configPath: string,
+  projectDir: string,
   deps: PullCommandDeps
 ): Promise<void> {
   const contextPath = config.context?.path;
   if (!contextPath) return; // omitted or false = opted out
 
   const { excluded } = resolveComponentsFilter(config.components);
-  const targetDir = path.resolve(path.dirname(configPath), contextPath);
+  const targetDir = path.resolve(projectDir, contextPath);
   const copied = await copyAgentContext(
     targetDir,
     deps.getZebkitContextDir(),
@@ -47,56 +49,6 @@ async function refreshAgentContext(
   }
 }
 
-async function countNewKeys(
-  defaultTokenData: Record<string, unknown>,
-  projectFilePath: string,
-  moduleKey: string,
-  deps: Pick<PullCommandDeps, 'pathExists' | 'readJson'>
-): Promise<number> {
-  if (!(await deps.pathExists(projectFilePath))) {
-    return 0;
-  }
-
-  const projectFile = (await deps.readJson(projectFilePath)) as Record<string, any>;
-  const defaultData = { ...defaultTokenData };
-  delete (defaultData as any)._key;
-  delete (defaultData as any)._layer;
-
-  const projectTokens = projectFile[moduleKey] || {};
-  let newKeysCount = 0;
-
-  for (const key of Object.keys(defaultData)) {
-    if (!(key in projectTokens)) {
-      newKeysCount++;
-    }
-  }
-
-  return newKeysCount;
-}
-
-async function mergeTokenFile(
-  defaultTokenData: Record<string, unknown>,
-  projectFilePath: string,
-  moduleKey: string,
-  deps: Pick<PullCommandDeps, 'readJson' | 'writeJson'>
-): Promise<void> {
-  const projectFile = (await deps.readJson(projectFilePath)) as Record<string, any>;
-  const defaultData = { ...defaultTokenData };
-  delete (defaultData as any)._key;
-  delete (defaultData as any)._layer;
-
-  const projectTokens = projectFile[moduleKey] || {};
-
-  for (const [key, value] of Object.entries(defaultData)) {
-    if (!(key in projectTokens)) {
-      projectTokens[key] = value;
-    }
-  }
-
-  projectFile[moduleKey] = projectTokens;
-  await deps.writeJson(projectFilePath, projectFile, { spaces: 2 });
-}
-
 export async function runPullCommand(deps: PullCommandDeps) {
   deps.log('Syncing tokens...\n');
 
@@ -106,10 +58,12 @@ export async function runPullCommand(deps: PullCommandDeps) {
     process.exit(1);
   }
 
-  const { config, path: configPath } = configResult;
+  const { path: configPath } = configResult;
+  const projectDir = deps.getProjectDir();
+  const config = configResult.config;
 
   // Agent context is independent of tokens — refresh it before the tokenPath gate.
-  await refreshAgentContext(config, configPath, deps);
+  await refreshAgentContext(config, projectDir, deps);
 
   const customTokenPath = config.tokens?.tokenPath;
 
@@ -131,7 +85,9 @@ export async function runPullCommand(deps: PullCommandDeps) {
     deps.getZebkitPackageRoot()
   );
 
-  const tokensDir = path.resolve(path.dirname(configPath), customTokenPath);
+  // Config paths follow the build command's established convention: they are
+  // relative to the project working directory, even when --config is nested.
+  const tokensDir = path.resolve(projectDir, customTokenPath);
   const manifestPath = path.join(sourceDir, 'manifest.json');
 
   if (!(await deps.pathExists(manifestPath))) {
@@ -144,57 +100,43 @@ export async function runPullCommand(deps: PullCommandDeps) {
 
   await deps.ensureDir(tokensDir);
 
-  const manifest = (await deps.readJson(manifestPath)) as {
-    modules: Array<{ key: string; file: string }>;
-  };
+  const snapshot = await readTokenSnapshot(sourceDir, deps);
+  const summary = await syncTokenSnapshot({
+    tokensDir,
+    configPath,
+    basePreset,
+    snapshot,
+    deps,
+  });
 
-  const results: Array<{ file: string; status: 'added' | 'updated'; count?: number }> = [];
+  const changedCount =
+    summary.filesAdded.length +
+    summary.filesRemoved.length +
+    summary.keysAdded +
+    summary.defaultsUpdated +
+    summary.keysRemoved;
 
-  for (const mod of manifest.modules) {
-    const srcFile = path.join(sourceDir, mod.file);
-    const destFile = path.join(tokensDir, mod.file);
-    const raw = (await deps.readJson(srcFile)) as Record<string, unknown>;
-    const { _key, _layer, ...defaultTokenData } = raw;
-
-    const fileExists = await deps.pathExists(destFile);
-
-    if (!fileExists) {
-      await deps.writeJson(destFile, { [mod.key]: defaultTokenData }, { spaces: 2 });
-      results.push({ file: mod.file, status: 'added' });
-    } else {
-      const newKeysCount = await countNewKeys(defaultTokenData, destFile, mod.key, deps);
-
-      if (newKeysCount > 0) {
-        await mergeTokenFile(defaultTokenData, destFile, mod.key, deps);
-        results.push({ file: mod.file, status: 'updated', count: newKeysCount });
-      }
-    }
-  }
-
-  if (results.length === 0) {
+  if (changedCount === 0) {
     deps.log('Already up to date.');
   } else {
-    const added = results.filter((r) => r.status === 'added');
-    const updated = results.filter((r) => r.status === 'updated');
-
-    const maxLen = Math.max(...results.map((r) => r.file.length), 0);
-
-    for (const result of added) {
-      const filename = result.file.replace('.json', '');
-      deps.log(`  + ${filename}.json${' '.repeat(Math.max(0, maxLen - result.file.length))} (new)`);
-    }
-
-    for (const result of updated) {
-      const filename = result.file.replace('.json', '');
-      deps.log(`  ~ ${filename}.json${' '.repeat(Math.max(0, maxLen - result.file.length))} (${result.count} new key${result.count === 1 ? '' : 's'} added)`);
-    }
-
-    deps.log('');
-    deps.log(
-      `${added.length} file${added.length === 1 ? '' : 's'} added, ${updated.length} file${updated.length === 1 ? '' : 's'} updated.`
-    );
+    const parts = [
+      summary.filesAdded.length && `${summary.filesAdded.length} file${summary.filesAdded.length === 1 ? '' : 's'} added`,
+      summary.filesRemoved.length && `${summary.filesRemoved.length} untouched retired file${summary.filesRemoved.length === 1 ? '' : 's'} removed`,
+      summary.keysAdded && `${summary.keysAdded} new key${summary.keysAdded === 1 ? '' : 's'} added`,
+      summary.defaultsUpdated && `${summary.defaultsUpdated} untouched default${summary.defaultsUpdated === 1 ? '' : 's'} updated`,
+      summary.keysRemoved && `${summary.keysRemoved} untouched retired key${summary.keysRemoved === 1 ? '' : 's'} removed`,
+    ].filter(Boolean);
+    deps.log(parts.join(', ') + '.');
   }
 
-  await writeVscodeSettings(path.dirname(configPath), customTokenPath, manifest.modules, deps);
+  if (summary.establishedBaseline) {
+    const statePath = path.relative(path.dirname(configPath), getPullStatePath(configPath));
+    deps.log(`Established ${statePath} baseline; commit this file with the project.`);
+  }
+  for (const token of summary.preservedRetired) {
+    deps.log(`Warning: preserved customized retired token ${token}; migrate or remove it manually.`);
+  }
+
+  await writeVscodeSettings(projectDir, customTokenPath, snapshot.manifest.modules, deps);
   deps.log('Updated .vscode/settings.json for editor support');
 }

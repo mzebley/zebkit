@@ -541,7 +541,7 @@ function resolveDefault(option: ConfigOption, ctx: PromptContext): unknown {
  */
 export function buildQuestions(
   tiers: OptionTier[],
-  current: ZebkitConfig,
+  current: Partial<ZebkitConfig>,
   ctx: PromptContext
 ): Question[] {
   return CONFIG_OPTIONS.filter((o) => tiers.includes(o.tier)).map((option) => {

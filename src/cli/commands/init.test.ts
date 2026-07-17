@@ -64,9 +64,9 @@ describe('init command', () => {
 
   const tokenReadJson = (target: string) => {
     if (target === '/pkg/dist/cli/presets/dynamowaves/manifest.json') {
-      return { modules: [{ key: 'zbk-button', file: 'zbk-button.tokens.json' }] };
+      return { modules: [{ key: 'zbk-button', file: 'zbk-button.json' }] };
     }
-    if (target === '/pkg/dist/cli/presets/dynamowaves/zbk-button.tokens.json') {
+    if (target === '/pkg/dist/cli/presets/dynamowaves/zbk-button.json') {
       return {
         _key: 'zbk-button',
         _layer: 'components',
@@ -112,11 +112,12 @@ describe('init command', () => {
     expect(mockEnsureDir).toHaveBeenCalledWith('/workspace/project/tokens');
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
-      { 'zbk-button': { canvas: { value: '#fff', type: 'color' } } },
+      { canvas: { value: '#fff', type: 'color' } },
       { spaces: 2 }
     );
 
     const written = findWrittenConfig();
+    expect(written.configVersion).toBe(1);
     expect(written.$schema).toBe(
       './node_modules/zebkit/dist/editor/schemas/zebkit.config.schema.json'
     );
@@ -133,6 +134,17 @@ describe('init command', () => {
     expect(written.tokens.exportTokens).toBe(false);
     expect(written.tokens.outputFormats).toEqual(['JSON']);
     expect(written.tokens.extendedTokens.breakpoints).toBe(true);
+    expect(mockWriteJson).toHaveBeenCalledWith(
+      '/workspace/project/.zebkit/pull-state.json',
+      expect.objectContaining({
+        stateVersion: 1,
+        basePreset: 'dynamowaves',
+        modules: expect.objectContaining({
+          'zbk-button': expect.objectContaining({ file: 'zbk-button.tokens.json' }),
+        }),
+      }),
+      { spaces: 2 }
+    );
   });
 
   it('asks only quick prompts but still writes a complete config (--quick)', async () => {
@@ -298,11 +310,11 @@ describe('writeVscodeSettings', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['/tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.tokens.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
           {
-            fileMatch: ['/tokens/zbk-app.json'],
+            fileMatch: ['/tokens/zbk-app.tokens.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
           },
         ],
@@ -327,11 +339,11 @@ describe('writeVscodeSettings', () => {
         'editor.defaultFormatter': 'prettier',
         'json.schemas': [
           {
-            fileMatch: ['/tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.tokens.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
           {
-            fileMatch: ['/tokens/zbk-app.json'],
+            fileMatch: ['/tokens/zbk-app.tokens.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
           },
         ],
@@ -345,11 +357,11 @@ describe('writeVscodeSettings', () => {
     mockReadJsonSafe.mockResolvedValue({
       'json.schemas': [
         {
-          fileMatch: ['/tokens/zbk-button.json'],
+          fileMatch: ['/tokens/zbk-button.tokens.json'],
           url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
         },
         {
-          fileMatch: ['/tokens/zbk-app.json'],
+          fileMatch: ['/tokens/zbk-app.tokens.json'],
           url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
         },
       ],
@@ -363,16 +375,35 @@ describe('writeVscodeSettings', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['/tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.tokens.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
           {
-            fileMatch: ['/tokens/zbk-app.json'],
+            fileMatch: ['/tokens/zbk-app.tokens.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-app.schema.json',
           },
         ],
         'css.customData': ['./node_modules/zebkit/dist/editor/zebkit.css-data.json'],
       },
+      { spaces: 2 }
+    );
+  });
+
+  it('keeps repository-local schemas instead of adding broken self-package URLs', async () => {
+    const repositorySchemas = mockModules.map((module) => ({
+        fileMatch: [`/theme/**/${module.key}.tokens.json`],
+        url: `./schemas/tokens/${module.key}.schema.json`,
+      }));
+    mockReadJsonSafe.mockResolvedValue({
+      'json.schemas': repositorySchemas,
+      'css.customData': ['./node_modules/zebkit/dist/editor/zebkit.css-data.json'],
+    });
+
+    await writeVscodeSettings('/project', './theme/zebkit-docs', mockModules, createVscodeDeps());
+
+    expect(mockWriteJson).toHaveBeenCalledWith(
+      '/project/.vscode/settings.json',
+      { 'json.schemas': repositorySchemas },
       { spaces: 2 }
     );
   });

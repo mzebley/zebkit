@@ -1,0 +1,336 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-font-weight Token Overrides",
+  "description": "Authorable overrides for the zbk-font-weight token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "fontWeightValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{h1.font-weight}",
+        "{h2.font-weight}",
+        "{h3.font-weight}",
+        "{h4.font-weight}",
+        "{h5.font-weight}",
+        "{h6.font-weight}",
+        "{lede.font-weight}",
+        "{list.font-weight}",
+        "{p.font-weight}",
+        "{font-weight.thin}",
+        "{font-weight.extralight}",
+        "{font-weight.light}",
+        "{font-weight.normal}",
+        "{font-weight.medium}",
+        "{font-weight.semibold}",
+        "{font-weight.bold}",
+        "{font-weight.extrabold}",
+        "{font-weight.black}",
+        "{button.font-weight}",
+        "{checkbox.font-weight}",
+        "{input.font-weight}",
+        "{input.label-font-weight}",
+        "{radio.font-weight}",
+        "{select.font-weight}",
+        "{select.label-font-weight}",
+        "{textarea.font-weight}",
+        "{textarea.label-font-weight}",
+        "{toggle.font-weight}",
+        "{tooltip.font-weight}"
+      ]
+    }
+  },
+  "properties": {
+    "thin": {
+      "type": "object",
+      "description": "Lightest font weight.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/fontWeightValue"
+        },
+        "type": {
+          "const": "fontWeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "extralight": {
+      "type": "object",
+      "description": "Lighter font weight.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/fontWeightValue"
+        },
+        "type": {
+          "const": "fontWeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "light": {
+      "type": "object",
+      "description": "Light font weight.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/fontWeightValue"
+        },
+        "type": {
+          "const": "fontWeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "normal": {
+      "type": "object",
+      "description": "Default font weight.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/fontWeightValue"
+        },
+        "type": {
+          "const": "fontWeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "medium": {
+      "type": "object",
+      "description": "Medium font weight.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/fontWeightValue"
+        },
+        "type": {
+          "const": "fontWeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "semibold": {
+      "type": "object",
+      "description": "Semibold font weight.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/fontWeightValue"
+        },
+        "type": {
+          "const": "fontWeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "bold": {
+      "type": "object",
+      "description": "Bold font weight.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/fontWeightValue"
+        },
+        "type": {
+          "const": "fontWeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "extrabold": {
+      "type": "object",
+      "description": "Bolder font weight.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/fontWeightValue"
+        },
+        "type": {
+          "const": "fontWeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "black": {
+      "type": "object",
+      "description": "Boldest font weight.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/fontWeightValue"
+        },
+        "type": {
+          "const": "fontWeight"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}

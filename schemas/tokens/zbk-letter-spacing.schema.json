@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-letter-spacing Token Overrides",
+  "description": "Authorable overrides for the zbk-letter-spacing token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "letterSpacingValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{h1.letter-spacing}",
+        "{h2.letter-spacing}",
+        "{h3.letter-spacing}",
+        "{h4.letter-spacing}",
+        "{h5.letter-spacing}",
+        "{h6.letter-spacing}",
+        "{lede.letter-spacing}",
+        "{list.letter-spacing}",
+        "{p.letter-spacing}",
+        "{letter-spacing.tighter}",
+        "{letter-spacing.tight}",
+        "{letter-spacing.normal}",
+        "{letter-spacing.wide}",
+        "{letter-spacing.wider}",
+        "{button.letter-spacing}",
+        "{checkbox.letter-spacing}",
+        "{input.letter-spacing}",
+        "{radio.letter-spacing}",
+        "{select.letter-spacing}",
+        "{textarea.letter-spacing}",
+        "{toggle.letter-spacing}",
+        "{tooltip.letter-spacing}"
+      ]
+    }
+  },
+  "properties": {
+    "tighter": {
+      "type": "object",
+      "description": "",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/letterSpacingValue"
+        },
+        "type": {
+          "const": "letterSpacing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "tight": {
+      "type": "object",
+      "description": "",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/letterSpacingValue"
+        },
+        "type": {
+          "const": "letterSpacing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "normal": {
+      "type": "object",
+      "description": "",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/letterSpacingValue"
+        },
+        "type": {
+          "const": "letterSpacing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "wide": {
+      "type": "object",
+      "description": "",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/letterSpacingValue"
+        },
+        "type": {
+          "const": "letterSpacing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "wider": {
+      "type": "object",
+      "description": "",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/letterSpacingValue"
+        },
+        "type": {
+          "const": "letterSpacing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}

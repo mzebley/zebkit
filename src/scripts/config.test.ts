@@ -24,6 +24,7 @@ describe('validateKnownConfigItems', () => {
   it('accepts known keys throughout the config grammar', () => {
     expect(() =>
       validateKnownConfigItems({
+        configVersion: 1,
         $schema: './node_modules/zebkit/dist/editor/schemas/zebkit.config.schema.json',
         tokens: {
           destinationPath: './dist',
@@ -44,6 +45,15 @@ describe('validateKnownConfigItems', () => {
         context: { path: './zebkit/context' },
       })
     ).not.toThrow();
+  });
+
+  it('requires the config version used by this release', () => {
+    expect(() => validateKnownConfigItems({ tokens: {} })).toThrow(
+      'Missing required config item `configVersion`'
+    );
+    expect(() => validateKnownConfigItems({ configVersion: 2, tokens: {} })).toThrow(
+      'Invalid config value at `configVersion`. Expected 1.'
+    );
   });
 
   it('rejects a duplicate tokens wrapper and names the exact move', () => {
@@ -83,7 +93,10 @@ describe('validateKnownConfigItems', () => {
   it('runs unknown-key validation when loading a config file', async () => {
     const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-config-'));
     const configPath = path.join(directory, 'zebkit.config.json');
-    await fs.writeJson(configPath, { tokens: { fonst: { strategy: 'link' } } });
+    await fs.writeJson(configPath, {
+      configVersion: 1,
+      tokens: { fonst: { strategy: 'link' } },
+    });
 
     try {
       await expect(loadZebkitConfig(configPath)).rejects.toThrow(

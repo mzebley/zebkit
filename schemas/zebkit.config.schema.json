@@ -4,8 +4,16 @@
   "title": "Zebkit configuration",
   "description": "Build, theme, component, pruning, and agent-context settings for Zebkit.",
   "type": "object",
+  "required": [
+    "configVersion"
+  ],
   "additionalProperties": false,
   "properties": {
+    "configVersion": {
+      "type": "integer",
+      "const": 1,
+      "description": "Zebkit config format version required by this release."
+    },
     "$schema": {
       "type": "string",
       "description": "Path or URL to the Zebkit config JSON Schema used by the editor."

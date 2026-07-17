@@ -1,0 +1,240 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-text-measure Token Overrides",
+  "description": "Authorable overrides for the zbk-text-measure token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "sizingValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{focus.width}",
+        "{h1.measure}",
+        "{h2.measure}",
+        "{h3.measure}",
+        "{h4.measure}",
+        "{h5.measure}",
+        "{h6.measure}",
+        "{lede.measure}",
+        "{list.measure}",
+        "{p.measure}",
+        "{spacing.card}",
+        "{spacing.mobile}",
+        "{spacing.mobile-lg}",
+        "{spacing.tablet}",
+        "{spacing.tablet-lg}",
+        "{spacing.desktop}",
+        "{spacing.desktop-lg}",
+        "{spacing.widescreen}",
+        "{spacing.section}",
+        "{spacing.aside}",
+        "{text-measure.1}",
+        "{text-measure.2}",
+        "{text-measure.3}",
+        "{text-measure.4}",
+        "{text-measure.5}",
+        "{button.width}",
+        "{button.min-width}",
+        "{button.max-width}",
+        "{button.height}",
+        "{button.min-height}",
+        "{button.max-height}",
+        "{button.icon-size}",
+        "{button.icon-start-size}",
+        "{button.icon-end-size}",
+        "{checkbox.control-width}",
+        "{checkbox.control-height}",
+        "{checkbox.indicator-size}",
+        "{input.icon-size}",
+        "{input.width}",
+        "{input.min-width}",
+        "{input.max-width}",
+        "{input.min-height}",
+        "{radio.control-width}",
+        "{radio.control-height}",
+        "{radio.indicator-size}",
+        "{select.icon-size}",
+        "{select.indicator-size}",
+        "{select.width}",
+        "{select.min-width}",
+        "{select.max-width}",
+        "{select.min-height}",
+        "{textarea.width}",
+        "{textarea.min-width}",
+        "{textarea.max-width}",
+        "{textarea.min-block-size}",
+        "{toggle.track-width}",
+        "{toggle.track-height}",
+        "{toggle.thumb-size}",
+        "{tooltip.max-width}",
+        "{tooltip.arrow-size}",
+        "{tooltip.offset}"
+      ]
+    }
+  },
+  "properties": {
+    "1": {
+      "type": "object",
+      "description": "Cards, sidebars, tight UI.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/sizingValue"
+        },
+        "type": {
+          "const": "sizing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "2": {
+      "type": "object",
+      "description": "Short text blocks, captions.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/sizingValue"
+        },
+        "type": {
+          "const": "sizing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "3": {
+      "type": "object",
+      "description": "Base body content measure.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/sizingValue"
+        },
+        "type": {
+          "const": "sizing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "4": {
+      "type": "object",
+      "description": "Articles, long-form content.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/sizingValue"
+        },
+        "type": {
+          "const": "sizing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "5": {
+      "type": "object",
+      "description": "Articles, long-form content.",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/sizingValue"
+        },
+        "type": {
+          "const": "sizing"
+        },
+        "description": {
+          "type": "string"
+        },
+        "a11y": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "additional": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}

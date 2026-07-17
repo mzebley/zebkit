@@ -5,6 +5,8 @@ import { ZEBKIT_PREFIX } from '@config';
 
 export { isVariantOverrideFile } from './compile-variant-helpers';
 
+const CANONICAL_TOKEN_OVERRIDE_FILE = /^(zbk-[a-z0-9-]+)\.tokens\.json$/;
+
 export function validateTokenExport(tokenExport: unknown, schema: ZodSchema): string[] {
   try {
     schema.parse(tokenExport);
@@ -18,24 +20,11 @@ export function validateTokenExport(tokenExport: unknown, schema: ZodSchema): st
 }
 
 export function inferTokenKeyFromFilename(filePath: string): string | undefined {
-  const baseName = path.basename(filePath, path.extname(filePath));
-  if (!baseName) return undefined;
+  return path.basename(filePath).match(CANONICAL_TOKEN_OVERRIDE_FILE)?.[1];
+}
 
-  const knownSuffixes = ['.tokens'];
-  let normalized = baseName;
-
-  for (const suffix of knownSuffixes) {
-    if (normalized.endsWith(suffix)) {
-      normalized = normalized.slice(0, -suffix.length);
-      break;
-    }
-  }
-
-  if (!normalized) return undefined;
-
-  return normalized.startsWith(`${ZEBKIT_PREFIX}-`)
-    ? normalized
-    : `${ZEBKIT_PREFIX}-${normalized}`;
+export function isCanonicalTokenOverrideFile(filePath: string): boolean {
+  return CANONICAL_TOKEN_OVERRIDE_FILE.test(path.basename(filePath));
 }
 
 export function mergeOverrideObject(

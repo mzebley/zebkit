@@ -11,6 +11,7 @@ import { ZEBKIT_PREFIX } from '@config';
 import {
   buildFilePayload,
   inferTokenKeyFromFilename,
+  isCanonicalTokenOverrideFile,
   isVariantOverrideFile,
   mergeOverrideObject,
   mergeTokens,
@@ -245,8 +246,13 @@ async function applyCustomOverrides(
 
     const stats = await fs.stat(resolvedOverridePath);
     if (stats.isFile()) {
-      const customTokenData = await fs.readJson(resolvedOverridePath);
-      mergeOverrideObject(customTokenData, tokens, tokenSchemas, touched, excludedModuleKeys);
+      await applyTokenOverrideFile(
+        resolvedOverridePath,
+        tokens,
+        tokenSchemas,
+        touched,
+        excludedModuleKeys
+      );
     } else if (stats.isDirectory()) {
       const overrideFiles = await glob('**/*.json', {
         cwd: resolvedOverridePath,
@@ -255,14 +261,7 @@ async function applyCustomOverrides(
       });
 
       for (const file of overrideFiles) {
-        const data = await fs.readJson(file);
-        const inferredKey = inferTokenKeyFromFilename(file);
-
-        if (Object.keys(data).some((key) => key.startsWith(`${ZEBKIT_PREFIX}-`))) {
-          mergeOverrideObject(data, tokens, tokenSchemas, touched, excludedModuleKeys);
-        } else if (inferredKey && tokens[inferredKey]) {
-          mergeOverrideObject({ [inferredKey]: data }, tokens, tokenSchemas, touched);
-        } else if (isVariantOverrideFile(file)) {
+        if (isVariantOverrideFile(file)) {
           console.info(
             chalk.gray(
               `Detected variant override file '${path.basename(
@@ -270,17 +269,13 @@ async function applyCustomOverrides(
               )}'. It will be applied during variant processing.`
             )
           );
-        } else if (inferredKey && excludedModuleKeys.has(inferredKey)) {
-          console.warn(
-            chalk.yellow(
-              `Override file '${path.basename(file)}' targets component ` +
-                `"${inferredKey.slice(ZEBKIT_PREFIX.length + 1)}", which is excluded by the ` +
-                `components config. Remove the file or re-include the component.`
-            )
-          );
         } else {
-          console.warn(
-            chalk.yellow(`No matching token key for override file: ${path.basename(file)}`)
+          await applyTokenOverrideFile(
+            file,
+            tokens,
+            tokenSchemas,
+            touched,
+            excludedModuleKeys
           );
         }
       }
@@ -296,9 +291,60 @@ async function applyCustomOverrides(
   }
 }
 
+async function applyTokenOverrideFile(
+  file: string,
+  tokens: Record<string, TokenInterface>,
+  tokenSchemas: Record<string, ZodSchema>,
+  touched: Record<string, Set<string>> | undefined,
+  excludedModuleKeys: ReadonlySet<string>
+): Promise<void> {
+  if (!isCanonicalTokenOverrideFile(file)) {
+    const basename = path.basename(file);
+    const stem = basename.replace(/\.json$/i, '').replace(/\.tokens$/i, '');
+    const suggested = stem.startsWith(`${ZEBKIT_PREFIX}-`)
+      ? `${stem}.tokens.json`
+      : `${ZEBKIT_PREFIX}-${stem}.tokens.json`;
+    throw new Error(
+      `Invalid token override filename '${basename}'. ` +
+        `Token override files must use 'zbk-<module>.tokens.json'; rename it to '${suggested}'.`
+    );
+  }
+
+  const data = await fs.readJson(file);
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    throw new Error(`Token override file '${path.basename(file)}' must contain a JSON object.`);
+  }
+  if (Object.keys(data).some((key) => key.startsWith(`${ZEBKIT_PREFIX}-`))) {
+    throw new Error(
+      `Token override file '${path.basename(file)}' must contain an unwrapped token object. ` +
+        `Remove the outer '${inferTokenKeyFromFilename(file)}' key.`
+    );
+  }
+
+  const inferredKey = inferTokenKeyFromFilename(file)!;
+  if (tokens[inferredKey]) {
+    mergeOverrideObject({ [inferredKey]: data }, tokens, tokenSchemas, touched);
+    return;
+  }
+  if (excludedModuleKeys.has(inferredKey)) {
+    console.warn(
+      chalk.yellow(
+        `Override file '${path.basename(file)}' targets component ` +
+          `"${inferredKey.slice(ZEBKIT_PREFIX.length + 1)}", which is excluded by the ` +
+          `components config. Remove the file or re-include the component.`
+      )
+    );
+    return;
+  }
+  throw new Error(
+    `Token override file '${path.basename(file)}' does not match a token module in this build.`
+  );
+}
+
 export {
   buildFilePayload,
   inferTokenKeyFromFilename,
+  isCanonicalTokenOverrideFile,
   isVariantOverrideFile,
   mergeOverrideObject,
   mergeTokens,

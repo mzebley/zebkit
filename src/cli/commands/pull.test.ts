@@ -44,14 +44,16 @@ describe('pull command', () => {
     getZebkitDefaultsDir: mockGetZebkitDefaultsDir,
     getZebkitPackageRoot: mockGetZebkitPackageRoot,
     getZebkitContextDir: mockGetZebkitContextDir,
+    getProjectDir: () => '/workspace/project',
     resolveBundledThemeTokensDir: mockResolveBundledThemeTokensDir,
     log: mockLog,
   });
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockReaddir.mockResolvedValue([]);
     mockReadConfig.mockResolvedValue({
-      config: { tokens: { tokenPath: './tokens' } },
+      config: { configVersion: 1, tokens: { tokenPath: './tokens' } },
       path: '/workspace/project/zebkit.config.json',
     });
     mockGetZebkitDefaultsDir.mockReturnValue('/pkg/dist/cli/defaults');
@@ -61,7 +63,7 @@ describe('pull command', () => {
   it('writes VS Code settings after syncing new token files', async () => {
     mockPathExists.mockImplementation(async (target: string) => {
       if (target === '/pkg/dist/cli/defaults/manifest.json') return true;
-      if (target === '/workspace/project/tokens/zbk-button.json') return false;
+      if (target === '/workspace/project/tokens/zbk-button.tokens.json') return false;
       return false;
     });
 
@@ -85,11 +87,9 @@ describe('pull command', () => {
 
     expect(mockEnsureDir).toHaveBeenCalledWith('/workspace/project/tokens');
     expect(mockWriteJson).toHaveBeenCalledWith(
-      '/workspace/project/tokens/zbk-button.json',
+      '/workspace/project/tokens/zbk-button.tokens.json',
       {
-        'zbk-button': {
-          canvas: { value: '#fff', type: 'color', description: 'Background.' },
-        },
+        canvas: { value: '#fff', type: 'color', description: 'Background.' },
       },
       { spaces: 2 }
     );
@@ -99,7 +99,7 @@ describe('pull command', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['/tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.tokens.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
         ],
@@ -114,7 +114,7 @@ describe('pull command', () => {
   it('writes VS Code settings even when already up to date', async () => {
     mockPathExists.mockImplementation(async (target: string) => {
       if (target === '/pkg/dist/cli/defaults/manifest.json') return true;
-      if (target === '/workspace/project/tokens/zbk-button.json') return true;
+      if (target === '/workspace/project/tokens/zbk-button.tokens.json') return true;
       return false;
     });
 
@@ -129,11 +129,9 @@ describe('pull command', () => {
           canvas: { value: '#fff', type: 'color', description: 'Background.' },
         };
       }
-      if (target === '/workspace/project/tokens/zbk-button.json') {
+      if (target === '/workspace/project/tokens/zbk-button.tokens.json') {
         return {
-          'zbk-button': {
-            canvas: { value: '#fff', type: 'color', description: 'Background.' },
-          },
+          canvas: { value: '#fff', type: 'color', description: 'Background.' },
         };
       }
       throw new Error(`Unexpected readJson target: ${target}`);
@@ -150,7 +148,7 @@ describe('pull command', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['/tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.tokens.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
         ],
@@ -165,7 +163,7 @@ describe('pull command', () => {
   it('writes VS Code settings after merging updated token files', async () => {
     mockPathExists.mockImplementation(async (target: string) => {
       if (target === '/pkg/dist/cli/defaults/manifest.json') return true;
-      if (target === '/workspace/project/tokens/zbk-button.json') return true;
+      if (target === '/workspace/project/tokens/zbk-button.tokens.json') return true;
       return false;
     });
 
@@ -181,11 +179,9 @@ describe('pull command', () => {
           newKey: { value: '#000', type: 'color', description: 'New key.' },
         };
       }
-      if (target === '/workspace/project/tokens/zbk-button.json') {
+      if (target === '/workspace/project/tokens/zbk-button.tokens.json') {
         return {
-          'zbk-button': {
-            canvas: { value: '#fff', type: 'color', description: 'Background.' },
-          },
+          canvas: { value: '#fff', type: 'color', description: 'Background.' },
         };
       }
       throw new Error(`Unexpected readJson target: ${target}`);
@@ -196,12 +192,10 @@ describe('pull command', () => {
     await runPullCommand(createDeps());
 
     expect(mockWriteJson).toHaveBeenCalledWith(
-      '/workspace/project/tokens/zbk-button.json',
+      '/workspace/project/tokens/zbk-button.tokens.json',
       {
-        'zbk-button': {
-          canvas: { value: '#fff', type: 'color', description: 'Background.' },
-          newKey: { value: '#000', type: 'color', description: 'New key.' },
-        },
+        canvas: { value: '#fff', type: 'color', description: 'Background.' },
+        newKey: { value: '#000', type: 'color', description: 'New key.' },
       },
       { spaces: 2 }
     );
@@ -211,7 +205,7 @@ describe('pull command', () => {
       {
         'json.schemas': [
           {
-            fileMatch: ['/tokens/zbk-button.json'],
+            fileMatch: ['/tokens/zbk-button.tokens.json'],
             url: './node_modules/zebkit/dist/editor/schemas/zbk-button.schema.json',
           },
         ],
@@ -225,7 +219,7 @@ describe('pull command', () => {
 
   it('pulls from the configured base preset snapshot, not the default theme', async () => {
     mockReadConfig.mockResolvedValue({
-      config: { tokens: { tokenPath: './tokens', basePreset: 'dusk' } },
+      config: { configVersion: 1, tokens: { tokenPath: './tokens', basePreset: 'dusk' } },
       path: '/workspace/project/zebkit.config.json',
     });
 
@@ -255,11 +249,9 @@ describe('pull command', () => {
 
     // The new file carries the PRESET value, not the default theme's.
     expect(mockWriteJson).toHaveBeenCalledWith(
-      '/workspace/project/tokens/zbk-button.json',
+      '/workspace/project/tokens/zbk-button.tokens.json',
       {
-        'zbk-button': {
-          canvas: { value: '#123', type: 'color', description: 'Preset background.' },
-        },
+        canvas: { value: '#123', type: 'color', description: 'Preset background.' },
       },
       { spaces: 2 }
     );
@@ -267,19 +259,29 @@ describe('pull command', () => {
 
   it('returns with guidance (exit 0) when no tokenPath is configured', async () => {
     mockReadConfig.mockResolvedValue({
-      config: { tokens: {} },
+      config: { configVersion: 1, tokens: {} },
       path: '/workspace/project/zebkit.config.json',
     });
 
     await runPullCommand(createDeps());
 
     expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('No tokenPath set in config'));
-    expect(mockWriteJson).not.toHaveBeenCalled();
+    expect(mockWriteJson).not.toHaveBeenCalledWith(
+      '/workspace/project/zebkit.config.json',
+      expect.anything(),
+      expect.anything()
+    );
+    expect(mockWriteJson).not.toHaveBeenCalledWith(
+      expect.stringContaining('/tokens/'),
+      expect.anything(),
+      expect.anything()
+    );
   });
 
   it('refreshes agent context when context.path is set, honoring excluded components', async () => {
     mockReadConfig.mockResolvedValue({
       config: {
+        configVersion: 1,
         context: { path: './zebkit/context' },
         components: { checkbox: false },
       },
@@ -335,7 +337,7 @@ describe('pull command', () => {
 
   it('does not touch context when context.path is unset (opted out)', async () => {
     mockReadConfig.mockResolvedValue({
-      config: { tokens: {} },
+      config: { configVersion: 1, tokens: {} },
       path: '/workspace/project/zebkit.config.json',
     });
 

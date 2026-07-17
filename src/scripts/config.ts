@@ -216,6 +216,8 @@ export type ContextConfig = {
 };
 
 export type ZebkitConfig = {
+  /** Config format version required by this release. */
+  configVersion: number;
   /** JSON Schema used by editors for completion and inline validation. */
   $schema?: string;
   tokens?: TokensConfig;
@@ -375,6 +377,9 @@ function formatSchemaError(config: unknown, error: ErrorObject): string {
   if (error.keyword === 'enum') {
     const allowed = (error.params.allowedValues as unknown[]).map((value) => JSON.stringify(value));
     return `Invalid config value at \`${itemPath}\`. Expected one of ${allowed.join(', ')}.`;
+  }
+  if (error.keyword === 'const') {
+    return `Invalid config value at \`${itemPath}\`. Expected ${JSON.stringify(error.params.allowedValue)}.`;
   }
   if (error.keyword === 'required') {
     return `Missing required config item \`${configPath(parentPath, String(error.params.missingProperty))}\`.`;
@@ -554,6 +559,31 @@ export async function loadZebkitConfig(configPath?: string): Promise<
     }
   | undefined
 > {
+  const raw = await loadRawZebkitConfig(configPath);
+  if (!raw) return undefined;
+
+  try {
+    validateKnownConfigItems(raw.config);
+    const config = raw.config as ZebkitConfig;
+    validateOverlays(config.tokens?.overlays);
+    validatePruneConfig(config.tokens?.prune);
+    validateComponentsConfig(config.components);
+    return { config, path: raw.path };
+  } catch (error) {
+    throw new Error(`Unable to read config file at ${raw.path}: ${error}`);
+  }
+}
+
+/**
+ * Finds and parses a config without validating its shape.
+ */
+export async function loadRawZebkitConfig(configPath?: string): Promise<
+  | {
+      config: unknown;
+      path: string;
+    }
+  | undefined
+> {
   const explicitPath = configPath ?? parseConfigPathFromArgs();
 
   const candidates = explicitPath
@@ -565,13 +595,7 @@ export async function loadZebkitConfig(configPath?: string): Promise<
     if (await fs.pathExists(resolved)) {
       try {
         const fileContents = await fs.readFile(resolved, 'utf-8');
-        const parsed = JSON.parse(fileContents) as unknown;
-        validateKnownConfigItems(parsed);
-        const config = parsed as ZebkitConfig;
-        validateOverlays(config.tokens?.overlays);
-        validatePruneConfig(config.tokens?.prune);
-        validateComponentsConfig(config.components);
-        return { config, path: resolved };
+        return { config: JSON.parse(fileContents) as unknown, path: resolved };
       } catch (error) {
         throw new Error(`Unable to read config file at ${resolved}: ${error}`);
       }

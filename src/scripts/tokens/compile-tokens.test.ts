@@ -7,6 +7,7 @@ import type { TokenInterface } from '@definitions/tokens';
 import {
   buildFilePayload,
   inferTokenKeyFromFilename,
+  isCanonicalTokenOverrideFile,
   isVariantOverrideFile,
   mergeTokens,
   validateTokenExport,
@@ -31,8 +32,10 @@ describe('compile-tokens helpers', () => {
 
   it('infers token keys from token filenames', () => {
     expect(inferTokenKeyFromFilename('/tmp/zbk-button.tokens.json')).toBe('zbk-button');
-    expect(inferTokenKeyFromFilename('/tmp/button.tokens.json')).toBe('zbk-button');
-    expect(inferTokenKeyFromFilename('/tmp/button.json')).toBe('zbk-button');
+    expect(inferTokenKeyFromFilename('/tmp/button.tokens.json')).toBeUndefined();
+    expect(inferTokenKeyFromFilename('/tmp/button.json')).toBeUndefined();
+    expect(isCanonicalTokenOverrideFile('/tmp/zbk-button.tokens.json')).toBe(true);
+    expect(isCanonicalTokenOverrideFile('/tmp/zbk-button.json')).toBe(false);
   });
 
   it('detects variant override files by naming convention', () => {
