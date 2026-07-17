@@ -10,6 +10,7 @@ Zebkit is a token-driven, accessibility-first web component library. Components 
 - [zbk-checkbox](zbk-checkbox.md): A binary (or mixed-state) choice: a light-DOM element wrapping a real <input type="checkbox"> inside its own label, with an aria-hidden control span visualizing its state.
 - [zbk-heading](zbk-heading.md): The zbk-heading component.
 - [zbk-input](zbk-input.md): Single-line text entry: a light-DOM element wrapping a real <input> inside its own label, with optional format-as-you-type masking.
+- [zbk-pagination](zbk-pagination.md): Page navigation for a partitioned collection: a nav of page items with previous/next controls, the current page marked aria-current="page", and a windowed page display with ellipses.
 - [zbk-radio](zbk-radio.md): One option in a mutually exclusive group: a light-DOM element wrapping a real <input type="radio"> inside its own label. Radios sharing a name form a native group — mutual exclusion, arrow-key navigation, and form submission come from the platform.
 - [zbk-select](zbk-select.md): Pick from a fixed set of options: a light-DOM element wrapping a real <select> inside its own label. Authored option content is adopted into the select; remaining default children are the visible label.
 - [zbk-textarea](zbk-textarea.md): Multi-line free-form text entry: a light-DOM element wrapping a real <textarea> inside its own label. No affixes, no masking.

@@ -1,0 +1,128 @@
+@use 'tokens/styles/variables/prefix'as prefix;
+
+@layer components {
+
+  // The one styling contract for pagination. <zbk-pagination> renders exactly
+  // this markup in light DOM: a nav wrapping a list of page/prev/next items.
+  nav.zbk-pagination {
+    display: var(--#{prefix.$cssVar}-pagination-display);
+
+    /* Typography (items and status inherit) */
+    font-family: var(--#{prefix.$cssVar}-pagination-font-family);
+    font-size: var(--#{prefix.$cssVar}-pagination-font-size);
+    font-weight: var(--#{prefix.$cssVar}-pagination-font-weight);
+    line-height: var(--#{prefix.$cssVar}-pagination-line-height);
+  }
+
+  nav.zbk-pagination .zbk-pagination__list {
+    /* The list is structure, not a bullet list. */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--#{prefix.$cssVar}-pagination-gap);
+  }
+
+  /* Every interactive item: page numbers and the prev/next controls. The
+     selectors cover both spellings of an item — <button> and <a>. */
+  nav.zbk-pagination .zbk-pagination__item {
+    color: var(--#{prefix.$cssVar}-pagination-ink);
+    background-color: var(--#{prefix.$cssVar}-pagination-canvas);
+    border-color: var(--#{prefix.$cssVar}-pagination-border-color);
+    border-width: var(--#{prefix.$cssVar}-pagination-border-width);
+    border-style: var(--#{prefix.$cssVar}-pagination-border-style);
+    border-radius: var(--#{prefix.$cssVar}-pagination-border-radius);
+
+    min-inline-size: var(--#{prefix.$cssVar}-pagination-min-width);
+    min-block-size: var(--#{prefix.$cssVar}-pagination-min-height);
+    padding-inline: var(--#{prefix.$cssVar}-pagination-padding-inline);
+    padding-block: var(--#{prefix.$cssVar}-pagination-padding-block);
+
+    /* Structural: center the number/glyph, inherit the nav's type. */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font: inherit;
+    text-decoration: none;
+
+    cursor: var(--#{prefix.$cssVar}-pagination-cursor);
+    outline: none;
+
+    transition-property: var(--#{prefix.$cssVar}-pagination-transition-property);
+    transition-duration: var(--#{prefix.$cssVar}-pagination-transition-duration);
+    transition-timing-function: var(--#{prefix.$cssVar}-pagination-transition-timing-function);
+  }
+
+  nav.zbk-pagination .zbk-pagination__item:hover {
+    color: var(--#{prefix.$cssVar}-pagination-ink-hover);
+    background-color: var(--#{prefix.$cssVar}-pagination-canvas-hover);
+    border-color: var(--#{prefix.$cssVar}-pagination-border-color-hover);
+  }
+
+  nav.zbk-pagination .zbk-pagination__item:active {
+    color: var(--#{prefix.$cssVar}-pagination-ink-active);
+    background-color: var(--#{prefix.$cssVar}-pagination-canvas-active);
+    border-color: var(--#{prefix.$cssVar}-pagination-border-color-active);
+  }
+
+  nav.zbk-pagination .zbk-pagination__item:focus-visible {
+    outline-color: var(--#{prefix.$cssVar}-pagination-focus-color);
+    outline-width: var(--#{prefix.$cssVar}-pagination-focus-width);
+    outline-style: solid;
+    outline-offset: var(--#{prefix.$cssVar}-pagination-focus-offset);
+  }
+
+  /* The current page (`-selected` semantic state). Declared after hover/active
+     so the marked page holds its appearance under the pointer. */
+  nav.zbk-pagination .zbk-pagination__item[aria-current='page'] {
+    color: var(--#{prefix.$cssVar}-pagination-ink-selected);
+    background-color: var(--#{prefix.$cssVar}-pagination-canvas-selected);
+    border-color: var(--#{prefix.$cssVar}-pagination-border-color-selected);
+  }
+
+  /* Disabled prev/next: aria-disabled (not native disabled) so the control
+     stays focusable and keyboard users don't lose their place at the ends.
+     Link-mode controls also drop their href. */
+  nav.zbk-pagination .zbk-pagination__item[aria-disabled='true'] {
+    color: var(--#{prefix.$cssVar}-pagination-ink-disabled);
+    background-color: var(--#{prefix.$cssVar}-pagination-canvas-disabled);
+    border-color: var(--#{prefix.$cssVar}-pagination-border-color-disabled);
+    cursor: not-allowed;
+  }
+
+  /* Non-interactive window gap. */
+  nav.zbk-pagination .zbk-pagination__ellipsis {
+    color: var(--#{prefix.$cssVar}-pagination-ellipsis-ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--#{prefix.$cssVar}-pagination-min-width);
+    min-block-size: var(--#{prefix.$cssVar}-pagination-min-height);
+  }
+
+  /* Compact-mode "Page X of Y" readout. */
+  nav.zbk-pagination .zbk-pagination__status {
+    color: var(--#{prefix.$cssVar}-pagination-status-ink);
+    display: inline-flex;
+    align-items: center;
+    padding-inline: var(--#{prefix.$cssVar}-pagination-padding-inline);
+  }
+
+  /* Prev/next glyph box: the drawn chevron or slotted icon content. */
+  nav.zbk-pagination .zbk-pagination__icon {
+    font-size: var(--#{prefix.$cssVar}-pagination-icon-size);
+    inline-size: var(--#{prefix.$cssVar}-pagination-icon-size);
+    block-size: var(--#{prefix.$cssVar}-pagination-icon-size);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  nav.zbk-pagination .zbk-pagination__icon svg {
+    inline-size: 1em;
+    block-size: 1em;
+  }
+}

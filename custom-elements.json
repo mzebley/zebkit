@@ -2822,6 +2822,22 @@
         },
         {
           "kind": "js",
+          "name": "ZbkPagination",
+          "declaration": {
+            "name": "ZbkPagination",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineZbkPagination",
+          "declaration": {
+            "name": "defineZbkPagination",
+            "module": "src/components/index.ts"
+          }
+        },
+        {
+          "kind": "js",
           "name": "ZbkHeading",
           "declaration": {
             "name": "ZbkHeading",
@@ -4064,6 +4080,1085 @@
           "declaration": {
             "name": "ZbkInput",
             "module": "src/components/input/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/pagination/index.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "The zebkit pagination: a light-DOM element rendering page navigation for a\npartitioned collection as a `<nav>` of page items with previous/next\ncontrols, `aria-current=\"page\"` on the current page, and a windowed page\ndisplay with ellipses. Items are real links when `href-template` is set\n(the browser navigates); otherwise they are buttons and a choice surfaces\nas the cancelable `zbk-page-change` event — uncanceled, the element adopts\nthe page and announces \"Page X of Y\" through the shared live region.",
+          "name": "ZbkPagination",
+          "members": [
+            {
+              "kind": "field",
+              "name": "componentName",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "readonly": true,
+              "static": true,
+              "default": "\"pagination\"",
+              "description": "The pattern's common name in kebab-case, e.g. \"button\". Set per subclass.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variantConfigs",
+              "type": {
+                "text": "ReadonlyArray<VariantConfig>"
+              },
+              "static": true,
+              "default": "paginationVariants",
+              "description": "Variant configs registered for this component (its ./variants module).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "slotContract",
+              "type": {
+                "text": "SlotContract | undefined"
+              },
+              "static": true,
+              "description": "The component's slot contract (its generated ./slot-contract module,\nfrom zbk-{name}.manifest.json). Drives the unknown-slot and missing\nrequired-content warnings. Set per subclass.",
+              "default": "slotContract",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "current",
+              "privacy": "public",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "The current page, 1-based. Values outside 1..total warn and clamp.",
+              "attribute": "current"
+            },
+            {
+              "kind": "field",
+              "name": "total",
+              "privacy": "public",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Total number of pages in the collection.",
+              "attribute": "total"
+            },
+            {
+              "kind": "field",
+              "name": "siblings",
+              "privacy": "public",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Page neighbors shown on each side of the current page.",
+              "attribute": "siblings"
+            },
+            {
+              "kind": "field",
+              "name": "boundaries",
+              "privacy": "public",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Pages pinned at each end of the window.",
+              "attribute": "boundaries"
+            },
+            {
+              "kind": "field",
+              "name": "compact",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Compact presentation: previous/next around a \"Page X of Y\" readout.",
+              "attribute": "compact"
+            },
+            {
+              "kind": "field",
+              "name": "hrefTemplate",
+              "privacy": "public",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "URL template with a `{page}` placeholder (e.g. \"?page={page}\"). When set,\nitems render as real links and navigation is the browser's — better for\ncrawlers and modified-click. Leave unset for buttons + `zbk-page-change`.",
+              "attribute": "href-template"
+            },
+            {
+              "kind": "field",
+              "name": "nativeElement",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "privacy": "protected",
+              "description": "The internal native element that carries the pattern's semantics (the\n`<button>` inside `<zbk-button>`). ARIA relocates here; focus forwards here.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusTarget",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "privacy": "protected",
+              "description": "Focus lands on the current page item (or the first control in compact mode).",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "pageCount",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "description": "`total`, floored to a sane page count."
+            },
+            {
+              "kind": "method",
+              "name": "clampedCurrent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "description": "`current`, clamped into 1..total for rendering."
+            },
+            {
+              "kind": "method",
+              "name": "windowItems",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "PaginationWindowItem[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "current",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "total",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderWindowItem",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "TemplateResult"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "PaginationWindowItem"
+                  }
+                },
+                {
+                  "name": "current",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderControl",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "TemplateResult"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "direction",
+                  "type": {
+                    "text": "\"previous\" | \"next\""
+                  }
+                },
+                {
+                  "name": "current",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "total",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "controlGlyph",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "TemplateResult"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "position",
+                  "type": {
+                    "text": "IconPosition"
+                  }
+                }
+              ],
+              "description": "Slotted icon content replaces the drawn chevron at that position."
+            },
+            {
+              "kind": "method",
+              "name": "hrefFor",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "page",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "The URL for a page, from the `href-template` `{page}` placeholder."
+            },
+            {
+              "kind": "method",
+              "name": "requestPage",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "page",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Button-mode page choice: dispatch the cancelable event; uncanceled, adopt\nthe page and announce it through the shared live region."
+            },
+            {
+              "kind": "field",
+              "name": "consumerVariants",
+              "privacy": "private",
+              "static": true,
+              "default": "new Map<string, Map<string, VariantConfig>>()",
+              "description": "Consumer variants registered via registerVariants, keyed by component name.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "registerVariants",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "source",
+                  "type": {
+                    "text": "unknown"
+                  }
+                }
+              ],
+              "description": "Register consumer variants (theme JSON overlays) so the `variant`\nattribute accepts them. Accepts the same shapes as the build's variant\noverride files — a single entry, an array of entries, or a component-keyed\nmap — so the theme's `zbk-{component}.variants.json` can be imported and\npassed straight through. Call before elements upgrade (e.g. before\n`defineZebkitComponents()`); already-rendered elements won't recompute.\n\nThe variant's CSS class comes from the token build; this only teaches the\nruntime the name so the class is applied and validation lists it.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "resetConsumerVariants",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Clear all consumer-registered variants (test hook).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "excludedComponents",
+              "privacy": "private",
+              "static": true,
+              "default": "new Set<string>()",
+              "description": "Components excluded by the build's components config.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variantAllowlists",
+              "privacy": "private",
+              "static": true,
+              "default": "new Map<string, Set<string>>()",
+              "description": "Per-component shipped-variant allowlists from the components config.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "warnedExcludedComponents",
+              "privacy": "private",
+              "static": true,
+              "default": "new Set<string>()",
+              "description": "Excluded-component warnings already emitted (once per component).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "applyComponentsConfig",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "components",
+                  "type": {
+                    "text": "unknown"
+                  }
+                }
+              ],
+              "description": "Mirror the build's `components` config at runtime so dev warnings match\nthe compiled CSS. Pass the exact `components` object from\nzebkit.config.json: excluded components warn on first use (their styles\nare not in the build), and shipped variants outside an allowlist stop\napplying and warn with the allowed vocabulary instead of silently\nrendering base styles. Consumer variants added via registerVariants are\nnever filtered.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "resetComponentsConfig",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Clear the mirrored components config (test hook).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "warnings",
+              "type": {
+                "text": "boolean"
+              },
+              "static": true,
+              "default": "true",
+              "description": "Dev diagnostics switch. Warnings name the fix (see GRAMMAR.md §9); silence\nthem wholesale in production builds if desired.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
+              "attribute": "variant",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "zbkUid",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "++uidCounter",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "adopted",
+              "type": {
+                "text": "AdoptedChildren | undefined"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "originalChildIndexes",
+              "privacy": "private",
+              "default": "new WeakMap<Node, number>()",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "ariaObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "relocatingAria",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "baseClass",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "componentClasses",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "description": "`zbk-{component}` plus one `zbk-{component}--{name}` per applied variant.\nSubclass templates bind this to the skeleton's root native element.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "uidFor",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "suffix",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Generate a document-unique id for internal ARIA relationships.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "parsedVariantNames",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "excludedShippedVariantNames",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Set<string>"
+                }
+              },
+              "description": "Shipped variant names removed by the components config's allowlist.\nThey cannot come back via registerVariants — their CSS is not in the build.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "registeredVariantConfigs",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "VariantConfig[]"
+                }
+              },
+              "description": "The component's full variant vocabulary: compiled-in configs (minus any\nremoved by the components config's allowlist) plus consumer variants\nregistered at runtime. A consumer entry with a shipped name wins (the\nbuild already merged its overrides into that variant's CSS).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "appliedVariants",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VariantConfig[]"
+                }
+              },
+              "description": "The registered VariantConfigs matching the `variant` attribute, in order.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "validateVariants",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Validate the `variant` attribute; every warning names the fix.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "focus",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "options",
+                  "optional": true,
+                  "type": {
+                    "text": "FocusOptions"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "blur",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "relocateAria",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Move `aria-*` and `role` from the host to the internal native element.\nThe host stays role-generic; AT reads the native element.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "observeAria",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "captureChildren",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Capture authored children before Lit's first render so the component can\nplace them inside the skeleton it renders. Named positions use the `slot`\nattribute; everything else is default content.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "slotted",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "Node[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Authored content for a named slot (or the default content when omitted).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "hasSlotted",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "True when the author supplied content for the given position.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderIcon",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "TemplateResult | typeof nothing"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "position",
+                  "type": {
+                    "text": "IconPosition"
+                  }
+                },
+                {
+                  "name": "name",
+                  "default": "\"icon\""
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "iconsAt",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "Node[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "position",
+                  "type": {
+                    "text": "IconPosition"
+                  }
+                },
+                {
+                  "name": "name",
+                  "default": "\"icon\""
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "hasIcon",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "position",
+                  "optional": true,
+                  "type": {
+                    "text": "IconPosition"
+                  }
+                },
+                {
+                  "name": "name",
+                  "default": "\"icon\""
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "iconPosition",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "IconPosition"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "node",
+                  "type": {
+                    "text": "Node"
+                  }
+                },
+                {
+                  "name": "name",
+                  "default": "\"icon\""
+                }
+              ],
+              "description": "Explicit icon placement uses `data-position`, not `position`.\n`position` is a CSS property name and is rejected by framework HTML typings\non normal child elements such as `<i>`, so unsupported values fall through\nto authored-order inference.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "meaningfulDefaultContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Node[]"
+                }
+              },
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "warn",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "`[zbk-button] <message>` — every message names the fix (GRAMMAR.md §9).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "accessibleNameWarning",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "string | null"
+                }
+              },
+              "description": "The dev-mode warning for a required-but-empty accessible name, fired from\nfirstUpdated when the slot contract requires default content. Override to\ntailor the fix text; return null to opt out (a component whose default\ncontent is not its accessible name, e.g. a tooltip's trigger, warns with\nits own semantics instead).",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "hasAccessibleName",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Rough accessible-name computation for the dev-mode nameless-control check:\nvisible text, aria-label, or aria-labelledby on the native element.",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "zbk-page-change",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "A page was chosen in button mode. `detail.page` is the requested page; `preventDefault()` keeps `current` unchanged for consumers that own the state."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "current",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "The current page, 1-based. Values outside 1..total warn and clamp.",
+              "fieldName": "current"
+            },
+            {
+              "name": "total",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Total number of pages in the collection.",
+              "fieldName": "total"
+            },
+            {
+              "name": "siblings",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Page neighbors shown on each side of the current page.",
+              "fieldName": "siblings"
+            },
+            {
+              "name": "boundaries",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Pages pinned at each end of the window.",
+              "fieldName": "boundaries"
+            },
+            {
+              "name": "compact",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Compact presentation: previous/next around a \"Page X of Y\" readout.",
+              "fieldName": "compact"
+            },
+            {
+              "name": "href-template",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "URL template with a `{page}` placeholder (e.g. \"?page={page}\"). When set,\nitems render as real links and navigation is the browser's — better for\ncrawlers and modified-click. Leave unset for buttons + `zbk-page-change`.",
+              "fieldName": "hrefTemplate"
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "Space-separated registered variant names, e.g. \"ghost lg\". Unknown names warn with the registered vocabulary.",
+              "fieldName": "variant",
+              "inheritedFrom": {
+                "name": "ZebkitElement",
+                "module": "src/components/base/zebkit-element.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "ZebkitElement",
+            "module": "/src/components/base/zebkit-element"
+          },
+          "tagName": "zbk-pagination",
+          "customElement": true
+        },
+        {
+          "kind": "function",
+          "name": "defineZbkPagination",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "description": "Register <zbk-pagination> (idempotent)."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "paginationWindow",
+          "declaration": {
+            "name": "paginationWindow",
+            "module": "./window"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "PaginationWindowItem",
+          "declaration": {
+            "name": "PaginationWindowItem",
+            "module": "./window"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ZbkPagination",
+          "declaration": {
+            "name": "ZbkPagination",
+            "module": "src/components/pagination/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineZbkPagination",
+          "declaration": {
+            "name": "defineZbkPagination",
+            "module": "src/components/pagination/index.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "zbk-pagination",
+          "declaration": {
+            "name": "ZbkPagination",
+            "module": "src/components/pagination/index.ts"
           }
         }
       ]

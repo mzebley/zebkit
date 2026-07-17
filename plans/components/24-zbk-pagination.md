@@ -1,6 +1,6 @@
 # `<zbk-pagination>` — Phase 2 plan (deferred)
 
-Status: DEFERRED — high-level plan, not yet a handoff prompt. Promote using the Phase 1 section skeleton once §7 is satisfied.
+Status: SHIPPED 2026-07-17 — promoted directly and built (`src/components/pagination/`). §8 records how each §4 decision landed.
 
 ## 1. Pattern definition
 
@@ -38,4 +38,11 @@ The dual links/buttons mode doubling the test surface; ellipsis windows are a cl
 
 ## 8. Revision notes
 
-(Working notes welcome here while the component is deferred.)
+Shipped 2026-07-17, promoted ahead of the §7 checklist at Mark's direction (the doc-site token tables provided the first real consumer). How the §4 decisions landed:
+
+1. **Dual-mode, as the lean predicted.** `href-template` present → real links from the `{page}` placeholder, no event; absent → buttons + cancelable `zbk-page-change` (uncanceled, the element adopts the page and announces via the shared live region). The one-spelling argument: the *mode* is one spelling per navigation intent — a URL-per-page collection has exactly one way to express it (links), an app-state collection exactly one (buttons); neither intent has two spellings.
+2. **Attributes with defaults**: `siblings="1"`, `boundaries="1"`. Constant window width `boundaries*2 + siblings*2 + 3`; ellipsis never hides a single page. Worked example table lives in `window.ts` and `window.test.ts` (the §6 off-by-one nest is fully tabled there).
+3. **Compact is a boolean attribute**, not a variant — it changes rendered structure, and variants are token remappings (GRAMMAR §6).
+4. **Announcer: yes**, button mode only ("Page X of Y"); link mode navigates, so the new page announces itself.
+
+Also settled during the build: disabled prev/next use `aria-disabled` (focus is kept at the ends) in button mode and drop `href` in link mode; the current page is the `-selected` semantic state bound to `aria-current="page"`; drawn chevrons are replaceable via the shared `icon` slot (`data-position="start|end"`); the nav self-labels "Pagination" unless the author provides `aria-label`. First consumer: `doc-site` `TokenTable.svelte`, page size 10.

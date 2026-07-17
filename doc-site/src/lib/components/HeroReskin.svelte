@@ -1,7 +1,6 @@
 <script lang="ts">
   import { theme } from "$lib/stores/theme.svelte";
   import { heroThemes, diffFor, type HeroThemeName } from "$data/hero-themes";
-  import ZebkitLoader from "$components/ZebkitLoader.svelte";
   import ZbkButton from "$components/ZbkButton.svelte";
 
   // Hero-local reskin state lives on the shared store (scaffolded there), but only
@@ -97,7 +96,6 @@
   {/each}
 </svelte:head>
 
-<ZebkitLoader />
 
 <section
   class="reskin-stage"

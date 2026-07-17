@@ -4,10 +4,10 @@
   export const HOME_EYEBROW_LINES = [
     "The design is the variable.",
     "It's tokens the whole way down.",
-    "A permanent system for everchanging design.",
-    "Components that hold steady. Design that's free as a bird.",
-    "Strongly held opinions. None about your aesthetic.",
-    "The design system designed to disappear.",
+    "A permanent system for ever-changing design.",
+    "Components that hold steady even when the design wanders.",
+    "Strongly held opinions, yet none about your aesthetic.",
+    "A design system that was designed to disappear.",
   ] as const;
 </script>
 

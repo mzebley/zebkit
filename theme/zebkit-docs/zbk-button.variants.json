@@ -64,15 +64,16 @@
       "axis": "style",
       "description": "Low-emphasis fill on the subtle action canvas; no border.",
       "overrides": {
-        "canvas": "{action.canvas-subtle}",
-        "canvas-hover": "{action.canvas-muted}",
-        "canvas-active": "{action.canvas-muted}",
+        "canvas": "{app.canvas-muted}",
+        "canvas-hover": "{app.canvas-muted}",
+        "canvas-active": "{app.canvas-muted}",
         "ink": "{action.ink}",
         "ink-hover": "{action.ink-emphasis}",
         "ink-active": "{action.ink-emphasis}",
         "border-color": "transparent",
         "border-color-hover": "transparent",
-        "border-color-active": "transparent"
+        "border-color-active": "transparent",
+        "border-radius": "{border.radius-md}"
       }
     }
   }

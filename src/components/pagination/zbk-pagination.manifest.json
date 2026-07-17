@@ -1,0 +1,79 @@
+{
+  "$schema": "../../../schemas/component-manifest.schema.json",
+  "tag": "zbk-pagination",
+  "purpose": "Page navigation for a partitioned collection: a nav of page items with previous/next controls, the current page marked aria-current=\"page\", and a windowed page display with ellipses.",
+  "nativeElement": "nav",
+  "useWhen": [
+    "A collection is split into pages and the user moves between them (search results, tables, archives).",
+    "Each page has a real URL — set href-template and every item becomes a link the browser (and crawlers, and middle-click) can follow.",
+    "Page state lives in the app — omit href-template and items are buttons surfacing the cancelable zbk-page-change event."
+  ],
+  "notWhen": [
+    {
+      "case": "The collection loads incrementally on one page (infinite scroll, \"load more\").",
+      "instead": "zbk-button"
+    },
+    {
+      "case": "Sequential steps in a flow (wizard, checkout).",
+      "instead": "A step indicator — steps are a process with an order, not a partitioned collection."
+    }
+  ],
+  "guidance": [
+    "One spelling per navigation intent: href-template present means links (the browser navigates, no event); absent means buttons (zbk-page-change fires and, uncanceled, the element adopts the page and announces it).",
+    "Canceling zbk-page-change (preventDefault) keeps current unchanged — the consumer owns the state and sets current itself.",
+    "The window keeps a constant width of boundaries*2 + siblings*2 + 3 items so the control never reflows while paging; an ellipsis never hides a single page.",
+    "The nav defaults its accessible name to \"Pagination\"; set aria-label on the element when a page has more than one pagination region."
+  ],
+  "slots": {
+    "icon": {
+      "description": "Replaces a drawn chevron glyph: data-position=\"start\" is the previous control's glyph, data-position=\"end\" the next control's — any markup: svg, icon-font glyph, HTML character, image.",
+      "presentational": true,
+      "tokens": { "size": "icon-size" },
+      "positions": ["start", "end"],
+      "guidance": [
+        "The glyphs are aria-hidden; the controls keep their \"Previous page\" / \"Next page\" accessible names regardless of what renders inside them."
+      ]
+    }
+  },
+  "keyboard": [
+    {
+      "keys": "Tab / Shift+Tab",
+      "does": "Moves through the page and previous/next controls (native behavior, preserved). Disabled previous/next controls in button mode stay focusable via aria-disabled so the user's place is kept at the ends."
+    },
+    {
+      "keys": "Enter / Space",
+      "does": "Activates the focused control (native button behavior; links activate on Enter only, as links do)."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Basic (buttons + event)",
+      "html": "<zbk-pagination current=\"3\" total=\"12\"></zbk-pagination>"
+    },
+    {
+      "title": "Real URLs per page",
+      "html": "<zbk-pagination current=\"3\" total=\"12\" href-template=\"?page={page}\"></zbk-pagination>",
+      "why": "href-template turns every item into a real link — crawlers, middle-click, and open-in-new-tab all work; there is no event to wire."
+    },
+    {
+      "title": "Compact",
+      "html": "<zbk-pagination compact current=\"3\" total=\"12\"></zbk-pagination>",
+      "why": "Previous/next around a \"Page 3 of 12\" readout — for narrow containers where a page window cannot fit."
+    },
+    {
+      "title": "Wider window",
+      "html": "<zbk-pagination current=\"25\" total=\"50\" siblings=\"2\" boundaries=\"2\"></zbk-pagination>"
+    },
+    {
+      "title": "Custom control glyphs",
+      "html": "<zbk-pagination current=\"2\" total=\"5\"><span slot=\"icon\" data-position=\"start\">&#8592;</span><span slot=\"icon\" data-position=\"end\">&#8594;</span></zbk-pagination>"
+    },
+    {
+      "title": "Pagination as a stepper",
+      "tier": "discouraged",
+      "html": "<zbk-pagination current=\"2\" total=\"4\" aria-label=\"Checkout steps\"></zbk-pagination>",
+      "why": "Steps are a process, not a partitioned collection: they have names, completion state, and usually cannot be jumped to freely. Use a step indicator pattern."
+    }
+  ],
+  "related": ["zbk-button"]
+}

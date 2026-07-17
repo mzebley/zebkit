@@ -2,7 +2,26 @@
   import type { TokenRow } from '$utils/token-docs';
   import { getCssVarForReference } from '$utils/token-lookup';
 
-  let { rows = [], showSwatch = true }: { rows?: TokenRow[]; showSwatch?: boolean } = $props();
+  let {
+    rows = [],
+    showSwatch = true,
+    pageSize = 10
+  }: { rows?: TokenRow[]; showSwatch?: boolean; pageSize?: number } = $props();
+
+  let page = $state(1);
+
+  const pageCount = $derived(Math.max(1, Math.ceil(rows.length / pageSize)));
+  // Filters upstream (e.g. the token catalog search) can shrink rows under us.
+  const clampedPage = $derived(Math.min(page, pageCount));
+  const pagedRows = $derived(
+    rows.length > pageSize
+      ? rows.slice((clampedPage - 1) * pageSize, clampedPage * pageSize)
+      : rows
+  );
+
+  function handlePageChange(event: Event) {
+    page = (event as CustomEvent<{ page: number }>).detail.page;
+  }
 
   function swatchVar(row: TokenRow): string | null {
     if (!showSwatch || row.type !== 'color') return null;
@@ -27,7 +46,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each rows as row (row.token)}
+      {#each pagedRows as row (row.token)}
         {@const cssVar = swatchVar(row)}
         <tr>
           <td><code class="tok" data-inspect-token={inspectVar(row)}>{row.token}</code></td>
@@ -46,6 +65,21 @@
     </tbody>
   </table>
 </div>
+
+{#if pageCount > 1}
+  <div class="pagination-row">
+    <zbk-pagination
+      variant="sm"
+      current={clampedPage}
+      total={pageCount}
+      aria-label="Token table pages"
+      on:zbk-page-change={handlePageChange}
+    ></zbk-pagination>
+    <p class="pagination-count">
+      {(clampedPage - 1) * pageSize + 1}–{Math.min(clampedPage * pageSize, rows.length)} of {rows.length} tokens
+    </p>
+  </div>
+{/if}
 
 <style>
   .token-table-scroll {
@@ -114,5 +148,20 @@
     color: var(--zbk-app-ink-subtle);
     font-size: var(--zbk-font-size-xs);
     max-width: 40ch;
+  }
+
+  .pagination-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--zbk-spacing-2);
+    margin-top: var(--zbk-spacing-2);
+  }
+
+  .pagination-count {
+    margin: 0;
+    color: var(--zbk-app-ink-subtle);
+    font-size: var(--zbk-font-size-xs);
   }
 </style>

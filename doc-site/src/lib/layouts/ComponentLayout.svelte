@@ -1,7 +1,6 @@
 <script lang="ts">
   import InstrumentShell from './InstrumentShell.svelte';
   import DefaultLayout from './DefaultLayout.svelte';
-  import ZebkitLoader from '$components/ZebkitLoader.svelte';
 
   // Component pages are an instrument register: they document tokens and utility
   // classes, so they get the inspector rail. The narrative prose styling still
@@ -16,7 +15,6 @@
 </script>
 
 <!-- Live demos on component pages need the custom elements registered. -->
-<ZebkitLoader />
 
 <InstrumentShell>
   <DefaultLayout {title} {description}>

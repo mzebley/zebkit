@@ -115,34 +115,34 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 
 | Token | Default | Type | Description |
 |---|---|---|---|
-| `--zbk-button-ink` | `{action.ink-inverse}` | color | Default button label color. |
-| `--zbk-button-ink-hover` | `{action.ink-inverse}` | color | Label color when hovered. |
-| `--zbk-button-ink-active` | `{action.ink-inverse}` | color | Label color when active or pressed. |
+| `--zbk-button-ink` | `{action.ink-emphasis}` | color | Default button label color. |
+| `--zbk-button-ink-hover` | `{app.ink}` | color | Label color when hovered. |
+| `--zbk-button-ink-active` | `{action.ink-emphasis}` | color | Label color when active or pressed. |
 | `--zbk-button-ink-disabled` | `{disabled.ink}` | color | Label color for disabled buttons. |
-| `--zbk-button-ink-loading` | `{action.ink-inverse}` | color | Label color while the button is in its loading state. |
-| `--zbk-button-canvas` | `{action.canvas-inverse}` | color | Default button background. |
-| `--zbk-button-canvas-hover` | `{action.canvas-inverse-emphasis}` | color | Background for hover state. |
-| `--zbk-button-canvas-active` | `{action.canvas-inverse}` | color | Background for active/pressed state. |
+| `--zbk-button-ink-loading` | `{action.ink-emphasis}` | color | Label color while the button is in its loading state. |
+| `--zbk-button-canvas` | `{action.canvas-muted}` | color | Default button background. |
+| `--zbk-button-canvas-hover` | `{action.canvas-subtle}` | color | Background for hover state. |
+| `--zbk-button-canvas-active` | `{action.canvas-muted}` | color | Background for active/pressed state. |
 | `--zbk-button-canvas-disabled` | `{disabled.canvas}` | color | Background for disabled buttons. |
-| `--zbk-button-canvas-loading` | `{action.canvas-inverse}` | color | Background while the button is in its loading state. |
-| `--zbk-button-border-color` | `{action.border-inverse-subtle}` | color | Default button border color. |
-| `--zbk-button-border-color-hover` | `{action.border-inverse}` | color | Border color on hover. |
-| `--zbk-button-border-color-active` | `{action.border-inverse-subtle}` | color | Border color when the button is active/pressed. |
+| `--zbk-button-canvas-loading` | `{action.canvas-subtle}` | color | Background while the button is in its loading state. |
+| `--zbk-button-border-color` | `{action.canvas-subtle}` | color | Default button border color. |
+| `--zbk-button-border-color-hover` | `{button.border-color}` | color | Border color on hover. |
+| `--zbk-button-border-color-active` | `{button.border-color}` | color | Border color when the button is active/pressed. |
 | `--zbk-button-border-color-disabled` | `{disabled.border}` | color | Border color for disabled buttons. |
 | `--zbk-button-border-color-loading` | `{button.border-color-hover}` | color | Border color while the button is in its loading state. |
 | `--zbk-button-border-width` | `0px` | borderWidth | Base border width. |
 | `--zbk-button-border-style` | `{border.style}` | borderStyle | Border style (solid, dashed, etc) for standard buttons. |
-| `--zbk-button-border-radius` | `{border.radius-md}` | borderRadius | Corner radius for standard buttons. |
+| `--zbk-button-border-radius` | `{border.radius-sm}` | borderRadius | Corner radius for standard buttons. |
 | `--zbk-button-font-family` | `{font-family.interface}` | fontFamily | Font family for button labels. |
 | `--zbk-button-font-size` | `{font-size.sm}` | fontSize | Base font size for button labels. |
-| `--zbk-button-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for button labels. |
-| `--zbk-button-line-height` | `{line-height.1}` | lineHeight | Base line height for buttons. |
+| `--zbk-button-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for button labels. |
+| `--zbk-button-line-height` | `{line-height.3}` | lineHeight | Base line height for buttons. |
 | `--zbk-button-letter-spacing` | `{letter-spacing.normal}` | letterSpacing | Letter spacing for button labels. |
 | `--zbk-button-text-transform` | `none` | textTransform | Text transform for button labels. |
 | `--zbk-button-text-decoration` | `none` | textDecoration | Text decoration for button labels. |
 | `--zbk-button-text-align` | `center` | textAlignment | Text alignment for button content. |
-| `--zbk-button-padding-inline` | `{spacing.1}` | spacing | Inline (horizontal) padding for standard buttons. |
-| `--zbk-button-padding-block` | `{spacing.05}` | spacing | Block (vertical) padding for standard buttons. |
+| `--zbk-button-padding-inline` | `{spacing.md}` | spacing | Inline (horizontal) padding for standard buttons. |
+| `--zbk-button-padding-block` | `{spacing.sm}` | spacing | Block (vertical) padding for standard buttons. |
 | `--zbk-button-padding-inline-start` | `{button.padding-inline}` | spacing | Inline-start padding override when needed. |
 | `--zbk-button-padding-inline-end` | `{button.padding-inline}` | spacing | Inline-end padding override when needed. |
 | `--zbk-button-padding-block-start` | `{button.padding-block}` | spacing | Block-start padding override when needed. |
@@ -169,7 +169,7 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-focus-width` | `{focus.width}` | borderWidth | Outline width for focus state. |
 | `--zbk-button-focus-offset` | `{focus.offset}` | spacing | Outline offset for focus state. |
 | `--zbk-button-box-shadow` | `none` | boxShadow | Default box shadow for buttons. |
-| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-2px) 0 var(--zbk-button-border-color-hover)` | boxShadow | Box shadow on hover. |
+| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)` | boxShadow | Box shadow on hover. |
 | `--zbk-button-box-shadow-active` | `none` | boxShadow | Box shadow when active/pressed. |
 | `--zbk-button-box-shadow-focus` | `none` | boxShadow | Box shadow in focus state (in addition to outline). |
 | `--zbk-button-transform` | `translateY(0)` | utility | Default transform property for buttons. |
@@ -194,11 +194,11 @@ A variant is a named, partial remapping of the token surface compiled to a class
 
 | Variant | Axis | Class | Description | Overrides |
 |---|---|---|---|---|
-| `ghost` | style | `zbk-button--ghost` | Transparent canvas and border; ink takes the action role with a subtle hover wash. | canvas: transparent; canvas-hover: {action.canvas-subtle}; canvas-active: {action.canvas-muted}; canvas-disabled: transparent; ink: {action.ink}; ink-hover: {action.ink-emphasis}; ink-active: {action.ink-emphasis}; border-color: transparent; border-color-hover: transparent; border-color-active: transparent; border-color-disabled: transparent |
-| `lg` | size | `zbk-button--lg` | Larger type and padding. | font-size: {font-size.lg}; padding-inline: {spacing.lg}; padding-block: {spacing.sm}; icon-size: 1.5rem |
-| `outline` | style | `zbk-button--outline` | Transparent canvas with an action-colored border; subtle wash on hover. | canvas: transparent; canvas-hover: {action.canvas-subtle}; canvas-active: {action.canvas-muted}; canvas-disabled: transparent; ink: {action.ink}; ink-hover: {action.ink-emphasis}; ink-active: {action.ink-emphasis}; border-color: {action.border}; border-color-hover: {action.border-emphasis}; border-color-active: {action.border-emphasis} |
-| `sm` | size | `zbk-button--sm` | Smaller type and padding; keeps the 44px minimum tap target. | font-size: {font-size.sm}; padding-inline: {spacing.xs}; padding-block: {spacing.2xs}; icon-size: 1rem |
-| `subtle` | style | `zbk-button--subtle` | Low-emphasis fill on the subtle action canvas; no border. | canvas: {action.canvas-subtle}; canvas-hover: {action.canvas-muted}; canvas-active: {action.canvas-muted}; ink: {action.ink}; ink-hover: {action.ink-emphasis}; ink-active: {action.ink-emphasis}; border-color: transparent; border-color-hover: transparent; border-color-active: transparent |
+| `ghost` | style | `zbk-button--ghost` | Transparent canvas and border; ink takes the action role with a subtle hover wash. | canvas: transparent; canvas-hover: transparent; canvas-active: transparent; canvas-disabled: transparent; ink: {action.ink}; ink-hover: {action.ink-emphasis}; ink-active: {action.ink}; border-color: transparent; border-color-hover: transparent; border-color-active: transparent; border-color-disabled: transparent; box-shadow-hover: none; transform-hover: translateY(0) |
+| `lg` | size | `zbk-button--lg` | Larger type and padding. | font-size: {font-size.md}; padding-inline: {spacing.lg}; padding-block: {spacing.sm}; icon-size: 1.5rem; border-radius: {border.radius-md}; line-height: {line-height.5} |
+| `outline` | style | `zbk-button--outline` | Transparent canvas with an action-colored border; subtle wash on hover. | canvas: transparent; canvas-hover: {button.canvas}; canvas-active: {action.ink-inverse-emphasis}; canvas-disabled: transparent; ink: {action.ink}; ink-hover: {action.ink-emphasis}; ink-active: {action.ink-emphasis}; border-color: {button.ink}; border-color-hover: {button.ink-hover}; border-color-active: {button.ink-active}; ink-disabled: {disabled.ink-inverse-muted}; border-width: {border.width-sm}; border-radius: {border.radius-md}; border-color-disabled: {button.ink-disabled}; box-shadow-hover: none; transform: scale(1); transform-hover: translateY(0) scale(1); transform-active: scale(.9725) |
+| `sm` | size | `zbk-button--sm` | Smaller type and padding; keeps the 44px minimum tap target. | font-size: {font-size.xs}; padding-inline: {spacing.sm}; padding-block: {spacing.xs}; icon-size: 1rem |
+| `subtle` | style | `zbk-button--subtle` | Low-emphasis fill on the subtle action canvas; no border. | canvas: {app.canvas-muted}; canvas-hover: {app.canvas-muted}; canvas-active: {app.canvas-muted}; ink: {action.ink}; ink-hover: {action.ink-emphasis}; ink-active: {action.ink-emphasis}; border-color: transparent; border-color-hover: transparent; border-color-active: transparent; border-radius: {border.radius-md} |
 
 Custom variants: add a `zbk-button.variants.json` file to the base theme's token folder (component-keyed map of `{ "button": { "{name}": { "overrides": { ... } } } }`; token keys must exist in the table above, values are alias references or structural literals). A shipped variant name patches that variant's CSS — usable immediately. A new name compiles a new `.zbk-button--{name}` class and additionally needs `ZebkitElement.registerVariants(json)` before elements upgrade so `variant="{name}"` validates and applies it.
 

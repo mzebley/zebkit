@@ -7,6 +7,7 @@ import { ZbkToggle, defineZbkToggle } from "./toggle";
 import { ZbkInput, defineZbkInput } from "./input";
 import { ZbkTextarea, defineZbkTextarea } from "./textarea";
 import { ZbkSelect, defineZbkSelect } from "./select";
+import { ZbkPagination, defineZbkPagination } from "./pagination";
 import { ZbkHeading, defineZbkHeading } from "./heading";
 import { ZebkitElement } from "./base/zebkit-element";
 import { announce, resetAnnouncer } from "./base/announce";
@@ -31,6 +32,8 @@ export {
   defineZbkTextarea,
   ZbkSelect,
   defineZbkSelect,
+  ZbkPagination,
+  defineZbkPagination,
   ZbkHeading,
   defineZbkHeading,
 };
@@ -45,5 +48,6 @@ export const defineZebkitComponents = () => {
   defineZbkInput();
   defineZbkTextarea();
   defineZbkSelect();
+  defineZbkPagination();
   defineZbkHeading();
 };

@@ -3,6 +3,7 @@
   import '../styles/editorial.css';
   import TopBar from '$lib/components/TopBar.svelte';
   import LeftNav from '$lib/components/LeftNav.svelte';
+  import ZebkitLoader from '$lib/components/ZebkitLoader.svelte';
   import Overlay from '$lib/components/Overlay.svelte';
   import CollapsiblePanel from '$lib/components/CollapsiblePanel.svelte';
   import { viewport } from '$lib/stores/viewport.svelte';
@@ -20,6 +21,10 @@
   tuck it to a rail, peek on hover/focus) and an off-canvas drawer (summoned by
   the TopBar hamburger) on compact ones — same LeftNav, different vessel.
 -->
+<!-- Registers the zebkit custom elements once for every route: zebkit
+     elements appear throughout the site (component demos, token tables). -->
+<ZebkitLoader />
+
 <div class="app-shell">
   <TopBar />
   <div class="app-body">

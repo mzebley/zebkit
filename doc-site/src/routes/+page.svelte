@@ -147,7 +147,7 @@
 <div class="home width-full min-width-0 text-wrap-pretty">
   <div class="home-hero width-full">
     <div
-      class="display-flex flex-direction-column prose width-full max-width-section padding-inline-105 padding-block-2 tablet:padding-inline-4"
+      class="display-flex flex-direction-column prose width-full max-width-section padding-inline-105 padding-block-2 tablet:padding-inline-4 tablet:padding-block-start-4"
     >
       <h1 class="text-4xl margin-block-end-1 tablet:text-5xl">
         Change everything.<br />Rewrite nothing.

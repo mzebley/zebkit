@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import ZebkitLoader from "$lib/components/ZebkitLoader.svelte";
   import ZbkButton from "$lib/components/ZbkButton.svelte";
 
   // The strata, made grabbable. Each register is a real primitive palette from
@@ -89,7 +88,6 @@
   ];
 </script>
 
-<ZebkitLoader />
 
 <div class="token-chain">
   <div
