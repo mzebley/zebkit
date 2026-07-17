@@ -53,6 +53,7 @@ function applyA11yTokens() {
 
   // Reduced motion affects transition duration
   root.style.setProperty('--zbk-a11y-transition-duration-modifier', theme.reducedMotion ? '0' : '1');
+  root.toggleAttribute('data-zbk-reduced-motion', theme.reducedMotion);
 
   // TODO: contrast token not yet in zebkit — log as gap
 }
@@ -86,6 +87,7 @@ export function setReskinTheme(preset: string) {
 if (typeof window !== 'undefined') {
   const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   theme.reducedMotion = mediaQuery.matches;
+  applyA11yTokens();
 
   mediaQuery.addEventListener('change', (e) => {
     theme.reducedMotion = e.matches;

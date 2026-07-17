@@ -840,7 +840,7 @@
 
   .reskin-caption {
     margin: 0;
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     font-style: italic;
   }
 

@@ -1,26 +1,27 @@
 {
   "primary": {
-    "value": "\"Newsreader\"",
-    "description": "Reading body + interface. Literary serif built for screen reading (docs editorial register).",
+    "value": "\"Proza Libre\"",
+    "type": "fontFamily",
+    "source": "google",
+    "fallback": "sans",
+    "styles": ["normal", "italic"],
+    "weights": [400, 500, 600, 700, 800]
+  },
+  "alt": {
+    "value": "\"Source Serif 4\"",
     "type": "fontFamily",
     "source": "google",
     "fallback": "serif",
-    "weights": "200..800"
-  },
-  "alt": {
-    "value": "\"Instrument Serif\"",
-    "description": "Display + headings. High-contrast magazine serif; used large only.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "serif"
+    "styles": ["normal", "italic"],
+    "weights": "300..700"
   },
   "monospace": {
-    "value": "\"Space Mono\"",
-    "description": "Token names, values, code, instrument labels. The 'this is data you can change' signal.",
+    "value": "\"Inconsolata\"",
     "type": "fontFamily",
     "source": "google",
     "fallback": "mono",
-    "weights": [400, 700]
+    "styles": ["normal", "italic"],
+    "weights": "300..700"
   },
     "interface": {
     "value": "{font-family.monospace}"

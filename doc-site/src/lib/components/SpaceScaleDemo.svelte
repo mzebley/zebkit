@@ -154,7 +154,7 @@
   .space-demo__gap-label {
     font-family: var(--zbk-font-family-monospace);
     font-size: var(--zbk-font-size-3xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 
   .space-demo__readout {
@@ -169,7 +169,7 @@
   .space-demo__readout dt {
     font-family: var(--zbk-font-family-body);
     font-size: var(--zbk-font-size-3xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
@@ -184,7 +184,7 @@
     margin-top: var(--zbk-spacing-15);
     font-family: var(--zbk-font-family-body);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     line-height: 1.6;
   }
 </style>

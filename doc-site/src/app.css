@@ -16,11 +16,25 @@
 
 html {
   font-size: var(--zbk-font-size-md);
+  scroll-behavior: smooth;
   /* Kill the grey/blue flash mobile browsers paint over tapped interactive
      elements — focus-visible + :active states carry the real feedback. Inherits
      to all descendants. (Also lives in the library reset.scss; this stays until
      that reset is wired into the docs build.) */
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Native anchor navigation powers the docs' section links. The runtime a11y
+   dial and the platform preference both turn that animation into an immediate
+   jump without changing the link or URL-hash behavior. */
+html[data-zbk-reduced-motion] {
+  scroll-behavior: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 html * {

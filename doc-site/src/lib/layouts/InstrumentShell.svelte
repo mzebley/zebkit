@@ -118,6 +118,6 @@
     padding: var(--zbk-spacing-2);
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 </style>

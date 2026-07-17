@@ -221,6 +221,11 @@ Manages the `tokens.overlays` array — the minimal, selector-scoped [overlay th
 emitted alongside your base theme. Run with no arguments to list current overlays and pick an
 action, or call a subcommand directly.
 
+<aside class="editorial-marginalia">
+An overlay redeclares only the tokens it changes — see <a href="/foundations/theming">Overlay
+themes</a> for what actually gets emitted and why.
+</aside>
+
 ```bash
 zebkit overlay-theme            # list, then choose an action
 zebkit overlay-theme list       # just list configured overlays
@@ -237,8 +242,3 @@ zebkit overlay-theme delete [name]
   given).
 - **`delete [name]`** removes the overlay from the config and can optionally **delete its token
   files and folder** too.
-
-<aside class="editorial-marginalia">
-An overlay redeclares only the tokens it changes — see <a href="/foundations/theming">Overlay
-themes</a> for what actually gets emitted and why.
-</aside>

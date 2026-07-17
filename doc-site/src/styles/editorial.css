@@ -1,29 +1,65 @@
-/* Editorial typographic primitives — marginalia, baseline rhythm, comfortable measure */
+/*
+ * Editorial register — typographic layout for narrative doc pages.
+ *
+ * Faces, sizes, weights, and flow rhythm all come from the docs theme's prose
+ * tokens (`theme/zebkit-docs/zbk-h*.tokens.json`, `zbk-p`, `zbk-lede`) via the
+ * library's `.prose` rules. This file owns what the prose system has no
+ * semantics for yet: the marginalia rail, and stopgap element treatments
+ * (tables, lists, code, blockquote, hr) built strictly from existing tokens.
+ * Those stopgaps are tracked as token-surface gaps — see CHANGELOG.
+ */
 
+/* Register the rail width so `ch` resolves once, at the frame's font, and
+   every use (aside width, negative pull, frame cap, rail lane) agrees on the
+   same length. */
+@property --editorial-marginalia-width {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+/* The root is the size container the frame's rail math reads (100cqi = the
+   actual column this register was given, nav and inspector already deducted). */
 .editorial-root {
-  /* Baseline rhythm: use line-height-3 (150%) as the base vertical unit */
-  --editorial-baseline: var(--zbk-line-height-3, 1.5);
-  --editorial-measure: var(--zbk-text-measure-3);
-  --editorial-marginalia-width: 24ch;
-  --editorial-gap: var(--zbk-spacing-3);
-
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--editorial-gap);
-
-  font-size: var(--zbk-font-size-md);
-  line-height: var(--editorial-baseline);
+  container-type: inline-size;
+  line-height: var(--zbk-line-height-3);
   min-height: calc(100dvh - var(--zbk-spacing-205));
 }
 
-/* Main editorial column — comfortable measure for reading */
+/* The frame owns the composition: reading column + gap + marginalia rail.
+   The rail takes its natural width (text-measure-1) when there's room and
+   shrinks to whatever is actually available when the nav or inspector eats
+   the column — so notes and the page index never get clipped. */
+.editorial-frame {
+  --editorial-measure: var(--zbk-text-measure-3);
+  --editorial-gap: var(--zbk-spacing-3);
+  --editorial-marginalia-width: min(
+    var(--zbk-text-measure-1),
+    max(0px, calc(100cqi - var(--editorial-measure) - var(--editorial-gap)))
+  );
+
+  position: relative;
+  max-inline-size: calc(
+    var(--editorial-measure) + var(--editorial-gap) + var(--editorial-marginalia-width)
+  );
+}
+
+/* Reserve the rail inside the frame's own box (floats pull into the padding,
+   so nothing ever overflows the shell's clip). */
+@media (min-width: 80rem) {
+  .editorial-frame {
+    padding-inline-end: calc(var(--editorial-gap) + var(--editorial-marginalia-width));
+  }
+}
+
+/* Main editorial column — comfortable measure for reading. */
 .editorial-main {
   max-inline-size: var(--editorial-measure);
 }
 
-/* Editorial headings — use display font (Instrument Serif) */
-.editorial-main :is(h1, h2, h3, h4, h5, h6) {
-  font-family: var(--zbk-font-family-alt);
+/* Anchor targets land below the sticky TopBar (and the compact page-index bar). */
+.editorial-frame :is(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-block-start: calc(var(--zbk-spacing-205) + var(--zbk-spacing-2));
 }
 
 h1.display {
@@ -31,27 +67,183 @@ h1.display {
   font-size: var(--zbk-font-size-5xl);
 }
 
-/* Code blocks — monospace font from tokens */
-.editorial-main code {
+/* The prose system's heading spacing tokens ride adjacent-sibling rules that
+   fight `.prose > p + *` / `.prose > * + p` at equal specificity — which side
+   wins is a source-order coin flip. Wire the same tokens from the heading's own
+   edges here (unlayered, so they win deterministically); adjacent margins
+   collapse to the larger value, which is the intended semantic. */
+.editorial-main > h1 { margin-block-end: var(--zbk-h1-spacing-after); }
+.editorial-main > h2 { margin-block-end: var(--zbk-h2-spacing-after); }
+.editorial-main > h3 { margin-block-end: var(--zbk-h3-spacing-after); }
+.editorial-main > h4 { margin-block-end: var(--zbk-h4-spacing-after); }
+.editorial-main > h5 { margin-block-end: var(--zbk-h5-spacing-after); }
+.editorial-main > h6 { margin-block-end: var(--zbk-h6-spacing-after); }
+
+.editorial-main > * + h1 { margin-block-start: var(--zbk-h1-spacing-before); }
+.editorial-main > * + h2 { margin-block-start: var(--zbk-h2-spacing-before); }
+.editorial-main > * + h3 { margin-block-start: var(--zbk-h3-spacing-before); }
+.editorial-main > * + h4 { margin-block-start: var(--zbk-h4-spacing-before); }
+.editorial-main > * + h5 { margin-block-start: var(--zbk-h5-spacing-before); }
+.editorial-main > * + h6 { margin-block-start: var(--zbk-h6-spacing-before); }
+
+/* The paragraph that opens a page is its lede. Adopting the treatment here
+   means every existing page gets one without markup edits; `.lede` remains
+   available for explicit use elsewhere. */
+.editorial-main > h1 + p {
+  font-family: var(--zbk-lede-font-family);
+  font-size: var(--zbk-lede-font-size);
+  font-weight: var(--zbk-lede-font-weight);
+  line-height: var(--zbk-lede-line-height);
+  letter-spacing: var(--zbk-lede-letter-spacing);
+  max-width: var(--zbk-lede-measure);
+  color: var(--zbk-lede-color);
+}
+
+/* Flow spacing for elements the prose system doesn't cover yet. Collapses
+   against `.prose > p + *` / heading below-gaps, so the larger intent wins. */
+.editorial-main > :is(ul, ol, pre, table, blockquote, figure) {
+  margin-block: var(--zbk-spacing-1);
+}
+
+/* Lists — ride the paragraph tokens so list items match body copy. */
+.editorial-main :is(ul, ol) {
+  font-family: var(--zbk-p-font-family);
+  font-size: var(--zbk-p-font-size);
+  line-height: var(--zbk-p-line-height);
+  max-inline-size: var(--zbk-p-measure);
+  color: var(--zbk-p-color);
+  padding-inline-start: var(--zbk-spacing-105);
+}
+
+.editorial-main li + li {
+  margin-block-start: var(--zbk-spacing-05);
+}
+
+.editorial-main li > :is(ul, ol) {
+  margin-block: var(--zbk-spacing-05) 0;
+}
+
+.editorial-main li::marker {
+  color: var(--zbk-app-ink-subtle);
+}
+
+/* Code — mono is the 'this is data you can change' register. */
+.editorial-main :not(pre) > code {
   font-family: var(--zbk-font-family-code);
-  font-size: var(--zbk-font-size-sm);
+  /* em-relative so chips track their context (body, lede, headings alike);
+     Space Mono runs wide, so it takes a small optical correction. */
+  font-size: 0.875em;
+  background: var(--zbk-app-canvas-muted);
+  padding: 0.1em 0.35em;
+  border-radius: var(--zbk-border-radius-sm);
+}
+
+/* Inside headings the chip reads as furniture — keep the mono 'data' signal,
+   drop the box. Space Mono runs large, hence the deeper optical correction. */
+.editorial-main :is(h1, h2, h3, h4, h5, h6) code {
+  background: none;
+  padding: 0;
+  font-size: 0.75em;
 }
 
 .editorial-main pre {
-  font-size: var(--zbk-font-size-sm);
+  font-family: var(--zbk-font-family-code);
+  font-size: var(--zbk-font-size-xs);
   line-height: var(--zbk-line-height-3);
-  padding: var(--zbk-spacing-2);
+  padding: var(--zbk-spacing-105);
   background: var(--zbk-app-canvas-muted);
+  border: var(--zbk-border-width-xs) solid var(--zbk-app-border-subtle);
   border-radius: var(--zbk-border-radius-sm);
   overflow-x: auto;
+  tab-size: 2;
 }
 
-/* Marginalia (sidenotes) — lighter font weight, smaller size */
-.editorial-marginalia {
-  max-inline-size: var(--editorial-marginalia-width);
+.editorial-main pre code {
+  font-size: inherit;
+}
+
+/* Tables — print-style rules, no verticals, no zebra. Headers speak in the
+   instrument register (mono labels, like the inspector and left nav).
+   Stopgap until table semantics exist as prose tokens. */
+.editorial-main table {
+  border-collapse: collapse;
   font-size: var(--zbk-font-size-sm);
+  line-height: var(--zbk-line-height-2);
+  font-variant-numeric: tabular-nums;
+  margin-block-start: var(--zbk-spacing-105);
+}
+
+.editorial-main th {
+  font-family: var(--zbk-font-family-interface);
+  font-size: var(--zbk-font-size-xs);
+  font-weight: var(--zbk-font-weight-normal);
+  letter-spacing: var(--zbk-letter-spacing-wide);
+  text-transform: uppercase;
+  text-align: start;
+  color: var(--zbk-app-ink-subtle);
+  border-block-end: var(--zbk-border-width-xs) solid var(--zbk-app-border-emphasis);
+}
+
+.editorial-main :is(th, td) {
+  padding: var(--zbk-spacing-05) var(--zbk-spacing-1);
+}
+
+.editorial-main :is(th, td):first-child {
+  padding-inline-start: 0;
+}
+
+.editorial-main td {
+  border-block-end: var(--zbk-border-width-xs) solid var(--zbk-app-border-subtle);
+}
+
+/* Blockquote — indented aside voice. */
+.editorial-main blockquote {
+  margin-inline: 0;
+  padding-inline-start: var(--zbk-spacing-1);
+  border-inline-start: var(--zbk-border-width-sm) solid var(--zbk-app-border-emphasis);
+  font-style: italic;
+  color: var(--zbk-app-ink-muted);
+  max-inline-size: var(--zbk-text-measure-2);
+}
+
+/* Section pause. */
+.editorial-main hr {
+  border: none;
+  border-block-start: var(--zbk-border-width-xs) solid var(--zbk-app-border);
+  margin-block: var(--zbk-spacing-205);
+}
+
+/* Links — quiet ember underline that fills on hover. */
+.editorial-main a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--zbk-action-ink-subtle);
+  text-decoration-thickness: var(--zbk-border-width-xs);
+  text-underline-offset: 0.15em;
+}
+
+.editorial-main a:hover {
+  color: var(--zbk-action-ink);
+  text-decoration-color: currentColor;
+}
+
+.editorial-main figcaption {
+  font-size: var(--zbk-font-size-xs);
+  color: var(--zbk-app-ink-subtle);
+}
+
+/* Marginalia (sidenotes) — asides that carry citations, definitions, and
+   commentary without breaking the reading line. Below the full regime they
+   render inline as an inset sidenote; at ≥80rem they float into the rail
+   beside the paragraph they follow. */
+.editorial-marginalia {
+  font-size: var(--zbk-font-size-xs);
   line-height: var(--zbk-line-height-3);
-  color: var(--zbk-app-ink-soft);
+  color: var(--zbk-app-ink-subtle);
+  max-inline-size: var(--zbk-text-measure-2);
+  border-inline-start: var(--zbk-border-width-sm) solid var(--zbk-app-border-muted);
+  padding-inline-start: var(--zbk-spacing-1);
+  margin-block: var(--zbk-spacing-105);
 }
 
 /* Optional drop-cap styling */
@@ -64,20 +256,16 @@ h1.display {
   padding-right: var(--zbk-spacing-1);
 }
 
-/* Responsive: two-column grid on wider screens */
-@media (min-width: 75rem) {
-  .editorial-root {
-    grid-template-columns: 1fr var(--editorial-marginalia-width);
-    grid-template-areas:
-      'main marginalia';
-  }
-
-  .editorial-main {
-    grid-area: main;
-  }
-
+/* Full regime — the rail. Matches the shell's 'full' viewport regime (≥80rem),
+   where the inspector also becomes a column. */
+@media (min-width: 80rem) {
   .editorial-marginalia {
-    grid-area: marginalia;
-    padding-top: var(--editorial-gap);
+    float: inline-end;
+    clear: inline-end;
+    inline-size: var(--editorial-marginalia-width);
+    margin-inline-end: calc(-1 * (var(--editorial-marginalia-width) + var(--editorial-gap)));
+    margin-block: 0 var(--zbk-spacing-1);
+    border-inline-start: none;
+    padding-inline-start: 0;
   }
 }

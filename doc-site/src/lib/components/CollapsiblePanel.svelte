@@ -216,7 +216,7 @@
     height: var(--zbk-spacing-4);
     max-height: 40%;
     border-radius: var(--zbk-border-radius-pill, 999px);
-    background: var(--zbk-action-ink-soft);
+    background: var(--zbk-action-ink-subtle);
     transition: background-color var(--zbk-transition-duration-fast, 120ms)
       var(--zbk-transition-timing-function, ease);
   }
@@ -257,7 +257,7 @@
     border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-sm);
     background: var(--zbk-app-canvas);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     cursor: pointer;
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-sm);

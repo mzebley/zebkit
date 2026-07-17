@@ -112,7 +112,7 @@
   }
 
   .lede {
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     max-width: var(--zbk-text-measure-3, 65ch);
     margin: 0 0 var(--zbk-spacing-4);
   }
@@ -153,7 +153,7 @@
   }
   .strata p {
     margin: var(--zbk-spacing-025) 0 0;
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 
   .block {

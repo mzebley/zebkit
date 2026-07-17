@@ -2,6 +2,7 @@
   import A11yDials from "./A11yDials.svelte";
   import Overlay from "./Overlay.svelte";
   import { viewport } from "$lib/stores/viewport.svelte";
+  import { focusFirst, trapFocus } from "$lib/utils/focus-trap";
   import {
     ui,
     toggleNav,
@@ -12,6 +13,7 @@
 
   let dials_open = $state(false);
   let dialsContainer: HTMLDivElement;
+  let dialsPopover = $state<HTMLDivElement | null>(null);
   let triggerButton: HTMLButtonElement;
 
   // On compact the dials live in an Overlay bottom-sheet, which owns Esc,
@@ -32,7 +34,9 @@
     if (e.key === "Escape" && dials_open && !sheetMode) {
       // Return focus to the trigger when dismissed via keyboard.
       closeDials(true);
+      return;
     }
+    if (dials_open && !sheetMode) trapFocus(e, dialsPopover);
   }
 
   function handlePointerDown(e: PointerEvent) {
@@ -50,10 +54,7 @@
   // Move focus into the popover when it opens (the sheet's Overlay does its own).
   $effect(() => {
     if (dials_open && !sheetMode) {
-      const first = dialsContainer?.querySelector<HTMLElement>(
-        ".dials-popover input, .dials-popover button",
-      );
-      first?.focus();
+      focusFirst(dialsPopover);
     }
   });
 </script>
@@ -145,10 +146,12 @@
       <!-- Wide viewports: anchored popover. -->
       {#if !sheetMode}
         <div
+          bind:this={dialsPopover}
           class="dials-popover"
           class:open={dials_open}
           role="dialog"
           aria-label="Accessibility controls"
+          tabindex="-1"
         >
           <A11yDials />
         </div>
@@ -257,7 +260,7 @@
     border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-sm);
     background: var(--zbk-app-canvas);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     font-family: var(--zbk-font-family-body);
     font-size: var(--zbk-font-size-xs);
     cursor: pointer;
@@ -302,7 +305,7 @@
   }
 
   .icon-button:disabled {
-    color: var(--zbk-disabled-ink-soft);
+    color: var(--zbk-disabled-ink-subtle);
     cursor: not-allowed;
     /* opacity: .5; */
   }

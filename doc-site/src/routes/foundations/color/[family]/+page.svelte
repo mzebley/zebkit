@@ -51,7 +51,7 @@
     display: inline-block;
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     text-decoration: none;
     margin-bottom: var(--zbk-spacing-2);
   }
@@ -66,7 +66,7 @@
   }
 
   .lede {
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     max-width: var(--zbk-text-measure-3, 65ch);
     margin: 0 0 var(--zbk-spacing-4);
   }
@@ -100,7 +100,7 @@
   .family-nav a {
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     text-decoration: none;
     padding: var(--zbk-spacing-025) var(--zbk-spacing-05);
     border-radius: var(--zbk-border-radius-xs);

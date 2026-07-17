@@ -2,6 +2,7 @@
   import type { Snippet } from 'svelte';
   import type { Frontmatter } from '$lib/types/frontmatter';
   import InstrumentShell from './InstrumentShell.svelte';
+  import OnThisPage from '$lib/components/OnThisPage.svelte';
 
   // Content-register layout (instrument / reference). Dense, with a right
   // inspector rail provided by InstrumentShell. The app shell is provided by the
@@ -20,9 +21,14 @@
 </svelte:head>
 
 <InstrumentShell {inspector}>
-  <article class="reference-article">
-    {@render children?.()}
-  </article>
+  <div class="editorial-root">
+    <div class="editorial-frame">
+      <OnThisPage />
+      <article class="reference-article">
+        {@render children?.()}
+      </article>
+    </div>
+  </div>
 </InstrumentShell>
 
 <style>

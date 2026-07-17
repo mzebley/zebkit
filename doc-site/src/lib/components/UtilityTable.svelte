@@ -93,7 +93,7 @@
   .meta-row dt {
     flex-shrink: 0;
     width: 9rem;
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     font-weight: var(--zbk-font-weight-semibold);
   }
 
@@ -125,14 +125,14 @@
     font-family: var(--zbk-font-family-body);
     font-size: var(--zbk-font-size-sm);
     font-weight: var(--zbk-font-weight-semibold);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     margin: var(--zbk-spacing-3) 0 var(--zbk-spacing-1);
   }
 
   .vcount {
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-2xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     font-weight: var(--zbk-font-weight-normal);
   }
 
@@ -164,6 +164,6 @@
   .note {
     margin-top: var(--zbk-spacing-2);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 </style>

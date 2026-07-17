@@ -91,7 +91,7 @@
   }
 
   .role-blurb {
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     margin: var(--zbk-spacing-025) 0 0;
   }
 
@@ -180,6 +180,6 @@
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-2xs);
     word-break: break-all;
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 </style>

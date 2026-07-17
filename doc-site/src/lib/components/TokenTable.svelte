@@ -63,7 +63,7 @@
     font-family: var(--zbk-font-family-body);
     font-weight: var(--zbk-font-weight-semibold);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     padding: var(--zbk-spacing-1) var(--zbk-spacing-2);
     border-bottom: var(--zbk-border-width-xs) solid var(--zbk-app-border);
     white-space: nowrap;
@@ -89,7 +89,7 @@
   }
 
   .type {
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 
   .value-cell {
@@ -111,7 +111,7 @@
   }
 
   .desc {
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     font-size: var(--zbk-font-size-xs);
     max-width: 40ch;
   }

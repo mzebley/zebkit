@@ -84,7 +84,7 @@
   .field-label {
     font-size: var(--zbk-font-size-xs);
     font-weight: var(--zbk-font-weight-semibold);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 
   input,
@@ -106,7 +106,7 @@
     margin: 0 0 0 auto;
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 
   .group {
@@ -126,10 +126,10 @@
   .group-key {
     font-family: var(--zbk-font-family-code);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 
   .empty {
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 </style>

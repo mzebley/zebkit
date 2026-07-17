@@ -166,7 +166,7 @@
     justify-content: space-between;
     font-family: var(--zbk-font-family-monospace);
     font-size: var(--zbk-font-size-3xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 
   .type-demo__scale {
@@ -188,7 +188,7 @@
   .type-demo__name {
     font-family: var(--zbk-font-family-monospace);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 
   .type-demo__sample {
@@ -203,7 +203,7 @@
   .type-demo__px {
     font-family: var(--zbk-font-family-monospace);
     font-size: var(--zbk-font-size-3xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     white-space: nowrap;
   }
 
@@ -211,7 +211,7 @@
     margin-top: var(--zbk-spacing-15);
     font-family: var(--zbk-font-family-body);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
-    line-height: var(--zbk-line-height-relaxed, 1.6);
+    color: var(--zbk-app-ink-subtle);
+    line-height: var(--zbk-line-height-4);
   }
 </style>

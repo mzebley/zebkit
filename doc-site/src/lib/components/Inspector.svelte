@@ -363,7 +363,7 @@
     margin: 0;
     font-family: var(--zbk-font-family-body, inherit);
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     line-height: var(--zbk-line-height-2, 1.4);
   }
 
@@ -485,7 +485,7 @@
 
   .xray-ref {
     font-size: var(--zbk-font-size-2xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     width: 100%;
     padding-left: var(--zbk-spacing-1);
   }
@@ -571,7 +571,7 @@
   .class-meta {
     margin: 0;
     font-size: var(--zbk-font-size-2xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 
   .class-meta a {
@@ -603,7 +603,7 @@
   }
 
   .contents a {
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     text-decoration: none;
     font-size: var(--zbk-font-size-xs);
   }
@@ -615,7 +615,7 @@
   .rail-empty {
     margin: 0;
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
   }
 
   /* Inspectable affordances in the content. Scoped styles don't reach the

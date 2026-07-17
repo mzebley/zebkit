@@ -95,7 +95,7 @@
 
   .value-label {
     font-size: var(--zbk-font-size-xs);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     font-family: var(--zbk-font-family-code);
   }
 

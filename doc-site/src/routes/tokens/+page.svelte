@@ -23,7 +23,7 @@
   }
 
   .lede {
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     max-width: var(--zbk-text-measure-3, 65ch);
     margin: 0 0 var(--zbk-spacing-4);
   }

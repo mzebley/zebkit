@@ -21,25 +21,25 @@
       "
     >
       <div style="border: 1px solid var(--zbk-app-border-muted); padding: var(--zbk-spacing-2);">
-        <p style="font-size: var(--zbk-font-size-sm); color: var(--zbk-app-ink-soft);">Display/Headings</p>
+        <p style="font-size: var(--zbk-font-size-sm); color: var(--zbk-app-ink-subtle);">Display/Headings</p>
         <p style="font-family: var(--zbk-font-family-alt); font-size: var(--zbk-font-size-2xl);">Instrument Serif</p>
       </div>
 
       <div style="border: 1px solid var(--zbk-app-border-muted); padding: var(--zbk-spacing-2);">
-        <p style="font-size: var(--zbk-font-size-sm); color: var(--zbk-app-ink-soft);">Body/Secondary</p>
-        <p style="font-family: var(--zbk-font-family-primary); font-size: var(--zbk-font-size-base);">
+        <p style="font-size: var(--zbk-font-size-sm); color: var(--zbk-app-ink-subtle);">Body/Secondary</p>
+        <p style="font-family: var(--zbk-font-family-primary); font-size: var(--zbk-font-size-md);">
           Newsreader
         </p>
       </div>
 
       <div style="border: 1px solid var(--zbk-app-border-muted); padding: var(--zbk-spacing-2);">
-        <p style="font-size: var(--zbk-font-size-sm); color: var(--zbk-app-ink-soft);">Monospace/Code</p>
+        <p style="font-size: var(--zbk-font-size-sm); color: var(--zbk-app-ink-subtle);">Monospace/Code</p>
         <p style="font-family: var(--zbk-font-family-code); font-size: var(--zbk-font-size-sm);">Space Mono</p>
       </div>
 
       <div style="border: 1px solid var(--zbk-app-border-muted); padding: var(--zbk-spacing-2);">
-        <p style="font-size: var(--zbk-font-size-sm); color: var(--zbk-app-ink-soft);">A11y High-Legibility</p>
-        <p style="font-family: 'Atkinson Hyperlegible Next', sans-serif; font-size: var(--zbk-font-size-base);">
+        <p style="font-size: var(--zbk-font-size-sm); color: var(--zbk-app-ink-subtle);">A11y High-Legibility</p>
+        <p style="font-family: 'Atkinson Hyperlegible Next', sans-serif; font-size: var(--zbk-font-size-md);">
           Atkinson
         </p>
       </div>
@@ -78,12 +78,12 @@
       <div
         style="
           padding: var(--zbk-spacing-3);
-          background: var(--zbk-app-canvas-soft);
+          background: var(--zbk-app-canvas-subtle);
           border: 1px solid var(--zbk-app-border-muted);
         "
       >
         <p style="margin: 0; font-size: var(--zbk-font-size-sm); color: var(--zbk-app-ink);">
-          Canvas Soft: var(--zbk-app-canvas-soft)
+          Canvas Subtle: var(--zbk-app-canvas-subtle)
         </p>
       </div>
     </div>
@@ -111,17 +111,23 @@
   </section>
 
   <section style="margin-bottom: var(--zbk-spacing-5);">
-    <h2>Editorial Grid (with Marginalia)</h2>
-    <p>Two-column layout on wide screens, single column on mobile.</p>
+    <h2>Editorial register (with marginalia)</h2>
+    <p>Marginalia float into the rail at the full regime, inset sidenote below it.</p>
 
     <div class="editorial-root" style="margin-top: var(--zbk-spacing-3);">
-      <div class="editorial-main">
+      <div class="editorial-frame">
+      <div class="editorial-main prose">
         <h3>Main Content</h3>
         <p>
-          This is a test of the editorial grid. The main column is constrained to a comfortable reading measure
-          (65 characters) using <code>max-inline-size</code> bound to a zebkit token. Baseline rhythm is maintained
-          through line-height modifiers.
+          This is a test of the editorial register. The main column is constrained to a comfortable reading
+          measure (65 characters) using <code>max-inline-size</code> bound to a zebkit token. Baseline rhythm
+          is maintained through line-height modifiers.
         </p>
+
+        <aside class="editorial-marginalia">
+          <strong>Sidenote:</strong> Authored inline after the paragraph it annotates. At 80rem+ it floats
+          into the rail beside that paragraph; below, it renders as an inset note. All values token-bound.
+        </aside>
 
         <h4>Heading Level 4</h4>
         <p>
@@ -129,18 +135,11 @@
           <code>--editorial-gap</code>, which is itself a zebkit spacing token.
         </p>
 
-        <p>
-          On wider screens (75rem+), the marginalia column appears to the right. On mobile, it stacks below.
-        </p>
-
         <pre><code>{`const example = () => {
   return "All values are token-bound";
 };`}</code></pre>
       </div>
-
-      <aside class="editorial-marginalia">
-        <p><strong>Sidenote:</strong> This marginalia section uses the same token system. Font size, line-height, and color all bind to zebkit tokens.</p>
-      </aside>
+      </div>
     </div>
   </section>
 
@@ -162,6 +161,7 @@
   h2 {
     font-family: var(--zbk-font-family-alt);
     font-size: var(--zbk-font-size-2xl);
+    font-weight: var(--zbk-font-weight-normal);
     margin-top: var(--zbk-spacing-4);
   }
 </style>

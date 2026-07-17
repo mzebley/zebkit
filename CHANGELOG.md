@@ -9,6 +9,8 @@ All notable changes to zebkit are documented here. Format follows [Keep a Change
 Repository housekeeping (internal structure/tooling — no effect on the published package surface):
 
 ### Changed
+- Docs editorial register cleanup. Docs theme now overrides the prose tokens (`theme/zebkit-docs/zbk-h1..h6|p|lede.tokens.json`): Instrument Serif at its native 400 for h1/h2 (no more synthesized faux-bold), Newsreader for h3–h5, mono uppercase instrument labels for h6, 65ch paragraph measure, and a real flow rhythm (`p-spacing-after: spacing-1`, heading before/after gaps). `editorial.css` rewritten: killed the double `font-size-md` application that inflated lists/tables/asides to ~125% of body copy, floats inline `<aside class="editorial-marginalia">` into the reserved rail Tufte-style at the full regime (inset sidenote below it), auto-adopts the lede treatment on each page's opening paragraph, and adds token-bound stopgap treatments for tables (mono uppercase headers, print-style rules), lists, code, blockquote, hr, and links
+- Docs component/foundations register (`DefaultLayout`): replaced dead Tailwind-style utility classes and spacing-ladder misreads (`gap: spacing-4` ≈ 92px between every block, `h2 margin-top: spacing-8` ≈ 192px — zebkit's ladder is 1 = 1rem) with scoped token-bound rules; body and list text now ride the `--zbk-p-*` prose tokens
 - Cleared all `npm audit` findings (was 35: 1 critical, 13 high). Safe transitive bumps plus dev/build-tooling majors: `inquirer` 10→14 (annotated the one `default` callback that lost cross-question inference), `esbuild` 0.23→0.25, `@rollup/plugin-terser` 0.4→1.0, and the doc-site toolchain `vite` 5→7 / `@sveltejs/vite-plugin-svelte` 4→6 / `@sveltejs/kit` + `adapter-static` refreshed. Added a `cookie` `^0.7.0` override (kit still pins the vulnerable `^0.6.0`) and dropped the obsolete `@types/inquirer` (v14 bundles its own types). No change to the published package runtime — all affected deps are dev/build/docs only
 - Grouped the binding concept docs into `foundations/` — `VISION.md`, `GRAMMAR.md`, `COMPONENT-VISION.md` (root markdown is now just README/CHANGELOG/INSTALL/CLAUDE/AGENTS)
 - Renamed the documentation-site directory `docs/` → `doc-site/`; updated every build, config, and CI path (npm workspace, token + hero-theme output dirs, agent-context and CLI copy paths, `svelte.config.js`, Vercel `outputDirectory`)
@@ -19,10 +21,13 @@ Repository housekeeping (internal structure/tooling — no effect on the publish
 - Completed `HANDOFF-*.md` coordination docs, stale compiled theme CSS, the generated `theme/zebkit-baseline/` reference set, the redundant nested docs `package-lock.json`, and the obsolete `.babelrc`
 
 ### Fixed
+- Dead CSS variable references across the doc site that silently fell back to inherited values: `--zbk-app-ink-soft`/`--zbk-disabled-ink-soft` → `-subtle` (a dozen components incl. TopBar, LeftNav, Inspector, TokenTable), `--zbk-line-height-relaxed` → numbered scale, `--zbk-font-family-mono` → `-code`, `--zbk-radius-sm` → `--zbk-border-radius-sm`, `--zbk-action` → `--zbk-action-ink`, `--zbk-app-canvas-soft` → `-subtle`, `--zbk-font-size-base` → `-md`
+- Removed `EditorialLayout`'s grid rail + `marginalia` snippet: mdsvex pages can't fill Svelte snippets, so the rail sat permanently empty while every inline aside stacked at 24ch inside the reading column (with a stray rail `padding-top` inflating the gaps around it)
 - CI installed docs dependencies from a nested lockfile that no longer exists; the root `npm ci` covers the workspace, so that redundant step is removed
 - Normalized a root-absolute manifesto link (`/foundations/VISION.md`) to a repo-relative path
 
 ### Added
+- Responsive docs "On this page" navigation: a sticky, backdrop-blurred reading lens shares the editorial marginalia rail without displacing notes, falling back to a focus-trapped anchored popover when the rail is too narrow and a bottom sheet only on compact viewports; section jumps scroll smoothly unless reduced motion is active, and the navbar accessibility popover now shares the same keyboard focus containment
 - `.gitignore` rules for handoff docs, compiled theme CSS, the generated baseline reference, and local Claude settings
 
 Road to 1.0:
@@ -33,7 +38,8 @@ Road to 1.0:
 - Dark-mode mechanism (the `*-inverse` app tokens exist; nothing toggles them yet)
 - Per-component CSS/JS exclusion parity (`components` config should also shape the JS bundle)
 - Docs: "For agents" prose, Cmd-K palette, accessibility audit, getting-started and config pages
-- Prose token gaps: eyebrow, code/pre, link (see NOTES.md)
+- Prose token gaps: eyebrow, code/pre, link (see NOTES.md); table, list flow, blockquote/hr/figure, and marginalia/aside semantics (stopgapped with raw token references in `doc-site/src/styles/editorial.css`)
+- Prose flow-spacing determinism: heading `spacing-before/after` sibling rules fight `.prose > * + p` / `.prose > p + *` at equal specificity, so the winner is a source-order coin flip — the docs re-wire the tokens unlayered in `editorial.css`; the generator needs a deterministic contract (wide tables also still clip on narrow viewports under `.app-main`'s `overflow-x: clip` — needs a scroll wrapper that keeps table semantics)
 - JSON schema for `zebkit.config.json`
 - First npm publish
 

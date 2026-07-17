@@ -819,12 +819,12 @@
       "description": "Font size for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
-      "value": "{font-weight.bold}",
+      "value": "{font-weight.normal}",
       "type": "fontWeight",
       "description": "Font weight for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "line-height": {
-      "value": "{line-height.2}",
+      "value": "{line-height.1}",
       "type": "lineHeight",
       "description": "Line height for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -876,12 +876,12 @@
       "description": "Font size for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
-      "value": "{font-weight.bold}",
+      "value": "{font-weight.normal}",
       "type": "fontWeight",
       "description": "Font weight for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
     "line-height": {
-      "value": "{line-height.3}",
+      "value": "{line-height.2}",
       "type": "lineHeight",
       "description": "Line height for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -901,7 +901,7 @@
       "description": "Amount of margin inline start for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
-      "value": "{spacing.2}",
+      "value": "{spacing.1}",
       "type": "spacing",
       "description": "Amount of margin inline end for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -923,7 +923,7 @@
   },
   "zbk-h3": {
     "font-family": {
-      "value": "{font-family.heading}",
+      "value": "{font-family.primary}",
       "type": "fontFamily",
       "description": "Font size for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -938,7 +938,7 @@
       "description": "Font weight for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
     "line-height": {
-      "value": "{line-height.3}",
+      "value": "{line-height.2}",
       "type": "lineHeight",
       "description": "Line height for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -953,12 +953,12 @@
       "description": "Maximum width for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
-      "value": "{spacing.3}",
+      "value": "{spacing.2}",
       "type": "spacing",
       "description": "Amount of margin inline start for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
-      "value": "{spacing.2}",
+      "value": "{spacing.05}",
       "type": "spacing",
       "description": "Amount of margin inline end for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -980,7 +980,7 @@
   },
   "zbk-h4": {
     "font-family": {
-      "value": "{font-family.heading}",
+      "value": "{font-family.primary}",
       "type": "fontFamily",
       "description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -995,7 +995,7 @@
       "description": "Font weight for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
     "line-height": {
-      "value": "{line-height.3}",
+      "value": "{line-height.2}",
       "type": "lineHeight",
       "description": "Line height for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -1010,12 +1010,12 @@
       "description": "Maximum width for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
-      "value": "{spacing.3}",
+      "value": "{spacing.105}",
       "type": "spacing",
       "description": "Amount of margin inline start for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
-      "value": "{spacing.105}",
+      "value": "{spacing.05}",
       "type": "spacing",
       "description": "Amount of margin inline end for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -1037,7 +1037,7 @@
   },
   "zbk-h5": {
     "font-family": {
-      "value": "{font-family.heading}",
+      "value": "{font-family.primary}",
       "type": "fontFamily",
       "description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -1067,12 +1067,12 @@
       "description": "Maximum width for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
-      "value": "{spacing.2}",
+      "value": "{spacing.105}",
       "type": "spacing",
       "description": "Amount of margin inline start for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
-      "value": "{spacing.1}",
+      "value": "{spacing.05}",
       "type": "spacing",
       "description": "Amount of margin inline end for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -1094,17 +1094,17 @@
   },
   "zbk-h6": {
     "font-family": {
-      "value": "{font-family.heading}",
+      "value": "{font-family.interface}",
       "type": "fontFamily",
       "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-size": {
-      "value": "{font-size.sm}",
+      "value": "{font-size.xs}",
       "type": "fontSize",
       "description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
-      "value": "{font-weight.semibold}",
+      "value": "{font-weight.normal}",
       "type": "fontWeight",
       "description": "Font weight for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -1114,7 +1114,7 @@
       "description": "Line height for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
-      "value": "{letter-spacing.normal}",
+      "value": "{letter-spacing.wide}",
       "type": "letterSpacing",
       "description": "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -1124,17 +1124,17 @@
       "description": "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
-      "value": "{spacing.2}",
+      "value": "{spacing.105}",
       "type": "spacing",
       "description": "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
-      "value": "{spacing.1}",
+      "value": "{spacing.05}",
       "type": "spacing",
       "description": "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "color": {
-      "value": "{app.ink}",
+      "value": "{app.ink-subtle}",
       "type": "color",
       "description": "Color of H6 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -1176,7 +1176,7 @@
       "description": "Tracking for introductory lede text with .lede applied directly or as a child of a .prose container."
     },
     "measure": {
-      "value": "{text-measure.3}",
+      "value": "{text-measure.2}",
       "type": "sizing",
       "description": "Maximum width for introductory lede text with .lede applied directly or as a child of a .prose container."
     },
@@ -1300,7 +1300,7 @@
       "description": "Tracking for P elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
-      "value": "{text-measure.4}",
+      "value": "{text-measure.3}",
       "type": "sizing",
       "description": "Maximum width for P elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -1310,7 +1310,7 @@
       "description": "Amount of margin inline start for P elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
-      "value": "{spacing.05}",
+      "value": "{spacing.1}",
       "type": "spacing",
       "description": "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -2781,29 +2781,45 @@
   },
   "zbk-font-family": {
     "primary": {
-      "value": "\"Newsreader\"",
+      "value": "\"Proza Libre\"",
       "description": "Primary font family for use in the system. Usually used for body content and interface items.",
       "type": "fontFamily",
       "source": "google",
-      "fallback": "serif",
-      "weights": "200..800"
+      "fallback": "sans",
+      "weights": [
+        400,
+        500,
+        600,
+        700,
+        800
+      ],
+      "styles": [
+        "normal",
+        "italic"
+      ]
     },
     "alt": {
-      "value": "\"Instrument Serif\"",
+      "value": "\"Source Serif 4\"",
       "description": "Alternate font family for use in the system. Primarily used for headings.",
       "type": "fontFamily",
       "source": "google",
-      "fallback": "serif"
+      "fallback": "serif",
+      "weights": "300..700",
+      "styles": [
+        "normal",
+        "italic"
+      ]
     },
     "monospace": {
-      "value": "\"Space Mono\"",
+      "value": "\"Inconsolata\"",
       "description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
       "type": "fontFamily",
       "source": "google",
       "fallback": "mono",
-      "weights": [
-        400,
-        700
+      "weights": "300..700",
+      "styles": [
+        "normal",
+        "italic"
       ]
     },
     "system-sans": {

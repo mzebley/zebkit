@@ -168,7 +168,7 @@
   .nav-link {
     display: block;
     padding: var(--zbk-spacing-05) var(--zbk-spacing-05);
-    color: var(--zbk-app-ink-soft);
+    color: var(--zbk-app-ink-subtle);
     border-left: var(--zbk-border-width-xs) solid var(--zbk-app-border-muted);
     padding-left: calc(var(--zbk-spacing-05) - var(--zbk-border-width-xs));
     text-decoration: none;
