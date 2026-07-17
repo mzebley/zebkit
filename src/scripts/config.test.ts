@@ -2,13 +2,103 @@
  * @jest-environment node
  */
 
+import fs from 'fs-extra';
+import os from 'node:os';
+import path from 'node:path';
+
 import {
+  loadZebkitConfig,
   OverlayThemeConfig,
   PruneConfig,
+  validateKnownConfigItems,
   resolveOverlayRootSelector,
   validateOverlays,
   validatePruneConfig,
 } from './config';
+import {
+  ZEBKIT_CONFIG_SCHEMA,
+  ZEBKIT_CONFIG_SCHEMA_FILENAME,
+} from './config-schema';
+
+describe('validateKnownConfigItems', () => {
+  it('accepts known keys throughout the config grammar', () => {
+    expect(() =>
+      validateKnownConfigItems({
+        $schema: './node_modules/zebkit/dist/editor/schemas/zebkit.config.schema.json',
+        tokens: {
+          destinationPath: './dist',
+          fonts: { strategy: 'link' },
+          extendedTokens: { colors: 'smart', emitBreakpointVars: true },
+          typeScale: { static: false },
+          spaceScale: { fluid: true },
+          prune: { enabled: true, output: { mode: 'alongside' } },
+          overlays: [
+            {
+              themeName: 'dark',
+              tokenPath: './dark',
+              fonts: { strategy: 'manual' },
+            },
+          ],
+        },
+        components: { button: { variants: ['outline'] }, checkbox: false },
+        context: { path: './zebkit/context' },
+      })
+    ).not.toThrow();
+  });
+
+  it('rejects a duplicate tokens wrapper and names the exact move', () => {
+    expect(() =>
+      validateKnownConfigItems({
+        tokens: { tokens: { fonts: { strategy: 'link' } } },
+      })
+    ).toThrow(
+      /Unknown config item `tokens\.tokens`.*Move `tokens\.tokens\.fonts` to `tokens\.fonts`/
+    );
+  });
+
+  it('suggests the closest known key for a typo', () => {
+    expect(() =>
+      validateKnownConfigItems({ tokens: { fonts: { stratgy: 'link' } } })
+    ).toThrow(
+      /Unknown config item `tokens\.fonts\.stratgy`.*Did you mean `tokens\.fonts\.strategy`/
+    );
+  });
+
+  it('rejects invalid enum values with the valid vocabulary', () => {
+    expect(() =>
+      validateKnownConfigItems({ tokens: { fonts: { strategy: 'fastest' } } })
+    ).toThrow(
+      /Invalid config value at `tokens\.fonts\.strategy`.*"import", "link", "preload", "manual"/
+    );
+  });
+
+  it('rejects unknown keys in dynamic component entries', () => {
+    expect(() =>
+      validateKnownConfigItems({ components: { button: { varients: ['outline'] } } })
+    ).toThrow(
+      /Unknown config item `components\.button\.varients`.*Did you mean `components\.button\.variants`/
+    );
+  });
+
+  it('runs unknown-key validation when loading a config file', async () => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-config-'));
+    const configPath = path.join(directory, 'zebkit.config.json');
+    await fs.writeJson(configPath, { tokens: { fonst: { strategy: 'link' } } });
+
+    try {
+      await expect(loadZebkitConfig(configPath)).rejects.toThrow(
+        /Unknown config item `tokens\.fonst`.*Did you mean `tokens\.fonts`/
+      );
+    } finally {
+      await fs.remove(directory);
+    }
+  });
+
+  it('keeps the tracked editor schema in sync with runtime validation', async () => {
+    const schemaPath = path.resolve('schemas', ZEBKIT_CONFIG_SCHEMA_FILENAME);
+    await expect(fs.readJson(schemaPath)).resolves.toEqual(ZEBKIT_CONFIG_SCHEMA);
+  });
+});
 
 describe('resolveOverlayRootSelector', () => {
   it('defaults to a data-attribute selector built from themeName', () => {

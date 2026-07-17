@@ -1,7 +1,10 @@
 import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
+import Ajv2020 from 'ajv/dist/2020.js';
+import type { ErrorObject } from 'ajv';
 import { compileMatchers } from './prune/matchers';
+import { ZEBKIT_CONFIG_SCHEMA } from './config-schema';
 
 export const EXTENDED_TOKEN_BREAKPOINTS = [
   'tablet',
@@ -213,10 +216,187 @@ export type ContextConfig = {
 };
 
 export type ZebkitConfig = {
+  /** JSON Schema used by editors for completion and inline validation. */
+  $schema?: string;
   tokens?: TokensConfig;
   components?: ComponentsConfig;
   context?: ContextConfig;
 };
+
+type ConfigRecord = Record<string, unknown>;
+type SchemaNode = {
+  type?: string;
+  const?: unknown;
+  oneOf?: readonly SchemaNode[];
+  properties?: Readonly<Record<string, SchemaNode>>;
+  additionalProperties?: boolean | SchemaNode;
+  items?: SchemaNode;
+};
+
+const configSchemaValidator = new Ajv2020({ allErrors: true, strict: false }).compile(
+  ZEBKIT_CONFIG_SCHEMA as any
+);
+
+function asConfigRecord(value: unknown): ConfigRecord | undefined {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+    ? (value as ConfigRecord)
+    : undefined;
+}
+
+function editDistance(left: string, right: string): number {
+  const previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+  for (let leftIndex = 1; leftIndex <= left.length; leftIndex += 1) {
+    const current = [leftIndex];
+    for (let rightIndex = 1; rightIndex <= right.length; rightIndex += 1) {
+      current[rightIndex] = Math.min(
+        current[rightIndex - 1] + 1,
+        previous[rightIndex] + 1,
+        previous[rightIndex - 1] +
+          (left[leftIndex - 1] === right[rightIndex - 1] ? 0 : 1)
+      );
+    }
+    previous.splice(0, previous.length, ...current);
+  }
+  return previous[right.length];
+}
+
+function configPath(parentPath: string, key: string): string {
+  return parentPath ? `${parentPath}.${key}` : key;
+}
+
+function pointerSegments(pointer: string): string[] {
+  if (!pointer) return [];
+  return pointer
+    .slice(1)
+    .split('/')
+    .map((segment) => segment.replace(/~1/g, '/').replace(/~0/g, '~'));
+}
+
+function pointerLabel(pointer: string): string {
+  return pointerSegments(pointer).reduce(
+    (label, segment) =>
+      /^\d+$/.test(segment)
+        ? `${label}[${segment}]`
+        : configPath(label, segment),
+    ''
+  );
+}
+
+function valueAtPointer(value: unknown, pointer: string): unknown {
+  return pointerSegments(pointer).reduce<unknown>((current, segment) => {
+    if (Array.isArray(current)) return current[Number(segment)];
+    return asConfigRecord(current)?.[segment];
+  }, value);
+}
+
+function schemaMatchesValue(schema: SchemaNode, value: unknown): boolean {
+  if ('const' in schema) return schema.const === value;
+  if (schema.type === 'object') return asConfigRecord(value) !== undefined;
+  if (schema.type === 'array') return Array.isArray(value);
+  if (schema.type === 'string') return typeof value === 'string';
+  if (schema.type === 'boolean') return typeof value === 'boolean';
+  if (schema.type === 'number') return typeof value === 'number';
+  return true;
+}
+
+function selectSchemaBranch(schema: SchemaNode, value: unknown): SchemaNode {
+  return schema.oneOf?.find((candidate) => schemaMatchesValue(candidate, value)) ?? schema;
+}
+
+function schemaAtPointer(config: unknown, pointer: string): SchemaNode {
+  let schema = ZEBKIT_CONFIG_SCHEMA as unknown as SchemaNode;
+  let value = config;
+
+  for (const segment of pointerSegments(pointer)) {
+    schema = selectSchemaBranch(schema, value);
+    const nextSchema = Array.isArray(value)
+      ? schema.items
+      : schema.properties?.[segment] ??
+        (typeof schema.additionalProperties === 'object'
+          ? schema.additionalProperties
+          : undefined);
+    if (!nextSchema) return {};
+    schema = nextSchema;
+    value = Array.isArray(value)
+      ? value[Number(segment)]
+      : asConfigRecord(value)?.[segment];
+  }
+
+  return selectSchemaBranch(schema, value);
+}
+
+function unknownConfigFix(
+  parentPath: string,
+  unknownKey: string,
+  unknownValue: unknown,
+  allowedKeys: readonly string[]
+): string {
+  const unknownPath = configPath(parentPath, unknownKey);
+  const nested = asConfigRecord(unknownValue);
+  const liftableKeys = nested
+    ? Object.keys(nested).filter((key) => allowedKeys.includes(key))
+    : [];
+  if (liftableKeys.length > 0) {
+    return ` Move ${liftableKeys
+      .map(
+        (key) =>
+          `\`${configPath(unknownPath, key)}\` to \`${configPath(parentPath, key)}\``
+      )
+      .join(', ')}.`;
+  }
+
+  const closest = allowedKeys
+    .map((key) => ({ key, distance: editDistance(unknownKey, key) }))
+    .sort((left, right) => left.distance - right.distance || left.key.localeCompare(right.key))[0];
+  if (closest && closest.distance <= 2) {
+    return ` Did you mean \`${configPath(parentPath, closest.key)}\`?`;
+  }
+
+  return ' Remove it or replace it with one of the valid items.';
+}
+
+function formatSchemaError(config: unknown, error: ErrorObject): string {
+  const parentPath = pointerLabel(error.instancePath);
+  if (error.keyword === 'additionalProperties') {
+    const unknownKey = String(error.params.additionalProperty);
+    const parentValue = valueAtPointer(config, error.instancePath);
+    const unknownValue = asConfigRecord(parentValue)?.[unknownKey];
+    const allowedKeys = Object.keys(schemaAtPointer(config, error.instancePath).properties ?? {});
+    const location = parentPath ? `under \`${parentPath}\`` : 'at the config root';
+    const validPaths = allowedKeys.map((allowed) => `\`${configPath(parentPath, allowed)}\``);
+    return (
+      `Unknown config item \`${configPath(parentPath, unknownKey)}\` ${location}.` +
+      unknownConfigFix(parentPath, unknownKey, unknownValue, allowedKeys) +
+      ` Valid items here: ${validPaths.join(', ')}.`
+    );
+  }
+
+  const itemPath = parentPath || 'config root';
+  if (error.keyword === 'enum') {
+    const allowed = (error.params.allowedValues as unknown[]).map((value) => JSON.stringify(value));
+    return `Invalid config value at \`${itemPath}\`. Expected one of ${allowed.join(', ')}.`;
+  }
+  if (error.keyword === 'required') {
+    return `Missing required config item \`${configPath(parentPath, String(error.params.missingProperty))}\`.`;
+  }
+  return `Invalid config item at \`${itemPath}\`: ${error.message ?? error.keyword}.`;
+}
+
+/**
+ * Validates config against the same schema editors use for completion and diagnostics.
+ * Semantic checks that JSON Schema cannot express run immediately after this pass.
+ */
+export function validateKnownConfigItems(config: unknown): void {
+  if (configSchemaValidator(config)) return;
+  const errors = configSchemaValidator.errors ?? [];
+  const error =
+    errors.find((item) => item.keyword === 'additionalProperties') ??
+    errors.find((item) => item.keyword === 'enum') ??
+    errors.find((item) => item.keyword === 'required') ??
+    errors.find((item) => item.keyword !== 'oneOf') ??
+    errors[0];
+  throw new Error(error ? formatSchemaError(config, error) : 'Invalid Zebkit config.');
+}
 
 /**
  * Resolves an overlay's effective selector, defaulting to `[data-zbk-theme="<themeName>"]`
@@ -385,11 +565,13 @@ export async function loadZebkitConfig(configPath?: string): Promise<
     if (await fs.pathExists(resolved)) {
       try {
         const fileContents = await fs.readFile(resolved, 'utf-8');
-        const parsed = JSON.parse(fileContents) as ZebkitConfig;
-        validateOverlays(parsed.tokens?.overlays);
-        validatePruneConfig(parsed.tokens?.prune);
-        validateComponentsConfig(parsed.components);
-        return { config: parsed, path: resolved };
+        const parsed = JSON.parse(fileContents) as unknown;
+        validateKnownConfigItems(parsed);
+        const config = parsed as ZebkitConfig;
+        validateOverlays(config.tokens?.overlays);
+        validatePruneConfig(config.tokens?.prune);
+        validateComponentsConfig(config.components);
+        return { config, path: resolved };
       } catch (error) {
         throw new Error(`Unable to read config file at ${resolved}: ${error}`);
       }

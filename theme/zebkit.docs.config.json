@@ -1,6 +1,6 @@
 {
+  "$schema": "../schemas/zebkit.config.schema.json",
   "tokens": {
-    "includeAllComponents": true,
     "destinationPath": "./doc-site/static/zebkit",
     "assetFilePath": "/zebkit/",
     "basePreset": "default",
@@ -44,6 +44,6 @@
         "destinationPath": "./doc-site/static/zebkit/themes"
       }
     ],
-    "tokens": { "fonts": { "strategy": "link" } }
+    "fonts": { "strategy": "link" }
   }
 }

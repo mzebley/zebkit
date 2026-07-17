@@ -4,12 +4,17 @@
  *
  * Generates:
  * 1. dist/editor/schemas/{key}.schema.json — Per-module JSON Schemas for token files
- * 2. dist/editor/zebkit.css-data.json — VS Code CSS custom data for autocomplete
+ * 2. schemas/zebkit.config.schema.json + dist/editor copy — Config completion/validation
+ * 3. dist/editor/zebkit.css-data.json — VS Code CSS custom data for autocomplete
  */
 
 import path from 'path';
 import fs from 'fs-extra';
 import { fileURLToPath } from 'node:url';
+import {
+  ZEBKIT_CONFIG_SCHEMA,
+  ZEBKIT_CONFIG_SCHEMA_FILENAME,
+} from '../src/scripts/config-schema';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +22,11 @@ const __dirname = path.dirname(__filename);
 const defaultsDir = path.resolve(__dirname, '../dist/cli/defaults');
 const editorDir = path.resolve(__dirname, '../dist/editor');
 const schemasDir = path.resolve(editorDir, 'schemas');
+const sourceConfigSchemaPath = path.resolve(
+  __dirname,
+  '../schemas',
+  ZEBKIT_CONFIG_SCHEMA_FILENAME
+);
 
 interface ManifestModule {
   key: string;
@@ -245,6 +255,15 @@ async function buildEditor() {
       await fs.writeJson(schemaPath, moduleSchema, { spaces: 2 });
       console.log(`  Written: ${schemaPath}`);
     }
+
+    // The tracked source copy powers this repository's own configs; the dist copy ships
+    // with the package. Both come from the runtime schema object used by config.ts.
+    console.log('\nGenerating Zebkit config schema...');
+    const distConfigSchemaPath = path.join(schemasDir, ZEBKIT_CONFIG_SCHEMA_FILENAME);
+    await fs.writeJson(sourceConfigSchemaPath, ZEBKIT_CONFIG_SCHEMA, { spaces: 2 });
+    await fs.writeJson(distConfigSchemaPath, ZEBKIT_CONFIG_SCHEMA, { spaces: 2 });
+    console.log(`  Written: ${sourceConfigSchemaPath}`);
+    console.log(`  Written: ${distConfigSchemaPath}`);
 
     // Generate and write CSS custom data
     console.log('\nGenerating zebkit.css-data.json...');

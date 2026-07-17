@@ -1,0 +1,289 @@
+export const ZEBKIT_CONFIG_SCHEMA_FILENAME = 'zebkit.config.schema.json';
+export const ZEBKIT_CONFIG_CONSUMER_SCHEMA_PATH =
+  './node_modules/zebkit/dist/editor/schemas/zebkit.config.schema.json';
+
+const stringArray = (description: string) => ({
+  type: 'array',
+  description,
+  items: { type: 'string' },
+  uniqueItems: true,
+});
+
+const scaleSchema = (description: string) => ({
+  type: 'object',
+  description,
+  additionalProperties: false,
+  properties: {
+    static: {
+      type: 'boolean',
+      default: false,
+      description: 'Emit authored static values instead of the generated fluid scale.',
+    },
+    fluid: {
+      type: 'boolean',
+      default: true,
+      description: 'Generate a viewport-responsive scale. Setting this to false enables static mode.',
+    },
+  },
+});
+
+const fontsSchema = {
+  type: 'object',
+  description: 'Controls how configured Google Fonts are delivered.',
+  additionalProperties: false,
+  properties: {
+    strategy: {
+      type: 'string',
+      enum: ['import', 'link', 'preload', 'manual'],
+      default: 'import',
+      description:
+        'Google Fonts delivery: import emits CSS @imports; link/preload write an HTML head sidecar; manual emits no remote font loading.',
+    },
+  },
+} as const;
+
+const componentEntrySchema = {
+  oneOf: [
+    {
+      type: 'boolean',
+      description: 'Include or exclude the component and all of its shipped variants.',
+    },
+    {
+      type: 'object',
+      description: 'Include the component with an optional shipped-variant allowlist.',
+      additionalProperties: false,
+      properties: {
+        variants: {
+          type: 'array',
+          description: 'Shipped variant names to include. An empty array includes no shipped variants.',
+          items: { type: 'string' },
+          uniqueItems: true,
+        },
+      },
+    },
+  ],
+} as const;
+
+/**
+ * One source for runtime config validation and the JSON Schema shipped to editors.
+ * Keep descriptions concise: they are surfaced directly in completion and hover UI.
+ */
+export const ZEBKIT_CONFIG_SCHEMA = {
+  $schema: 'https://json-schema.org/draft/2020-12/schema',
+  $id: 'https://zebkit.dev/schemas/zebkit.config.schema.json',
+  title: 'Zebkit configuration',
+  description: 'Build, theme, component, pruning, and agent-context settings for Zebkit.',
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    $schema: {
+      type: 'string',
+      description: 'Path or URL to the Zebkit config JSON Schema used by the editor.',
+    },
+    tokens: {
+      type: 'object',
+      description: 'Token, CSS, theme, overlay, font, and pruning build settings.',
+      additionalProperties: false,
+      properties: {
+        destinationPath: {
+          type: 'string',
+          default: './dist',
+          description: 'Directory where compiled CSS and optional token artifacts are written.',
+        },
+        assetFilePath: {
+          type: 'string',
+          default: '/',
+          description: 'Public asset URL prefix used when compiling asset references into CSS.',
+        },
+        basePreset: {
+          type: 'string',
+          default: 'default',
+          description: 'Bundled theme preset used as the base token set.',
+        },
+        tokenPath: {
+          type: 'string',
+          description: 'Token override file or directory layered over the base preset.',
+        },
+        themeName: {
+          type: 'string',
+          description: 'Output theme name used in generated filenames.',
+        },
+        overlays: {
+          type: 'array',
+          description: 'Scoped overlay themes emitted alongside the base theme.',
+          items: {
+            type: 'object',
+            additionalProperties: false,
+            required: ['themeName', 'tokenPath'],
+            properties: {
+              tokenPath: {
+                type: 'string',
+                description: 'Token override file or directory for this overlay.',
+              },
+              themeName: {
+                type: 'string',
+                minLength: 1,
+                description: 'Overlay name used in its filename and default selector.',
+              },
+              rootSelector: {
+                type: 'string',
+                description:
+                  'Selector that scopes the overlay. Defaults to [data-zbk-theme="<themeName>"].',
+              },
+              destinationPath: {
+                type: 'string',
+                description: 'Overlay output directory. Defaults to the base destinationPath.',
+              },
+              fonts: fontsSchema,
+            },
+          },
+        },
+        exportTokens: {
+          type: 'boolean',
+          default: false,
+          description: 'Write authorable token artifacts alongside compiled CSS.',
+        },
+        splitMode: {
+          type: 'string',
+          enum: ['combined', 'per-module'],
+          default: 'combined',
+          description: 'Write one token export per format or one per token module.',
+        },
+        outputFormats: {
+          type: 'array',
+          default: ['JSON'],
+          description: 'Token export formats written when exportTokens is enabled.',
+          items: { type: 'string', enum: ['JSON', 'TypeScript', 'JavaScript'] },
+          uniqueItems: true,
+          minItems: 1,
+        },
+        writeAllowedTokenTypes: {
+          type: 'boolean',
+          default: false,
+          description: 'Write the allowed token-type vocabulary as JSON.',
+        },
+        writeTokenLookup: {
+          type: 'boolean',
+          default: false,
+          description: 'Write the token alias lookup map as JSON.',
+        },
+        writeVariantRegistry: {
+          type: 'boolean',
+          default: false,
+          description: 'Write the compiled component variant registry.',
+        },
+        tokenLookupOutputPath: {
+          type: 'string',
+          description: 'Custom output path for the token lookup map.',
+        },
+        extendedTokens: {
+          type: 'object',
+          description: 'Controls optional primitive palettes, responsive utilities, and breakpoint vars.',
+          additionalProperties: false,
+          properties: {
+            colors: {
+              type: 'string',
+              enum: ['all', 'smart'],
+              default: 'all',
+              description: 'Include every primitive palette or only families referenced by the token graph.',
+            },
+            breakpoints: {
+              description: 'Responsive utility breakpoints: true for all, false for none, or an allowlist.',
+              oneOf: [
+                { type: 'boolean' },
+                {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                    enum: ['tablet', 'tablet-lg', 'desktop', 'desktop-lg', 'widescreen'],
+                  },
+                  uniqueItems: true,
+                },
+              ],
+              default: true,
+            },
+            emitBreakpointVars: {
+              type: 'boolean',
+              default: false,
+              description: 'Emit --zbk-breakpoint-* custom properties for JavaScript consumers.',
+            },
+          },
+        },
+        typeScale: scaleSchema('Controls fluid or static font-size scale generation.'),
+        spaceScale: scaleSchema('Controls fluid or static spacing scale generation.'),
+        fonts: fontsSchema,
+        prune: {
+          type: 'object',
+          description: 'Production CSS pruning settings.',
+          additionalProperties: false,
+          properties: {
+            enabled: {
+              type: 'boolean',
+              default: false,
+              description: 'Prune unused CSS during a normal Zebkit build.',
+            },
+            content: stringArray('Content globs scanned for used classes and tokens.'),
+            safelist: stringArray('Exact classes or /regex/ patterns that pruning must retain.'),
+            blocklist: stringArray('Exact classes or /regex/ patterns that pruning must remove.'),
+            output: {
+              type: 'object',
+              description: 'Controls whether pruned CSS replaces or accompanies the canonical CSS.',
+              additionalProperties: false,
+              properties: {
+                mode: {
+                  type: 'string',
+                  enum: ['replace', 'alongside'],
+                  default: 'replace',
+                  description: 'Replace the canonical CSS or write a separate pruned file.',
+                },
+                path: {
+                  type: 'string',
+                  description: 'Output path used in alongside mode.',
+                },
+              },
+            },
+            tokens: {
+              type: 'boolean',
+              default: true,
+              description: 'Trim unreachable design tokens in addition to selectors.',
+            },
+            keepLayers: stringArray('Cascade layers pruning must preserve.'),
+            componentCss: {
+              type: 'string',
+              enum: ['keep', 'detect'],
+              default: 'keep',
+              description: 'Component-layer pruning mode. Version 1 supports keep.',
+            },
+            report: {
+              type: 'boolean',
+              default: true,
+              description: 'Write a JSON report describing the pruning result.',
+            },
+          },
+        },
+        minify: {
+          type: 'boolean',
+          default: true,
+          description: 'Minify the canonical compiled CSS.',
+        },
+      },
+    },
+    components: {
+      type: 'object',
+      description:
+        'Per-component inclusion. Use false to exclude, true to include, or an object with a shipped-variant allowlist.',
+      additionalProperties: componentEntrySchema,
+    },
+    context: {
+      type: 'object',
+      description: 'Controls generated agent-context delivery.',
+      additionalProperties: false,
+      properties: {
+        path: {
+          description: 'Destination for generated context, or false to disable it.',
+          oneOf: [{ type: 'string' }, { const: false }],
+        },
+      },
+    },
+  },
+} as const;

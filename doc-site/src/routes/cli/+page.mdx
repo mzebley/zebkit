@@ -52,7 +52,10 @@ complete config. It asks about:
   breakpoint vars and the responsive breakpoint set)
 
 It also writes `.vscode/settings.json` so the editor gets token schema validation and CSS
-custom-property hints. When you accept the context copy, the location is recorded as
+custom-property hints. The generated config's `$schema` field separately enables config-key
+completion, option suggestions, hover descriptions, and inline errors in JSON Schema-aware
+editors. This works inside the zebkit repository too; the checked-in theme configs point at the
+tracked schema in `schemas/`. When you accept the context copy, the location is recorded as
 `context.path` in the config (omit it, or set `context.path: false`, to opt out); `zebkit pull`
 refreshes that directory on upgrade.
 

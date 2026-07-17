@@ -21,12 +21,14 @@ Repository housekeeping (internal structure/tooling — no effect on the publish
 - Completed `HANDOFF-*.md` coordination docs, stale compiled theme CSS, the generated `theme/zebkit-baseline/` reference set, the redundant nested docs `package-lock.json`, and the obsolete `.babelrc`
 
 ### Fixed
+- Config files now fail fast on unknown keys with the full dotted path, valid keys, and a specific move or typo suggestion when one can be inferred, instead of silently ignoring the item and falling back to defaults
 - Dead CSS variable references across the doc site that silently fell back to inherited values: `--zbk-app-ink-soft`/`--zbk-disabled-ink-soft` → `-subtle` (a dozen components incl. TopBar, LeftNav, Inspector, TokenTable), `--zbk-line-height-relaxed` → numbered scale, `--zbk-font-family-mono` → `-code`, `--zbk-radius-sm` → `--zbk-border-radius-sm`, `--zbk-action` → `--zbk-action-ink`, `--zbk-app-canvas-soft` → `-subtle`, `--zbk-font-size-base` → `-md`
 - Removed `EditorialLayout`'s grid rail + `marginalia` snippet: mdsvex pages can't fill Svelte snippets, so the rail sat permanently empty while every inline aside stacked at 24ch inside the reading column (with a stray rail `padding-top` inflating the gaps around it)
 - CI installed docs dependencies from a nested lockfile that no longer exists; the root `npm ci` covers the workspace, so that redundant step is removed
 - Normalized a root-absolute manifesto link (`/foundations/VISION.md`) to a repo-relative path
 
 ### Added
+- `zebkit.config.json` JSON Schema with property completion, hover descriptions, enum suggestions, and inline validation; `zebkit init` adds a portable `$schema` pointer, while repository theme configs use the tracked source schema
 - Responsive docs "On this page" navigation: a sticky, backdrop-blurred reading lens shares the editorial marginalia rail without displacing notes, falling back to a focus-trapped anchored popover when the rail is too narrow and a bottom sheet only on compact viewports; section jumps scroll smoothly unless reduced motion is active, and the navbar accessibility popover now shares the same keyboard focus containment
 - `.gitignore` rules for handoff docs, compiled theme CSS, the generated baseline reference, and local Claude settings
 
@@ -40,7 +42,6 @@ Road to 1.0:
 - Docs: "For agents" prose, Cmd-K palette, accessibility audit, getting-started and config pages
 - Prose token gaps: eyebrow, code/pre, link (see NOTES.md); table, list flow, blockquote/hr/figure, and marginalia/aside semantics (stopgapped with raw token references in `doc-site/src/styles/editorial.css`)
 - Prose flow-spacing determinism: heading `spacing-before/after` sibling rules fight `.prose > * + p` / `.prose > p + *` at equal specificity, so the winner is a source-order coin flip — the docs re-wire the tokens unlayered in `editorial.css`; the generator needs a deterministic contract (wide tables also still clip on narrow viewports under `.app-main`'s `overflow-x: clip` — needs a scroll wrapper that keeps table semantics)
-- JSON schema for `zebkit.config.json`
 - First npm publish
 
 ## [0.8.1] — 2026-07-16

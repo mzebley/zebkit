@@ -1,5 +1,6 @@
 import path from 'path';
 import type { ZebkitConfig } from '../../scripts/config';
+import { ZEBKIT_CONFIG_CONSUMER_SCHEMA_PATH } from '../../scripts/config-schema';
 import { resolveComponentsFilter } from '../../scripts/components-config';
 import {
   applyOptionValues,
@@ -293,7 +294,10 @@ export async function runInitCommand(
     }
 
     // Write a complete, self-documenting token config (defaults are not omitted).
-    const config: ZebkitConfig = { tokens: {} };
+    const config: ZebkitConfig = {
+      $schema: ZEBKIT_CONFIG_CONSUMER_SCHEMA_PATH,
+      tokens: {},
+    };
     applyOptionValues(config, answers, ctx);
 
     if (answers.copyTokens) {

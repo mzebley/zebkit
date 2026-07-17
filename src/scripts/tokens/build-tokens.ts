@@ -39,6 +39,9 @@ import {
   resolveOverlayRootSelector,
   TokensConfig,
   validateComponentsConfig,
+  validateKnownConfigItems,
+  validateOverlays,
+  validatePruneConfig,
   ZebkitConfig,
 } from "../config";
 import {
@@ -129,46 +132,52 @@ export interface RunTokenBuildOptions {
 export async function runTokenBuild(
   options: RunTokenBuildOptions = {}
 ): Promise<void> {
-  const { overrideConfig, zebkitPackageRoot, tokenDefaultsDir, configPath, cliOverrides } =
-    options;
   displayWelcome();
-
-  const loadedConfig = overrideConfig
-    ? { config: overrideConfig, path: "(provided)" }
-    : await loadZebkitConfig(configPath);
-  let tokensConfig: TokensConfig | undefined = loadedConfig?.config.tokens;
-  if (loadedConfig && loadedConfig.path !== "(provided)") {
-    console.log(chalk.green(`Using config from ${loadedConfig.path}`));
-  }
-
-  // Declared component intent: excluded components and shipped-variant allowlists.
-  // Filters at gather time; prune (evidence-based) runs after and only removes more.
-  const componentsConfig = loadedConfig?.config.components;
-  validateComponentsConfig(componentsConfig);
-  const componentsFilter: ComponentsFilter = resolveComponentsFilter(componentsConfig);
-  if (componentsConfig && Object.keys(componentsConfig).length > 0) {
-    warnUnknownComponents(componentsConfig, await getKnownComponents(tokenDefaultsDir));
-  }
-
-  // Flag overrides (`--theme`, `--dest`) layer on top of the loaded config. When no
-  // config exists they establish one, which intentionally skips the interactive
-  // prompts for anything they don't cover (defaults apply).
-  if (cliOverrides?.basePreset || cliOverrides?.destinationPath) {
-    tokensConfig = {
-      ...(tokensConfig ?? {}),
-      ...(cliOverrides.basePreset ? { basePreset: cliOverrides.basePreset } : {}),
-      ...(cliOverrides.destinationPath
-        ? { destinationPath: cliOverrides.destinationPath }
-        : {}),
-    };
-  }
-
-  const builtInThemeNames = getThemePromptChoices(
-    await getBuiltInThemeNames(zebkitPackageRoot)
-  );
   const buildStart = Date.now();
 
   try {
+    const { overrideConfig, zebkitPackageRoot, tokenDefaultsDir, configPath, cliOverrides } =
+      options;
+    if (overrideConfig) {
+      validateKnownConfigItems(overrideConfig);
+      validateOverlays(overrideConfig.tokens?.overlays);
+      validatePruneConfig(overrideConfig.tokens?.prune);
+    }
+
+    const loadedConfig = overrideConfig
+      ? { config: overrideConfig, path: "(provided)" }
+      : await loadZebkitConfig(configPath);
+    let tokensConfig: TokensConfig | undefined = loadedConfig?.config.tokens;
+    if (loadedConfig && loadedConfig.path !== "(provided)") {
+      console.log(chalk.green(`Using config from ${loadedConfig.path}`));
+    }
+
+    // Declared component intent: excluded components and shipped-variant allowlists.
+    // Filters at gather time; prune (evidence-based) runs after and only removes more.
+    const componentsConfig = loadedConfig?.config.components;
+    validateComponentsConfig(componentsConfig);
+    const componentsFilter: ComponentsFilter = resolveComponentsFilter(componentsConfig);
+    if (componentsConfig && Object.keys(componentsConfig).length > 0) {
+      warnUnknownComponents(componentsConfig, await getKnownComponents(tokenDefaultsDir));
+    }
+
+    // Flag overrides (`--theme`, `--dest`) layer on top of the loaded config. When no
+    // config exists they establish one, which intentionally skips the interactive
+    // prompts for anything they don't cover (defaults apply).
+    if (cliOverrides?.basePreset || cliOverrides?.destinationPath) {
+      tokensConfig = {
+        ...(tokensConfig ?? {}),
+        ...(cliOverrides.basePreset ? { basePreset: cliOverrides.basePreset } : {}),
+        ...(cliOverrides.destinationPath
+          ? { destinationPath: cliOverrides.destinationPath }
+          : {}),
+      };
+    }
+
+    const builtInThemeNames = getThemePromptChoices(
+      await getBuiltInThemeNames(zebkitPackageRoot)
+    );
+
     const { destinationPath, assetFilePath } = tokensConfig
       ? {
           destinationPath: tokensConfig.destinationPath ?? "./dist",

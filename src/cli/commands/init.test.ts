@@ -117,6 +117,9 @@ describe('init command', () => {
     );
 
     const written = findWrittenConfig();
+    expect(written.$schema).toBe(
+      './node_modules/zebkit/dist/editor/schemas/zebkit.config.schema.json'
+    );
     // Quick answers captured.
     expect(written.tokens.destinationPath).toBe('./dist');
     expect(written.tokens.basePreset).toBe('dynamowaves');
