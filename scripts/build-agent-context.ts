@@ -75,10 +75,10 @@ interface CemDeclaration {
 }
 
 interface TokenEntry {
-  value?: string | number;
-  type?: string;
-  description?: string;
-  a11y?: boolean | string;
+  $value?: string | number;
+  $type?: string;
+  $description?: string;
+  $extensions?: { 'dev.zebkit'?: { a11y?: boolean | string } };
 }
 
 interface VariantEntry {
@@ -323,11 +323,11 @@ function renderComponent(
     lines.push('| Token | Default | Type | Description |');
     lines.push('|---|---|---|---|');
     for (const [name, token] of tokenEntries) {
-      const a11y = token.a11y ? ' **(a11y)**' : '';
+      const a11y = token.$extensions?.['dev.zebkit']?.a11y ? ' **(a11y)**' : '';
       lines.push(
-        `| \`--${tag}-${name}\` | \`${cell(String(token.value ?? ''))}\` | ${cell(
-          token.type
-        )} | ${cell(token.description)}${a11y} |`
+        `| \`--${tag}-${name}\` | \`${cell(String(token.$value ?? ''))}\` | ${cell(
+          token.$type
+        )} | ${cell(token.$description)}${a11y} |`
       );
     }
     lines.push('');

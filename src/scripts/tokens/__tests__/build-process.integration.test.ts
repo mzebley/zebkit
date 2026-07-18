@@ -77,7 +77,7 @@ describe('build smoke tests', () => {
       path.join(overlayDir, 'zbk-font-family.tokens.json'),
       {
         alt: {
-          value: '"Inter"',
+          $value: '"Inter"',
           type: 'fontFamily',
           source: 'system',
           fallback: 'sans',
@@ -157,7 +157,7 @@ describe('build smoke tests', () => {
       path.join(overrideDir, 'zbk-button.tokens.json'),
       {
         'font-size': {
-          value: '{font-size.3xl}',
+          $value: '{font-size.3xl}',
         },
       },
       { spaces: 2 }
@@ -226,7 +226,7 @@ describe('build smoke tests', () => {
     const overrideDir = path.join(tmpDir, 'tokens');
     await fs.ensureDir(overrideDir);
     await fs.writeJson(path.join(overrideDir, 'zbk-button.json'), {
-      'font-size': { value: '{font-size.3xl}' },
+      'font-size': { $value: '{font-size.3xl}' },
     });
     await fs.writeJson(configPath, {
       configVersion: 1,

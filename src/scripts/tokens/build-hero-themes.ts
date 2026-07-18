@@ -41,12 +41,12 @@ async function readThemeDiff(name: string): Promise<Record<string, string>> {
     const moduleKey = file.replace(/^zbk-/, "").replace(/\.tokens\.json$/, "");
     const json = (await fs.readJson(path.join(dir, file))) as Record<
       string,
-      { value?: string }
+      { $value?: string }
     >;
     for (const [tokenKey, entry] of Object.entries(json)) {
-      if (!entry || typeof entry.value !== "string") continue;
+      if (!entry || typeof entry.$value !== "string") continue;
       // `{color.red-600}` → `red-600`, `{spacing.0}` → `0`, fonts kept verbatim.
-      const pretty = entry.value.replace(/^\{[a-z-]+\.(.+)\}$/, "$1");
+      const pretty = entry.$value.replace(/^\{[a-z-]+\.(.+)\}$/, "$1");
       diff[`${moduleKey}-${tokenKey}`] = pretty;
     }
   }

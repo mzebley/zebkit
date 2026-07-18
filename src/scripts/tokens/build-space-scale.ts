@@ -83,9 +83,9 @@ function toPx(value: string | number): number {
 function readControls(tokens: Record<string, TokenInterface>): SpaceControls {
   const font = tokens[FONT_SIZE_KEY];
   const spacing = tokens[SPACING_KEY];
-  const minVp = font?.["min-viewport"]?.value;
-  const maxVp = font?.["max-viewport"]?.value;
-  const maxScale = spacing?.["max-scale"]?.value;
+  const minVp = font?.["min-viewport"]?.$value;
+  const maxVp = font?.["max-viewport"]?.$value;
+  const maxScale = spacing?.["max-scale"]?.$value;
 
   return {
     minViewportPx: minVp != null ? toPx(minVp) : DEFAULT_MIN_VIEWPORT_PX,
@@ -205,7 +205,7 @@ export function resolveSpaceScale(
     // Strip the build-time control — it must not become a CSS variable.
     if (name === "max-scale") continue;
 
-    if (!entry || entry.type !== "rootSize" || !("value" in entry)) {
+    if (!entry || entry.$type !== "rootSize" || !("$value" in entry)) {
       resolvedModule[name] = entry;
       continue;
     }
@@ -215,15 +215,15 @@ export function resolveSpaceScale(
     // consumed here — it is not re-emitted, so it never leaks to a CSS variable.
     const growthOverride = (entry as { growth?: number }).growth;
     const value = resolveValue(
-      entry.value as string | number,
+      entry.$value as string | number,
       controls,
       mode,
       growthOverride
     );
     resolvedModule[name] = {
-      value,
-      type: "rootSize",
-      description: entry.description,
+      $value: value,
+      $type: "rootSize",
+      $description: entry.$description,
     } as TokenObject;
   }
 

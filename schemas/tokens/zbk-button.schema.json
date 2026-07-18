@@ -1152,31 +1152,37 @@
       "type": "object",
       "description": "Default button label color.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1184,31 +1190,37 @@
       "type": "object",
       "description": "Label color when hovered.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1216,31 +1228,37 @@
       "type": "object",
       "description": "Label color when active or pressed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1248,31 +1266,37 @@
       "type": "object",
       "description": "Label color for disabled buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1280,31 +1304,37 @@
       "type": "object",
       "description": "Label color while the button is in its loading state.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1312,31 +1342,37 @@
       "type": "object",
       "description": "Default button background.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1344,31 +1380,37 @@
       "type": "object",
       "description": "Background for hover state.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1376,31 +1418,37 @@
       "type": "object",
       "description": "Background for active/pressed state.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1408,31 +1456,37 @@
       "type": "object",
       "description": "Background for disabled buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1440,31 +1494,37 @@
       "type": "object",
       "description": "Background while the button is in its loading state.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1472,31 +1532,37 @@
       "type": "object",
       "description": "Default button border color.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1504,31 +1570,37 @@
       "type": "object",
       "description": "Border color on hover.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1536,31 +1608,37 @@
       "type": "object",
       "description": "Border color when the button is active/pressed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1568,31 +1646,37 @@
       "type": "object",
       "description": "Border color for disabled buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1600,31 +1684,37 @@
       "type": "object",
       "description": "Border color while the button is in its loading state.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1632,31 +1722,37 @@
       "type": "object",
       "description": "Base border width.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/borderWidthValue"
         },
-        "type": {
+        "$type": {
           "const": "borderWidth"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1664,31 +1760,37 @@
       "type": "object",
       "description": "Border style (solid, dashed, etc) for standard buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/borderStyleValue"
         },
-        "type": {
+        "$type": {
           "const": "borderStyle"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1696,31 +1798,37 @@
       "type": "object",
       "description": "Corner radius for standard buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/borderRadiusValue"
         },
-        "type": {
+        "$type": {
           "const": "borderRadius"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1728,133 +1836,146 @@
       "type": "object",
       "description": "Font family for button labels.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/fontFamilyValue"
         },
-        "type": {
+        "$type": {
           "const": "fontFamily"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "source": {
-          "type": "string",
-          "enum": [
-            "system",
-            "google",
-            "local"
-          ],
-          "description": "Where this font family is loaded from."
-        },
-        "fallback": {
-          "type": "string",
-          "enum": [
-            "sans",
-            "serif",
-            "mono"
-          ],
-          "description": "Fallback stack category appended to the authored family."
-        },
-        "weights": {
-          "description": "Static font weights or a variable-font range such as 200..800.",
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": [
-                  "string",
-                  "number"
-                ]
-              },
-              "uniqueItems": true
-            }
-          ]
-        },
-        "styles": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "normal",
-              "italic"
-            ]
-          },
-          "uniqueItems": true
-        },
-        "faces": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "src"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "src": {
-                "type": "string"
-              },
-              "weight": {
-                "type": [
-                  "string",
-                  "number"
-                ]
-              },
-              "style": {
-                "type": "string",
-                "enum": [
-                  "normal",
-                  "italic",
-                  "oblique"
-                ]
-              },
-              "display": {
-                "type": "string",
-                "enum": [
-                  "auto",
-                  "block",
-                  "swap",
-                  "fallback",
-                  "optional"
-                ]
-              },
-              "format": {
-                "type": "string"
-              },
-              "unicodeRange": {
-                "type": "string"
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                },
+                "font": {
+                  "type": "object",
+                  "description": "Font-loading metadata for this family.",
+                  "additionalProperties": false,
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "enum": [
+                        "system",
+                        "google",
+                        "local"
+                      ],
+                      "description": "Where this font family is loaded from."
+                    },
+                    "fallback": {
+                      "type": "string",
+                      "enum": [
+                        "sans",
+                        "serif",
+                        "mono"
+                      ],
+                      "description": "Fallback stack category appended to the authored family."
+                    },
+                    "weights": {
+                      "description": "Static font weights or a variable-font range such as 200..800.",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": [
+                              "string",
+                              "number"
+                            ]
+                          },
+                          "uniqueItems": true
+                        }
+                      ]
+                    },
+                    "styles": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "normal",
+                          "italic"
+                        ]
+                      },
+                      "uniqueItems": true
+                    },
+                    "faces": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "src"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "src": {
+                            "type": "string"
+                          },
+                          "weight": {
+                            "type": [
+                              "string",
+                              "number"
+                            ]
+                          },
+                          "style": {
+                            "type": "string",
+                            "enum": [
+                              "normal",
+                              "italic",
+                              "oblique"
+                            ]
+                          },
+                          "display": {
+                            "type": "string",
+                            "enum": [
+                              "auto",
+                              "block",
+                              "swap",
+                              "fallback",
+                              "optional"
+                            ]
+                          },
+                          "format": {
+                            "type": "string"
+                          },
+                          "unicodeRange": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "display": {
+                      "type": "string",
+                      "enum": [
+                        "auto",
+                        "block",
+                        "swap",
+                        "fallback",
+                        "optional"
+                      ]
+                    }
+                  }
+                }
               }
             }
           }
-        },
-        "display": {
-          "type": "string",
-          "enum": [
-            "auto",
-            "block",
-            "swap",
-            "fallback",
-            "optional"
-          ]
         }
       }
     },
@@ -1862,31 +1983,37 @@
       "type": "object",
       "description": "Base font size for button labels.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/fontSizeValue"
         },
-        "type": {
+        "$type": {
           "const": "fontSize"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1894,31 +2021,37 @@
       "type": "object",
       "description": "Font weight for button labels.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/fontWeightValue"
         },
-        "type": {
+        "$type": {
           "const": "fontWeight"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1926,31 +2059,37 @@
       "type": "object",
       "description": "Base line height for buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/lineHeightValue"
         },
-        "type": {
+        "$type": {
           "const": "lineHeight"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1958,31 +2097,37 @@
       "type": "object",
       "description": "Letter spacing for button labels.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/letterSpacingValue"
         },
-        "type": {
+        "$type": {
           "const": "letterSpacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1990,31 +2135,37 @@
       "type": "object",
       "description": "Text transform for button labels.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/textTransformValue"
         },
-        "type": {
+        "$type": {
           "const": "textTransform"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2022,31 +2173,37 @@
       "type": "object",
       "description": "Text decoration for button labels.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/textDecorationValue"
         },
-        "type": {
+        "$type": {
           "const": "textDecoration"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2054,31 +2211,37 @@
       "type": "object",
       "description": "Text alignment for button content.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/textAlignmentValue"
         },
-        "type": {
+        "$type": {
           "const": "textAlignment"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2086,31 +2249,37 @@
       "type": "object",
       "description": "Inline (horizontal) padding for standard buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2118,31 +2287,37 @@
       "type": "object",
       "description": "Block (vertical) padding for standard buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2150,31 +2325,37 @@
       "type": "object",
       "description": "Inline-start padding override when needed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2182,31 +2363,37 @@
       "type": "object",
       "description": "Inline-end padding override when needed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2214,31 +2401,37 @@
       "type": "object",
       "description": "Block-start padding override when needed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2246,31 +2439,37 @@
       "type": "object",
       "description": "Block-end padding override when needed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2278,31 +2477,37 @@
       "type": "object",
       "description": "Inline margin for standalone buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2310,31 +2515,37 @@
       "type": "object",
       "description": "Block margin for standalone buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2342,31 +2553,37 @@
       "type": "object",
       "description": "Inline-start margin override when needed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2374,31 +2591,37 @@
       "type": "object",
       "description": "Inline-end margin override when needed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2406,31 +2629,37 @@
       "type": "object",
       "description": "Block-start margin override when needed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2438,31 +2667,37 @@
       "type": "object",
       "description": "Block-end margin override when needed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2470,31 +2705,37 @@
       "type": "object",
       "description": "Gap between button icon and label.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2502,31 +2743,37 @@
       "type": "object",
       "description": "Gap between buttons when rendered in a group.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2534,31 +2781,37 @@
       "type": "object",
       "description": "Display mode for buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/displayValue"
         },
-        "type": {
+        "$type": {
           "const": "display"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2566,31 +2819,37 @@
       "type": "object",
       "description": "Default button width.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/sizingValue"
         },
-        "type": {
+        "$type": {
           "const": "sizing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2598,31 +2857,37 @@
       "type": "object",
       "description": "Minimum button width.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/sizingValue"
         },
-        "type": {
+        "$type": {
           "const": "sizing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2630,31 +2895,37 @@
       "type": "object",
       "description": "Maximum button width.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/sizingValue"
         },
-        "type": {
+        "$type": {
           "const": "sizing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2662,31 +2933,37 @@
       "type": "object",
       "description": "Default button height.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/sizingValue"
         },
-        "type": {
+        "$type": {
           "const": "sizing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2694,31 +2971,37 @@
       "type": "object",
       "description": "Minimum height to ensure tappable area.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/sizingValue"
         },
-        "type": {
+        "$type": {
           "const": "sizing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2726,31 +3009,37 @@
       "type": "object",
       "description": "Maximum button height.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/sizingValue"
         },
-        "type": {
+        "$type": {
           "const": "sizing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2758,31 +3047,37 @@
       "type": "object",
       "description": "Default icon size within buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/sizingValue"
         },
-        "type": {
+        "$type": {
           "const": "sizing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2790,31 +3085,37 @@
       "type": "object",
       "description": "Default icon size for icons at start of buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/sizingValue"
         },
-        "type": {
+        "$type": {
           "const": "sizing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2822,31 +3123,37 @@
       "type": "object",
       "description": "Default icon size for icons at end of buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/sizingValue"
         },
-        "type": {
+        "$type": {
           "const": "sizing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2854,31 +3161,37 @@
       "type": "object",
       "description": "Outline color for focus state.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/colorValue"
         },
-        "type": {
+        "$type": {
           "const": "color"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2886,31 +3199,37 @@
       "type": "object",
       "description": "Outline width for focus state.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/borderWidthValue"
         },
-        "type": {
+        "$type": {
           "const": "borderWidth"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2918,31 +3237,37 @@
       "type": "object",
       "description": "Outline offset for focus state.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/spacingValue"
         },
-        "type": {
+        "$type": {
           "const": "spacing"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2950,31 +3275,37 @@
       "type": "object",
       "description": "Default box shadow for buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/boxShadowValue"
         },
-        "type": {
+        "$type": {
           "const": "boxShadow"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2982,31 +3313,37 @@
       "type": "object",
       "description": "Box shadow on hover.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/boxShadowValue"
         },
-        "type": {
+        "$type": {
           "const": "boxShadow"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3014,31 +3351,37 @@
       "type": "object",
       "description": "Box shadow when active/pressed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/boxShadowValue"
         },
-        "type": {
+        "$type": {
           "const": "boxShadow"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3046,31 +3389,37 @@
       "type": "object",
       "description": "Box shadow in focus state (in addition to outline).",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/boxShadowValue"
         },
-        "type": {
+        "$type": {
           "const": "boxShadow"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3078,31 +3427,37 @@
       "type": "object",
       "description": "Default transform property for buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/utilityValue"
         },
-        "type": {
+        "$type": {
           "const": "utility"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3110,31 +3465,37 @@
       "type": "object",
       "description": "Transform effect on hover.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/utilityValue"
         },
-        "type": {
+        "$type": {
           "const": "utility"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3142,31 +3503,37 @@
       "type": "object",
       "description": "Transform effect when active/pressed.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/utilityValue"
         },
-        "type": {
+        "$type": {
           "const": "utility"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3174,31 +3541,37 @@
       "type": "object",
       "description": "Transform effect in focus state (in addition to outline).",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/utilityValue"
         },
-        "type": {
+        "$type": {
           "const": "utility"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3206,31 +3579,37 @@
       "type": "object",
       "description": "Cursor style when hovering over buttons.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/utilityValue"
         },
-        "type": {
+        "$type": {
           "const": "utility"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3238,31 +3617,37 @@
       "type": "object",
       "description": "Cursor style while the button is in its loading state.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/utilityValue"
         },
-        "type": {
+        "$type": {
           "const": "utility"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3270,31 +3655,37 @@
       "type": "object",
       "description": "Direction of icon and label layout.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/flexValue"
         },
-        "type": {
+        "$type": {
           "const": "flex"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3302,31 +3693,37 @@
       "type": "object",
       "description": "Main axis alignment for button contents.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/flexValue"
         },
-        "type": {
+        "$type": {
           "const": "flex"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3334,31 +3731,37 @@
       "type": "object",
       "description": "Cross axis alignment for button contents.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/flexValue"
         },
-        "type": {
+        "$type": {
           "const": "flex"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3366,31 +3769,37 @@
       "type": "object",
       "description": "Duration for hover/active transitions.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/transitionValue"
         },
-        "type": {
+        "$type": {
           "const": "transition"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3398,31 +3807,37 @@
       "type": "object",
       "description": "Timing function for button transitions.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/transitionValue"
         },
-        "type": {
+        "$type": {
           "const": "transition"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3430,31 +3845,37 @@
       "type": "object",
       "description": "CSS properties that should animate on interaction.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/transitionValue"
         },
-        "type": {
+        "$type": {
           "const": "transition"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3462,31 +3883,37 @@
       "type": "object",
       "description": "Delay before CSS properties run through their animate on interaction.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/transitionValue"
         },
-        "type": {
+        "$type": {
           "const": "transition"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3494,31 +3921,37 @@
       "type": "object",
       "description": "Visual opacity of button.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/opacityValue"
         },
-        "type": {
+        "$type": {
           "const": "opacity"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3526,31 +3959,37 @@
       "type": "object",
       "description": "Visual opacity while the button is in its loading state.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/opacityValue"
         },
-        "type": {
+        "$type": {
           "const": "opacity"
         },
-        "description": {
+        "$description": {
           "type": "string"
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          }
         }
       }
     }

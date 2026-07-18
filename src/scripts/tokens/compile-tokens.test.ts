@@ -16,18 +16,18 @@ import {
 describe('compile-tokens helpers', () => {
   const tokenSchema = z.object({
     canvas: z.object({
-      value: z.string(),
-      type: z.literal('color'),
+      $value: z.string(),
+      $type: z.literal('color'),
     }),
     radius: z.object({
-      value: z.string(),
-      type: z.literal('dimension'),
+      $value: z.string(),
+      $type: z.literal('dimension'),
     }),
   });
 
   const defaultTokens = {
-    canvas: { value: '#fff', type: 'color', description: 'canvas' },
-    radius: { value: '4px', type: 'dimension', description: 'radius' },
+    canvas: { $value: '#fff', $type: 'color', $description: 'canvas' },
+    radius: { $value: '4px', $type: 'dimension', $description: 'radius' },
   } as TokenInterface;
 
   it('infers token keys from token filenames', () => {
@@ -50,16 +50,16 @@ describe('compile-tokens helpers', () => {
     const merged = mergeTokens(
       defaultTokens,
       {
-        canvas: { value: '#000' },
+        canvas: { $value: '#000' },
         radius: ['bad'],
-        extra: { value: 'ignored' },
+        extra: { $value: 'ignored' },
       },
       tokenSchema,
       'zbk-button'
     );
 
-    expect(merged.canvas.value).toBe('#000');
-    expect(merged.radius.value).toBe('4px');
+    expect(merged.canvas.$value).toBe('#000');
+    expect(merged.radius.$value).toBe('4px');
     expect('extra' in merged).toBe(false);
     expect(warnSpy).toHaveBeenCalled();
   });
@@ -82,12 +82,12 @@ describe('compile-tokens helpers', () => {
     expect(
       validateTokenExport(
         {
-          canvas: { value: 123, type: 'color' },
-          radius: { value: '4px', type: 'dimension' },
+          canvas: { $value: 123, $type: 'color' },
+          radius: { $value: '4px', $type: 'dimension' },
         },
         tokenSchema
       )
-    ).toEqual(expect.arrayContaining([expect.stringContaining('canvas.value →')]));
+    ).toEqual(expect.arrayContaining([expect.stringContaining('canvas.$value →')]));
   });
 
 });

@@ -16,7 +16,7 @@ import { EXTENDED_TOKEN_BREAKPOINTS } from './config';
 import { BREAKPOINTS } from './utilities/expand';
 
 const tokenEntries = Object.entries(breakpointTokens) as Array<
-  [string, { value: string | null }]
+  [string, { $value: string | null }]
 >;
 const tokenKeys = tokenEntries.map(([key]) => key);
 
@@ -42,8 +42,8 @@ describe('breakpoint fallback copies stay in sync with the token module', () => 
     }
     expect([...defaults.keys()]).toEqual(tokenKeys);
     for (const [key, entry] of tokenEntries) {
-      if (entry.value == null) continue; // token-disabled breakpoints carry no width
-      expect(defaults.get(key)).toBe(entry.value);
+      if (entry.$value == null) continue; // token-disabled breakpoints carry no width
+      expect(defaults.get(key)).toBe(entry.$value);
     }
 
     // The $breakpoints fallback map must reference every key.

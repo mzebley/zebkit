@@ -425,7 +425,7 @@ export async function runTokenBuild(
       if (tokensConfig?.extendedTokens?.emitBreakpointVars === true) {
         const enabledOnly: TokenInterface = {};
         for (const [name, entry] of Object.entries(cssVarTokens[breakpointKey])) {
-          if ((entry as { value?: unknown })?.value != null) enabledOnly[name] = entry;
+          if ((entry as { $value?: unknown })?.$value != null) enabledOnly[name] = entry;
         }
         cssVarTokens = { ...cssVarTokens, [breakpointKey]: enabledOnly };
       } else {

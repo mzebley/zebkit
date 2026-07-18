@@ -1,26 +1,44 @@
 {
   "primary": {
-    "value": "\"Manrope\"",
-    "description": "Primary family (body + interface) — Manrope, a geometric stand-in for Uber Move.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "weights": "400..800"
+    "$value": "\"Manrope\"",
+    "$description": "Primary family (body + interface) — Manrope, a geometric stand-in for Uber Move.",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "weights": "400..800"
+        }
+      }
+    }
   },
   "alt": {
-    "value": "\"Manrope\"",
-    "description": "Display / heading family — Manrope at heavier weights for Uber's bold headlines.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "weights": "400..800"
+    "$value": "\"Manrope\"",
+    "$description": "Display / heading family — Manrope at heavier weights for Uber's bold headlines.",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "weights": "400..800"
+        }
+      }
+    }
   },
   "monospace": {
-    "value": "\"JetBrains Mono\"",
-    "description": "Monospace family (code, labels, values).",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "mono",
-    "weights": "400..700"
+    "$value": "\"JetBrains Mono\"",
+    "$description": "Monospace family (code, labels, values).",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "mono",
+          "weights": "400..700"
+        }
+      }
+    }
   }
 }

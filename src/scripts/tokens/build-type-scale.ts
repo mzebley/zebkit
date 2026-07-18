@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { ZEBKIT_PREFIX } from "@config";
 import { a11yMap } from "@definitions/a11y-map";
+import { tokenA11y } from "@definitions/tokens";
 import type {
   RootFontSizeStepObject,
   SettingTokenObject,
@@ -75,15 +76,15 @@ function readControls(module: TokenInterface): FluidControls | null {
   const get = (k: string): SettingTokenObject | undefined =>
     module[k] as SettingTokenObject | undefined;
   const settings = CONTROL_KEYS.map((k) => get(k));
-  if (settings.some((s) => !s || s.value == null)) return null;
+  if (settings.some((s) => !s || s.$value == null)) return null;
 
   return {
-    minViewportPx: toPx(get("min-viewport")!.value),
-    maxViewportPx: toPx(get("max-viewport")!.value),
-    minBaseRem: toRem(get("min-base")!.value),
-    maxBaseRem: toRem(get("max-base")!.value),
-    minRatio: Number(get("min-ratio")!.value),
-    maxRatio: Number(get("max-ratio")!.value),
+    minViewportPx: toPx(get("min-viewport")!.$value),
+    maxViewportPx: toPx(get("max-viewport")!.$value),
+    minBaseRem: toRem(get("min-base")!.$value),
+    maxBaseRem: toRem(get("max-base")!.$value),
+    minRatio: Number(get("min-ratio")!.$value),
+    maxRatio: Number(get("max-ratio")!.$value),
   };
 }
 
@@ -125,8 +126,9 @@ function buildStaticValue(value: string | number, a11y: string | null): string {
 }
 
 function stepA11yVar(step: RootFontSizeStepObject): string | null {
-  if (typeof step.a11y === "string") return step.a11y;
-  if (step.a11y === true) return a11yMap.fontSize;
+  const a11y = tokenA11y(step);
+  if (typeof a11y === "string") return a11y;
+  if (a11y === true) return a11yMap.fontSize;
   return null;
 }
 
@@ -159,7 +161,7 @@ export function resolveTypeScale(
     // Strip build-time controls — they must not become CSS variables.
     if (control.has(name)) continue;
 
-    if (!entry || entry.type !== "rootFontSize") {
+    if (!entry || entry.$type !== "rootFontSize") {
       resolvedModule[name] = entry;
       continue;
     }
@@ -169,29 +171,29 @@ export function resolveTypeScale(
 
     let value: string;
     if (mode === "static") {
-      if (step.value == null) {
+      if (step.$value == null) {
         console.warn(
           chalk.yellow(
-            `Static type scale is enabled but step "${name}" has no \`value\`. Falling back to its fluid size.`
+            `Static type scale is enabled but step "${name}" has no \`$value\`. Falling back to its fluid size.`
           )
         );
         value = controls
           ? buildFluidValue(step.index, controls, a11y)
           : "1rem";
       } else {
-        value = buildStaticValue(step.value, a11y);
+        value = buildStaticValue(step.$value, a11y);
       }
-    } else if (step.value != null) {
+    } else if (step.$value != null) {
       // Per-step override: pinned static value inside an otherwise-fluid scale.
-      value = buildStaticValue(step.value, a11y);
+      value = buildStaticValue(step.$value, a11y);
     } else {
       value = buildFluidValue(step.index, controls!, a11y);
     }
 
     resolvedModule[name] = {
-      value,
-      type: "rootFontSize",
-      description: step.description,
+      $value: value,
+      $type: "rootFontSize",
+      $description: step.$description,
     };
   }
 

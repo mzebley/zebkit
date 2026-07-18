@@ -100,7 +100,7 @@ export function getAuthorableTokenData(raw: Record<string, unknown>): Record<str
       ([key, token]) =>
         !key.startsWith('_') &&
         isRecord(token) &&
-        Object.prototype.hasOwnProperty.call(token, 'value')
+        Object.prototype.hasOwnProperty.call(token, '$value')
     )
   );
 }

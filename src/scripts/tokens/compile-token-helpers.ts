@@ -1,6 +1,8 @@
 import path from 'path';
 import { z, ZodSchema } from 'zod';
-import type { TokenInterface } from '@definitions/tokens';
+import type { TokenInterface, ZebkitExtension } from '@definitions/tokens';
+import { tokenFontMeta, zbkExtension } from '@definitions/tokens';
+import { ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
 import { ZEBKIT_PREFIX } from '@config';
 
 export { isVariantOverrideFile } from './compile-variant-helpers';
@@ -90,35 +92,37 @@ export function mergeTokens(
         typeof customValue === 'object' &&
         customValue !== null &&
         !Array.isArray(customValue) &&
-        'value' in customValue
-          ? (customValue as Record<string, any>).value
+        '$value' in customValue
+          ? (customValue as Record<string, any>).$value
           : customValue;
 
       if (typeof overrideValue !== 'string' && typeof overrideValue !== 'number') {
         console.warn(
-          `Custom token for '${keyPath}.${key}' does not contain a valid 'value'. Using default token.`
+          `Custom token for '${keyPath}.${key}' does not contain a valid '$value'. Using default token.`
         );
         continue;
       }
 
       const nextToken = {
         ...defaultTokens[key],
-        value: overrideValue,
+        $value: overrideValue,
       };
 
-      // Allow overrides to carry font metadata. A theme may swap to a family whose loading
-      // differs from the base font's (a different `source`, weight axis, fallback category, or
-      // self-hosted `faces`), and the emitted import/@font-face must follow the override, not the
-      // base. Type and a11y stay base-controlled. The schema parse below validates the result.
-      if (
-        typeof customValue === 'object' &&
-        customValue !== null &&
-        !Array.isArray(customValue)
-      ) {
-        const meta = customValue as Record<string, unknown>;
-        for (const field of ['source', 'fallback', 'weights', 'styles', 'faces', 'display']) {
-          if (field in meta) (nextToken as Record<string, unknown>)[field] = meta[field];
-        }
+      // Allow overrides to carry font metadata (`$extensions["dev.zebkit"].font`). A theme may
+      // swap to a family whose loading differs from the base font's (a different `source`,
+      // weight axis, fallback category, or self-hosted `faces`), and the emitted
+      // import/@font-face must follow the override, not the base. Field-level merge into the
+      // base metadata; `$type` and `a11y` stay base-controlled. The schema parse below
+      // validates the result.
+      const overrideFont = tokenFontMeta(customValue);
+      if (overrideFont) {
+        const baseExtension: ZebkitExtension = zbkExtension(defaultTokens[key]) ?? {};
+        (nextToken as Record<string, unknown>).$extensions = {
+          [ZEBKIT_EXTENSION_KEY]: {
+            ...baseExtension,
+            font: { ...baseExtension.font, ...overrideFont },
+          },
+        };
       }
 
       if (subSchema) {

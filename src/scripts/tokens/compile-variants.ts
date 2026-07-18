@@ -562,7 +562,7 @@ function buildVariantOutputs(
           typeof value === 'string'
             ? convertDotNotation(
                 value,
-                sourceToken.type,
+                sourceToken.$type,
                 ZEBKIT_PREFIX,
                 tokens,
                 false,
@@ -585,12 +585,12 @@ function buildVariantOutputs(
       for (const [key, sourceToken] of Object.entries(sourceTokens)) {
         if (entry.overrides && key in entry.overrides) continue;
         if (!closure.has(`${tokenKey}.${key}`)) continue;
-        const raw = sourceToken.value;
+        const raw = sourceToken.$value;
         const resolvedValue =
           typeof raw === 'string'
             ? convertDotNotation(
                 raw,
-                sourceToken.type,
+                sourceToken.$type,
                 ZEBKIT_PREFIX,
                 tokens,
                 false,

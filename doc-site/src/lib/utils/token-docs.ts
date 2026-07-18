@@ -18,8 +18,8 @@ export function buildTokenRows(
 
   return Object.entries(tokens).map(([name, token]) => ({
     token: `${tokenKey}.${name}`,
-    type: token.type,
-    value: token.value ?? token.index ?? '',
-    description: token.description,
+    type: token.$type,
+    value: token.$value ?? token.index ?? '',
+    description: token.$description,
   }));
 }

@@ -1,26 +1,44 @@
 {
   "primary": {
-    "value": "\"Inter\"",
-    "description": "Primary family (body + interface) — Inter, a stand-in for Atlassian's Charlie Sans.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "weights": "400..700"
+    "$value": "\"Inter\"",
+    "$description": "Primary family (body + interface) — Inter, a stand-in for Atlassian's Charlie Sans.",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "weights": "400..700"
+        }
+      }
+    }
   },
   "alt": {
-    "value": "\"Inter\"",
-    "description": "Display / heading family — Inter (ADS uses one family across the scale).",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "weights": "400..700"
+    "$value": "\"Inter\"",
+    "$description": "Display / heading family — Inter (ADS uses one family across the scale).",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "weights": "400..700"
+        }
+      }
+    }
   },
   "monospace": {
-    "value": "\"JetBrains Mono\"",
-    "description": "Monospace family (code, labels, values).",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "mono",
-    "weights": "400..500"
+    "$value": "\"JetBrains Mono\"",
+    "$description": "Monospace family (code, labels, values).",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "mono",
+          "weights": "400..500"
+        }
+      }
+    }
   }
 }

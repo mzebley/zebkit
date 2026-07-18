@@ -1,0 +1,163 @@
+import type { AllowedTokenTypes } from "@definitions/tokens";
+
+/**
+ * Central DTCG alignment definitions.
+ *
+ * Spec target: DTCG Design Tokens Format Module 2025.10 (the first stable release).
+ * These are the locked decisions from plans/dtcg-alignment/plan.md (D3, D4, D5) as
+ * data. Later migration phases import from here instead of re-deciding; changing a
+ * mapping means changing the plan's decision table first.
+ */
+
+/**
+ * The DTCG 2025.10 `$type` vocabulary: seven primitive types plus six composite
+ * types. Anything not in this list that zebkit emits carries a proprietary type
+ * from {@link ZEBKIT_PROPRIETARY_TYPES}.
+ */
+export const DTCG_TYPES = [
+  // Primitive types
+  "color",
+  "dimension",
+  "duration",
+  "fontFamily",
+  "fontWeight",
+  "cubicBezier",
+  "number",
+  // Composite types
+  "strokeStyle",
+  "border",
+  "transition",
+  "shadow",
+  "gradient",
+  "typography",
+] as const;
+
+export type DtcgType = (typeof DTCG_TYPES)[number];
+
+/**
+ * Zebkit's proprietary `$type` registry (decision D4): CSS-surface tokens the DTCG
+ * vocabulary cannot express. Kept minimal and documented; a strict-mode export
+ * (decision D9) can drop these for tools that hard-fail on unknown `$type`.
+ *
+ * `cssDimension` covers lengths DTCG's `dimension` cannot represent: `%`, `ch`,
+ * `em`, and `calc()` expressions (DTCG dimensions are `{value, unit}` with unit
+ * limited to `px`/`rem`).
+ */
+export const ZEBKIT_PROPRIETARY_TYPES = [
+  "display",
+  "cursor",
+  "textTransform",
+  "textDecoration",
+  "textAlignment",
+  "fontStyle",
+  "transform",
+  "transitionProperty",
+  "content",
+  "flex",
+  "utility",
+  "asset",
+  "boolean",
+  "cssDimension",
+] as const;
+
+export type ZebkitProprietaryType = (typeof ZEBKIT_PROPRIETARY_TYPES)[number];
+
+/** Every `$type` zebkit emits post-alignment: the spec set plus the proprietary registry. */
+export type ZebkitDtcgType = DtcgType | ZebkitProprietaryType;
+
+/** True when `type` is part of the DTCG 2025.10 spec vocabulary (vs. zebkit-proprietary). */
+export function isDtcgSpecType(type: string): type is DtcgType {
+  return (DTCG_TYPES as readonly string[]).includes(type);
+}
+
+/**
+ * The single vendor namespace for everything zebkit-specific inside `$extensions`
+ * (decision D3). Swap here — once — if the project ever settles on a different domain.
+ */
+export const ZEBKIT_EXTENSION_KEY = "dev.zebkit" as const;
+
+/**
+ * Sub-keys used under `$extensions["dev.zebkit"]`:
+ * - `a11y`: runtime accessibility-modifier opt-in (`true` or a custom modifier var)
+ * - `scale`: fluid-scale settings (viewport anchors, base/ratio, `max-scale`) and
+ *   generated-scale step data (`index`, optional pinned value)
+ * - `font`: font-loading metadata (`source`, `fallback`, `weights`, `styles`, `faces`, `display`)
+ * - `layer`: cascade-layer assignment, only where it must ride inside JSON artifacts
+ *   (e.g. defaults snapshots)
+ */
+export const ZEBKIT_EXTENSION_SUBKEYS = ["a11y", "scale", "font", "layer"] as const;
+
+export type ZebkitExtensionSubkey = (typeof ZEBKIT_EXTENSION_SUBKEYS)[number];
+
+/**
+ * How one legacy zebkit token type migrates to the DTCG shape (decision D5).
+ *
+ * - `spec`: every value of this legacy type becomes this single `$type`.
+ * - `valueDependent`: the target `$type` depends on the individual value (px/rem
+ *   lengths → `dimension`; `%`/`ch`/`em`/`calc()` → `cssDimension`).
+ * - `split`: one legacy type fans out into several `$type`s (transition →
+ *   duration / cubicBezier / transitionProperty).
+ * - `extension`: not a token post-alignment; the data moves under
+ *   `$extensions["dev.zebkit"]` on the owning group (build-time settings).
+ */
+export type LegacyTypeMigration =
+  | { kind: "spec"; type: ZebkitDtcgType }
+  | { kind: "valueDependent"; types: readonly ZebkitDtcgType[] }
+  | { kind: "split"; types: readonly ZebkitDtcgType[] }
+  | { kind: "extension"; subkey: ZebkitExtensionSubkey };
+
+const DIMENSION_OR_CSS = {
+  kind: "valueDependent",
+  types: ["dimension", "cssDimension"],
+} as const satisfies LegacyTypeMigration;
+
+/**
+ * The spec-type mapping table (decision D5): every legacy `AllowedTokenTypes`
+ * member and where its tokens land post-alignment. Phase 2 consumes this family
+ * by family; Phase 4's provenance-marked `allowed-token-types.json` derives from
+ * the end state.
+ */
+export const LEGACY_TYPE_MIGRATION: Record<AllowedTokenTypes, LegacyTypeMigration> = {
+  // Colors
+  color: { kind: "spec", type: "color" },
+  borderColor: { kind: "spec", type: "color" },
+  // Length families → dimension (px/rem) or cssDimension (%, ch, em, calc())
+  spacing: DIMENSION_OR_CSS,
+  sizing: DIMENSION_OR_CSS,
+  dimension: DIMENSION_OR_CSS,
+  rootSize: DIMENSION_OR_CSS,
+  borderWidth: DIMENSION_OR_CSS,
+  borderRadius: DIMENSION_OR_CSS,
+  fontSize: DIMENSION_OR_CSS,
+  rootFontSize: DIMENSION_OR_CSS,
+  letterSpacing: DIMENSION_OR_CSS,
+  // Shadows
+  boxShadow: { kind: "spec", type: "shadow" },
+  // Transition conflation splits into three types
+  transition: {
+    kind: "split",
+    types: ["duration", "cubicBezier", "transitionProperty"],
+  },
+  // Numbers
+  lineHeight: { kind: "spec", type: "number" },
+  opacity: { kind: "spec", type: "number" },
+  zIndex: { kind: "spec", type: "number" },
+  // Typography
+  fontWeight: { kind: "spec", type: "fontWeight" },
+  fontFamily: { kind: "spec", type: "fontFamily" },
+  // Border style
+  borderStyle: { kind: "spec", type: "strokeStyle" },
+  // Build-time settings stop being pseudo-tokens
+  setting: { kind: "extension", subkey: "scale" },
+  // Proprietary registry (no DTCG equivalent; type name is already final)
+  display: { kind: "spec", type: "display" },
+  fontStyle: { kind: "spec", type: "fontStyle" },
+  textDecoration: { kind: "spec", type: "textDecoration" },
+  textTransform: { kind: "spec", type: "textTransform" },
+  textAlignment: { kind: "spec", type: "textAlignment" },
+  utility: { kind: "spec", type: "utility" },
+  asset: { kind: "spec", type: "asset" },
+  content: { kind: "spec", type: "content" },
+  boolean: { kind: "spec", type: "boolean" },
+  flex: { kind: "spec", type: "flex" },
+};
