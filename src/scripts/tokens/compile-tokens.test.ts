@@ -3,12 +3,13 @@
  */
 
 import { z } from 'zod';
-import type { TokenInterface } from '@definitions/tokens';
+import type { TokenGroupExtensions, TokenInterface } from '@definitions/tokens';
 import {
   buildFilePayload,
   inferTokenKeyFromFilename,
   isCanonicalTokenOverrideFile,
   isVariantOverrideFile,
+  mergeGroupExtensions,
   mergeTokens,
   validateTokenExport,
 } from './compile-token-helpers';
@@ -62,6 +63,53 @@ describe('compile-tokens helpers', () => {
     expect(merged.radius.$value).toBe('4px');
     expect('extra' in merged).toBe(false);
     expect(warnSpy).toHaveBeenCalled();
+  });
+
+  it('merges group scale extensions control-by-control and records touched controls', () => {
+    const groupExtensions: Record<string, TokenGroupExtensions> = {
+      'zbk-spacing': { 'dev.zebkit': { scale: { 'max-scale': 1.25 } } },
+    };
+    const touched: Record<string, Set<string>> = {};
+
+    mergeGroupExtensions(
+      'zbk-spacing',
+      { 'dev.zebkit': { scale: { 'max-scale': 1.175 } } },
+      groupExtensions,
+      touched
+    );
+
+    expect(groupExtensions['zbk-spacing']['dev.zebkit']?.scale).toEqual({
+      'max-scale': 1.175,
+    });
+    // The overridden control name lands in `touched`; it never exists as a token
+    // entry, which is how the emission closure recognizes a consumed control.
+    expect([...touched['zbk-spacing']]).toEqual(['max-scale']);
+
+    // Controls merge key-by-key: overriding one control keeps the others.
+    mergeGroupExtensions(
+      'zbk-font-size',
+      { 'dev.zebkit': { scale: { 'min-viewport': '360px', 'min-base': '1rem' } } },
+      groupExtensions
+    );
+    mergeGroupExtensions(
+      'zbk-font-size',
+      { 'dev.zebkit': { scale: { 'min-base': '1.125rem' } } },
+      groupExtensions
+    );
+    expect(groupExtensions['zbk-font-size']['dev.zebkit']?.scale).toEqual({
+      'min-viewport': '360px',
+      'min-base': '1.125rem',
+    });
+
+    // Invalid extension blocks are ignored, leaving the collected state alone.
+    mergeGroupExtensions(
+      'zbk-spacing',
+      { 'dev.zebkit': { scale: 'not-an-object' } },
+      groupExtensions
+    );
+    expect(groupExtensions['zbk-spacing']['dev.zebkit']?.scale).toEqual({
+      'max-scale': 1.175,
+    });
   });
 
   it('builds token export payloads for supported formats', () => {

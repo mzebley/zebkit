@@ -39,9 +39,10 @@ export type DtcgType = (typeof DTCG_TYPES)[number];
  * vocabulary cannot express. Kept minimal and documented; a strict-mode export
  * (decision D9) can drop these for tools that hard-fail on unknown `$type`.
  *
- * `cssDimension` covers lengths DTCG's `dimension` cannot represent: `%`, `ch`,
- * `em`, and `calc()` expressions (DTCG dimensions are `{value, unit}` with unit
- * limited to `px`/`rem`).
+ * `cssDimension` covers CSS sizing values DTCG's `dimension` cannot represent:
+ * `%`, `ch`, `em`, `calc()` expressions, the sizing keywords `auto`/`none`, and
+ * unitless `0` (DTCG dimensions are `{value, unit}` with unit limited to
+ * `px`/`rem`).
  */
 export const ZEBKIT_PROPRIETARY_TYPES = [
   "display",
@@ -125,6 +126,7 @@ export const LEGACY_TYPE_MIGRATION: Record<AllowedTokenTypes, LegacyTypeMigratio
   spacing: DIMENSION_OR_CSS,
   sizing: DIMENSION_OR_CSS,
   dimension: DIMENSION_OR_CSS,
+  cssDimension: { kind: "spec", type: "cssDimension" },
   rootSize: DIMENSION_OR_CSS,
   borderWidth: DIMENSION_OR_CSS,
   borderRadius: DIMENSION_OR_CSS,
@@ -147,8 +149,9 @@ export const LEGACY_TYPE_MIGRATION: Record<AllowedTokenTypes, LegacyTypeMigratio
   fontFamily: { kind: "spec", type: "fontFamily" },
   // Border style
   borderStyle: { kind: "spec", type: "strokeStyle" },
-  // Build-time settings stop being pseudo-tokens
-  setting: { kind: "extension", subkey: "scale" },
+  // Build-time settings stopped being pseudo-tokens in Phase 2a: the former
+  // `setting` type is gone; scale controls live in group-level
+  // `$extensions["dev.zebkit"].scale` (see TokenGroupExtensions).
   // Proprietary registry (no DTCG equivalent; type name is already final)
   display: { kind: "spec", type: "display" },
   fontStyle: { kind: "spec", type: "fontStyle" },

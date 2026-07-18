@@ -143,7 +143,7 @@ const tokens = {
   },
   "border-radius": {
     $value: "50%",
-    $type: "borderRadius",
+    $type: "cssDimension",
     $description: "Corner radius of the radio control (a circle by default).",
   },
 
@@ -160,13 +160,13 @@ const tokens = {
   },
   "indicator-size": {
     $value: "0.75em",
-    $type: "sizing",
+    $type: "cssDimension",
     $description:
       "Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size.",
   },
   "indicator-radius": {
     $value: "50%",
-    $type: "borderRadius",
+    $type: "cssDimension",
     $description: "Corner radius of the selection dot (a circle by default).",
   },
 

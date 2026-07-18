@@ -16,6 +16,7 @@ import {
   ZEBKIT_CONFIG_SCHEMA,
   ZEBKIT_CONFIG_SCHEMA_FILENAME,
 } from '../src/scripts/config-schema';
+import { LEGACY_TYPE_MIGRATION } from '../src/definitions/dtcg';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,7 +38,7 @@ interface ManifestModule {
 }
 
 interface TokenObject {
-  $value: string | number;
+  $value: string | number | { value: number; unit: string };
   $type: string;
   $description: string;
   $extensions?: Record<string, unknown>;
@@ -133,6 +134,16 @@ function zebkitExtensionsSchema(token: TokenObject) {
       properties: fontMetadataProperties(),
     };
   }
+  if (token.$type === 'rootFontSize') {
+    vendorProperties.scale = {
+      type: 'object',
+      description: 'Generated-scale step metadata (index 0 = base step).',
+      additionalProperties: false,
+      properties: {
+        index: { type: 'number' },
+      },
+    };
+  }
   return {
     type: 'object',
     additionalProperties: false,
@@ -146,13 +157,42 @@ function zebkitExtensionsSchema(token: TokenObject) {
   };
 }
 
+/**
+ * Group-level `$extensions` on a token override document: fluid-scale controls
+ * (viewport anchors, base sizes, ratios, spacing `max-scale`) — build-time
+ * metadata, never tokens.
+ */
+function groupExtensionsSchema() {
+  return {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      'dev.zebkit': {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          scale: {
+            type: 'object',
+            description:
+              'Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).',
+            additionalProperties: {
+              oneOf: [{ type: ['string', 'number'] }, structuredDimensionSchema],
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
 function generateTokenProperties(
   tokenData: TokenData
 ): Record<string, any> {
   const properties: Record<string, any> = {};
 
   for (const [tokenName, tokenObj] of Object.entries(tokenData)) {
-    if (tokenName.startsWith('_')) continue; // Skip _key, _layer
+    // Skip _key/_layer metadata and the group-level $extensions member.
+    if (tokenName.startsWith('_') || tokenName.startsWith('$')) continue;
 
     const token = tokenObj as TokenObject;
     const tokenProperties: Record<string, any> = {
@@ -166,10 +206,6 @@ function generateTokenProperties(
       $extensions: zebkitExtensionsSchema(token),
     };
 
-    if ('index' in token || token.$type === 'rootFontSize') {
-      tokenProperties.index = { type: 'number' };
-    }
-
     properties[tokenName] = {
       type: 'object',
       description: token.$description,
@@ -180,6 +216,23 @@ function generateTokenProperties(
   }
 
   return properties;
+}
+
+/** Structured DTCG dimension value: `{value, unit}` with unit limited to px/rem. */
+const structuredDimensionSchema = {
+  type: 'object',
+  required: ['value', 'unit'],
+  additionalProperties: false,
+  properties: {
+    value: { type: 'number' },
+    unit: { type: 'string', enum: ['px', 'rem'] },
+  },
+};
+
+/** Length-family types whose values may be structured `{value, unit}` objects. */
+function acceptsStructuredDimension(type: string): boolean {
+  const migration = LEGACY_TYPE_MIGRATION[type as keyof typeof LEGACY_TYPE_MIGRATION];
+  return migration?.kind === 'valueDependent';
 }
 
 function generateValueDefinitions(
@@ -194,7 +247,9 @@ function generateValueDefinitions(
     const key = `${type}Value`;
     if (definitions[key]) continue;
 
-    definitions[key] = { type: ['string', 'number'] };
+    definitions[key] = acceptsStructuredDimension(type)
+      ? { oneOf: [{ type: ['string', 'number'] }, structuredDimensionSchema] }
+      : { type: ['string', 'number'] };
     if (refsByType[type]?.length) definitions[key].examples = refsByType[type];
   }
 
@@ -214,7 +269,10 @@ function generateTokenSchema(
     type: 'object',
     additionalProperties: false,
     definitions: generateValueDefinitions(tokenData, refsByType),
-    properties: generateTokenProperties(tokenData),
+    properties: {
+      $extensions: groupExtensionsSchema(),
+      ...generateTokenProperties(tokenData),
+    },
   };
 }
 
@@ -262,7 +320,8 @@ async function generateCssCustomData(): Promise<object> {
 
     // Iterate over token entries, skipping metadata fields
     for (const [tokenName, tokenObj] of Object.entries(tokenFile)) {
-      if (tokenName.startsWith('_')) continue; // Skip _key, _layer
+      // Skip _key/_layer metadata and the group-level $extensions member.
+      if (tokenName.startsWith('_') || tokenName.startsWith('$')) continue;
 
       const token = tokenObj as TokenObject;
       const cssVarName = `--zbk-${module.key.replace('zbk-', '')}-${tokenName}`;
@@ -318,7 +377,8 @@ async function buildEditor() {
       const namespace = module.key.replace('zbk-', '');
 
       for (const [tokenName, tokenObj] of Object.entries(tokenData)) {
-        if (tokenName.startsWith('_')) continue; // Skip _key, _layer
+        // Skip _key/_layer metadata and the group-level $extensions member.
+        if (tokenName.startsWith('_') || tokenName.startsWith('$')) continue;
 
         const token = tokenObj as TokenObject;
         const tokenType = token.$type;

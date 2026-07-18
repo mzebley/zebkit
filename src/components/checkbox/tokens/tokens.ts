@@ -184,7 +184,7 @@ const tokens = {
   },
   "indicator-size": {
     $value: "1em",
-    $type: "sizing",
+    $type: "cssDimension",
     $description:
       "Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it.",
   },

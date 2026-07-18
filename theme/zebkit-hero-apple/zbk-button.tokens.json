@@ -146,12 +146,12 @@
   },
   "margin-inline": {
     "$value": "0",
-    "$type": "spacing",
+    "$type": "cssDimension",
     "$description": "Inline margin for standalone buttons."
   },
   "margin-block": {
     "$value": "0",
-    "$type": "spacing",
+    "$type": "cssDimension",
     "$description": "Block margin for standalone buttons."
   },
   "margin-inline-start": {
@@ -191,7 +191,7 @@
   },
   "width": {
     "$value": "auto",
-    "$type": "sizing",
+    "$type": "cssDimension",
     "$description": "Default button width."
   },
   "min-width": {
@@ -201,12 +201,12 @@
   },
   "max-width": {
     "$value": "none",
-    "$type": "sizing",
+    "$type": "cssDimension",
     "$description": "Maximum button width."
   },
   "height": {
     "$value": "auto",
-    "$type": "sizing",
+    "$type": "cssDimension",
     "$description": "Default button height."
   },
   "min-height": {
@@ -216,7 +216,7 @@
   },
   "max-height": {
     "$value": "none",
-    "$type": "sizing",
+    "$type": "cssDimension",
     "$description": "Maximum button height."
   },
   "icon-size": {

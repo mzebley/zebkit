@@ -103,7 +103,7 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-thumb-border-color-checked` | `{toggle.thumb-border-color}` | color | Thumb border color when the toggle is on. |
 | `--zbk-toggle-thumb-border-width` | `{toggle.border-width}` | borderWidth | Border thickness of the thumb. |
 | `--zbk-toggle-thumb-border-style` | `{toggle.border-style}` | borderStyle | Border style of the thumb. |
-| `--zbk-toggle-thumb-radius` | `50%` | borderRadius | Corner radius of the thumb (a circle by default). |
+| `--zbk-toggle-thumb-radius` | `50%` | cssDimension | Corner radius of the thumb (a circle by default). |
 | `--zbk-toggle-thumb-shadow` | `none` | boxShadow | Default thumb shadow. |
 | `--zbk-toggle-thumb-shadow-hover` | `none` | boxShadow | Thumb shadow when hovered. |
 | `--zbk-toggle-thumb-shadow-active` | `none` | boxShadow | Thumb shadow while pressed. |

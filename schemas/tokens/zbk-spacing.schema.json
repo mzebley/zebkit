@@ -6,9 +6,33 @@
   "additionalProperties": false,
   "definitions": {
     "rootSizeValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{spacing.0}",
@@ -59,9 +83,33 @@
       ]
     },
     "spacingValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{a11y.min-interaction-size}",
@@ -104,8 +152,6 @@
         "{button.padding-inline-end}",
         "{button.padding-block-start}",
         "{button.padding-block-end}",
-        "{button.margin-inline}",
-        "{button.margin-block}",
         "{button.margin-inline-start}",
         "{button.margin-inline-end}",
         "{button.margin-block-start}",
@@ -148,9 +194,33 @@
       ]
     },
     "sizingValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{focus.width}",
@@ -173,43 +243,20 @@
         "{spacing.widescreen}",
         "{spacing.section}",
         "{spacing.aside}",
-        "{text-measure.1}",
-        "{text-measure.2}",
-        "{text-measure.3}",
-        "{text-measure.4}",
-        "{text-measure.5}",
-        "{button.width}",
         "{button.min-width}",
-        "{button.max-width}",
-        "{button.height}",
         "{button.min-height}",
-        "{button.max-height}",
         "{button.icon-size}",
         "{button.icon-start-size}",
         "{button.icon-end-size}",
         "{checkbox.control-width}",
         "{checkbox.control-height}",
-        "{checkbox.indicator-size}",
-        "{input.icon-size}",
-        "{input.width}",
-        "{input.min-width}",
-        "{input.max-width}",
         "{input.min-height}",
         "{pagination.min-width}",
         "{pagination.min-height}",
         "{pagination.icon-size}",
         "{radio.control-width}",
         "{radio.control-height}",
-        "{radio.indicator-size}",
-        "{select.icon-size}",
-        "{select.indicator-size}",
-        "{select.width}",
-        "{select.min-width}",
-        "{select.max-width}",
         "{select.min-height}",
-        "{textarea.width}",
-        "{textarea.min-width}",
-        "{textarea.max-width}",
         "{textarea.min-block-size}",
         "{toggle.track-width}",
         "{toggle.track-height}",
@@ -217,21 +264,6 @@
         "{tooltip.max-width}",
         "{tooltip.arrow-size}",
         "{tooltip.offset}"
-      ]
-    },
-    "settingValue": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "examples": [
-        "{spacing.max-scale}",
-        "{font-size.min-viewport}",
-        "{font-size.max-viewport}",
-        "{font-size.min-base}",
-        "{font-size.max-base}",
-        "{font-size.min-ratio}",
-        "{font-size.max-ratio}"
       ]
     }
   },
@@ -1148,6 +1180,52 @@
         }
       }
     },
+    "$extensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": [
+                      "string",
+                      "number"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "value",
+                      "unit"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "value": {
+                        "type": "number"
+                      },
+                      "unit": {
+                        "type": "string",
+                        "enum": [
+                          "px",
+                          "rem"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "2xs": {
       "type": "object",
       "description": "Smallest semantic spacing value.",
@@ -1959,44 +2037,6 @@
         },
         "$type": {
           "const": "spacing"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "max-scale": {
-      "type": "object",
-      "description": "Growth ceiling: how much the largest layout spacing tokens bloom from their authored (min-viewport) floor to the max viewport. Per-token growth ramps up to this on a log curve by floor magnitude; micro spacing stays flat.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/settingValue"
-        },
-        "$type": {
-          "const": "setting"
         },
         "$description": {
           "type": "string"

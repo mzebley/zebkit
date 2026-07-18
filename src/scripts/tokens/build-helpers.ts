@@ -1,4 +1,5 @@
 import path from 'path';
+import { tokenValueToString } from '@definitions/tokens';
 import type { TokenInterface } from '@definitions/tokens';
 import {
   EXTENDED_TOKEN_BREAKPOINTS,
@@ -140,7 +141,7 @@ export function readEnabledBreakpoints(
   for (const [key, entry] of Object.entries(group)) {
     const value = (entry as { $value?: unknown })?.$value;
     if (value == null) continue;
-    enabled.push({ key, width: String(value) });
+    enabled.push({ key, width: tokenValueToString(value) });
   }
   return enabled;
 }

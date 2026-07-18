@@ -44,9 +44,33 @@
       ]
     },
     "spacingValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{a11y.min-interaction-size}",
@@ -89,8 +113,6 @@
         "{button.padding-inline-end}",
         "{button.padding-block-start}",
         "{button.padding-block-end}",
-        "{button.margin-inline}",
-        "{button.margin-block}",
         "{button.margin-inline-start}",
         "{button.margin-inline-end}",
         "{button.margin-block-start}",
@@ -134,6 +156,52 @@
     }
   },
   "properties": {
+    "$extensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": [
+                      "string",
+                      "number"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "value",
+                      "unit"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "value": {
+                        "type": "number"
+                      },
+                      "unit": {
+                        "type": "string",
+                        "enum": [
+                          "px",
+                          "rem"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "spacing-modifier": {
       "type": "object",
       "description": "Amount to multiply spacing variables by (independent density dial).",

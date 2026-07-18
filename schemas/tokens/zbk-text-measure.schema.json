@@ -5,76 +5,40 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "sizingValue": {
+    "cssDimensionValue": {
       "type": [
         "string",
         "number"
       ],
       "examples": [
-        "{focus.width}",
-        "{h1.measure}",
-        "{h2.measure}",
-        "{h3.measure}",
-        "{h4.measure}",
-        "{h5.measure}",
-        "{h6.measure}",
-        "{lede.measure}",
-        "{list.measure}",
-        "{p.measure}",
-        "{spacing.card}",
-        "{spacing.mobile}",
-        "{spacing.mobile-lg}",
-        "{spacing.tablet}",
-        "{spacing.tablet-lg}",
-        "{spacing.desktop}",
-        "{spacing.desktop-lg}",
-        "{spacing.widescreen}",
-        "{spacing.section}",
-        "{spacing.aside}",
         "{text-measure.1}",
         "{text-measure.2}",
         "{text-measure.3}",
         "{text-measure.4}",
         "{text-measure.5}",
+        "{button.margin-inline}",
+        "{button.margin-block}",
         "{button.width}",
-        "{button.min-width}",
         "{button.max-width}",
         "{button.height}",
-        "{button.min-height}",
         "{button.max-height}",
-        "{button.icon-size}",
-        "{button.icon-start-size}",
-        "{button.icon-end-size}",
-        "{checkbox.control-width}",
-        "{checkbox.control-height}",
         "{checkbox.indicator-size}",
         "{input.icon-size}",
         "{input.width}",
         "{input.min-width}",
         "{input.max-width}",
-        "{input.min-height}",
-        "{pagination.min-width}",
-        "{pagination.min-height}",
-        "{pagination.icon-size}",
-        "{radio.control-width}",
-        "{radio.control-height}",
+        "{radio.border-radius}",
         "{radio.indicator-size}",
+        "{radio.indicator-radius}",
         "{select.icon-size}",
         "{select.indicator-size}",
         "{select.width}",
         "{select.min-width}",
         "{select.max-width}",
-        "{select.min-height}",
         "{textarea.width}",
         "{textarea.min-width}",
         "{textarea.max-width}",
-        "{textarea.min-block-size}",
-        "{toggle.track-width}",
-        "{toggle.track-height}",
-        "{toggle.thumb-size}",
-        "{tooltip.max-width}",
-        "{tooltip.arrow-size}",
-        "{tooltip.offset}"
+        "{toggle.thumb-radius}"
       ]
     }
   },
@@ -88,10 +52,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/cssDimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "cssDimension"
         },
         "$description": {
           "type": "string"
@@ -126,10 +90,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/cssDimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "cssDimension"
         },
         "$description": {
           "type": "string"
@@ -164,10 +128,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/cssDimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "cssDimension"
         },
         "$description": {
           "type": "string"
@@ -202,10 +166,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/cssDimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "cssDimension"
         },
         "$description": {
           "type": "string"
@@ -240,10 +204,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/cssDimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "cssDimension"
         },
         "$description": {
           "type": "string"
@@ -263,6 +227,52 @@
                   ],
                   "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "$extensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": [
+                      "string",
+                      "number"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "value",
+                      "unit"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "value": {
+                        "type": "number"
+                      },
+                      "unit": {
+                        "type": "string",
+                        "enum": [
+                          "px",
+                          "rem"
+                        ]
+                      }
+                    }
+                  }
+                ]
               }
             }
           }

@@ -8,6 +8,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { glob } from 'glob';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { tokenValueToString } from '@definitions/tokens';
 import type { TokenInterface } from '@definitions/tokens';
 import type { VariantConfig } from '@definitions/token-variants';
 import type { ComponentsFilter } from '../components-config';
@@ -596,7 +597,7 @@ function buildVariantOutputs(
                 false,
                 referenceErrors
               )
-            : String(raw);
+            : tokenValueToString(raw);
         declarations.push(`--${tokenKey}-${key}: ${resolvedValue};`);
       }
 

@@ -101,11 +101,11 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-radio-border-color-disabled` | `{disabled.border}` | color | Control border color when disabled. |
 | `--zbk-radio-border-width` | `{border.width-md}` | borderWidth | Border thickness of the radio control. |
 | `--zbk-radio-border-style` | `{border.style}` | borderStyle | Border style of the radio control. |
-| `--zbk-radio-border-radius` | `50%` | borderRadius | Corner radius of the radio control (a circle by default). |
+| `--zbk-radio-border-radius` | `50%` | cssDimension | Corner radius of the radio control (a circle by default). |
 | `--zbk-radio-indicator-color` | `{app.ink-inverse}` | color | Color of the selection dot. |
 | `--zbk-radio-indicator-color-disabled` | `{disabled.ink}` | color | Selection dot color when disabled. |
-| `--zbk-radio-indicator-size` | `0.75em` | sizing | Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size. |
-| `--zbk-radio-indicator-radius` | `50%` | borderRadius | Corner radius of the selection dot (a circle by default). |
+| `--zbk-radio-indicator-size` | `0.75em` | cssDimension | Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size. |
+| `--zbk-radio-indicator-radius` | `50%` | cssDimension | Corner radius of the selection dot (a circle by default). |
 | `--zbk-radio-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-radio-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-radio-font-family` | `{font-family.interface}` | fontFamily | Font family for the radio label. |

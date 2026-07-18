@@ -280,21 +280,21 @@ const tokens = {
   // Sizing
   width: {
     $value: "auto",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Width of the field box.",
   },
   "min-width": {
     $value: "0",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Minimum width of the field box.",
   },
   "max-width": {
     $value: "100%",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Maximum width of the field box.",
   },
   "min-block-size": {
-    $value: "44px",
+    $value: { value: 44, unit: "px" },
     $type: "sizing",
     $description: "Minimum field height for a multi-line box; also a tappable floor.",
   },

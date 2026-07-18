@@ -93,14 +93,20 @@ export function hashToken(value: unknown): string {
   return createHash('sha256').update(stableJson(value)).digest('hex');
 }
 
-/** Token override files contain only entries with a concrete authorable value. */
+/**
+ * Token override files contain entries with a concrete authorable value, plus
+ * the module's group-level `$extensions` member (fluid-scale controls) — the
+ * only authorable surface for build-time scale settings.
+ */
 export function getAuthorableTokenData(raw: Record<string, unknown>): Record<string, unknown> {
   return Object.fromEntries(
     Object.entries(raw).filter(
       ([key, token]) =>
-        !key.startsWith('_') &&
-        isRecord(token) &&
-        Object.prototype.hasOwnProperty.call(token, '$value')
+        (key === '$extensions' && isRecord(token)) ||
+        (!key.startsWith('_') &&
+          !key.startsWith('$') &&
+          isRecord(token) &&
+          Object.prototype.hasOwnProperty.call(token, '$value'))
     )
   );
 }

@@ -115,12 +115,12 @@ const tokens = {
     $description: "Block padding inside the bubble.",
   },
   "max-width": {
-    $value: "20rem",
+    $value: { value: 20, unit: "rem" },
     $type: "sizing",
     $description: "Maximum bubble width before text wraps.",
   },
   "arrow-size": {
-    $value: "8px",
+    $value: { value: 8, unit: "px" },
     $type: "sizing",
     $description: "Arrow square size; also sets the default trigger-to-bubble gap.",
   },

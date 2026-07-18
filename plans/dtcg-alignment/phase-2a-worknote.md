@@ -3,6 +3,25 @@
 Written at the end of the session that landed Phases 0 and 1. This is the ground truth
 gathered for 2a so the next session starts from findings, not re-discovery. Delete when 2a lands.
 
+## Progress (2026-07-18)
+
+Steps 1–3 of the landing order below are DONE in this worktree, each leaving `npm run check`
+green (minus the check:context commit-pending state) and the golden baseline byte-identical:
+
+1. **Done** — `cssDimension` live; 28 non-px/rem literals retyped (source + the 15 theme files
+   that carried explicit legacy `$type` on those entries); compat row added; D4 widened to
+   cover keywords/unitless 0.
+2. **Done** — 61 source px/rem literals structured `{value, unit}`; `serializeDimensionValue`
+   (leading-zero-stripping, see audit result below) feeds converter/resolvers/breakpoints/
+   variants/context/docs; merge + editor schemas + pull accept structured values.
+3. **Done** — `setting` type deleted; controls live in group `$extensions["dev.zebkit"].scale`
+   (module `extensions` export / snapshot `$extensions` member / override-document top-level
+   `$extensions` with touched-control recording for overlays); step `index` moved under entry
+   `$extensions["dev.zebkit"].scale.index`; pull round-trips the block; docs-theme control
+   files migrated.
+4. **NOT started** — the D5 type collapse (hazards 1–3 below). Land it on a clean base after
+   steps 1–3 are committed.
+
 ## Where things stand
 
 - Phase 0 landed: `npm run check:dtcg-baseline` (19 golden artifacts + I7 order-shuffle) wired into `npm run check`; central definitions in `src/definitions/dtcg.ts`.
@@ -27,6 +46,13 @@ gathered for 2a so the next session starts from findings, not re-discovery. Dele
 2. **Utility manifests bind legacy type names** — e.g. margin/padding bind `"types": ["spacing", "rootSize"]`, layout binds `["spacing", "rootSize"]`, flex binds a list too. Today the `rootSize` vs `spacing` split distinguishes primitives from semantic aliases in the same group. A flat retype to `dimension` makes the filter match *everything* in the group → new utility classes appear → baseline breaks. Manifest `types` values must be updated in lockstep, and the primitive/alias discriminator needs a new basis (candidate: filter on "entry has a structured `$value`" vs "entry is a reference" — matches the actual intent and survives the collapse; needs a deliberate decision).
 3. **`tokenCompatibilityMap` rekey** — add `dimension`/`cssDimension` rows so all 191 references stay valid; the docs `token-types.ts` filter list and editor-schema `getTokenTypeSyntax` map also enumerate legacy type names.
 4. **Settings → group `$extensions["dev.zebkit"].scale`** touches: `readControls` in both resolvers; `computeEmissionClosure`'s consumed-controls re-emission logic (overlays overriding a control); `applyTokenOverrideFile`/`mergeOverrideObject` (must merge a group-level `$extensions` member from override documents — new code path); the editor schema generator (override schemas need a group-level `$extensions` property); CLI pull's "authorable" filter (settings entries currently pass the `$value` filter and are written into consumer token files). Theme files that override settings today: `theme/zebkit-docs/zbk-font-size.tokens.json` (viewport/base/ratio controls) and `theme/zebkit-docs/zbk-spacing.tokens.json` (`max-scale`) — plus the pull-state snapshot under `theme/.zebkit/`. No theme overrides step `index`.
+
+## Step-2 corpus audit result (2026-07-18)
+
+The full-corpus audit for fractional px/rem formatting ran with step 1:
+
+- **Source modules are consistent**: all 8 fractional literals are leading-dot (`.5rem`, `-.025rem`, ...); every other px/rem literal is integer-valued. The leading-zero-stripping serializer is byte-safe for the authoring layer.
+- **Theme files are mixed**: 31 leading-zero literals (`0.75rem`, `0.8125rem`, ...) vs 37 leading-dot (`.75rem`, `.82rem`, ...). No single canonical serializer reproduces both, so the theme sweep to structured values **cannot** be byte-identical and is dropped from 2a. Theme override `$value`s stay raw strings — the merge path substitutes them verbatim and the serializer never touches them. Their document-level conformance is Phase 3's problem (normalize formatting there, deliberately, if structured values are ever wanted in override documents).
 
 ## Suggested landing order inside 2a (each step baseline-green)
 

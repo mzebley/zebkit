@@ -243,7 +243,7 @@ const tokens = {
   },
   "icon-size": {
     $value: "1em",
-    $type: "sizing",
+    $type: "cssDimension",
     $description:
       "Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it.",
   },
@@ -261,7 +261,7 @@ const tokens = {
   },
   "indicator-size": {
     $value: "0.5em",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Side length of the drawn chevron; 0.5em tracks the field's font-size.",
   },
   "indicator-stroke-width": {
@@ -290,21 +290,21 @@ const tokens = {
   // Sizing
   width: {
     $value: "auto",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Width of the field box.",
   },
   "min-width": {
     $value: "0",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Minimum width of the field box.",
   },
   "max-width": {
     $value: "100%",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Maximum width of the field box.",
   },
   "min-height": {
-    $value: "44px",
+    $value: { value: 44, unit: "px" },
     $type: "sizing",
     $description: "Minimum field height to ensure a tappable area.",
   },

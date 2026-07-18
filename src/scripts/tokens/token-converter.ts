@@ -7,6 +7,7 @@ import {
   FontFaceObject,
   tokenA11y,
   tokenFontMeta,
+  tokenValueToString,
 } from "@definitions/tokens";
 import {
   FONT_FALLBACK_STACKS,
@@ -240,12 +241,6 @@ export const convertTokensToCssVars = (
     Object.entries(tokenProperties).forEach(([propertyKey, item]) => {
       const cssVariableKey = join(key, propertyKey);
 
-      // Build-time settings (e.g. fluid type-scale controls) are consumed during
-      // compilation and must never be emitted as CSS variables.
-      if (item && typeof item === "object" && "$type" in item && item.$type === "setting") {
-        return;
-      }
-
       // Font-family tokens get bespoke handling: normalize the shape, append the fallback stack,
       // and emit the relevant loading artifact (Google request or `@font-face`) based on `source`.
       if (isFontToken(item)) {
@@ -292,10 +287,10 @@ export const convertTokensToCssVars = (
       }
 
       if (item && typeof item === "object" && "$value" in item) {
-        let cssVariableValue: string | number = item.$value as string | number;
-
-        cssVariableValue = convertDotNotation(
-          String(item.$value),
+        // Structured dimensions serialize to their canonical CSS string here;
+        // plain strings (including references) and numbers pass through.
+        let cssVariableValue: string | number = convertDotNotation(
+          tokenValueToString(item.$value),
           item.$type as AllowedTokenTypes,
           ZEBKIT_PREFIX,
           refTokens,

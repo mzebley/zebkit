@@ -63,6 +63,20 @@ export const tokenCompatibilityMap: {
   sizing: ["sizing", "dimension", "spacing", "rootSize", "fontSize"],
   spacing: ["spacing", "dimension", "sizing", "rootSize"],
   dimension: ["dimension", "spacing", "sizing", "rootSize"],
+  // Non-px/rem CSS sizing values (%, ch, em, keywords, unitless 0). The compat
+  // check is a symmetric intersection, so listing the length family here lets
+  // those types reference cssDimension targets (and vice versa) without
+  // loosening any pairing between two legacy types.
+  cssDimension: [
+    "cssDimension",
+    "dimension",
+    "sizing",
+    "spacing",
+    "rootSize",
+    "fontSize",
+    "borderRadius",
+    "borderWidth",
+  ],
   rootSize: ["rootSize"],
   display: ["display"],
   borderRadius: ["borderRadius", "sizing", "dimension", "spacing", "rootSize"],
@@ -77,7 +91,6 @@ export const tokenCompatibilityMap: {
   boolean: ["boolean"],
   boxShadow: ["boxShadow"],
   flex: ["flex"],
-  setting: ["setting"],
   transition: ["transition"]
 };
 

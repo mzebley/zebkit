@@ -160,8 +160,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-padding-inline-end` | `{button.padding-inline}` | spacing | Inline-end padding override when needed. |
 | `--zbk-button-padding-block-start` | `{button.padding-block}` | spacing | Block-start padding override when needed. |
 | `--zbk-button-padding-block-end` | `{button.padding-block}` | spacing | Block-end padding override when needed. |
-| `--zbk-button-margin-inline` | `0` | spacing | Inline margin for standalone buttons. |
-| `--zbk-button-margin-block` | `0` | spacing | Block margin for standalone buttons. |
+| `--zbk-button-margin-inline` | `0` | cssDimension | Inline margin for standalone buttons. |
+| `--zbk-button-margin-block` | `0` | cssDimension | Block margin for standalone buttons. |
 | `--zbk-button-margin-inline-start` | `{button.margin-inline}` | spacing | Inline-start margin override when needed. |
 | `--zbk-button-margin-inline-end` | `{button.margin-inline}` | spacing | Inline-end margin override when needed. |
 | `--zbk-button-margin-block-start` | `{button.margin-block}` | spacing | Block-start margin override when needed. |
@@ -169,12 +169,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-gap` | `{button.padding-block}` | spacing | Gap between button icon and label. |
 | `--zbk-button-group-gap` | `{spacing.105}` | spacing | Gap between buttons when rendered in a group. |
 | `--zbk-button-display` | `inline-flex` | display | Display mode for buttons. |
-| `--zbk-button-width` | `auto` | sizing | Default button width. |
+| `--zbk-button-width` | `auto` | cssDimension | Default button width. |
 | `--zbk-button-min-width` | `{a11y.min-interaction-size}` | sizing | Minimum button width. |
-| `--zbk-button-max-width` | `none` | sizing | Maximum button width. |
-| `--zbk-button-height` | `auto` | sizing | Default button height. |
+| `--zbk-button-max-width` | `none` | cssDimension | Maximum button width. |
+| `--zbk-button-height` | `auto` | cssDimension | Default button height. |
 | `--zbk-button-min-height` | `{a11y.min-interaction-size}` | sizing | Minimum height to ensure tappable area. |
-| `--zbk-button-max-height` | `none` | sizing | Maximum button height. |
+| `--zbk-button-max-height` | `none` | cssDimension | Maximum button height. |
 | `--zbk-button-icon-size` | `{button.font-size}` | sizing | Default icon size within buttons. |
 | `--zbk-button-icon-start-size` | `{button.icon-size}` | sizing | Default icon size for icons at start of buttons. |
 | `--zbk-button-icon-end-size` | `{button.icon-size}` | sizing | Default icon size for icons at end of buttons. |
@@ -334,7 +334,7 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-checkbox-indicator-color-disabled` | `{disabled.ink}` | color | Indicator color when disabled. |
 | `--zbk-checkbox-indicator-stroke-width` | `{border.width-md}` | borderWidth | Stroke width of the checkmark; also the indeterminate bar's thickness. |
 | `--zbk-checkbox-indicator-radius` | `{border.radius-xs}` | borderRadius | Corner radius of the indeterminate bar. |
-| `--zbk-checkbox-indicator-size` | `1em` | sizing | Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it. |
+| `--zbk-checkbox-indicator-size` | `1em` | cssDimension | Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it. |
 | `--zbk-checkbox-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-checkbox-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-checkbox-font-family` | `{font-family.interface}` | fontFamily | Font family for the checkbox label. |
@@ -545,13 +545,13 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-input-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
 | `--zbk-input-affix-ink` | `{app.ink-muted}` | color | Color of prefix/suffix affix content (icon fonts and currentColor SVGs inherit it). |
 | `--zbk-input-affix-ink-disabled` | `{disabled.ink}` | color | Affix color when disabled. |
-| `--zbk-input-icon-size` | `1em` | sizing | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
+| `--zbk-input-icon-size` | `1em` | cssDimension | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
 | `--zbk-input-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
 | `--zbk-input-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
 | `--zbk-input-gap` | `{spacing.2xs}` | spacing | Space between affixes and the entered text. |
-| `--zbk-input-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-input-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-input-max-width` | `100%` | sizing | Maximum width of the field box. |
+| `--zbk-input-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-input-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-input-max-width` | `100%` | cssDimension | Maximum width of the field box. |
 | `--zbk-input-min-height` | `44px` | sizing | Minimum field height to ensure a tappable area. |
 | `--zbk-input-group-gap` | `{spacing.md}` | spacing | Gap between fields in a .zbk-input-group. |
 | `--zbk-input-group-direction` | `column` | flex | Flow direction of a .zbk-input-group (column or row). |
@@ -848,11 +848,11 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-radio-border-color-disabled` | `{disabled.border}` | color | Control border color when disabled. |
 | `--zbk-radio-border-width` | `{border.width-md}` | borderWidth | Border thickness of the radio control. |
 | `--zbk-radio-border-style` | `{border.style}` | borderStyle | Border style of the radio control. |
-| `--zbk-radio-border-radius` | `50%` | borderRadius | Corner radius of the radio control (a circle by default). |
+| `--zbk-radio-border-radius` | `50%` | cssDimension | Corner radius of the radio control (a circle by default). |
 | `--zbk-radio-indicator-color` | `{app.ink-inverse}` | color | Color of the selection dot. |
 | `--zbk-radio-indicator-color-disabled` | `{disabled.ink}` | color | Selection dot color when disabled. |
-| `--zbk-radio-indicator-size` | `0.75em` | sizing | Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size. |
-| `--zbk-radio-indicator-radius` | `50%` | borderRadius | Corner radius of the selection dot (a circle by default). |
+| `--zbk-radio-indicator-size` | `0.75em` | cssDimension | Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size. |
+| `--zbk-radio-indicator-radius` | `50%` | cssDimension | Corner radius of the selection dot (a circle by default). |
 | `--zbk-radio-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-radio-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-radio-font-family` | `{font-family.interface}` | fontFamily | Font family for the radio label. |
@@ -1022,17 +1022,17 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-select-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
 | `--zbk-select-affix-ink` | `{app.ink-muted}` | color | Color of prefix/suffix affix content (icon fonts and currentColor SVGs inherit it). |
 | `--zbk-select-affix-ink-disabled` | `{disabled.ink}` | color | Affix color when disabled. |
-| `--zbk-select-icon-size` | `1em` | sizing | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
+| `--zbk-select-icon-size` | `1em` | cssDimension | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
 | `--zbk-select-indicator-color` | `{app.ink-muted}` | color | Color of the drawn chevron indicator. |
 | `--zbk-select-indicator-color-disabled` | `{disabled.ink}` | color | Chevron color when disabled. |
-| `--zbk-select-indicator-size` | `0.5em` | sizing | Side length of the drawn chevron; 0.5em tracks the field's font-size. |
+| `--zbk-select-indicator-size` | `0.5em` | cssDimension | Side length of the drawn chevron; 0.5em tracks the field's font-size. |
 | `--zbk-select-indicator-stroke-width` | `{border.width-md}` | borderWidth | Stroke width of the drawn chevron. |
 | `--zbk-select-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
 | `--zbk-select-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
 | `--zbk-select-gap` | `{spacing.2xs}` | spacing | Space between affixes, the select, and the indicator. |
-| `--zbk-select-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-select-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-select-max-width` | `100%` | sizing | Maximum width of the field box. |
+| `--zbk-select-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-select-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-select-max-width` | `100%` | cssDimension | Maximum width of the field box. |
 | `--zbk-select-min-height` | `44px` | sizing | Minimum field height to ensure a tappable area. |
 | `--zbk-select-group-gap` | `{spacing.md}` | spacing | Gap between fields in a .zbk-select-group. |
 | `--zbk-select-group-direction` | `column` | flex | Flow direction of a .zbk-select-group (column or row). |
@@ -1188,9 +1188,9 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
 | `--zbk-textarea-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
 | `--zbk-textarea-resize` | `vertical` | utility | CSS resize behavior of the field (vertical, horizontal, both, none). |
-| `--zbk-textarea-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-textarea-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-textarea-max-width` | `100%` | sizing | Maximum width of the field box. |
+| `--zbk-textarea-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-textarea-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-textarea-max-width` | `100%` | cssDimension | Maximum width of the field box. |
 | `--zbk-textarea-min-block-size` | `44px` | sizing | Minimum field height for a multi-line box; also a tappable floor. |
 | `--zbk-textarea-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
 | `--zbk-textarea-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
@@ -1327,7 +1327,7 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-thumb-border-color-checked` | `{toggle.thumb-border-color}` | color | Thumb border color when the toggle is on. |
 | `--zbk-toggle-thumb-border-width` | `{toggle.border-width}` | borderWidth | Border thickness of the thumb. |
 | `--zbk-toggle-thumb-border-style` | `{toggle.border-style}` | borderStyle | Border style of the thumb. |
-| `--zbk-toggle-thumb-radius` | `50%` | borderRadius | Corner radius of the thumb (a circle by default). |
+| `--zbk-toggle-thumb-radius` | `50%` | cssDimension | Corner radius of the thumb (a circle by default). |
 | `--zbk-toggle-thumb-shadow` | `none` | boxShadow | Default thumb shadow. |
 | `--zbk-toggle-thumb-shadow-hover` | `none` | boxShadow | Thumb shadow when hovered. |
 | `--zbk-toggle-thumb-shadow-active` | `none` | boxShadow | Thumb shadow while pressed. |

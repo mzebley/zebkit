@@ -126,17 +126,17 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-select-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
 | `--zbk-select-affix-ink` | `{app.ink-muted}` | color | Color of prefix/suffix affix content (icon fonts and currentColor SVGs inherit it). |
 | `--zbk-select-affix-ink-disabled` | `{disabled.ink}` | color | Affix color when disabled. |
-| `--zbk-select-icon-size` | `1em` | sizing | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
+| `--zbk-select-icon-size` | `1em` | cssDimension | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
 | `--zbk-select-indicator-color` | `{app.ink-muted}` | color | Color of the drawn chevron indicator. |
 | `--zbk-select-indicator-color-disabled` | `{disabled.ink}` | color | Chevron color when disabled. |
-| `--zbk-select-indicator-size` | `0.5em` | sizing | Side length of the drawn chevron; 0.5em tracks the field's font-size. |
+| `--zbk-select-indicator-size` | `0.5em` | cssDimension | Side length of the drawn chevron; 0.5em tracks the field's font-size. |
 | `--zbk-select-indicator-stroke-width` | `{border.width-md}` | borderWidth | Stroke width of the drawn chevron. |
 | `--zbk-select-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
 | `--zbk-select-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
 | `--zbk-select-gap` | `{spacing.2xs}` | spacing | Space between affixes, the select, and the indicator. |
-| `--zbk-select-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-select-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-select-max-width` | `100%` | sizing | Maximum width of the field box. |
+| `--zbk-select-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-select-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-select-max-width` | `100%` | cssDimension | Maximum width of the field box. |
 | `--zbk-select-min-height` | `44px` | sizing | Minimum field height to ensure a tappable area. |
 | `--zbk-select-group-gap` | `{spacing.md}` | spacing | Gap between fields in a .zbk-select-group. |
 | `--zbk-select-group-direction` | `column` | flex | Flow direction of a .zbk-select-group (column or row). |

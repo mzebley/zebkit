@@ -2477,6 +2477,13 @@
         }
       }
     },
+    "$extensions": {
+      "dev.zebkit": {
+        "scale": {
+          "max-scale": 1.175
+        }
+      }
+    },
     "2xs": {
       "$value": "{spacing.2px}",
       "$type": "spacing",
@@ -2586,11 +2593,6 @@
       "$value": "{spacing.105}",
       "$type": "spacing",
       "$description": "Preferred horizontal padding for page."
-    },
-    "max-scale": {
-      "$value": 1.175,
-      "$type": "setting",
-      "$description": "Growth ceiling: how much the largest layout spacing tokens bloom from their authored (min-viewport) floor to the max viewport. Per-token growth ramps up to this on a log curve by floor magnitude; micro spacing stays flat."
     },
     "neg-15": {
       "$value": "-15rem",
@@ -3332,168 +3334,172 @@
   "zbk-text-measure": {
     "1": {
       "$value": "34ch",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Cards, sidebars, tight UI."
     },
     "2": {
       "$value": "48ch",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Short text blocks, captions."
     },
     "3": {
       "$value": "65ch",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Base body content measure."
     },
     "4": {
       "$value": "72ch",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Articles, long-form content."
     },
     "5": {
       "$value": "84ch",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Articles, long-form content."
     }
   },
   "zbk-font-size": {
-    "min-viewport": {
-      "$value": "360px",
-      "$type": "setting",
-      "$description": "Lower anchor viewport for fluid type sizing."
-    },
-    "max-viewport": {
-      "$value": "1240px",
-      "$type": "setting",
-      "$description": "Upper anchor viewport for fluid type sizing."
-    },
-    "min-base": {
-      "$value": "1rem",
-      "$type": "setting",
-      "$description": "Base (md) font size at the min viewport."
-    },
-    "max-base": {
-      "$value": "1.175rem",
-      "$type": "setting",
-      "$description": "Base (md) font size at the max viewport."
-    },
-    "min-ratio": {
-      "$value": 1.2,
-      "$type": "setting",
-      "$description": "Type scale ratio at the min viewport (minor third)."
-    },
-    "max-ratio": {
-      "$value": 1.25,
-      "$type": "setting",
-      "$description": "Type scale ratio at the max viewport (major third)."
+    "$extensions": {
+      "dev.zebkit": {
+        "scale": {
+          "min-viewport": "360px",
+          "max-viewport": "1240px",
+          "min-base": "1rem",
+          "max-base": "1.175rem",
+          "min-ratio": 1.2,
+          "max-ratio": 1.25
+        }
+      }
     },
     "3xs": {
-      "index": -4,
       "$type": "rootFontSize",
       "$description": "Smallest font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-3xs"
+          "a11y": "--zbk-a11y-font-size-modifier-3xs",
+          "scale": {
+            "index": -4
+          }
         }
       }
     },
     "2xs": {
-      "index": -3,
       "$type": "rootFontSize",
       "$description": "Second smallest font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-2xs"
+          "a11y": "--zbk-a11y-font-size-modifier-2xs",
+          "scale": {
+            "index": -3
+          }
         }
       }
     },
     "xs": {
-      "index": -2,
       "$type": "rootFontSize",
       "$description": "Extra small font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-xs"
+          "a11y": "--zbk-a11y-font-size-modifier-xs",
+          "scale": {
+            "index": -2
+          }
         }
       }
     },
     "sm": {
-      "index": -1,
       "$type": "rootFontSize",
       "$description": "Small font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-sm"
+          "a11y": "--zbk-a11y-font-size-modifier-sm",
+          "scale": {
+            "index": -1
+          }
         }
       }
     },
     "md": {
-      "index": 0,
       "$type": "rootFontSize",
       "$description": "Base / body font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-md"
+          "a11y": "--zbk-a11y-font-size-modifier-md",
+          "scale": {
+            "index": 0
+          }
         }
       }
     },
     "lg": {
-      "index": 1,
       "$type": "rootFontSize",
       "$description": "Large font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-lg"
+          "a11y": "--zbk-a11y-font-size-modifier-lg",
+          "scale": {
+            "index": 1
+          }
         }
       }
     },
     "xl": {
-      "index": 2,
       "$type": "rootFontSize",
       "$description": "Extra large font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-xl"
+          "a11y": "--zbk-a11y-font-size-modifier-xl",
+          "scale": {
+            "index": 2
+          }
         }
       }
     },
     "2xl": {
-      "index": 3,
       "$type": "rootFontSize",
       "$description": "Double extra large font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-2xl"
+          "a11y": "--zbk-a11y-font-size-modifier-2xl",
+          "scale": {
+            "index": 3
+          }
         }
       }
     },
     "3xl": {
-      "index": 4,
       "$type": "rootFontSize",
       "$description": "Triple extra large font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-3xl"
+          "a11y": "--zbk-a11y-font-size-modifier-3xl",
+          "scale": {
+            "index": 4
+          }
         }
       }
     },
     "4xl": {
-      "index": 5,
       "$type": "rootFontSize",
       "$description": "Quadruple extra large font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-4xl"
+          "a11y": "--zbk-a11y-font-size-modifier-4xl",
+          "scale": {
+            "index": 5
+          }
         }
       }
     },
     "5xl": {
-      "index": 6,
       "$type": "rootFontSize",
       "$description": "Quintuple extra large font size.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-font-size-modifier-5xl"
+          "a11y": "--zbk-a11y-font-size-modifier-5xl",
+          "scale": {
+            "index": 6
+          }
         }
       }
     }
@@ -3758,12 +3764,12 @@
     },
     "margin-inline": {
       "$value": "0",
-      "$type": "spacing",
+      "$type": "cssDimension",
       "$description": "Inline margin for standalone buttons."
     },
     "margin-block": {
       "$value": "0",
-      "$type": "spacing",
+      "$type": "cssDimension",
       "$description": "Block margin for standalone buttons."
     },
     "margin-inline-start": {
@@ -3803,7 +3809,7 @@
     },
     "width": {
       "$value": "auto",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Default button width."
     },
     "min-width": {
@@ -3813,12 +3819,12 @@
     },
     "max-width": {
       "$value": "none",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum button width."
     },
     "height": {
       "$value": "auto",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Default button height."
     },
     "min-height": {
@@ -3828,7 +3834,7 @@
     },
     "max-height": {
       "$value": "none",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum button height."
     },
     "icon-size": {
@@ -4075,7 +4081,7 @@
     },
     "indicator-size": {
       "$value": "1em",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it."
     },
     "ink": {
@@ -4407,7 +4413,7 @@
     },
     "icon-size": {
       "$value": "1em",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it."
     },
     "padding-inline": {
@@ -4427,17 +4433,17 @@
     },
     "width": {
       "$value": "auto",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Width of the field box."
     },
     "min-width": {
       "$value": "0",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Minimum width of the field box."
     },
     "max-width": {
       "$value": "100%",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width of the field box."
     },
     "min-height": {
@@ -4816,7 +4822,7 @@
     },
     "border-radius": {
       "$value": "50%",
-      "$type": "borderRadius",
+      "$type": "cssDimension",
       "$description": "Corner radius of the radio control (a circle by default)."
     },
     "indicator-color": {
@@ -4831,12 +4837,12 @@
     },
     "indicator-size": {
       "$value": "0.75em",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size."
     },
     "indicator-radius": {
       "$value": "50%",
-      "$type": "borderRadius",
+      "$type": "cssDimension",
       "$description": "Corner radius of the selection dot (a circle by default)."
     },
     "ink": {
@@ -5138,7 +5144,7 @@
     },
     "icon-size": {
       "$value": "1em",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it."
     },
     "indicator-color": {
@@ -5153,7 +5159,7 @@
     },
     "indicator-size": {
       "$value": "0.5em",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Side length of the drawn chevron; 0.5em tracks the field's font-size."
     },
     "indicator-stroke-width": {
@@ -5178,17 +5184,17 @@
     },
     "width": {
       "$value": "auto",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Width of the field box."
     },
     "min-width": {
       "$value": "0",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Minimum width of the field box."
     },
     "max-width": {
       "$value": "100%",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width of the field box."
     },
     "min-height": {
@@ -5485,17 +5491,17 @@
     },
     "width": {
       "$value": "auto",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Width of the field box."
     },
     "min-width": {
       "$value": "0",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Minimum width of the field box."
     },
     "max-width": {
       "$value": "100%",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width of the field box."
     },
     "min-block-size": {
@@ -5747,7 +5753,7 @@
     },
     "thumb-radius": {
       "$value": "50%",
-      "$type": "borderRadius",
+      "$type": "cssDimension",
       "$description": "Corner radius of the thumb (a circle by default)."
     },
     "thumb-shadow": {

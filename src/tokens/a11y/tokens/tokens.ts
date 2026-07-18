@@ -41,7 +41,7 @@ const tokens = {
       "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'",
   },
   "min-interaction-size": {
-    $value: `28px`,
+    $value: { value: 28, unit: "px" },
     $type: "spacing",
     $description:
       "Minimum height and width for interactive elements like links or buttons. WCAG AA is >= 24px, AAA is 44px",

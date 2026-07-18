@@ -234,6 +234,13 @@
       }
     }
   },
+  "$extensions": {
+    "dev.zebkit": {
+      "scale": {
+        "max-scale": 1.175
+      }
+    }
+  },
   "2xs": {
     "$value": "{spacing.2px}",
     "$type": "spacing",
@@ -343,11 +350,6 @@
     "$value": "{spacing.105}",
     "$type": "spacing",
     "$description": "Preferred horizontal padding for page."
-  },
-  "max-scale": {
-    "$value": 1.175,
-    "$type": "setting",
-    "$description": "Growth ceiling: how much the largest layout spacing tokens bloom from their authored (min-viewport) floor to the max viewport. Per-token growth ramps up to this on a log curve by floor magnitude; micro spacing stays flat."
   },
   "neg-15": {
     "$value": "-15rem",

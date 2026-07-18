@@ -23,9 +23,33 @@
       ]
     },
     "sizingValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{focus.width}",
@@ -48,43 +72,20 @@
         "{spacing.widescreen}",
         "{spacing.section}",
         "{spacing.aside}",
-        "{text-measure.1}",
-        "{text-measure.2}",
-        "{text-measure.3}",
-        "{text-measure.4}",
-        "{text-measure.5}",
-        "{button.width}",
         "{button.min-width}",
-        "{button.max-width}",
-        "{button.height}",
         "{button.min-height}",
-        "{button.max-height}",
         "{button.icon-size}",
         "{button.icon-start-size}",
         "{button.icon-end-size}",
         "{checkbox.control-width}",
         "{checkbox.control-height}",
-        "{checkbox.indicator-size}",
-        "{input.icon-size}",
-        "{input.width}",
-        "{input.min-width}",
-        "{input.max-width}",
         "{input.min-height}",
         "{pagination.min-width}",
         "{pagination.min-height}",
         "{pagination.icon-size}",
         "{radio.control-width}",
         "{radio.control-height}",
-        "{radio.indicator-size}",
-        "{select.icon-size}",
-        "{select.indicator-size}",
-        "{select.width}",
-        "{select.min-width}",
-        "{select.max-width}",
         "{select.min-height}",
-        "{textarea.width}",
-        "{textarea.min-width}",
-        "{textarea.max-width}",
         "{textarea.min-block-size}",
         "{toggle.track-width}",
         "{toggle.track-height}",
@@ -557,9 +558,33 @@
       ]
     },
     "borderWidthValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{border.width-xs}",
@@ -608,29 +633,40 @@
         "{tooltip.border-style}"
       ]
     },
-    "borderRadiusValue": {
+    "cssDimensionValue": {
       "type": [
         "string",
         "number"
       ],
       "examples": [
-        "{border.radius-xs}",
-        "{border.radius-sm}",
-        "{border.radius-md}",
-        "{border.radius-lg}",
-        "{border.radius-xl}",
-        "{button.border-radius}",
-        "{checkbox.border-radius}",
-        "{checkbox.indicator-radius}",
-        "{input.border-radius}",
-        "{pagination.border-radius}",
+        "{text-measure.1}",
+        "{text-measure.2}",
+        "{text-measure.3}",
+        "{text-measure.4}",
+        "{text-measure.5}",
+        "{button.margin-inline}",
+        "{button.margin-block}",
+        "{button.width}",
+        "{button.max-width}",
+        "{button.height}",
+        "{button.max-height}",
+        "{checkbox.indicator-size}",
+        "{input.icon-size}",
+        "{input.width}",
+        "{input.min-width}",
+        "{input.max-width}",
         "{radio.border-radius}",
+        "{radio.indicator-size}",
         "{radio.indicator-radius}",
-        "{select.border-radius}",
-        "{textarea.border-radius}",
-        "{toggle.border-radius}",
-        "{toggle.thumb-radius}",
-        "{tooltip.border-radius}"
+        "{select.icon-size}",
+        "{select.indicator-size}",
+        "{select.width}",
+        "{select.min-width}",
+        "{select.max-width}",
+        "{textarea.width}",
+        "{textarea.min-width}",
+        "{textarea.max-width}",
+        "{toggle.thumb-radius}"
       ]
     },
     "fontFamilyValue": {
@@ -670,9 +706,33 @@
       ]
     },
     "fontSizeValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{h1.font-size}",
@@ -768,9 +828,33 @@
       ]
     },
     "letterSpacingValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{h1.letter-spacing}",
@@ -798,9 +882,33 @@
       ]
     },
     "spacingValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{a11y.min-interaction-size}",
@@ -843,8 +951,6 @@
         "{button.padding-inline-end}",
         "{button.padding-block-start}",
         "{button.padding-block-end}",
-        "{button.margin-inline}",
-        "{button.margin-block}",
         "{button.margin-inline-start}",
         "{button.margin-inline-end}",
         "{button.margin-block-start}",
@@ -1112,6 +1218,52 @@
     }
   },
   "properties": {
+    "$extensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": [
+                      "string",
+                      "number"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "value",
+                      "unit"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "value": {
+                        "type": "number"
+                      },
+                      "unit": {
+                        "type": "string",
+                        "enum": [
+                          "px",
+                          "rem"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "display": {
       "type": "object",
       "description": "Display mode for the <zbk-radio> host element.",
@@ -1691,10 +1843,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/borderRadiusValue"
+          "$ref": "#/definitions/cssDimensionValue"
         },
         "$type": {
-          "const": "borderRadius"
+          "const": "cssDimension"
         },
         "$description": {
           "type": "string"
@@ -1805,10 +1957,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/cssDimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "cssDimension"
         },
         "$description": {
           "type": "string"
@@ -1843,10 +1995,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/borderRadiusValue"
+          "$ref": "#/definitions/cssDimensionValue"
         },
         "$type": {
-          "const": "borderRadius"
+          "const": "cssDimension"
         },
         "$description": {
           "type": "string"

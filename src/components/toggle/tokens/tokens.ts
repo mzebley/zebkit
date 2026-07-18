@@ -249,7 +249,7 @@ const tokens = {
   },
   "thumb-radius": {
     $value: "50%",
-    $type: "borderRadius",
+    $type: "cssDimension",
     $description: "Corner radius of the thumb (a circle by default).",
   },
 

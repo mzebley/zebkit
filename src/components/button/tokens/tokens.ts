@@ -259,12 +259,12 @@ const tokens = {
   // External spacing (margins)
   "margin-inline": {
     $value: "0",
-    $type: "spacing",
+    $type: "cssDimension",
     $description: "Inline margin for standalone buttons.",
   },
   "margin-block": {
     $value: "0",
-    $type: "spacing",
+    $type: "cssDimension",
     $description: "Block margin for standalone buttons.",
   },
   "margin-inline-start": {
@@ -308,7 +308,7 @@ const tokens = {
   },
   width: {
     $value: "auto",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Default button width.",
   },
   "min-width": {
@@ -318,12 +318,12 @@ const tokens = {
   },
   "max-width": {
     $value: "none",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Maximum button width.",
   },
   height: {
     $value: "auto",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Default button height.",
   },
   "min-height": {
@@ -333,7 +333,7 @@ const tokens = {
   },
   "max-height": {
     $value: "none",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Maximum button height.",
   },
 

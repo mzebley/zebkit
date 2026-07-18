@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { tokenObjectSchema, settingTokenSchema } from "@definitions/tokens";
+import { tokenObjectSchema } from "@definitions/tokens";
 
 // Spacing-scoped entry: a normal token entry plus an optional `growth` escape hatch that
 // pins the token's max-anchor multiplier, bypassing the build-time growth curve. Optional
@@ -10,11 +10,9 @@ const spacingEntrySchema = tokenObjectSchema.extend({
   growth: z.number().positive().optional(),
 });
 
+// The `max-scale` growth ceiling is group-level metadata under the module's
+// `extensions` export — build-time only, never a token.
 export const tokenSchema = z.object({
-  // Fluid spacing control (build-time only). Viewport anchors are shared with the
-  // font-size scale; this is the only spacing-specific generator input. Authored values
-  // are the mobile floor; this multiplier grows them toward the max viewport.
-  "max-scale": settingTokenSchema,
   "neg-15": spacingEntrySchema,
   "neg-10": spacingEntrySchema,
   "neg-9": spacingEntrySchema,

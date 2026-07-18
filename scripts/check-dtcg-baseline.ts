@@ -28,7 +28,7 @@ import { resolveSpaceScale } from "../src/scripts/tokens/build-space-scale.js";
 import { resolveTypeScale } from "../src/scripts/tokens/build-type-scale.js";
 import { convertTokensToCssVars } from "../src/scripts/tokens/token-converter.js";
 import type { ZebkitConfig, TokensConfig } from "../src/scripts/config.js";
-import type { TokenInterface } from "../src/definitions/tokens.js";
+import type { TokenGroupExtensions, TokenInterface } from "../src/definitions/tokens.js";
 import type { LayerName } from "../src/definitions/layers.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -317,10 +317,11 @@ interface DerivedEmission {
 
 function deriveEmission(
   tokens: Record<string, TokenInterface>,
-  layers: Record<string, LayerName>
+  layers: Record<string, LayerName>,
+  groupExtensions: Record<string, TokenGroupExtensions>
 ): DerivedEmission {
-  let resolved = resolveSpaceScale(tokens, { mode: "fluid" });
-  resolved = resolveTypeScale(resolved, { mode: "fluid" });
+  let resolved = resolveSpaceScale(tokens, { mode: "fluid", groupExtensions });
+  resolved = resolveTypeScale(resolved, { mode: "fluid", groupExtensions });
   // Mirror the build: breakpoints are build-time inputs, not emitted vars.
   resolved = { ...resolved };
   delete resolved["zbk-breakpoint"];
@@ -346,7 +347,7 @@ function deriveEmission(
 async function checkOrderInvariance(): Promise<boolean> {
   console.log(chalk.cyan("\n--- entry-order-shuffle check (I7) ---"));
   const files = await gatherZebkitFiles();
-  const { tokens, layers } = await buildZebkitTokens(
+  const { tokens, layers, groupExtensions } = await buildZebkitTokens(
     "order-check",
     files.tokenFiles,
     path.join(TMP_ROOT, "order-check"),
@@ -356,8 +357,8 @@ async function checkOrderInvariance(): Promise<boolean> {
     false
   );
 
-  const original = deriveEmission(tokens, layers);
-  const reversed = deriveEmission(reverseTokenMap(tokens), layers);
+  const original = deriveEmission(tokens, layers, groupExtensions);
+  const reversed = deriveEmission(reverseTokenMap(tokens), layers, groupExtensions);
 
   const problems: string[] = [];
   const layerNames = new Set([...Object.keys(original.decls), ...Object.keys(reversed.decls)]);
