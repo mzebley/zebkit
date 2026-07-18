@@ -143,13 +143,13 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-input-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
 | `--zbk-input-affix-ink` | `{app.ink-muted}` | color | Color of prefix/suffix affix content (icon fonts and currentColor SVGs inherit it). |
 | `--zbk-input-affix-ink-disabled` | `{disabled.ink}` | color | Affix color when disabled. |
-| `--zbk-input-icon-size` | `1em` | sizing | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
+| `--zbk-input-icon-size` | `1em` | cssDimension | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
 | `--zbk-input-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
 | `--zbk-input-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
 | `--zbk-input-gap` | `{spacing.2xs}` | spacing | Space between affixes and the entered text. |
-| `--zbk-input-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-input-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-input-max-width` | `100%` | sizing | Maximum width of the field box. |
+| `--zbk-input-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-input-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-input-max-width` | `100%` | cssDimension | Maximum width of the field box. |
 | `--zbk-input-min-height` | `44px` | sizing | Minimum field height to ensure a tappable area. |
 | `--zbk-input-group-gap` | `{spacing.md}` | spacing | Gap between fields in a .zbk-input-group. |
 | `--zbk-input-group-direction` | `column` | flex | Flow direction of a .zbk-input-group (column or row). |

@@ -21,7 +21,7 @@ const breakpointTokensFor = (
   'zbk-breakpoint': Object.fromEntries(
     Object.entries(entries).map(([key, value]) => [
       key,
-      { value, type: 'dimension', description: '' },
+      { $value: value, $type: 'dimension', $description: '' },
     ])
   ) as unknown as TokenInterface,
 });
@@ -30,12 +30,12 @@ describe('build-tokens helpers', () => {
   it('extracts referenced color families from token values', () => {
     const tokens = {
       'zbk-button': {
-        canvas: { value: '{color.blue-500}', type: 'color', description: 'canvas' },
-        ink: { value: '{color.red-100}', type: 'color', description: 'ink' },
-        border: { value: 'currentColor', type: 'color', description: 'border' },
+        canvas: { $value: '{color.blue-500}', $type: 'color', $description: 'canvas' },
+        ink: { $value: '{color.red-100}', $type: 'color', $description: 'ink' },
+        border: { $value: 'currentColor', $type: 'color', $description: 'border' },
       },
       'zbk-app': {
-        background: { value: '{color.blue-700}', type: 'color', description: 'background' },
+        background: { $value: '{color.blue-700}', $type: 'color', $description: 'background' },
       },
     } as Record<string, TokenInterface>;
 
@@ -90,10 +90,10 @@ describe('build-tokens helpers', () => {
   it('builds token lookup aliases and css variable names', () => {
     const lookup = buildTokenLookup({
       'zbk-button': {
-        canvas: { value: '#000', type: 'color', description: 'canvas' },
+        canvas: { $value: '#000', $type: 'color', $description: 'canvas' },
       },
       spacing: {
-        sm: { value: '0.5rem', type: 'dimension', description: 'small spacing' },
+        sm: { $value: '0.5rem', $type: 'dimension', $description: 'small spacing' },
       },
     } as Record<string, TokenInterface>);
 
@@ -118,14 +118,14 @@ describe('build-tokens helpers', () => {
     // viewport anchors) are already stripped; steps carry resolved clamp values.
     const scaled = {
       'zbk-font-size': {
-        md: { value: 'clamp(1rem, 2vw, 1.2rem)', type: 'rootFontSize', description: '' },
-        lg: { value: 'clamp(1.2rem, 3vw, 1.6rem)', type: 'rootFontSize', description: '' },
+        md: { $value: 'clamp(1rem, 2vw, 1.2rem)', $type: 'rootFontSize', $description: '' },
+        lg: { $value: 'clamp(1.2rem, 3vw, 1.6rem)', $type: 'rootFontSize', $description: '' },
       },
       'zbk-spacing': {
-        sm: { value: 'clamp(0.5rem, 1vw, 0.6rem)', type: 'rootSize', description: '' },
+        sm: { $value: 'clamp(0.5rem, 1vw, 0.6rem)', $type: 'rootSize', $description: '' },
       },
       'zbk-h1': {
-        'font-size': { value: '{font-size.lg}', type: 'fontSize', description: '' },
+        'font-size': { $value: '{font-size.lg}', $type: 'fontSize', $description: '' },
       },
     } as unknown as Record<string, TokenInterface>;
 
@@ -175,10 +175,10 @@ describe('build-tokens helpers', () => {
       // variant class instead of staying locked to their :root substitution.
       const componentTokens = {
         'zbk-toggle': {
-          'track-height': { value: '{spacing.105}', type: 'sizing', description: '' },
-          'thumb-size': { value: '{toggle.track-height}', type: 'sizing', description: '' },
-          'border-radius': { value: '{toggle.track-height}', type: 'borderRadius', description: '' },
-          'thumb-inset': { value: '{spacing.neg-2px}', type: 'spacing', description: '' },
+          'track-height': { $value: '{spacing.105}', $type: 'sizing', $description: '' },
+          'thumb-size': { $value: '{toggle.track-height}', $type: 'sizing', $description: '' },
+          'border-radius': { $value: '{toggle.track-height}', $type: 'borderRadius', $description: '' },
+          'thumb-inset': { $value: '{spacing.neg-2px}', $type: 'spacing', $description: '' },
         },
       } as unknown as Record<string, TokenInterface>;
 

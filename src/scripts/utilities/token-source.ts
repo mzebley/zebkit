@@ -24,7 +24,7 @@ export async function loadTokenModules(rootDir: string): Promise<TokenModuleMap>
     if (typeof mod.key !== "string" || typeof mod.default !== "object") continue;
     const keys = modules.get(mod.key) ?? new Map<string, string>();
     for (const [tokenKey, token] of Object.entries(mod.default as Record<string, unknown>)) {
-      const type = (token as { type?: unknown })?.type;
+      const type = (token as { $type?: unknown })?.$type;
       keys.set(tokenKey, typeof type === "string" ? type : "");
     }
     modules.set(mod.key, keys);

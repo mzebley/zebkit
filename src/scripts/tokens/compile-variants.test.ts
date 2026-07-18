@@ -98,8 +98,8 @@ describe('compile-variants helpers', () => {
     };
     const tokens = {
       'zbk-button': {
-        canvas: { value: '#fff', type: 'color', description: 'canvas' },
-        radius: { value: '4px', type: 'dimension', description: 'radius' },
+        canvas: { $value: '#fff', $type: 'color', $description: 'canvas' },
+        radius: { $value: '4px', $type: 'dimension', $description: 'radius' },
       },
     } as Record<string, TokenInterface>;
     const metadata = new Map([
@@ -166,8 +166,8 @@ describe('compile-variants helpers', () => {
 describe('variant grammar enforcement', () => {
   const tokens: Record<string, TokenInterface> = {
     'zbk-button': {
-      canvas: { value: '{brand.200}', type: 'color', description: 'bg' },
-      ink: { value: '{app.ink}', type: 'color', description: 'fg' },
+      canvas: { $value: '{brand.200}', $type: 'color', $description: 'bg' },
+      ink: { $value: '{app.ink}', $type: 'color', $description: 'fg' },
     } as unknown as TokenInterface,
   };
 

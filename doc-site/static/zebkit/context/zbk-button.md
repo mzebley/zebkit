@@ -147,8 +147,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-padding-inline-end` | `{button.padding-inline}` | spacing | Inline-end padding override when needed. |
 | `--zbk-button-padding-block-start` | `{button.padding-block}` | spacing | Block-start padding override when needed. |
 | `--zbk-button-padding-block-end` | `{button.padding-block}` | spacing | Block-end padding override when needed. |
-| `--zbk-button-margin-inline` | `0` | spacing | Inline margin for standalone buttons. |
-| `--zbk-button-margin-block` | `0` | spacing | Block margin for standalone buttons. |
+| `--zbk-button-margin-inline` | `0` | cssDimension | Inline margin for standalone buttons. |
+| `--zbk-button-margin-block` | `0` | cssDimension | Block margin for standalone buttons. |
 | `--zbk-button-margin-inline-start` | `{button.margin-inline}` | spacing | Inline-start margin override when needed. |
 | `--zbk-button-margin-inline-end` | `{button.margin-inline}` | spacing | Inline-end margin override when needed. |
 | `--zbk-button-margin-block-start` | `{button.margin-block}` | spacing | Block-start margin override when needed. |
@@ -156,12 +156,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-gap` | `{button.padding-block}` | spacing | Gap between button icon and label. |
 | `--zbk-button-group-gap` | `{spacing.105}` | spacing | Gap between buttons when rendered in a group. |
 | `--zbk-button-display` | `inline-flex` | display | Display mode for buttons. |
-| `--zbk-button-width` | `auto` | sizing | Default button width. |
+| `--zbk-button-width` | `auto` | cssDimension | Default button width. |
 | `--zbk-button-min-width` | `{a11y.min-interaction-size}` | sizing | Minimum button width. |
-| `--zbk-button-max-width` | `none` | sizing | Maximum button width. |
-| `--zbk-button-height` | `auto` | sizing | Default button height. |
+| `--zbk-button-max-width` | `none` | cssDimension | Maximum button width. |
+| `--zbk-button-height` | `auto` | cssDimension | Default button height. |
 | `--zbk-button-min-height` | `{a11y.min-interaction-size}` | sizing | Minimum height to ensure tappable area. |
-| `--zbk-button-max-height` | `none` | sizing | Maximum button height. |
+| `--zbk-button-max-height` | `none` | cssDimension | Maximum button height. |
 | `--zbk-button-icon-size` | `{button.font-size}` | sizing | Default icon size within buttons. |
 | `--zbk-button-icon-start-size` | `{button.icon-size}` | sizing | Default icon size for icons at start of buttons. |
 | `--zbk-button-icon-end-size` | `{button.icon-size}` | sizing | Default icon size for icons at end of buttons. |

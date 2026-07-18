@@ -39,14 +39,14 @@ async function buildDefaults() {
   const files = await gatherZebkitFiles();
 
   // Run the full token pipeline in-memory (no CSS compilation, no file export)
-  const { tokens, layers } = await buildZebkitTokens(DEFAULT_THEME_NAME, files.tokenFiles, defaultsDir, undefined, [], { splitMode: 'combined' }, false);
+  const { tokens, layers, groupExtensions } = await buildZebkitTokens(DEFAULT_THEME_NAME, files.tokenFiles, defaultsDir, undefined, [], { splitMode: 'combined' }, false);
 
   if (Object.keys(tokens).length === 0) {
     console.error('No tokens found — aborting.');
     process.exit(1);
   }
 
-  await writeSnapshotDir(defaultsDir, tokens, layers);
+  await writeSnapshotDir(defaultsDir, tokens, layers, groupExtensions);
 
   // Snapshot built-in variant configs (raw, as-authored) so the installed CLI can
   // register them without the TS sources — those don't ship, and the bundled CLI
@@ -73,7 +73,11 @@ async function buildDefaults() {
     const presetOutputDir = path.join(presetsDir, themeName);
     await fs.ensureDir(presetOutputDir);
 
-    const { tokens: presetTokens, layers: presetLayers } = await buildZebkitTokens(
+    const {
+      tokens: presetTokens,
+      layers: presetLayers,
+      groupExtensions: presetGroupExtensions,
+    } = await buildZebkitTokens(
       themeName,
       files.tokenFiles,
       presetOutputDir,
@@ -86,7 +90,7 @@ async function buildDefaults() {
       false
     );
 
-    await writeSnapshotDir(presetOutputDir, presetTokens, presetLayers);
+    await writeSnapshotDir(presetOutputDir, presetTokens, presetLayers, presetGroupExtensions);
     await copyVariantOverrideFiles(overridePath, path.join(presetOutputDir, 'variant-overrides'));
   }
 
@@ -124,7 +128,8 @@ async function copyVariantOverrideFiles(sourceDir: string, outputDir: string) {
 async function writeSnapshotDir(
   outputDir: string,
   tokens: Record<string, unknown>,
-  layers: Record<string, LayerName>
+  layers: Record<string, LayerName>,
+  groupExtensions: Record<string, unknown> = {}
 ) {
   const manifest: { modules: ManifestModule[] } = { modules: [] };
 
@@ -134,10 +139,18 @@ async function writeSnapshotDir(
     const filePath = path.join(outputDir, fileName);
 
     // Write token data with metadata fields so the CLI can reconstruct key/layer
-    // without needing a separate manifest lookup per-file.
+    // without needing a separate manifest lookup per-file. Group-level metadata
+    // (fluid-scale controls) rides as a `$extensions` member on the module object.
     await fs.writeJson(
       filePath,
-      { _key: tokenKey, _layer: layer, ...tokenData },
+      {
+        _key: tokenKey,
+        _layer: layer,
+        ...(groupExtensions[tokenKey]
+          ? { $extensions: groupExtensions[tokenKey] }
+          : {}),
+        ...(tokenData as Record<string, unknown>),
+      },
       { spaces: 2 }
     );
 

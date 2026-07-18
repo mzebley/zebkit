@@ -134,7 +134,7 @@ export function resolveChain(input: string): ChainNode[] {
       break;
     }
 
-    const raw = String(entry.value ?? '');
+    const raw = String(entry.$value ?? '');
     const ref = isReference(raw) ? raw.slice(1, -1) : null;
     nodes.push({ path, cssVar, stratum: stratumFor(group), raw, ref });
     path = ref;

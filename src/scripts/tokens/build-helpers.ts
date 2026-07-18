@@ -1,4 +1,5 @@
 import path from 'path';
+import { tokenValueToString } from '@definitions/tokens';
 import type { TokenInterface } from '@definitions/tokens';
 import {
   EXTENDED_TOKEN_BREAKPOINTS,
@@ -60,7 +61,7 @@ export function computeEmissionClosure(
   const dependsOn = new Map<string, string>();
   for (const [moduleKey, entries] of Object.entries(scaled)) {
     for (const [entry, obj] of Object.entries(entries)) {
-      const value = (obj as { value?: unknown })?.value;
+      const value = (obj as { $value?: unknown })?.$value;
       if (typeof value !== 'string' || !value.startsWith('{') || !value.endsWith('}')) continue;
       const [parent, child] = value.slice(1, -1).split('.');
       if (!parent || !child) continue;
@@ -89,7 +90,7 @@ export function extractReferencedColorFamilies(
   for (const tokenGroup of Object.values(tokens)) {
     if (!tokenGroup) continue;
     for (const token of Object.values(tokenGroup as Record<string, unknown>)) {
-      const value = typeof (token as any)?.value === 'string' ? (token as any).value : '';
+      const value = typeof (token as any)?.$value === 'string' ? (token as any).$value : '';
       for (const match of value.matchAll(pattern)) {
         families.add(match[1]);
       }
@@ -138,9 +139,9 @@ export function readEnabledBreakpoints(
   if (!group) return [];
   const enabled: Array<{ key: string; width: string }> = [];
   for (const [key, entry] of Object.entries(group)) {
-    const value = (entry as { value?: unknown })?.value;
+    const value = (entry as { $value?: unknown })?.$value;
     if (value == null) continue;
-    enabled.push({ key, width: String(value) });
+    enabled.push({ key, width: tokenValueToString(value) });
   }
   return enabled;
 }

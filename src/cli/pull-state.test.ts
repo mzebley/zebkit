@@ -18,7 +18,7 @@ import {
   type VariantSnapshot,
 } from './pull-state';
 
-const token = (value: string) => ({ value, type: 'color' });
+const token = (value: string) => ({ $value: value, $type: 'color' });
 
 function snapshot(modules: Record<string, Record<string, unknown>>): TokenSnapshot {
   return {
@@ -82,10 +82,10 @@ describe('pull state reconciliation', () => {
     expect(
       getAuthorableTokenData({
         _key: 'zbk-font-size',
-        generated: { index: 0, type: 'rootSize' },
-        authorable: { value: '1rem', type: 'sizing' },
+        generated: { index: 0, $type: 'rootSize' },
+        authorable: { $value: '1rem', $type: 'sizing' },
       })
-    ).toEqual({ authorable: { value: '1rem', type: 'sizing' } });
+    ).toEqual({ authorable: { $value: '1rem', $type: 'sizing' } });
   });
 
   it('rejects bundled manifests that do not use the internal zbk-*.json contract', async () => {

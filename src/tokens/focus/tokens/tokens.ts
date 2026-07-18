@@ -8,21 +8,21 @@ export type FocusTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "color": {
-    value: `{color.cyan-600}`,
-    type: "color",
-    description:
+    $value: `{color.cyan-600}`,
+    $type: "color",
+    $description:
       "Color of focus outline",
   },
     "width": {
-    value: `{spacing.025}`,
-    type: "sizing",
-    description:
+    $value: `{spacing.025}`,
+    $type: "sizing",
+    $description:
       "Width of focus outline",
   },
     "offset": {
-    value: `{spacing.025}`,
-    type: "spacing",
-    description:
+    $value: `{spacing.025}`,
+    $type: "spacing",
+    $description:
       "Offset distance of focus outline",
   },
 } as const satisfies FocusTokens;

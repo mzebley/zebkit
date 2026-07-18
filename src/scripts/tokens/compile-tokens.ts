@@ -5,7 +5,7 @@ import ora from 'ora';
 import { glob } from 'glob';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { ZodSchema, z } from 'zod';
-import { TokenInterface } from '@definitions/tokens';
+import { TokenInterface, TokenGroupExtensions } from '@definitions/tokens';
 import { DEFAULT_LAYER, LayerName } from '@definitions/layers';
 import { ZEBKIT_PREFIX } from '@config';
 import {
@@ -13,6 +13,7 @@ import {
   inferTokenKeyFromFilename,
   isCanonicalTokenOverrideFile,
   isVariantOverrideFile,
+  mergeGroupExtensions,
   mergeOverrideObject,
   mergeTokens,
   validateTokenExport,
@@ -38,9 +39,19 @@ export interface BuildZebkitTokensResult {
   /**
    * Per-module set of leaf token names that overrides actually wrote, e.g.
    * `{ 'zbk-accent-primary': Set('default','hover') }`. Empty when no overrides applied.
-   * Drives minimal overlay emission (emit only what changed).
+   * Drives minimal overlay emission (emit only what changed). Overridden group-level
+   * scale controls appear here under their control name (e.g. `max-scale`) — they
+   * never exist as entries in `tokens`, which is exactly how the emission closure
+   * recognizes them as consumed build-time controls.
    */
   overriddenKeys: Record<string, Set<string>>;
+  /**
+   * Group-level `$extensions["dev.zebkit"]` metadata per module (fluid-scale
+   * controls), collected from module `extensions` exports / snapshot JSON and
+   * merged with override documents' top-level `$extensions` members. Not tokens;
+   * never emitted as CSS custom properties.
+   */
+  groupExtensions: Record<string, TokenGroupExtensions>;
 }
 
 /**
@@ -62,6 +73,7 @@ export async function buildZebkitTokens(
   const layers: Record<string, LayerName> = {};
   const tokenSchemas: Record<string, ZodSchema> = {};
   const overriddenKeys: Record<string, Set<string>> = {};
+  const groupExtensions: Record<string, TokenGroupExtensions> = {};
   const splitMode = options.splitMode ?? 'combined';
   const overridePaths = options.overridePaths ?? [];
 
@@ -79,11 +91,14 @@ export async function buildZebkitTokens(
       if (path.isAbsolute(file) && file.endsWith('.json')) {
         try {
           const data = await fs.readJson(file);
-          const { _key, _layer, ...tokenData } = data as Record<string, any>;
+          const { _key, _layer, $extensions, ...tokenData } = data as Record<string, any>;
           const tokenKey: string = _key ?? path.basename(file, '.json');
           const moduleLayer: LayerName = _layer ?? DEFAULT_LAYER;
           tokens[tokenKey] = tokenData as TokenInterface;
           layers[tokenKey] = moduleLayer;
+          if ($extensions) {
+            mergeGroupExtensions(tokenKey, $extensions, groupExtensions);
+          }
         } catch (error) {
           console.error(chalk.red(`Error loading JSON token file ${file}:`), error);
           fatalErrors.push(`Failed to load JSON token file ${file}: ${error}`);
@@ -134,6 +149,11 @@ export async function buildZebkitTokens(
 
         const schemaErrors = validateTokenExport(tokensExport, tokenSchema);
         if (schemaErrors.length === 0) {
+          // Group-level metadata (fluid-scale controls) rides a named `extensions`
+          // export next to the default token map.
+          if (tokenModule.extensions) {
+            mergeGroupExtensions(tokenKey, tokenModule.extensions, groupExtensions);
+          }
           // Merge modules that share the same logical key (e.g., primitive + semantic spacing).
           // Copy the imported export rather than aliasing it: token modules are ES singletons
           // cached for the process lifetime, so mutating one (below, or via overrides) would
@@ -197,13 +217,21 @@ export async function buildZebkitTokens(
   // tracked. Only `customTokenPath` is tracked into `overriddenKeys`, so an overlay build
   // can emit just the tokens that overlay itself changed (minimal emission).
   for (const overridePath of overridePaths) {
-    await applyCustomOverrides(overridePath, tokens, tokenSchemas, undefined, options.excludedComponents);
+    await applyCustomOverrides(
+      overridePath,
+      tokens,
+      tokenSchemas,
+      groupExtensions,
+      undefined,
+      options.excludedComponents
+    );
   }
   if (customTokenPath) {
     await applyCustomOverrides(
       customTokenPath,
       tokens,
       tokenSchemas,
+      groupExtensions,
       overriddenKeys,
       options.excludedComponents
     );
@@ -215,15 +243,24 @@ export async function buildZebkitTokens(
     );
   }
 
-  if (exportFile) await writeTokensToFile(tokens, resolvedDestination, outputFormats, themeName, splitMode);
+  if (exportFile)
+    await writeTokensToFile(
+      tokens,
+      resolvedDestination,
+      outputFormats,
+      themeName,
+      splitMode,
+      groupExtensions
+    );
 
-  return { tokens, layers, overriddenKeys };
+  return { tokens, layers, overriddenKeys, groupExtensions };
 }
 
 async function applyCustomOverrides(
   overridePath: string,
   tokens: Record<string, TokenInterface>,
   tokenSchemas: Record<string, ZodSchema>,
+  groupExtensions: Record<string, TokenGroupExtensions>,
   touched?: Record<string, Set<string>>,
   excludedComponents?: ReadonlySet<string>
 ) {
@@ -250,6 +287,7 @@ async function applyCustomOverrides(
         resolvedOverridePath,
         tokens,
         tokenSchemas,
+        groupExtensions,
         touched,
         excludedModuleKeys
       );
@@ -274,6 +312,7 @@ async function applyCustomOverrides(
             file,
             tokens,
             tokenSchemas,
+            groupExtensions,
             touched,
             excludedModuleKeys
           );
@@ -295,6 +334,7 @@ async function applyTokenOverrideFile(
   file: string,
   tokens: Record<string, TokenInterface>,
   tokenSchemas: Record<string, ZodSchema>,
+  groupExtensions: Record<string, TokenGroupExtensions>,
   touched: Record<string, Set<string>> | undefined,
   excludedModuleKeys: ReadonlySet<string>
 ): Promise<void> {
@@ -323,7 +363,14 @@ async function applyTokenOverrideFile(
 
   const inferredKey = inferTokenKeyFromFilename(file)!;
   if (tokens[inferredKey]) {
-    mergeOverrideObject({ [inferredKey]: data }, tokens, tokenSchemas, touched);
+    // A top-level `$extensions` member carries group-level scale-control
+    // overrides; it is not a token entry. Overridden control names are recorded
+    // into `touched` so overlay emission re-emits the modules they shape.
+    const { $extensions: groupOverride, ...entryData } = data as Record<string, unknown>;
+    if (groupOverride) {
+      mergeGroupExtensions(inferredKey, groupOverride, groupExtensions, touched);
+    }
+    mergeOverrideObject({ [inferredKey]: entryData }, tokens, tokenSchemas, touched);
     return;
   }
   if (excludedModuleKeys.has(inferredKey)) {
@@ -346,6 +393,7 @@ export {
   inferTokenKeyFromFilename,
   isCanonicalTokenOverrideFile,
   isVariantOverrideFile,
+  mergeGroupExtensions,
   mergeOverrideObject,
   mergeTokens,
 } from './compile-token-helpers';
@@ -355,12 +403,20 @@ export async function writeTokensToFile(
   destinationPath: string,
   outputFormats: string[],
   themeName: string,
-  splitMode: BuildZebkitTokensOptions['splitMode']
+  splitMode: BuildZebkitTokensOptions['splitMode'],
+  groupExtensions: Record<string, TokenGroupExtensions> = {}
 ) {
   const writeSpinner = ora('Writing tokens to file(s)...').start();
   const destinationPaths: string[] = [];
   const normalizedFormats = outputFormats.map((format) => format.toLowerCase());
   const resolvedSplitMode = splitMode ?? 'combined';
+
+  // Group-level metadata rides inside each module object as a `$extensions`
+  // member (the DTCG group shape), alongside the token entries.
+  const modulePayload = (tokenKey: string): Record<string, unknown> =>
+    groupExtensions[tokenKey]
+      ? { $extensions: groupExtensions[tokenKey], ...tokens[tokenKey] }
+      : tokens[tokenKey];
 
   try {
     await fs.ensureDir(destinationPath);
@@ -371,18 +427,21 @@ export async function writeTokensToFile(
           const { filePath, fileContent } = buildFilePayload(
             format,
             path.join(destinationPath, `${tokenKey}.tokens`),
-            tokens[tokenKey]
+            modulePayload(tokenKey)
           );
           await fs.writeFile(filePath, fileContent);
           destinationPaths.push(filePath);
         }
       }
     } else {
+      const combined = Object.fromEntries(
+        Object.keys(tokens).map((tokenKey) => [tokenKey, modulePayload(tokenKey)])
+      );
       for (const format of normalizedFormats) {
         const { filePath, fileContent } = buildFilePayload(
           format,
           path.join(destinationPath, `${themeName}-tokens`),
-          tokens
+          combined
         );
         await fs.writeFile(filePath, fileContent);
         destinationPaths.push(filePath);

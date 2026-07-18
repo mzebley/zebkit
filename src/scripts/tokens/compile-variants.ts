@@ -8,6 +8,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { glob } from 'glob';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { tokenValueToString } from '@definitions/tokens';
 import type { TokenInterface } from '@definitions/tokens';
 import type { VariantConfig } from '@definitions/token-variants';
 import type { ComponentsFilter } from '../components-config';
@@ -562,7 +563,7 @@ function buildVariantOutputs(
           typeof value === 'string'
             ? convertDotNotation(
                 value,
-                sourceToken.type,
+                sourceToken.$type,
                 ZEBKIT_PREFIX,
                 tokens,
                 false,
@@ -585,18 +586,18 @@ function buildVariantOutputs(
       for (const [key, sourceToken] of Object.entries(sourceTokens)) {
         if (entry.overrides && key in entry.overrides) continue;
         if (!closure.has(`${tokenKey}.${key}`)) continue;
-        const raw = sourceToken.value;
+        const raw = sourceToken.$value;
         const resolvedValue =
           typeof raw === 'string'
             ? convertDotNotation(
                 raw,
-                sourceToken.type,
+                sourceToken.$type,
                 ZEBKIT_PREFIX,
                 tokens,
                 false,
                 referenceErrors
               )
-            : String(raw);
+            : tokenValueToString(raw);
         declarations.push(`--${tokenKey}-${key}: ${resolvedValue};`);
       }
 

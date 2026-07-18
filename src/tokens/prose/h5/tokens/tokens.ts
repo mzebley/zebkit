@@ -8,69 +8,69 @@ export type H5Tokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "font-family": {
-    value: `{font-family.heading}`,
-    type: "fontFamily",
-    description:
+    $value: `{font-family.heading}`,
+    $type: "fontFamily",
+    $description:
       "Font size for H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-size": {
-    value: `{font-size.sm}`,
-    type: "fontSize",
-    description:
+    $value: `{font-size.sm}`,
+    $type: "fontSize",
+    $description:
       "Font size for H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-weight": {
-    value: `{font-weight.bold}`,
-    type: "fontWeight",
-    description:
+    $value: `{font-weight.bold}`,
+    $type: "fontWeight",
+    $description:
       "Font weight for H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "line-height": {
-    value: `{line-height.3}`,
-    type: "lineHeight",
-    description:
+    $value: `{line-height.3}`,
+    $type: "lineHeight",
+    $description:
       "Line height for H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "letter-spacing": {
-    value: `{letter-spacing.normal}`,
-    type: "letterSpacing",
-    description:
+    $value: `{letter-spacing.normal}`,
+    $type: "letterSpacing",
+    $description:
       "Tracking for H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
   measure: {
-    value: `{text-measure.3}`,
-    type: "sizing",
-    description:
+    $value: `{text-measure.3}`,
+    $type: "sizing",
+    $description:
       "Maximum width for H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-before": {
-    value: `{spacing.2}`,
-    type: "spacing",
-    description:
+    $value: `{spacing.2}`,
+    $type: "spacing",
+    $description:
       "Amount of margin inline start for H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-after": {
-    value: `{spacing.1}`,
-    type: "spacing",
-    description:
+    $value: `{spacing.1}`,
+    $type: "spacing",
+    $description:
       "Amount of margin inline end for H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
   color: {
-    value: `{app.ink}`,
-    type: "color",
-    description:
+    $value: `{app.ink}`,
+    $type: "color",
+    $description:
       "Color of H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-style": {
-    value: `italic`,
-    type: "fontStyle",
-    description:
+    $value: `italic`,
+    $type: "fontStyle",
+    $description:
       "Font style for H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "text-transform": {
-    value: `none`,
-    type: "textTransform",
-    description:
+    $value: `none`,
+    $type: "textTransform",
+    $description:
       "Text transform for H5 elements with .prose applied directly or that are a child of a .prose container.",
   },
 } as const satisfies H5Tokens;

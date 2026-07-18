@@ -5,6 +5,9 @@ import {
   FontSource,
   FontFallback,
   FontFaceObject,
+  tokenA11y,
+  tokenFontMeta,
+  tokenValueToString,
 } from "@definitions/tokens";
 import {
   FONT_FALLBACK_STACKS,
@@ -54,7 +57,7 @@ function validateCssReferencesExist(
   if (availableTokens.hasOwnProperty(`${globalPrefix}-${parent}`)) {
     if (availableTokens[`${globalPrefix}-${parent}`].hasOwnProperty(child)) {
       const tokenType =
-        availableTokens[`${globalPrefix}-${parent}`][child].type;
+        availableTokens[`${globalPrefix}-${parent}`][child].$type;
       if (areTokensTypesCompatible(type as AllowedTokenTypes, tokenType as AllowedTokenTypes)) {
         valid = true;
       } else {
@@ -238,12 +241,6 @@ export const convertTokensToCssVars = (
     Object.entries(tokenProperties).forEach(([propertyKey, item]) => {
       const cssVariableKey = join(key, propertyKey);
 
-      // Build-time settings (e.g. fluid type-scale controls) are consumed during
-      // compilation and must never be emitted as CSS variables.
-      if (item && typeof item === "object" && "type" in item && item.type === "setting") {
-        return;
-      }
-
       // Font-family tokens get bespoke handling: normalize the shape, append the fallback stack,
       // and emit the relevant loading artifact (Google request or `@font-face`) based on `source`.
       if (isFontToken(item)) {
@@ -289,12 +286,12 @@ export const convertTokensToCssVars = (
         return;
       }
 
-      if (item && typeof item === "object" && "value" in item) {
-        let cssVariableValue: string | number = item.value as string | number;
-
-        cssVariableValue = convertDotNotation(
-          String(item.value),
-          item.type as AllowedTokenTypes,
+      if (item && typeof item === "object" && "$value" in item) {
+        // Structured dimensions serialize to their canonical CSS string here;
+        // plain strings (including references) and numbers pass through.
+        let cssVariableValue: string | number = convertDotNotation(
+          tokenValueToString(item.$value),
+          item.$type as AllowedTokenTypes,
           ZEBKIT_PREFIX,
           refTokens,
           false,
@@ -303,14 +300,14 @@ export const convertTokensToCssVars = (
 
         const baseValue = String(cssVariableValue);
 
-        if ("type" in item && (item.type === "rootFontSize" || item.type === "rootSize")) {
+        if ("$type" in item && (item.$type === "rootFontSize" || item.$type === "rootSize")) {
           // Pre-resolved by `resolveTypeScale` / `resolveSpaceScale` (fluid clamp or static
           // value, with a11y modifiers already baked in). Emit the value verbatim.
           cssVariableValue = baseValue;
-        } else if ("a11y" in item && "type" in item) {
-          let a11yValue = item["a11y"];
+        } else {
+          let a11yValue = tokenA11y(item);
           if (typeof a11yValue === "boolean") {
-            a11yValue = a11yMap[item.type as string];
+            a11yValue = a11yValue ? a11yMap[item.$type as string] : undefined;
           }
           if (a11yValue) {
             cssVariableValue = `calc(${cssVariableValue} * var(${a11yValue}))`;
@@ -370,21 +367,23 @@ function isFontToken(item: unknown): boolean {
   return (
     !!item &&
     typeof item === "object" &&
-    "type" in item &&
-    (item as { type?: unknown }).type === "fontFamily"
+    "$type" in item &&
+    (item as { $type?: unknown }).$type === "fontFamily"
   );
 }
 
-/** Reads a font token's fields into a source-agnostic shape, defaulting `source` to `system`. */
+/** Reads a font token's fields (loading metadata lives under `$extensions["dev.zebkit"].font`)
+ * into a source-agnostic shape, defaulting `source` to `system`. */
 function normalizeFontToken(item: Record<string, unknown>): NormalizedFontToken {
+  const font = tokenFontMeta(item) ?? {};
   return {
-    value: String(item.value ?? ""),
-    source: (item.source as FontSource) ?? "system",
-    fallback: item.fallback as FontFallback | undefined,
-    weights: item.weights as NormalizedFontToken["weights"],
-    styles: item.styles as NormalizedFontToken["styles"],
-    faces: item.faces as FontFaceObject[] | undefined,
-    display: item.display as string | undefined,
+    value: String(item.$value ?? ""),
+    source: (font.source as FontSource) ?? "system",
+    fallback: font.fallback as FontFallback | undefined,
+    weights: font.weights as NormalizedFontToken["weights"],
+    styles: font.styles as NormalizedFontToken["styles"],
+    faces: font.faces as FontFaceObject[] | undefined,
+    display: font.display as string | undefined,
   };
 }
 

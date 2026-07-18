@@ -384,7 +384,7 @@ export async function runTokenBuild(
     const resolvedSplitMode =
       splitMode as BuildZebkitTokensOptions["splitMode"];
 
-    const { tokens, layers } = await buildZebkitTokens(
+    const { tokens, layers, groupExtensions } = await buildZebkitTokens(
       themeName,
       files.tokenFiles,
       resolvedDestinationPath,
@@ -403,8 +403,7 @@ export async function runTokenBuild(
     // Resolve the generated font-size and spacing scales (fluid by default; static opt-out)
     // before emitting CSS vars. Operates on copies so exported artifacts keep their
     // authorable form; downstream consumers (variants, color/lookup) use original tokens.
-    // Spacing runs first: it reads the shared viewport anchors from the font-size module,
-    // which the type-scale pass then strips.
+    // Both read their controls from the group-level `$extensions` metadata.
     const useStaticTypeScale =
       tokensConfig?.typeScale?.static === true ||
       tokensConfig?.typeScale?.fluid === false;
@@ -413,9 +412,11 @@ export async function runTokenBuild(
       tokensConfig?.spaceScale?.fluid === false;
     let cssVarTokens = resolveSpaceScale(tokens, {
       mode: useStaticSpaceScale ? "static" : "fluid",
+      groupExtensions,
     });
     cssVarTokens = resolveTypeScale(cssVarTokens, {
       mode: useStaticTypeScale ? "static" : "fluid",
+      groupExtensions,
     });
     // Breakpoints feed the SCSS responsive system at build time; only surface them
     // as `--zbk-breakpoint-*` custom properties when explicitly opted in. Either
@@ -425,7 +426,7 @@ export async function runTokenBuild(
       if (tokensConfig?.extendedTokens?.emitBreakpointVars === true) {
         const enabledOnly: TokenInterface = {};
         for (const [name, entry] of Object.entries(cssVarTokens[breakpointKey])) {
-          if ((entry as { value?: unknown })?.value != null) enabledOnly[name] = entry;
+          if ((entry as { $value?: unknown })?.$value != null) enabledOnly[name] = entry;
         }
         cssVarTokens = { ...cssVarTokens, [breakpointKey]: enabledOnly };
       } else {
@@ -865,7 +866,7 @@ async function computeOverlayCss(
 
   // Merge base context + overlay overrides. `overriddenKeys` reflects only the overlay's
   // tokenPath (context paths are applied untracked inside buildZebkitTokens).
-  const { tokens, layers, overriddenKeys } = await buildZebkitTokens(
+  const { tokens, layers, overriddenKeys, groupExtensions } = await buildZebkitTokens(
     overlay.themeName,
     options.baseTokenFiles,
     destination,
@@ -891,9 +892,11 @@ async function computeOverlayCss(
   // Resolve scales on the full merged map (anchors present) before filtering.
   let scaled = resolveSpaceScale(tokens, {
     mode: options.useStaticSpaceScale ? "static" : "fluid",
+    groupExtensions,
   });
   scaled = resolveTypeScale(scaled, {
     mode: options.useStaticTypeScale ? "static" : "fluid",
+    groupExtensions,
   });
 
   // Emit the transitive closure of the overridden tokens, not just the leaves. A CSS custom

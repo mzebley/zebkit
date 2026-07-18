@@ -28,6 +28,7 @@ import {
   loadTokenModules,
   resolvePatternValues,
 } from '../src/scripts/utilities/token-source.js';
+import { tokenValueToString } from '../src/definitions/tokens.js';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(repoRoot, 'doc-site', 'static', 'zebkit', 'context');
@@ -75,10 +76,10 @@ interface CemDeclaration {
 }
 
 interface TokenEntry {
-  value?: string | number;
-  type?: string;
-  description?: string;
-  a11y?: boolean | string;
+  $value?: string | number | { value: number; unit: string };
+  $type?: string;
+  $description?: string;
+  $extensions?: { 'dev.zebkit'?: { a11y?: boolean | string } };
 }
 
 interface VariantEntry {
@@ -312,7 +313,10 @@ function renderComponent(
     }
   }
 
-  const tokenEntries = Object.entries(tokens ?? {});
+  // Skip the group-level $extensions member — it is scale metadata, not a token.
+  const tokenEntries = Object.entries(tokens ?? {}).filter(
+    ([name]) => !name.startsWith('$')
+  );
   if (tokenEntries.length > 0) {
     lines.push('## Tokens (CSS custom properties)');
     lines.push('');
@@ -323,11 +327,11 @@ function renderComponent(
     lines.push('| Token | Default | Type | Description |');
     lines.push('|---|---|---|---|');
     for (const [name, token] of tokenEntries) {
-      const a11y = token.a11y ? ' **(a11y)**' : '';
+      const a11y = token.$extensions?.['dev.zebkit']?.a11y ? ' **(a11y)**' : '';
       lines.push(
-        `| \`--${tag}-${name}\` | \`${cell(String(token.value ?? ''))}\` | ${cell(
-          token.type
-        )} | ${cell(token.description)}${a11y} |`
+        `| \`--${tag}-${name}\` | \`${cell(token.$value == null ? '' : tokenValueToString(token.$value))}\` | ${cell(
+          token.$type
+        )} | ${cell(token.$description)}${a11y} |`
       );
     }
     lines.push('');

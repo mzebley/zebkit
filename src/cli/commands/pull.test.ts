@@ -75,7 +75,7 @@ describe('pull command', () => {
         return {
           _key: 'zbk-button',
           _layer: 'base',
-          canvas: { value: '#fff', type: 'color', description: 'Background.' },
+          canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
         };
       }
       throw new Error(`Unexpected readJson target: ${target}`);
@@ -89,7 +89,7 @@ describe('pull command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
       {
-        canvas: { value: '#fff', type: 'color', description: 'Background.' },
+        canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
       },
       { spaces: 2 }
     );
@@ -126,12 +126,12 @@ describe('pull command', () => {
         return {
           _key: 'zbk-button',
           _layer: 'base',
-          canvas: { value: '#fff', type: 'color', description: 'Background.' },
+          canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
         };
       }
       if (target === '/workspace/project/tokens/zbk-button.tokens.json') {
         return {
-          canvas: { value: '#fff', type: 'color', description: 'Background.' },
+          canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
         };
       }
       throw new Error(`Unexpected readJson target: ${target}`);
@@ -175,13 +175,13 @@ describe('pull command', () => {
         return {
           _key: 'zbk-button',
           _layer: 'base',
-          canvas: { value: '#fff', type: 'color', description: 'Background.' },
-          newKey: { value: '#000', type: 'color', description: 'New key.' },
+          canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
+          newKey: { $value: '#000', $type: 'color', $description: 'New key.' },
         };
       }
       if (target === '/workspace/project/tokens/zbk-button.tokens.json') {
         return {
-          canvas: { value: '#fff', type: 'color', description: 'Background.' },
+          canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
         };
       }
       throw new Error(`Unexpected readJson target: ${target}`);
@@ -194,8 +194,8 @@ describe('pull command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
       {
-        canvas: { value: '#fff', type: 'color', description: 'Background.' },
-        newKey: { value: '#000', type: 'color', description: 'New key.' },
+        canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
+        newKey: { $value: '#000', $type: 'color', $description: 'New key.' },
       },
       { spaces: 2 }
     );
@@ -237,7 +237,7 @@ describe('pull command', () => {
         return {
           _key: 'zbk-button',
           _layer: 'base',
-          canvas: { value: '#123', type: 'color', description: 'Preset background.' },
+          canvas: { $value: '#123', $type: 'color', $description: 'Preset background.' },
         };
       }
       throw new Error(`Unexpected readJson target: ${target}`);
@@ -251,7 +251,7 @@ describe('pull command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
       {
-        canvas: { value: '#123', type: 'color', description: 'Preset background.' },
+        canvas: { $value: '#123', $type: 'color', $description: 'Preset background.' },
       },
       { spaces: 2 }
     );

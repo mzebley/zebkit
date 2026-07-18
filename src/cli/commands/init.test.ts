@@ -70,7 +70,7 @@ describe('init command', () => {
       return {
         _key: 'zbk-button',
         _layer: 'components',
-        canvas: { value: '#fff', type: 'color' },
+        canvas: { $value: '#fff', $type: 'color' },
       };
     }
     if (target === '/pkg/dist/cli/defaults/manifest.json') {
@@ -112,7 +112,7 @@ describe('init command', () => {
     expect(mockEnsureDir).toHaveBeenCalledWith('/workspace/project/tokens');
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
-      { canvas: { value: '#fff', type: 'color' } },
+      { canvas: { $value: '#fff', $type: 'color' } },
       { spaces: 2 }
     );
 

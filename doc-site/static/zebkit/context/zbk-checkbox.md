@@ -115,7 +115,7 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-checkbox-indicator-color-disabled` | `{disabled.ink}` | color | Indicator color when disabled. |
 | `--zbk-checkbox-indicator-stroke-width` | `{border.width-md}` | borderWidth | Stroke width of the checkmark; also the indeterminate bar's thickness. |
 | `--zbk-checkbox-indicator-radius` | `{border.radius-xs}` | borderRadius | Corner radius of the indeterminate bar. |
-| `--zbk-checkbox-indicator-size` | `1em` | sizing | Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it. |
+| `--zbk-checkbox-indicator-size` | `1em` | cssDimension | Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it. |
 | `--zbk-checkbox-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-checkbox-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-checkbox-font-family` | `{font-family.interface}` | fontFamily | Font family for the checkbox label. |

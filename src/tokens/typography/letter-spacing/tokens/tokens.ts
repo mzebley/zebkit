@@ -10,34 +10,34 @@ export type LetterSpacingTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   tighter: {
-    value: `-.05rem`,
-    type: "letterSpacing",
-    description: "",
-    a11y: true
+    $value: { value: -0.05, unit: "rem" },
+    $type: "letterSpacing",
+    $description: "",
+    $extensions: { "dev.zebkit": { a11y: true } }
   },
   tight: {
-    value: `-.025rem`,
-    type: "letterSpacing",
-    description: "",
-    a11y: true
+    $value: { value: -0.025, unit: "rem" },
+    $type: "letterSpacing",
+    $description: "",
+    $extensions: { "dev.zebkit": { a11y: true } }
   },
   normal: {
-    value: `0rem`,
-    type: "letterSpacing",
-    description: "",
-    a11y: true
+    $value: { value: 0, unit: "rem" },
+    $type: "letterSpacing",
+    $description: "",
+    $extensions: { "dev.zebkit": { a11y: true } }
   },
   wide: {
-    value: `.025rem`,
-    type: "letterSpacing",
-    description: "",
-    a11y: true
+    $value: { value: 0.025, unit: "rem" },
+    $type: "letterSpacing",
+    $description: "",
+    $extensions: { "dev.zebkit": { a11y: true } }
   },
   wider: {
-    value: `.05rem`,
-    type: "letterSpacing",
-    description: "",
-    a11y: true
+    $value: { value: 0.05, unit: "rem" },
+    $type: "letterSpacing",
+    $description: "",
+    $extensions: { "dev.zebkit": { a11y: true } }
   },
 } as const satisfies LetterSpacingTokens;
 

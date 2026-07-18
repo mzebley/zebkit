@@ -120,9 +120,9 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
 | `--zbk-textarea-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
 | `--zbk-textarea-resize` | `vertical` | utility | CSS resize behavior of the field (vertical, horizontal, both, none). |
-| `--zbk-textarea-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-textarea-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-textarea-max-width` | `100%` | sizing | Maximum width of the field box. |
+| `--zbk-textarea-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-textarea-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-textarea-max-width` | `100%` | cssDimension | Maximum width of the field box. |
 | `--zbk-textarea-min-block-size` | `44px` | sizing | Minimum field height for a multi-line box; also a tappable floor. |
 | `--zbk-textarea-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
 | `--zbk-textarea-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |

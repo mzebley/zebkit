@@ -8,7 +8,7 @@ import { convertTokensToCssVars } from './token-converter';
 describe('convertTokensToCssVars — selector scoping (rootSelector)', () => {
   const tokens = {
     'zbk-app': {
-      canvas: { value: '#ffffff', type: 'color', description: 'canvas' },
+      canvas: { $value: '#ffffff', $type: 'color', $description: 'canvas' },
     },
   } as unknown as { [key: string]: TokenInterface };
 
@@ -33,13 +33,13 @@ describe('convertTokensToCssVars — referenceTokens (minimal overlay emission)'
   it('emits only the passed subset but resolves references against referenceTokens', () => {
     const emitted = {
       'zbk-h1': {
-        color: { value: '{app.ink}', type: 'color', description: 'h1 color' },
+        color: { $value: '{app.ink}', $type: 'color', $description: 'h1 color' },
       },
     } as unknown as { [key: string]: TokenInterface };
     const full = {
       ...emitted,
       'zbk-app': {
-        ink: { value: '#111111', type: 'color', description: 'ink' },
+        ink: { $value: '#111111', $type: 'color', $description: 'ink' },
       },
     } as unknown as { [key: string]: TokenInterface };
 
@@ -58,7 +58,7 @@ describe('convertTokensToCssVars — referenceTokens (minimal overlay emission)'
   it('emits "undefined" when a reference is unresolvable in the subset alone', () => {
     const emitted = {
       'zbk-h1': {
-        color: { value: '{app.ink}', type: 'color', description: 'h1 color' },
+        color: { $value: '{app.ink}', $type: 'color', $description: 'h1 color' },
       },
     } as unknown as { [key: string]: TokenInterface };
 
@@ -80,7 +80,7 @@ describe('convertTokensToCssVars — font tokens', () => {
 
   it('appends the canonical fallback stack to a concrete value', () => {
     const { css } = convertTokensToCssVars(
-      fontTokens({ value: '"Inter"', type: 'fontFamily', source: 'system', fallback: 'sans' })
+      fontTokens({ $value: '"Inter"', $type: 'fontFamily', $extensions: { "dev.zebkit": { font: { source: 'system', fallback: 'sans' } } }, })
     );
     expect(css).toContain('--zbk-font-family-primary: "Inter", ui-sans-serif, system-ui');
   });
@@ -88,12 +88,12 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('does not append a fallback to a reference value', () => {
     const { css } = convertTokensToCssVars({
       'zbk-font-family': {
-        primary: { value: '"Inter"', type: 'fontFamily', source: 'system' },
+        primary: { $value: '"Inter"', $type: 'fontFamily', $extensions: { "dev.zebkit": { font: { source: 'system' } } } },
         body: {
-          value: '{font-family.primary}',
-          type: 'fontFamily',
-          fallback: 'sans',
-          description: 'body',
+          $value: '{font-family.primary}',
+          $type: 'fontFamily',
+          $extensions: { "dev.zebkit": { font: { fallback: 'sans' } } },
+          $description: 'body',
         },
       },
     } as unknown as { [key: string]: TokenInterface });
@@ -104,9 +104,9 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('system source emits a plain var with no @import or @font-face', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        value: 'ui-sans-serif, system-ui, sans-serif',
-        type: 'fontFamily',
-        source: 'system',
+        $value: 'ui-sans-serif, system-ui, sans-serif',
+        $type: 'fontFamily',
+        $extensions: { "dev.zebkit": { font: { source: 'system' } } },
       })
     );
     expect(result.css).not.toContain('@import');
@@ -117,10 +117,9 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('google variable range builds a wght@min..max css2 URL (import strategy)', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        value: '"Inter"',
-        type: 'fontFamily',
-        source: 'google',
-        weights: '200..800',
+        $value: '"Inter"',
+        $type: 'fontFamily',
+        $extensions: { "dev.zebkit": { font: { source: 'google', weights: '200..800' } } },
       })
     );
     expect(result.fontImports[0]).toContain(
@@ -131,10 +130,9 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('google static array builds a semicolon-joined wght list', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        value: '"Fira Code"',
-        type: 'fontFamily',
-        source: 'google',
-        weights: [400, 500, 700],
+        $value: '"Fira Code"',
+        $type: 'fontFamily',
+        $extensions: { "dev.zebkit": { font: { source: 'google', weights: [400, 500, 700] } } },
       })
     );
     expect(result.fontImports[0]).toContain('family=Fira+Code:wght@400;500;700');
@@ -143,11 +141,9 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('google italic composes the ital axis combinatorially with weights', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        value: '"Inter"',
-        type: 'fontFamily',
-        source: 'google',
-        weights: [400, 700],
-        styles: ['normal', 'italic'],
+        $value: '"Inter"',
+        $type: 'fontFamily',
+        $extensions: { "dev.zebkit": { font: { source: 'google', weights: [400, 700], styles: ['normal', 'italic'] } } },
       })
     );
     expect(result.fontImports[0]).toContain('family=Inter:ital,wght@0,400;0,700;1,400;1,700');
@@ -156,10 +152,9 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('link strategy emits no @import and populates fontHead', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        value: '"Inter"',
-        type: 'fontFamily',
-        source: 'google',
-        weights: '200..800',
+        $value: '"Inter"',
+        $type: 'fontFamily',
+        $extensions: { "dev.zebkit": { font: { source: 'google', weights: '200..800' } } },
       }),
       { fontStrategy: 'link' }
     );
@@ -172,10 +167,9 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('local source emits @font-face, resolving bare src against assetFilePath', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        value: '"Brand Sans"',
-        type: 'fontFamily',
-        source: 'local',
-        faces: [{ src: 'BrandSans.woff2', weight: '100 900', style: 'normal' }],
+        $value: '"Brand Sans"',
+        $type: 'fontFamily',
+        $extensions: { "dev.zebkit": { font: { source: 'local', faces: [{ src: 'BrandSans.woff2', weight: '100 900', style: 'normal' }] } } },
       }),
       { assetFilePath: '/fonts/' }
     );
@@ -188,10 +182,9 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('local source uses verbatim src for absolute/remote URLs', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        value: '"Brand Sans"',
-        type: 'fontFamily',
-        source: 'local',
-        faces: [{ src: 'https://cdn.example/BrandSans.woff2' }],
+        $value: '"Brand Sans"',
+        $type: 'fontFamily',
+        $extensions: { "dev.zebkit": { font: { source: 'local', faces: [{ src: 'https://cdn.example/BrandSans.woff2' }] } } },
       }),
       { assetFilePath: '/fonts/' }
     );
@@ -206,7 +199,7 @@ describe('convertTokensToCssVars — error collection', () => {
     const spy = errorSpy();
     const result = convertTokensToCssVars({
       'zbk-h1': {
-        color: { value: '{app.does-not-exist}', type: 'color', description: '' },
+        color: { $value: '{app.does-not-exist}', $type: 'color', $description: '' },
       },
     } as unknown as { [key: string]: TokenInterface });
 
@@ -220,7 +213,7 @@ describe('convertTokensToCssVars — error collection', () => {
     const spy = errorSpy();
     const result = convertTokensToCssVars({
       'zbk-h1': {
-        color: { value: '{app.nested.ink}', type: 'color', description: '' },
+        color: { $value: '{app.nested.ink}', $type: 'color', $description: '' },
       },
     } as unknown as { [key: string]: TokenInterface });
 
@@ -232,8 +225,8 @@ describe('convertTokensToCssVars — error collection', () => {
   it('reports no errors for a clean token map', () => {
     const result = convertTokensToCssVars({
       'zbk-app': {
-        canvas: { value: '#fff', type: 'color', description: '' },
-        ink: { value: '{app.canvas}', type: 'color', description: '' },
+        canvas: { $value: '#fff', $type: 'color', $description: '' },
+        ink: { $value: '{app.canvas}', $type: 'color', $description: '' },
       },
     } as unknown as { [key: string]: TokenInterface });
 
