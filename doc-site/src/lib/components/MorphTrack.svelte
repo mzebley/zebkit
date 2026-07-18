@@ -90,8 +90,9 @@
   }
 
   .rider {
-    --duration-modifier: 2;
-    --travel-duration: calc(150 * var(--zbk-transition-playful-motion-duration-slow) * var(--duration-modifier));
+    --track-duration-modifier: 3;
+    --morph-duration-modifier: 1.25;
+    --travel-duration: calc(150 * var(--zbk-transition-playful-motion-duration-slow) * var(--track-duration-modifier));
 
     offset-path: path("M -72 76 C 16 18 82 132 164 72 S 304 32 386 82 S 526 128 608 68 S 724 28 832 76");
     offset-distance: var(--rest-position);
@@ -102,49 +103,49 @@
   .rider--toggle {
     --rest-position: 9%;
     --travel-delay: 0s;
-    --morph-duration: calc(40 * var(--zbk-transition-playful-motion-duration-default));
+    --morph-duration: calc(40 * var(--zbk-transition-playful-motion-duration-default) * var(--morph-duration-modifier));
     --morph-delay: calc(-7 * var(--zbk-transition-playful-motion-duration-default));
   }
 
   .rider--card {
     --rest-position: 23%;
-    --travel-delay: calc(-21 * var(--zbk-transition-playful-motion-duration-slow) * var(--duration-modifier));
-    --morph-duration: calc(44 * var(--zbk-transition-playful-motion-duration-default));
+    --travel-delay: calc(-21 * var(--zbk-transition-playful-motion-duration-slow) * var(--track-duration-modifier));
+    --morph-duration: calc(44 * var(--zbk-transition-playful-motion-duration-default) * var(--morph-duration-modifier));
     --morph-delay: calc(-15 * var(--zbk-transition-playful-motion-duration-default));
   }
 
   .rider--button {
     --rest-position: 38%;
-    --travel-delay: calc(-42 * var(--zbk-transition-playful-motion-duration-slow) * var(--duration-modifier));
-    --morph-duration: calc(34 * var(--zbk-transition-playful-motion-duration-default));
+    --travel-delay: calc(-42 * var(--zbk-transition-playful-motion-duration-slow) * var(--track-duration-modifier));
+    --morph-duration: calc(34 * var(--zbk-transition-playful-motion-duration-default) * var(--morph-duration-modifier));
     --morph-delay: calc(-11 * var(--zbk-transition-playful-motion-duration-default));
   }
 
   .rider--checkbox {
     --rest-position: 52%;
-    --travel-delay: calc(-63 * var(--zbk-transition-playful-motion-duration-slow) * var(--duration-modifier));
-    --morph-duration: calc(44 * var(--zbk-transition-playful-motion-duration-default));
+    --travel-delay: calc(-63 * var(--zbk-transition-playful-motion-duration-slow) * var(--track-duration-modifier));
+    --morph-duration: calc(44 * var(--zbk-transition-playful-motion-duration-default) * var(--morph-duration-modifier));
     --morph-delay: calc(-6 * var(--zbk-transition-playful-motion-duration-default));
   }
 
   .rider--grid {
     --rest-position: 67%;
-    --travel-delay: calc(-84 * var(--zbk-transition-playful-motion-duration-slow) * var(--duration-modifier));
-    --morph-duration: calc(52 * var(--zbk-transition-playful-motion-duration-default));
+    --travel-delay: calc(-84 * var(--zbk-transition-playful-motion-duration-slow) * var(--track-duration-modifier));
+    --morph-duration: calc(52 * var(--zbk-transition-playful-motion-duration-default) * var(--morph-duration-modifier));
     --morph-delay: calc(-20 * var(--zbk-transition-playful-motion-duration-default));
   }
 
   .rider--diamond {
     --rest-position: 81%;
-    --travel-delay: calc(-102 * var(--zbk-transition-playful-motion-duration-slow) * var(--duration-modifier));
-    --morph-duration: calc(38 * var(--zbk-transition-playful-motion-duration-default));
+    --travel-delay: calc(-102 * var(--zbk-transition-playful-motion-duration-slow) * var(--track-duration-modifier));
+    --morph-duration: calc(38 * var(--zbk-transition-playful-motion-duration-default) * var(--morph-duration-modifier));
     --morph-delay: calc(-13 * var(--zbk-transition-playful-motion-duration-default));
   }
 
   .rider--orb {
     --rest-position: 94%;
-    --travel-delay: calc(-128 * var(--zbk-transition-playful-motion-duration-slow) * var(--duration-modifier));
-    --morph-duration: calc(56 * var(--zbk-transition-playful-motion-duration-default));
+    --travel-delay: calc(-128 * var(--zbk-transition-playful-motion-duration-slow) * var(--track-duration-modifier));
+    --morph-duration: calc(56 * var(--zbk-transition-playful-motion-duration-default) * var(--morph-duration-modifier));
     --morph-delay: calc(-4 * var(--zbk-transition-playful-motion-duration-default));
   }
 

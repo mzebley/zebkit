@@ -337,7 +337,7 @@
       "description": "Emphasis inverse secondary-accent canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
-      "value": "{accent-secondary.700}",
+      "value": "{accent-secondary.300}",
       "type": "color",
       "description": "Base secondary-accent ink color (the accent hue) for body text and icons on neutral or light canvases."
     },
@@ -352,7 +352,7 @@
       "description": "Muted secondary-accent ink color for secondary text and icons."
     },
     "ink-emphasis": {
-      "value": "{accent-secondary.800}",
+      "value": "{accent-secondary.100}",
       "type": "color",
       "description": "Emphasis secondary-accent ink color for high-prominence text and icons."
     },
@@ -1290,7 +1290,7 @@
       "description": "Font weight for P elements with .prose applied directly or that are a child of a .prose container."
     },
     "line-height": {
-      "value": "{line-height.3}",
+      "value": "{line-height.4}",
       "type": "lineHeight",
       "description": "Line height for P elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -2993,7 +2993,7 @@
       "description": "Short text blocks, captions."
     },
     "3": {
-      "value": "65ch",
+      "value": "60ch",
       "type": "sizing",
       "description": "Base body content measure."
     },
@@ -5176,12 +5176,12 @@
       "description": "Display mode for the <zbk-toggle> host element."
     },
     "track-width": {
-      "value": "{spacing.205}",
+      "value": "{spacing.2}",
       "type": "sizing",
       "description": "Width of the toggle track."
     },
     "track-height": {
-      "value": "{spacing.105}",
+      "value": "{spacing.1}",
       "type": "sizing",
       "description": "Height of the toggle track; the thumb and pill radius derive from it."
     },
@@ -5201,7 +5201,7 @@
       "description": "Track background while pressed."
     },
     "canvas-checked": {
-      "value": "{accent-primary.500}",
+      "value": "{action.ink}",
       "type": "color",
       "description": "Track background when the toggle is on."
     },
@@ -5211,22 +5211,22 @@
       "description": "Track background when disabled."
     },
     "border-color": {
-      "value": "{app.border-emphasis}",
+      "value": "{app.border}",
       "type": "color",
       "description": "Track border color when the toggle is off."
     },
     "border-color-hover": {
-      "value": "{accent-primary.400}",
+      "value": "{toggle.border-color}",
       "type": "color",
       "description": "Track border color when hovered."
     },
     "border-color-active": {
-      "value": "{accent-primary.500}",
+      "value": "{toggle.border-color}",
       "type": "color",
       "description": "Track border color while pressed."
     },
     "border-color-checked": {
-      "value": "{toggle.canvas-checked}",
+      "value": "{toggle.border-color}",
       "type": "color",
       "description": "Track border color when the toggle is on."
     },
@@ -5236,7 +5236,7 @@
       "description": "Track border color when disabled."
     },
     "border-width": {
-      "value": "{border.width-md}",
+      "value": "{border.width-sm}",
       "type": "borderWidth",
       "description": "Border thickness of the toggle track."
     },
@@ -5286,7 +5286,7 @@
       "description": "Thumb offset from the track's start edge; negative overlaps the border."
     },
     "thumb-canvas": {
-      "value": "{app.canvas}",
+      "value": "{app.canvas-inverse}",
       "type": "color",
       "description": "Thumb background when the toggle is off."
     },
@@ -5306,7 +5306,7 @@
       "description": "Thumb background when disabled."
     },
     "thumb-border-color": {
-      "value": "{toggle.border-color}",
+      "value": "{toggle.thumb-canvas}",
       "type": "color",
       "description": "Thumb border color when the toggle is off."
     },
@@ -5331,22 +5331,22 @@
       "description": "Corner radius of the thumb (a circle by default)."
     },
     "thumb-shadow": {
-      "value": "none",
+      "value": "0 0 0 2px var(--zbk-app-canvas-muted)",
       "type": "boxShadow",
       "description": "Default thumb shadow."
     },
     "thumb-shadow-hover": {
-      "value": "none",
+      "value": "{toggle.thumb-shadow}",
       "type": "boxShadow",
       "description": "Thumb shadow when hovered."
     },
     "thumb-shadow-active": {
-      "value": "none",
+      "value": "{toggle.thumb-shadow}",
       "type": "boxShadow",
       "description": "Thumb shadow while pressed."
     },
     "thumb-shadow-checked": {
-      "value": "none",
+      "value": "{toggle.thumb-shadow}",
       "type": "boxShadow",
       "description": "Thumb shadow when the toggle is on."
     },
@@ -5386,7 +5386,7 @@
       "description": "Font family for the toggle label."
     },
     "font-size": {
-      "value": "{font-size.md}",
+      "value": "{font-size.sm}",
       "type": "fontSize",
       "description": "Font size for the toggle label."
     },

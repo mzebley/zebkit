@@ -78,14 +78,14 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-canvas` | `{app.canvas-muted}` | color | Track background when the toggle is off. |
 | `--zbk-toggle-canvas-hover` | `{toggle.canvas}` | color | Track background when hovered. |
 | `--zbk-toggle-canvas-active` | `{toggle.canvas}` | color | Track background while pressed. |
-| `--zbk-toggle-canvas-checked` | `{accent-primary.500}` | color | Track background when the toggle is on. |
+| `--zbk-toggle-canvas-checked` | `{action.ink}` | color | Track background when the toggle is on. |
 | `--zbk-toggle-canvas-disabled` | `{disabled.canvas}` | color | Track background when disabled. |
-| `--zbk-toggle-border-color` | `{app.border-emphasis}` | color | Track border color when the toggle is off. |
-| `--zbk-toggle-border-color-hover` | `{accent-primary.400}` | color | Track border color when hovered. |
-| `--zbk-toggle-border-color-active` | `{accent-primary.500}` | color | Track border color while pressed. |
+| `--zbk-toggle-border-color` | `{app.border}` | color | Track border color when the toggle is off. |
+| `--zbk-toggle-border-color-hover` | `{app.border}` | color | Track border color when hovered. |
+| `--zbk-toggle-border-color-active` | `{app.border}` | color | Track border color while pressed. |
 | `--zbk-toggle-border-color-checked` | `{toggle.canvas-checked}` | color | Track border color when the toggle is on. |
 | `--zbk-toggle-border-color-disabled` | `{disabled.border}` | color | Track border color when disabled. |
-| `--zbk-toggle-border-width` | `{border.width-md}` | borderWidth | Border thickness of the toggle track. |
+| `--zbk-toggle-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the toggle track. |
 | `--zbk-toggle-border-style` | `{border.style}` | borderStyle | Border style of the toggle track. |
 | `--zbk-toggle-border-radius` | `{toggle.track-height}` | borderRadius | Corner radius of the track (track-height yields a pill). |
 | `--zbk-toggle-box-shadow` | `none` | boxShadow | Default track shadow. |

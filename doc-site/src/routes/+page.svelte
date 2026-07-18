@@ -137,7 +137,7 @@
 </script>
 
 <svelte:head>
-  <title>"Change everything. Rewrite nothing."</title>
+  <title>zebkit - "Change everything. Rewrite nothing."</title>
   <meta
     name="description"
     content="Zebkit is a token-driven, accessibility-first design system. Traditional design systems make you trade consistency for their look-and-feel. Zebkit keeps the consistency and hands the design opinions back to you."
@@ -167,54 +167,74 @@
     </div>
   </div>
 
-  <!-- 01 · The premise -->
+  <!-- 01 · The what -->
   <section
     id="about-zebkit"
     class="home-section display-flex flex-direction-column prose width-full max-width-section padding-inline-105 padding-block-2 tablet:padding-inline-4"
   >
     <p class="section-eyebrow font-code text-uppercase text-sm">
-      <span class="eyebrow-index">01</span>The premise
+      <span class="eyebrow-index">01</span>What's a zebkit?
     </p>
-    <p class="lede">
-      Traditional design systems make you pay for their consistency by enforcing
-      their look-and-feel. Zebkit keeps the consistency and hands the opinion
-      back to you.
+    <p class="margin-block-start-0 margin-block-end-1">
+      Traditionally, a design system will force you to exchange its consistency
+      for being locked into its look-and-feel.
     </p>
-    <p class="sub">
-      Every visual decision in zebkit is a token, and every token is data you
-      can swap. Change the tokens and the whole product takes on <em
-        >your look</em
-      >: same HTML, same behavior, <em>new everything</em>.
+    <p class="lede ink-accent-secondary">
+      But what if you could have all those muscle memory advantages without
+      sacrificing an ounce of design flexibility?
+    </p>
+    <p>
+      In zebkit, every visual decision is a token and every token is data you
+      can simply swap out. Change the tokens and the whole system happily takes
+      on any design your latest project asks for.
+    </p>
+    <p>
+      The same HTML. The same components. The same code.<br />
+      Yet, infinitely flexible.
     </p>
     <nav class="jump-links" aria-label="The premise — related pages">
       <a href="/foundations/why-tokens"
-        ><span>Why tokens</span><i class="ri-arrow-right-line" aria-hidden="true"
+        ><span>Why tokens</span><i
+          class="ri-arrow-right-line"
+          aria-hidden="true"
         ></i></a
       >
     </nav>
   </section>
 
-  <!-- 02 · The mechanism -->
+  <!-- 02 · The how -->
   <section
-    id="mechanism"
+    id="how-zebkit"
     class="home-section display-flex flex-direction-column prose width-full max-width-section padding-inline-105 padding-block-2 tablet:padding-inline-4"
   >
     <p class="section-eyebrow font-code text-uppercase text-sm">
-      <span class="eyebrow-index">02</span>The mechanism
+      <span class="eyebrow-index">02</span>Okay, but how?
     </p>
-    <h2>Three tiers. One move.</h2>
-    <p class="section-copy">
-      Tokens are organized as a theory of change: <strong>primitives</strong> say
-      what exists, <strong>aliases</strong> say what means what, and
-      <strong>component tokens</strong> say what one specific thing uses. Swap a
-      single primitive and everything built on its meaning moves in lockstep.
-      Try it — it will re-brand this entire page, live, until you hand ember
-      back.
+    <h2>Tokens, tokens, and more tokens.</h2>
+    <p class="margin-block-1">
+      No wheel reinvention here, zebkit tokens are organized in the <a
+        href="https://stefaniefluin.medium.com/the-pyramid-design-token-structure-the-best-way-to-format-organize-and-name-your-design-tokens-ca81b9d8836d"
+        target="_blank">standard linear stream.</a
+      >
+    </p>
+    <p class="lede ink-accent-secondary">
+      <em class="text-medium">Primitives</em>
+      define what exists,
+      <em class="text-medium">aliases</em>
+      explain what means what, and
+      <em class="text-medium">consumer tokens</em> tell a specific thing what to
+      do with it all.
+    </p>
+    <p>
+      Swap a zebkit primitive and everything built on its foundation moves right
+      along with it. In realtime.
     </p>
     <TokenChain />
     <nav class="jump-links" aria-label="The mechanism — related pages">
       <a href="/foundations/tokens"
-        ><span>The strata</span><i class="ri-arrow-right-line" aria-hidden="true"
+        ><span>The strata</span><i
+          class="ri-arrow-right-line"
+          aria-hidden="true"
         ></i></a
       >
       <a href="/tokens"
@@ -265,15 +285,16 @@
     class="home-section display-flex flex-direction-column prose width-full max-width-section padding-inline-105 padding-block-2 tablet:padding-inline-4"
   >
     <p class="section-eyebrow font-code text-uppercase text-sm">
-      <span class="eyebrow-index">03</span>The proof
+      <span class="eyebrow-index">03</span>No, seriously. So many tokens.
     </p>
-    <h2>Now at full scale.</h2>
-    <p class="section-copy">
+    <h2>Take it to the limit.</h2>
+    <p class="margin-block-1">
+      Okay, yeah. You've seen color swaps before and customizing a design system's font families is lightyears away from being innovative.
+    </p>
+    <p class="margin-block-0">
       Below is a complete landing page — header, cards, accent band, the works —
-      as one fixed markup tree. Switch the preset and only token values change;
-      the diff strip underneath is the receipt. Your own look is the same
-      operation: an <a href="/foundations/theming">overlay theme</a> that
-      redeclares only what it disagrees with.
+      as one <strong>fixed</strong> markup tree. Jump around between the presets and only the token values will change;
+      the underlying HTML remains constant.
     </p>
   </section>
   <HeroReskin />
@@ -413,7 +434,9 @@
       <span class="eyebrow-index">06</span>The field guide
     </p>
     <h2>Pick a door.</h2>
-    <div class="guide-grid display-grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3">
+    <div
+      class="guide-grid display-grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3"
+    >
       {#each guide as group (group.heading)}
         <nav class="guide-group" aria-label={group.heading}>
           <p class="guide-heading font-code text-uppercase text-2xs">
@@ -459,11 +482,6 @@
     min-height: max-content;
   }
 
-  .sub {
-    max-width: 60ch;
-    margin-top: var(--zbk-spacing-1);
-  }
-
   .watermark {
     width: var(--zbk-spacing-tablet-lg);
     max-width: 90vw;
@@ -483,6 +501,7 @@
       var(--zbk-spacing-205) + var(--zbk-spacing-1)
     );
     padding-block: var(--zbk-spacing-3);
+    --zbk-lede-spacing-after: var(--zbk-spacing-1);
   }
 
   .home-section h2 {
@@ -491,14 +510,19 @@
   }
 
   .section-eyebrow {
-    margin: 0 0 var(--zbk-spacing-05);
-    color: var(--zbk-app-ink-subtle);
+    margin: 0 0 var(--zbk-spacing-105);
+    color: var(--zbk-accent-primary-ink);
     letter-spacing: var(--zbk-letter-spacing-wider);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    font-size: var(--zbk-font-size-md);
   }
 
   .eyebrow-index {
-    color: var(--zbk-action-ink-muted);
+    color: var(--zbk-accent-secondary-ink);
     margin-inline-end: var(--zbk-spacing-05);
+    font-weight: var(--zbk-font-weight-semibold);
   }
 
   .section-copy {

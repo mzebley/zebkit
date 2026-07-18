@@ -14,147 +14,221 @@
   // inherit the finished values, so a scoped override would change nothing.
   // Overriding at the root is also the honest version of the claim: the entire
   // page re-resolves, not a sandboxed subtree.
-  const registers = [
-    "ember",
-    "gold",
-    "mint",
-    "sea",
-    "violet",
-    "foxglove",
-  ] as const;
-  type Register = (typeof registers)[number];
 
-  const HUE = "--zbk-color-ember-hue";
-  const SAT = "--zbk-color-ember-saturation";
-
-  let active = $state<Register>("ember");
-  // SSR fallback matches the shipped declaration; replaced by the live
-  // computed value after hydration and on every swap.
-  let resolvedPrimitive = $state("hsl(16, 78%, 48%)");
-
-  function readResolvedPrimitive() {
-    const value = getComputedStyle(document.documentElement)
-      .getPropertyValue("--zbk-color-ember-600")
-      .trim();
-    if (value) resolvedPrimitive = value.replace(/,(?=\S)/g, ", ");
-  }
-
-  function select(name: Register) {
-    active = name;
-    const root = document.documentElement;
-    if (name === "ember") {
-      root.style.removeProperty(HUE);
-      root.style.removeProperty(SAT);
-    } else {
-      root.style.setProperty(HUE, `var(--zbk-color-${name}-hue)`);
-      root.style.setProperty(SAT, `var(--zbk-color-${name}-saturation)`);
-    }
-    readResolvedPrimitive();
-  }
-
-  onMount(() => {
-    readResolvedPrimitive();
-    // Leaving the page takes the experiment with it.
-    return () => {
-      document.documentElement.style.removeProperty(HUE);
-      document.documentElement.style.removeProperty(SAT);
-    };
-  });
-
-  // The chain on display — real declarations from the shipped default theme,
-  // one per tier. If these drift from the build, that is a docs bug.
-  const tiers = [
-    {
-      label: "primitive",
-      claim: "what exists",
-      token: "--zbk-color-ember-600",
-      value: "hsl(16, 78%, 48%)",
-      note: "The raw vocabulary. The only tier where a literal value may appear.",
-    },
-    {
-      label: "alias",
-      claim: "what means what",
-      token: "--zbk-action-ink",
-      value: "var(--zbk-color-ember-600)",
-      note: "The design language. Here is where a color becomes “action.”",
-    },
-    {
-      label: "component",
-      claim: "what this thing uses",
-      token: "--zbk-button-ink",
-      value: "var(--zbk-action-ink)",
-      note: "The surface one component paints from — overridable without touching its neighbors.",
-    },
+  const colors: SelectionItem[] = [
+    { name: "ember", value: "hsl(16, 78%, 48%)" },
+    { name: "gold", value: "hsl(40, 85%, 48%)" },
+    { name: "mint", value: "hsl(158, 42%, 48%)" },
+    { name: "deepcurrent", value: "hsl(224,85%,36%)" },
+    { name: "violet", value: "hsl(268, 76%, 48%)" },
+    { name: "rosewater", value: "hsl(352, 40%, 48%)" },
   ];
+  interface SelectionItem {
+    name: string;
+    value: string;
+    size?: string;
+  }
+
+  const families: SelectionItem[] = [
+    { name: "primary", value: "Proza Libre", size: "xs" },
+    { name: "alt", value: "Fraunces", size: "sm" },
+    { name: "monospace", value: "Inconsolata", size: "sm" },
+  ];
+
+  let activeColor = $state<SelectionItem>(colors[0]);
+  let activeFamily = $state<SelectionItem>(families[0]);
+
+  function selectColor(color: SelectionItem) {
+    activeColor = color;
+  }
+
+  function selectFamily(family: SelectionItem) {
+    activeFamily = family;
+  }
 </script>
 
-
-<div class="token-chain">
+<div class="token-chain margin-block-2">
   <div
-    class="register-row"
+    class="width-full display-flex gap-1 flex-direction-column"
     role="group"
     aria-label="Swap the primitive palette driving the chain"
   >
-    <span class="register-label font-code text-uppercase text-2xs"
-      >Swap the primitive</span
+    <span
+      class="ink-accent-primary letter-spacing-wide display-flex gap-05 font-code text-uppercase text-sm"
+      >Tokens in action</span
     >
-    {#each registers as name (name)}
-      <button
-        type="button"
-        class="register"
-        class:is-active={active === name}
-        aria-pressed={active === name}
-        onclick={() => select(name)}
-      >
-        <span
-          class="register-swatch"
-          style={`background: var(--zbk-color-${name}-500)`}
-          aria-hidden="true"
-        ></span>
-        <span class="font-code text-xs"
-          >{name}{#if name === "ember" && active !== "ember"}<span
-              class="register-reset">(reset)</span
-            >{/if}</span
+    <div class="register-row">
+      {#each colors as color (color)}
+        <button
+          type="button"
+          class="register"
+          class:is-active={activeColor.name === color.name}
+          aria-pressed={activeColor.name === color.name}
+          style={activeColor.name === color.name
+            ? `border-color: var(--zbk-color-${color.name}-600)`
+            : undefined}
+          onclick={() => selectColor(color)}
         >
-      </button>
-    {/each}
+          <span
+            class="register-swatch"
+            style={`background: var(--zbk-color-${color.name}-600)`}
+            aria-hidden="true"
+          ></span>
+          <span class="font-code text-capitalize text-sm">{color.name}</span>
+        </button>
+      {/each}
+    </div>
+    <div class="register-row">
+      {#each families as family (family)}
+        <button
+          type="button"
+          class="register"
+          class:is-active={activeFamily.name === family.name}
+          aria-pressed={activeFamily.name === family.name}
+          style={activeFamily.name === family.name
+            ? `border-color: var(--zbk-color-${activeColor.name}-600)`
+            : undefined}
+          onclick={() => selectFamily(family)}
+        >
+          <span
+            class="register-swatch"
+            style={activeFamily.name === family.name
+              ? `background: var(--zbk-color-${activeColor.name}-600)`
+              : `background: var(--zbk-app-border)`}
+            aria-hidden="true"
+          ></span>
+          <span class="font-code text-capitalize text-sm"
+            >{family.name} font</span
+          >
+        </button>
+      {/each}
+    </div>
   </div>
 
   <div class="chain">
-    {#each tiers as tier, i (tier.token)}
-      {#if i > 0}
-        <span class="chain-arrow font-code" aria-hidden="true">&rarr;</span>
-      {/if}
-      <div class="tier">
-        <p class="tier-label font-code text-uppercase text-2xs">
-          <span class="tier-index">0{i + 1}</span>
-          {tier.label} <em>&mdash; {tier.claim}</em>
-        </p>
-        <p class="tier-token font-code text-sm">
-          {tier.token}{#if i === 0}<span
-              class="tier-swatch"
-              style="background: var(--zbk-color-ember-600)"
-              aria-hidden="true"
-            ></span>{/if}
-        </p>
-        <p class="tier-value font-code text-xs">
-          {i === 0 ? resolvedPrimitive : tier.value}
-        </p>
-        <p class="tier-note text-xs">{tier.note}</p>
-      </div>
-    {/each}
-
-    <span class="chain-arrow font-code" aria-hidden="true">&rarr;</span>
-
-    <div class="tier tier-result">
-      <p class="tier-label font-code text-uppercase text-2xs">
-        <span class="tier-index">04</span>
-        the paint
+    <div class="tier">
+      <p class="tier-label font-code text-uppercase text-sm">
+        <span class="tier-index">01</span>
+        Primitives
       </p>
-      <div class="result-stage">
-        <ZbkButton>Hover me</ZbkButton>
+      <p class="tier-token font-code margin-block-start-05 text-sm">
+        <span
+          class="tier-swatch"
+          style={`background: var(--zbk-color-${activeColor.name}-400)`}
+          aria-hidden="true"
+        ></span>
+        {`--zbk-color-${activeColor.name}-400`}
+      </p>
+      <span class="display-flex align-items-center gap-025">
+        <i class="ri-corner-down-right-line ink-app-muted text-md"></i>
+        <p
+          class="tier-value font-code text-sm"
+          style={`color: var(--zbk-color-${activeColor.name}-400)`}
+        >
+          {activeColor.value}
+        </p>
+      </span>
+      <p class="tier-token margin-block-start-05 font-code text-sm">
+        {`--zbk-font-family-${activeFamily.name}`}
+      </p>
+      <span class="display-flex align-items-center gap-025">
+        <i class="ri-corner-down-right-line ink-app-muted text-md"></i>
+        <p
+          class="tier-value font-code text-sm"
+          style={`color: var(--zbk-color-${activeColor.name}-400);`}
+        >
+          {activeFamily.value}
+        </p>
+      </span>
+      <p class="prose margin-block-start-05 text-xs">
+        The raw vocabulary. Generally speaking, this should be the only tier
+        where you'll find literal values.
+      </p>
+    </div>
+    <div class="tier">
+      <p class="tier-label font-code text-uppercase text-sm">
+        <span class="tier-index">02</span>
+        Aliases
+      </p>
+      <p class="tier-token font-code margin-block-start-05 text-sm">
+        --zbk-action-ink
+      </p>
+      <span class="display-flex align-items-center gap-025">
+        <i class="ri-corner-down-right-line ink-app-muted text-md"></i>
+        <p
+          class="tier-value font-code text-sm"
+          style={`color: var(--zbk-color-${activeColor.name}-400)`}
+        >
+          {`var(--zbk-color-${activeColor.name}-400)`}
+        </p>
+      </span>
+      <p class="tier-token margin-block-start-05 font-code text-sm">
+        --zbk-font-family-interface
+      </p>
+      <span class="display-flex align-items-center gap-025">
+        <i class="ri-corner-down-right-line ink-app-muted text-md"></i>
+        <p
+          class="tier-value font-code text-sm"
+          style={`color: var(--zbk-color-${activeColor.name}-400)`}
+        >
+          {`var(--zbk-font-family-${activeFamily.name})`}
+        </p>
+      </span>
+      <p class="prose text-xs margin-block-start-05">
+        The design language. Here is where a raw color can become “action ink,”
+        while a font family gains intuitive usage meaning from a new name.
+      </p>
+    </div>
+    <div class="tier">
+      <p class="tier-label font-code text-uppercase text-sm">
+        <span class="tier-index">03</span>
+        Consumers
+      </p>
+      <p class="tier-token font-code margin-block-start-05 text-sm">
+        --zbk-toggle-canvas-checked
+      </p>
+      <span class="display-flex align-items-center gap-025">
+        <i class="ri-corner-down-right-line ink-app-muted text-md"></i>
+        <p
+          class="tier-value font-code text-sm"
+          style={`color: var(--zbk-color-${activeColor.name}-400)`}
+        >
+          var(--zbk-action-ink)
+        </p>
+      </span>
+      <p class="tier-token margin-block-start-05 font-code text-sm">
+        --zbk-link-font-family
+      </p>
+      <span class="display-flex align-items-center gap-025">
+        <i class="ri-corner-down-right-line ink-app-muted text-md"></i>
+        <p
+          class="tier-value font-code text-sm"
+          style={`color: var(--zbk-color-${activeColor.name}-400)`}
+        >
+          var(--zbk-font-family-interface)
+        </p>
+      </span>
+      <p class="prose text-xs margin-block-start-05">
+        The token recipient. An element or utility class can consume these
+        values and, uh, do things with them.
+      </p>
+    </div>
+    <div class="tier tier-result">
+      <p class="tier-label font-code text-uppercase text-sm">
+        <span class="tier-index">04</span>
+        The results
+      </p>
+      <div class="display-flex gap-1 align-items-center">
+       <zbk-toggle style={`--zbk-toggle-font-family: var(--zbk-font-family-${activeFamily.name});--zbk-toggle-canvas-checked: var(--zbk-color-${activeColor.name}-400);--zbk-toggle-border-color-checked: var(--zbk-color-${activeColor.name}-400)`} name="notifications" checked>Email me about updates</zbk-toggle>
+
+        <a class="jump-link" href="#" style={`--zbk-font-family-interface: var(--zbk-font-family-${activeFamily.name}); --zbk-action-ink: var(--zbk-color-${activeColor.name}-400); --zbk-action-ink-muted: var(--zbk-color-${activeColor.name}-200)`}
+          ><span>Type scaling</span><i
+            class="ri-arrow-right-line"
+            aria-hidden="true"
+          ></i></a
+        >
       </div>
-      <p class="tier-note text-xs">
+      <p class="prose text-xs">
         A real <code>&lt;zbk-button&gt;</code> — canvas, ink, border, and every hover
         state riding the same chain. So is every other button on this page.
       </p>
@@ -162,8 +236,8 @@
   </div>
 
   <p class="chain-caption text-sm">
-    References flow downward only, so this is no sandbox: one primitive moved
-    at the root and the entire page followed — chrome, links, cards, this very
+    References flow downward only, so this is no sandbox: one primitive moved at
+    the root and the entire page followed — chrome, links, cards, this very
     caption. No component was edited, no class was written. Ember brings it
     home.
   </p>
@@ -173,7 +247,7 @@
   .token-chain {
     display: flex;
     flex-direction: column;
-    gap: var(--zbk-spacing-105);
+    gap: var(--zbk-spacing-1);
   }
 
   /* ── Register switcher ─────────────────────────────────────────────────── */
@@ -184,32 +258,31 @@
     gap: var(--zbk-spacing-05);
   }
 
-  .register-label {
-    color: var(--zbk-app-ink-subtle);
-    letter-spacing: var(--zbk-letter-spacing-wide);
-    margin-inline-end: var(--zbk-spacing-05);
-  }
-
   .register {
     display: inline-flex;
     align-items: center;
     gap: var(--zbk-spacing-05);
-    padding-inline: var(--zbk-spacing-05);
-    padding-block: var(--zbk-spacing-025);
-    background: var(--zbk-app-canvas-subtle);
-    color: var(--zbk-app-ink-muted);
+    padding-inline: var(--zbk-spacing-05) var(--zbk-spacing-1);
+    padding-block: var(--zbk-spacing-05);
+    background: var(--zbk-app-canvas-muted);
+    color: var(--zbk-app-ink);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-xl);
+    height: var(--zbk-spacing-2);
     cursor: pointer;
+    overflow: clip;
     transition:
-      border-color var(--zbk-transition-duration-fast),
-      color var(--zbk-transition-duration-fast),
-      background-color var(--zbk-transition-duration-fast);
+      border-color var(--zbk-transition-playful-motion-duration-fast)
+        var(--zbk-transition-playful-motion-function-fast),
+      color var(--zbk-transition-playful-motion-duration-fast)
+        var(--zbk-transition-playful-motion-function-fast),
+      background-color var(--zbk-transition-playful-motion-duration-fast)
+        var(--zbk-transition-playful-motion-function-fast);
   }
 
   .register:hover {
     border-color: var(--zbk-app-border-emphasis);
-    color: var(--zbk-app-ink);
+    color: var(--zbk-app-ink-emphasis);
   }
 
   .register.is-active {
@@ -224,15 +297,16 @@
   }
 
   .register-swatch {
-    inline-size: var(--zbk-spacing-05);
-    block-size: var(--zbk-spacing-05);
+    inline-size: var(--zbk-spacing-1);
+    block-size: var(--zbk-spacing-1);
     border-radius: 50%;
-    border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
+    transition: transform var(--zbk-transition-playful-fx-duration-slow)
+      var(--zbk-transition-playful-fx-function-slow);
   }
 
-  .register-reset {
-    color: var(--zbk-app-ink-subtle);
-    margin-inline-start: var(--zbk-spacing-025);
+  .register.is-active .register-swatch {
+    transform-origin: right center;
+    transform: scale(3);
   }
 
   /* ── The chain ─────────────────────────────────────────────────────────── */
@@ -240,43 +314,28 @@
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    gap: var(--zbk-spacing-05);
-  }
-
-  .chain-arrow {
-    align-self: center;
-    color: var(--zbk-app-ink-subtle);
-    font-size: var(--zbk-font-size-lg);
+    gap: var(--zbk-spacing-1);
   }
 
   .tier {
-    flex: 1 1 13rem;
+    flex: 1 1 calc(var(--zbk-spacing-card) + var(--zbk-spacing-2));
     display: flex;
     flex-direction: column;
     gap: var(--zbk-spacing-05);
-    padding: var(--zbk-spacing-105);
-    background: var(--zbk-app-canvas-subtle);
+    padding: var(--zbk-spacing-1);
+    background: var(--zbk-app-canvas-muted);
     border: var(--zbk-border-width-sm) solid var(--zbk-app-border);
     border-radius: var(--zbk-border-radius-md);
   }
 
-  .tier p {
-    margin: 0;
-  }
-
   .tier-label {
-    color: var(--zbk-app-ink-subtle);
+    color: var(--zbk-accent-primary-ink);
     letter-spacing: var(--zbk-letter-spacing-wide);
   }
 
-  .tier-label em {
-    font-style: normal;
-    text-transform: none;
-    letter-spacing: normal;
-  }
-
   .tier-index {
-    color: var(--zbk-action-ink-muted);
+    color: var(--zbk-accent-secondary-ink);
+    font-weight: var(--zbk-font-weight-semibold);
   }
 
   .tier-token {
@@ -291,8 +350,7 @@
     flex: 0 0 auto;
     inline-size: var(--zbk-spacing-1);
     block-size: var(--zbk-spacing-1);
-    border-radius: var(--zbk-border-radius-xs);
-    border: var(--zbk-border-width-xs) solid var(--zbk-app-border);
+    border-radius: var(--zbk-border-radius-sm);
     transition: background-color var(--zbk-transition-duration-default);
   }
 
@@ -301,13 +359,33 @@
     overflow-wrap: anywhere;
   }
 
-  .tier-note {
-    color: var(--zbk-app-ink-muted);
-    max-inline-size: var(--zbk-text-measure-2);
+  .jump-link {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: var(--zbk-spacing-025);
+    font-family: var(--zbk-font-family-interface);
+    font-size: var(--zbk-font-size-sm);
+    text-decoration: none;
+    color: var(--zbk-action-ink);
   }
 
-  .tier-note code {
-    font-family: var(--zbk-font-family-code);
+  .jump-link > span {
+    text-decoration: underline dotted var(--zbk-action-ink)
+      var(--zbk-border-width-md);
+    text-underline-offset: var(--zbk-spacing-05);
+  }
+
+  .jump-link:hover {
+    color: var(--zbk-action-ink-muted);
+  }
+
+  .jump-link:hover > span {
+    text-decoration-color: var(--zbk-action-ink-muted);
+  }
+
+  .jump-link:focus-visible {
+    outline: var(--zbk-focus-width) solid var(--zbk-focus-color);
+    outline-offset: var(--zbk-focus-offset);
   }
 
   .tier-result {

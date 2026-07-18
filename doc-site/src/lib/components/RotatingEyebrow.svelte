@@ -2,10 +2,10 @@
   // Homepage copy lives here. Add, edit, remove, or reorder lines without
   // touching the animation below.
   export const HOME_EYEBROW_LINES = [
-    "The design is the variable.",
+    "The design is the variable, the code is the constant.",
     "It's tokens the whole way down.",
-    "A permanent system for ever-changing design.",
-    "Components that hold steady even when the design wanders.",
+    "A forever home for designs with wanderlust.",
+    "Components that hold steady, even when the design doesn't.",
     "Strongly held opinions, yet none about your aesthetic.",
     "A design system that was designed to disappear.",
   ] as const;
