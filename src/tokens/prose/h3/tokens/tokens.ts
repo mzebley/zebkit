@@ -15,7 +15,7 @@ const tokens = {
   },
   "font-size": {
     $value: `{font-size.lg}`,
-    $type: "fontSize",
+    $type: "cssDimension",
     $description:
       "Font size for H3 elements with .prose applied directly or that are a child of a .prose container.",
   },
@@ -33,25 +33,25 @@ const tokens = {
   },
   "letter-spacing": {
     $value: `{letter-spacing.normal}`,
-    $type: "letterSpacing",
+    $type: "dimension",
     $description:
       "Tracking for H3 elements with .prose applied directly or that are a child of a .prose container.",
   },
   measure: {
     $value: `{text-measure.3}`,
-    $type: "sizing",
+    $type: "cssDimension",
     $description:
       "Maximum width for H3 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-before": {
     $value: `{spacing.3}`,
-    $type: "spacing",
+    $type: "dimension",
     $description:
       "Amount of margin inline start for H3 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-after": {
     $value: `{spacing.2}`,
-    $type: "spacing",
+    $type: "dimension",
     $description:
       "Amount of margin inline end for H3 elements with .prose applied directly or that are a child of a .prose container.",
   },

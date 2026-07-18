@@ -61,7 +61,7 @@
   },
   "border-width": {
     "$value": "0px",
-    "$type": "borderWidth",
+    "$type": "dimension",
     "$description": "Base border width — M3 filled button is borderless."
   },
   "border-style": {
@@ -71,7 +71,7 @@
   },
   "border-radius": {
     "$value": "100px",
-    "$type": "borderRadius",
+    "$type": "dimension",
     "$description": "Corner radius — M3 buttons use the full (pill) shape."
   },
   "font-family": {
@@ -81,7 +81,7 @@
   },
   "font-size": {
     "$value": "{font-size.xs}",
-    "$type": "fontSize",
+    "$type": "cssDimension",
     "$description": "Base font size for button labels — M3 label-large (14px)."
   },
   "font-weight": {
@@ -96,7 +96,7 @@
   },
   "letter-spacing": {
     "$value": "0.1px",
-    "$type": "letterSpacing",
+    "$type": "cssDimension",
     "$description": "Letter spacing for button labels — M3 label-large tracking."
   },
   "text-transform": {
@@ -116,22 +116,22 @@
   },
   "padding-inline": {
     "$value": "{spacing.105}",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Inline (horizontal) padding for standard buttons — M3 24px gutter."
   },
   "padding-block": {
     "$value": "{spacing.05}",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Block (vertical) padding (min-height drives the 40px M3 target)."
   },
   "gap": {
     "$value": "{spacing.05}",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Gap between button icon and label — M3 8px."
   },
   "group-gap": {
     "$value": "{spacing.05}",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Gap between buttons when rendered in a group."
   },
   "justify-content": {
@@ -141,17 +141,17 @@
   },
   "min-height": {
     "$value": "40px",
-    "$type": "sizing",
+    "$type": "dimension",
     "$description": "Minimum height — M3 button height (40px)."
   },
   "min-width": {
     "$value": "44px",
-    "$type": "sizing",
+    "$type": "dimension",
     "$description": "Minimum button width."
   },
   "icon-size": {
     "$value": "1.125rem",
-    "$type": "sizing",
+    "$type": "cssDimension",
     "$description": "Default icon size within buttons — M3 18px icon."
   },
   "focus-color": {
@@ -161,12 +161,12 @@
   },
   "focus-width": {
     "$value": "{focus.width}",
-    "$type": "borderWidth",
+    "$type": "dimension",
     "$description": "Outline width for focus state."
   },
   "focus-offset": {
     "$value": "{focus.offset}",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Outline offset for focus state."
   },
   "box-shadow": {

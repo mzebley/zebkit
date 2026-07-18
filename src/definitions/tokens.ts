@@ -12,24 +12,21 @@ import { ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
 export const allowedTokenTypes = z.enum([
   'color',
   'fontFamily',
-  'fontSize',
-  'rootFontSize',
   'lineHeight',
-  'letterSpacing',
   'fontWeight',
   'fontStyle',
   'textDecoration',
   'textTransform',
   'textAlignment',
   'transition',
-  'sizing',
-  'spacing',
+  // The dimension family (Phase 2a step 4, decision D5): `dimension` is the
+  // spec type for structured `{value, unit}` px/rem lengths; `cssDimension`
+  // covers every other CSS length surface (%, ch, em, keywords, unitless 0,
+  // calc()/clamp() expressions). The legacy names — spacing, sizing, rootSize,
+  // borderWidth, borderRadius, fontSize, rootFontSize, letterSpacing — are gone.
   'dimension',
   'cssDimension',
-  'rootSize',
   'display',
-  'borderRadius',
-  'borderWidth',
   'borderColor',
   'borderStyle',
   'utility',
@@ -198,11 +195,13 @@ export type TokenGroupExtensions = z.infer<typeof tokenGroupExtensionsSchema>;
  * (base = 0) lives under `$extensions["dev.zebkit"].scale`; `$value` is present
  * ONLY when a step is pinned to a static literal (static mode or a per-step
  * override). Fluid steps omit `$value` and are derived from the group's scale
- * controls at build time.
+ * controls at build time. Steps are `cssDimension`-typed: they resolve to
+ * fluid `clamp()` / a11y `calc()` expressions the spec `dimension` type cannot
+ * represent.
  */
-export const rootFontSizeStepSchema = z.object({
+export const fontSizeStepSchema = z.object({
   $value: z.union([z.string(), z.number(), dimensionValueSchema]).optional(),
-  $type: z.literal('rootFontSize'),
+  $type: z.literal('cssDimension'),
   $description: z.string(),
   $extensions: tokenExtensionsSchema.optional(),
 });
@@ -210,7 +209,7 @@ export const rootFontSizeStepSchema = z.object({
 /**
  * Shape of a generated-scale step token.
  */
-export interface RootFontSizeStepObject extends z.infer<typeof rootFontSizeStepSchema> {}
+export interface FontSizeStepObject extends z.infer<typeof fontSizeStepSchema> {}
 
 /**
  * Map of token keys to token entries.

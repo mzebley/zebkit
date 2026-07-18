@@ -32,7 +32,7 @@
     },
     "min-interaction-size": {
       "$value": "28px",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Minimum height and width for interactive elements like links or buttons. WCAG AA is >= 24px, AAA is 44px"
     }
   },
@@ -711,12 +711,12 @@
     },
     "width": {
       "$value": "{spacing.025}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Width of focus outline"
     },
     "offset": {
       "$value": "{spacing.025}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Offset distance of focus outline"
     }
   },
@@ -815,7 +815,7 @@
     },
     "font-size": {
       "$value": "{font-size.3xl}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
@@ -830,22 +830,22 @@
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "Tracking for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
       "$value": "{text-measure.3}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
       "$value": "{spacing.0}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline start for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
       "$value": "{spacing.1}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline end for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "color": {
@@ -872,7 +872,7 @@
     },
     "font-size": {
       "$value": "{font-size.xl}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
@@ -887,22 +887,22 @@
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "Tracking for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
       "$value": "{text-measure.3}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
       "$value": "{spacing.3}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline start for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
       "$value": "{spacing.1}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline end for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
     "color": {
@@ -929,7 +929,7 @@
     },
     "font-size": {
       "$value": "{font-size.lg}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
@@ -944,22 +944,22 @@
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "Tracking for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
       "$value": "{text-measure.3}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
       "$value": "{spacing.2}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline start for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
       "$value": "{spacing.05}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline end for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
     "color": {
@@ -986,7 +986,7 @@
     },
     "font-size": {
       "$value": "{font-size.md}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
@@ -1001,22 +1001,22 @@
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "Tracking for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
       "$value": "{text-measure.3}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
       "$value": "{spacing.105}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline start for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
       "$value": "{spacing.05}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline end for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
     "color": {
@@ -1043,7 +1043,7 @@
     },
     "font-size": {
       "$value": "{font-size.sm}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
@@ -1058,22 +1058,22 @@
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "Tracking for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
       "$value": "{text-measure.3}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
       "$value": "{spacing.105}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline start for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
       "$value": "{spacing.05}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline end for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "color": {
@@ -1100,7 +1100,7 @@
     },
     "font-size": {
       "$value": "{font-size.xs}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
@@ -1115,22 +1115,22 @@
     },
     "letter-spacing": {
       "$value": "{letter-spacing.wide}",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
       "$value": "{text-measure.3}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
       "$value": "{spacing.105}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
       "$value": "{spacing.05}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "color": {
@@ -1157,7 +1157,7 @@
     },
     "font-size": {
       "$value": "{font-size.lg}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for introductory lede text with .lede applied directly or as a child of a .prose container."
     },
     "font-weight": {
@@ -1172,22 +1172,22 @@
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "Tracking for introductory lede text with .lede applied directly or as a child of a .prose container."
     },
     "measure": {
       "$value": "{text-measure.1}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width for introductory lede text with .lede applied directly or as a child of a .prose container."
     },
     "spacing-before": {
       "$value": "{spacing.0}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Block spacing before introductory lede text when it appears in a .prose flow."
     },
     "spacing-after": {
       "$value": "{spacing.105}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Block spacing after introductory lede text when it appears in a .prose flow."
     },
     "color": {
@@ -1214,7 +1214,7 @@
     },
     "font-size": {
       "$value": "{font-size.sm}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
@@ -1229,32 +1229,32 @@
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
       "$value": "{text-measure.3}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
       "$value": "{spacing.2}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
       "$value": "{spacing.1}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "padding-block-start": {
       "$value": "{spacing.105}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of spacing before list items."
     },
     "padding-block-end": {
       "$value": "{spacing.0}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of spacing after list items."
     },
     "color": {
@@ -1281,7 +1281,7 @@
     },
     "font-size": {
       "$value": "{font-size.sm}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for P elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-weight": {
@@ -1296,22 +1296,22 @@
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "Tracking for P elements with .prose applied directly or that are a child of a .prose container."
     },
     "measure": {
       "$value": "{text-measure.3}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Maximum width for P elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-before": {
       "$value": "{spacing.0}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline start for P elements with .prose applied directly or that are a child of a .prose container."
     },
     "spacing-after": {
       "$value": "{spacing.1}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container."
     },
     "color": {
@@ -1333,27 +1333,27 @@
   "zbk-border": {
     "width-xs": {
       "$value": "{spacing.1px}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Smallest semantic border width."
     },
     "width-sm": {
       "$value": "{spacing.2px}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Small semantic border width."
     },
     "width-md": {
       "$value": "{spacing.025}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Base semantic border width."
     },
     "width-lg": {
       "$value": "{spacing.05}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Larger semantic border width."
     },
     "width-xl": {
       "$value": "{spacing.1}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Largest semantic border width."
     },
     "style": {
@@ -1363,27 +1363,27 @@
     },
     "radius-xs": {
       "$value": "{spacing.2px}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Smallest semantic corner radius."
     },
     "radius-sm": {
       "$value": "{spacing.025}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Small semantic corner radius."
     },
     "radius-md": {
       "$value": "{spacing.05}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Base semantic corner radius."
     },
     "radius-lg": {
       "$value": "{spacing.105}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Larger semantic corner radius."
     },
     "radius-xl": {
       "$value": "{spacing.205}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Largest semantic corner radius."
     }
   },
@@ -2244,12 +2244,12 @@
   "zbk-spacing": {
     "0": {
       "$value": "0px",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Zero spacing."
     },
     "1": {
       "$value": "1rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Small spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2259,7 +2259,7 @@
     },
     "2": {
       "$value": "2rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Base spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2269,7 +2269,7 @@
     },
     "3": {
       "$value": "3rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Medium spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2279,7 +2279,7 @@
     },
     "4": {
       "$value": "4rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Medium-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2289,7 +2289,7 @@
     },
     "5": {
       "$value": "5rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Large spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2299,7 +2299,7 @@
     },
     "6": {
       "$value": "6rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Large-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2309,7 +2309,7 @@
     },
     "7": {
       "$value": "7rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "XL spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2319,7 +2319,7 @@
     },
     "8": {
       "$value": "8rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "XL-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2329,7 +2329,7 @@
     },
     "9": {
       "$value": "9rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "2XL spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2339,7 +2339,7 @@
     },
     "10": {
       "$value": "10rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "2XL-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2349,7 +2349,7 @@
     },
     "15": {
       "$value": "15rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "3XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2359,7 +2359,7 @@
     },
     "20": {
       "$value": "20rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "4XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2369,7 +2369,7 @@
     },
     "25": {
       "$value": "25rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "5XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2379,7 +2379,7 @@
     },
     "30": {
       "$value": "30rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "6XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2389,7 +2389,7 @@
     },
     "40": {
       "$value": "40rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "7XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2399,7 +2399,7 @@
     },
     "50": {
       "$value": "50rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "8XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2409,7 +2409,7 @@
     },
     "60": {
       "$value": "60rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "9XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2419,7 +2419,7 @@
     },
     "70": {
       "$value": "70rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "10XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2429,7 +2429,7 @@
     },
     "80": {
       "$value": "80rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "11XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2439,7 +2439,7 @@
     },
     "90": {
       "$value": "90rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "12XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2449,7 +2449,7 @@
     },
     "100": {
       "$value": "100rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "13XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2459,7 +2459,7 @@
     },
     "105": {
       "$value": "1.5rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Small-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2469,7 +2469,7 @@
     },
     "205": {
       "$value": "2.5rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Base-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2486,117 +2486,117 @@
     },
     "2xs": {
       "$value": "{spacing.2px}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Smallest semantic spacing value."
     },
     "xs": {
       "$value": "{spacing.025}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Second smallest semantic spacing value."
     },
     "sm": {
       "$value": "{spacing.05}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Third smallest semantic spacing value."
     },
     "md": {
       "$value": "{spacing.1}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Base semantic spacing value."
     },
     "lg": {
       "$value": "{spacing.2}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Large semantic spacing value."
     },
     "xl": {
       "$value": "{spacing.3}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Third largest semantic spacing value."
     },
     "2xl": {
       "$value": "{spacing.5}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Second largest semantic spacing value."
     },
     "3xl": {
       "$value": "{spacing.10}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Largest semantic spacing value."
     },
     "card": {
       "$value": "{spacing.15}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Size of a basic card."
     },
     "mobile": {
       "$value": "{spacing.25}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Size of a small mobile device."
     },
     "mobile-lg": {
       "$value": "{spacing.30}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Size of a larger mobile device."
     },
     "tablet": {
       "$value": "{spacing.40}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Size of a tablet device."
     },
     "tablet-lg": {
       "$value": "{spacing.60}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Size of a larger tablet device."
     },
     "desktop": {
       "$value": "{spacing.70}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Size of a small desktop device."
     },
     "desktop-lg": {
       "$value": "{spacing.80}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Size of a larger desktop device."
     },
     "widescreen": {
       "$value": "{spacing.90}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Size of a large desktop device."
     },
     "section": {
       "$value": "{spacing.60}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Ideal max size of a page section."
     },
     "section-margin-block": {
       "$value": "{spacing.2}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Preferred vertical margin for page sections."
     },
     "section-margin-inline": {
       "$value": "{spacing.0}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Preferred horizontal margin for page sections."
     },
     "aside": {
       "$value": "{spacing.15}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Preferred size for an aside element."
     },
     "page-padding-block": {
       "$value": "{spacing.1}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Preferred vertical padding for page."
     },
     "page-padding-inline": {
       "$value": "{spacing.105}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Preferred horizontal padding for page."
     },
     "neg-15": {
       "$value": "-15rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Extremely large negative spacing (major overlap or pull effects).",
       "$extensions": {
         "dev.zebkit": {
@@ -2606,7 +2606,7 @@
     },
     "neg-10": {
       "$value": "-10rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Very large negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2616,7 +2616,7 @@
     },
     "neg-9": {
       "$value": "-9rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Large negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2626,7 +2626,7 @@
     },
     "neg-8": {
       "$value": "-8rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Large negative spacing (slightly smaller).",
       "$extensions": {
         "dev.zebkit": {
@@ -2636,7 +2636,7 @@
     },
     "neg-7": {
       "$value": "-7rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Medium-large negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2646,7 +2646,7 @@
     },
     "neg-6": {
       "$value": "-6rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Medium negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2656,7 +2656,7 @@
     },
     "neg-5": {
       "$value": "-5rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Medium negative spacing (slightly smaller).",
       "$extensions": {
         "dev.zebkit": {
@@ -2666,7 +2666,7 @@
     },
     "neg-4": {
       "$value": "-4rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Small-medium negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2676,7 +2676,7 @@
     },
     "neg-3": {
       "$value": "-3rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Small negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2686,7 +2686,7 @@
     },
     "neg-205": {
       "$value": "-2.5rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Extra-small negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2696,7 +2696,7 @@
     },
     "neg-2": {
       "$value": "-2rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Tiny negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2706,7 +2706,7 @@
     },
     "neg-105": {
       "$value": "-1.5rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Very tiny negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2716,7 +2716,7 @@
     },
     "neg-1": {
       "$value": "-1rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Minimal negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2726,7 +2726,7 @@
     },
     "neg-05": {
       "$value": "-.5rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Minimal negative spacing (smaller).",
       "$extensions": {
         "dev.zebkit": {
@@ -2736,7 +2736,7 @@
     },
     "neg-025": {
       "$value": "-.25rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Hairline negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2746,7 +2746,7 @@
     },
     "neg-2px": {
       "$value": "-2px",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Precision negative spacing (coarse).",
       "$extensions": {
         "dev.zebkit": {
@@ -2756,7 +2756,7 @@
     },
     "neg-1px": {
       "$value": "-1px",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Precision negative spacing (fine).",
       "$extensions": {
         "dev.zebkit": {
@@ -2766,7 +2766,7 @@
     },
     "1px": {
       "$value": "1px",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Precision spacing (fine).",
       "$extensions": {
         "dev.zebkit": {
@@ -2776,7 +2776,7 @@
     },
     "2px": {
       "$value": "2px",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Precision spacing (coarse).",
       "$extensions": {
         "dev.zebkit": {
@@ -2786,7 +2786,7 @@
     },
     "025": {
       "$value": ".25rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Extra-tiny spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -2796,7 +2796,7 @@
     },
     "05": {
       "$value": ".5rem",
-      "$type": "rootSize",
+      "$type": "dimension",
       "$description": "Tiny spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -3230,51 +3230,51 @@
   "zbk-letter-spacing": {
     "tighter": {
       "$value": "-.05rem",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": "--zbk-a11y-letter-spacing-modifier"
         }
       }
     },
     "tight": {
       "$value": "-.025rem",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": "--zbk-a11y-letter-spacing-modifier"
         }
       }
     },
     "normal": {
       "$value": "0rem",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": "--zbk-a11y-letter-spacing-modifier"
         }
       }
     },
     "wide": {
       "$value": ".025rem",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": "--zbk-a11y-letter-spacing-modifier"
         }
       }
     },
     "wider": {
       "$value": ".05rem",
-      "$type": "letterSpacing",
+      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": "--zbk-a11y-letter-spacing-modifier"
         }
       }
     }
@@ -3372,7 +3372,7 @@
       }
     },
     "3xs": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Smallest font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3384,7 +3384,7 @@
       }
     },
     "2xs": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Second smallest font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3396,7 +3396,7 @@
       }
     },
     "xs": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Extra small font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3408,7 +3408,7 @@
       }
     },
     "sm": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Small font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3420,7 +3420,7 @@
       }
     },
     "md": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Base / body font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3432,7 +3432,7 @@
       }
     },
     "lg": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3444,7 +3444,7 @@
       }
     },
     "xl": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Extra large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3456,7 +3456,7 @@
       }
     },
     "2xl": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Double extra large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3468,7 +3468,7 @@
       }
     },
     "3xl": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Triple extra large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3480,7 +3480,7 @@
       }
     },
     "4xl": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Quadruple extra large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3492,7 +3492,7 @@
       }
     },
     "5xl": {
-      "$type": "rootFontSize",
+      "$type": "cssDimension",
       "$description": "Quintuple extra large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -3679,7 +3679,7 @@
     },
     "border-width": {
       "$value": "0px",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Base border width."
     },
     "border-style": {
@@ -3689,7 +3689,7 @@
     },
     "border-radius": {
       "$value": "{border.radius-sm}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Corner radius for standard buttons."
     },
     "font-family": {
@@ -3699,7 +3699,7 @@
     },
     "font-size": {
       "$value": "{font-size.sm}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Base font size for button labels."
     },
     "font-weight": {
@@ -3714,7 +3714,7 @@
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
-      "$type": "letterSpacing",
+      "$type": "cssDimension",
       "$description": "Letter spacing for button labels."
     },
     "text-transform": {
@@ -3734,32 +3734,32 @@
     },
     "padding-inline": {
       "$value": "{spacing.md}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Inline (horizontal) padding for standard buttons."
     },
     "padding-block": {
       "$value": "{spacing.sm}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Block (vertical) padding for standard buttons."
     },
     "padding-inline-start": {
       "$value": "{button.padding-inline}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Inline-start padding override when needed."
     },
     "padding-inline-end": {
       "$value": "{button.padding-inline}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Inline-end padding override when needed."
     },
     "padding-block-start": {
       "$value": "{button.padding-block}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Block-start padding override when needed."
     },
     "padding-block-end": {
       "$value": "{button.padding-block}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Block-end padding override when needed."
     },
     "margin-inline": {
@@ -3774,32 +3774,32 @@
     },
     "margin-inline-start": {
       "$value": "{button.margin-inline}",
-      "$type": "spacing",
+      "$type": "cssDimension",
       "$description": "Inline-start margin override when needed."
     },
     "margin-inline-end": {
       "$value": "{button.margin-inline}",
-      "$type": "spacing",
+      "$type": "cssDimension",
       "$description": "Inline-end margin override when needed."
     },
     "margin-block-start": {
       "$value": "{button.margin-block}",
-      "$type": "spacing",
+      "$type": "cssDimension",
       "$description": "Block-start margin override when needed."
     },
     "margin-block-end": {
       "$value": "{button.margin-block}",
-      "$type": "spacing",
+      "$type": "cssDimension",
       "$description": "Block-end margin override when needed."
     },
     "gap": {
       "$value": "{button.padding-block}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Gap between button icon and label."
     },
     "group-gap": {
       "$value": "{spacing.105}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Gap between buttons when rendered in a group."
     },
     "display": {
@@ -3814,7 +3814,7 @@
     },
     "min-width": {
       "$value": "{a11y.min-interaction-size}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Minimum button width."
     },
     "max-width": {
@@ -3829,7 +3829,7 @@
     },
     "min-height": {
       "$value": "{a11y.min-interaction-size}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Minimum height to ensure tappable area."
     },
     "max-height": {
@@ -3839,17 +3839,17 @@
     },
     "icon-size": {
       "$value": "{button.font-size}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Default icon size within buttons."
     },
     "icon-start-size": {
       "$value": "{button.icon-size}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Default icon size for icons at start of buttons."
     },
     "icon-end-size": {
       "$value": "{button.icon-size}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Default icon size for icons at end of buttons."
     },
     "focus-color": {
@@ -3859,12 +3859,12 @@
     },
     "focus-width": {
       "$value": "{focus.width}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Outline width for focus state."
     },
     "focus-offset": {
       "$value": "{focus.offset}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Outline offset for focus state."
     },
     "box-shadow": {
@@ -3976,12 +3976,12 @@
     },
     "control-width": {
       "$value": "{spacing.105}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Width of the checkbox control."
     },
     "control-height": {
       "$value": "{spacing.105}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Height of the checkbox control."
     },
     "canvas": {
@@ -4046,7 +4046,7 @@
     },
     "border-width": {
       "$value": "{border.width-md}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Border thickness of the checkbox control."
     },
     "border-style": {
@@ -4056,7 +4056,7 @@
     },
     "border-radius": {
       "$value": "{border.radius-xs}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Corner radius of the checkbox control."
     },
     "indicator-color": {
@@ -4071,12 +4071,12 @@
     },
     "indicator-stroke-width": {
       "$value": "{border.width-md}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Stroke width of the checkmark; also the indeterminate bar's thickness."
     },
     "indicator-radius": {
       "$value": "{border.radius-xs}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Corner radius of the indeterminate bar."
     },
     "indicator-size": {
@@ -4101,7 +4101,7 @@
     },
     "font-size": {
       "$value": "{font-size.md}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for the checkbox label."
     },
     "font-weight": {
@@ -4116,12 +4116,12 @@
     },
     "letter-spacing": {
       "$value": "{tracking.normal}",
-      "$type": "letterSpacing",
+      "$type": "cssDimension",
       "$description": "Letter spacing for the checkbox label."
     },
     "gap": {
       "$value": "{spacing.sm}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Space between the control and its label."
     },
     "align-items": {
@@ -4131,7 +4131,7 @@
     },
     "group-gap": {
       "$value": "{spacing.md}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Gap between checkboxes in a .zbk-checkbox-group."
     },
     "group-direction": {
@@ -4146,12 +4146,12 @@
     },
     "focus-width": {
       "$value": "{focus.width}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Outline width for keyboard focus."
     },
     "focus-offset": {
       "$value": "{focus.offset}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Outline offset for keyboard focus."
     },
     "box-shadow": {
@@ -4338,7 +4338,7 @@
     },
     "border-width": {
       "$value": "{border.width-sm}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Border thickness of the field box."
     },
     "border-style": {
@@ -4348,7 +4348,7 @@
     },
     "border-radius": {
       "$value": "{border.radius-md}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Corner radius of the field box."
     },
     "font-family": {
@@ -4358,7 +4358,7 @@
     },
     "font-size": {
       "$value": "{font-size.md}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for the entered text."
     },
     "font-weight": {
@@ -4373,7 +4373,7 @@
     },
     "letter-spacing": {
       "$value": "{tracking.normal}",
-      "$type": "letterSpacing",
+      "$type": "cssDimension",
       "$description": "Letter spacing for the entered text."
     },
     "label-ink": {
@@ -4388,7 +4388,7 @@
     },
     "label-font-size": {
       "$value": "{font-size.sm}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for the label."
     },
     "label-font-weight": {
@@ -4398,7 +4398,7 @@
     },
     "label-gap": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Space between the label and the field box."
     },
     "affix-ink": {
@@ -4418,17 +4418,17 @@
     },
     "padding-inline": {
       "$value": "{spacing.sm}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Inline (horizontal) padding of the field box."
     },
     "padding-block": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Block (vertical) padding of the field box."
     },
     "gap": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Space between affixes and the entered text."
     },
     "width": {
@@ -4448,12 +4448,12 @@
     },
     "min-height": {
       "$value": "44px",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Minimum field height to ensure a tappable area."
     },
     "group-gap": {
       "$value": "{spacing.md}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Gap between fields in a .zbk-input-group."
     },
     "group-direction": {
@@ -4468,12 +4468,12 @@
     },
     "focus-width": {
       "$value": "{focus.width}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Outline width for keyboard focus."
     },
     "focus-offset": {
       "$value": "{focus.offset}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Outline offset for keyboard focus."
     },
     "box-shadow": {
@@ -4625,7 +4625,7 @@
     },
     "border-width": {
       "$value": "{border.width-sm}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Item border width."
     },
     "border-style": {
@@ -4635,7 +4635,7 @@
     },
     "border-radius": {
       "$value": "{border.radius-md}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Item corner radius."
     },
     "font-family": {
@@ -4645,7 +4645,7 @@
     },
     "font-size": {
       "$value": "{font-size.md}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Base font size for pagination content."
     },
     "font-weight": {
@@ -4665,32 +4665,32 @@
     },
     "gap": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Gap between pagination items."
     },
     "min-width": {
       "$value": "{a11y.min-interaction-size}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Minimum item width to keep the tap target."
     },
     "min-height": {
       "$value": "{a11y.min-interaction-size}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Minimum item height to keep the tap target."
     },
     "padding-inline": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Inline padding inside each item."
     },
     "padding-block": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Block padding inside each item."
     },
     "icon-size": {
       "$value": "{pagination.font-size}",
-      "$type": "sizing",
+      "$type": "cssDimension",
       "$description": "Size of the previous/next glyphs (drawn or slotted)."
     },
     "ellipsis-ink": {
@@ -4710,12 +4710,12 @@
     },
     "focus-width": {
       "$value": "{focus.width}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Outline width for a focused item."
     },
     "focus-offset": {
       "$value": "{focus.offset}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Outline offset for a focused item."
     },
     "transition-property": {
@@ -4752,12 +4752,12 @@
     },
     "control-width": {
       "$value": "{spacing.105}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Width of the radio control."
     },
     "control-height": {
       "$value": "{spacing.105}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Height of the radio control."
     },
     "canvas": {
@@ -4812,7 +4812,7 @@
     },
     "border-width": {
       "$value": "{border.width-md}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Border thickness of the radio control."
     },
     "border-style": {
@@ -4862,7 +4862,7 @@
     },
     "font-size": {
       "$value": "{font-size.md}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for the radio label."
     },
     "font-weight": {
@@ -4877,12 +4877,12 @@
     },
     "letter-spacing": {
       "$value": "{tracking.normal}",
-      "$type": "letterSpacing",
+      "$type": "cssDimension",
       "$description": "Letter spacing for the radio label."
     },
     "gap": {
       "$value": "{spacing.sm}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Space between the control and its label."
     },
     "align-items": {
@@ -4892,7 +4892,7 @@
     },
     "group-gap": {
       "$value": "{spacing.md}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Gap between radios in a .zbk-radio-group."
     },
     "group-direction": {
@@ -4907,12 +4907,12 @@
     },
     "focus-width": {
       "$value": "{focus.width}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Outline width for keyboard focus."
     },
     "focus-offset": {
       "$value": "{focus.offset}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Outline offset for keyboard focus."
     },
     "box-shadow": {
@@ -5069,7 +5069,7 @@
     },
     "border-width": {
       "$value": "{border.width-sm}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Border thickness of the field box."
     },
     "border-style": {
@@ -5079,7 +5079,7 @@
     },
     "border-radius": {
       "$value": "{border.radius-md}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Corner radius of the field box."
     },
     "font-family": {
@@ -5089,7 +5089,7 @@
     },
     "font-size": {
       "$value": "{font-size.md}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for the selected option's text."
     },
     "font-weight": {
@@ -5104,7 +5104,7 @@
     },
     "letter-spacing": {
       "$value": "{tracking.normal}",
-      "$type": "letterSpacing",
+      "$type": "cssDimension",
       "$description": "Letter spacing for the selected option's text."
     },
     "label-ink": {
@@ -5119,7 +5119,7 @@
     },
     "label-font-size": {
       "$value": "{font-size.sm}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for the label."
     },
     "label-font-weight": {
@@ -5129,7 +5129,7 @@
     },
     "label-gap": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Space between the label and the field box."
     },
     "affix-ink": {
@@ -5164,22 +5164,22 @@
     },
     "indicator-stroke-width": {
       "$value": "{border.width-md}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Stroke width of the drawn chevron."
     },
     "padding-inline": {
       "$value": "{spacing.sm}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Inline (horizontal) padding of the field box."
     },
     "padding-block": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Block (vertical) padding of the field box."
     },
     "gap": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Space between affixes, the select, and the indicator."
     },
     "width": {
@@ -5199,12 +5199,12 @@
     },
     "min-height": {
       "$value": "44px",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Minimum field height to ensure a tappable area."
     },
     "group-gap": {
       "$value": "{spacing.md}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Gap between fields in a .zbk-select-group."
     },
     "group-direction": {
@@ -5219,12 +5219,12 @@
     },
     "focus-width": {
       "$value": "{focus.width}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Outline width for keyboard focus."
     },
     "focus-offset": {
       "$value": "{focus.offset}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Outline offset for keyboard focus."
     },
     "box-shadow": {
@@ -5411,7 +5411,7 @@
     },
     "border-width": {
       "$value": "{border.width-sm}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Border thickness of the field box."
     },
     "border-style": {
@@ -5421,7 +5421,7 @@
     },
     "border-radius": {
       "$value": "{border.radius-md}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Corner radius of the field box."
     },
     "font-family": {
@@ -5431,7 +5431,7 @@
     },
     "font-size": {
       "$value": "{font-size.md}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for the entered text."
     },
     "font-weight": {
@@ -5446,7 +5446,7 @@
     },
     "letter-spacing": {
       "$value": "{tracking.normal}",
-      "$type": "letterSpacing",
+      "$type": "cssDimension",
       "$description": "Letter spacing for the entered text."
     },
     "label-ink": {
@@ -5461,7 +5461,7 @@
     },
     "label-font-size": {
       "$value": "{font-size.sm}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for the label."
     },
     "label-font-weight": {
@@ -5471,17 +5471,17 @@
     },
     "label-gap": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Space between the label and the field box."
     },
     "padding-inline": {
       "$value": "{spacing.sm}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Inline (horizontal) padding of the field box."
     },
     "padding-block": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Block (vertical) padding of the field box."
     },
     "resize": {
@@ -5506,7 +5506,7 @@
     },
     "min-block-size": {
       "$value": "44px",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Minimum field height for a multi-line box; also a tappable floor."
     },
     "focus-color": {
@@ -5516,12 +5516,12 @@
     },
     "focus-width": {
       "$value": "{focus.width}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Outline width for keyboard focus."
     },
     "focus-offset": {
       "$value": "{focus.offset}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Outline offset for keyboard focus."
     },
     "box-shadow": {
@@ -5603,12 +5603,12 @@
     },
     "track-width": {
       "$value": "{spacing.2}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Width of the toggle track."
     },
     "track-height": {
       "$value": "{spacing.1}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Height of the toggle track; the thumb and pill radius derive from it."
     },
     "canvas": {
@@ -5663,7 +5663,7 @@
     },
     "border-width": {
       "$value": "{border.width-sm}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Border thickness of the toggle track."
     },
     "border-style": {
@@ -5673,7 +5673,7 @@
     },
     "border-radius": {
       "$value": "{toggle.track-height}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Corner radius of the track (track-height yields a pill)."
     },
     "box-shadow": {
@@ -5703,12 +5703,12 @@
     },
     "thumb-size": {
       "$value": "{toggle.track-height}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Diameter of the thumb."
     },
     "thumb-inset": {
       "$value": "{spacing.neg-2px}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Thumb offset from the track's start edge; negative overlaps the border."
     },
     "thumb-canvas": {
@@ -5743,7 +5743,7 @@
     },
     "thumb-border-width": {
       "$value": "{toggle.border-width}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Border thickness of the thumb."
     },
     "thumb-border-style": {
@@ -5813,7 +5813,7 @@
     },
     "font-size": {
       "$value": "{font-size.sm}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for the toggle label."
     },
     "font-weight": {
@@ -5828,12 +5828,12 @@
     },
     "letter-spacing": {
       "$value": "{tracking.normal}",
-      "$type": "letterSpacing",
+      "$type": "cssDimension",
       "$description": "Letter spacing for the toggle label."
     },
     "gap": {
       "$value": "{spacing.sm}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Space between the track and its label."
     },
     "align-items": {
@@ -5843,7 +5843,7 @@
     },
     "group-gap": {
       "$value": "{spacing.md}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Gap between toggles in a .zbk-toggle-group."
     },
     "group-direction": {
@@ -5858,12 +5858,12 @@
     },
     "focus-width": {
       "$value": "{focus.width}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Outline width for keyboard focus."
     },
     "focus-offset": {
       "$value": "{focus.offset}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Outline offset for keyboard focus."
     },
     "cursor": {
@@ -5935,7 +5935,7 @@
     },
     "border-width": {
       "$value": "{border.width-sm}",
-      "$type": "borderWidth",
+      "$type": "dimension",
       "$description": "Tooltip bubble border width."
     },
     "border-style": {
@@ -5945,7 +5945,7 @@
     },
     "border-radius": {
       "$value": "{border.radius-md}",
-      "$type": "borderRadius",
+      "$type": "dimension",
       "$description": "Tooltip bubble corner radius."
     },
     "font-family": {
@@ -5955,7 +5955,7 @@
     },
     "font-size": {
       "$value": "{font-size.sm}",
-      "$type": "fontSize",
+      "$type": "cssDimension",
       "$description": "Font size for tooltip text."
     },
     "font-weight": {
@@ -5970,32 +5970,32 @@
     },
     "letter-spacing": {
       "$value": "{tracking.normal}",
-      "$type": "letterSpacing",
+      "$type": "cssDimension",
       "$description": "Letter spacing for tooltip text."
     },
     "padding-inline": {
       "$value": "{spacing.xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Inline padding inside the bubble."
     },
     "padding-block": {
       "$value": "{spacing.2xs}",
-      "$type": "spacing",
+      "$type": "dimension",
       "$description": "Block padding inside the bubble."
     },
     "max-width": {
       "$value": "20rem",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Maximum bubble width before text wraps."
     },
     "arrow-size": {
       "$value": "8px",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Arrow square size; also sets the default trigger-to-bubble gap."
     },
     "offset": {
       "$value": "{tooltip.arrow-size}",
-      "$type": "sizing",
+      "$type": "dimension",
       "$description": "Gap between the trigger and the bubble."
     },
     "box-shadow": {

@@ -19,8 +19,36 @@ green (minus the check:context commit-pending state) and the golden baseline byt
    `$extensions` with touched-control recording for overlays); step `index` moved under entry
    `$extensions["dev.zebkit"].scale.index`; pull round-trips the block; docs-theme control
    files migrated.
-4. **NOT started** — the D5 type collapse (hazards 1–3 below). Land it on a clean base after
-   steps 1–3 are committed.
+4. **Done** (worktree `dtcg-phase-2-step-4-694020`, on the merged steps 1–3 base) — the D5
+   collapse: the eight legacy dimension-family names are gone from `allowedTokenTypes`;
+   `scripts/codemod-d5-collapse.ts` retyped 1262 entries across 25 source modules and 96
+   theme files (references take the transitively-resolved target's collapsed type via a
+   `dist/cli/defaults` oracle). Hazard resolutions, all byte-identical against the baseline:
+   - **Hazard 1 (a11y)**: only the 5 letter-spacing `a11y: true` flags actually fire the
+     converter wrap — they materialized to the explicit modifier var. The 44 spacing-primitive
+     flags are inert in the converter (the space-scale resolver hardcodes the density/coupling
+     multiplier and strips extensions) and stay `true` as dial documentation. Font-size steps
+     already carried per-step custom strings. `a11yMap` shrank to `lineHeight` + `transition`;
+     the step resolver's `a11y: true` fallback is a local constant now.
+   - **Hazard 2 (manifests)**: margin/padding/layout/flex `types` rebound to `["dimension"]`.
+     No derived-value change — margin/padding's `pattern.exclude` already listed every
+     sizing-intent name, so the purpose split lives in the manifests (excludes / explicit
+     values), not in `$type`. Regenerated SCSS is byte-identical; README §types rewritten.
+   - **Hazard 3 (compat/enumerations)**: compat map rekeyed (`dimension` ↔ `cssDimension`;
+     `lineHeight` row updated); `tokenAliasMap` tracking → `cssDimension` (hand-written em
+     vars), letter-spacing → `dimension`; editor `getTokenTypeSyntax` + structured-value
+     gate updated; `allowed-token-types.json` self-shrank to 22 types.
+   - **Resolver discriminators** (the real design decision): the space scale resolves any
+     entry whose `$value` is concrete (structured floor, or a raw string substituted by a
+     theme override — corpus: every pull-written theme overrides all primitives with raw
+     strings) and passes `{…}` references through; the type scale treats "has
+     `$extensions.scale.index` (merge preserves base extensions) or a concrete `$value`" as
+     a step. Both resolvers re-emit as `cssDimension` (values are calc()/clamp() strings);
+     the converter's rootSize/rootFontSize verbatim special-case is deleted (resolved
+     entries carry no extensions, so the a11y wrap is a natural no-op).
+   - Steps are `cssDimension`-typed (`fontSizeStepSchema`, renamed from
+     `rootFontSizeStepSchema`); refs to steps and to `text-measure`/`tracking` are
+     `cssDimension`, refs landing on structured px/rem targets are `dimension`.
 
 ## Where things stand
 

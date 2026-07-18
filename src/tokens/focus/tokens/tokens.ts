@@ -15,13 +15,13 @@ const tokens = {
   },
     "width": {
     $value: `{spacing.025}`,
-    $type: "sizing",
+    $type: "dimension",
     $description:
       "Width of focus outline",
   },
     "offset": {
     $value: `{spacing.025}`,
-    $type: "spacing",
+    $type: "dimension",
     $description:
       "Offset distance of focus outline",
   },

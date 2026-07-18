@@ -104,29 +104,29 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-border-color-disabled` | `{disabled.border}` | color | Field border color when disabled. |
 | `--zbk-textarea-border-color-readonly` | `{app.border-muted}` | color | Field border color when readonly. |
 | `--zbk-textarea-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the value is invalid. |
-| `--zbk-textarea-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the field box. |
+| `--zbk-textarea-border-width` | `{border.width-sm}` | dimension | Border thickness of the field box. |
 | `--zbk-textarea-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
-| `--zbk-textarea-border-radius` | `{border.radius-md}` | borderRadius | Corner radius of the field box. |
+| `--zbk-textarea-border-radius` | `{border.radius-md}` | dimension | Corner radius of the field box. |
 | `--zbk-textarea-font-family` | `{font-family.interface}` | fontFamily | Font family for the entered text. |
-| `--zbk-textarea-font-size` | `{font-size.md}` | fontSize | Font size for the entered text. |
+| `--zbk-textarea-font-size` | `{font-size.md}` | cssDimension | Font size for the entered text. |
 | `--zbk-textarea-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the entered text. |
 | `--zbk-textarea-field-line-height` | `{line-height.2}` | lineHeight | Line height of the entered multi-line text. |
-| `--zbk-textarea-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the entered text. |
+| `--zbk-textarea-letter-spacing` | `{tracking.normal}` | cssDimension | Letter spacing for the entered text. |
 | `--zbk-textarea-label-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-textarea-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
-| `--zbk-textarea-label-font-size` | `{font-size.sm}` | fontSize | Font size for the label. |
+| `--zbk-textarea-label-font-size` | `{font-size.sm}` | cssDimension | Font size for the label. |
 | `--zbk-textarea-label-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for the label. |
-| `--zbk-textarea-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
-| `--zbk-textarea-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
-| `--zbk-textarea-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
+| `--zbk-textarea-label-gap` | `{spacing.2xs}` | dimension | Space between the label and the field box. |
+| `--zbk-textarea-padding-inline` | `{spacing.sm}` | dimension | Inline (horizontal) padding of the field box. |
+| `--zbk-textarea-padding-block` | `{spacing.2xs}` | dimension | Block (vertical) padding of the field box. |
 | `--zbk-textarea-resize` | `vertical` | utility | CSS resize behavior of the field (vertical, horizontal, both, none). |
 | `--zbk-textarea-width` | `auto` | cssDimension | Width of the field box. |
 | `--zbk-textarea-min-width` | `0` | cssDimension | Minimum width of the field box. |
 | `--zbk-textarea-max-width` | `100%` | cssDimension | Maximum width of the field box. |
-| `--zbk-textarea-min-block-size` | `44px` | sizing | Minimum field height for a multi-line box; also a tappable floor. |
+| `--zbk-textarea-min-block-size` | `44px` | dimension | Minimum field height for a multi-line box; also a tappable floor. |
 | `--zbk-textarea-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-textarea-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-textarea-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
+| `--zbk-textarea-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-textarea-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
 | `--zbk-textarea-box-shadow` | `none` | boxShadow | Default field shadow. |
 | `--zbk-textarea-box-shadow-hover` | `none` | boxShadow | Field shadow when hovered. |
 | `--zbk-textarea-box-shadow-focus` | `none` | boxShadow | Field shadow while focused (in addition to the outline). |

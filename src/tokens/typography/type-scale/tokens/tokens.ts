@@ -45,7 +45,7 @@ export const extensions = {
 
 const tokens = {
   "3xs": {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Smallest font size.",
     $extensions: {
       "dev.zebkit": {
@@ -55,7 +55,7 @@ const tokens = {
     },
   },
   "2xs": {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Second smallest font size.",
     $extensions: {
       "dev.zebkit": {
@@ -65,7 +65,7 @@ const tokens = {
     },
   },
   xs: {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Extra small font size.",
     $extensions: {
       "dev.zebkit": {
@@ -75,7 +75,7 @@ const tokens = {
     },
   },
   sm: {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Small font size.",
     $extensions: {
       "dev.zebkit": {
@@ -85,7 +85,7 @@ const tokens = {
     },
   },
   md: {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Base / body font size.",
     $extensions: {
       "dev.zebkit": {
@@ -95,7 +95,7 @@ const tokens = {
     },
   },
   lg: {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Large font size.",
     $extensions: {
       "dev.zebkit": {
@@ -105,7 +105,7 @@ const tokens = {
     },
   },
   xl: {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Extra large font size.",
     $extensions: {
       "dev.zebkit": {
@@ -115,7 +115,7 @@ const tokens = {
     },
   },
   "2xl": {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Double extra large font size.",
     $extensions: {
       "dev.zebkit": {
@@ -125,7 +125,7 @@ const tokens = {
     },
   },
   "3xl": {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Triple extra large font size.",
     $extensions: {
       "dev.zebkit": {
@@ -135,7 +135,7 @@ const tokens = {
     },
   },
   "4xl": {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Quadruple extra large font size.",
     $extensions: {
       "dev.zebkit": {
@@ -145,7 +145,7 @@ const tokens = {
     },
   },
   "5xl": {
-    $type: "rootFontSize",
+    $type: "cssDimension",
     $description: "Quintuple extra large font size.",
     $extensions: {
       "dev.zebkit": {

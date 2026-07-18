@@ -15,7 +15,7 @@ const tokens = {
   },
   "font-size": {
     $value: `{font-size.sm}`,
-    $type: "fontSize",
+    $type: "cssDimension",
     $description:
       "Font size for P elements with .prose applied directly or that are a child of a .prose container.",
   },
@@ -33,25 +33,25 @@ const tokens = {
   },
   "letter-spacing": {
     $value: `{letter-spacing.normal}`,
-    $type: "letterSpacing",
+    $type: "dimension",
     $description:
       "Tracking for P elements with .prose applied directly or that are a child of a .prose container.",
   },
   measure: {
     $value: `{text-measure.4}`,
-    $type: "sizing",
+    $type: "cssDimension",
     $description:
       "Maximum width for P elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-before": {
     $value: `{spacing.0}`,
-    $type: "spacing",
+    $type: "dimension",
     $description:
       "Amount of margin inline start for P elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-after": {
     $value: `{spacing.05}`,
-    $type: "spacing",
+    $type: "dimension",
     $description:
       "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container.",
   },

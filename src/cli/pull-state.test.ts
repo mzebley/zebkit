@@ -82,10 +82,13 @@ describe('pull state reconciliation', () => {
     expect(
       getAuthorableTokenData({
         _key: 'zbk-font-size',
-        generated: { index: 0, $type: 'rootSize' },
-        authorable: { $value: '1rem', $type: 'sizing' },
+        generated: {
+          $type: 'cssDimension',
+          $extensions: { 'dev.zebkit': { scale: { index: 0 } } },
+        },
+        authorable: { $value: '1rem', $type: 'dimension' },
       })
-    ).toEqual({ authorable: { $value: '1rem', $type: 'sizing' } });
+    ).toEqual({ authorable: { $value: '1rem', $type: 'dimension' } });
   });
 
   it('rejects bundled manifests that do not use the internal zbk-*.json contract', async () => {

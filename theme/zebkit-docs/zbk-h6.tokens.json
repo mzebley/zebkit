@@ -6,7 +6,7 @@
   },
   "font-size": {
     "$value": "{font-size.xs}",
-    "$type": "fontSize",
+    "$type": "cssDimension",
     "$description": "Label scale."
   },
   "font-weight": {
@@ -16,7 +16,7 @@
   },
   "letter-spacing": {
     "$value": "{letter-spacing.wide}",
-    "$type": "letterSpacing",
+    "$type": "dimension",
     "$description": "Uppercase labels want extra tracking."
   },
   "text-transform": {
@@ -31,12 +31,12 @@
   },
   "spacing-before": {
     "$value": "{spacing.105}",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Minor heads separate modestly."
   },
   "spacing-after": {
     "$value": "{spacing.05}",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Minor heads sit on their copy."
   },
   "line-height": {
@@ -46,7 +46,7 @@
   },
   "measure": {
     "$value": "{text-measure.3}",
-    "$type": "sizing",
+    "$type": "cssDimension",
     "$description": "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container."
   },
   "font-style": {

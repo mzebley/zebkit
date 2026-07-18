@@ -1,6 +1,5 @@
 import chalk from "chalk";
 import { ZEBKIT_PREFIX } from "@config";
-import { a11yMap } from "@definitions/a11y-map";
 import {
   groupScale,
   tokenA11y,
@@ -8,7 +7,7 @@ import {
   tokenValueToString,
 } from "@definitions/tokens";
 import type {
-  RootFontSizeStepObject,
+  FontSizeStepObject,
   TokenGroupExtensions,
   TokenInterface,
 } from "@definitions/tokens";
@@ -135,10 +134,14 @@ function buildStaticValue(value: unknown, a11y: string | null): string {
   return a11y ? `calc(${v} * var(${a11y}))` : v;
 }
 
-function stepA11yVar(step: RootFontSizeStepObject): string | null {
+/** Default modifier for steps that opt in with `a11y: true` instead of naming
+ * a per-step variable (post-D5 the `$type` no longer identifies a modifier). */
+const FALLBACK_FONT_SIZE_MODIFIER = `--${ZEBKIT_PREFIX}-a11y-fallback-font-size-modifier`;
+
+function stepA11yVar(step: FontSizeStepObject): string | null {
   const a11y = tokenA11y(step);
   if (typeof a11y === "string") return a11y;
-  if (a11y === true) return a11yMap.fontSize;
+  if (a11y === true) return FALLBACK_FONT_SIZE_MODIFIER;
   return null;
 }
 
@@ -167,12 +170,21 @@ export function resolveTypeScale(
   const resolvedModule: TokenInterface = {};
 
   for (const [name, entry] of Object.entries(module)) {
-    if (!entry || entry.$type !== "rootFontSize") {
+    // A step carries a scale index (base steps keep it through override merges)
+    // or pins a concrete value; `{…}` references and index-less, value-less
+    // entries pass through untouched.
+    const isStep =
+      entry &&
+      (tokenScaleIndex(entry) != null ||
+        ("$value" in entry &&
+          entry.$value != null &&
+          !(typeof entry.$value === "string" && entry.$value.trim().startsWith("{"))));
+    if (!isStep) {
       resolvedModule[name] = entry;
       continue;
     }
 
-    const step = entry as unknown as RootFontSizeStepObject;
+    const step = entry as unknown as FontSizeStepObject;
     const a11y = stepA11yVar(step);
     const index = tokenScaleIndex(step);
 
@@ -208,7 +220,7 @@ export function resolveTypeScale(
 
     resolvedModule[name] = {
       $value: value,
-      $type: "rootFontSize",
+      $type: "cssDimension",
       $description: step.$description,
     };
   }

@@ -69,12 +69,12 @@ const tokens = {
   // Control geometry. Width and height stay independently addressable.
   "control-width": {
     $value: "{spacing.105}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Width of the radio control.",
   },
   "control-height": {
     $value: "{spacing.105}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Height of the radio control.",
   },
 
@@ -133,7 +133,7 @@ const tokens = {
   },
   "border-width": {
     $value: "{border.width-md}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Border thickness of the radio control.",
   },
   "border-style": {
@@ -188,7 +188,7 @@ const tokens = {
   },
   "font-size": {
     $value: "{font-size.md}",
-    $type: "fontSize",
+    $type: "cssDimension",
     $description: "Font size for the radio label.",
   },
   "font-weight": {
@@ -203,14 +203,14 @@ const tokens = {
   },
   "letter-spacing": {
     $value: "{tracking.normal}",
-    $type: "letterSpacing",
+    $type: "cssDimension",
     $description: "Letter spacing for the radio label.",
   },
 
   // Layout
   gap: {
     $value: "{spacing.sm}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Space between the control and its label.",
   },
   "align-items": {
@@ -220,7 +220,7 @@ const tokens = {
   },
   "group-gap": {
     $value: "{spacing.md}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Gap between radios in a .zbk-radio-group.",
   },
   "group-direction": {
@@ -237,12 +237,12 @@ const tokens = {
   },
   "focus-width": {
     $value: "{focus.width}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Outline width for keyboard focus.",
   },
   "focus-offset": {
     $value: "{focus.offset}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Outline offset for keyboard focus.",
   },
 

@@ -12,7 +12,7 @@ import type {
  * Resolves the spacing scale into emittable tokens — the spacing counterpart to
  * `resolveTypeScale`.
  *
- * Each spacing primitive (`type: "rootSize"`) carries its size at the MIN (mobile) viewport
+ * Each spacing primitive carries its size at the MIN (mobile) viewport
  * anchor as `value` — a guaranteed floor that never shrinks below what was authored; this pass
  * derives the max-anchor size (`value × growth`) and fits a fluid `clamp()` across the anchors
  * shared with the font scale. `growth` is per-token: a continuous log curve (see `curveGrowth`)
@@ -27,9 +27,15 @@ import type {
  *
  * Precision px tokens skip the viewport interpolation (fluidizing a 1px hairline is nonsense)
  * but still get the density + coupling multiplier — every spacing token, rem or px, honors the
- * runtime a11y dials. Only `0` is emitted exact (scaling zero is pointless). Semantic spacing
- * aliases are `type: "spacing"` with `{…}` references and pass through untouched — they resolve
- * to the primitive var, which already carries the fluid + coupling behavior.
+ * runtime a11y dials. Only `0` is emitted exact (scaling zero is pointless).
+ *
+ * What resolves vs. passes through is decided by VALUE SHAPE, not `$type` (the D5
+ * collapse typed the whole family `dimension`): any concrete value — a structured
+ * `{value, unit}` floor or a raw px/rem string substituted by a theme override —
+ * is a scale floor and resolves; `{…}` references are semantic aliases and pass
+ * through untouched, landing on the primitive var that already carries the fluid +
+ * coupling behavior. Resolved entries re-emit as `cssDimension` (their values are
+ * calc()/clamp() expressions).
  *
  * Viewport anchors are read from the font-size group's `$extensions["dev.zebkit"].scale`
  * so type and space share one responsive rhythm; `max-scale` comes from the spacing
@@ -162,15 +168,13 @@ function buildFluidValue(
   return `clamp(calc(${r(lo)}rem${m}), calc((${preferred})${m}), calc(${r(hi)}rem${m}))`;
 }
 
-/** Resolves a single rootSize primitive's value (rem → fluid; px/0 → exact). */
+/** Resolves a single scale floor's value (rem → fluid; px/0 → exact). */
 function resolveValue(
   raw: string | number | DimensionValue,
   c: SpaceControls,
   mode: SpaceScaleMode,
   growthOverride?: number
 ): string {
-  if (typeof raw === "string" && raw.trim().startsWith("{")) return raw;
-
   // Structured floors serialize to their canonical string first; from there the
   // px/rem/zero handling below is identical to the raw-string path.
   const v = tokenValueToString(raw).trim();
@@ -214,7 +218,14 @@ export function resolveSpaceScale(
 
   const resolvedModule: TokenInterface = {};
   for (const [name, entry] of Object.entries(module)) {
-    if (!entry || entry.$type !== "rootSize" || !("$value" in entry)) {
+    // Concrete values (structured floors, or raw strings substituted by theme
+    // overrides) are scale floors; `{…}` references are semantic aliases.
+    const isFloor =
+      entry &&
+      "$value" in entry &&
+      entry.$value != null &&
+      !(typeof entry.$value === "string" && entry.$value.trim().startsWith("{"));
+    if (!isFloor) {
       resolvedModule[name] = entry;
       continue;
     }
@@ -231,7 +242,7 @@ export function resolveSpaceScale(
     );
     resolvedModule[name] = {
       $value: value,
-      $type: "rootSize",
+      $type: "cssDimension",
       $description: entry.$description,
     } as TokenObject;
   }

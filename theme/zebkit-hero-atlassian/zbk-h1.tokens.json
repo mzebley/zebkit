@@ -6,7 +6,7 @@
   },
   "font-size": {
     "$value": "{font-size.3xl}",
-    "$type": "fontSize",
+    "$type": "cssDimension",
     "$description": "Font size for H1 elements — ADS heading xxlarge (~35px)."
   },
   "font-weight": {
@@ -21,22 +21,22 @@
   },
   "letter-spacing": {
     "$value": "-0.01em",
-    "$type": "letterSpacing",
+    "$type": "dimension",
     "$description": "Tracking for H1 — ADS large headings tighten slightly."
   },
   "measure": {
     "$value": "{text-measure.3}",
-    "$type": "sizing",
+    "$type": "cssDimension",
     "$description": "Maximum width for H1 elements with .prose applied directly or that are a child of a .prose container."
   },
   "spacing-before": {
     "$value": "0.67em",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Amount of margin block start for H1 elements with .prose applied directly or that are a child of a .prose container."
   },
   "spacing-after": {
     "$value": "0.67em",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Amount of margin block end for H1 elements with .prose applied directly or that are a child of a .prose container."
   },
   "color": {

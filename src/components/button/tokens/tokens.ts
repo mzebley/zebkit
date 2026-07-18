@@ -168,7 +168,7 @@ const tokens = {
   // Border geometry
   "border-width": {
     $value: "{border.width-sm}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Base border width.",
   },
   "border-style": {
@@ -178,7 +178,7 @@ const tokens = {
   },
   "border-radius": {
     $value: "{border.radius-md}",
-    $type: "borderRadius",
+    $type: "dimension",
     $description: "Corner radius for standard buttons.",
   },
 
@@ -190,7 +190,7 @@ const tokens = {
   },
   "font-size": {
     $value: "{font-size.md}",
-    $type: "fontSize",
+    $type: "cssDimension",
     $description: "Base font size for button labels.",
   },
   "font-weight": {
@@ -205,7 +205,7 @@ const tokens = {
   },
   "letter-spacing": {
     $value: "{tracking.normal}",
-    $type: "letterSpacing",
+    $type: "cssDimension",
     $description: "Letter spacing for button labels.",
   },
   "text-transform": {
@@ -227,32 +227,32 @@ const tokens = {
   // Internal spacing (logical axes)
   "padding-inline": {
     $value: "{spacing.1}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Inline (horizontal) padding for standard buttons.",
   },
   "padding-block": {
     $value: "{spacing.05}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Block (vertical) padding for standard buttons.",
   },
   "padding-inline-start": {
     $value: "{button.padding-inline}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Inline-start padding override when needed.",
   },
   "padding-inline-end": {
     $value: "{button.padding-inline}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Inline-end padding override when needed.",
   },
   "padding-block-start": {
     $value: "{button.padding-block}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Block-start padding override when needed.",
   },
   "padding-block-end": {
     $value: "{button.padding-block}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Block-end padding override when needed.",
   },
 
@@ -269,34 +269,34 @@ const tokens = {
   },
   "margin-inline-start": {
     $value: "{button.margin-inline}",
-    $type: "spacing",
+    $type: "cssDimension",
     $description: "Inline-start margin override when needed.",
   },
   "margin-inline-end": {
     $value: "{button.margin-inline}",
-    $type: "spacing",
+    $type: "cssDimension",
     $description: "Inline-end margin override when needed.",
   },
   "margin-block-start": {
     $value: "{button.margin-block}",
-    $type: "spacing",
+    $type: "cssDimension",
     $description: "Block-start margin override when needed.",
   },
   "margin-block-end": {
     $value: "{button.margin-block}",
-    $type: "spacing",
+    $type: "cssDimension",
     $description: "Block-end margin override when needed.",
   },
 
   // Gaps
   gap: {
     $value: "{button.padding-block}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Gap between button icon and label.",
   },
   "group-gap": {
     $value: "{spacing.105}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Gap between buttons when rendered in a group.",
   },
 
@@ -313,7 +313,7 @@ const tokens = {
   },
   "min-width": {
     $value: "{a11y.min-interaction-size}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Minimum button width.",
   },
   "max-width": {
@@ -328,7 +328,7 @@ const tokens = {
   },
   "min-height": {
     $value: "{a11y.min-interaction-size}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Minimum height to ensure tappable area.",
   },
   "max-height": {
@@ -340,17 +340,17 @@ const tokens = {
   // Icon-related
   "icon-size": {
     $value: "{button.font-size}",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Default icon size within buttons.",
   },
     "icon-start-size": {
     $value: "{button.icon-size}",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Default icon size for icons at start of buttons.",
   },
     "icon-end-size": {
     $value: "{button.icon-size}",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Default icon size for icons at end of buttons.",
   },
 
@@ -362,12 +362,12 @@ const tokens = {
   },
   "focus-width": {
     $value: "{focus.width}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Outline width for focus state.",
   },
   "focus-offset": {
     $value: "{focus.offset}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Outline offset for focus state.",
   },
 

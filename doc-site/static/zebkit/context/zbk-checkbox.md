@@ -94,8 +94,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | Token | Default | Type | Description |
 |---|---|---|---|
 | `--zbk-checkbox-display` | `contents` | display | Display mode for the <zbk-checkbox> host element. |
-| `--zbk-checkbox-control-width` | `{spacing.105}` | sizing | Width of the checkbox control. |
-| `--zbk-checkbox-control-height` | `{spacing.105}` | sizing | Height of the checkbox control. |
+| `--zbk-checkbox-control-width` | `{spacing.105}` | dimension | Width of the checkbox control. |
+| `--zbk-checkbox-control-height` | `{spacing.105}` | dimension | Height of the checkbox control. |
 | `--zbk-checkbox-canvas` | `{app.canvas}` | color | Background of an unchecked checkbox control. |
 | `--zbk-checkbox-canvas-hover` | `{app.canvas-subtle}` | color | Control background when hovered. |
 | `--zbk-checkbox-canvas-active` | `{app.canvas-muted}` | color | Control background while pressed. |
@@ -108,28 +108,28 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-checkbox-border-color-checked` | `{checkbox.canvas-checked}` | color | Control border color when checked. |
 | `--zbk-checkbox-border-color-indeterminate` | `{checkbox.canvas-indeterminate}` | color | Control border color in the indeterminate state. |
 | `--zbk-checkbox-border-color-disabled` | `{disabled.border}` | color | Control border color when disabled. |
-| `--zbk-checkbox-border-width` | `{border.width-md}` | borderWidth | Border thickness of the checkbox control. |
+| `--zbk-checkbox-border-width` | `{border.width-md}` | dimension | Border thickness of the checkbox control. |
 | `--zbk-checkbox-border-style` | `{border.style}` | borderStyle | Border style of the checkbox control. |
-| `--zbk-checkbox-border-radius` | `{border.radius-xs}` | borderRadius | Corner radius of the checkbox control. |
+| `--zbk-checkbox-border-radius` | `{border.radius-xs}` | dimension | Corner radius of the checkbox control. |
 | `--zbk-checkbox-indicator-color` | `{app.ink-inverse}` | color | Color of the checkmark and indeterminate bar. |
 | `--zbk-checkbox-indicator-color-disabled` | `{disabled.ink}` | color | Indicator color when disabled. |
-| `--zbk-checkbox-indicator-stroke-width` | `{border.width-md}` | borderWidth | Stroke width of the checkmark; also the indeterminate bar's thickness. |
-| `--zbk-checkbox-indicator-radius` | `{border.radius-xs}` | borderRadius | Corner radius of the indeterminate bar. |
+| `--zbk-checkbox-indicator-stroke-width` | `{border.width-md}` | dimension | Stroke width of the checkmark; also the indeterminate bar's thickness. |
+| `--zbk-checkbox-indicator-radius` | `{border.radius-xs}` | dimension | Corner radius of the indeterminate bar. |
 | `--zbk-checkbox-indicator-size` | `1em` | cssDimension | Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it. |
 | `--zbk-checkbox-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-checkbox-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-checkbox-font-family` | `{font-family.interface}` | fontFamily | Font family for the checkbox label. |
-| `--zbk-checkbox-font-size` | `{font-size.md}` | fontSize | Font size for the checkbox label. |
+| `--zbk-checkbox-font-size` | `{font-size.md}` | cssDimension | Font size for the checkbox label. |
 | `--zbk-checkbox-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the checkbox label. |
 | `--zbk-checkbox-line-height` | `{line-height.2}` | lineHeight | Line height for the checkbox label. |
-| `--zbk-checkbox-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the checkbox label. |
-| `--zbk-checkbox-gap` | `{spacing.sm}` | spacing | Space between the control and its label. |
+| `--zbk-checkbox-letter-spacing` | `{tracking.normal}` | cssDimension | Letter spacing for the checkbox label. |
+| `--zbk-checkbox-gap` | `{spacing.sm}` | dimension | Space between the control and its label. |
 | `--zbk-checkbox-align-items` | `center` | flex | Cross-axis alignment of control and label. |
-| `--zbk-checkbox-group-gap` | `{spacing.md}` | spacing | Gap between checkboxes in a .zbk-checkbox-group. |
+| `--zbk-checkbox-group-gap` | `{spacing.md}` | dimension | Gap between checkboxes in a .zbk-checkbox-group. |
 | `--zbk-checkbox-group-direction` | `column` | flex | Flow direction of a .zbk-checkbox-group (column or row). |
 | `--zbk-checkbox-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-checkbox-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-checkbox-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
+| `--zbk-checkbox-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-checkbox-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
 | `--zbk-checkbox-box-shadow` | `none` | boxShadow | Default control shadow. |
 | `--zbk-checkbox-box-shadow-hover` | `none` | boxShadow | Control shadow when hovered. |
 | `--zbk-checkbox-box-shadow-active` | `none` | boxShadow | Control shadow while pressed. |

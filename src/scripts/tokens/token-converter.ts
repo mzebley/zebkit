@@ -298,20 +298,17 @@ export const convertTokensToCssVars = (
           errors
         );
 
-        const baseValue = String(cssVariableValue);
-
-        if ("$type" in item && (item.$type === "rootFontSize" || item.$type === "rootSize")) {
-          // Pre-resolved by `resolveTypeScale` / `resolveSpaceScale` (fluid clamp or static
-          // value, with a11y modifiers already baked in). Emit the value verbatim.
-          cssVariableValue = baseValue;
-        } else {
-          let a11yValue = tokenA11y(item);
-          if (typeof a11yValue === "boolean") {
-            a11yValue = a11yValue ? a11yMap[item.$type as string] : undefined;
-          }
-          if (a11yValue) {
-            cssVariableValue = `calc(${cssVariableValue} * var(${a11yValue}))`;
-          }
+        // Entries pre-resolved by `resolveTypeScale` / `resolveSpaceScale` carry no
+        // `$extensions` (a11y modifiers are already baked into their values), so they
+        // fall through this wrap untouched. `a11y: true` resolves the default modifier
+        // for the token's type; dimension-family entries name their modifier variable
+        // explicitly (the collapsed `$type` no longer identifies one).
+        let a11yValue = tokenA11y(item);
+        if (typeof a11yValue === "boolean") {
+          a11yValue = a11yValue ? a11yMap[item.$type as string] : undefined;
+        }
+        if (a11yValue) {
+          cssVariableValue = `calc(${cssVariableValue} * var(${a11yValue}))`;
         }
 
         currentStyles += `--${cssVariableKey}: ${cssVariableValue};\n`;

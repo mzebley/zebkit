@@ -16,7 +16,7 @@ import {
   ZEBKIT_CONFIG_SCHEMA,
   ZEBKIT_CONFIG_SCHEMA_FILENAME,
 } from '../src/scripts/config-schema';
-import { LEGACY_TYPE_MIGRATION } from '../src/definitions/dtcg';
+import { tokenScaleIndex } from '../src/definitions/tokens';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -134,7 +134,7 @@ function zebkitExtensionsSchema(token: TokenObject) {
       properties: fontMetadataProperties(),
     };
   }
-  if (token.$type === 'rootFontSize') {
+  if (tokenScaleIndex(token) != null) {
     vendorProperties.scale = {
       type: 'object',
       description: 'Generated-scale step metadata (index 0 = base step).',
@@ -229,10 +229,10 @@ const structuredDimensionSchema = {
   },
 };
 
-/** Length-family types whose values may be structured `{value, unit}` objects. */
+/** `dimension` values may be structured `{value, unit}` objects (override
+ * documents may also carry raw strings, substituted verbatim by the merge). */
 function acceptsStructuredDimension(type: string): boolean {
-  const migration = LEGACY_TYPE_MIGRATION[type as keyof typeof LEGACY_TYPE_MIGRATION];
-  return migration?.kind === 'valueDependent';
+  return type === 'dimension';
 }
 
 function generateValueDefinitions(
@@ -283,14 +283,8 @@ function getTokenTypeSyntax(type: string): string | undefined {
   const syntaxMap: Record<string, string> = {
     'color': '<color>',
     'borderColor': '<color>',
-    'fontSize': '<length>',
-    'rootFontSize': '<length>',
-    'spacing': '<length>',
     'dimension': '<length>',
-    'rootSize': '<length>',
-    'sizing': '<length>',
-    'borderWidth': '<length>',
-    'borderRadius': '<length>',
+    'cssDimension': '<length-percentage>',
     'fontFamily': '<family-name>',
     'fontWeight': '<number>',
     'lineHeight': '<number> | <length>',

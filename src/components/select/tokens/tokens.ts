@@ -162,7 +162,7 @@ const tokens = {
   },
   "border-width": {
     $value: "{border.width-sm}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Border thickness of the field box.",
   },
   "border-style": {
@@ -172,7 +172,7 @@ const tokens = {
   },
   "border-radius": {
     $value: "{border.radius-md}",
-    $type: "borderRadius",
+    $type: "dimension",
     $description: "Corner radius of the field box.",
   },
 
@@ -184,7 +184,7 @@ const tokens = {
   },
   "font-size": {
     $value: "{font-size.md}",
-    $type: "fontSize",
+    $type: "cssDimension",
     $description: "Font size for the selected option's text.",
   },
   "font-weight": {
@@ -199,7 +199,7 @@ const tokens = {
   },
   "letter-spacing": {
     $value: "{tracking.normal}",
-    $type: "letterSpacing",
+    $type: "cssDimension",
     $description: "Letter spacing for the selected option's text.",
   },
 
@@ -216,7 +216,7 @@ const tokens = {
   },
   "label-font-size": {
     $value: "{font-size.sm}",
-    $type: "fontSize",
+    $type: "cssDimension",
     $description: "Font size for the label.",
   },
   "label-font-weight": {
@@ -226,7 +226,7 @@ const tokens = {
   },
   "label-gap": {
     $value: "{spacing.2xs}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Space between the label and the field box.",
   },
 
@@ -266,24 +266,24 @@ const tokens = {
   },
   "indicator-stroke-width": {
     $value: "{border.width-md}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Stroke width of the drawn chevron.",
   },
 
   // Internal layout
   "padding-inline": {
     $value: "{spacing.sm}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Inline (horizontal) padding of the field box.",
   },
   "padding-block": {
     $value: "{spacing.2xs}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Block (vertical) padding of the field box.",
   },
   gap: {
     $value: "{spacing.2xs}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Space between affixes, the select, and the indicator.",
   },
 
@@ -305,14 +305,14 @@ const tokens = {
   },
   "min-height": {
     $value: { value: 44, unit: "px" },
-    $type: "sizing",
+    $type: "dimension",
     $description: "Minimum field height to ensure a tappable area.",
   },
 
   // Grouping
   "group-gap": {
     $value: "{spacing.md}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Gap between fields in a .zbk-select-group.",
   },
   "group-direction": {
@@ -329,12 +329,12 @@ const tokens = {
   },
   "focus-width": {
     $value: "{focus.width}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Outline width for keyboard focus.",
   },
   "focus-offset": {
     $value: "{focus.offset}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Outline offset for keyboard focus.",
   },
 

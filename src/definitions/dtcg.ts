@@ -107,32 +107,24 @@ export type LegacyTypeMigration =
   | { kind: "split"; types: readonly ZebkitDtcgType[] }
   | { kind: "extension"; subkey: ZebkitExtensionSubkey };
 
-const DIMENSION_OR_CSS = {
-  kind: "valueDependent",
-  types: ["dimension", "cssDimension"],
-} as const satisfies LegacyTypeMigration;
-
 /**
  * The spec-type mapping table (decision D5): every legacy `AllowedTokenTypes`
  * member and where its tokens land post-alignment. Phase 2 consumes this family
  * by family; Phase 4's provenance-marked `allowed-token-types.json` derives from
  * the end state.
+ *
+ * The dimension family collapsed in Phase 2a step 4: `spacing`, `sizing`,
+ * `rootSize`, `borderWidth`, `borderRadius`, `fontSize`, `rootFontSize`, and
+ * `letterSpacing` no longer exist — px/rem values are `dimension`, everything
+ * else a length slot accepts is `cssDimension`.
  */
 export const LEGACY_TYPE_MIGRATION: Record<AllowedTokenTypes, LegacyTypeMigration> = {
   // Colors
   color: { kind: "spec", type: "color" },
   borderColor: { kind: "spec", type: "color" },
-  // Length families → dimension (px/rem) or cssDimension (%, ch, em, calc())
-  spacing: DIMENSION_OR_CSS,
-  sizing: DIMENSION_OR_CSS,
-  dimension: DIMENSION_OR_CSS,
+  // The dimension family is final (Phase 2a step 4)
+  dimension: { kind: "spec", type: "dimension" },
   cssDimension: { kind: "spec", type: "cssDimension" },
-  rootSize: DIMENSION_OR_CSS,
-  borderWidth: DIMENSION_OR_CSS,
-  borderRadius: DIMENSION_OR_CSS,
-  fontSize: DIMENSION_OR_CSS,
-  rootFontSize: DIMENSION_OR_CSS,
-  letterSpacing: DIMENSION_OR_CSS,
   // Shadows
   boxShadow: { kind: "spec", type: "shadow" },
   // Transition conflation splits into three types

@@ -92,7 +92,7 @@ Grammar: `flex-shrink-{value}` · values: 0…5 · responsive: prefix with `tabl
 
 Sets the initial main size of a flex item before any extra space is distributed or shrinking occurs.
 
-Grammar: `flex-basis-{value}` · values: 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, aside, section, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, 0, full, auto, max-content, min-content, fit-content (spacing tokens: sizing, rootSize) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `flex-basis-{value}` · values: 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, aside, section, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, 0, full, auto, max-content, min-content, fit-content (spacing tokens: dimension) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Controls width when flex direction is 'row'
 - Controls height when flex direction is 'column'
@@ -125,7 +125,7 @@ Grammar: `display-{value}` · values: flex, inline-flex, block, inline-block, in
 
 Sets the gutters between flex or grid tracks: the bare form sets both axes, with logical block (row-gap) and inline (column-gap) edges.
 
-Grammar: `gap[-edge]-{value}` — edges: block, inline · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 2xs, xs, sm, md, lg, xl, 2xl, 3xl (spacing tokens: spacing, rootSize) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `gap[-edge]-{value}` — edges: block, inline · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 2xs, xs, sm, md, lg, xl, 2xl, 3xl (spacing tokens: dimension) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Accessibility: Gap values rescale with the spacing accessibility dial.
 - Prefer gap on the flex or grid container over per-child margins — it only adds space between items, never around the outer edges.

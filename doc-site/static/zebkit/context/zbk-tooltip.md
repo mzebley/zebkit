@@ -87,19 +87,19 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-tooltip-canvas` | `{app.canvas-inverse}` | color | Tooltip bubble background. |
 | `--zbk-tooltip-ink` | `{app.ink-inverse}` | color | Tooltip text color. |
 | `--zbk-tooltip-border-color` | `transparent` | color | Tooltip bubble border color. |
-| `--zbk-tooltip-border-width` | `{border.width-sm}` | borderWidth | Tooltip bubble border width. |
+| `--zbk-tooltip-border-width` | `{border.width-sm}` | dimension | Tooltip bubble border width. |
 | `--zbk-tooltip-border-style` | `{border.style}` | borderStyle | Tooltip bubble border style. |
-| `--zbk-tooltip-border-radius` | `{border.radius-md}` | borderRadius | Tooltip bubble corner radius. |
+| `--zbk-tooltip-border-radius` | `{border.radius-md}` | dimension | Tooltip bubble corner radius. |
 | `--zbk-tooltip-font-family` | `{font-family.interface}` | fontFamily | Font family for tooltip text. |
-| `--zbk-tooltip-font-size` | `{font-size.sm}` | fontSize | Font size for tooltip text. |
+| `--zbk-tooltip-font-size` | `{font-size.sm}` | cssDimension | Font size for tooltip text. |
 | `--zbk-tooltip-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for tooltip text. |
 | `--zbk-tooltip-line-height` | `{line-height.2}` | lineHeight | Line height for tooltip text. |
-| `--zbk-tooltip-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for tooltip text. |
-| `--zbk-tooltip-padding-inline` | `{spacing.xs}` | spacing | Inline padding inside the bubble. |
-| `--zbk-tooltip-padding-block` | `{spacing.2xs}` | spacing | Block padding inside the bubble. |
-| `--zbk-tooltip-max-width` | `20rem` | sizing | Maximum bubble width before text wraps. |
-| `--zbk-tooltip-arrow-size` | `8px` | sizing | Arrow square size; also sets the default trigger-to-bubble gap. |
-| `--zbk-tooltip-offset` | `{tooltip.arrow-size}` | sizing | Gap between the trigger and the bubble. |
+| `--zbk-tooltip-letter-spacing` | `{tracking.normal}` | cssDimension | Letter spacing for tooltip text. |
+| `--zbk-tooltip-padding-inline` | `{spacing.xs}` | dimension | Inline padding inside the bubble. |
+| `--zbk-tooltip-padding-block` | `{spacing.2xs}` | dimension | Block padding inside the bubble. |
+| `--zbk-tooltip-max-width` | `20rem` | dimension | Maximum bubble width before text wraps. |
+| `--zbk-tooltip-arrow-size` | `8px` | dimension | Arrow square size; also sets the default trigger-to-bubble gap. |
+| `--zbk-tooltip-offset` | `{tooltip.arrow-size}` | dimension | Gap between the trigger and the bubble. |
 | `--zbk-tooltip-box-shadow` | `{elevation.sm}` | boxShadow | Bubble shadow. |
 | `--zbk-tooltip-z-index` | `{z-index.tooltip}` | zIndex | Stacking order when the top-layer popover API is unavailable. |
 | `--zbk-tooltip-transition-duration` | `150ms` | transition | Show/hide transition duration. **(a11y)** |

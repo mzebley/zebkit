@@ -73,12 +73,12 @@ const tokens = {
   // track-shaped control is a width override, not a new component.
   "control-width": {
     $value: "{spacing.105}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Width of the checkbox control.",
   },
   "control-height": {
     $value: "{spacing.105}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Height of the checkbox control.",
   },
 
@@ -147,7 +147,7 @@ const tokens = {
   },
   "border-width": {
     $value: "{border.width-md}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Border thickness of the checkbox control.",
   },
   "border-style": {
@@ -157,7 +157,7 @@ const tokens = {
   },
   "border-radius": {
     $value: "{border.radius-xs}",
-    $type: "borderRadius",
+    $type: "dimension",
     $description: "Corner radius of the checkbox control.",
   },
 
@@ -174,12 +174,12 @@ const tokens = {
   },
   "indicator-stroke-width": {
     $value: "{border.width-md}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Stroke width of the checkmark; also the indeterminate bar's thickness.",
   },
   "indicator-radius": {
     $value: "{border.radius-xs}",
-    $type: "borderRadius",
+    $type: "dimension",
     $description: "Corner radius of the indeterminate bar.",
   },
   "indicator-size": {
@@ -207,7 +207,7 @@ const tokens = {
   },
   "font-size": {
     $value: "{font-size.md}",
-    $type: "fontSize",
+    $type: "cssDimension",
     $description: "Font size for the checkbox label.",
   },
   "font-weight": {
@@ -222,14 +222,14 @@ const tokens = {
   },
   "letter-spacing": {
     $value: "{tracking.normal}",
-    $type: "letterSpacing",
+    $type: "cssDimension",
     $description: "Letter spacing for the checkbox label.",
   },
 
   // Layout
   gap: {
     $value: "{spacing.sm}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Space between the control and its label.",
   },
   "align-items": {
@@ -239,7 +239,7 @@ const tokens = {
   },
   "group-gap": {
     $value: "{spacing.md}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Gap between checkboxes in a .zbk-checkbox-group.",
   },
   "group-direction": {
@@ -256,12 +256,12 @@ const tokens = {
   },
   "focus-width": {
     $value: "{focus.width}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Outline width for keyboard focus.",
   },
   "focus-offset": {
     $value: "{focus.offset}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Outline offset for keyboard focus.",
   },
 

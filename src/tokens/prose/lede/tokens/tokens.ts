@@ -15,7 +15,7 @@ const tokens = {
   },
   "font-size": {
     $value: `{font-size.lg}`,
-    $type: "fontSize",
+    $type: "cssDimension",
     $description:
       "Font size for introductory lede text with .lede applied directly or as a child of a .prose container.",
   },
@@ -33,25 +33,25 @@ const tokens = {
   },
   "letter-spacing": {
     $value: `{letter-spacing.normal}`,
-    $type: "letterSpacing",
+    $type: "dimension",
     $description:
       "Tracking for introductory lede text with .lede applied directly or as a child of a .prose container.",
   },
   measure: {
     $value: `{text-measure.3}`,
-    $type: "sizing",
+    $type: "cssDimension",
     $description:
       "Maximum width for introductory lede text with .lede applied directly or as a child of a .prose container.",
   },
   "spacing-before": {
     $value: `{spacing.0}`,
-    $type: "spacing",
+    $type: "dimension",
     $description:
       "Block spacing before introductory lede text when it appears in a .prose flow.",
   },
   "spacing-after": {
     $value: `{spacing.105}`,
-    $type: "spacing",
+    $type: "dimension",
     $description:
       "Block spacing after introductory lede text when it appears in a .prose flow.",
   },

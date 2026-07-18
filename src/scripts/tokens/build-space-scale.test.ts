@@ -24,18 +24,18 @@ const GROUP_EXTENSIONS: Record<string, TokenGroupExtensions> = {
 function makeTokens(): Record<string, TokenInterface> {
   return {
     [SPACING]: {
-      "2": { $value: "2rem", $type: "rootSize", $description: "Base spacing.", $extensions: { "dev.zebkit": { a11y: true } } } as unknown as TokenInterface[string],
-      "neg-2": { $value: "-2rem", $type: "rootSize", $description: "Negative.", $extensions: { "dev.zebkit": { a11y: true } } } as unknown as TokenInterface[string],
+      "2": { $value: "2rem", $type: "dimension", $description: "Base spacing.", $extensions: { "dev.zebkit": { a11y: true } } } as unknown as TokenInterface[string],
+      "neg-2": { $value: "-2rem", $type: "dimension", $description: "Negative.", $extensions: { "dev.zebkit": { a11y: true } } } as unknown as TokenInterface[string],
       // Micro floor (== MICRO_ANCHOR): curve growth is exactly 1, so it stays flat.
-      "05": { $value: "0.5rem", $type: "rootSize", $description: "Tiny.", $extensions: { "dev.zebkit": { a11y: true } } } as unknown as TokenInterface[string],
+      "05": { $value: "0.5rem", $type: "dimension", $description: "Tiny.", $extensions: { "dev.zebkit": { a11y: true } } } as unknown as TokenInterface[string],
       // Macro floor (== MACRO_ANCHOR): curve growth reaches the full max-scale.
-      "16": { $value: "16rem", $type: "rootSize", $description: "Macro.", $extensions: { "dev.zebkit": { a11y: true } } } as unknown as TokenInterface[string],
+      "16": { $value: "16rem", $type: "dimension", $description: "Macro.", $extensions: { "dev.zebkit": { a11y: true } } } as unknown as TokenInterface[string],
       // Per-token override: pins growth, bypassing the curve.
-      pinned: { $value: "1rem", $type: "rootSize", $description: "Pinned.", $extensions: { "dev.zebkit": { a11y: true } }, growth: 1.5 } as unknown as TokenInterface[string],
-      "0": { $value: "0px", $type: "rootSize", $description: "Zero." } as unknown as TokenInterface[string],
-      "1px": { $value: "1px", $type: "rootSize", $description: "Hairline.", $extensions: { "dev.zebkit": { a11y: true } } } as unknown as TokenInterface[string],
+      pinned: { $value: "1rem", $type: "dimension", $description: "Pinned.", $extensions: { "dev.zebkit": { a11y: true } }, growth: 1.5 } as unknown as TokenInterface[string],
+      "0": { $value: "0px", $type: "dimension", $description: "Zero." } as unknown as TokenInterface[string],
+      "1px": { $value: "1px", $type: "dimension", $description: "Hairline.", $extensions: { "dev.zebkit": { a11y: true } } } as unknown as TokenInterface[string],
       // A semantic alias that shares the module key — must pass through untouched.
-      md: { $value: "{spacing.2}", $type: "spacing", $description: "Alias." } as unknown as TokenInterface[string],
+      md: { $value: "{spacing.2}", $type: "dimension", $description: "Alias." } as unknown as TokenInterface[string],
     },
   };
 }
@@ -51,6 +51,8 @@ describe("resolveSpaceScale", () => {
     const out = resolveSpaceScale(makeTokens(), { groupExtensions: GROUP_EXTENSIONS });
     const v = out[SPACING]["2"].$value as string;
     expect(v).toMatch(/^clamp\(/);
+    // resolved floors re-emit as cssDimension (calc/clamp expressions)
+    expect(out[SPACING]["2"].$type).toBe("cssDimension");
     // both runtime forces, three times (min / preferred / max)
     expect(v.match(/--zbk-a11y-spacing-modifier/g)).toHaveLength(3);
     expect(
@@ -112,10 +114,10 @@ describe("resolveSpaceScale", () => {
     );
   });
 
-  it("passes semantic aliases ({…} references, type spacing) through untouched", () => {
+  it("passes semantic aliases ({…} references) through untouched", () => {
     const out = resolveSpaceScale(makeTokens(), { groupExtensions: GROUP_EXTENSIONS });
     expect(out[SPACING].md.$value).toBe("{spacing.2}");
-    expect(out[SPACING].md.$type).toBe("spacing");
+    expect(out[SPACING].md.$type).toBe("dimension");
   });
 
   it("drops the viewport interpolation in static mode but keeps density + coupling", () => {

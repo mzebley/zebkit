@@ -6,7 +6,7 @@
   },
   "font-size": {
     "$value": "{font-size.md}",
-    "$type": "fontSize",
+    "$type": "cssDimension",
     "$description": "Font size for P elements with .prose applied directly or that are a child of a .prose container."
   },
   "font-weight": {
@@ -21,22 +21,22 @@
   },
   "letter-spacing": {
     "$value": "{letter-spacing.tighter}",
-    "$type": "letterSpacing",
+    "$type": "dimension",
     "$description": "Tracking for P elements with .prose applied directly or that are a child of a .prose container."
   },
   "measure": {
     "$value": "88ch",
-    "$type": "sizing",
+    "$type": "cssDimension",
     "$description": "Maximum width for P elements with .prose applied directly or that are a child of a .prose container."
   },
   "spacing-before": {
     "$value": "1em",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Amount of margin inline start for P elements with .prose applied directly or that are a child of a .prose container."
   },
   "spacing-after": {
     "$value": "1em",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container."
   },
   "color": {

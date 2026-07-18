@@ -89,12 +89,12 @@ const tokens = {
   // Track geometry
   "track-width": {
     $value: "{spacing.205}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Width of the toggle track.",
   },
   "track-height": {
     $value: "{spacing.105}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Height of the toggle track; the thumb and pill radius derive from it.",
   },
 
@@ -153,7 +153,7 @@ const tokens = {
   },
   "border-width": {
     $value: "{border.width-md}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Border thickness of the toggle track.",
   },
   "border-style": {
@@ -163,7 +163,7 @@ const tokens = {
   },
   "border-radius": {
     $value: "{toggle.track-height}",
-    $type: "borderRadius",
+    $type: "dimension",
     $description: "Corner radius of the track (track-height yields a pill).",
   },
 
@@ -199,12 +199,12 @@ const tokens = {
   // resizing the track re-derives the whole control.
   "thumb-size": {
     $value: "{toggle.track-height}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Diameter of the thumb.",
   },
   "thumb-inset": {
     $value: "{spacing.neg-2px}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Thumb offset from the track's start edge; negative overlaps the border.",
   },
   "thumb-canvas": {
@@ -239,7 +239,7 @@ const tokens = {
   },
   "thumb-border-width": {
     $value: "{toggle.border-width}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Border thickness of the thumb.",
   },
   "thumb-border-style": {
@@ -314,7 +314,7 @@ const tokens = {
   },
   "font-size": {
     $value: "{font-size.md}",
-    $type: "fontSize",
+    $type: "cssDimension",
     $description: "Font size for the toggle label.",
   },
   "font-weight": {
@@ -329,14 +329,14 @@ const tokens = {
   },
   "letter-spacing": {
     $value: "{tracking.normal}",
-    $type: "letterSpacing",
+    $type: "cssDimension",
     $description: "Letter spacing for the toggle label.",
   },
 
   // Layout
   gap: {
     $value: "{spacing.sm}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Space between the track and its label.",
   },
   "align-items": {
@@ -346,7 +346,7 @@ const tokens = {
   },
   "group-gap": {
     $value: "{spacing.md}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Gap between toggles in a .zbk-toggle-group.",
   },
   "group-direction": {
@@ -363,12 +363,12 @@ const tokens = {
   },
   "focus-width": {
     $value: "{focus.width}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Outline width for keyboard focus.",
   },
   "focus-offset": {
     $value: "{focus.offset}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Outline offset for keyboard focus.",
   },
 

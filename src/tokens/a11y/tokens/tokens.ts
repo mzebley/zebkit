@@ -42,7 +42,7 @@ const tokens = {
   },
   "min-interaction-size": {
     $value: { value: 28, unit: "px" },
-    $type: "spacing",
+    $type: "dimension",
     $description:
       "Minimum height and width for interactive elements like links or buttons. WCAG AA is >= 24px, AAA is 44px",
   }

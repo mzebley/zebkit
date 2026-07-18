@@ -133,7 +133,7 @@ const tokens = {
   },
   "border-width": {
     $value: "{border.width-sm}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Item border width.",
   },
   "border-style": {
@@ -143,7 +143,7 @@ const tokens = {
   },
   "border-radius": {
     $value: "{border.radius-md}",
-    $type: "borderRadius",
+    $type: "dimension",
     $description: "Item corner radius.",
   },
 
@@ -155,7 +155,7 @@ const tokens = {
   },
   "font-size": {
     $value: "{font-size.md}",
-    $type: "fontSize",
+    $type: "cssDimension",
     $description: "Base font size for pagination content.",
   },
   "font-weight": {
@@ -177,34 +177,34 @@ const tokens = {
   },
   gap: {
     $value: "{spacing.2xs}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Gap between pagination items.",
   },
   "min-width": {
     $value: "{a11y.min-interaction-size}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Minimum item width to keep the tap target.",
   },
   "min-height": {
     $value: "{a11y.min-interaction-size}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Minimum item height to keep the tap target.",
   },
   "padding-inline": {
     $value: "{spacing.2xs}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Inline padding inside each item.",
   },
   "padding-block": {
     $value: "{spacing.2xs}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Block padding inside each item.",
   },
 
   // Sub-elements
   "icon-size": {
     $value: "{pagination.font-size}",
-    $type: "sizing",
+    $type: "cssDimension",
     $description: "Size of the previous/next glyphs (drawn or slotted).",
   },
   "ellipsis-ink": {
@@ -226,12 +226,12 @@ const tokens = {
   },
   "focus-width": {
     $value: "{focus.width}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Outline width for a focused item.",
   },
   "focus-offset": {
     $value: "{focus.offset}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Outline offset for a focused item.",
   },
 

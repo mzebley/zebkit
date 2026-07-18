@@ -6,7 +6,7 @@
   },
   "font-size": {
     "$value": "{font-size.lg}",
-    "$type": "fontSize",
+    "$type": "cssDimension",
     "$description": "Font size for H3 elements — Carbon heading-03 (~20px)."
   },
   "font-weight": {
@@ -21,22 +21,22 @@
   },
   "letter-spacing": {
     "$value": "0",
-    "$type": "letterSpacing",
+    "$type": "dimension",
     "$description": "Tracking for H3 — Carbon headings use neutral tracking."
   },
   "measure": {
     "$value": "{text-measure.3}",
-    "$type": "sizing",
+    "$type": "cssDimension",
     "$description": "Maximum width for H3 elements with .prose applied directly or that are a child of a .prose container."
   },
   "spacing-before": {
     "$value": "1em",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Amount of margin block start for H3 elements with .prose applied directly or that are a child of a .prose container."
   },
   "spacing-after": {
     "$value": "1em",
-    "$type": "spacing",
+    "$type": "dimension",
     "$description": "Amount of margin block end for H3 elements with .prose applied directly or that are a child of a .prose container."
   },
   "color": {

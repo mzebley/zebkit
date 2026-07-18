@@ -28,21 +28,21 @@ function makeModule(): Record<string, TokenInterface> {
   return {
     [KEY]: {
       md: {
-        $type: "rootFontSize",
+        $type: "cssDimension",
         $description: "Base.",
         $extensions: {
           "dev.zebkit": { a11y: "--zbk-a11y-font-size-modifier-md", scale: { index: 0 } },
         },
       } as unknown as TokenInterface[string],
       "3xs": {
-        $type: "rootFontSize",
+        $type: "cssDimension",
         $description: "Smallest.",
         $extensions: {
           "dev.zebkit": { a11y: "--zbk-a11y-font-size-modifier-3xs", scale: { index: -4 } },
         },
       } as unknown as TokenInterface[string],
       lg: {
-        $type: "rootFontSize",
+        $type: "cssDimension",
         $description: "Large.",
         $extensions: {
           "dev.zebkit": { a11y: "--zbk-a11y-font-size-modifier-lg", scale: { index: 1 } },
@@ -62,6 +62,7 @@ describe("resolveTypeScale", () => {
     expect(keys).toEqual(expect.arrayContaining(["md", "lg", "3xs"]));
     for (const key of keys) {
       expect(typeof out[KEY][key].$value).toBe("string");
+      expect(out[KEY][key].$type).toBe("cssDimension");
     }
   });
 

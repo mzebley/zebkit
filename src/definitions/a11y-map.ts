@@ -1,13 +1,16 @@
 import { ZEBKIT_PREFIX } from "@config";
 
 /**
- * Default accessibility modifiers keyed by token type.
- * Tokens can opt into these with `a11y: true` or reference custom modifiers.
+ * Default accessibility modifiers keyed by token type. Tokens opt in with
+ * `a11y: true` (this map) or name a custom modifier variable directly.
+ *
+ * Only the families still awaiting their Phase 2 migration key by type. The
+ * collapsed dimension family (Phase 2a step 4) carries explicit modifier vars
+ * where the wrap applies (letter-spacing entries), and the fluid-scale
+ * resolvers bake the spacing/font-size modifiers in — one `$type` no longer
+ * identifies which modifier a dimension token means.
  */
 export const a11yMap: { [key: string]: string } = {
-  spacing: `--${ZEBKIT_PREFIX}-a11y-spacing-modifier`,
   lineHeight: `--${ZEBKIT_PREFIX}-a11y-line-height-modifier`,
-  letterSpacing: `--${ZEBKIT_PREFIX}-a11y-letter-spacing-modifier`,
-  fontSize: `--${ZEBKIT_PREFIX}-a11y-fallback-font-size-modifier`,
   transition: `--${ZEBKIT_PREFIX}-a11y-transition-duration-modifier`
 };

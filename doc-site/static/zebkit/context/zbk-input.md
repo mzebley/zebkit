@@ -128,34 +128,34 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-input-border-color-disabled` | `{disabled.border}` | color | Field border color when disabled. |
 | `--zbk-input-border-color-readonly` | `{app.border-muted}` | color | Field border color when readonly. |
 | `--zbk-input-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the value is invalid. |
-| `--zbk-input-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the field box. |
+| `--zbk-input-border-width` | `{border.width-sm}` | dimension | Border thickness of the field box. |
 | `--zbk-input-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
-| `--zbk-input-border-radius` | `{border.radius-md}` | borderRadius | Corner radius of the field box. |
+| `--zbk-input-border-radius` | `{border.radius-md}` | dimension | Corner radius of the field box. |
 | `--zbk-input-font-family` | `{font-family.interface}` | fontFamily | Font family for the entered text. |
-| `--zbk-input-font-size` | `{font-size.md}` | fontSize | Font size for the entered text. |
+| `--zbk-input-font-size` | `{font-size.md}` | cssDimension | Font size for the entered text. |
 | `--zbk-input-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the entered text. |
 | `--zbk-input-line-height` | `{line-height.2}` | lineHeight | Line height for the entered text. |
-| `--zbk-input-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the entered text. |
+| `--zbk-input-letter-spacing` | `{tracking.normal}` | cssDimension | Letter spacing for the entered text. |
 | `--zbk-input-label-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-input-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
-| `--zbk-input-label-font-size` | `{font-size.sm}` | fontSize | Font size for the label. |
+| `--zbk-input-label-font-size` | `{font-size.sm}` | cssDimension | Font size for the label. |
 | `--zbk-input-label-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for the label. |
-| `--zbk-input-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
+| `--zbk-input-label-gap` | `{spacing.2xs}` | dimension | Space between the label and the field box. |
 | `--zbk-input-affix-ink` | `{app.ink-muted}` | color | Color of prefix/suffix affix content (icon fonts and currentColor SVGs inherit it). |
 | `--zbk-input-affix-ink-disabled` | `{disabled.ink}` | color | Affix color when disabled. |
 | `--zbk-input-icon-size` | `1em` | cssDimension | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
-| `--zbk-input-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
-| `--zbk-input-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
-| `--zbk-input-gap` | `{spacing.2xs}` | spacing | Space between affixes and the entered text. |
+| `--zbk-input-padding-inline` | `{spacing.sm}` | dimension | Inline (horizontal) padding of the field box. |
+| `--zbk-input-padding-block` | `{spacing.2xs}` | dimension | Block (vertical) padding of the field box. |
+| `--zbk-input-gap` | `{spacing.2xs}` | dimension | Space between affixes and the entered text. |
 | `--zbk-input-width` | `auto` | cssDimension | Width of the field box. |
 | `--zbk-input-min-width` | `0` | cssDimension | Minimum width of the field box. |
 | `--zbk-input-max-width` | `100%` | cssDimension | Maximum width of the field box. |
-| `--zbk-input-min-height` | `44px` | sizing | Minimum field height to ensure a tappable area. |
-| `--zbk-input-group-gap` | `{spacing.md}` | spacing | Gap between fields in a .zbk-input-group. |
+| `--zbk-input-min-height` | `44px` | dimension | Minimum field height to ensure a tappable area. |
+| `--zbk-input-group-gap` | `{spacing.md}` | dimension | Gap between fields in a .zbk-input-group. |
 | `--zbk-input-group-direction` | `column` | flex | Flow direction of a .zbk-input-group (column or row). |
 | `--zbk-input-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-input-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-input-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
+| `--zbk-input-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-input-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
 | `--zbk-input-box-shadow` | `none` | boxShadow | Default field shadow. |
 | `--zbk-input-box-shadow-hover` | `none` | boxShadow | Field shadow when hovered. |
 | `--zbk-input-box-shadow-focus` | `none` | boxShadow | Field shadow while focused (in addition to the outline). |

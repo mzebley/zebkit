@@ -19,19 +19,23 @@ export const tokenAliasMap: {
     extrabold: "fontWeight",
     black: "fontWeight",
   },
+  // Tracking vars are hand-written CSS (em-based) — a length surface the spec
+  // `dimension` type cannot represent, so referencing entries type `cssDimension`.
   tracking: {
-    tighter: "letterSpacing",
-    tight: "letterSpacing",
-    normal: "letterSpacing",
-    wide: "letterSpacing",
-    wider: "letterSpacing",
+    tighter: "cssDimension",
+    tight: "cssDimension",
+    normal: "cssDimension",
+    wide: "cssDimension",
+    wider: "cssDimension",
   },
+  // Shadowed by the real letter-spacing module (structured px/rem tokens);
+  // kept aligned with its collapsed type for the fallback path.
   "letter-spacing": {
-    tighter: "letterSpacing",
-    tight: "letterSpacing",
-    normal: "letterSpacing",
-    wide: "letterSpacing",
-    wider: "letterSpacing",
+    tighter: "dimension",
+    tight: "dimension",
+    normal: "dimension",
+    wide: "dimension",
+    wider: "dimension",
   },
 };
 
@@ -43,44 +47,19 @@ export const tokenCompatibilityMap: {
 } = {
   color: ["color", "borderColor"],
   fontFamily: ["fontFamily"],
-  fontSize: ["fontSize", "rootFontSize"],
-  rootFontSize: ["rootFontSize"],
-  lineHeight: [
-    "lineHeight",
-    "dimension",
-    "spacing",
-    "sizing",
-    "rootSize",
-    "fontSize",
-    "rootFontSize",
-  ],
-  letterSpacing: ["letterSpacing"],
+  lineHeight: ["lineHeight", "dimension", "cssDimension"],
   fontWeight: ["fontWeight"],
   textDecoration: ["textDecoration"],
   textTransform: ["textTransform"],
   fontStyle: ["fontStyle"],
   textAlignment: ["textAlignment"],
-  sizing: ["sizing", "dimension", "spacing", "rootSize", "fontSize"],
-  spacing: ["spacing", "dimension", "sizing", "rootSize"],
-  dimension: ["dimension", "spacing", "sizing", "rootSize"],
-  // Non-px/rem CSS sizing values (%, ch, em, keywords, unitless 0). The compat
-  // check is a symmetric intersection, so listing the length family here lets
-  // those types reference cssDimension targets (and vice versa) without
-  // loosening any pairing between two legacy types.
-  cssDimension: [
-    "cssDimension",
-    "dimension",
-    "sizing",
-    "spacing",
-    "rootSize",
-    "fontSize",
-    "borderRadius",
-    "borderWidth",
-  ],
-  rootSize: ["rootSize"],
+  // The dimension family: structured px/rem (`dimension`) and every other CSS
+  // length surface (`cssDimension`) reference each other freely — a semantic
+  // alias resolves through the fluid-scale resolvers, whose emitted values are
+  // clamp()/calc() strings regardless of which side authored the floor.
+  dimension: ["dimension", "cssDimension"],
+  cssDimension: ["cssDimension", "dimension"],
   display: ["display"],
-  borderRadius: ["borderRadius", "sizing", "dimension", "spacing", "rootSize"],
-  borderWidth: ["borderWidth", "sizing", "dimension", "spacing", "rootSize"],
   borderColor: ["borderColor", "color"],
   borderStyle: ["borderStyle"],
   utility: ["utility", "boolean"],

@@ -5,84 +5,7 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "rootSizeValue": {
-      "oneOf": [
-        {
-          "type": [
-            "string",
-            "number"
-          ]
-        },
-        {
-          "type": "object",
-          "required": [
-            "value",
-            "unit"
-          ],
-          "additionalProperties": false,
-          "properties": {
-            "value": {
-              "type": "number"
-            },
-            "unit": {
-              "type": "string",
-              "enum": [
-                "px",
-                "rem"
-              ]
-            }
-          }
-        }
-      ],
-      "examples": [
-        "{spacing.0}",
-        "{spacing.1}",
-        "{spacing.2}",
-        "{spacing.3}",
-        "{spacing.4}",
-        "{spacing.5}",
-        "{spacing.6}",
-        "{spacing.7}",
-        "{spacing.8}",
-        "{spacing.9}",
-        "{spacing.10}",
-        "{spacing.15}",
-        "{spacing.20}",
-        "{spacing.25}",
-        "{spacing.30}",
-        "{spacing.40}",
-        "{spacing.50}",
-        "{spacing.60}",
-        "{spacing.70}",
-        "{spacing.80}",
-        "{spacing.90}",
-        "{spacing.100}",
-        "{spacing.105}",
-        "{spacing.205}",
-        "{spacing.neg-15}",
-        "{spacing.neg-10}",
-        "{spacing.neg-9}",
-        "{spacing.neg-8}",
-        "{spacing.neg-7}",
-        "{spacing.neg-6}",
-        "{spacing.neg-5}",
-        "{spacing.neg-4}",
-        "{spacing.neg-3}",
-        "{spacing.neg-205}",
-        "{spacing.neg-2}",
-        "{spacing.neg-105}",
-        "{spacing.neg-1}",
-        "{spacing.neg-05}",
-        "{spacing.neg-025}",
-        "{spacing.neg-2px}",
-        "{spacing.neg-1px}",
-        "{spacing.1px}",
-        "{spacing.2px}",
-        "{spacing.025}",
-        "{spacing.05}"
-      ]
-    },
-    "spacingValue": {
+    "dimensionValue": {
       "oneOf": [
         {
           "type": [
@@ -113,27 +36,76 @@
       ],
       "examples": [
         "{a11y.min-interaction-size}",
+        "{breakpoint.tablet}",
+        "{breakpoint.tablet-lg}",
+        "{breakpoint.desktop}",
+        "{breakpoint.desktop-lg}",
+        "{breakpoint.widescreen}",
+        "{focus.width}",
         "{focus.offset}",
+        "{h1.letter-spacing}",
         "{h1.spacing-before}",
         "{h1.spacing-after}",
+        "{h2.letter-spacing}",
         "{h2.spacing-before}",
         "{h2.spacing-after}",
+        "{h3.letter-spacing}",
         "{h3.spacing-before}",
         "{h3.spacing-after}",
+        "{h4.letter-spacing}",
         "{h4.spacing-before}",
         "{h4.spacing-after}",
+        "{h5.letter-spacing}",
         "{h5.spacing-before}",
         "{h5.spacing-after}",
+        "{h6.letter-spacing}",
         "{h6.spacing-before}",
         "{h6.spacing-after}",
+        "{lede.letter-spacing}",
         "{lede.spacing-before}",
         "{lede.spacing-after}",
+        "{list.letter-spacing}",
         "{list.spacing-before}",
         "{list.spacing-after}",
         "{list.padding-block-start}",
         "{list.padding-block-end}",
+        "{p.letter-spacing}",
         "{p.spacing-before}",
         "{p.spacing-after}",
+        "{border.width-xs}",
+        "{border.width-sm}",
+        "{border.width-md}",
+        "{border.width-lg}",
+        "{border.width-xl}",
+        "{border.radius-xs}",
+        "{border.radius-sm}",
+        "{border.radius-md}",
+        "{border.radius-lg}",
+        "{border.radius-xl}",
+        "{spacing.0}",
+        "{spacing.1}",
+        "{spacing.2}",
+        "{spacing.3}",
+        "{spacing.4}",
+        "{spacing.5}",
+        "{spacing.6}",
+        "{spacing.7}",
+        "{spacing.8}",
+        "{spacing.9}",
+        "{spacing.10}",
+        "{spacing.15}",
+        "{spacing.20}",
+        "{spacing.25}",
+        "{spacing.30}",
+        "{spacing.40}",
+        "{spacing.50}",
+        "{spacing.60}",
+        "{spacing.70}",
+        "{spacing.80}",
+        "{spacing.90}",
+        "{spacing.100}",
+        "{spacing.105}",
+        "{spacing.205}",
         "{spacing.2xs}",
         "{spacing.xs}",
         "{spacing.sm}",
@@ -142,97 +114,6 @@
         "{spacing.xl}",
         "{spacing.2xl}",
         "{spacing.3xl}",
-        "{spacing.section-margin-block}",
-        "{spacing.section-margin-inline}",
-        "{spacing.page-padding-block}",
-        "{spacing.page-padding-inline}",
-        "{button.padding-inline}",
-        "{button.padding-block}",
-        "{button.padding-inline-start}",
-        "{button.padding-inline-end}",
-        "{button.padding-block-start}",
-        "{button.padding-block-end}",
-        "{button.margin-inline-start}",
-        "{button.margin-inline-end}",
-        "{button.margin-block-start}",
-        "{button.margin-block-end}",
-        "{button.gap}",
-        "{button.group-gap}",
-        "{button.focus-offset}",
-        "{checkbox.gap}",
-        "{checkbox.group-gap}",
-        "{checkbox.focus-offset}",
-        "{input.label-gap}",
-        "{input.padding-inline}",
-        "{input.padding-block}",
-        "{input.gap}",
-        "{input.group-gap}",
-        "{input.focus-offset}",
-        "{pagination.gap}",
-        "{pagination.padding-inline}",
-        "{pagination.padding-block}",
-        "{pagination.focus-offset}",
-        "{radio.gap}",
-        "{radio.group-gap}",
-        "{radio.focus-offset}",
-        "{select.label-gap}",
-        "{select.padding-inline}",
-        "{select.padding-block}",
-        "{select.gap}",
-        "{select.group-gap}",
-        "{select.focus-offset}",
-        "{textarea.label-gap}",
-        "{textarea.padding-inline}",
-        "{textarea.padding-block}",
-        "{textarea.focus-offset}",
-        "{toggle.thumb-inset}",
-        "{toggle.gap}",
-        "{toggle.group-gap}",
-        "{toggle.focus-offset}",
-        "{tooltip.padding-inline}",
-        "{tooltip.padding-block}"
-      ]
-    },
-    "sizingValue": {
-      "oneOf": [
-        {
-          "type": [
-            "string",
-            "number"
-          ]
-        },
-        {
-          "type": "object",
-          "required": [
-            "value",
-            "unit"
-          ],
-          "additionalProperties": false,
-          "properties": {
-            "value": {
-              "type": "number"
-            },
-            "unit": {
-              "type": "string",
-              "enum": [
-                "px",
-                "rem"
-              ]
-            }
-          }
-        }
-      ],
-      "examples": [
-        "{focus.width}",
-        "{h1.measure}",
-        "{h2.measure}",
-        "{h3.measure}",
-        "{h4.measure}",
-        "{h5.measure}",
-        "{h6.measure}",
-        "{lede.measure}",
-        "{list.measure}",
-        "{p.measure}",
         "{spacing.card}",
         "{spacing.mobile}",
         "{spacing.mobile-lg}",
@@ -242,25 +123,121 @@
         "{spacing.desktop-lg}",
         "{spacing.widescreen}",
         "{spacing.section}",
+        "{spacing.section-margin-block}",
+        "{spacing.section-margin-inline}",
         "{spacing.aside}",
+        "{spacing.page-padding-block}",
+        "{spacing.page-padding-inline}",
+        "{spacing.neg-15}",
+        "{spacing.neg-10}",
+        "{spacing.neg-9}",
+        "{spacing.neg-8}",
+        "{spacing.neg-7}",
+        "{spacing.neg-6}",
+        "{spacing.neg-5}",
+        "{spacing.neg-4}",
+        "{spacing.neg-3}",
+        "{spacing.neg-205}",
+        "{spacing.neg-2}",
+        "{spacing.neg-105}",
+        "{spacing.neg-1}",
+        "{spacing.neg-05}",
+        "{spacing.neg-025}",
+        "{spacing.neg-2px}",
+        "{spacing.neg-1px}",
+        "{spacing.1px}",
+        "{spacing.2px}",
+        "{spacing.025}",
+        "{spacing.05}",
+        "{letter-spacing.tighter}",
+        "{letter-spacing.tight}",
+        "{letter-spacing.normal}",
+        "{letter-spacing.wide}",
+        "{letter-spacing.wider}",
+        "{button.border-width}",
+        "{button.border-radius}",
+        "{button.padding-inline}",
+        "{button.padding-block}",
+        "{button.padding-inline-start}",
+        "{button.padding-inline-end}",
+        "{button.padding-block-start}",
+        "{button.padding-block-end}",
+        "{button.gap}",
+        "{button.group-gap}",
         "{button.min-width}",
         "{button.min-height}",
-        "{button.icon-size}",
-        "{button.icon-start-size}",
-        "{button.icon-end-size}",
+        "{button.focus-width}",
+        "{button.focus-offset}",
         "{checkbox.control-width}",
         "{checkbox.control-height}",
+        "{checkbox.border-width}",
+        "{checkbox.border-radius}",
+        "{checkbox.indicator-stroke-width}",
+        "{checkbox.indicator-radius}",
+        "{checkbox.gap}",
+        "{checkbox.group-gap}",
+        "{checkbox.focus-width}",
+        "{checkbox.focus-offset}",
+        "{input.border-width}",
+        "{input.border-radius}",
+        "{input.label-gap}",
+        "{input.padding-inline}",
+        "{input.padding-block}",
+        "{input.gap}",
         "{input.min-height}",
+        "{input.group-gap}",
+        "{input.focus-width}",
+        "{input.focus-offset}",
+        "{pagination.border-width}",
+        "{pagination.border-radius}",
+        "{pagination.gap}",
         "{pagination.min-width}",
         "{pagination.min-height}",
-        "{pagination.icon-size}",
+        "{pagination.padding-inline}",
+        "{pagination.padding-block}",
+        "{pagination.focus-width}",
+        "{pagination.focus-offset}",
         "{radio.control-width}",
         "{radio.control-height}",
+        "{radio.border-width}",
+        "{radio.gap}",
+        "{radio.group-gap}",
+        "{radio.focus-width}",
+        "{radio.focus-offset}",
+        "{select.border-width}",
+        "{select.border-radius}",
+        "{select.label-gap}",
+        "{select.indicator-stroke-width}",
+        "{select.padding-inline}",
+        "{select.padding-block}",
+        "{select.gap}",
         "{select.min-height}",
+        "{select.group-gap}",
+        "{select.focus-width}",
+        "{select.focus-offset}",
+        "{textarea.border-width}",
+        "{textarea.border-radius}",
+        "{textarea.label-gap}",
+        "{textarea.padding-inline}",
+        "{textarea.padding-block}",
         "{textarea.min-block-size}",
+        "{textarea.focus-width}",
+        "{textarea.focus-offset}",
         "{toggle.track-width}",
         "{toggle.track-height}",
+        "{toggle.border-width}",
+        "{toggle.border-radius}",
         "{toggle.thumb-size}",
+        "{toggle.thumb-inset}",
+        "{toggle.thumb-border-width}",
+        "{toggle.gap}",
+        "{toggle.group-gap}",
+        "{toggle.focus-width}",
+        "{toggle.focus-offset}",
+        "{tooltip.border-width}",
+        "{tooltip.border-radius}",
+        "{tooltip.padding-inline}",
+        "{tooltip.padding-block}",
         "{tooltip.max-width}",
         "{tooltip.arrow-size}",
         "{tooltip.offset}"
@@ -277,10 +254,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -315,10 +292,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -353,10 +330,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -391,10 +368,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -429,10 +406,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -467,10 +444,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -505,10 +482,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -543,10 +520,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -581,10 +558,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -619,10 +596,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -657,10 +634,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -695,10 +672,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -733,10 +710,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -771,10 +748,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -809,10 +786,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -847,10 +824,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -885,10 +862,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -923,10 +900,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -961,10 +938,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -999,10 +976,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1037,10 +1014,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1075,10 +1052,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1113,10 +1090,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1151,10 +1128,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1235,10 +1212,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1273,10 +1250,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1311,10 +1288,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1349,10 +1326,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1387,10 +1364,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1425,10 +1402,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1463,10 +1440,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1501,10 +1478,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1539,10 +1516,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1577,10 +1554,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1615,10 +1592,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1653,10 +1630,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1691,10 +1668,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1729,10 +1706,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1767,10 +1744,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1805,10 +1782,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1843,10 +1820,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1881,10 +1858,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1919,10 +1896,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1957,10 +1934,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/sizingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "sizing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -1995,10 +1972,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2033,10 +2010,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/spacingValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "spacing"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2071,10 +2048,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2109,10 +2086,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2147,10 +2124,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2185,10 +2162,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2223,10 +2200,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2261,10 +2238,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2299,10 +2276,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2337,10 +2314,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2375,10 +2352,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2413,10 +2390,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2451,10 +2428,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2489,10 +2466,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2527,10 +2504,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2565,10 +2542,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2603,10 +2580,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2641,10 +2618,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2679,10 +2656,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2717,10 +2694,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2755,10 +2732,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2793,10 +2770,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"
@@ -2831,10 +2808,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/rootSizeValue"
+          "$ref": "#/definitions/dimensionValue"
         },
         "$type": {
-          "const": "rootSize"
+          "const": "dimension"
         },
         "$description": {
           "type": "string"

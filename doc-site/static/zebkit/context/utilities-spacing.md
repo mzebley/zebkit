@@ -112,7 +112,7 @@ Dictates spacing outside of the defined border of an element, separating it from
 
 Sets the empty space around an element.
 
-Grammar: `margin[-edge]-{value}` — edges: block, inline, block-start, block-end, inline-start, inline-end · values: 2xs, xs, sm, md, lg, xl, 2xl, 3xl, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 105, 205, 1px, 2px, 025, 05, auto, unset (spacing tokens: spacing, rootSize) · negatives: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 105, 205, 1px, 2px, 025, 05 · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `margin[-edge]-{value}` — edges: block, inline, block-start, block-end, inline-start, inline-end · values: 2xs, xs, sm, md, lg, xl, 2xl, 3xl, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 105, 205, 1px, 2px, 025, 05, auto, unset (spacing tokens: dimension) · negatives: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 105, 205, 1px, 2px, 025, 05 · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - 'block' margin values have no effect on elements with 'inline' display, they must be set to something like 'inline-block'
 - Zebkit uses logical margin operators (inline/block) for improved international accessibility. 'block' is vertical, 'inline' is horizontal.
@@ -125,6 +125,6 @@ Dictates spacing inside of the defined border of an element, separating content 
 
 Sets the empty space inside an element.
 
-Grammar: `padding[-edge]-{value}` — edges: block, inline, block-start, block-end, inline-start, inline-end · values: 2xs, xs, sm, md, lg, xl, 2xl, 3xl, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 105, 205, 1px, 2px, 025, 05, unset (spacing tokens: spacing, rootSize) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `padding[-edge]-{value}` — edges: block, inline, block-start, block-end, inline-start, inline-end · values: 2xs, xs, sm, md, lg, xl, 2xl, 3xl, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 105, 205, 1px, 2px, 025, 05, unset (spacing tokens: dimension) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Zebkit uses logical padding operators (inline/block) for improved international accessibility. 'block' is vertical, 'inline' is horizontal.

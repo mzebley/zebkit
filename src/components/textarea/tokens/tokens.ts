@@ -189,7 +189,7 @@ const tokens = {
   },
   "border-width": {
     $value: "{border.width-sm}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Border thickness of the field box.",
   },
   "border-style": {
@@ -199,7 +199,7 @@ const tokens = {
   },
   "border-radius": {
     $value: "{border.radius-md}",
-    $type: "borderRadius",
+    $type: "dimension",
     $description: "Corner radius of the field box.",
   },
 
@@ -211,7 +211,7 @@ const tokens = {
   },
   "font-size": {
     $value: "{font-size.md}",
-    $type: "fontSize",
+    $type: "cssDimension",
     $description: "Font size for the entered text.",
   },
   "font-weight": {
@@ -226,7 +226,7 @@ const tokens = {
   },
   "letter-spacing": {
     $value: "{tracking.normal}",
-    $type: "letterSpacing",
+    $type: "cssDimension",
     $description: "Letter spacing for the entered text.",
   },
 
@@ -243,7 +243,7 @@ const tokens = {
   },
   "label-font-size": {
     $value: "{font-size.sm}",
-    $type: "fontSize",
+    $type: "cssDimension",
     $description: "Font size for the label.",
   },
   "label-font-weight": {
@@ -253,19 +253,19 @@ const tokens = {
   },
   "label-gap": {
     $value: "{spacing.2xs}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Space between the label and the field box.",
   },
 
   // Internal layout
   "padding-inline": {
     $value: "{spacing.sm}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Inline (horizontal) padding of the field box.",
   },
   "padding-block": {
     $value: "{spacing.2xs}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Block (vertical) padding of the field box.",
   },
 
@@ -295,7 +295,7 @@ const tokens = {
   },
   "min-block-size": {
     $value: { value: 44, unit: "px" },
-    $type: "sizing",
+    $type: "dimension",
     $description: "Minimum field height for a multi-line box; also a tappable floor.",
   },
 
@@ -307,12 +307,12 @@ const tokens = {
   },
   "focus-width": {
     $value: "{focus.width}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Outline width for keyboard focus.",
   },
   "focus-offset": {
     $value: "{focus.offset}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Outline offset for keyboard focus.",
   },
 

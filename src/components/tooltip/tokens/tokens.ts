@@ -62,7 +62,7 @@ const tokens = {
   },
   "border-width": {
     $value: "{border.width-sm}",
-    $type: "borderWidth",
+    $type: "dimension",
     $description: "Tooltip bubble border width.",
   },
   "border-style": {
@@ -72,7 +72,7 @@ const tokens = {
   },
   "border-radius": {
     $value: "{border.radius-md}",
-    $type: "borderRadius",
+    $type: "dimension",
     $description: "Tooltip bubble corner radius.",
   },
 
@@ -84,7 +84,7 @@ const tokens = {
   },
   "font-size": {
     $value: "{font-size.sm}",
-    $type: "fontSize",
+    $type: "cssDimension",
     $description: "Font size for tooltip text.",
   },
   "font-weight": {
@@ -99,34 +99,34 @@ const tokens = {
   },
   "letter-spacing": {
     $value: "{tracking.normal}",
-    $type: "letterSpacing",
+    $type: "cssDimension",
     $description: "Letter spacing for tooltip text.",
   },
 
   // Spacing & sizing
   "padding-inline": {
     $value: "{spacing.xs}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Inline padding inside the bubble.",
   },
   "padding-block": {
     $value: "{spacing.2xs}",
-    $type: "spacing",
+    $type: "dimension",
     $description: "Block padding inside the bubble.",
   },
   "max-width": {
     $value: { value: 20, unit: "rem" },
-    $type: "sizing",
+    $type: "dimension",
     $description: "Maximum bubble width before text wraps.",
   },
   "arrow-size": {
     $value: { value: 8, unit: "px" },
-    $type: "sizing",
+    $type: "dimension",
     $description: "Arrow square size; also sets the default trigger-to-bubble gap.",
   },
   offset: {
     $value: "{tooltip.arrow-size}",
-    $type: "sizing",
+    $type: "dimension",
     $description: "Gap between the trigger and the bubble.",
   },
 
