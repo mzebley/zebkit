@@ -139,6 +139,10 @@ export async function readTokenSnapshot(
     if (!isRecord(raw)) {
       throw new Error(`Bundled token module ${module.file} must contain a JSON object.`);
     }
+    // Emission-external modules (the primitive palette) are not authorable:
+    // their CSS is generated from the palette definition, and entry-level
+    // overrides are rejected at build time.
+    if (raw._cssEmission === 'external') continue;
     const tokens = getAuthorableTokenData(raw);
     if (Object.keys(tokens).length === 0) continue;
     modules[module.key] = {

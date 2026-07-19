@@ -27,7 +27,8 @@ export const allowedTokenTypes = z.enum([
   'dimension',
   'cssDimension',
   'display',
-  'borderColor',
+  // `borderColor` collapsed into `color` (Phase 2b, decision D5) — it never had
+  // its own token entries; border color surfaces are plain `color` tokens.
   'borderStyle',
   'utility',
   'zIndex',
@@ -74,9 +75,78 @@ export function serializeDimensionValue(v: DimensionValue): string {
   return `${String(v.value).replace(/^(-?)0\./, "$1.")}${v.unit}`;
 }
 
-/** A token `$value` as its CSS string: structured dimensions serialize, the rest stringify. */
+/**
+ * DTCG color value (2025.10): a color space, its components, optional alpha
+ * (default 1), and an optional `hex` fallback. Zebkit authors `hsl` (the
+ * palette ramp) and `srgb` + `hex` (the globals); the full spec color-space
+ * list is accepted for interchange.
+ */
+export const DTCG_COLOR_SPACES = [
+  "srgb",
+  "srgb-linear",
+  "hsl",
+  "hwb",
+  "lab",
+  "lch",
+  "oklab",
+  "oklch",
+  "display-p3",
+  "a98-rgb",
+  "prophoto-rgb",
+  "rec2020",
+  "xyz-d65",
+  "xyz-d50",
+] as const;
+export const colorValueSchema = z.object({
+  colorSpace: z.enum(DTCG_COLOR_SPACES),
+  components: z.tuple([z.number(), z.number(), z.number()]),
+  alpha: z.number().min(0).max(1).optional(),
+  hex: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+});
+export type ColorValue = z.infer<typeof colorValueSchema>;
+
+/** True when `v` is a structured DTCG color value. */
+export function isColorValue(v: unknown): v is ColorValue {
+  return (
+    !!v &&
+    typeof v === "object" &&
+    typeof (v as { colorSpace?: unknown }).colorSpace === "string" &&
+    Array.isArray((v as { components?: unknown }).components)
+  );
+}
+
+/**
+ * Canonical CSS serialization for a structured color. Byte-driven rules (the
+ * palette SCSS and docs data must reproduce today's output exactly):
+ * fully-transparent black is the `transparent` keyword (decision D8); a `hex`
+ * fallback wins where present; `hsl` uses the legacy comma notation the
+ * palette has always emitted; anything else falls back to CSS Color 4
+ * `color()` / `rgb()` notation.
+ */
+export function serializeColorValue(v: ColorValue): string {
+  const alpha = v.alpha ?? 1;
+  const [c1, c2, c3] = v.components;
+  if (alpha === 0 && c1 === 0 && c2 === 0 && c3 === 0) return "transparent";
+  if (v.hex && alpha === 1) return v.hex;
+  if (v.colorSpace === "hsl") {
+    return alpha === 1
+      ? `hsl(${c1}, ${c2}%, ${c3}%)`
+      : `hsla(${c1}, ${c2}%, ${c3}%, ${alpha})`;
+  }
+  if (v.colorSpace === "srgb") {
+    const to255 = (n: number) => Math.round(n * 255);
+    return alpha === 1
+      ? `rgb(${to255(c1)}, ${to255(c2)}, ${to255(c3)})`
+      : `rgba(${to255(c1)}, ${to255(c2)}, ${to255(c3)}, ${alpha})`;
+  }
+  return `color(${v.colorSpace} ${c1} ${c2} ${c3}${alpha === 1 ? "" : ` / ${alpha}`})`;
+}
+
+/** A token `$value` as its CSS string: structured dimensions/colors serialize, the rest stringify. */
 export function tokenValueToString(v: unknown): string {
-  return isDimensionValue(v) ? serializeDimensionValue(v) : String(v);
+  if (isDimensionValue(v)) return serializeDimensionValue(v);
+  if (isColorValue(v)) return serializeColorValue(v);
+  return String(v);
 }
 
 /**
@@ -158,7 +228,7 @@ export type TokenExtensions = z.infer<typeof tokenExtensionsSchema>;
  * Zod schema describing a single token entry.
  */
 export const tokenObjectSchema = z.object({
-  $value: z.union([z.string(), z.number(), dimensionValueSchema]),
+  $value: z.union([z.string(), z.number(), dimensionValueSchema, colorValueSchema]),
   $type: allowedTokenTypes,
   $description: z.string(),
   $extensions: tokenExtensionsSchema.optional(),

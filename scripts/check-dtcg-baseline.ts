@@ -318,18 +318,23 @@ interface DerivedEmission {
 function deriveEmission(
   tokens: Record<string, TokenInterface>,
   layers: Record<string, LayerName>,
-  groupExtensions: Record<string, TokenGroupExtensions>
+  groupExtensions: Record<string, TokenGroupExtensions>,
+  externalModules: ReadonlySet<string>
 ): DerivedEmission {
   let resolved = resolveSpaceScale(tokens, { mode: "fluid", groupExtensions });
   resolved = resolveTypeScale(resolved, { mode: "fluid", groupExtensions });
-  // Mirror the build: breakpoints are build-time inputs, not emitted vars.
+  // Mirror the build: breakpoints are build-time inputs, not emitted vars, and
+  // emission-external modules (the primitive palette) ride the generated SCSS.
   resolved = { ...resolved };
   delete resolved["zbk-breakpoint"];
+  const referenceTokens = { ...resolved };
+  for (const externalKey of externalModules) delete resolved[externalKey];
 
   const { css, fontHead, errors } = convertTokensToCssVars(resolved, {
     layers,
     fontStrategy: "link",
     assetFilePath: "/assets/",
+    referenceTokens,
   });
   if (errors.length > 0) {
     throw new Error(`Token conversion failed during order check:\n${errors.join("\n")}`);
@@ -347,7 +352,7 @@ function deriveEmission(
 async function checkOrderInvariance(): Promise<boolean> {
   console.log(chalk.cyan("\n--- entry-order-shuffle check (I7) ---"));
   const files = await gatherZebkitFiles();
-  const { tokens, layers, groupExtensions } = await buildZebkitTokens(
+  const { tokens, layers, groupExtensions, externalModules } = await buildZebkitTokens(
     "order-check",
     files.tokenFiles,
     path.join(TMP_ROOT, "order-check"),
@@ -357,8 +362,13 @@ async function checkOrderInvariance(): Promise<boolean> {
     false
   );
 
-  const original = deriveEmission(tokens, layers, groupExtensions);
-  const reversed = deriveEmission(reverseTokenMap(tokens), layers, groupExtensions);
+  const original = deriveEmission(tokens, layers, groupExtensions, externalModules);
+  const reversed = deriveEmission(
+    reverseTokenMap(tokens),
+    layers,
+    groupExtensions,
+    externalModules
+  );
 
   const problems: string[] = [];
   const layerNames = new Set([...Object.keys(original.decls), ...Object.keys(reversed.decls)]);

@@ -14,9 +14,10 @@ npm run test:watch          # Run tests in watch mode
 npm run type-check          # TypeScript type checking (tsc --noEmit)
 npm run build:tokens        # Build design tokens (interactive prompts)
 npm run build:components    # Build web components
-npm run generate            # Regenerate all manifest-derived source (utilities + components)
+npm run generate            # Regenerate all derived source (utilities + components + palette SCSS)
 npm run generate:utilities  # Utility SCSS from utility manifests
 npm run generate:components # Component slot-contract.ts from component manifests
+npm run generate:palette    # Palette SCSS from the palette token definition
 npm run build               # Full build: generate -> CEM -> tokens/CSS -> components -> doc-site/context -> editor/CLI
 npm run lint                # Lint components + utilities
 npm run lint:utilities      # Lint utility manifests against generated SCSS
@@ -28,7 +29,7 @@ npm run docs:build          # Refresh every generated artifact, then build stati
 
 **Configuration**: Token/component builds can skip prompts via `zebkit.config.json`, or pass `--config path/to/config.json`.
 
-**Manifests are the source of truth.** Utility classes are generated from hand-authored `*utilities.manifest.json` contracts (`src/scripts/utilities/README.md`); component slot contracts and agent docs are generated from `zbk-*.manifest.json` (`src/scripts/components/README.md`). Never hand-edit a generated `*.scss` partial or `slot-contract.ts` — edit the manifest and regenerate.
+**Manifests are the source of truth.** Utility classes are generated from hand-authored `*utilities.manifest.json` contracts (`src/scripts/utilities/README.md`); component slot contracts and agent docs are generated from `zbk-*.manifest.json` (`src/scripts/components/README.md`); the primitive palette SCSS (mixin, family partials, globals) is generated from `src/tokens/colors/palette/tokens/palette-definition.ts`. Never hand-edit a generated `*.scss` partial or `slot-contract.ts` — edit the manifest/definition and regenerate.
 
 ## Architecture Overview
 

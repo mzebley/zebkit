@@ -282,7 +282,6 @@ function generateTokenSchema(
 function getTokenTypeSyntax(type: string): string | undefined {
   const syntaxMap: Record<string, string> = {
     'color': '<color>',
-    'borderColor': '<color>',
     'dimension': '<length>',
     'cssDimension': '<length-percentage>',
     'fontFamily': '<family-name>',
@@ -399,6 +398,11 @@ async function buildEditor() {
     for (const module of manifest.modules) {
       const tokenFilePath = path.join(defaultsDir, module.file);
       const tokenData = await fs.readJson(tokenFilePath) as TokenData;
+
+      // Emission-external modules (the primitive palette) are not overridable —
+      // no override schema, no theme-file association. Their entries still feed
+      // the reference examples (pass 1) and the CSS custom data.
+      if ((tokenData as Record<string, unknown>)._cssEmission === 'external') continue;
 
       const tokenSchema = generateTokenSchema(module, tokenData, refsByType);
       const schemaFileName = `${module.key}.schema.json`;

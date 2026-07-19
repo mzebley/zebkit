@@ -56,7 +56,7 @@ const tokens = {
     $description: "Tooltip text color.",
   },
   "border-color": {
-    $value: "transparent",
+    $value: "{color.global-transparent}",
     $type: "color",
     $description: "Tooltip bubble border color.",
   },

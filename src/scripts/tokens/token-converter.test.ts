@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import type { TokenInterface } from '@definitions/tokens';
+import { serializeColorValue, type TokenInterface } from '@definitions/tokens';
 import { convertTokensToCssVars } from './token-converter';
 
 describe('convertTokensToCssVars — selector scoping (rootSelector)', () => {
@@ -231,5 +231,53 @@ describe('convertTokensToCssVars — error collection', () => {
     } as unknown as { [key: string]: TokenInterface });
 
     expect(result.errors).toEqual([]);
+  });
+});
+
+describe('serializeColorValue — DTCG color serialization', () => {
+  it('serializes the palette surfaces byte-exactly', () => {
+    // Ramp steps: legacy comma hsl() notation.
+    expect(serializeColorValue({ colorSpace: 'hsl', components: [0, 80, 58] })).toBe(
+      'hsl(0, 80%, 58%)'
+    );
+    // Globals: hex fallback wins at full alpha.
+    expect(
+      serializeColorValue({
+        colorSpace: 'srgb',
+        components: [19 / 255, 19 / 255, 19 / 255],
+        hex: '#131313',
+      })
+    ).toBe('#131313');
+    // D8: fully-transparent black is the `transparent` keyword.
+    expect(
+      serializeColorValue({ colorSpace: 'srgb', components: [0, 0, 0], alpha: 0 })
+    ).toBe('transparent');
+  });
+
+  it('covers the non-palette notations', () => {
+    expect(
+      serializeColorValue({ colorSpace: 'hsl', components: [200, 50, 40], alpha: 0.5 })
+    ).toBe('hsla(200, 50%, 40%, 0.5)');
+    expect(serializeColorValue({ colorSpace: 'srgb', components: [1, 0.5, 0] })).toBe(
+      'rgb(255, 128, 0)'
+    );
+    expect(
+      serializeColorValue({ colorSpace: 'oklch', components: [0.7, 0.1, 200] })
+    ).toBe('color(oklch 0.7 0.1 200)');
+  });
+
+  it('emits structured color values through the converter', () => {
+    const result = convertTokensToCssVars({
+      'zbk-app': {
+        canvas: {
+          $value: { colorSpace: 'hsl', components: [48, 72, 98] },
+          $type: 'color',
+          $description: '',
+        },
+      },
+    } as unknown as { [key: string]: TokenInterface });
+
+    expect(result.errors).toEqual([]);
+    expect(result.css).toContain('--zbk-app-canvas: hsl(48, 72%, 98%);');
   });
 });

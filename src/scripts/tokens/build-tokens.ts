@@ -69,16 +69,18 @@ import {
   resolveLookupOutputPath,
   slugifyFileSegment,
 } from './build-helpers';
+import { PALETTE_GLOBALS } from '../../tokens/colors/palette/tokens/palette-definition';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const ZEBKIT_PREFIX = "zbk";
 
+// Smart-mode builds drop `palette/styles.scss` (globals + every family) and
+// re-add only the referenced families, so the globals are re-emitted inline
+// from the same definition the palette SCSS generates from.
 const paletteGlobalColors = (selector: string = ":root"): string => `${selector} {
-  --zbk-color-global-black: #131313;
-  --zbk-color-global-white: #fefefe;
-  --zbk-color-global-transparent: transparent;
+${PALETTE_GLOBALS.map((global) => `  --zbk-color-${global.name}: ${global.value};`).join("\n")}
 }`;
 
 export {
@@ -384,7 +386,7 @@ export async function runTokenBuild(
     const resolvedSplitMode =
       splitMode as BuildZebkitTokensOptions["splitMode"];
 
-    const { tokens, layers, groupExtensions } = await buildZebkitTokens(
+    const { tokens, layers, groupExtensions, externalModules } = await buildZebkitTokens(
       themeName,
       files.tokenFiles,
       resolvedDestinationPath,
@@ -435,6 +437,14 @@ export async function runTokenBuild(
       }
     }
     const fontStrategy = tokensConfig?.fonts?.strategy ?? "import";
+    // Emission-external modules (the primitive palette) stay in the reference
+    // map so `{color.*}` targets validate, but their CSS rides the generated
+    // palette SCSS — never the converter.
+    const referenceTokens = cssVarTokens;
+    if (externalModules.size > 0) {
+      cssVarTokens = { ...cssVarTokens };
+      for (const externalKey of externalModules) delete cssVarTokens[externalKey];
+    }
     const {
       css: cssVars,
       fontHead,
@@ -443,6 +453,7 @@ export async function runTokenBuild(
       layers,
       fontStrategy,
       assetFilePath,
+      referenceTokens,
     });
     failOnConversionErrors(conversionErrors);
     const tokenLookupOutputPath = resolveLookupOutputPath(
@@ -866,19 +877,20 @@ async function computeOverlayCss(
 
   // Merge base context + overlay overrides. `overriddenKeys` reflects only the overlay's
   // tokenPath (context paths are applied untracked inside buildZebkitTokens).
-  const { tokens, layers, overriddenKeys, groupExtensions } = await buildZebkitTokens(
-    overlay.themeName,
-    options.baseTokenFiles,
-    destination,
-    overlay.tokenPath,
-    [],
-    {
-      splitMode: "combined",
-      overridePaths: options.contextOverridePaths,
-      excludedComponents: options.excludedComponents,
-    },
-    false
-  );
+  const { tokens, layers, overriddenKeys, groupExtensions, externalModules } =
+    await buildZebkitTokens(
+      overlay.themeName,
+      options.baseTokenFiles,
+      destination,
+      overlay.tokenPath,
+      [],
+      {
+        splitMode: "combined",
+        overridePaths: options.contextOverridePaths,
+        excludedComponents: options.excludedComponents,
+      },
+      false
+    );
 
   if (Object.keys(overriddenKeys).length === 0) {
     console.warn(
@@ -908,6 +920,10 @@ async function computeOverlayCss(
   const closure = computeEmissionClosure(scaled, overriddenKeys);
   const emitted: Record<string, TokenInterface> = {};
   for (const [moduleKey, resolvedModule] of Object.entries(scaled)) {
+    // Palette entries can never be closure seeds (their overrides are rejected)
+    // and carry no references, but keep emission-external modules out of
+    // overlays defensively — their CSS only ever comes from the palette SCSS.
+    if (externalModules.has(moduleKey)) continue;
     const picked: TokenInterface = {};
     for (const [entry, value] of Object.entries(resolvedModule)) {
       if (closure.has(`${moduleKey}.${entry}`)) picked[entry] = value;

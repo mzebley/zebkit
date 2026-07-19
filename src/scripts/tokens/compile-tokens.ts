@@ -52,6 +52,14 @@ export interface BuildZebkitTokensResult {
    * never emitted as CSS custom properties.
    */
   groupExtensions: Record<string, TokenGroupExtensions>;
+  /**
+   * Modules whose CSS custom properties are emitted outside the token converter
+   * (the primitive palette rides the generated palette SCSS). They participate
+   * in reference validation and exports but must be excluded from CSS var
+   * emission, editor override schemas, and `zebkit pull`. Declared via a
+   * `cssEmission = "external"` module export / `_cssEmission` snapshot sidecar.
+   */
+  externalModules: Set<string>;
 }
 
 /**
@@ -74,6 +82,7 @@ export async function buildZebkitTokens(
   const tokenSchemas: Record<string, ZodSchema> = {};
   const overriddenKeys: Record<string, Set<string>> = {};
   const groupExtensions: Record<string, TokenGroupExtensions> = {};
+  const externalModules = new Set<string>();
   const splitMode = options.splitMode ?? 'combined';
   const overridePaths = options.overridePaths ?? [];
 
@@ -91,11 +100,14 @@ export async function buildZebkitTokens(
       if (path.isAbsolute(file) && file.endsWith('.json')) {
         try {
           const data = await fs.readJson(file);
-          const { _key, _layer, $extensions, ...tokenData } = data as Record<string, any>;
+          const { _key, _layer, _cssEmission, $extensions, ...tokenData } = data as Record<string, any>;
           const tokenKey: string = _key ?? path.basename(file, '.json');
           const moduleLayer: LayerName = _layer ?? DEFAULT_LAYER;
           tokens[tokenKey] = tokenData as TokenInterface;
           layers[tokenKey] = moduleLayer;
+          if (_cssEmission === 'external') {
+            externalModules.add(tokenKey);
+          }
           if ($extensions) {
             mergeGroupExtensions(tokenKey, $extensions, groupExtensions);
           }
@@ -153,6 +165,9 @@ export async function buildZebkitTokens(
           // export next to the default token map.
           if (tokenModule.extensions) {
             mergeGroupExtensions(tokenKey, tokenModule.extensions, groupExtensions);
+          }
+          if (tokenModule.cssEmission === 'external') {
+            externalModules.add(tokenKey);
           }
           // Merge modules that share the same logical key (e.g., primitive + semantic spacing).
           // Copy the imported export rather than aliasing it: token modules are ES singletons
@@ -223,7 +238,8 @@ export async function buildZebkitTokens(
       tokenSchemas,
       groupExtensions,
       undefined,
-      options.excludedComponents
+      options.excludedComponents,
+      externalModules
     );
   }
   if (customTokenPath) {
@@ -233,7 +249,8 @@ export async function buildZebkitTokens(
       tokenSchemas,
       groupExtensions,
       overriddenKeys,
-      options.excludedComponents
+      options.excludedComponents,
+      externalModules
     );
   }
 
@@ -253,7 +270,7 @@ export async function buildZebkitTokens(
       groupExtensions
     );
 
-  return { tokens, layers, overriddenKeys, groupExtensions };
+  return { tokens, layers, overriddenKeys, groupExtensions, externalModules };
 }
 
 async function applyCustomOverrides(
@@ -262,7 +279,8 @@ async function applyCustomOverrides(
   tokenSchemas: Record<string, ZodSchema>,
   groupExtensions: Record<string, TokenGroupExtensions>,
   touched?: Record<string, Set<string>>,
-  excludedComponents?: ReadonlySet<string>
+  excludedComponents?: ReadonlySet<string>,
+  externalModules?: ReadonlySet<string>
 ) {
   const spinner = ora('Processing custom token overrides...').start();
   const resolvedOverridePath = path.isAbsolute(overridePath)
@@ -289,7 +307,8 @@ async function applyCustomOverrides(
         tokenSchemas,
         groupExtensions,
         touched,
-        excludedModuleKeys
+        excludedModuleKeys,
+        externalModules
       );
     } else if (stats.isDirectory()) {
       const overrideFiles = await glob('**/*.json', {
@@ -314,7 +333,8 @@ async function applyCustomOverrides(
             tokenSchemas,
             groupExtensions,
             touched,
-            excludedModuleKeys
+            excludedModuleKeys,
+            externalModules
           );
         }
       }
@@ -336,7 +356,8 @@ async function applyTokenOverrideFile(
   tokenSchemas: Record<string, ZodSchema>,
   groupExtensions: Record<string, TokenGroupExtensions>,
   touched: Record<string, Set<string>> | undefined,
-  excludedModuleKeys: ReadonlySet<string>
+  excludedModuleKeys: ReadonlySet<string>,
+  externalModules?: ReadonlySet<string>
 ): Promise<void> {
   if (!isCanonicalTokenOverrideFile(file)) {
     const basename = path.basename(file);
@@ -362,6 +383,14 @@ async function applyTokenOverrideFile(
   }
 
   const inferredKey = inferTokenKeyFromFilename(file)!;
+  if (externalModules?.has(inferredKey)) {
+    throw new Error(
+      `Token override file '${path.basename(file)}' targets the primitive palette, ` +
+        `whose CSS is generated from its token module — entry-level overrides are not supported. ` +
+        `Re-theme primitives at runtime via the --zbk-color-<family>-hue/-saturation custom properties, ` +
+        `or change the palette definition in zebkit itself.`
+    );
+  }
   if (tokens[inferredKey]) {
     // A top-level `$extensions` member carries group-level scale-control
     // overrides; it is not a token entry. Overridden control names are recorded

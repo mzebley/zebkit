@@ -24,13 +24,22 @@ describe('generated editor token schemas', () => {
     path.resolve('dist/cli/defaults/manifest.json')
   ) as { modules: ManifestModule[] };
 
-  it('tracks one canonical repository schema for every token module', () => {
+  it('tracks one canonical repository schema for every authorable token module', () => {
     const settings = fs.readJsonSync(path.resolve('.vscode/settings.json')) as {
       'json.schemas': Array<{ fileMatch: string[]; url: string }>;
     };
 
-    expect(settings['json.schemas']).toHaveLength(manifest.modules.length);
-    for (const module of manifest.modules) {
+    // Emission-external modules (the primitive palette) are not overridable and
+    // get no schema or theme-file association.
+    const authorableModules = manifest.modules.filter((module) => {
+      const data = fs.readJsonSync(
+        path.resolve('dist/cli/defaults', module.file)
+      ) as Record<string, unknown>;
+      return data._cssEmission !== 'external';
+    });
+
+    expect(settings['json.schemas']).toHaveLength(authorableModules.length);
+    for (const module of authorableModules) {
       const schemaFile = `${module.key}.schema.json`;
       expect(settings['json.schemas']).toContainEqual({
         fileMatch: [`/theme/**/${module.key}.tokens.json`],

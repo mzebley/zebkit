@@ -45,7 +45,7 @@ export const tokenAliasMap: {
 export const tokenCompatibilityMap: {
   [key in AllowedTokenTypes]: AllowedTokenTypes[];
 } = {
-  color: ["color", "borderColor"],
+  color: ["color"],
   fontFamily: ["fontFamily"],
   lineHeight: ["lineHeight", "dimension", "cssDimension"],
   fontWeight: ["fontWeight"],
@@ -60,7 +60,6 @@ export const tokenCompatibilityMap: {
   dimension: ["dimension", "cssDimension"],
   cssDimension: ["cssDimension", "dimension"],
   display: ["display"],
-  borderColor: ["borderColor", "color"],
   borderStyle: ["borderStyle"],
   utility: ["utility", "boolean"],
   zIndex: ["zIndex"],

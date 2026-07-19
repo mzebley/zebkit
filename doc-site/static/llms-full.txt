@@ -698,15 +698,15 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-pagination-ink-active` | `{action.ink-emphasis}` | color | Item label color when pressed. |
 | `--zbk-pagination-ink-disabled` | `{disabled.ink}` | color | Label color of a disabled previous/next control. |
 | `--zbk-pagination-ink-selected` | `{app.ink-inverse}` | color | Label color of the current page item (aria-current). |
-| `--zbk-pagination-canvas` | `transparent` | color | Item background at rest. |
+| `--zbk-pagination-canvas` | `{color.global-transparent}` | color | Item background at rest. |
 | `--zbk-pagination-canvas-hover` | `{action.canvas-subtle}` | color | Item background when hovered. |
 | `--zbk-pagination-canvas-active` | `{action.canvas-muted}` | color | Item background when pressed. |
-| `--zbk-pagination-canvas-disabled` | `transparent` | color | Background of a disabled previous/next control. |
+| `--zbk-pagination-canvas-disabled` | `{color.global-transparent}` | color | Background of a disabled previous/next control. |
 | `--zbk-pagination-canvas-selected` | `{accent-primary.500}` | color | Background of the current page item (aria-current). |
-| `--zbk-pagination-border-color` | `transparent` | color | Item border color at rest. |
-| `--zbk-pagination-border-color-hover` | `transparent` | color | Item border color when hovered. |
-| `--zbk-pagination-border-color-active` | `transparent` | color | Item border color when pressed. |
-| `--zbk-pagination-border-color-disabled` | `transparent` | color | Border color of a disabled previous/next control. |
+| `--zbk-pagination-border-color` | `{color.global-transparent}` | color | Item border color at rest. |
+| `--zbk-pagination-border-color-hover` | `{color.global-transparent}` | color | Item border color when hovered. |
+| `--zbk-pagination-border-color-active` | `{color.global-transparent}` | color | Item border color when pressed. |
+| `--zbk-pagination-border-color-disabled` | `{color.global-transparent}` | color | Border color of a disabled previous/next control. |
 | `--zbk-pagination-border-color-selected` | `{accent-primary.500}` | color | Border color of the current page item (aria-current). |
 | `--zbk-pagination-border-width` | `{border.width-sm}` | dimension | Item border width. |
 | `--zbk-pagination-border-style` | `{border.style}` | borderStyle | Item border style. |

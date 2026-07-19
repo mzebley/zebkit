@@ -119,9 +119,8 @@ export type LegacyTypeMigration =
  * else a length slot accepts is `cssDimension`.
  */
 export const LEGACY_TYPE_MIGRATION: Record<AllowedTokenTypes, LegacyTypeMigration> = {
-  // Colors
+  // Colors (`borderColor` collapsed into `color` in Phase 2b — it had no entries)
   color: { kind: "spec", type: "color" },
-  borderColor: { kind: "spec", type: "color" },
   // The dimension family is final (Phase 2a step 4)
   dimension: { kind: "spec", type: "dimension" },
   cssDimension: { kind: "spec", type: "cssDimension" },

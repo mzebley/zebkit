@@ -57,6 +57,14 @@ describe('build smoke tests', () => {
 
       expect(css).toContain('--zbk-a11y-spacing-modifier:1');
       expect(css).toContain('--zbk-button-font-size:var(--zbk-font-size-3xl)');
+
+      // The primitive palette is emitted exactly once (by the generated palette
+      // SCSS) — the emission-external token module must not double-emit it.
+      expect(css.split('--zbk-color-red-hue:').length - 1).toBe(1);
+      expect(css.split('--zbk-color-red-500:').length - 1).toBe(1);
+      expect(css).toMatch(
+        /--zbk-color-red-500:\s*hsl\(var\(--zbk-color-red-hue\),\s*var\(--zbk-color-red-saturation\),\s*58%\)/
+      );
     } finally {
       await fs.remove(tmpDir);
     }
@@ -141,6 +149,46 @@ describe('build smoke tests', () => {
       expect(overlayCss).not.toContain('--zbk-z-index-');
       // No utility classes / primitive ramps leak into the overlay.
       expect(overlayCss).not.toContain('.zbk-');
+    } finally {
+      await fs.remove(tmpDir);
+    }
+  });
+
+  it('rejects token overrides that target the primitive palette', async () => {
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-palette-override-'));
+    const destinationPath = path.join(tmpDir, 'dist');
+    const configPath = path.join(tmpDir, 'zebkit.config.json');
+    const overrideDir = path.join(tmpDir, 'tokens');
+
+    await fs.ensureDir(overrideDir);
+    await fs.writeJson(
+      path.join(overrideDir, 'zbk-color.tokens.json'),
+      { 'red-500': { $value: 'hsl(10, 90%, 50%)' } },
+      { spaces: 2 }
+    );
+
+    const config = {
+      configVersion: 1,
+      tokens: {
+        destinationPath,
+        assetFilePath: '/assets/',
+        basePreset: 'default',
+        tokenPath: overrideDir,
+        themeName: 'palette-override',
+        exportTokens: false,
+        writeVariantRegistry: false,
+      },
+    };
+
+    await fs.writeJson(configPath, config, { spaces: 2 });
+
+    try {
+      await expect(
+        execFileAsync('npm', ['run', 'build:tokens', '--', '--config', configPath], {
+          cwd: PROJECT_ROOT,
+          env: { ...process.env, CI: 'true', FORCE_COLOR: '0' },
+        })
+      ).rejects.toThrow(/primitive palette/);
     } finally {
       await fs.remove(tmpDir);
     }

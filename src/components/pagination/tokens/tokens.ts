@@ -80,7 +80,7 @@ const tokens = {
 
   // Item canvas
   canvas: {
-    $value: "transparent",
+    $value: "{color.global-transparent}",
     $type: "color",
     $description: "Item background at rest.",
   },
@@ -95,7 +95,7 @@ const tokens = {
     $description: "Item background when pressed.",
   },
   "canvas-disabled": {
-    $value: "transparent",
+    $value: "{color.global-transparent}",
     $type: "color",
     $description: "Background of a disabled previous/next control.",
   },
@@ -107,22 +107,22 @@ const tokens = {
 
   // Item border
   "border-color": {
-    $value: "transparent",
+    $value: "{color.global-transparent}",
     $type: "color",
     $description: "Item border color at rest.",
   },
   "border-color-hover": {
-    $value: "transparent",
+    $value: "{color.global-transparent}",
     $type: "color",
     $description: "Item border color when hovered.",
   },
   "border-color-active": {
-    $value: "transparent",
+    $value: "{color.global-transparent}",
     $type: "color",
     $description: "Item border color when pressed.",
   },
   "border-color-disabled": {
-    $value: "transparent",
+    $value: "{color.global-transparent}",
     $type: "color",
     $description: "Border color of a disabled previous/next control.",
   },

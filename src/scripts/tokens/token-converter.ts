@@ -14,7 +14,6 @@ import {
   FontFallbackCategory,
 } from "@definitions/font-fallbacks";
 import { a11yMap } from "@definitions/a11y-map";
-import { paletteMap } from "@definitions/palette-map";
 import {
   tokenAliasMap,
   areTokensTypesCompatible,
@@ -64,26 +63,6 @@ function validateCssReferencesExist(
         invalidType = true;
         report(
           `Invalid token reference: ${value} (type '${type}' cannot reference '${tokenType}').`
-        );
-      }
-    }
-  }
-
-  if (!valid && !invalidType) {
-    const paletteKeyDirect = child;
-    const paletteKeyNested = `${parent}-${child}`;
-    const paletteHit =
-      typeof child === "string" &&
-      typeof parent === "string" &&
-      (paletteMap.includes(paletteKeyDirect) || paletteMap.includes(paletteKeyNested));
-
-    if (paletteHit) {
-      if (type === "color" || type === "borderColor") {
-        valid = true;
-      } else {
-        invalidType = true;
-        report(
-          `Invalid token reference: ${value}. Token type '${type}' is not a color-compatible token.`
         );
       }
     }
