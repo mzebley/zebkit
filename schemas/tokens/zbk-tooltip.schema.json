@@ -1217,7 +1217,7 @@
         "{tooltip.line-height}"
       ]
     },
-    "boxShadowValue": {
+    "shadowValue": {
       "type": [
         "string",
         "number"
@@ -2224,10 +2224,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/boxShadowValue"
+          "$ref": "#/definitions/shadowValue"
         },
         "$type": {
-          "const": "boxShadow"
+          "const": "shadow"
         },
         "$description": {
           "type": "string"

@@ -120,11 +120,11 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-radio-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
 | `--zbk-radio-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
 | `--zbk-radio-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
-| `--zbk-radio-box-shadow` | `none` | boxShadow | Default control shadow. |
-| `--zbk-radio-box-shadow-hover` | `none` | boxShadow | Control shadow when hovered. |
-| `--zbk-radio-box-shadow-active` | `none` | boxShadow | Control shadow while pressed. |
-| `--zbk-radio-box-shadow-checked` | `none` | boxShadow | Control shadow when selected. |
-| `--zbk-radio-box-shadow-focus` | `none` | boxShadow | Control shadow in the focus state (in addition to the outline). |
+| `--zbk-radio-box-shadow` | `none` | shadow | Default control shadow. |
+| `--zbk-radio-box-shadow-hover` | `none` | shadow | Control shadow when hovered. |
+| `--zbk-radio-box-shadow-active` | `none` | shadow | Control shadow while pressed. |
+| `--zbk-radio-box-shadow-checked` | `none` | shadow | Control shadow when selected. |
+| `--zbk-radio-box-shadow-focus` | `none` | shadow | Control shadow in the focus state (in addition to the outline). |
 | `--zbk-radio-cursor` | `pointer` | utility | Cursor when hovering an enabled radio. |
 | `--zbk-radio-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled radio. |
 | `--zbk-radio-transition-duration` | `{transition.playful-fx-duration-default}` | transition | Duration for radio state transitions. **(a11y)** |

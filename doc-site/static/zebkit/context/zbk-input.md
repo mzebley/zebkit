@@ -156,11 +156,11 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-input-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
 | `--zbk-input-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
 | `--zbk-input-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
-| `--zbk-input-box-shadow` | `none` | boxShadow | Default field shadow. |
-| `--zbk-input-box-shadow-hover` | `none` | boxShadow | Field shadow when hovered. |
-| `--zbk-input-box-shadow-focus` | `none` | boxShadow | Field shadow while focused (in addition to the outline). |
-| `--zbk-input-box-shadow-active` | `none` | boxShadow | Field shadow while pressed. |
-| `--zbk-input-box-shadow-invalid` | `none` | boxShadow | Field shadow when the value is invalid. |
+| `--zbk-input-box-shadow` | `none` | shadow | Default field shadow. |
+| `--zbk-input-box-shadow-hover` | `none` | shadow | Field shadow when hovered. |
+| `--zbk-input-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
+| `--zbk-input-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
+| `--zbk-input-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
 | `--zbk-input-cursor` | `text` | utility | Cursor over the editable field. |
 | `--zbk-input-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
 | `--zbk-input-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |

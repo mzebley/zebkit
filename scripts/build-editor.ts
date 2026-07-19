@@ -288,6 +288,7 @@ function getTokenTypeSyntax(type: string): string | undefined {
     'fontWeight': '<number>',
     'lineHeight': '<number> | <length>',
     'opacity': '<number>',
+    'shadow': '<shadow>',
     'transition': '<string>',
   };
 

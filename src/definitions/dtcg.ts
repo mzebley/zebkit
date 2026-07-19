@@ -124,8 +124,8 @@ export const LEGACY_TYPE_MIGRATION: Record<AllowedTokenTypes, LegacyTypeMigratio
   // The dimension family is final (Phase 2a step 4)
   dimension: { kind: "spec", type: "dimension" },
   cssDimension: { kind: "spec", type: "cssDimension" },
-  // Shadows
-  boxShadow: { kind: "spec", type: "shadow" },
+  // Shadows are final (Phase 2c): structured shadow-layer arrays, `none` = `[]`
+  shadow: { kind: "spec", type: "shadow" },
   // Transition conflation splits into three types
   transition: {
     kind: "split",

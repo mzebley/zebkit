@@ -36,7 +36,10 @@ export const allowedTokenTypes = z.enum([
   'opacity',
   'content',
   'boolean',
-  'boxShadow',
+  // The DTCG composite `shadow` type (Phase 2c, decision D5): a `$value` is one
+  // shadow-layer object or an array of them; the empty array is `box-shadow:
+  // none`. The legacy `boxShadow` name is gone.
+  'shadow',
   'flex'
 ]);
 
@@ -142,10 +145,89 @@ export function serializeColorValue(v: ColorValue): string {
   return `color(${v.colorSpace} ${c1} ${c2} ${c3}${alpha === 1 ? "" : ` / ${alpha}`})`;
 }
 
-/** A token `$value` as its CSS string: structured dimensions/colors serialize, the rest stringify. */
+/**
+ * DTCG shadow value (2025.10): one shadow layer — a color, the four
+ * offset/blur/spread dimensions, and an optional `inset` flag (default false).
+ * A shadow token's `$value` is one of these objects or an array of them
+ * (layered shadows); the empty array is zebkit's convention for
+ * `box-shadow: none` (Phase 2c). Zebkit's elevation ramp authors srgb
+ * black-with-alpha layers.
+ */
+export const shadowValueSchema = z.object({
+  color: colorValueSchema,
+  offsetX: dimensionValueSchema,
+  offsetY: dimensionValueSchema,
+  blur: dimensionValueSchema,
+  spread: dimensionValueSchema,
+  inset: z.boolean().optional(),
+});
+export type ShadowValue = z.infer<typeof shadowValueSchema>;
+
+function isSingleShadow(v: unknown): boolean {
+  return (
+    !!v &&
+    typeof v === "object" &&
+    !Array.isArray(v) &&
+    "offsetX" in v &&
+    "color" in v
+  );
+}
+
+/**
+ * True when `v` is a single structured shadow or an array of them — including
+ * the empty `none` array. A non-empty array of non-shadow entries (e.g. a
+ * future `cubicBezier` number tuple) is not a shadow.
+ */
+export function isShadowValue(v: unknown): v is ShadowValue | ShadowValue[] {
+  if (Array.isArray(v)) return v.length === 0 || v.every(isSingleShadow);
+  return isSingleShadow(v);
+}
+
+/** Shadow offsets drop the unit at zero magnitude (`0`, not `0px`) — the authored CSS form. */
+function serializeShadowDimension(d: DimensionValue): string {
+  return d.value === 0 ? "0" : serializeDimensionValue(d);
+}
+
+/** Shadow colors render in CSS Color 4 space notation (srgb → `rgb(r g b[ / a])`). */
+function serializeShadowColor(c: ColorValue): string {
+  const alpha = c.alpha ?? 1;
+  if (c.colorSpace === "srgb") {
+    const to255 = (n: number) => Math.round(n * 255);
+    const [r, g, b] = c.components;
+    const rgb = `${to255(r)} ${to255(g)} ${to255(b)}`;
+    return alpha === 1 ? `rgb(${rgb})` : `rgb(${rgb} / ${alpha})`;
+  }
+  return serializeColorValue(c);
+}
+
+function serializeShadowLayer(s: ShadowValue): string {
+  const body = [
+    serializeShadowDimension(s.offsetX),
+    serializeShadowDimension(s.offsetY),
+    serializeShadowDimension(s.blur),
+    serializeShadowDimension(s.spread),
+    serializeShadowColor(s.color),
+  ].join(" ");
+  return s.inset ? `inset ${body}` : body;
+}
+
+/**
+ * Canonical CSS serialization for a shadow value. Byte-driven (must reproduce
+ * the elevation ramp's authored strings exactly): each layer is
+ * `[inset ]<offsetX> <offsetY> <blur> <spread> <color>`, layers join with
+ * `, `, and the empty array is `none`.
+ */
+export function serializeShadowValue(v: ShadowValue | ShadowValue[]): string {
+  const layers = Array.isArray(v) ? v : [v];
+  if (layers.length === 0) return "none";
+  return layers.map(serializeShadowLayer).join(", ");
+}
+
+/** A token `$value` as its CSS string: structured dimensions/colors/shadows serialize, the rest stringify. */
 export function tokenValueToString(v: unknown): string {
   if (isDimensionValue(v)) return serializeDimensionValue(v);
   if (isColorValue(v)) return serializeColorValue(v);
+  if (isShadowValue(v)) return serializeShadowValue(v);
   return String(v);
 }
 
@@ -228,7 +310,14 @@ export type TokenExtensions = z.infer<typeof tokenExtensionsSchema>;
  * Zod schema describing a single token entry.
  */
 export const tokenObjectSchema = z.object({
-  $value: z.union([z.string(), z.number(), dimensionValueSchema, colorValueSchema]),
+  $value: z.union([
+    z.string(),
+    z.number(),
+    dimensionValueSchema,
+    colorValueSchema,
+    shadowValueSchema,
+    z.array(shadowValueSchema),
+  ]),
   $type: allowedTokenTypes,
   $description: z.string(),
   $extensions: tokenExtensionsSchema.optional(),

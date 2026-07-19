@@ -1236,7 +1236,7 @@
         "{toggle.group-direction}"
       ]
     },
-    "boxShadowValue": {
+    "shadowValue": {
       "type": [
         "string",
         "number"
@@ -2899,10 +2899,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/boxShadowValue"
+          "$ref": "#/definitions/shadowValue"
         },
         "$type": {
-          "const": "boxShadow"
+          "const": "shadow"
         },
         "$description": {
           "type": "string"
@@ -2937,10 +2937,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/boxShadowValue"
+          "$ref": "#/definitions/shadowValue"
         },
         "$type": {
-          "const": "boxShadow"
+          "const": "shadow"
         },
         "$description": {
           "type": "string"
@@ -2975,10 +2975,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/boxShadowValue"
+          "$ref": "#/definitions/shadowValue"
         },
         "$type": {
-          "const": "boxShadow"
+          "const": "shadow"
         },
         "$description": {
           "type": "string"
@@ -3013,10 +3013,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/boxShadowValue"
+          "$ref": "#/definitions/shadowValue"
         },
         "$type": {
-          "const": "boxShadow"
+          "const": "shadow"
         },
         "$description": {
           "type": "string"
@@ -3051,10 +3051,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/boxShadowValue"
+          "$ref": "#/definitions/shadowValue"
         },
         "$type": {
-          "const": "boxShadow"
+          "const": "shadow"
         },
         "$description": {
           "type": "string"

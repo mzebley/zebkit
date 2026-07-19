@@ -2,7 +2,12 @@
  * @jest-environment node
  */
 
-import { serializeColorValue, type TokenInterface } from '@definitions/tokens';
+import {
+  serializeColorValue,
+  serializeShadowValue,
+  type ShadowValue,
+  type TokenInterface,
+} from '@definitions/tokens';
 import { convertTokensToCssVars } from './token-converter';
 
 describe('convertTokensToCssVars — selector scoping (rootSelector)', () => {
@@ -279,5 +284,64 @@ describe('serializeColorValue — DTCG color serialization', () => {
 
     expect(result.errors).toEqual([]);
     expect(result.css).toContain('--zbk-app-canvas: hsl(48, 72%, 98%);');
+  });
+});
+
+describe('serializeShadowValue — DTCG shadow serialization', () => {
+  const layer = (
+    offsetX: number,
+    offsetY: number,
+    blur: number,
+    spread: number,
+    alpha: number,
+    inset = false
+  ): ShadowValue => ({
+    color: { colorSpace: 'srgb', components: [0, 0, 0], alpha },
+    offsetX: { value: offsetX, unit: 'px' },
+    offsetY: { value: offsetY, unit: 'px' },
+    blur: { value: blur, unit: 'px' },
+    spread: { value: spread, unit: 'px' },
+    ...(inset ? { inset: true } : {}),
+  });
+
+  it('reproduces the elevation ramp strings byte-exactly', () => {
+    // Zero-magnitude offsets/spread drop the unit; srgb black renders in space notation.
+    expect(serializeShadowValue([layer(0, 1, 2, 0, 0.05)])).toBe(
+      '0 1px 2px 0 rgb(0 0 0 / 0.05)'
+    );
+    // Multiple layers join with ', '; negative spread keeps its unit.
+    expect(
+      serializeShadowValue([layer(0, 1, 3, 0, 0.1), layer(0, 1, 2, -1, 0.1)])
+    ).toBe('0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)');
+    // Inset prefix.
+    expect(serializeShadowValue([layer(0, 2, 4, 0, 0.05, true)])).toBe(
+      'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)'
+    );
+  });
+
+  it('serializes the empty array as `none` and a bare object as one layer', () => {
+    expect(serializeShadowValue([])).toBe('none');
+    expect(serializeShadowValue(layer(0, 25, 50, -12, 0.25))).toBe(
+      '0 25px 50px -12px rgb(0 0 0 / 0.25)'
+    );
+  });
+
+  it('emits structured shadow values through the converter', () => {
+    const result = convertTokensToCssVars({
+      'zbk-elevation': {
+        sm: {
+          $value: [layer(0, 1, 3, 0, 0.1), layer(0, 1, 2, -1, 0.1)],
+          $type: 'shadow',
+          $description: '',
+        },
+        none: { $value: [], $type: 'shadow', $description: '' },
+      },
+    } as unknown as { [key: string]: TokenInterface });
+
+    expect(result.errors).toEqual([]);
+    expect(result.css).toContain(
+      '--zbk-elevation-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);'
+    );
+    expect(result.css).toContain('--zbk-elevation-none: none;');
   });
 });

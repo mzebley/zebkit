@@ -1,4 +1,9 @@
-import type { CompiledToken } from '../data/compiled-tokens';
+import type {
+  ColorValue,
+  CompiledToken,
+  DimensionValue,
+  ShadowValue,
+} from '../data/compiled-tokens';
 
 export interface TokenRow {
   token: string;
@@ -10,11 +15,65 @@ export interface TokenRow {
 export type { CompiledToken };
 export type CompiledTokenMap = Record<string, CompiledToken>;
 
-/** Structured `{value, unit}` dimensions render as their canonical CSS string
- * (leading zero dropped below 1, matching the emitted form). */
+/** Canonical CSS string for a structured dimension (leading zero dropped below 1). */
+function serializeDimension(d: DimensionValue): string {
+  return `${String(d.value).replace(/^(-?)0\./, '$1.')}${d.unit}`;
+}
+
+/** Mirror of the shared `serializeColorValue` (doc-site is decoupled from `src`). */
+function serializeColor(c: ColorValue): string {
+  const alpha = c.alpha ?? 1;
+  const [c1, c2, c3] = c.components;
+  if (alpha === 0 && c1 === 0 && c2 === 0 && c3 === 0) return 'transparent';
+  if (c.hex && alpha === 1) return c.hex;
+  if (c.colorSpace === 'hsl') {
+    return alpha === 1
+      ? `hsl(${c1}, ${c2}%, ${c3}%)`
+      : `hsla(${c1}, ${c2}%, ${c3}%, ${alpha})`;
+  }
+  if (c.colorSpace === 'srgb') {
+    const to255 = (n: number) => Math.round(n * 255);
+    return alpha === 1
+      ? `rgb(${to255(c1)}, ${to255(c2)}, ${to255(c3)})`
+      : `rgba(${to255(c1)}, ${to255(c2)}, ${to255(c3)}, ${alpha})`;
+  }
+  return `color(${c.colorSpace} ${c1} ${c2} ${c3}${alpha === 1 ? '' : ` / ${alpha}`})`;
+}
+
+/** Shadow colors use CSS Color 4 space notation (srgb → `rgb(r g b[ / a])`). */
+function serializeShadowColor(c: ColorValue): string {
+  const alpha = c.alpha ?? 1;
+  if (c.colorSpace === 'srgb') {
+    const to255 = (n: number) => Math.round(n * 255);
+    const [r, g, b] = c.components;
+    const rgb = `${to255(r)} ${to255(g)} ${to255(b)}`;
+    return alpha === 1 ? `rgb(${rgb})` : `rgb(${rgb} / ${alpha})`;
+  }
+  return serializeColor(c);
+}
+
+function serializeShadowLayer(s: ShadowValue): string {
+  const dim = (d: DimensionValue) => (d.value === 0 ? '0' : serializeDimension(d));
+  const body = [dim(s.offsetX), dim(s.offsetY), dim(s.blur), dim(s.spread), serializeShadowColor(s.color)].join(' ');
+  return s.inset ? `inset ${body}` : body;
+}
+
+/** Mirror of the shared `serializeShadowValue`: the empty array is `none`. */
+function serializeShadow(layers: ShadowValue[]): string {
+  return layers.length === 0 ? 'none' : layers.map(serializeShadowLayer).join(', ');
+}
+
+/**
+ * Structured token values render as their canonical CSS string — dimensions
+ * (`{value, unit}`), colors (`{colorSpace, components, ...}`), and shadows
+ * (layer objects or arrays; `[]` → `none`). References and scalars pass through.
+ */
 export function formatTokenValue(value: CompiledToken['$value']): string | number {
+  if (Array.isArray(value)) return serializeShadow(value);
   if (value !== null && typeof value === 'object') {
-    return `${String(value.value).replace(/^(-?)0\./, '$1.')}${value.unit}`;
+    if ('offsetX' in value) return serializeShadow([value]);
+    if ('colorSpace' in value) return serializeColor(value);
+    return serializeDimension(value);
   }
   return value ?? '';
 }

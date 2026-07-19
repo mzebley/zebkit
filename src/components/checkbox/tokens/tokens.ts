@@ -267,28 +267,28 @@ const tokens = {
 
   // Shadow / lift physics (default flat; themes can add press/lift depth)
   "box-shadow": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Default control shadow.",
   },
   "box-shadow-hover": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Control shadow when hovered.",
   },
   "box-shadow-active": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Control shadow while pressed.",
   },
   "box-shadow-checked": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Control shadow when checked.",
   },
   "box-shadow-focus": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Control shadow in the focus state (in addition to the outline).",
   },
 

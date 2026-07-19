@@ -100,7 +100,7 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-tooltip-max-width` | `20rem` | dimension | Maximum bubble width before text wraps. |
 | `--zbk-tooltip-arrow-size` | `8px` | dimension | Arrow square size; also sets the default trigger-to-bubble gap. |
 | `--zbk-tooltip-offset` | `{tooltip.arrow-size}` | dimension | Gap between the trigger and the bubble. |
-| `--zbk-tooltip-box-shadow` | `{elevation.sm}` | boxShadow | Bubble shadow. |
+| `--zbk-tooltip-box-shadow` | `{elevation.sm}` | shadow | Bubble shadow. |
 | `--zbk-tooltip-z-index` | `{z-index.tooltip}` | zIndex | Stacking order when the top-layer popover API is unavailable. |
 | `--zbk-tooltip-transition-duration` | `150ms` | transition | Show/hide transition duration. **(a11y)** |
 | `--zbk-tooltip-transition-timing-function` | `ease-out` | transition | Show/hide transition timing function. |

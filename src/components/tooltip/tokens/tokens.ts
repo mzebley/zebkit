@@ -133,7 +133,7 @@ const tokens = {
   // Elevation & stacking
   "box-shadow": {
     $value: "{elevation.sm}",
-    $type: "boxShadow",
+    $type: "shadow",
     $description: "Bubble shadow.",
   },
   "z-index": {

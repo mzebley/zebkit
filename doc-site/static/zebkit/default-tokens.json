@@ -3995,52 +3995,52 @@
   "zbk-elevation": {
     "none": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "No shadow."
     },
     "xs": {
       "$value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Extra-small shadow for subtle elevation."
     },
     "sm": {
       "$value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Small shadow for low elevation."
     },
     "md": {
       "$value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Medium shadow for moderate elevation."
     },
     "lg": {
       "$value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Large shadow for high elevation."
     },
     "xl": {
       "$value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Extra-large shadow for very high elevation."
     },
     "2xl": {
       "$value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "2XL shadow for maximum elevation."
     },
     "inner": {
       "$value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Inner shadow for inset/pressed effect."
     },
     "inner-sm": {
       "$value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Small inner shadow."
     },
     "inner-lg": {
       "$value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Large inner shadow."
     }
   },
@@ -7210,22 +7210,22 @@
     },
     "box-shadow": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Default box shadow for buttons."
     },
     "box-shadow-hover": {
       "$value": "0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Box shadow on hover."
     },
     "box-shadow-active": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Box shadow when active/pressed."
     },
     "box-shadow-focus": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Box shadow in focus state (in addition to outline)."
     },
     "transform": {
@@ -7497,27 +7497,27 @@
     },
     "box-shadow": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Default control shadow."
     },
     "box-shadow-hover": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Control shadow when hovered."
     },
     "box-shadow-active": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Control shadow while pressed."
     },
     "box-shadow-checked": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Control shadow when checked."
     },
     "box-shadow-focus": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Control shadow in the focus state (in addition to the outline)."
     },
     "cursor": {
@@ -7819,27 +7819,27 @@
     },
     "box-shadow": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Default field shadow."
     },
     "box-shadow-hover": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow when hovered."
     },
     "box-shadow-focus": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow while focused (in addition to the outline)."
     },
     "box-shadow-active": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow while pressed."
     },
     "box-shadow-invalid": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow when the value is invalid."
     },
     "cursor": {
@@ -8258,27 +8258,27 @@
     },
     "box-shadow": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Default control shadow."
     },
     "box-shadow-hover": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Control shadow when hovered."
     },
     "box-shadow-active": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Control shadow while pressed."
     },
     "box-shadow-checked": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Control shadow when selected."
     },
     "box-shadow-focus": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Control shadow in the focus state (in addition to the outline)."
     },
     "cursor": {
@@ -8570,27 +8570,27 @@
     },
     "box-shadow": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Default field shadow."
     },
     "box-shadow-hover": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow when hovered."
     },
     "box-shadow-focus": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow while focused (in addition to the outline)."
     },
     "box-shadow-active": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow while pressed."
     },
     "box-shadow-invalid": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow when the selection is invalid."
     },
     "cursor": {
@@ -8867,27 +8867,27 @@
     },
     "box-shadow": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Default field shadow."
     },
     "box-shadow-hover": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow when hovered."
     },
     "box-shadow-focus": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow while focused (in addition to the outline)."
     },
     "box-shadow-active": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow while pressed."
     },
     "box-shadow-invalid": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Field shadow when the value is invalid."
     },
     "cursor": {
@@ -9019,27 +9019,27 @@
     },
     "box-shadow": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Default track shadow."
     },
     "box-shadow-hover": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Track shadow when hovered."
     },
     "box-shadow-active": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Track shadow while pressed."
     },
     "box-shadow-checked": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Track shadow when the toggle is on."
     },
     "box-shadow-focus": {
       "$value": "none",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Track shadow in the focus state (in addition to the outline)."
     },
     "thumb-size": {
@@ -9099,22 +9099,22 @@
     },
     "thumb-shadow": {
       "$value": "0 0 0 2px var(--zbk-app-canvas-muted)",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Default thumb shadow."
     },
     "thumb-shadow-hover": {
       "$value": "{toggle.thumb-shadow}",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Thumb shadow when hovered."
     },
     "thumb-shadow-active": {
       "$value": "{toggle.thumb-shadow}",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Thumb shadow while pressed."
     },
     "thumb-shadow-checked": {
       "$value": "{toggle.thumb-shadow}",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Thumb shadow when the toggle is on."
     },
     "thumb-transform": {
@@ -9341,7 +9341,7 @@
     },
     "box-shadow": {
       "$value": "{elevation.sm}",
-      "$type": "boxShadow",
+      "$type": "shadow",
       "$description": "Bubble shadow."
     },
     "z-index": {

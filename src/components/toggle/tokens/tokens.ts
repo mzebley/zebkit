@@ -169,28 +169,28 @@ const tokens = {
 
   // Track shadow
   "box-shadow": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Default track shadow.",
   },
   "box-shadow-hover": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Track shadow when hovered.",
   },
   "box-shadow-active": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Track shadow while pressed.",
   },
   "box-shadow-checked": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Track shadow when the toggle is on.",
   },
   "box-shadow-focus": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Track shadow in the focus state (in addition to the outline).",
   },
 
@@ -256,23 +256,23 @@ const tokens = {
   // Thumb physics: shadow + transform per state, so lift/press effects (the
   // thumb raising on hover, pressing down on :active) are pure token edits.
   "thumb-shadow": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Default thumb shadow.",
   },
   "thumb-shadow-hover": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Thumb shadow when hovered.",
   },
   "thumb-shadow-active": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Thumb shadow while pressed.",
   },
   "thumb-shadow-checked": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Thumb shadow when the toggle is on.",
   },
   "thumb-transform": {

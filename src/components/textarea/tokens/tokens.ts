@@ -318,28 +318,28 @@ const tokens = {
 
   // Shadow / lift physics (default flat; themes can add depth)
   "box-shadow": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Default field shadow.",
   },
   "box-shadow-hover": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Field shadow when hovered.",
   },
   "box-shadow-focus": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Field shadow while focused (in addition to the outline).",
   },
   "box-shadow-active": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Field shadow while pressed.",
   },
   "box-shadow-invalid": {
-    $value: "none",
-    $type: "boxShadow",
+    $value: [],
+    $type: "shadow",
     $description: "Field shadow when the value is invalid.",
   },
 

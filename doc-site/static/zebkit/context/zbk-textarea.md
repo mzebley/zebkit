@@ -127,11 +127,11 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
 | `--zbk-textarea-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
 | `--zbk-textarea-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
-| `--zbk-textarea-box-shadow` | `none` | boxShadow | Default field shadow. |
-| `--zbk-textarea-box-shadow-hover` | `none` | boxShadow | Field shadow when hovered. |
-| `--zbk-textarea-box-shadow-focus` | `none` | boxShadow | Field shadow while focused (in addition to the outline). |
-| `--zbk-textarea-box-shadow-active` | `none` | boxShadow | Field shadow while pressed. |
-| `--zbk-textarea-box-shadow-invalid` | `none` | boxShadow | Field shadow when the value is invalid. |
+| `--zbk-textarea-box-shadow` | `none` | shadow | Default field shadow. |
+| `--zbk-textarea-box-shadow-hover` | `none` | shadow | Field shadow when hovered. |
+| `--zbk-textarea-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
+| `--zbk-textarea-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
+| `--zbk-textarea-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
 | `--zbk-textarea-cursor` | `text` | utility | Cursor over the editable field. |
 | `--zbk-textarea-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
 | `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |

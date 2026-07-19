@@ -81,27 +81,27 @@
   },
   "box-shadow": {
     "$value": "none",
-    "$type": "boxShadow",
+    "$type": "shadow",
     "$description": "Default track shadow."
   },
   "box-shadow-hover": {
     "$value": "none",
-    "$type": "boxShadow",
+    "$type": "shadow",
     "$description": "Track shadow when hovered."
   },
   "box-shadow-active": {
     "$value": "none",
-    "$type": "boxShadow",
+    "$type": "shadow",
     "$description": "Track shadow while pressed."
   },
   "box-shadow-checked": {
     "$value": "none",
-    "$type": "boxShadow",
+    "$type": "shadow",
     "$description": "Track shadow when the toggle is on."
   },
   "box-shadow-focus": {
     "$value": "none",
-    "$type": "boxShadow",
+    "$type": "shadow",
     "$description": "Track shadow in the focus state (in addition to the outline)."
   },
   "thumb-size": {
@@ -161,22 +161,22 @@
   },
   "thumb-shadow": {
     "$value": "0 0 0 2px var(--zbk-app-canvas-muted)",
-    "$type": "boxShadow",
+    "$type": "shadow",
     "$description": "Default thumb shadow."
   },
   "thumb-shadow-hover": {
     "$value": "{toggle.thumb-shadow}",
-    "$type": "boxShadow",
+    "$type": "shadow",
     "$description": "Thumb shadow when hovered."
   },
   "thumb-shadow-active": {
     "$value": "{toggle.thumb-shadow}",
-    "$type": "boxShadow",
+    "$type": "shadow",
     "$description": "Thumb shadow while pressed."
   },
   "thumb-shadow-checked": {
     "$value": "{toggle.thumb-shadow}",
-    "$type": "boxShadow",
+    "$type": "shadow",
     "$description": "Thumb shadow when the toggle is on."
   },
   "thumb-transform": {

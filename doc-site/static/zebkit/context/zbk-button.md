@@ -168,10 +168,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-focus-color` | `{focus.color}` | color | Outline color for focus state. |
 | `--zbk-button-focus-width` | `{focus.width}` | dimension | Outline width for focus state. |
 | `--zbk-button-focus-offset` | `{focus.offset}` | dimension | Outline offset for focus state. |
-| `--zbk-button-box-shadow` | `none` | boxShadow | Default box shadow for buttons. |
-| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)` | boxShadow | Box shadow on hover. |
-| `--zbk-button-box-shadow-active` | `none` | boxShadow | Box shadow when active/pressed. |
-| `--zbk-button-box-shadow-focus` | `none` | boxShadow | Box shadow in focus state (in addition to outline). |
+| `--zbk-button-box-shadow` | `none` | shadow | Default box shadow for buttons. |
+| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)` | shadow | Box shadow on hover. |
+| `--zbk-button-box-shadow-active` | `none` | shadow | Box shadow when active/pressed. |
+| `--zbk-button-box-shadow-focus` | `none` | shadow | Box shadow in focus state (in addition to outline). |
 | `--zbk-button-transform` | `translateY(0)` | utility | Default transform property for buttons. |
 | `--zbk-button-transform-hover` | `translateY(-2%)` | utility | Transform effect on hover. |
 | `--zbk-button-transform-active` | `translateY(0)` | utility | Transform effect when active/pressed. |

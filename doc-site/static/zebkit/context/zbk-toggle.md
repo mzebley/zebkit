@@ -88,11 +88,11 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-border-width` | `{border.width-sm}` | dimension | Border thickness of the toggle track. |
 | `--zbk-toggle-border-style` | `{border.style}` | borderStyle | Border style of the toggle track. |
 | `--zbk-toggle-border-radius` | `{toggle.track-height}` | dimension | Corner radius of the track (track-height yields a pill). |
-| `--zbk-toggle-box-shadow` | `none` | boxShadow | Default track shadow. |
-| `--zbk-toggle-box-shadow-hover` | `none` | boxShadow | Track shadow when hovered. |
-| `--zbk-toggle-box-shadow-active` | `none` | boxShadow | Track shadow while pressed. |
-| `--zbk-toggle-box-shadow-checked` | `none` | boxShadow | Track shadow when the toggle is on. |
-| `--zbk-toggle-box-shadow-focus` | `none` | boxShadow | Track shadow in the focus state (in addition to the outline). |
+| `--zbk-toggle-box-shadow` | `none` | shadow | Default track shadow. |
+| `--zbk-toggle-box-shadow-hover` | `none` | shadow | Track shadow when hovered. |
+| `--zbk-toggle-box-shadow-active` | `none` | shadow | Track shadow while pressed. |
+| `--zbk-toggle-box-shadow-checked` | `none` | shadow | Track shadow when the toggle is on. |
+| `--zbk-toggle-box-shadow-focus` | `none` | shadow | Track shadow in the focus state (in addition to the outline). |
 | `--zbk-toggle-thumb-size` | `{toggle.track-height}` | dimension | Diameter of the thumb. |
 | `--zbk-toggle-thumb-inset` | `{spacing.neg-2px}` | dimension | Thumb offset from the track's start edge; negative overlaps the border. |
 | `--zbk-toggle-thumb-canvas` | `{app.canvas-inverse}` | color | Thumb background when the toggle is off. |
@@ -104,10 +104,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-thumb-border-width` | `{toggle.border-width}` | dimension | Border thickness of the thumb. |
 | `--zbk-toggle-thumb-border-style` | `{toggle.border-style}` | borderStyle | Border style of the thumb. |
 | `--zbk-toggle-thumb-radius` | `50%` | cssDimension | Corner radius of the thumb (a circle by default). |
-| `--zbk-toggle-thumb-shadow` | `0 0 0 2px var(--zbk-app-canvas-muted)` | boxShadow | Default thumb shadow. |
-| `--zbk-toggle-thumb-shadow-hover` | `{toggle.thumb-shadow}` | boxShadow | Thumb shadow when hovered. |
-| `--zbk-toggle-thumb-shadow-active` | `{toggle.thumb-shadow}` | boxShadow | Thumb shadow while pressed. |
-| `--zbk-toggle-thumb-shadow-checked` | `{toggle.thumb-shadow}` | boxShadow | Thumb shadow when the toggle is on. |
+| `--zbk-toggle-thumb-shadow` | `0 0 0 2px var(--zbk-app-canvas-muted)` | shadow | Default thumb shadow. |
+| `--zbk-toggle-thumb-shadow-hover` | `{toggle.thumb-shadow}` | shadow | Thumb shadow when hovered. |
+| `--zbk-toggle-thumb-shadow-active` | `{toggle.thumb-shadow}` | shadow | Thumb shadow while pressed. |
+| `--zbk-toggle-thumb-shadow-checked` | `{toggle.thumb-shadow}` | shadow | Thumb shadow when the toggle is on. |
 | `--zbk-toggle-thumb-transform` | `none` | utility | Default thumb transform (travel is handled structurally). |
 | `--zbk-toggle-thumb-transform-hover` | `none` | utility | Thumb transform when hovered (e.g. a translateY lift). |
 | `--zbk-toggle-thumb-transform-active` | `none` | utility | Thumb transform while pressed (e.g. a press-down). |

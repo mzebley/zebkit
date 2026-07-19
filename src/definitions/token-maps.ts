@@ -67,7 +67,7 @@ export const tokenCompatibilityMap: {
   opacity: ["opacity"],
   content: ["content"],
   boolean: ["boolean"],
-  boxShadow: ["boxShadow"],
+  shadow: ["shadow"],
   flex: ["flex"],
   transition: ["transition"]
 };

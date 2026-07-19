@@ -1,4 +1,5 @@
 import { compiledTokens, type CompiledToken } from '../data/compiled-tokens';
+import { formatTokenValue } from './token-docs';
 import lookup from '../data/generated/token-lookup.json';
 
 // Token x-ray resolver: walks a token's reference chain through the three strata
@@ -134,7 +135,7 @@ export function resolveChain(input: string): ChainNode[] {
       break;
     }
 
-    const raw = String(entry.$value ?? '');
+    const raw = String(formatTokenValue(entry.$value));
     const ref = isReference(raw) ? raw.slice(1, -1) : null;
     nodes.push({ path, cssVar, stratum: stratumFor(group), raw, ref });
     path = ref;
