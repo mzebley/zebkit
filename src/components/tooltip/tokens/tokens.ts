@@ -144,26 +144,26 @@ const tokens = {
 
   // Motion & timing
   "transition-duration": {
-    $value: "150ms",
-    $type: "transition",
+    $value: { value: 150, unit: "ms" },
+    $type: "duration",
     $description: "Show/hide transition duration.",
     $extensions: { "dev.zebkit": { a11y: true } },
   },
   "transition-timing-function": {
     $value: "ease-out",
-    $type: "transition",
+    $type: "transitionTimingFunction",
     $description: "Show/hide transition timing function.",
   },
   "show-delay": {
-    $value: "150ms",
-    $type: "transition",
+    $value: { value: 150, unit: "ms" },
+    $type: "duration",
     $description:
       "Delay before a hint tooltip shows on hover/focus. Read by the element at runtime.",
     $extensions: { "dev.zebkit": { a11y: true } },
   },
   "hide-grace": {
-    $value: "120ms",
-    $type: "transition",
+    $value: { value: 120, unit: "ms" },
+    $type: "duration",
     $description:
       "Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime.",
     $extensions: { "dev.zebkit": { a11y: true } },

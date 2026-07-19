@@ -181,7 +181,7 @@
   },
   "transition-duration": {
     "$value": "150ms",
-    "$type": "transition",
+    "$type": "duration",
     "$description": "Duration for hover/active transitions.",
     "$extensions": {
       "dev.zebkit": {
@@ -191,7 +191,7 @@
   },
   "transition-timing-function": {
     "$value": "ease-in-out",
-    "$type": "transition",
+    "$type": "transitionTimingFunction",
     "$description": "Timing function for button transitions."
   }
 }

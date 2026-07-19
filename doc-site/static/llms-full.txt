@@ -194,10 +194,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-flex-direction` | `row` | flex | Direction of icon and label layout. |
 | `--zbk-button-justify-content` | `center` | flex | Main axis alignment for button contents. |
 | `--zbk-button-align-items` | `center` | flex | Cross axis alignment for button contents. |
-| `--zbk-button-transition-duration` | `{transition.playful-motion-duration-default}` | transition | Duration for hover/active transitions. **(a11y)** |
-| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | transition | Timing function for button transitions. |
-| `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transition | CSS properties that should animate on interaction. |
-| `--zbk-button-transition-delay` | `0` | transition | Delay before CSS properties run through their animate on interaction. |
+| `--zbk-button-transition-duration` | `{transition.playful-motion-duration-default}` | duration | Duration for hover/active transitions. **(a11y)** |
+| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | transitionTimingFunction | Timing function for button transitions. |
+| `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transitionProperty | CSS properties that should animate on interaction. |
+| `--zbk-button-transition-delay` | `0` | duration | Delay before CSS properties run through their animate on interaction. |
 | `--zbk-button-opacity` | `1` | opacity | Visual opacity of button. |
 | `--zbk-button-opacity-loading` | `1` | opacity | Visual opacity while the button is in its loading state. |
 
@@ -356,10 +356,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-checkbox-box-shadow-focus` | `none` | shadow | Control shadow in the focus state (in addition to the outline). |
 | `--zbk-checkbox-cursor` | `pointer` | utility | Cursor when hovering an enabled checkbox. |
 | `--zbk-checkbox-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled checkbox. |
-| `--zbk-checkbox-transition-duration` | `{transition.playful-fx-duration-default}` | transition | Duration for checkbox state transitions. **(a11y)** |
-| `--zbk-checkbox-transition-timing-function` | `{transition.playful-fx-function-default}` | transition | Easing for checkbox state transitions. |
-| `--zbk-checkbox-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-checkbox-transition-delay` | `0` | transition | Delay before checkbox transitions run. |
+| `--zbk-checkbox-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for checkbox state transitions. **(a11y)** |
+| `--zbk-checkbox-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for checkbox state transitions. |
+| `--zbk-checkbox-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-checkbox-transition-delay` | `0` | duration | Delay before checkbox transitions run. |
 | `--zbk-checkbox-opacity` | `1` | opacity | Opacity of the checkbox. |
 | `--zbk-checkbox-opacity-disabled` | `{opacity.70}` | opacity | Control opacity when disabled. |
 
@@ -565,10 +565,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-input-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
 | `--zbk-input-cursor` | `text` | utility | Cursor over the editable field. |
 | `--zbk-input-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
-| `--zbk-input-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
-| `--zbk-input-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
-| `--zbk-input-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-input-transition-delay` | `0` | transition | Delay before field transitions run. |
+| `--zbk-input-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
+| `--zbk-input-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
+| `--zbk-input-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-input-transition-delay` | `0` | duration | Delay before field transitions run. |
 | `--zbk-input-opacity` | `1` | opacity | Opacity of the field. |
 | `--zbk-input-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
 
@@ -727,9 +727,9 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-pagination-focus-color` | `{focus.color}` | color | Outline color for a focused item. |
 | `--zbk-pagination-focus-width` | `{focus.width}` | dimension | Outline width for a focused item. |
 | `--zbk-pagination-focus-offset` | `{focus.offset}` | dimension | Outline offset for a focused item. |
-| `--zbk-pagination-transition-property` | `background-color, color, border-color, outline` | transition | CSS properties that animate on item interaction. |
-| `--zbk-pagination-transition-duration` | `150ms` | transition | Duration for item hover/active transitions. **(a11y)** |
-| `--zbk-pagination-transition-timing-function` | `ease-out` | transition | Timing function for item transitions. |
+| `--zbk-pagination-transition-property` | `background-color, color, border-color, outline` | transitionProperty | CSS properties that animate on item interaction. |
+| `--zbk-pagination-transition-duration` | `150ms` | duration | Duration for item hover/active transitions. **(a11y)** |
+| `--zbk-pagination-transition-timing-function` | `ease-out` | transitionTimingFunction | Timing function for item transitions. |
 | `--zbk-pagination-cursor` | `pointer` | utility | Cursor over interactive pagination items. |
 
 ## Variants
@@ -874,10 +874,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-radio-box-shadow-focus` | `none` | shadow | Control shadow in the focus state (in addition to the outline). |
 | `--zbk-radio-cursor` | `pointer` | utility | Cursor when hovering an enabled radio. |
 | `--zbk-radio-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled radio. |
-| `--zbk-radio-transition-duration` | `{transition.playful-fx-duration-default}` | transition | Duration for radio state transitions. **(a11y)** |
-| `--zbk-radio-transition-timing-function` | `{transition.playful-fx-function-default}` | transition | Easing for radio state transitions. |
-| `--zbk-radio-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-radio-transition-delay` | `0` | transition | Delay before radio transitions run. |
+| `--zbk-radio-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for radio state transitions. **(a11y)** |
+| `--zbk-radio-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for radio state transitions. |
+| `--zbk-radio-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-radio-transition-delay` | `0` | duration | Delay before radio transitions run. |
 | `--zbk-radio-opacity` | `1` | opacity | Opacity of the radio. |
 | `--zbk-radio-opacity-disabled` | `{opacity.70}` | opacity | Control opacity when disabled. |
 
@@ -1046,10 +1046,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-select-box-shadow-invalid` | `none` | shadow | Field shadow when the selection is invalid. |
 | `--zbk-select-cursor` | `pointer` | utility | Cursor over an enabled select. |
 | `--zbk-select-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled select. |
-| `--zbk-select-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
-| `--zbk-select-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
-| `--zbk-select-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-select-transition-delay` | `0` | transition | Delay before field transitions run. |
+| `--zbk-select-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
+| `--zbk-select-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
+| `--zbk-select-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-select-transition-delay` | `0` | duration | Delay before field transitions run. |
 | `--zbk-select-opacity` | `1` | opacity | Opacity of the field. |
 | `--zbk-select-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
 
@@ -1202,10 +1202,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
 | `--zbk-textarea-cursor` | `text` | utility | Cursor over the editable field. |
 | `--zbk-textarea-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
-| `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
-| `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
-| `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-textarea-transition-delay` | `0` | transition | Delay before field transitions run. |
+| `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
+| `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
+| `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-textarea-transition-delay` | `0` | duration | Delay before field transitions run. |
 | `--zbk-textarea-opacity` | `1` | opacity | Opacity of the field. |
 | `--zbk-textarea-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
 
@@ -1352,10 +1352,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
 | `--zbk-toggle-cursor` | `pointer` | utility | Cursor when hovering an enabled toggle. |
 | `--zbk-toggle-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled toggle. |
-| `--zbk-toggle-transition-duration` | `{transition.playful-fx-duration-default}` | transition | Duration for toggle state transitions, including thumb travel. **(a11y)** |
-| `--zbk-toggle-transition-timing-function` | `{transition.playful-fx-function-default}` | transition | Easing for toggle state transitions. |
-| `--zbk-toggle-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transition | CSS properties that animate on track state changes. |
-| `--zbk-toggle-transition-delay` | `0` | transition | Delay before toggle transitions run. |
+| `--zbk-toggle-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for toggle state transitions, including thumb travel. **(a11y)** |
+| `--zbk-toggle-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for toggle state transitions. |
+| `--zbk-toggle-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on track state changes. |
+| `--zbk-toggle-transition-delay` | `0` | duration | Delay before toggle transitions run. |
 | `--zbk-toggle-opacity` | `1` | opacity | Opacity of the toggle. |
 | `--zbk-toggle-opacity-disabled` | `{opacity.70}` | opacity | Track and thumb opacity when disabled. |
 
@@ -1476,10 +1476,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-tooltip-offset` | `{tooltip.arrow-size}` | dimension | Gap between the trigger and the bubble. |
 | `--zbk-tooltip-box-shadow` | `{elevation.sm}` | shadow | Bubble shadow. |
 | `--zbk-tooltip-z-index` | `{z-index.tooltip}` | zIndex | Stacking order when the top-layer popover API is unavailable. |
-| `--zbk-tooltip-transition-duration` | `150ms` | transition | Show/hide transition duration. **(a11y)** |
-| `--zbk-tooltip-transition-timing-function` | `ease-out` | transition | Show/hide transition timing function. |
-| `--zbk-tooltip-show-delay` | `150ms` | transition | Delay before a hint tooltip shows on hover/focus. Read by the element at runtime. **(a11y)** |
-| `--zbk-tooltip-hide-grace` | `120ms` | transition | Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime. **(a11y)** |
+| `--zbk-tooltip-transition-duration` | `150ms` | duration | Show/hide transition duration. **(a11y)** |
+| `--zbk-tooltip-transition-timing-function` | `ease-out` | transitionTimingFunction | Show/hide transition timing function. |
+| `--zbk-tooltip-show-delay` | `150ms` | duration | Delay before a hint tooltip shows on hover/focus. Read by the element at runtime. **(a11y)** |
+| `--zbk-tooltip-hide-grace` | `120ms` | duration | Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime. **(a11y)** |
 | `--zbk-tooltip-opacity` | `1` | opacity | Bubble opacity. |
 
 ## Variants

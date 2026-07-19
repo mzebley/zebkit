@@ -307,23 +307,23 @@ const tokens = {
   // Transitions
   "transition-duration": {
     $value: "{transition.playful-fx-duration-default}",
-    $type: "transition",
+    $type: "duration",
     $description: "Duration for checkbox state transitions.",
     $extensions: { "dev.zebkit": { a11y: true } },
   },
   "transition-timing-function": {
     $value: "{transition.playful-fx-function-default}",
-    $type: "transition",
+    $type: "cubicBezier",
     $description: "Easing for checkbox state transitions.",
   },
   "transition-property": {
     $value: "background-color, border-color, box-shadow, transform, opacity, outline",
-    $type: "transition",
+    $type: "transitionProperty",
     $description: "CSS properties that animate on state changes.",
   },
   "transition-delay": {
-    $value: "0",
-    $type: "transition",
+    $value: { value: 0, unit: "ms" },
+    $type: "duration",
     $description: "Delay before checkbox transitions run.",
   },
 

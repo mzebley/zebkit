@@ -140,9 +140,9 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-pagination-focus-color` | `{focus.color}` | color | Outline color for a focused item. |
 | `--zbk-pagination-focus-width` | `{focus.width}` | dimension | Outline width for a focused item. |
 | `--zbk-pagination-focus-offset` | `{focus.offset}` | dimension | Outline offset for a focused item. |
-| `--zbk-pagination-transition-property` | `background-color, color, border-color, outline` | transition | CSS properties that animate on item interaction. |
-| `--zbk-pagination-transition-duration` | `150ms` | transition | Duration for item hover/active transitions. **(a11y)** |
-| `--zbk-pagination-transition-timing-function` | `ease-out` | transition | Timing function for item transitions. |
+| `--zbk-pagination-transition-property` | `background-color, color, border-color, outline` | transitionProperty | CSS properties that animate on item interaction. |
+| `--zbk-pagination-transition-duration` | `150ms` | duration | Duration for item hover/active transitions. **(a11y)** |
+| `--zbk-pagination-transition-timing-function` | `ease-out` | transitionTimingFunction | Timing function for item transitions. |
 | `--zbk-pagination-cursor` | `pointer` | utility | Cursor over interactive pagination items. |
 
 ## Variants

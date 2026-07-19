@@ -358,23 +358,23 @@ const tokens = {
   // Transitions
   "transition-duration": {
     $value: "{transition.calm-fx-duration-default}",
-    $type: "transition",
+    $type: "duration",
     $description: "Duration for field state transitions.",
     $extensions: { "dev.zebkit": { a11y: true } },
   },
   "transition-timing-function": {
     $value: "{transition.calm-fx-function-default}",
-    $type: "transition",
+    $type: "cubicBezier",
     $description: "Easing for field state transitions.",
   },
   "transition-property": {
     $value: "background-color, border-color, box-shadow, outline",
-    $type: "transition",
+    $type: "transitionProperty",
     $description: "CSS properties that animate on state changes.",
   },
   "transition-delay": {
-    $value: "0",
-    $type: "transition",
+    $value: { value: 0, unit: "ms" },
+    $type: "duration",
     $description: "Delay before field transitions run.",
   },
 

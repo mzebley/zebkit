@@ -1,6 +1,8 @@
 import defaultTokens from './generated/default-tokens.json';
 
 export type DimensionValue = { value: number; unit: 'px' | 'rem' };
+export type DurationValue = { value: number; unit: 'ms' | 's' };
+export type CubicBezierValue = [number, number, number, number];
 export type ColorValue = {
   colorSpace: string;
   components: [number, number, number];
@@ -19,7 +21,15 @@ export type ShadowValue = {
 export type CompiledToken = {
   $type: string;
   $description: string;
-  $value?: string | number | DimensionValue | ColorValue | ShadowValue | ShadowValue[];
+  $value?:
+    | string
+    | number
+    | DimensionValue
+    | DurationValue
+    | CubicBezierValue
+    | ColorValue
+    | ShadowValue
+    | ShadowValue[];
   $extensions?: {
     'dev.zebkit'?: {
       a11y?: boolean | string;

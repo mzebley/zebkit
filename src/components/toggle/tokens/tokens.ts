@@ -387,23 +387,23 @@ const tokens = {
   // Transitions
   "transition-duration": {
     $value: "{transition.playful-fx-duration-default}",
-    $type: "transition",
+    $type: "duration",
     $description: "Duration for toggle state transitions, including thumb travel.",
     $extensions: { "dev.zebkit": { a11y: true } },
   },
   "transition-timing-function": {
     $value: "{transition.playful-fx-function-default}",
-    $type: "transition",
+    $type: "cubicBezier",
     $description: "Easing for toggle state transitions.",
   },
   "transition-property": {
     $value: "background-color, border-color, box-shadow, transform, opacity, outline",
-    $type: "transition",
+    $type: "transitionProperty",
     $description: "CSS properties that animate on track state changes.",
   },
   "transition-delay": {
-    $value: "0",
-    $type: "transition",
+    $value: { value: 0, unit: "ms" },
+    $type: "duration",
     $description: "Delay before toggle transitions run.",
   },
 

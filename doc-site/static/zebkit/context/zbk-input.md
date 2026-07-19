@@ -163,10 +163,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-input-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
 | `--zbk-input-cursor` | `text` | utility | Cursor over the editable field. |
 | `--zbk-input-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
-| `--zbk-input-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
-| `--zbk-input-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
-| `--zbk-input-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-input-transition-delay` | `0` | transition | Delay before field transitions run. |
+| `--zbk-input-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
+| `--zbk-input-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
+| `--zbk-input-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-input-transition-delay` | `0` | duration | Delay before field transitions run. |
 | `--zbk-input-opacity` | `1` | opacity | Opacity of the field. |
 | `--zbk-input-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
 

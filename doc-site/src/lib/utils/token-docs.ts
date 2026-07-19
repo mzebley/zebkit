@@ -1,7 +1,9 @@
 import type {
   ColorValue,
   CompiledToken,
+  CubicBezierValue,
   DimensionValue,
+  DurationValue,
   ShadowValue,
 } from '../data/compiled-tokens';
 
@@ -18,6 +20,16 @@ export type CompiledTokenMap = Record<string, CompiledToken>;
 /** Canonical CSS string for a structured dimension (leading zero dropped below 1). */
 function serializeDimension(d: DimensionValue): string {
   return `${String(d.value).replace(/^(-?)0\./, '$1.')}${d.unit}`;
+}
+
+/** Duration: `<n><unit>`, dropping the unit at zero (`0`, not `0ms`). */
+function serializeDuration(d: DurationValue): string {
+  return d.value === 0 ? '0' : `${d.value}${d.unit}`;
+}
+
+/** Cubic-bezier curve at two decimals, matching the emitted CSS. */
+function serializeCubicBezier(v: CubicBezierValue): string {
+  return `cubic-bezier(${v.map((n) => n.toFixed(2)).join(', ')})`;
 }
 
 /** Mirror of the shared `serializeColorValue` (doc-site is decoupled from `src`). */
@@ -64,15 +76,21 @@ function serializeShadow(layers: ShadowValue[]): string {
 }
 
 /**
- * Structured token values render as their canonical CSS string — dimensions
- * (`{value, unit}`), colors (`{colorSpace, components, ...}`), and shadows
- * (layer objects or arrays; `[]` → `none`). References and scalars pass through.
+ * Structured token values render as their canonical CSS string — dimensions and
+ * durations (`{value, unit}`), colors (`{colorSpace, components, ...}`),
+ * cubic-bezier curves (`[x1,y1,x2,y2]`), and shadows (layer objects or arrays;
+ * `[]` → `none`). References and scalars pass through.
  */
 export function formatTokenValue(value: CompiledToken['$value']): string | number {
-  if (Array.isArray(value)) return serializeShadow(value);
+  if (Array.isArray(value)) {
+    return value.length > 0 && value.every((n) => typeof n === 'number')
+      ? serializeCubicBezier(value as CubicBezierValue)
+      : serializeShadow(value as ShadowValue[]);
+  }
   if (value !== null && typeof value === 'object') {
     if ('offsetX' in value) return serializeShadow([value]);
     if ('colorSpace' in value) return serializeColor(value);
+    if (value.unit === 'ms' || value.unit === 's') return serializeDuration(value);
     return serializeDimension(value);
   }
   return value ?? '';

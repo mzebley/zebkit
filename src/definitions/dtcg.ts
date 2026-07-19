@@ -53,6 +53,9 @@ export const ZEBKIT_PROPRIETARY_TYPES = [
   "fontStyle",
   "transform",
   "transitionProperty",
+  // The CSS `<easing-function>` keyword surface (`ease-out`, `linear`, …) DTCG's
+  // `cubicBezier` type (explicit `[x1,y1,x2,y2]` curves) cannot express.
+  "transitionTimingFunction",
   "content",
   "flex",
   "utility",
@@ -126,11 +129,13 @@ export const LEGACY_TYPE_MIGRATION: Record<AllowedTokenTypes, LegacyTypeMigratio
   cssDimension: { kind: "spec", type: "cssDimension" },
   // Shadows are final (Phase 2c): structured shadow-layer arrays, `none` = `[]`
   shadow: { kind: "spec", type: "shadow" },
-  // Transition conflation splits into three types
-  transition: {
-    kind: "split",
-    types: ["duration", "cubicBezier", "transitionProperty"],
-  },
+  // The transition conflation is final (Phase 2d): durations → spec `duration`,
+  // easing curves → spec `cubicBezier`, the property list and keyword-easing
+  // surfaces → proprietary `transitionProperty` / `transitionTimingFunction`.
+  duration: { kind: "spec", type: "duration" },
+  cubicBezier: { kind: "spec", type: "cubicBezier" },
+  transitionProperty: { kind: "spec", type: "transitionProperty" },
+  transitionTimingFunction: { kind: "spec", type: "transitionTimingFunction" },
   // Numbers
   lineHeight: { kind: "spec", type: "number" },
   opacity: { kind: "spec", type: "number" },

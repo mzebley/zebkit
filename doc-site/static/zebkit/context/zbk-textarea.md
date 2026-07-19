@@ -134,10 +134,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
 | `--zbk-textarea-cursor` | `text` | utility | Cursor over the editable field. |
 | `--zbk-textarea-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
-| `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
-| `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
-| `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-textarea-transition-delay` | `0` | transition | Delay before field transitions run. |
+| `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
+| `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
+| `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-textarea-transition-delay` | `0` | duration | Delay before field transitions run. |
 | `--zbk-textarea-opacity` | `1` | opacity | Opacity of the field. |
 | `--zbk-textarea-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
 

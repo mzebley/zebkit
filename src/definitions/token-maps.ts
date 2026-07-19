@@ -69,7 +69,13 @@ export const tokenCompatibilityMap: {
   boolean: ["boolean"],
   shadow: ["shadow"],
   flex: ["flex"],
-  transition: ["transition"]
+  // The transition split (Phase 2d). A timing-function slot accepts either a
+  // keyword easing or a `cubicBezier` curve reference, so the two are mutually
+  // compatible; durations and property lists stand alone.
+  duration: ["duration"],
+  cubicBezier: ["cubicBezier", "transitionTimingFunction"],
+  transitionProperty: ["transitionProperty"],
+  transitionTimingFunction: ["transitionTimingFunction", "cubicBezier"]
 };
 
 /**

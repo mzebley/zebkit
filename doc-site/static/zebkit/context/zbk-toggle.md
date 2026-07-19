@@ -128,10 +128,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
 | `--zbk-toggle-cursor` | `pointer` | utility | Cursor when hovering an enabled toggle. |
 | `--zbk-toggle-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled toggle. |
-| `--zbk-toggle-transition-duration` | `{transition.playful-fx-duration-default}` | transition | Duration for toggle state transitions, including thumb travel. **(a11y)** |
-| `--zbk-toggle-transition-timing-function` | `{transition.playful-fx-function-default}` | transition | Easing for toggle state transitions. |
-| `--zbk-toggle-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transition | CSS properties that animate on track state changes. |
-| `--zbk-toggle-transition-delay` | `0` | transition | Delay before toggle transitions run. |
+| `--zbk-toggle-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for toggle state transitions, including thumb travel. **(a11y)** |
+| `--zbk-toggle-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for toggle state transitions. |
+| `--zbk-toggle-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on track state changes. |
+| `--zbk-toggle-transition-delay` | `0` | duration | Delay before toggle transitions run. |
 | `--zbk-toggle-opacity` | `1` | opacity | Opacity of the toggle. |
 | `--zbk-toggle-opacity-disabled` | `{opacity.70}` | opacity | Track and thumb opacity when disabled. |
 

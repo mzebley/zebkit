@@ -4,6 +4,8 @@
 
 import {
   serializeColorValue,
+  serializeCubicBezierValue,
+  serializeDurationValue,
   serializeShadowValue,
   type ShadowValue,
   type TokenInterface,
@@ -343,5 +345,48 @@ describe('serializeShadowValue — DTCG shadow serialization', () => {
       '--zbk-elevation-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);'
     );
     expect(result.css).toContain('--zbk-elevation-none: none;');
+  });
+});
+
+describe('serializeDurationValue / serializeCubicBezierValue — DTCG transition split', () => {
+  it('serializes durations, dropping the unit only at zero', () => {
+    expect(serializeDurationValue({ value: 325, unit: 'ms' })).toBe('325ms');
+    expect(serializeDurationValue({ value: 0, unit: 'ms' })).toBe('0');
+    expect(serializeDurationValue({ value: 2, unit: 's' })).toBe('2s');
+  });
+
+  it('serializes cubic-bezier curves at two decimals (byte-exact)', () => {
+    expect(serializeCubicBezierValue([0.38, 1.21, 0.22, 1.0])).toBe(
+      'cubic-bezier(0.38, 1.21, 0.22, 1.00)'
+    );
+    expect(serializeCubicBezierValue([0.42, 1.67, 0.21, 0.9])).toBe(
+      'cubic-bezier(0.42, 1.67, 0.21, 0.90)'
+    );
+  });
+
+  it('emits structured duration/bezier values through the converter, wrapping a11y durations', () => {
+    const result = convertTokensToCssVars({
+      'zbk-transition': {
+        'duration-default': {
+          $value: { value: 325, unit: 'ms' },
+          $type: 'duration',
+          $description: '',
+          $extensions: { 'dev.zebkit': { a11y: true } },
+        },
+        'calm-fx-function-default': {
+          $value: [0.34, 0.8, 0.34, 1.0],
+          $type: 'cubicBezier',
+          $description: '',
+        },
+      },
+    } as unknown as { [key: string]: TokenInterface });
+
+    expect(result.errors).toEqual([]);
+    expect(result.css).toContain(
+      '--zbk-transition-duration-default: calc(325ms * var(--zbk-a11y-transition-duration-modifier));'
+    );
+    expect(result.css).toContain(
+      '--zbk-transition-calm-fx-function-default: cubic-bezier(0.34, 0.80, 0.34, 1.00);'
+    );
   });
 });

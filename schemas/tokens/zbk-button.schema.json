@@ -1367,7 +1367,7 @@
         "{toggle.group-direction}"
       ]
     },
-    "transitionValue": {
+    "durationValue": {
       "type": [
         "string",
         "number"
@@ -1376,65 +1376,63 @@
         "{transition.duration-default}",
         "{transition.duration-slow}",
         "{transition.duration-fast}",
-        "{transition.playful-motion-function-default}",
-        "{transition.playful-motion-function-slow}",
-        "{transition.playful-motion-function-fast}",
         "{transition.playful-motion-duration-default}",
         "{transition.playful-motion-duration-slow}",
         "{transition.playful-motion-duration-fast}",
-        "{transition.playful-fx-function-default}",
-        "{transition.playful-fx-function-slow}",
-        "{transition.playful-fx-function-fast}",
         "{transition.playful-fx-duration-default}",
         "{transition.playful-fx-duration-slow}",
         "{transition.playful-fx-duration-fast}",
-        "{transition.calm-motion-function-default}",
-        "{transition.calm-motion-function-slow}",
-        "{transition.calm-motion-function-fast}",
         "{transition.calm-motion-duration-default}",
         "{transition.calm-motion-duration-slow}",
         "{transition.calm-motion-duration-fast}",
-        "{transition.calm-fx-function-default}",
-        "{transition.calm-fx-function-slow}",
-        "{transition.calm-fx-function-fast}",
         "{transition.calm-fx-duration-default}",
         "{transition.calm-fx-duration-slow}",
         "{transition.calm-fx-duration-fast}",
         "{button.transition-duration}",
-        "{button.transition-timing-function}",
-        "{button.transition-property}",
         "{button.transition-delay}",
         "{checkbox.transition-duration}",
-        "{checkbox.transition-timing-function}",
-        "{checkbox.transition-property}",
         "{checkbox.transition-delay}",
         "{input.transition-duration}",
-        "{input.transition-timing-function}",
-        "{input.transition-property}",
         "{input.transition-delay}",
-        "{pagination.transition-property}",
         "{pagination.transition-duration}",
-        "{pagination.transition-timing-function}",
         "{radio.transition-duration}",
-        "{radio.transition-timing-function}",
-        "{radio.transition-property}",
         "{radio.transition-delay}",
         "{select.transition-duration}",
-        "{select.transition-timing-function}",
-        "{select.transition-property}",
         "{select.transition-delay}",
         "{textarea.transition-duration}",
-        "{textarea.transition-timing-function}",
-        "{textarea.transition-property}",
         "{textarea.transition-delay}",
         "{toggle.transition-duration}",
-        "{toggle.transition-timing-function}",
-        "{toggle.transition-property}",
         "{toggle.transition-delay}",
         "{tooltip.transition-duration}",
-        "{tooltip.transition-timing-function}",
         "{tooltip.show-delay}",
         "{tooltip.hide-grace}"
+      ]
+    },
+    "transitionTimingFunctionValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
+      ]
+    },
+    "transitionPropertyValue": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "examples": [
+        "{button.transition-property}",
+        "{checkbox.transition-property}",
+        "{input.transition-property}",
+        "{pagination.transition-property}",
+        "{radio.transition-property}",
+        "{select.transition-property}",
+        "{textarea.transition-property}",
+        "{toggle.transition-property}"
       ]
     },
     "opacityValue": {
@@ -4151,10 +4149,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/transitionValue"
+          "$ref": "#/definitions/durationValue"
         },
         "$type": {
-          "const": "transition"
+          "const": "duration"
         },
         "$description": {
           "type": "string"
@@ -4189,10 +4187,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/transitionValue"
+          "$ref": "#/definitions/transitionTimingFunctionValue"
         },
         "$type": {
-          "const": "transition"
+          "const": "transitionTimingFunction"
         },
         "$description": {
           "type": "string"
@@ -4227,10 +4225,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/transitionValue"
+          "$ref": "#/definitions/transitionPropertyValue"
         },
         "$type": {
-          "const": "transition"
+          "const": "transitionProperty"
         },
         "$description": {
           "type": "string"
@@ -4265,10 +4263,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/transitionValue"
+          "$ref": "#/definitions/durationValue"
         },
         "$type": {
-          "const": "transition"
+          "const": "duration"
         },
         "$description": {
           "type": "string"

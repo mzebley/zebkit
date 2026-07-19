@@ -6149,7 +6149,7 @@
   "zbk-transition": {
     "duration-default": {
       "$value": "325ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
       "$extensions": {
         "dev.zebkit": {
@@ -6159,7 +6159,7 @@
     },
     "duration-slow": {
       "$value": "625ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
       "$extensions": {
         "dev.zebkit": {
@@ -6169,7 +6169,7 @@
     },
     "duration-fast": {
       "$value": "125ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
       "$extensions": {
         "dev.zebkit": {
@@ -6179,22 +6179,22 @@
     },
     "playful-motion-function-default": {
       "$value": "cubic-bezier(0.38, 1.21, 0.22, 1.00)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate."
     },
     "playful-motion-function-slow": {
       "$value": "cubic-bezier(0.39, 1.29, 0.35, 0.98)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt."
     },
     "playful-motion-function-fast": {
       "$value": "cubic-bezier(0.42, 1.67, 0.21, 0.90)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid."
     },
     "playful-motion-duration-default": {
       "$value": "500ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -6204,7 +6204,7 @@
     },
     "playful-motion-duration-slow": {
       "$value": "650ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -6214,7 +6214,7 @@
     },
     "playful-motion-duration-fast": {
       "$value": "350ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
       "$extensions": {
         "dev.zebkit": {
@@ -6224,22 +6224,22 @@
     },
     "playful-fx-function-default": {
       "$value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
     },
     "playful-fx-function-slow": {
       "$value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce."
     },
     "playful-fx-function-fast": {
       "$value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth."
     },
     "playful-fx-duration-default": {
       "$value": "200ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -6249,7 +6249,7 @@
     },
     "playful-fx-duration-slow": {
       "$value": "300ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
       "$extensions": {
         "dev.zebkit": {
@@ -6259,7 +6259,7 @@
     },
     "playful-fx-duration-fast": {
       "$value": "150ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
       "$extensions": {
         "dev.zebkit": {
@@ -6269,22 +6269,22 @@
     },
     "calm-motion-function-default": {
       "$value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish."
     },
     "calm-motion-function-slow": {
       "$value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate."
     },
     "calm-motion-function-fast": {
       "$value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion."
     },
     "calm-motion-duration-default": {
       "$value": "500ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -6294,7 +6294,7 @@
     },
     "calm-motion-duration-slow": {
       "$value": "750ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
       "$extensions": {
         "dev.zebkit": {
@@ -6304,7 +6304,7 @@
     },
     "calm-motion-duration-fast": {
       "$value": "350ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -6314,22 +6314,22 @@
     },
     "calm-fx-function-default": {
       "$value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
     },
     "calm-fx-function-slow": {
       "$value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained."
     },
     "calm-fx-function-fast": {
       "$value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention."
     },
     "calm-fx-duration-default": {
       "$value": "200ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -6339,7 +6339,7 @@
     },
     "calm-fx-duration-slow": {
       "$value": "300ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
       "$extensions": {
         "dev.zebkit": {
@@ -6349,7 +6349,7 @@
     },
     "calm-fx-duration-fast": {
       "$value": "150ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
       "$extensions": {
         "dev.zebkit": {
@@ -7275,7 +7275,7 @@
     },
     "transition-duration": {
       "$value": "{transition.playful-motion-duration-default}",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Duration for hover/active transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -7285,17 +7285,17 @@
     },
     "transition-timing-function": {
       "$value": "{transition.playful-motion-function-default}",
-      "$type": "transition",
+      "$type": "transitionTimingFunction",
       "$description": "Timing function for button transitions."
     },
     "transition-property": {
       "$value": "background-color, color, border-color, box-shadow, transform, outline",
-      "$type": "transition",
+      "$type": "transitionProperty",
       "$description": "CSS properties that should animate on interaction."
     },
     "transition-delay": {
       "$value": "0",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Delay before CSS properties run through their animate on interaction."
     },
     "opacity": {
@@ -7532,7 +7532,7 @@
     },
     "transition-duration": {
       "$value": "{transition.playful-fx-duration-default}",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Duration for checkbox state transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -7542,17 +7542,17 @@
     },
     "transition-timing-function": {
       "$value": "{transition.playful-fx-function-default}",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Easing for checkbox state transitions."
     },
     "transition-property": {
       "$value": "background-color, border-color, box-shadow, transform, opacity, outline",
-      "$type": "transition",
+      "$type": "transitionProperty",
       "$description": "CSS properties that animate on state changes."
     },
     "transition-delay": {
       "$value": "0",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Delay before checkbox transitions run."
     },
     "opacity": {
@@ -7854,7 +7854,7 @@
     },
     "transition-duration": {
       "$value": "{transition.calm-fx-duration-default}",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Duration for field state transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -7864,17 +7864,17 @@
     },
     "transition-timing-function": {
       "$value": "{transition.calm-fx-function-default}",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Easing for field state transitions."
     },
     "transition-property": {
       "$value": "background-color, border-color, box-shadow, outline",
-      "$type": "transition",
+      "$type": "transitionProperty",
       "$description": "CSS properties that animate on state changes."
     },
     "transition-delay": {
       "$value": "0",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Delay before field transitions run."
     },
     "opacity": {
@@ -8061,12 +8061,15 @@
     },
     "transition-property": {
       "$value": "background-color, color, border-color, outline",
-      "$type": "transition",
+      "$type": "transitionProperty",
       "$description": "CSS properties that animate on item interaction."
     },
     "transition-duration": {
-      "$value": "150ms",
-      "$type": "transition",
+      "$value": {
+        "value": 150,
+        "unit": "ms"
+      },
+      "$type": "duration",
       "$description": "Duration for item hover/active transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -8076,7 +8079,7 @@
     },
     "transition-timing-function": {
       "$value": "ease-out",
-      "$type": "transition",
+      "$type": "transitionTimingFunction",
       "$description": "Timing function for item transitions."
     },
     "cursor": {
@@ -8293,7 +8296,7 @@
     },
     "transition-duration": {
       "$value": "{transition.playful-fx-duration-default}",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Duration for radio state transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -8303,17 +8306,17 @@
     },
     "transition-timing-function": {
       "$value": "{transition.playful-fx-function-default}",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Easing for radio state transitions."
     },
     "transition-property": {
       "$value": "background-color, border-color, box-shadow, transform, opacity, outline",
-      "$type": "transition",
+      "$type": "transitionProperty",
       "$description": "CSS properties that animate on state changes."
     },
     "transition-delay": {
       "$value": "0",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Delay before radio transitions run."
     },
     "opacity": {
@@ -8605,7 +8608,7 @@
     },
     "transition-duration": {
       "$value": "{transition.calm-fx-duration-default}",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Duration for field state transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -8615,17 +8618,17 @@
     },
     "transition-timing-function": {
       "$value": "{transition.calm-fx-function-default}",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Easing for field state transitions."
     },
     "transition-property": {
       "$value": "background-color, border-color, box-shadow, outline",
-      "$type": "transition",
+      "$type": "transitionProperty",
       "$description": "CSS properties that animate on state changes."
     },
     "transition-delay": {
       "$value": "0",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Delay before field transitions run."
     },
     "opacity": {
@@ -8902,7 +8905,7 @@
     },
     "transition-duration": {
       "$value": "{transition.calm-fx-duration-default}",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Duration for field state transitions.",
       "$extensions": {
         "dev.zebkit": {
@@ -8912,17 +8915,17 @@
     },
     "transition-timing-function": {
       "$value": "{transition.calm-fx-function-default}",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Easing for field state transitions."
     },
     "transition-property": {
       "$value": "background-color, border-color, box-shadow, outline",
-      "$type": "transition",
+      "$type": "transitionProperty",
       "$description": "CSS properties that animate on state changes."
     },
     "transition-delay": {
       "$value": "0",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Delay before field transitions run."
     },
     "opacity": {
@@ -9219,7 +9222,7 @@
     },
     "transition-duration": {
       "$value": "{transition.playful-fx-duration-default}",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Duration for toggle state transitions, including thumb travel.",
       "$extensions": {
         "dev.zebkit": {
@@ -9229,17 +9232,17 @@
     },
     "transition-timing-function": {
       "$value": "{transition.playful-fx-function-default}",
-      "$type": "transition",
+      "$type": "cubicBezier",
       "$description": "Easing for toggle state transitions."
     },
     "transition-property": {
       "$value": "background-color, border-color, box-shadow, transform, opacity, outline",
-      "$type": "transition",
+      "$type": "transitionProperty",
       "$description": "CSS properties that animate on track state changes."
     },
     "transition-delay": {
       "$value": "0",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Delay before toggle transitions run."
     },
     "opacity": {
@@ -9351,7 +9354,7 @@
     },
     "transition-duration": {
       "$value": "150ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Show/hide transition duration.",
       "$extensions": {
         "dev.zebkit": {
@@ -9361,12 +9364,12 @@
     },
     "transition-timing-function": {
       "$value": "ease-out",
-      "$type": "transition",
+      "$type": "transitionTimingFunction",
       "$description": "Show/hide transition timing function."
     },
     "show-delay": {
       "$value": "150ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Delay before a hint tooltip shows on hover/focus. Read by the element at runtime.",
       "$extensions": {
         "dev.zebkit": {
@@ -9376,7 +9379,7 @@
     },
     "hide-grace": {
       "$value": "120ms",
-      "$type": "transition",
+      "$type": "duration",
       "$description": "Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime.",
       "$extensions": {
         "dev.zebkit": {

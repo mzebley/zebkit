@@ -181,7 +181,7 @@
   },
   "transition-duration": {
     "$value": "100ms",
-    "$type": "transition",
+    "$type": "duration",
     "$description": "Duration for hover/active transitions — Fluent 2 durationFaster.",
     "$extensions": {
       "dev.zebkit": {
@@ -191,7 +191,7 @@
   },
   "transition-timing-function": {
     "$value": "cubic-bezier(0.33, 0, 0.67, 1)",
-    "$type": "transition",
+    "$type": "transitionTimingFunction",
     "$description": "Timing function — Fluent 2 curveEasyEase."
   }
 }

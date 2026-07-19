@@ -181,10 +181,10 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-flex-direction` | `row` | flex | Direction of icon and label layout. |
 | `--zbk-button-justify-content` | `center` | flex | Main axis alignment for button contents. |
 | `--zbk-button-align-items` | `center` | flex | Cross axis alignment for button contents. |
-| `--zbk-button-transition-duration` | `{transition.playful-motion-duration-default}` | transition | Duration for hover/active transitions. **(a11y)** |
-| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | transition | Timing function for button transitions. |
-| `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transition | CSS properties that should animate on interaction. |
-| `--zbk-button-transition-delay` | `0` | transition | Delay before CSS properties run through their animate on interaction. |
+| `--zbk-button-transition-duration` | `{transition.playful-motion-duration-default}` | duration | Duration for hover/active transitions. **(a11y)** |
+| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | transitionTimingFunction | Timing function for button transitions. |
+| `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transitionProperty | CSS properties that should animate on interaction. |
+| `--zbk-button-transition-delay` | `0` | duration | Delay before CSS properties run through their animate on interaction. |
 | `--zbk-button-opacity` | `1` | opacity | Visual opacity of button. |
 | `--zbk-button-opacity-loading` | `1` | opacity | Visual opacity while the button is in its loading state. |
 

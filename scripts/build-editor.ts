@@ -289,7 +289,10 @@ function getTokenTypeSyntax(type: string): string | undefined {
     'lineHeight': '<number> | <length>',
     'opacity': '<number>',
     'shadow': '<shadow>',
-    'transition': '<string>',
+    'duration': '<time>',
+    'cubicBezier': '<easing-function>',
+    'transitionProperty': '<single-transition-property>#',
+    'transitionTimingFunction': '<easing-function>',
   };
 
   return syntaxMap[type];

@@ -444,24 +444,24 @@ const tokens = {
 
   // Transitions
   "transition-duration": {
-    $value: "150ms",
-    $type: "transition",
+    $value: { value: 150, unit: "ms" },
+    $type: "duration",
     $description: "Duration for hover/active transitions.",
     $extensions: { "dev.zebkit": { a11y: true } },
   },
   "transition-timing-function": {
     $value: "ease-out",
-    $type: "transition",
+    $type: "transitionTimingFunction",
     $description: "Timing function for button transitions.",
   },
   "transition-property": {
     $value: "background-color, color, border-color, box-shadow, transform, outline",
-    $type: "transition",
+    $type: "transitionProperty",
     $description: "CSS properties that should animate on interaction.",
   },
     "transition-delay": {
-    $value: "0",
-    $type: "transition",
+    $value: { value: 0, unit: "ms" },
+    $type: "duration",
     $description: "Delay before CSS properties run through their animate on interaction.",
   },
   opacity: {

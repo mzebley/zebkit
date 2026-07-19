@@ -12,5 +12,7 @@ import { ZEBKIT_PREFIX } from "@config";
  */
 export const a11yMap: { [key: string]: string } = {
   lineHeight: `--${ZEBKIT_PREFIX}-a11y-line-height-modifier`,
-  transition: `--${ZEBKIT_PREFIX}-a11y-transition-duration-modifier`
+  // Reduced-motion scales durations (Phase 2d retyped `transition` → `duration`);
+  // easing curves and property lists are not modifier-scaled.
+  duration: `--${ZEBKIT_PREFIX}-a11y-transition-duration-modifier`
 };

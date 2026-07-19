@@ -18,7 +18,15 @@ export const allowedTokenTypes = z.enum([
   'textDecoration',
   'textTransform',
   'textAlignment',
-  'transition',
+  // The transition split (Phase 2c→2d, decision D5): the conflated `transition`
+  // type fanned out. Durations are spec `duration` ({value, unit} ms/s), easing
+  // curves are spec `cubicBezier` ([x1,y1,x2,y2]); the CSS-property list and the
+  // `<easing-function>` keyword surface (`ease-out`, …) DTCG can't type are the
+  // proprietary `transitionProperty` / `transitionTimingFunction`.
+  'duration',
+  'cubicBezier',
+  'transitionProperty',
+  'transitionTimingFunction',
   // The dimension family (Phase 2a step 4, decision D5): `dimension` is the
   // spec type for structured `{value, unit}` px/rem lengths; `cssDimension`
   // covers every other CSS length surface (%, ch, em, keywords, unitless 0,
@@ -223,10 +231,64 @@ export function serializeShadowValue(v: ShadowValue | ShadowValue[]): string {
   return layers.map(serializeShadowLayer).join(", ");
 }
 
-/** A token `$value` as its CSS string: structured dimensions/colors/shadows serialize, the rest stringify. */
+/**
+ * DTCG duration value (2025.10): a `{value, unit}` pair with unit limited to
+ * `ms`/`s`. Zebkit authors `ms`. A zero-magnitude duration serializes to the
+ * bare `0` the CSS surface uses (`transition-delay: 0`), not `0ms`.
+ */
+export const DURATION_UNITS = ["ms", "s"] as const;
+export const durationValueSchema = z.object({
+  value: z.number(),
+  unit: z.enum(DURATION_UNITS),
+});
+export type DurationValue = z.infer<typeof durationValueSchema>;
+
+/** True when `v` is a structured `{value, unit}` duration (ms/s). */
+export function isDurationValue(v: unknown): v is DurationValue {
+  return (
+    !!v &&
+    typeof v === "object" &&
+    typeof (v as { value?: unknown }).value === "number" &&
+    ((v as { unit?: unknown }).unit === "ms" || (v as { unit?: unknown }).unit === "s")
+  );
+}
+
+/** Canonical CSS serialization for a duration; zero drops its unit (`0`, not `0ms`). */
+export function serializeDurationValue(v: DurationValue): string {
+  return v.value === 0 ? "0" : `${v.value}${v.unit}`;
+}
+
+/**
+ * DTCG cubic-bezier value (2025.10): the four control-point coordinates
+ * `[x1, y1, x2, y2]`. Zebkit's easing curves author two-decimal coordinates
+ * (`1.00`, `0.90`); the serializer pins that precision so the emitted
+ * `cubic-bezier(...)` string is byte-identical (module-level self-checks guard
+ * it). Keyword easings (`ease-out`) are `transitionTimingFunction`, not this.
+ */
+export const cubicBezierValueSchema = z.tuple([
+  z.number(),
+  z.number(),
+  z.number(),
+  z.number(),
+]);
+export type CubicBezierValue = z.infer<typeof cubicBezierValueSchema>;
+
+/** True when `v` is a 4-number cubic-bezier coordinate tuple. */
+export function isCubicBezierValue(v: unknown): v is CubicBezierValue {
+  return Array.isArray(v) && v.length === 4 && v.every((n) => typeof n === "number");
+}
+
+/** Canonical CSS serialization: `cubic-bezier(x1, y1, x2, y2)` at two decimals. */
+export function serializeCubicBezierValue(v: CubicBezierValue): string {
+  return `cubic-bezier(${v.map((n) => n.toFixed(2)).join(", ")})`;
+}
+
+/** A token `$value` as its CSS string: structured dimensions/durations/colors/beziers/shadows serialize, the rest stringify. */
 export function tokenValueToString(v: unknown): string {
   if (isDimensionValue(v)) return serializeDimensionValue(v);
+  if (isDurationValue(v)) return serializeDurationValue(v);
   if (isColorValue(v)) return serializeColorValue(v);
+  if (isCubicBezierValue(v)) return serializeCubicBezierValue(v);
   if (isShadowValue(v)) return serializeShadowValue(v);
   return String(v);
 }
@@ -314,7 +376,9 @@ export const tokenObjectSchema = z.object({
     z.string(),
     z.number(),
     dimensionValueSchema,
+    durationValueSchema,
     colorValueSchema,
+    cubicBezierValueSchema,
     shadowValueSchema,
     z.array(shadowValueSchema),
   ]),

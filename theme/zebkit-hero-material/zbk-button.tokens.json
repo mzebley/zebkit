@@ -181,7 +181,7 @@
   },
   "transition-duration": {
     "$value": "150ms",
-    "$type": "transition",
+    "$type": "duration",
     "$description": "Duration for hover/active transitions — M3 short motion.",
     "$extensions": {
       "dev.zebkit": {
@@ -191,7 +191,7 @@
   },
   "transition-timing-function": {
     "$value": "cubic-bezier(0.2, 0, 0, 1)",
-    "$type": "transition",
+    "$type": "transitionTimingFunction",
     "$description": "Timing function — M3 standard easing."
   }
 }
