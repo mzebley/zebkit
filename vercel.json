@@ -2,5 +2,19 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run docs:build",
   "cleanUrls": true,
-  "outputDirectory": "doc-site/build"
+  "outputDirectory": "doc-site/build",
+  "headers": [
+    {
+      "source": "/zebkit/default-tokens.json",
+      "headers": [
+        { "key": "Content-Type", "value": "application/design-tokens+json; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/zebkit/(.*)\\.tokens\\.json",
+      "headers": [
+        { "key": "Content-Type", "value": "application/design-tokens+json; charset=utf-8" }
+      ]
+    }
+  ]
 }

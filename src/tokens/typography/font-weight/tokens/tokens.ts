@@ -1,10 +1,8 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "font-weight";
 export const layer: LayerName = "theme";
-export type FontWeightTokens = z.infer<typeof tokenSchema>;
 
 // DTCG `fontWeight` values are numeric (1–1000), not strings (Phase 2e). The
 // `a11y: true` flags are inert today (no font-weight modifier is defined and the
@@ -64,6 +62,6 @@ const tokens = {
     $description: "Boldest font weight.",
     $extensions: { "dev.zebkit": { a11y: true } },
   },
-} as const satisfies FontWeightTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

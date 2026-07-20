@@ -30,12 +30,13 @@ describe('generated editor token schemas', () => {
     };
 
     // Emission-external modules (the primitive palette) are not overridable and
-    // get no schema or theme-file association.
+    // get no schema or theme-file association. The emission mode rides the
+    // group-level `$extensions["dev.zebkit"]` block (Phase 3 DTCG documents).
     const authorableModules = manifest.modules.filter((module) => {
       const data = fs.readJsonSync(
         path.resolve('dist/cli/defaults', module.file)
-      ) as Record<string, unknown>;
-      return data._cssEmission !== 'external';
+      ) as { $extensions?: { 'dev.zebkit'?: { cssEmission?: string } } };
+      return data.$extensions?.['dev.zebkit']?.cssEmission !== 'external';
     });
 
     expect(settings['json.schemas']).toHaveLength(authorableModules.length);

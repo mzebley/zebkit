@@ -1,10 +1,8 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "h4";
 export const layer: LayerName = "base";
-export type H4Tokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "font-family": {
@@ -73,6 +71,6 @@ const tokens = {
     $description:
       "Text transform for H4 elements with .prose applied directly or that are a child of a .prose container.",
   },
-} as const satisfies H4Tokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

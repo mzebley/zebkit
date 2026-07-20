@@ -1,10 +1,8 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "lede";
 export const layer: LayerName = "theme";
-export type LedeTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "font-family": {
@@ -73,6 +71,6 @@ const tokens = {
     $description:
       "Text transform for introductory lede text with .lede applied directly or as a child of a .prose container.",
   },
-} as const satisfies LedeTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 /**
  * Zebkit brand color design tokens. 
@@ -8,7 +7,6 @@ import { tokenSchema } from "./token-schema";
 export const key = "brand";
 export const layer: LayerName = "theme";
 
-export type BrandTokenSchema = z.infer<typeof tokenSchema>;
 
 const tokens = {
   50: {
@@ -66,6 +64,6 @@ const tokens = {
     $type: "color",
     $description: "For primary branded surfaces."
   },
-} as const satisfies BrandTokenSchema;
+} as const satisfies TokenInterface;
 
 export default tokens;

@@ -1,10 +1,8 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "spacing";
 export const layer: LayerName = "base";
-export type SemanticSpacingTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "2xs": {
@@ -117,6 +115,6 @@ const tokens = {
     $type: "dimension",
     $description: "Preferred horizontal padding for page.",
   },
-} as const satisfies SemanticSpacingTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

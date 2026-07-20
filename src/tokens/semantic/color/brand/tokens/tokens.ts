@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 /**
  * Zebkit brand role tokens (canvas / ink / border).
@@ -14,7 +13,6 @@ import { tokenSchema } from "./token-schema";
 export const key = "brand";
 export const layer: LayerName = "theme";
 
-export type BrandRoleSchema = z.infer<typeof tokenSchema>;
 
 const tokens = {
   // Canvas: branded surfaces
@@ -148,6 +146,6 @@ const tokens = {
     $type: "color",
     $description: "Emphasis inverse brand border color for high-prominence outlines on inverse canvases."
   }
-} as const satisfies BrandRoleSchema;
+} as const satisfies TokenInterface;
 
 export default tokens;

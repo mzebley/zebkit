@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 /**
  * Zebkit info color design tokens.
@@ -8,7 +7,6 @@ import { tokenSchema } from "./token-schema";
 export const key = "info";
 export const layer: LayerName = "base";
 
-export type InfoTokenSchema = z.infer<typeof tokenSchema>;
 
 const tokens = {
   // Canvas: base info surfaces
@@ -142,6 +140,6 @@ const tokens = {
     $type: "color",
     $description: "Emphasis inverse info border color for high-prominence outlines on inverse canvases."
   }
-} as const satisfies InfoTokenSchema;
+} as const satisfies TokenInterface;
 
 export default tokens;

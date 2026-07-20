@@ -5,9 +5,10 @@ import ora from 'ora';
 import { glob } from 'glob';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { ZodSchema, z } from 'zod';
-import { TokenInterface, TokenGroupExtensions } from '@definitions/tokens';
+import { TokenInterface, TokenGroupExtensions, tokenModuleSchema } from '@definitions/tokens';
 import { DEFAULT_LAYER, LayerName } from '@definitions/layers';
 import { ZEBKIT_PREFIX } from '@config';
+import { fromDtcgDocument, toDtcgDocument } from './dtcg-document';
 import {
   buildFilePayload,
   inferTokenKeyFromFilename,
@@ -96,20 +97,22 @@ export async function buildZebkitTokens(
 
   try {
     for (const file of files) {
-      // JSON mode: pre-compiled defaults loaded by the installed CLI
+      // JSON mode: pre-compiled DTCG documents loaded by the installed CLI. The
+      // module key is the filename; layer / cssEmission / scale ride the group
+      // `$extensions["dev.zebkit"]` block, and a hoisted group `$type` expands
+      // back onto the entries (see fromDtcgDocument).
       if (path.isAbsolute(file) && file.endsWith('.json')) {
         try {
           const data = await fs.readJson(file);
-          const { _key, _layer, _cssEmission, $extensions, ...tokenData } = data as Record<string, any>;
-          const tokenKey: string = _key ?? path.basename(file, '.json');
-          const moduleLayer: LayerName = _layer ?? DEFAULT_LAYER;
-          tokens[tokenKey] = tokenData as TokenInterface;
-          layers[tokenKey] = moduleLayer;
-          if (_cssEmission === 'external') {
+          const tokenKey: string = path.basename(file, '.json');
+          const { entries, meta } = fromDtcgDocument(data as Record<string, unknown>);
+          tokens[tokenKey] = entries;
+          layers[tokenKey] = meta.layer;
+          if (meta.cssEmission === 'external') {
             externalModules.add(tokenKey);
           }
-          if ($extensions) {
-            mergeGroupExtensions(tokenKey, $extensions, groupExtensions);
+          if (meta.groupExtensions) {
+            mergeGroupExtensions(tokenKey, meta.groupExtensions, groupExtensions);
           }
         } catch (error) {
           console.error(chalk.red(`Error loading JSON token file ${file}:`), error);
@@ -140,19 +143,19 @@ export async function buildZebkitTokens(
         fatalErrors.push(`Token file missing: ${tokenPath}`);
         continue;
       }
-      if (!(await fs.pathExists(schemaPath))) {
-        fatalErrors.push(`Schema missing for token file: ${schemaPath}`);
-        continue;
-      }
+      // A bespoke `token-schema.ts` is optional (Phase 3 schema consolidation):
+      // modules without one validate against the generic DTCG entry-record
+      // schema; only modules with structural constraints (breakpoint, type-scale,
+      // font-family) keep a hand-written schema.
+      const hasBespokeSchema = await fs.pathExists(schemaPath);
 
       try {
-        const [tokenModule, schemaModule] = await Promise.all([
-          import(pathToFileURL(tokenPath).href),
-          import(pathToFileURL(schemaPath).href),
-        ]);
+        const tokenModule = await import(pathToFileURL(tokenPath).href);
+        const tokenSchema: ZodSchema = hasBespokeSchema
+          ? ((await import(pathToFileURL(schemaPath).href))['tokenSchema'] as ZodSchema)
+          : tokenModuleSchema;
 
         const tokensExport = tokenModule.default ?? tokenModule;
-        const tokenSchema = schemaModule['tokenSchema'] as ZodSchema;
         const moduleLayer: LayerName = tokenModule.layer ?? DEFAULT_LAYER;
 
         const moduleKey =
@@ -267,7 +270,9 @@ export async function buildZebkitTokens(
       outputFormats,
       themeName,
       splitMode,
-      groupExtensions
+      groupExtensions,
+      layers,
+      externalModules
     );
 
   return { tokens, layers, overriddenKeys, groupExtensions, externalModules };
@@ -392,14 +397,17 @@ async function applyTokenOverrideFile(
     );
   }
   if (tokens[inferredKey]) {
-    // A top-level `$extensions` member carries group-level scale-control
-    // overrides; it is not a token entry. Overridden control names are recorded
-    // into `touched` so overlay emission re-emits the modules they shape.
-    const { $extensions: groupOverride, ...entryData } = data as Record<string, unknown>;
-    if (groupOverride) {
-      mergeGroupExtensions(inferredKey, groupOverride, groupExtensions, touched);
+    // Read the override as a DTCG document: flatten nested groups (joining path
+    // segments with `-`), expand a hoisted group `$type` onto its entries, and
+    // reject `$ref` / `$extends` (D6) with an actionable error. A group-level
+    // `$extensions` block carries scale-control overrides — not token entries —
+    // whose names are recorded into `touched` so overlay emission re-emits the
+    // modules they shape.
+    const { entries, meta } = fromDtcgDocument(data as Record<string, unknown>);
+    if (meta.groupExtensions) {
+      mergeGroupExtensions(inferredKey, meta.groupExtensions, groupExtensions, touched);
     }
-    mergeOverrideObject({ [inferredKey]: entryData }, tokens, tokenSchemas, touched);
+    mergeOverrideObject({ [inferredKey]: entries }, tokens, tokenSchemas, touched);
     return;
   }
   if (excludedModuleKeys.has(inferredKey)) {
@@ -433,19 +441,24 @@ export async function writeTokensToFile(
   outputFormats: string[],
   themeName: string,
   splitMode: BuildZebkitTokensOptions['splitMode'],
-  groupExtensions: Record<string, TokenGroupExtensions> = {}
+  groupExtensions: Record<string, TokenGroupExtensions> = {},
+  layers: Record<string, LayerName> = {},
+  externalModules: ReadonlySet<string> = new Set()
 ) {
   const writeSpinner = ora('Writing tokens to file(s)...').start();
   const destinationPaths: string[] = [];
   const normalizedFormats = outputFormats.map((format) => format.toLowerCase());
   const resolvedSplitMode = splitMode ?? 'combined';
 
-  // Group-level metadata rides inside each module object as a `$extensions`
-  // member (the DTCG group shape), alongside the token entries.
+  // Each module serializes to a DTCG document: a hoisted group `$type` when the
+  // module is homogeneous, plus a group-level `$extensions["dev.zebkit"]` block
+  // carrying the module's layer, emission mode, and fluid-scale controls.
   const modulePayload = (tokenKey: string): Record<string, unknown> =>
-    groupExtensions[tokenKey]
-      ? { $extensions: groupExtensions[tokenKey], ...tokens[tokenKey] }
-      : tokens[tokenKey];
+    toDtcgDocument(tokens[tokenKey], {
+      layer: layers[tokenKey] ?? DEFAULT_LAYER,
+      cssEmission: externalModules.has(tokenKey) ? 'external' : undefined,
+      groupExtensions: groupExtensions[tokenKey],
+    });
 
   try {
     await fs.ensureDir(destinationPath);

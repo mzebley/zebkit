@@ -1,10 +1,8 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "opacity";
 export const layer: LayerName = "base";
-export type OpacityTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "0": {
@@ -92,6 +90,6 @@ const tokens = {
     $type: "number",
     $description: "Fully opaque (default).",
   },
-} as const satisfies OpacityTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

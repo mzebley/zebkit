@@ -1,7 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { serializeColorValue, type TokenObject } from "@definitions/tokens";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import { serializeColorValue, type TokenObject, TokenInterface } from "@definitions/tokens";
 import {
   PALETTE_FAMILIES,
   PALETTE_GLOBALS,
@@ -31,7 +29,6 @@ export const layer: LayerName = "theme";
  */
 export const cssEmission = "external";
 
-export type PaletteTokenSchema = z.infer<typeof tokenSchema>;
 
 function buildPaletteTokens(): Record<string, TokenObject> {
   const entries: Record<string, TokenObject> = {};
@@ -63,6 +60,6 @@ function buildPaletteTokens(): Record<string, TokenObject> {
   return entries;
 }
 
-const tokens = buildPaletteTokens() as PaletteTokenSchema;
+const tokens = buildPaletteTokens() as TokenInterface;
 
 export default tokens;

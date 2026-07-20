@@ -4,9 +4,9 @@ import { z, ZodSchema } from 'zod';
 import type { TokenGroupExtensions, TokenInterface, ZebkitExtension } from '@definitions/tokens';
 import {
   groupScale,
-  isDimensionValue,
   tokenFontMeta,
   tokenGroupExtensionsSchema,
+  tokenObjectSchema,
   zbkExtension,
 } from '@definitions/tokens';
 import { ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
@@ -125,13 +125,21 @@ export function mergeTokens(
     }
 
     const customValue = customTokens[key];
+    // Exact-key rejection only applies to modules with a bespoke ZodObject
+    // schema (breakpoint, type-scale, font-family); the generic record schema
+    // and the entry-must-exist-in-defaults check above are the closed-world
+    // guards for every other module (Phase 3 schema consolidation).
     const subSchema = schema instanceof z.ZodObject ? schema.shape[key] : undefined;
-    if (schema && !subSchema) {
+    if (schema instanceof z.ZodObject && !subSchema) {
       console.warn(`Invalid key '${keyPath}.${key}' not defined in schema. Ignoring.`);
       continue;
     }
 
     try {
+      // Bare-`$value` shorthand: an override entry may be the value itself
+      // (`"key": "1rem"`) or a full entry object (`"key": { "$value": … }`).
+      // The value may be any DTCG shape — a string/number, a structured
+      // dimension/color/shadow/duration/bezier object, or a shadow array.
       const overrideValue =
         typeof customValue === 'object' &&
         customValue !== null &&
@@ -139,17 +147,6 @@ export function mergeTokens(
         '$value' in customValue
           ? (customValue as Record<string, any>).$value
           : customValue;
-
-      if (
-        typeof overrideValue !== 'string' &&
-        typeof overrideValue !== 'number' &&
-        !isDimensionValue(overrideValue)
-      ) {
-        console.warn(
-          `Custom token for '${keyPath}.${key}' does not contain a valid '$value'. Using default token.`
-        );
-        continue;
-      }
 
       const nextToken = {
         ...defaultTokens[key],
@@ -173,9 +170,10 @@ export function mergeTokens(
         };
       }
 
-      if (subSchema) {
-        (subSchema as ZodSchema).parse(nextToken);
-      }
+      // Validate the merged entry: the module's bespoke subschema when it has
+      // one, otherwise the generic DTCG entry schema (which accepts every
+      // structured `$value`). A parse failure falls through to the default below.
+      (subSchema ?? tokenObjectSchema).parse(nextToken);
       merged[key] = nextToken;
       touched?.add(key);
     } catch {

@@ -1,13 +1,11 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
+import type { TokenInterface } from "@definitions/tokens";
 import { ZEBKIT_PREFIX } from "@config";
-import { tokenSchema } from "./token-schema";
 
 // TODO: Add descriptions
 
 export const key = "letter-spacing";
 export const layer: LayerName = "theme";
-export type LetterSpacingTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   tighter: {
@@ -40,6 +38,6 @@ const tokens = {
     $description: "",
     $extensions: { "dev.zebkit": { a11y: `--${ZEBKIT_PREFIX}-a11y-letter-spacing-modifier` } }
   },
-} as const satisfies LetterSpacingTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

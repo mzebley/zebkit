@@ -1,5 +1,10 @@
 {
   "zbk-a11y": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "spacing-modifier": {
       "$value": "1",
       "$type": "utility",
@@ -37,621 +42,537 @@
     }
   },
   "zbk-breakpoint": {
+    "$type": "dimension",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "tablet": {
       "$value": "40rem",
-      "$type": "dimension",
       "$description": "Small tablets and large phones in landscape (640px)."
     },
     "tablet-lg": {
       "$value": "50rem",
-      "$type": "dimension",
       "$description": "Large tablets (800px)."
     },
     "desktop": {
       "$value": "70rem",
-      "$type": "dimension",
       "$description": "Small desktops and laptops (1120px)."
     },
     "desktop-lg": {
       "$value": "80rem",
-      "$type": "dimension",
       "$description": "Large desktops (1280px)."
     },
     "widescreen": {
       "$value": "100rem",
-      "$type": "dimension",
       "$description": "Widescreen and ultra-wide displays (1600px)."
     }
   },
   "zbk-accent-primary": {
     "50": {
       "$value": "{color.sea-50}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "100": {
       "$value": "{color.sea-100}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "200": {
       "$value": "{color.sea-200}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "300": {
       "$value": "{color.sea-300}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "400": {
       "$value": "{color.sea-400}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "500": {
       "$value": "{color.sea-500}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "600": {
       "$value": "{color.sea-600}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "700": {
       "$value": "{color.sea-700}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "800": {
       "$value": "{color.sea-800}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "900": {
       "$value": "{color.sea-900}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "950": {
       "$value": "{color.sea-950}",
-      "$type": "color",
       "$description": "For primary accent surfaces."
+    },
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
     },
     "canvas": {
       "$value": "{accent-primary.500}",
-      "$type": "color",
       "$description": "Base primary-accent canvas color for primary accent surfaces."
     },
     "canvas-subtle": {
       "$value": "{accent-primary.50}",
-      "$type": "color",
       "$description": "Subtle primary-accent canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{accent-primary.100}",
-      "$type": "color",
       "$description": "Muted primary-accent canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{accent-primary.600}",
-      "$type": "color",
       "$description": "Emphasis primary-accent canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{accent-primary.400}",
-      "$type": "color",
       "$description": "Base inverse primary-accent canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{accent-primary.900}",
-      "$type": "color",
       "$description": "Subtle inverse primary-accent canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{accent-primary.800}",
-      "$type": "color",
       "$description": "Muted inverse primary-accent canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{accent-primary.300}",
-      "$type": "color",
       "$description": "Emphasis inverse primary-accent canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{accent-primary.300}",
-      "$type": "color",
       "$description": "Base primary-accent ink color (the accent hue) for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{accent-primary.200}",
-      "$type": "color",
       "$description": "Subtle primary-accent ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{accent-primary.400}",
-      "$type": "color",
       "$description": "Muted primary-accent ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{accent-primary.50}",
-      "$type": "color",
       "$description": "Emphasis primary-accent ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{accent-primary.300}",
-      "$type": "color",
       "$description": "Base inverse primary-accent ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{accent-primary.500}",
-      "$type": "color",
       "$description": "Subtle inverse primary-accent ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{accent-primary.400}",
-      "$type": "color",
       "$description": "Muted inverse primary-accent ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{accent-primary.200}",
-      "$type": "color",
       "$description": "Emphasis inverse primary-accent ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{accent-primary.500}",
-      "$type": "color",
       "$description": "Base primary-accent border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{accent-primary.200}",
-      "$type": "color",
       "$description": "Subtle primary-accent border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{accent-primary.300}",
-      "$type": "color",
       "$description": "Muted primary-accent border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{accent-primary.600}",
-      "$type": "color",
       "$description": "Emphasis primary-accent border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{accent-primary.500}",
-      "$type": "color",
       "$description": "Base inverse primary-accent border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{accent-primary.800}",
-      "$type": "color",
       "$description": "Subtle inverse primary-accent border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{accent-primary.700}",
-      "$type": "color",
       "$description": "Muted inverse primary-accent border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{accent-primary.400}",
-      "$type": "color",
       "$description": "Emphasis inverse primary-accent border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-accent-secondary": {
     "50": {
       "$value": "{color.butterfield-50}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "100": {
       "$value": "{color.butterfield-100}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "200": {
       "$value": "{color.butterfield-200}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "300": {
       "$value": "{color.butterfield-300}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "400": {
       "$value": "{color.butterfield-400}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "500": {
       "$value": "{color.butterfield-500}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "600": {
       "$value": "{color.butterfield-600}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "700": {
       "$value": "{color.butterfield-700}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "800": {
       "$value": "{color.butterfield-800}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "900": {
       "$value": "{color.butterfield-900}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "950": {
       "$value": "{color.butterfield-950}",
-      "$type": "color",
       "$description": "For secondary accent surfaces."
+    },
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
     },
     "canvas": {
       "$value": "{accent-secondary.500}",
-      "$type": "color",
       "$description": "Base secondary-accent canvas color for secondary accent surfaces."
     },
     "canvas-subtle": {
       "$value": "{accent-secondary.50}",
-      "$type": "color",
       "$description": "Subtle secondary-accent canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{accent-secondary.100}",
-      "$type": "color",
       "$description": "Muted secondary-accent canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{accent-secondary.600}",
-      "$type": "color",
       "$description": "Emphasis secondary-accent canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{accent-secondary.400}",
-      "$type": "color",
       "$description": "Base inverse secondary-accent canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{accent-secondary.900}",
-      "$type": "color",
       "$description": "Subtle inverse secondary-accent canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{accent-secondary.800}",
-      "$type": "color",
       "$description": "Muted inverse secondary-accent canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{accent-secondary.300}",
-      "$type": "color",
       "$description": "Emphasis inverse secondary-accent canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{accent-secondary.300}",
-      "$type": "color",
       "$description": "Base secondary-accent ink color (the accent hue) for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{accent-secondary.400}",
-      "$type": "color",
       "$description": "Subtle secondary-accent ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{accent-secondary.500}",
-      "$type": "color",
       "$description": "Muted secondary-accent ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{accent-secondary.100}",
-      "$type": "color",
       "$description": "Emphasis secondary-accent ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{accent-secondary.300}",
-      "$type": "color",
       "$description": "Base inverse secondary-accent ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{accent-secondary.500}",
-      "$type": "color",
       "$description": "Subtle inverse secondary-accent ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{accent-secondary.400}",
-      "$type": "color",
       "$description": "Muted inverse secondary-accent ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{accent-secondary.200}",
-      "$type": "color",
       "$description": "Emphasis inverse secondary-accent ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{accent-secondary.500}",
-      "$type": "color",
       "$description": "Base secondary-accent border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{accent-secondary.200}",
-      "$type": "color",
       "$description": "Subtle secondary-accent border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{accent-secondary.300}",
-      "$type": "color",
       "$description": "Muted secondary-accent border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{accent-secondary.600}",
-      "$type": "color",
       "$description": "Emphasis secondary-accent border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{accent-secondary.500}",
-      "$type": "color",
       "$description": "Base inverse secondary-accent border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{accent-secondary.800}",
-      "$type": "color",
       "$description": "Subtle inverse secondary-accent border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{accent-secondary.700}",
-      "$type": "color",
       "$description": "Muted inverse secondary-accent border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{accent-secondary.400}",
-      "$type": "color",
       "$description": "Emphasis inverse secondary-accent border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-brand": {
     "50": {
       "$value": "{color.dusk-50}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
     },
     "100": {
       "$value": "{color.dusk-100}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
     },
     "200": {
       "$value": "{color.dusk-200}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
     },
     "300": {
       "$value": "{color.dusk-300}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
     },
     "400": {
       "$value": "{color.dusk-400}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
     },
     "500": {
       "$value": "{color.dusk-500}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
     },
     "600": {
       "$value": "{color.dusk-600}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
     },
     "700": {
       "$value": "{color.dusk-700}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
     },
     "800": {
       "$value": "{color.dusk-800}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
     },
     "900": {
       "$value": "{color.dusk-900}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
     },
     "950": {
       "$value": "{color.dusk-950}",
-      "$type": "color",
       "$description": "For primary branded surfaces."
+    },
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
     },
     "canvas": {
       "$value": "{brand.900}",
-      "$type": "color",
       "$description": "Base brand canvas color for primary branded surfaces."
     },
     "canvas-subtle": {
       "$value": "{brand.800}",
-      "$type": "color",
       "$description": "Subtle brand canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{brand.950}",
-      "$type": "color",
       "$description": "Muted brand canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{brand.600}",
-      "$type": "color",
       "$description": "Emphasis brand canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{brand.100}",
-      "$type": "color",
       "$description": "Base inverse brand canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{brand.200}",
-      "$type": "color",
       "$description": "Subtle inverse brand canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{brand.50}",
-      "$type": "color",
       "$description": "Muted inverse brand canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{brand.300}",
-      "$type": "color",
       "$description": "Emphasis inverse brand canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{brand.100}",
-      "$type": "color",
       "$description": "Base brand ink color (the brand hue) for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{brand.200}",
-      "$type": "color",
       "$description": "Subtle brand ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{brand.300}",
-      "$type": "color",
       "$description": "Muted brand ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{brand.50}",
-      "$type": "color",
       "$description": "Emphasis brand ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{brand.900}",
-      "$type": "color",
       "$description": "Base inverse brand ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{brand.800}",
-      "$type": "color",
       "$description": "Subtle inverse brand ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{brand.700}",
-      "$type": "color",
       "$description": "Muted inverse brand ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{brand.950}",
-      "$type": "color",
       "$description": "Emphasis inverse brand ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{brand.700}",
-      "$type": "color",
       "$description": "Base brand border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{brand.800}",
-      "$type": "color",
       "$description": "Subtle brand border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{brand.950}",
-      "$type": "color",
       "$description": "Muted brand border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{brand.600}",
-      "$type": "color",
       "$description": "Emphasis brand border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{brand.500}",
-      "$type": "color",
       "$description": "Base inverse brand border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{brand.800}",
-      "$type": "color",
       "$description": "Subtle inverse brand border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{brand.700}",
-      "$type": "color",
       "$description": "Muted inverse brand border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{brand.400}",
-      "$type": "color",
       "$description": "Emphasis inverse brand border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-neutral": {
     "50": {
       "$value": "{color.stone-50}",
-      "$type": "color",
       "$description": "For neutral surfaces."
     },
     "100": {
       "$value": "{color.stone-100}",
-      "$type": "color",
       "$description": "For neutral surfaces."
     },
     "200": {
       "$value": "{color.stone-200}",
-      "$type": "color",
       "$description": "For neutral surfaces."
     },
     "300": {
       "$value": "{color.stone-300}",
-      "$type": "color",
       "$description": "For neutral surfaces."
     },
     "400": {
       "$value": "{color.stone-400}",
-      "$type": "color",
       "$description": "For neutral surfaces."
     },
     "500": {
       "$value": "{color.stone-500}",
-      "$type": "color",
       "$description": "For neutral surfaces."
     },
     "600": {
       "$value": "{color.stone-600}",
-      "$type": "color",
       "$description": "For neutral surfaces."
     },
     "700": {
       "$value": "{color.stone-700}",
-      "$type": "color",
       "$description": "For neutral surfaces."
     },
     "800": {
       "$value": "{color.stone-800}",
-      "$type": "color",
       "$description": "For neutral surfaces."
     },
     "900": {
       "$value": "{color.stone-900}",
-      "$type": "color",
       "$description": "For neutral surfaces."
     },
     "950": {
       "$value": "{color.stone-950}",
-      "$type": "color",
       "$description": "For neutral surfaces."
+    },
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
     }
   },
   "zbk-color": {
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme",
+        "cssEmission": "external"
+      }
+    },
     "red-50": {
       "$value": {
         "colorSpace": "hsl",
@@ -661,7 +582,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 50 (98% lightness)."
     },
     "red-100": {
@@ -673,7 +593,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 100 (93% lightness)."
     },
     "red-200": {
@@ -685,7 +604,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 200 (87% lightness)."
     },
     "red-300": {
@@ -697,7 +615,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 300 (78% lightness)."
     },
     "red-400": {
@@ -709,7 +626,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 400 (69% lightness)."
     },
     "red-500": {
@@ -721,7 +637,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 500 (58% lightness)."
     },
     "red-600": {
@@ -733,7 +648,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 600 (48% lightness)."
     },
     "red-700": {
@@ -745,7 +659,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 700 (36% lightness)."
     },
     "red-800": {
@@ -757,7 +670,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 800 (26% lightness)."
     },
     "red-900": {
@@ -769,7 +681,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 900 (18% lightness)."
     },
     "red-950": {
@@ -781,7 +692,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive red ramp, step 950 (10% lightness)."
     },
     "pink-50": {
@@ -793,7 +703,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 50 (98% lightness)."
     },
     "pink-100": {
@@ -805,7 +714,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 100 (93% lightness)."
     },
     "pink-200": {
@@ -817,7 +725,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 200 (87% lightness)."
     },
     "pink-300": {
@@ -829,7 +736,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 300 (78% lightness)."
     },
     "pink-400": {
@@ -841,7 +747,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 400 (69% lightness)."
     },
     "pink-500": {
@@ -853,7 +758,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 500 (58% lightness)."
     },
     "pink-600": {
@@ -865,7 +769,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 600 (48% lightness)."
     },
     "pink-700": {
@@ -877,7 +780,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 700 (36% lightness)."
     },
     "pink-800": {
@@ -889,7 +791,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 800 (26% lightness)."
     },
     "pink-900": {
@@ -901,7 +802,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 900 (18% lightness)."
     },
     "pink-950": {
@@ -913,7 +813,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive pink ramp, step 950 (10% lightness)."
     },
     "orange-50": {
@@ -925,7 +824,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 50 (98% lightness)."
     },
     "orange-100": {
@@ -937,7 +835,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 100 (93% lightness)."
     },
     "orange-200": {
@@ -949,7 +846,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 200 (87% lightness)."
     },
     "orange-300": {
@@ -961,7 +857,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 300 (78% lightness)."
     },
     "orange-400": {
@@ -973,7 +868,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 400 (69% lightness)."
     },
     "orange-500": {
@@ -985,7 +879,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 500 (58% lightness)."
     },
     "orange-600": {
@@ -997,7 +890,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 600 (48% lightness)."
     },
     "orange-700": {
@@ -1009,7 +901,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 700 (36% lightness)."
     },
     "orange-800": {
@@ -1021,7 +912,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 800 (26% lightness)."
     },
     "orange-900": {
@@ -1033,7 +923,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 900 (18% lightness)."
     },
     "orange-950": {
@@ -1045,7 +934,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive orange ramp, step 950 (10% lightness)."
     },
     "gold-50": {
@@ -1057,7 +945,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 50 (98% lightness)."
     },
     "gold-100": {
@@ -1069,7 +956,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 100 (93% lightness)."
     },
     "gold-200": {
@@ -1081,7 +967,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 200 (87% lightness)."
     },
     "gold-300": {
@@ -1093,7 +978,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 300 (78% lightness)."
     },
     "gold-400": {
@@ -1105,7 +989,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 400 (69% lightness)."
     },
     "gold-500": {
@@ -1117,7 +1000,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 500 (58% lightness)."
     },
     "gold-600": {
@@ -1129,7 +1011,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 600 (48% lightness)."
     },
     "gold-700": {
@@ -1141,7 +1022,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 700 (36% lightness)."
     },
     "gold-800": {
@@ -1153,7 +1033,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 800 (26% lightness)."
     },
     "gold-900": {
@@ -1165,7 +1044,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 900 (18% lightness)."
     },
     "gold-950": {
@@ -1177,7 +1055,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive gold ramp, step 950 (10% lightness)."
     },
     "yellow-50": {
@@ -1189,7 +1066,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 50 (98% lightness)."
     },
     "yellow-100": {
@@ -1201,7 +1077,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 100 (93% lightness)."
     },
     "yellow-200": {
@@ -1213,7 +1088,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 200 (87% lightness)."
     },
     "yellow-300": {
@@ -1225,7 +1099,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 300 (78% lightness)."
     },
     "yellow-400": {
@@ -1237,7 +1110,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 400 (69% lightness)."
     },
     "yellow-500": {
@@ -1249,7 +1121,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 500 (58% lightness)."
     },
     "yellow-600": {
@@ -1261,7 +1132,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 600 (48% lightness)."
     },
     "yellow-700": {
@@ -1273,7 +1143,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 700 (36% lightness)."
     },
     "yellow-800": {
@@ -1285,7 +1154,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 800 (26% lightness)."
     },
     "yellow-900": {
@@ -1297,7 +1165,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 900 (18% lightness)."
     },
     "yellow-950": {
@@ -1309,7 +1176,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive yellow ramp, step 950 (10% lightness)."
     },
     "lime-50": {
@@ -1321,7 +1187,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 50 (98% lightness)."
     },
     "lime-100": {
@@ -1333,7 +1198,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 100 (93% lightness)."
     },
     "lime-200": {
@@ -1345,7 +1209,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 200 (87% lightness)."
     },
     "lime-300": {
@@ -1357,7 +1220,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 300 (78% lightness)."
     },
     "lime-400": {
@@ -1369,7 +1231,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 400 (69% lightness)."
     },
     "lime-500": {
@@ -1381,7 +1242,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 500 (58% lightness)."
     },
     "lime-600": {
@@ -1393,7 +1253,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 600 (48% lightness)."
     },
     "lime-700": {
@@ -1405,7 +1264,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 700 (36% lightness)."
     },
     "lime-800": {
@@ -1417,7 +1275,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 800 (26% lightness)."
     },
     "lime-900": {
@@ -1429,7 +1286,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 900 (18% lightness)."
     },
     "lime-950": {
@@ -1441,7 +1297,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive lime ramp, step 950 (10% lightness)."
     },
     "green-50": {
@@ -1453,7 +1308,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 50 (98% lightness)."
     },
     "green-100": {
@@ -1465,7 +1319,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 100 (93% lightness)."
     },
     "green-200": {
@@ -1477,7 +1330,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 200 (87% lightness)."
     },
     "green-300": {
@@ -1489,7 +1341,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 300 (78% lightness)."
     },
     "green-400": {
@@ -1501,7 +1352,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 400 (69% lightness)."
     },
     "green-500": {
@@ -1513,7 +1363,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 500 (58% lightness)."
     },
     "green-600": {
@@ -1525,7 +1374,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 600 (48% lightness)."
     },
     "green-700": {
@@ -1537,7 +1385,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 700 (36% lightness)."
     },
     "green-800": {
@@ -1549,7 +1396,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 800 (26% lightness)."
     },
     "green-900": {
@@ -1561,7 +1407,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 900 (18% lightness)."
     },
     "green-950": {
@@ -1573,7 +1418,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive green ramp, step 950 (10% lightness)."
     },
     "teal-50": {
@@ -1585,7 +1429,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 50 (98% lightness)."
     },
     "teal-100": {
@@ -1597,7 +1440,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 100 (93% lightness)."
     },
     "teal-200": {
@@ -1609,7 +1451,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 200 (87% lightness)."
     },
     "teal-300": {
@@ -1621,7 +1462,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 300 (78% lightness)."
     },
     "teal-400": {
@@ -1633,7 +1473,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 400 (69% lightness)."
     },
     "teal-500": {
@@ -1645,7 +1484,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 500 (58% lightness)."
     },
     "teal-600": {
@@ -1657,7 +1495,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 600 (48% lightness)."
     },
     "teal-700": {
@@ -1669,7 +1506,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 700 (36% lightness)."
     },
     "teal-800": {
@@ -1681,7 +1517,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 800 (26% lightness)."
     },
     "teal-900": {
@@ -1693,7 +1528,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 900 (18% lightness)."
     },
     "teal-950": {
@@ -1705,7 +1539,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive teal ramp, step 950 (10% lightness)."
     },
     "cyan-50": {
@@ -1717,7 +1550,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 50 (98% lightness)."
     },
     "cyan-100": {
@@ -1729,7 +1561,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 100 (93% lightness)."
     },
     "cyan-200": {
@@ -1741,7 +1572,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 200 (87% lightness)."
     },
     "cyan-300": {
@@ -1753,7 +1583,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 300 (78% lightness)."
     },
     "cyan-400": {
@@ -1765,7 +1594,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 400 (69% lightness)."
     },
     "cyan-500": {
@@ -1777,7 +1605,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 500 (58% lightness)."
     },
     "cyan-600": {
@@ -1789,7 +1616,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 600 (48% lightness)."
     },
     "cyan-700": {
@@ -1801,7 +1627,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 700 (36% lightness)."
     },
     "cyan-800": {
@@ -1813,7 +1638,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 800 (26% lightness)."
     },
     "cyan-900": {
@@ -1825,7 +1649,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 900 (18% lightness)."
     },
     "cyan-950": {
@@ -1837,7 +1660,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive cyan ramp, step 950 (10% lightness)."
     },
     "blue-50": {
@@ -1849,7 +1671,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 50 (98% lightness)."
     },
     "blue-100": {
@@ -1861,7 +1682,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 100 (93% lightness)."
     },
     "blue-200": {
@@ -1873,7 +1693,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 200 (87% lightness)."
     },
     "blue-300": {
@@ -1885,7 +1704,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 300 (78% lightness)."
     },
     "blue-400": {
@@ -1897,7 +1715,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 400 (69% lightness)."
     },
     "blue-500": {
@@ -1909,7 +1726,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 500 (58% lightness)."
     },
     "blue-600": {
@@ -1921,7 +1737,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 600 (48% lightness)."
     },
     "blue-700": {
@@ -1933,7 +1748,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 700 (36% lightness)."
     },
     "blue-800": {
@@ -1945,7 +1759,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 800 (26% lightness)."
     },
     "blue-900": {
@@ -1957,7 +1770,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 900 (18% lightness)."
     },
     "blue-950": {
@@ -1969,7 +1781,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive blue ramp, step 950 (10% lightness)."
     },
     "indigo-50": {
@@ -1981,7 +1792,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 50 (98% lightness)."
     },
     "indigo-100": {
@@ -1993,7 +1803,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 100 (93% lightness)."
     },
     "indigo-200": {
@@ -2005,7 +1814,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 200 (87% lightness)."
     },
     "indigo-300": {
@@ -2017,7 +1825,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 300 (78% lightness)."
     },
     "indigo-400": {
@@ -2029,7 +1836,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 400 (69% lightness)."
     },
     "indigo-500": {
@@ -2041,7 +1847,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 500 (58% lightness)."
     },
     "indigo-600": {
@@ -2053,7 +1858,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 600 (48% lightness)."
     },
     "indigo-700": {
@@ -2065,7 +1869,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 700 (36% lightness)."
     },
     "indigo-800": {
@@ -2077,7 +1880,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 800 (26% lightness)."
     },
     "indigo-900": {
@@ -2089,7 +1891,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 900 (18% lightness)."
     },
     "indigo-950": {
@@ -2101,7 +1902,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive indigo ramp, step 950 (10% lightness)."
     },
     "violet-50": {
@@ -2113,7 +1913,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 50 (98% lightness)."
     },
     "violet-100": {
@@ -2125,7 +1924,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 100 (93% lightness)."
     },
     "violet-200": {
@@ -2137,7 +1935,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 200 (87% lightness)."
     },
     "violet-300": {
@@ -2149,7 +1946,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 300 (78% lightness)."
     },
     "violet-400": {
@@ -2161,7 +1957,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 400 (69% lightness)."
     },
     "violet-500": {
@@ -2173,7 +1968,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 500 (58% lightness)."
     },
     "violet-600": {
@@ -2185,7 +1979,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 600 (48% lightness)."
     },
     "violet-700": {
@@ -2197,7 +1990,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 700 (36% lightness)."
     },
     "violet-800": {
@@ -2209,7 +2001,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 800 (26% lightness)."
     },
     "violet-900": {
@@ -2221,7 +2012,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 900 (18% lightness)."
     },
     "violet-950": {
@@ -2233,7 +2023,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive violet ramp, step 950 (10% lightness)."
     },
     "merlot-50": {
@@ -2245,7 +2034,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 50 (98% lightness)."
     },
     "merlot-100": {
@@ -2257,7 +2045,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 100 (93% lightness)."
     },
     "merlot-200": {
@@ -2269,7 +2056,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 200 (87% lightness)."
     },
     "merlot-300": {
@@ -2281,7 +2067,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 300 (78% lightness)."
     },
     "merlot-400": {
@@ -2293,7 +2078,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 400 (69% lightness)."
     },
     "merlot-500": {
@@ -2305,7 +2089,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 500 (58% lightness)."
     },
     "merlot-600": {
@@ -2317,7 +2100,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 600 (48% lightness)."
     },
     "merlot-700": {
@@ -2329,7 +2111,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 700 (36% lightness)."
     },
     "merlot-800": {
@@ -2341,7 +2122,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 800 (26% lightness)."
     },
     "merlot-900": {
@@ -2353,7 +2133,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 900 (18% lightness)."
     },
     "merlot-950": {
@@ -2365,7 +2144,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive merlot ramp, step 950 (10% lightness)."
     },
     "butterfield-50": {
@@ -2377,7 +2155,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 50 (98% lightness)."
     },
     "butterfield-100": {
@@ -2389,7 +2166,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 100 (93% lightness)."
     },
     "butterfield-200": {
@@ -2401,7 +2177,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 200 (87% lightness)."
     },
     "butterfield-300": {
@@ -2413,7 +2188,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 300 (78% lightness)."
     },
     "butterfield-400": {
@@ -2425,7 +2199,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 400 (69% lightness)."
     },
     "butterfield-500": {
@@ -2437,7 +2210,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 500 (58% lightness)."
     },
     "butterfield-600": {
@@ -2449,7 +2221,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 600 (48% lightness)."
     },
     "butterfield-700": {
@@ -2461,7 +2232,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 700 (36% lightness)."
     },
     "butterfield-800": {
@@ -2473,7 +2243,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 800 (26% lightness)."
     },
     "butterfield-900": {
@@ -2485,7 +2254,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 900 (18% lightness)."
     },
     "butterfield-950": {
@@ -2497,7 +2265,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive butterfield ramp, step 950 (10% lightness)."
     },
     "mint-50": {
@@ -2509,7 +2276,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 50 (98% lightness)."
     },
     "mint-100": {
@@ -2521,7 +2287,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 100 (93% lightness)."
     },
     "mint-200": {
@@ -2533,7 +2298,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 200 (87% lightness)."
     },
     "mint-300": {
@@ -2545,7 +2309,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 300 (78% lightness)."
     },
     "mint-400": {
@@ -2557,7 +2320,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 400 (69% lightness)."
     },
     "mint-500": {
@@ -2569,7 +2331,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 500 (58% lightness)."
     },
     "mint-600": {
@@ -2581,7 +2342,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 600 (48% lightness)."
     },
     "mint-700": {
@@ -2593,7 +2353,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 700 (36% lightness)."
     },
     "mint-800": {
@@ -2605,7 +2364,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 800 (26% lightness)."
     },
     "mint-900": {
@@ -2617,7 +2375,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 900 (18% lightness)."
     },
     "mint-950": {
@@ -2629,7 +2386,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive mint ramp, step 950 (10% lightness)."
     },
     "sea-50": {
@@ -2641,7 +2397,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 50 (98% lightness)."
     },
     "sea-100": {
@@ -2653,7 +2408,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 100 (93% lightness)."
     },
     "sea-200": {
@@ -2665,7 +2419,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 200 (87% lightness)."
     },
     "sea-300": {
@@ -2677,7 +2430,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 300 (78% lightness)."
     },
     "sea-400": {
@@ -2689,7 +2441,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 400 (69% lightness)."
     },
     "sea-500": {
@@ -2701,7 +2452,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 500 (58% lightness)."
     },
     "sea-600": {
@@ -2713,7 +2463,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 600 (48% lightness)."
     },
     "sea-700": {
@@ -2725,7 +2474,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 700 (36% lightness)."
     },
     "sea-800": {
@@ -2737,7 +2485,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 800 (26% lightness)."
     },
     "sea-900": {
@@ -2749,7 +2496,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 900 (18% lightness)."
     },
     "sea-950": {
@@ -2761,7 +2507,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive sea ramp, step 950 (10% lightness)."
     },
     "dusk-50": {
@@ -2773,7 +2518,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 50 (98% lightness)."
     },
     "dusk-100": {
@@ -2785,7 +2529,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 100 (93% lightness)."
     },
     "dusk-200": {
@@ -2797,7 +2540,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 200 (87% lightness)."
     },
     "dusk-300": {
@@ -2809,7 +2551,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 300 (78% lightness)."
     },
     "dusk-400": {
@@ -2821,7 +2562,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 400 (69% lightness)."
     },
     "dusk-500": {
@@ -2833,7 +2573,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 500 (58% lightness)."
     },
     "dusk-600": {
@@ -2845,7 +2584,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 600 (48% lightness)."
     },
     "dusk-700": {
@@ -2857,7 +2595,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 700 (36% lightness)."
     },
     "dusk-800": {
@@ -2869,7 +2606,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 800 (26% lightness)."
     },
     "dusk-900": {
@@ -2881,7 +2617,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 900 (18% lightness)."
     },
     "dusk-950": {
@@ -2893,7 +2628,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive dusk ramp, step 950 (10% lightness)."
     },
     "stone-50": {
@@ -2905,7 +2639,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 50 (98% lightness)."
     },
     "stone-100": {
@@ -2917,7 +2650,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 100 (93% lightness)."
     },
     "stone-200": {
@@ -2929,7 +2661,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 200 (87% lightness)."
     },
     "stone-300": {
@@ -2941,7 +2672,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 300 (78% lightness)."
     },
     "stone-400": {
@@ -2953,7 +2683,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 400 (69% lightness)."
     },
     "stone-500": {
@@ -2965,7 +2694,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 500 (58% lightness)."
     },
     "stone-600": {
@@ -2977,7 +2705,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 600 (48% lightness)."
     },
     "stone-700": {
@@ -2989,7 +2716,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 700 (36% lightness)."
     },
     "stone-800": {
@@ -3001,7 +2727,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 800 (26% lightness)."
     },
     "stone-900": {
@@ -3013,7 +2738,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 900 (18% lightness)."
     },
     "stone-950": {
@@ -3025,7 +2749,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive stone ramp, step 950 (10% lightness)."
     },
     "charcoal-50": {
@@ -3037,7 +2760,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 50 (98% lightness)."
     },
     "charcoal-100": {
@@ -3049,7 +2771,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 100 (93% lightness)."
     },
     "charcoal-200": {
@@ -3061,7 +2782,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 200 (87% lightness)."
     },
     "charcoal-300": {
@@ -3073,7 +2793,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 300 (78% lightness)."
     },
     "charcoal-400": {
@@ -3085,7 +2804,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 400 (69% lightness)."
     },
     "charcoal-500": {
@@ -3097,7 +2815,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 500 (58% lightness)."
     },
     "charcoal-600": {
@@ -3109,7 +2826,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 600 (48% lightness)."
     },
     "charcoal-700": {
@@ -3121,7 +2837,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 700 (36% lightness)."
     },
     "charcoal-800": {
@@ -3133,7 +2848,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 800 (26% lightness)."
     },
     "charcoal-900": {
@@ -3145,7 +2859,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 900 (18% lightness)."
     },
     "charcoal-950": {
@@ -3157,7 +2870,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive charcoal ramp, step 950 (10% lightness)."
     },
     "lavenderfield-50": {
@@ -3169,7 +2881,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 50 (98% lightness)."
     },
     "lavenderfield-100": {
@@ -3181,7 +2892,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 100 (93% lightness)."
     },
     "lavenderfield-200": {
@@ -3193,7 +2903,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 200 (87% lightness)."
     },
     "lavenderfield-300": {
@@ -3205,7 +2914,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 300 (78% lightness)."
     },
     "lavenderfield-400": {
@@ -3217,7 +2925,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 400 (69% lightness)."
     },
     "lavenderfield-500": {
@@ -3229,7 +2936,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 500 (58% lightness)."
     },
     "lavenderfield-600": {
@@ -3241,7 +2947,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 600 (48% lightness)."
     },
     "lavenderfield-700": {
@@ -3253,7 +2958,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 700 (36% lightness)."
     },
     "lavenderfield-800": {
@@ -3265,7 +2969,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 800 (26% lightness)."
     },
     "lavenderfield-900": {
@@ -3277,7 +2980,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 900 (18% lightness)."
     },
     "lavenderfield-950": {
@@ -3289,7 +2991,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive lavenderfield ramp, step 950 (10% lightness)."
     },
     "rosewater-50": {
@@ -3301,7 +3002,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 50 (98% lightness)."
     },
     "rosewater-100": {
@@ -3313,7 +3013,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 100 (93% lightness)."
     },
     "rosewater-200": {
@@ -3325,7 +3024,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 200 (87% lightness)."
     },
     "rosewater-300": {
@@ -3337,7 +3035,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 300 (78% lightness)."
     },
     "rosewater-400": {
@@ -3349,7 +3046,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 400 (69% lightness)."
     },
     "rosewater-500": {
@@ -3361,7 +3057,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 500 (58% lightness)."
     },
     "rosewater-600": {
@@ -3373,7 +3068,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 600 (48% lightness)."
     },
     "rosewater-700": {
@@ -3385,7 +3079,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 700 (36% lightness)."
     },
     "rosewater-800": {
@@ -3397,7 +3090,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 800 (26% lightness)."
     },
     "rosewater-900": {
@@ -3409,7 +3101,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 900 (18% lightness)."
     },
     "rosewater-950": {
@@ -3421,7 +3112,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive rosewater ramp, step 950 (10% lightness)."
     },
     "ember-50": {
@@ -3433,7 +3123,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 50 (98% lightness)."
     },
     "ember-100": {
@@ -3445,7 +3134,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 100 (93% lightness)."
     },
     "ember-200": {
@@ -3457,7 +3145,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 200 (87% lightness)."
     },
     "ember-300": {
@@ -3469,7 +3156,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 300 (78% lightness)."
     },
     "ember-400": {
@@ -3481,7 +3167,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 400 (69% lightness)."
     },
     "ember-500": {
@@ -3493,7 +3178,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 500 (58% lightness)."
     },
     "ember-600": {
@@ -3505,7 +3189,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 600 (48% lightness)."
     },
     "ember-700": {
@@ -3517,7 +3200,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 700 (36% lightness)."
     },
     "ember-800": {
@@ -3529,7 +3211,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 800 (26% lightness)."
     },
     "ember-900": {
@@ -3541,7 +3222,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 900 (18% lightness)."
     },
     "ember-950": {
@@ -3553,7 +3233,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive ember ramp, step 950 (10% lightness)."
     },
     "deepcurrent-50": {
@@ -3565,7 +3244,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 50 (98% lightness)."
     },
     "deepcurrent-100": {
@@ -3577,7 +3255,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 100 (93% lightness)."
     },
     "deepcurrent-200": {
@@ -3589,7 +3266,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 200 (87% lightness)."
     },
     "deepcurrent-300": {
@@ -3601,7 +3277,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 300 (78% lightness)."
     },
     "deepcurrent-400": {
@@ -3613,7 +3288,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 400 (69% lightness)."
     },
     "deepcurrent-500": {
@@ -3625,7 +3299,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 500 (58% lightness)."
     },
     "deepcurrent-600": {
@@ -3637,7 +3310,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 600 (48% lightness)."
     },
     "deepcurrent-700": {
@@ -3649,7 +3321,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 700 (36% lightness)."
     },
     "deepcurrent-800": {
@@ -3661,7 +3332,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 800 (26% lightness)."
     },
     "deepcurrent-900": {
@@ -3673,7 +3343,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 900 (18% lightness)."
     },
     "deepcurrent-950": {
@@ -3685,7 +3354,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive deepcurrent ramp, step 950 (10% lightness)."
     },
     "foxglove-50": {
@@ -3697,7 +3365,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 50 (98% lightness)."
     },
     "foxglove-100": {
@@ -3709,7 +3376,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 100 (93% lightness)."
     },
     "foxglove-200": {
@@ -3721,7 +3387,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 200 (87% lightness)."
     },
     "foxglove-300": {
@@ -3733,7 +3398,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 300 (78% lightness)."
     },
     "foxglove-400": {
@@ -3745,7 +3409,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 400 (69% lightness)."
     },
     "foxglove-500": {
@@ -3757,7 +3420,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 500 (58% lightness)."
     },
     "foxglove-600": {
@@ -3769,7 +3431,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 600 (48% lightness)."
     },
     "foxglove-700": {
@@ -3781,7 +3442,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 700 (36% lightness)."
     },
     "foxglove-800": {
@@ -3793,7 +3453,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 800 (26% lightness)."
     },
     "foxglove-900": {
@@ -3805,7 +3464,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 900 (18% lightness)."
     },
     "foxglove-950": {
@@ -3817,7 +3475,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive foxglove ramp, step 950 (10% lightness)."
     },
     "chestnut-50": {
@@ -3829,7 +3486,6 @@
           98
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 50 (98% lightness)."
     },
     "chestnut-100": {
@@ -3841,7 +3497,6 @@
           93
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 100 (93% lightness)."
     },
     "chestnut-200": {
@@ -3853,7 +3508,6 @@
           87
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 200 (87% lightness)."
     },
     "chestnut-300": {
@@ -3865,7 +3519,6 @@
           78
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 300 (78% lightness)."
     },
     "chestnut-400": {
@@ -3877,7 +3530,6 @@
           69
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 400 (69% lightness)."
     },
     "chestnut-500": {
@@ -3889,7 +3541,6 @@
           58
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 500 (58% lightness)."
     },
     "chestnut-600": {
@@ -3901,7 +3552,6 @@
           48
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 600 (48% lightness)."
     },
     "chestnut-700": {
@@ -3913,7 +3563,6 @@
           36
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 700 (36% lightness)."
     },
     "chestnut-800": {
@@ -3925,7 +3574,6 @@
           26
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 800 (26% lightness)."
     },
     "chestnut-900": {
@@ -3937,7 +3585,6 @@
           18
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 900 (18% lightness)."
     },
     "chestnut-950": {
@@ -3949,7 +3596,6 @@
           10
         ]
       },
-      "$type": "color",
       "$description": "Primitive chestnut ramp, step 950 (10% lightness)."
     },
     "global-black": {
@@ -3962,7 +3608,6 @@
         ],
         "hex": "#131313"
       },
-      "$type": "color",
       "$description": "Global near-black for maximum-contrast ink on any canvas."
     },
     "global-white": {
@@ -3975,7 +3620,6 @@
         ],
         "hex": "#fefefe"
       },
-      "$type": "color",
       "$description": "Global near-white for maximum-contrast canvas surfaces."
     },
     "global-transparent": {
@@ -3988,63 +3632,63 @@
         ],
         "alpha": 0
       },
-      "$type": "color",
       "$description": "Fully transparent color for surfaces that must not paint."
     }
   },
   "zbk-elevation": {
+    "$type": "shadow",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "none": {
       "$value": "none",
-      "$type": "shadow",
       "$description": "No shadow."
     },
     "xs": {
       "$value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "$type": "shadow",
       "$description": "Extra-small shadow for subtle elevation."
     },
     "sm": {
       "$value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-      "$type": "shadow",
       "$description": "Small shadow for low elevation."
     },
     "md": {
       "$value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-      "$type": "shadow",
       "$description": "Medium shadow for moderate elevation."
     },
     "lg": {
       "$value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-      "$type": "shadow",
       "$description": "Large shadow for high elevation."
     },
     "xl": {
       "$value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-      "$type": "shadow",
       "$description": "Extra-large shadow for very high elevation."
     },
     "2xl": {
       "$value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
-      "$type": "shadow",
       "$description": "2XL shadow for maximum elevation."
     },
     "inner": {
       "$value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
-      "$type": "shadow",
       "$description": "Inner shadow for inset/pressed effect."
     },
     "inner-sm": {
       "$value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "$type": "shadow",
       "$description": "Small inner shadow."
     },
     "inner-lg": {
       "$value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
-      "$type": "shadow",
       "$description": "Large inner shadow."
     }
   },
   "zbk-focus": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "color": {
       "$value": "{accent-primary.600}",
       "$type": "color",
@@ -4064,91 +3708,85 @@
   "zbk-opacity": {
     "0": {
       "$value": 0,
-      "$type": "number",
       "$description": "Fully transparent (invisible)."
     },
     "5": {
       "$value": 0.05,
-      "$type": "number",
       "$description": "5% opacity - barely visible."
     },
     "10": {
       "$value": 0.1,
-      "$type": "number",
       "$description": "10% opacity - very faint."
     },
     "15": {
       "$value": 0.15,
-      "$type": "number",
       "$description": "15% opacity - faint."
     },
     "20": {
       "$value": 0.2,
-      "$type": "number",
       "$description": "20% opacity - subtle."
     },
     "25": {
       "$value": 0.25,
-      "$type": "number",
       "$description": "25% opacity - quarter visible."
     },
     "30": {
       "$value": 0.3,
-      "$type": "number",
       "$description": "30% opacity - light."
     },
     "40": {
       "$value": 0.4,
-      "$type": "number",
       "$description": "40% opacity - moderate-light."
     },
     "50": {
       "$value": 0.5,
-      "$type": "number",
       "$description": "50% opacity - half visible."
     },
     "60": {
       "$value": 0.6,
-      "$type": "number",
       "$description": "60% opacity - moderate."
     },
     "70": {
       "$value": 0.7,
-      "$type": "number",
       "$description": "70% opacity - mostly visible."
     },
     "75": {
       "$value": 0.75,
-      "$type": "number",
       "$description": "75% opacity - three-quarters visible."
     },
     "80": {
       "$value": 0.8,
-      "$type": "number",
       "$description": "80% opacity - largely visible."
     },
     "85": {
       "$value": 0.85,
-      "$type": "number",
       "$description": "85% opacity - mostly opaque."
     },
     "90": {
       "$value": 0.9,
-      "$type": "number",
       "$description": "90% opacity - nearly opaque."
     },
     "95": {
       "$value": 0.95,
-      "$type": "number",
       "$description": "95% opacity - almost fully opaque."
     },
     "100": {
       "$value": 1,
-      "$type": "number",
       "$description": "Fully opaque (default)."
+    },
+    "$type": "number",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
     }
   },
   "zbk-h1": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
+    },
     "font-family": {
       "$value": "{font-family.heading}",
       "$type": "fontFamily",
@@ -4206,6 +3844,11 @@
     }
   },
   "zbk-h2": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "font-family": {
       "$value": "{font-family.heading}",
       "$type": "fontFamily",
@@ -4263,6 +3906,11 @@
     }
   },
   "zbk-h3": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "font-family": {
       "$value": "{font-family.primary}",
       "$type": "fontFamily",
@@ -4320,6 +3968,11 @@
     }
   },
   "zbk-h4": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "font-family": {
       "$value": "{font-family.primary}",
       "$type": "fontFamily",
@@ -4377,6 +4030,11 @@
     }
   },
   "zbk-h5": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "font-family": {
       "$value": "{font-family.primary}",
       "$type": "fontFamily",
@@ -4434,6 +4092,11 @@
     }
   },
   "zbk-h6": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "font-family": {
       "$value": "{font-family.interface}",
       "$type": "fontFamily",
@@ -4491,6 +4154,11 @@
     }
   },
   "zbk-lede": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
+    },
     "font-family": {
       "$value": "{font-family.body}",
       "$type": "fontFamily",
@@ -4548,6 +4216,11 @@
     }
   },
   "zbk-list": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "font-family": {
       "$value": "{font-family.heading}",
       "$type": "fontFamily",
@@ -4615,6 +4288,11 @@
     }
   },
   "zbk-p": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "font-family": {
       "$value": "{font-family.body}",
       "$type": "fontFamily",
@@ -4672,6 +4350,11 @@
     }
   },
   "zbk-border": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "width-xs": {
       "$value": "{spacing.1px}",
       "$type": "dimension",
@@ -4729,868 +4412,740 @@
     }
   },
   "zbk-action": {
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "canvas": {
       "$value": "{color.ember-700}",
-      "$type": "color",
       "$description": "Base action canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.ember-800}",
-      "$type": "color",
       "$description": "Subtle action canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.ember-900}",
-      "$type": "color",
       "$description": "Muted action canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.ember-600}",
-      "$type": "color",
       "$description": "Emphasis action canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.ember-300}",
-      "$type": "color",
       "$description": "Base inverse action canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.ember-400}",
-      "$type": "color",
       "$description": "Subtle inverse action canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.ember-600}",
-      "$type": "color",
       "$description": "Muted inverse action canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.ember-200}",
-      "$type": "color",
       "$description": "Emphasis inverse action canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.ember-300}",
-      "$type": "color",
       "$description": "Base action ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.ember-200}",
-      "$type": "color",
       "$description": "Subtle action ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.ember-400}",
-      "$type": "color",
       "$description": "Muted action ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.ember-100}",
-      "$type": "color",
       "$description": "Emphasis action ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.ember-900}",
-      "$type": "color",
       "$description": "Base inverse action ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.ember-800}",
-      "$type": "color",
       "$description": "Subtle inverse action ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.ember-700}",
-      "$type": "color",
       "$description": "Muted inverse action ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.ember-950}",
-      "$type": "color",
       "$description": "Emphasis inverse action ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{color.ember-600}",
-      "$type": "color",
       "$description": "Base action border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{color.ember-500}",
-      "$type": "color",
       "$description": "Subtle action border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{color.ember-700}",
-      "$type": "color",
       "$description": "Muted action border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{color.ember-200}",
-      "$type": "color",
       "$description": "Emphasis action border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{color.ember-700}",
-      "$type": "color",
       "$description": "Base inverse action border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{color.ember-800}",
-      "$type": "color",
       "$description": "Subtle inverse action border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{color.ember-900}",
-      "$type": "color",
       "$description": "Muted inverse action border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{color.ember-500}",
-      "$type": "color",
       "$description": "Emphasis inverse action border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-app": {
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "canvas": {
       "$value": "{brand.canvas}",
-      "$type": "color",
       "$description": "Base app canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{brand.canvas-subtle}",
-      "$type": "color",
       "$description": "Subtle app canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{brand.canvas-muted}",
-      "$type": "color",
       "$description": "Muted app canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{brand.canvas-emphasis}",
-      "$type": "color",
       "$description": "Emphasis app canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{brand.canvas-inverse}",
-      "$type": "color",
       "$description": "Base inverse app canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{brand.canvas-inverse-subtle}",
-      "$type": "color",
       "$description": "Subtle inverse app canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{brand.canvas-inverse-muted}",
-      "$type": "color",
       "$description": "Muted inverse app canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{brand.canvas-inverse-emphasis}",
-      "$type": "color",
       "$description": "Emphasis inverse app canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{brand.ink}",
-      "$type": "color",
       "$description": "Base app ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{brand.ink-subtle}",
-      "$type": "color",
       "$description": "Subtle app ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{brand.ink-muted}",
-      "$type": "color",
       "$description": "Muted app ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{brand.ink-emphasis}",
-      "$type": "color",
       "$description": "Emphasis app ink color for high-prominence text such as headings."
     },
     "ink-inverse": {
       "$value": "{brand.ink-inverse}",
-      "$type": "color",
       "$description": "Base inverse app ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{brand.ink-inverse-subtle}",
-      "$type": "color",
       "$description": "Subtle inverse app ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{brand.ink-inverse-muted}",
-      "$type": "color",
       "$description": "Muted inverse app ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{brand.ink-inverse-emphasis}",
-      "$type": "color",
       "$description": "Emphasis inverse app ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{brand.border}",
-      "$type": "color",
       "$description": "Base app border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{brand.border-subtle}",
-      "$type": "color",
       "$description": "Subtle app border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{brand.border-muted}",
-      "$type": "color",
       "$description": "Muted app border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{brand.border-emphasis}",
-      "$type": "color",
       "$description": "Emphasis app border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{brand.border-inverse}",
-      "$type": "color",
       "$description": "Base inverse app border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{brand.border-inverse-subtle}",
-      "$type": "color",
       "$description": "Subtle inverse app border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{brand.border-inverse-muted}",
-      "$type": "color",
       "$description": "Muted inverse app border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{brand.border-inverse-emphasis}",
-      "$type": "color",
       "$description": "Emphasis inverse app border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-caution": {
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "canvas": {
       "$value": "{color.gold-500}",
-      "$type": "color",
       "$description": "Base caution canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.gold-50}",
-      "$type": "color",
       "$description": "Subtle caution canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.gold-100}",
-      "$type": "color",
       "$description": "Muted caution canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.gold-600}",
-      "$type": "color",
       "$description": "Emphasis caution canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.gold-400}",
-      "$type": "color",
       "$description": "Base inverse caution canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.gold-900}",
-      "$type": "color",
       "$description": "Subtle inverse caution canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.gold-800}",
-      "$type": "color",
       "$description": "Muted inverse caution canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.gold-300}",
-      "$type": "color",
       "$description": "Emphasis inverse caution canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.gold-700}",
-      "$type": "color",
       "$description": "Base caution ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.gold-400}",
-      "$type": "color",
       "$description": "Subtle caution ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.gold-500}",
-      "$type": "color",
       "$description": "Muted caution ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.gold-800}",
-      "$type": "color",
       "$description": "Emphasis caution ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.gold-300}",
-      "$type": "color",
       "$description": "Base inverse caution ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.gold-500}",
-      "$type": "color",
       "$description": "Subtle inverse caution ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.gold-400}",
-      "$type": "color",
       "$description": "Muted inverse caution ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.gold-200}",
-      "$type": "color",
       "$description": "Emphasis inverse caution ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{color.gold-500}",
-      "$type": "color",
       "$description": "Base caution border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{color.gold-200}",
-      "$type": "color",
       "$description": "Subtle caution border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{color.gold-300}",
-      "$type": "color",
       "$description": "Muted caution border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{color.gold-600}",
-      "$type": "color",
       "$description": "Emphasis caution border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{color.gold-500}",
-      "$type": "color",
       "$description": "Base inverse caution border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{color.gold-800}",
-      "$type": "color",
       "$description": "Subtle inverse caution border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{color.gold-700}",
-      "$type": "color",
       "$description": "Muted inverse caution border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{color.gold-400}",
-      "$type": "color",
       "$description": "Emphasis inverse caution border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-critical": {
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "canvas": {
       "$value": "{color.red-500}",
-      "$type": "color",
       "$description": "Base critical canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.red-50}",
-      "$type": "color",
       "$description": "Subtle critical canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.red-100}",
-      "$type": "color",
       "$description": "Muted critical canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.red-600}",
-      "$type": "color",
       "$description": "Emphasis critical canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.red-400}",
-      "$type": "color",
       "$description": "Base inverse critical canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.red-900}",
-      "$type": "color",
       "$description": "Subtle inverse critical canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.red-800}",
-      "$type": "color",
       "$description": "Muted inverse critical canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.red-300}",
-      "$type": "color",
       "$description": "Emphasis inverse critical canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.red-700}",
-      "$type": "color",
       "$description": "Base critical ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.red-400}",
-      "$type": "color",
       "$description": "Subtle critical ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.red-500}",
-      "$type": "color",
       "$description": "Muted critical ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.red-800}",
-      "$type": "color",
       "$description": "Emphasis critical ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.red-300}",
-      "$type": "color",
       "$description": "Base inverse critical ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.red-500}",
-      "$type": "color",
       "$description": "Subtle inverse critical ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.red-400}",
-      "$type": "color",
       "$description": "Muted inverse critical ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.red-200}",
-      "$type": "color",
       "$description": "Emphasis inverse critical ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{color.red-500}",
-      "$type": "color",
       "$description": "Base critical border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{color.red-200}",
-      "$type": "color",
       "$description": "Subtle critical border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{color.red-300}",
-      "$type": "color",
       "$description": "Muted critical border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{color.red-600}",
-      "$type": "color",
       "$description": "Emphasis critical border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{color.red-500}",
-      "$type": "color",
       "$description": "Base inverse critical border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{color.red-800}",
-      "$type": "color",
       "$description": "Subtle inverse critical border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{color.red-700}",
-      "$type": "color",
       "$description": "Muted inverse critical border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{color.red-400}",
-      "$type": "color",
       "$description": "Emphasis inverse critical border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-disabled": {
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
+    },
     "canvas": {
       "$value": "{color.charcoal-400}",
-      "$type": "color",
       "$description": "Base disabled canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.charcoal-50}",
-      "$type": "color",
       "$description": "Subtle disabled canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.charcoal-200}",
-      "$type": "color",
       "$description": "Muted disabled canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.charcoal-800}",
-      "$type": "color",
       "$description": "Emphasis disabled canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.charcoal-800}",
-      "$type": "color",
       "$description": "Base inverse disabled canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.charcoal-950}",
-      "$type": "color",
       "$description": "Subtle inverse disabled canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.charcoal-900}",
-      "$type": "color",
       "$description": "Muted inverse disabled canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.charcoal-200}",
-      "$type": "color",
       "$description": "Emphasis inverse disabled canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.charcoal-800}",
-      "$type": "color",
       "$description": "Base disabled ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.charcoal-400}",
-      "$type": "color",
       "$description": "Subtle disabled ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.charcoal-600}",
-      "$type": "color",
       "$description": "Muted disabled ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.charcoal-900}",
-      "$type": "color",
       "$description": "Emphasis disabled ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.charcoal-200}",
-      "$type": "color",
       "$description": "Base inverse disabled ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.charcoal-800}",
-      "$type": "color",
       "$description": "Subtle inverse disabled ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.charcoal-500}",
-      "$type": "color",
       "$description": "Muted inverse disabled ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.charcoal-100}",
-      "$type": "color",
       "$description": "Emphasis inverse disabled ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{disabled.ink}",
-      "$type": "color",
       "$description": "Base disabled border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{disabled.ink-subtle}",
-      "$type": "color",
       "$description": "Subtle disabled border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{disabled.ink-muted}",
-      "$type": "color",
       "$description": "Muted disabled border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{disabled.ink-emphasis}",
-      "$type": "color",
       "$description": "Emphasis disabled border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{disabled.ink-inverse}",
-      "$type": "color",
       "$description": "Base inverse disabled border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{disabled.ink-inverse-subtle}",
-      "$type": "color",
       "$description": "Subtle inverse disabled border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{disabled.ink-inverse-muted}",
-      "$type": "color",
       "$description": "Muted inverse disabled border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{disabled.ink-inverse-emphasis}",
-      "$type": "color",
       "$description": "Emphasis inverse disabled border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-info": {
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "canvas": {
       "$value": "{color.cyan-500}",
-      "$type": "color",
       "$description": "Base info canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.cyan-50}",
-      "$type": "color",
       "$description": "Subtle info canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.cyan-100}",
-      "$type": "color",
       "$description": "Muted info canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.cyan-600}",
-      "$type": "color",
       "$description": "Emphasis info canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.cyan-400}",
-      "$type": "color",
       "$description": "Base inverse info canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.cyan-900}",
-      "$type": "color",
       "$description": "Subtle inverse info canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.cyan-800}",
-      "$type": "color",
       "$description": "Muted inverse info canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.cyan-300}",
-      "$type": "color",
       "$description": "Emphasis inverse info canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.cyan-700}",
-      "$type": "color",
       "$description": "Base info ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.cyan-400}",
-      "$type": "color",
       "$description": "Subtle info ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.cyan-500}",
-      "$type": "color",
       "$description": "Muted info ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.cyan-800}",
-      "$type": "color",
       "$description": "Emphasis info ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.cyan-300}",
-      "$type": "color",
       "$description": "Base inverse info ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.cyan-500}",
-      "$type": "color",
       "$description": "Subtle inverse info ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.cyan-400}",
-      "$type": "color",
       "$description": "Muted inverse info ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.cyan-200}",
-      "$type": "color",
       "$description": "Emphasis inverse info ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{color.cyan-500}",
-      "$type": "color",
       "$description": "Base info border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{color.cyan-200}",
-      "$type": "color",
       "$description": "Subtle info border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{color.cyan-300}",
-      "$type": "color",
       "$description": "Muted info border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{color.cyan-600}",
-      "$type": "color",
       "$description": "Emphasis info border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{color.cyan-500}",
-      "$type": "color",
       "$description": "Base inverse info border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{color.cyan-800}",
-      "$type": "color",
       "$description": "Subtle inverse info border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{color.cyan-700}",
-      "$type": "color",
       "$description": "Muted inverse info border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{color.cyan-400}",
-      "$type": "color",
       "$description": "Emphasis inverse info border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-positive": {
+    "$type": "color",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "canvas": {
       "$value": "{color.green-500}",
-      "$type": "color",
       "$description": "Base positive canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.green-50}",
-      "$type": "color",
       "$description": "Subtle positive canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.green-100}",
-      "$type": "color",
       "$description": "Muted positive canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.green-600}",
-      "$type": "color",
       "$description": "Emphasis positive canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.green-400}",
-      "$type": "color",
       "$description": "Base inverse positive canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.green-900}",
-      "$type": "color",
       "$description": "Subtle inverse positive canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.green-800}",
-      "$type": "color",
       "$description": "Muted inverse positive canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.green-300}",
-      "$type": "color",
       "$description": "Emphasis inverse positive canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.green-700}",
-      "$type": "color",
       "$description": "Base positive ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.green-400}",
-      "$type": "color",
       "$description": "Subtle positive ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.green-500}",
-      "$type": "color",
       "$description": "Muted positive ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.green-800}",
-      "$type": "color",
       "$description": "Emphasis positive ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.green-300}",
-      "$type": "color",
       "$description": "Base inverse positive ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.green-500}",
-      "$type": "color",
       "$description": "Subtle inverse positive ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.green-400}",
-      "$type": "color",
       "$description": "Muted inverse positive ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.green-200}",
-      "$type": "color",
       "$description": "Emphasis inverse positive ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{color.green-500}",
-      "$type": "color",
       "$description": "Base positive border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{color.green-200}",
-      "$type": "color",
       "$description": "Subtle positive border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{color.green-300}",
-      "$type": "color",
       "$description": "Muted positive border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{color.green-600}",
-      "$type": "color",
       "$description": "Emphasis positive border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{color.green-500}",
-      "$type": "color",
       "$description": "Base inverse positive border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{color.green-800}",
-      "$type": "color",
       "$description": "Subtle inverse positive border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{color.green-700}",
-      "$type": "color",
       "$description": "Muted inverse positive border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{color.green-400}",
-      "$type": "color",
       "$description": "Emphasis inverse positive border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-spacing": {
     "0": {
       "$value": "0px",
-      "$type": "dimension",
       "$description": "Zero spacing."
     },
     "1": {
       "$value": "1rem",
-      "$type": "dimension",
       "$description": "Small spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5600,7 +5155,6 @@
     },
     "2": {
       "$value": "2rem",
-      "$type": "dimension",
       "$description": "Base spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5610,7 +5164,6 @@
     },
     "3": {
       "$value": "3rem",
-      "$type": "dimension",
       "$description": "Medium spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5620,7 +5173,6 @@
     },
     "4": {
       "$value": "4rem",
-      "$type": "dimension",
       "$description": "Medium-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5630,7 +5182,6 @@
     },
     "5": {
       "$value": "5rem",
-      "$type": "dimension",
       "$description": "Large spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5640,7 +5191,6 @@
     },
     "6": {
       "$value": "6rem",
-      "$type": "dimension",
       "$description": "Large-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5650,7 +5200,6 @@
     },
     "7": {
       "$value": "7rem",
-      "$type": "dimension",
       "$description": "XL spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5660,7 +5209,6 @@
     },
     "8": {
       "$value": "8rem",
-      "$type": "dimension",
       "$description": "XL-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5670,7 +5218,6 @@
     },
     "9": {
       "$value": "9rem",
-      "$type": "dimension",
       "$description": "2XL spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5680,7 +5227,6 @@
     },
     "10": {
       "$value": "10rem",
-      "$type": "dimension",
       "$description": "2XL-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5690,7 +5236,6 @@
     },
     "15": {
       "$value": "15rem",
-      "$type": "dimension",
       "$description": "3XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5700,7 +5245,6 @@
     },
     "20": {
       "$value": "20rem",
-      "$type": "dimension",
       "$description": "4XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5710,7 +5254,6 @@
     },
     "25": {
       "$value": "25rem",
-      "$type": "dimension",
       "$description": "5XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5720,7 +5263,6 @@
     },
     "30": {
       "$value": "30rem",
-      "$type": "dimension",
       "$description": "6XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5730,7 +5272,6 @@
     },
     "40": {
       "$value": "40rem",
-      "$type": "dimension",
       "$description": "7XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5740,7 +5281,6 @@
     },
     "50": {
       "$value": "50rem",
-      "$type": "dimension",
       "$description": "8XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5750,7 +5290,6 @@
     },
     "60": {
       "$value": "60rem",
-      "$type": "dimension",
       "$description": "9XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5760,7 +5299,6 @@
     },
     "70": {
       "$value": "70rem",
-      "$type": "dimension",
       "$description": "10XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5770,7 +5308,6 @@
     },
     "80": {
       "$value": "80rem",
-      "$type": "dimension",
       "$description": "11XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5780,7 +5317,6 @@
     },
     "90": {
       "$value": "90rem",
-      "$type": "dimension",
       "$description": "12XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5790,7 +5326,6 @@
     },
     "100": {
       "$value": "100rem",
-      "$type": "dimension",
       "$description": "13XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5800,7 +5335,6 @@
     },
     "105": {
       "$value": "1.5rem",
-      "$type": "dimension",
       "$description": "Small-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5810,7 +5344,6 @@
     },
     "205": {
       "$value": "2.5rem",
-      "$type": "dimension",
       "$description": "Base-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5818,8 +5351,10 @@
         }
       }
     },
+    "$type": "dimension",
     "$extensions": {
       "dev.zebkit": {
+        "layer": "base",
         "scale": {
           "max-scale": 1.175
         }
@@ -5827,117 +5362,94 @@
     },
     "2xs": {
       "$value": "{spacing.2px}",
-      "$type": "dimension",
       "$description": "Smallest semantic spacing value."
     },
     "xs": {
       "$value": "{spacing.025}",
-      "$type": "dimension",
       "$description": "Second smallest semantic spacing value."
     },
     "sm": {
       "$value": "{spacing.05}",
-      "$type": "dimension",
       "$description": "Third smallest semantic spacing value."
     },
     "md": {
       "$value": "{spacing.1}",
-      "$type": "dimension",
       "$description": "Base semantic spacing value."
     },
     "lg": {
       "$value": "{spacing.2}",
-      "$type": "dimension",
       "$description": "Large semantic spacing value."
     },
     "xl": {
       "$value": "{spacing.3}",
-      "$type": "dimension",
       "$description": "Third largest semantic spacing value."
     },
     "2xl": {
       "$value": "{spacing.5}",
-      "$type": "dimension",
       "$description": "Second largest semantic spacing value."
     },
     "3xl": {
       "$value": "{spacing.10}",
-      "$type": "dimension",
       "$description": "Largest semantic spacing value."
     },
     "card": {
       "$value": "{spacing.15}",
-      "$type": "dimension",
       "$description": "Size of a basic card."
     },
     "mobile": {
       "$value": "{spacing.25}",
-      "$type": "dimension",
       "$description": "Size of a small mobile device."
     },
     "mobile-lg": {
       "$value": "{spacing.30}",
-      "$type": "dimension",
       "$description": "Size of a larger mobile device."
     },
     "tablet": {
       "$value": "{spacing.40}",
-      "$type": "dimension",
       "$description": "Size of a tablet device."
     },
     "tablet-lg": {
       "$value": "{spacing.60}",
-      "$type": "dimension",
       "$description": "Size of a larger tablet device."
     },
     "desktop": {
       "$value": "{spacing.70}",
-      "$type": "dimension",
       "$description": "Size of a small desktop device."
     },
     "desktop-lg": {
       "$value": "{spacing.80}",
-      "$type": "dimension",
       "$description": "Size of a larger desktop device."
     },
     "widescreen": {
       "$value": "{spacing.90}",
-      "$type": "dimension",
       "$description": "Size of a large desktop device."
     },
     "section": {
       "$value": "{spacing.60}",
-      "$type": "dimension",
       "$description": "Ideal max size of a page section."
     },
     "section-margin-block": {
       "$value": "{spacing.2}",
-      "$type": "dimension",
       "$description": "Preferred vertical margin for page sections."
     },
     "section-margin-inline": {
       "$value": "{spacing.0}",
-      "$type": "dimension",
       "$description": "Preferred horizontal margin for page sections."
     },
     "aside": {
       "$value": "{spacing.15}",
-      "$type": "dimension",
       "$description": "Preferred size for an aside element."
     },
     "page-padding-block": {
       "$value": "{spacing.1}",
-      "$type": "dimension",
       "$description": "Preferred vertical padding for page."
     },
     "page-padding-inline": {
       "$value": "{spacing.105}",
-      "$type": "dimension",
       "$description": "Preferred horizontal padding for page."
     },
     "neg-15": {
       "$value": "-15rem",
-      "$type": "dimension",
       "$description": "Extremely large negative spacing (major overlap or pull effects).",
       "$extensions": {
         "dev.zebkit": {
@@ -5947,7 +5459,6 @@
     },
     "neg-10": {
       "$value": "-10rem",
-      "$type": "dimension",
       "$description": "Very large negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5957,7 +5468,6 @@
     },
     "neg-9": {
       "$value": "-9rem",
-      "$type": "dimension",
       "$description": "Large negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5967,7 +5477,6 @@
     },
     "neg-8": {
       "$value": "-8rem",
-      "$type": "dimension",
       "$description": "Large negative spacing (slightly smaller).",
       "$extensions": {
         "dev.zebkit": {
@@ -5977,7 +5486,6 @@
     },
     "neg-7": {
       "$value": "-7rem",
-      "$type": "dimension",
       "$description": "Medium-large negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5987,7 +5495,6 @@
     },
     "neg-6": {
       "$value": "-6rem",
-      "$type": "dimension",
       "$description": "Medium negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -5997,7 +5504,6 @@
     },
     "neg-5": {
       "$value": "-5rem",
-      "$type": "dimension",
       "$description": "Medium negative spacing (slightly smaller).",
       "$extensions": {
         "dev.zebkit": {
@@ -6007,7 +5513,6 @@
     },
     "neg-4": {
       "$value": "-4rem",
-      "$type": "dimension",
       "$description": "Small-medium negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -6017,7 +5522,6 @@
     },
     "neg-3": {
       "$value": "-3rem",
-      "$type": "dimension",
       "$description": "Small negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -6027,7 +5531,6 @@
     },
     "neg-205": {
       "$value": "-2.5rem",
-      "$type": "dimension",
       "$description": "Extra-small negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -6037,7 +5540,6 @@
     },
     "neg-2": {
       "$value": "-2rem",
-      "$type": "dimension",
       "$description": "Tiny negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -6047,7 +5549,6 @@
     },
     "neg-105": {
       "$value": "-1.5rem",
-      "$type": "dimension",
       "$description": "Very tiny negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -6057,7 +5558,6 @@
     },
     "neg-1": {
       "$value": "-1rem",
-      "$type": "dimension",
       "$description": "Minimal negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -6067,7 +5567,6 @@
     },
     "neg-05": {
       "$value": "-.5rem",
-      "$type": "dimension",
       "$description": "Minimal negative spacing (smaller).",
       "$extensions": {
         "dev.zebkit": {
@@ -6077,7 +5576,6 @@
     },
     "neg-025": {
       "$value": "-.25rem",
-      "$type": "dimension",
       "$description": "Hairline negative spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -6087,7 +5585,6 @@
     },
     "neg-2px": {
       "$value": "-2px",
-      "$type": "dimension",
       "$description": "Precision negative spacing (coarse).",
       "$extensions": {
         "dev.zebkit": {
@@ -6097,7 +5594,6 @@
     },
     "neg-1px": {
       "$value": "-1px",
-      "$type": "dimension",
       "$description": "Precision negative spacing (fine).",
       "$extensions": {
         "dev.zebkit": {
@@ -6107,7 +5603,6 @@
     },
     "1px": {
       "$value": "1px",
-      "$type": "dimension",
       "$description": "Precision spacing (fine).",
       "$extensions": {
         "dev.zebkit": {
@@ -6117,7 +5612,6 @@
     },
     "2px": {
       "$value": "2px",
-      "$type": "dimension",
       "$description": "Precision spacing (coarse).",
       "$extensions": {
         "dev.zebkit": {
@@ -6127,7 +5621,6 @@
     },
     "025": {
       "$value": ".25rem",
-      "$type": "dimension",
       "$description": "Extra-tiny spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -6137,7 +5630,6 @@
     },
     "05": {
       "$value": ".5rem",
-      "$type": "dimension",
       "$description": "Tiny spacing.",
       "$extensions": {
         "dev.zebkit": {
@@ -6147,6 +5639,11 @@
     }
   },
   "zbk-transition": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "duration-default": {
       "$value": "325ms",
       "$type": "duration",
@@ -6359,10 +5856,15 @@
     }
   },
   "zbk-font-family": {
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
+    },
     "primary": {
       "$value": "\"Proza Libre\"",
       "$description": "Primary font family for use in the system. Usually used for body content and interface items.",
-      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -6386,7 +5888,6 @@
     "alt": {
       "$value": "\"Fraunces\"",
       "$description": "Alternate font family for use in the system. Primarily used for headings.",
-      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -6404,7 +5905,6 @@
     "monospace": {
       "$value": "\"Inconsolata\"",
       "$description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
-      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -6422,7 +5922,6 @@
     "system-sans": {
       "$value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
       "$description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
-      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -6434,7 +5933,6 @@
     "system-serif": {
       "$value": "ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif",
       "$description": "System serif stack. Zero network cost.",
-      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -6446,7 +5944,6 @@
     "system-mono": {
       "$value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
       "$description": "System monospace stack. Zero network cost.",
-      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -6457,29 +5954,30 @@
     },
     "interface": {
       "$value": "{font-family.primary}",
-      "$description": "Font family used for things like buttons or input fields.",
-      "$type": "fontFamily"
+      "$description": "Font family used for things like buttons or input fields."
     },
     "heading": {
       "$value": "{font-family.alt}",
-      "$description": "Font family used for heading elements.",
-      "$type": "fontFamily"
+      "$description": "Font family used for heading elements."
     },
     "body": {
       "$value": "{font-family.primary}",
-      "$description": "Font family used for <p>, <li>, etc.",
-      "$type": "fontFamily"
+      "$description": "Font family used for <p>, <li>, etc."
     },
     "code": {
       "$value": "{font-family.monospace}",
-      "$description": "Font family used within <code> blocks",
-      "$type": "fontFamily"
+      "$description": "Font family used within <code> blocks"
     }
   },
   "zbk-font-weight": {
+    "$type": "fontWeight",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
+    },
     "thin": {
       "$value": 100,
-      "$type": "fontWeight",
       "$description": "Lightest font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6489,7 +5987,6 @@
     },
     "extralight": {
       "$value": 200,
-      "$type": "fontWeight",
       "$description": "Lighter font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6499,7 +5996,6 @@
     },
     "light": {
       "$value": 300,
-      "$type": "fontWeight",
       "$description": "Light font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6509,7 +6005,6 @@
     },
     "normal": {
       "$value": 400,
-      "$type": "fontWeight",
       "$description": "Default font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6519,7 +6014,6 @@
     },
     "medium": {
       "$value": 500,
-      "$type": "fontWeight",
       "$description": "Medium font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6529,7 +6023,6 @@
     },
     "semibold": {
       "$value": 600,
-      "$type": "fontWeight",
       "$description": "Semibold font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6539,7 +6032,6 @@
     },
     "bold": {
       "$value": 700,
-      "$type": "fontWeight",
       "$description": "Bold font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6549,7 +6041,6 @@
     },
     "extrabold": {
       "$value": 800,
-      "$type": "fontWeight",
       "$description": "Bolder font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6559,7 +6050,6 @@
     },
     "black": {
       "$value": 900,
-      "$type": "fontWeight",
       "$description": "Boldest font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6569,9 +6059,14 @@
     }
   },
   "zbk-letter-spacing": {
+    "$type": "dimension",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
+    },
     "tighter": {
       "$value": "-.05rem",
-      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
@@ -6581,7 +6076,6 @@
     },
     "tight": {
       "$value": "-.025rem",
-      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
@@ -6591,7 +6085,6 @@
     },
     "normal": {
       "$value": "0rem",
-      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
@@ -6601,7 +6094,6 @@
     },
     "wide": {
       "$value": ".025rem",
-      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
@@ -6611,7 +6103,6 @@
     },
     "wider": {
       "$value": ".05rem",
-      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
@@ -6623,7 +6114,6 @@
   "zbk-line-height": {
     "1": {
       "$value": 1,
-      "$type": "number",
       "$description": "Smallest line height.",
       "$extensions": {
         "dev.zebkit": {
@@ -6633,7 +6123,6 @@
     },
     "2": {
       "$value": 1.2,
-      "$type": "number",
       "$description": "Smaller line height.",
       "$extensions": {
         "dev.zebkit": {
@@ -6643,7 +6132,6 @@
     },
     "3": {
       "$value": 1.5,
-      "$type": "number",
       "$description": "Base line height.",
       "$extensions": {
         "dev.zebkit": {
@@ -6653,7 +6141,6 @@
     },
     "4": {
       "$value": 1.7,
-      "$type": "number",
       "$description": "Larger line height.",
       "$extensions": {
         "dev.zebkit": {
@@ -6663,45 +6150,53 @@
     },
     "5": {
       "$value": 2,
-      "$type": "number",
       "$description": "Largest line height.",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-line-height-modifier"
         }
       }
+    },
+    "$type": "number",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
     }
   },
   "zbk-text-measure": {
     "1": {
       "$value": "34ch",
-      "$type": "cssDimension",
       "$description": "Cards, sidebars, tight UI."
     },
     "2": {
       "$value": "48ch",
-      "$type": "cssDimension",
       "$description": "Short text blocks, captions."
     },
     "3": {
       "$value": "60ch",
-      "$type": "cssDimension",
       "$description": "Base body content measure."
     },
     "4": {
       "$value": "72ch",
-      "$type": "cssDimension",
       "$description": "Articles, long-form content."
     },
     "5": {
       "$value": "84ch",
-      "$type": "cssDimension",
       "$description": "Articles, long-form content."
+    },
+    "$type": "cssDimension",
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "theme"
+      }
     }
   },
   "zbk-font-size": {
+    "$type": "cssDimension",
     "$extensions": {
       "dev.zebkit": {
+        "layer": "base",
         "scale": {
           "min-viewport": "360px",
           "max-viewport": "1240px",
@@ -6713,7 +6208,6 @@
       }
     },
     "3xs": {
-      "$type": "cssDimension",
       "$description": "Smallest font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6725,7 +6219,6 @@
       }
     },
     "2xs": {
-      "$type": "cssDimension",
       "$description": "Second smallest font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6737,7 +6230,6 @@
       }
     },
     "xs": {
-      "$type": "cssDimension",
       "$description": "Extra small font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6749,7 +6241,6 @@
       }
     },
     "sm": {
-      "$type": "cssDimension",
       "$description": "Small font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6761,7 +6252,6 @@
       }
     },
     "md": {
-      "$type": "cssDimension",
       "$description": "Base / body font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6773,7 +6263,6 @@
       }
     },
     "lg": {
-      "$type": "cssDimension",
       "$description": "Large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6785,7 +6274,6 @@
       }
     },
     "xl": {
-      "$type": "cssDimension",
       "$description": "Extra large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6797,7 +6285,6 @@
       }
     },
     "2xl": {
-      "$type": "cssDimension",
       "$description": "Double extra large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6809,7 +6296,6 @@
       }
     },
     "3xl": {
-      "$type": "cssDimension",
       "$description": "Triple extra large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6821,7 +6307,6 @@
       }
     },
     "4xl": {
-      "$type": "cssDimension",
       "$description": "Quadruple extra large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6833,7 +6318,6 @@
       }
     },
     "5xl": {
-      "$type": "cssDimension",
       "$description": "Quintuple extra large font size.",
       "$extensions": {
         "dev.zebkit": {
@@ -6901,6 +6385,11 @@
       "$type": "number",
       "$description": "Top-level elevation stacking."
     },
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "auto": {
       "$value": "auto",
       "$type": "cssDimension",
@@ -6943,6 +6432,11 @@
     }
   },
   "zbk-button": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "ink": {
       "$value": "{action.ink-emphasis}",
       "$type": "color",
@@ -7310,6 +6804,11 @@
     }
   },
   "zbk-checkbox": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "display": {
       "$value": "contents",
       "$type": "display",
@@ -7567,6 +7066,11 @@
     }
   },
   "zbk-input": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "display": {
       "$value": "contents",
       "$type": "display",
@@ -7889,6 +7393,11 @@
     }
   },
   "zbk-pagination": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "ink": {
       "$value": "{action.ink}",
       "$type": "color",
@@ -8089,6 +7598,11 @@
     }
   },
   "zbk-radio": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "display": {
       "$value": "contents",
       "$type": "display",
@@ -8331,6 +7845,11 @@
     }
   },
   "zbk-select": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "display": {
       "$value": "contents",
       "$type": "display",
@@ -8643,6 +8162,11 @@
     }
   },
   "zbk-textarea": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "display": {
       "$value": "contents",
       "$type": "display",
@@ -8940,6 +8464,11 @@
     }
   },
   "zbk-toggle": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "display": {
       "$value": "contents",
       "$type": "display",
@@ -9257,6 +8786,11 @@
     }
   },
   "zbk-tooltip": {
+    "$extensions": {
+      "dev.zebkit": {
+        "layer": "base"
+      }
+    },
     "display": {
       "$value": "contents",
       "$type": "display",

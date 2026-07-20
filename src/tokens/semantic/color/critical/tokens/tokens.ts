@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 /**
  * Zebkit critical color design tokens.
@@ -8,7 +7,6 @@ import { tokenSchema } from "./token-schema";
 export const key = "critical";
 export const layer: LayerName = "base";
 
-export type CriticalTokenSchema = z.infer<typeof tokenSchema>;
 
 const tokens = {
   // Canvas: base critical surfaces
@@ -142,6 +140,6 @@ const tokens = {
     $type: "color",
     $description: "Emphasis inverse critical border color for high-prominence outlines on inverse canvases."
   }
-} as const satisfies CriticalTokenSchema;
+} as const satisfies TokenInterface;
 
 export default tokens;

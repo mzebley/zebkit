@@ -3,14 +3,10 @@ import {
   serializeCubicBezierValue,
   serializeDurationValue,
   type CubicBezierValue,
-  type TokenObject,
-} from "@definitions/tokens";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+  type TokenObject, TokenInterface } from "@definitions/tokens";
 
 export const key = "transition";
 export const layer: LayerName = "base";
-export type SemanticTransitionTokens = z.infer<typeof tokenSchema>;
 
 /**
  * Transition tokens split into DTCG types (Phase 2d, decision D5): `ms` timings
@@ -248,6 +244,6 @@ function build(): Record<string, TokenObject> {
   return entries;
 }
 
-const tokens = build() as SemanticTransitionTokens;
+const tokens = build() as TokenInterface;
 
 export default tokens;

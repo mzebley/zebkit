@@ -15,7 +15,9 @@ import { buildZebkitTokens } from '../src/scripts/tokens/compile-tokens.js';
 import { discoverVariantConfigs } from '../src/scripts/tokens/compile-variants.js';
 import { isVariantOverrideFile } from '../src/scripts/tokens/compile-variant-helpers.js';
 import { getKnownComponents } from '../src/scripts/known-components.js';
+import { toDtcgDocument } from '../src/scripts/tokens/dtcg-document.js';
 import type { LayerName } from '../src/definitions/layers.js';
+import type { TokenInterface, TokenGroupExtensions } from '../src/definitions/tokens.js';
 import { getBuiltInThemeNames, DEFAULT_THEME_NAME, resolveSourceThemeOverridePath } from '../src/scripts/theme-presets.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -146,22 +148,18 @@ async function writeSnapshotDir(
     const fileName = `${tokenKey}.json`;
     const filePath = path.join(outputDir, fileName);
 
-    // Write token data with metadata fields so the CLI can reconstruct key/layer
-    // without needing a separate manifest lookup per-file. Group-level metadata
-    // (fluid-scale controls) rides as a `$extensions` member on the module object.
-    // Emission-external modules (the primitive palette) carry `_cssEmission` so
-    // JSON-mode builds exclude them from CSS var emission just like dev mode.
+    // Each snapshot is a DTCG document (Phase 3): the module key comes from the
+    // filename, and layer / emission mode / fluid-scale controls ride the
+    // group-level `$extensions["dev.zebkit"]` block (a hoisted group `$type`
+    // appears when the module is homogeneous). The JSON-mode loader
+    // (fromDtcgDocument) reconstructs the internal token map from it.
     await fs.writeJson(
       filePath,
-      {
-        _key: tokenKey,
-        _layer: layer,
-        ...(externalModules.has(tokenKey) ? { _cssEmission: 'external' } : {}),
-        ...(groupExtensions[tokenKey]
-          ? { $extensions: groupExtensions[tokenKey] }
-          : {}),
-        ...(tokenData as Record<string, unknown>),
-      },
+      toDtcgDocument(tokenData as TokenInterface, {
+        layer,
+        cssEmission: externalModules.has(tokenKey) ? 'external' : undefined,
+        groupExtensions: groupExtensions[tokenKey] as TokenGroupExtensions | undefined,
+      }),
       { spaces: 2 }
     );
 

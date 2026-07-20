@@ -1,10 +1,8 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "z-index";
 export const layer: LayerName = "base";
-export type ZIndexTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "auto": {
@@ -102,6 +100,6 @@ const tokens = {
     $type: "number",
     $description: "Semantic z-index for tooltips (highest).",
   },
-} as const satisfies ZIndexTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

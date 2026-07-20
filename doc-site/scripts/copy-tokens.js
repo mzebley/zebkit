@@ -15,10 +15,42 @@ const targetDir = path.join(docsDir, 'src', 'lib', 'data', 'generated');
 const componentsDist = path.join(repoRoot, 'dist', 'components');
 
 const tokenFiles = [
-  'default-tokens.json',
   'token-lookup.json',
   'allowed-token-types.json'
 ];
+
+// The served `default-tokens.json` is a hoisted DTCG document (Phase 3): a
+// module homogeneous in `$type` declares it once at the group level and its
+// entries omit `$type`. The doc-site's data layer wants per-entry types, so the
+// internal copy is expanded back — group `$type` pushed onto each entry, group
+// `$`-metadata dropped — reproducing the flat `{ module: { entry: {…} } }` shape
+// consumers read. (Kept in sync with src/scripts/tokens/dtcg-document.ts, which
+// the decoupled doc-site can't import.)
+function expandDefaultTokens(combined) {
+  const out = {};
+  for (const [moduleKey, doc] of Object.entries(combined)) {
+    const groupType = typeof doc.$type === 'string' ? doc.$type : undefined;
+    const entries = {};
+    for (const [name, value] of Object.entries(doc)) {
+      if (name.startsWith('$') || name.startsWith('_')) continue;
+      if (!value || typeof value !== 'object' || Array.isArray(value)) continue;
+      entries[name] =
+        groupType && !('$type' in value) ? { ...value, $type: groupType } : value;
+    }
+    out[moduleKey] = entries;
+  }
+  return out;
+}
+
+async function copyDefaultTokens() {
+  const combined = JSON.parse(
+    await fs.readFile(path.join(staticDir, 'default-tokens.json'), 'utf8')
+  );
+  await fs.writeFile(
+    path.join(targetDir, 'default-tokens.json'),
+    JSON.stringify(expandDefaultTokens(combined), null, 2) + '\n'
+  );
+}
 async function copyComponentBundle() {
   // zebkit.js is the self-contained browser bundle (lit included).
   await copyFile(componentsDist, 'zebkit.js', path.join(staticDir, 'zebkit.js'));
@@ -108,6 +140,8 @@ async function run() {
   await Promise.all(
     tokenFiles.map((filename) => copyFile(staticDir, filename, path.join(targetDir, filename)))
   );
+
+  await copyDefaultTokens();
 
   await copyComponentBundle();
 

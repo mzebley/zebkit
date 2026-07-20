@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 /**
  * Zebkit neutral color design tokens. 
@@ -8,7 +7,6 @@ import { tokenSchema } from "./token-schema";
 export const key = "neutral";
 export const layer: LayerName = "theme";
 
-export type NeutralTokenSchema = z.infer<typeof tokenSchema>;
 
 const tokens = {
   50: {
@@ -66,6 +64,6 @@ const tokens = {
     $type: "color",
     $description: "For neutral surfaces."
   },
-} as const satisfies NeutralTokenSchema;
+} as const satisfies TokenInterface;
 
 export default tokens;

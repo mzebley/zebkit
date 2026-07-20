@@ -1,10 +1,8 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "border";
 export const layer: LayerName = "base";
-export type BorderTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
 "width-xs": {
@@ -62,6 +60,6 @@ const tokens = {
     $type: "dimension",
     $description: "Largest semantic corner radius.",
   }
-} as const satisfies BorderTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

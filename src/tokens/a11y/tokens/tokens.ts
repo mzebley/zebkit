@@ -1,10 +1,8 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "a11y";
 export const layer: LayerName = "base";
-export type A11yTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "spacing-modifier": {
@@ -46,6 +44,6 @@ const tokens = {
     $description:
       "Minimum height and width for interactive elements like links or buttons. WCAG AA is >= 24px, AAA is 44px",
   }
-} as const satisfies A11yTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

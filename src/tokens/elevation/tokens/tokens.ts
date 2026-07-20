@@ -3,14 +3,10 @@ import {
   serializeShadowValue,
   type ColorValue,
   type ShadowValue,
-  type TokenObject,
-} from "@definitions/tokens";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+  type TokenObject, TokenInterface } from "@definitions/tokens";
 
 export const key = "elevation";
 export const layer: LayerName = "base";
-export type ElevationTokens = z.infer<typeof tokenSchema>;
 
 /** srgb black at the given alpha — the only color the elevation ramp uses. */
 const black = (alpha: number): ColorValue => ({
@@ -112,6 +108,6 @@ function buildElevationTokens(): Record<string, TokenObject> {
   return entries;
 }
 
-const tokens = buildElevationTokens() as ElevationTokens;
+const tokens = buildElevationTokens() as TokenInterface;
 
 export default tokens;

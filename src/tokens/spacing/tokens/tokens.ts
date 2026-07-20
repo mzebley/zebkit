@@ -1,11 +1,8 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import type { TokenGroupExtensions } from "@definitions/tokens";
-import { tokenSchema } from "./token-schema";
+import type { TokenGroupExtensions, TokenInterface } from "@definitions/tokens";
 
 export const key = "spacing";
 export const layer: LayerName = "base";
-export type SpacingTokens = z.infer<typeof tokenSchema>;
 
 // Spacing is generated fluid (Utopia-style), like the type scale, and additionally
 // responds to two runtime forces so containers grow with their contents:
@@ -317,6 +314,6 @@ const tokens = {
     $description: "13XL layout spacing.",
     $extensions: { "dev.zebkit": { a11y: true } },
   },
-} as const satisfies SpacingTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

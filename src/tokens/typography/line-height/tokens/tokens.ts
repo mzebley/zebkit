@@ -1,11 +1,9 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
+import type { TokenInterface } from "@definitions/tokens";
 import { ZEBKIT_PREFIX } from "@config";
-import { tokenSchema } from "./token-schema";
 
 export const key = "line-height";
 export const layer: LayerName = "theme";
-export type LineHeightTokens = z.infer<typeof tokenSchema>;
 
 // Line heights are unitless (DTCG `number`, Phase 2e): the factor form inherits
 // the multiplier rather than a computed length, avoiding compounding. Each entry
@@ -44,6 +42,6 @@ const tokens = {
     $description: "Largest line height.",
     $extensions: { "dev.zebkit": { a11y } },
   },
-} as const satisfies LineHeightTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

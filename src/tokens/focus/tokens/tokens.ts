@@ -1,10 +1,8 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "focus";
 export const layer: LayerName = "base";
-export type FocusTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "color": {
@@ -25,6 +23,6 @@ const tokens = {
     $description:
       "Offset distance of focus outline",
   },
-} as const satisfies FocusTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

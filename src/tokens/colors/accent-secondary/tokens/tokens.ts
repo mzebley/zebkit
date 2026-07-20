@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 /**
  * Zebkit secondary accent color design tokens. 
@@ -8,7 +7,6 @@ import { tokenSchema } from "./token-schema";
 export const key = "accent-secondary";
 export const layer: LayerName = "theme";
 
-export type AccentSecondaryTokenSchema = z.infer<typeof tokenSchema>;
 
 const tokens = {
   50: {
@@ -66,6 +64,6 @@ const tokens = {
     $type: "color",
     $description: "For secondary accent surfaces."
   },
-} as const satisfies AccentSecondaryTokenSchema;
+} as const satisfies TokenInterface;
 
 export default tokens;

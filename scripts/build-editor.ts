@@ -17,6 +17,7 @@ import {
   ZEBKIT_CONFIG_SCHEMA_FILENAME,
 } from '../src/scripts/config-schema';
 import { tokenScaleIndex } from '../src/definitions/tokens';
+import { fromDtcgDocument, type ModuleMeta } from '../src/scripts/tokens/dtcg-document';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,10 +46,17 @@ interface TokenObject {
   [key: string]: unknown;
 }
 
-interface TokenData {
-  _key: string;
-  _layer: string;
-  [key: string]: unknown;
+// The flat, group-$type-expanded entries of one module's DTCG snapshot
+// (fromDtcgDocument strips the group $type/$extensions metadata into `meta`).
+type TokenData = Record<string, TokenObject>;
+
+/** Load a per-module DTCG snapshot and expand it to flat entries + module metadata. */
+async function readModuleSnapshot(
+  file: string
+): Promise<{ entries: TokenData; meta: ModuleMeta }> {
+  const doc = await fs.readJson(file);
+  const { entries, meta } = fromDtcgDocument(doc as Record<string, unknown>);
+  return { entries: entries as unknown as TokenData, meta };
 }
 
 /**
@@ -313,13 +321,10 @@ async function generateCssCustomData(): Promise<object> {
 
   for (const module of manifest.modules) {
     const tokenFilePath = path.join(defaultsDir, module.file);
-    const tokenFile = await fs.readJson(tokenFilePath) as TokenData;
+    const { entries: tokenFile } = await readModuleSnapshot(tokenFilePath);
 
-    // Iterate over token entries, skipping metadata fields
+    // Iterate over the module's leaf token entries (group $type already expanded).
     for (const [tokenName, tokenObj] of Object.entries(tokenFile)) {
-      // Skip _key/_layer metadata and the group-level $extensions member.
-      if (tokenName.startsWith('_') || tokenName.startsWith('$')) continue;
-
       const token = tokenObj as TokenObject;
       const cssVarName = `--zbk-${module.key.replace('zbk-', '')}-${tokenName}`;
       const description = `${token.$description} [${module.key.replace('zbk-', '')}]`;
@@ -368,15 +373,12 @@ async function buildEditor() {
 
     for (const module of manifest.modules) {
       const tokenFilePath = path.join(defaultsDir, module.file);
-      const tokenData = await fs.readJson(tokenFilePath) as TokenData;
+      const { entries: tokenData } = await readModuleSnapshot(tokenFilePath);
 
       // Extract namespace from module key: "zbk-brand" -> "brand", "zbk-app" -> "app"
       const namespace = module.key.replace('zbk-', '');
 
       for (const [tokenName, tokenObj] of Object.entries(tokenData)) {
-        // Skip _key/_layer metadata and the group-level $extensions member.
-        if (tokenName.startsWith('_') || tokenName.startsWith('$')) continue;
-
         const token = tokenObj as TokenObject;
         const tokenType = token.$type;
 
@@ -401,12 +403,12 @@ async function buildEditor() {
 
     for (const module of manifest.modules) {
       const tokenFilePath = path.join(defaultsDir, module.file);
-      const tokenData = await fs.readJson(tokenFilePath) as TokenData;
+      const { entries: tokenData, meta } = await readModuleSnapshot(tokenFilePath);
 
       // Emission-external modules (the primitive palette) are not overridable —
       // no override schema, no theme-file association. Their entries still feed
       // the reference examples (pass 1) and the CSS custom data.
-      if ((tokenData as Record<string, unknown>)._cssEmission === 'external') continue;
+      if (meta.cssEmission === 'external') continue;
 
       const tokenSchema = generateTokenSchema(module, tokenData, refsByType);
       const schemaFileName = `${module.key}.schema.json`;

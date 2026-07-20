@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
+import { LAYER_ORDER } from '@definitions/layers';
 
 /**
  * Shared token typing used across Zebkit token builders and validators.
@@ -397,6 +398,17 @@ export const tokenObjectSchema = z.object({
 export interface TokenObject extends z.infer<typeof tokenObjectSchema> {}
 
 /**
+ * Generic authoring schema for a token module's default export: a record of
+ * leaf token entries (Phase 3). Replaces the ~46 hand-listed per-module
+ * `token-schema.ts` files whose only job was to `z.object` the entry keys — the
+ * golden baseline and component lint catch a dropped/mistyped entry the exact-
+ * key form used to. Modules with real structural constraints (breakpoint
+ * ordering, generated-scale steps, font-family loading metadata) keep a bespoke
+ * schema. Group-level metadata rides a separate `extensions` export, not this map.
+ */
+export const tokenModuleSchema = z.record(tokenObjectSchema);
+
+/**
  * Build-time generator controls (the fluid type-scale anchors/ratios, spacing
  * `max-scale`) live at the GROUP level, under `$extensions["dev.zebkit"].scale`
  * on the owning token module — they are not tokens and are never emitted as CSS
@@ -412,6 +424,12 @@ export const tokenGroupExtensionsSchema = z.object({
   [ZEBKIT_EXTENSION_KEY]: z
     .object({
       scale: tokenGroupScaleSchema.optional(),
+      // A module's cascade layer and emission mode ride here in exported DTCG
+      // documents (Phase 3), replacing the `_layer` / `_cssEmission` snapshot
+      // sidecars. Authoring TS modules still declare these via `layer` /
+      // `cssEmission` exports; the exporter folds them into this group block.
+      layer: z.enum(LAYER_ORDER as [string, ...string[]]).optional(),
+      cssEmission: z.literal('external').optional(),
     })
     .optional(),
 });

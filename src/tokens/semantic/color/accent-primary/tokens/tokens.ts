@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 /**
  * Zebkit primary-accent role tokens (canvas / ink / border).
@@ -14,7 +13,6 @@ import { tokenSchema } from "./token-schema";
 export const key = "accent-primary";
 export const layer: LayerName = "theme";
 
-export type AccentPrimaryRoleSchema = z.infer<typeof tokenSchema>;
 
 const tokens = {
   // Canvas: accent surfaces
@@ -148,6 +146,6 @@ const tokens = {
     $type: "color",
     $description: "Emphasis inverse primary-accent border color for high-prominence outlines on inverse canvases."
   }
-} as const satisfies AccentPrimaryRoleSchema;
+} as const satisfies TokenInterface;
 
 export default tokens;
