@@ -138,7 +138,7 @@ const tokens = {
   },
   "border-style": {
     $value: "{border.style}",
-    $type: "borderStyle",
+    $type: "strokeStyle",
     $description: "Item border style.",
   },
   "border-radius": {
@@ -165,7 +165,7 @@ const tokens = {
   },
   "line-height": {
     $value: "{line-height.2}",
-    $type: "lineHeight",
+    $type: "number",
     $description: "Line height for pagination content.",
   },
 

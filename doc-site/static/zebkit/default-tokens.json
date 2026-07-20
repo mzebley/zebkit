@@ -4064,87 +4064,87 @@
   "zbk-opacity": {
     "0": {
       "$value": 0,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Fully transparent (invisible)."
     },
     "5": {
       "$value": 0.05,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "5% opacity - barely visible."
     },
     "10": {
       "$value": 0.1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "10% opacity - very faint."
     },
     "15": {
       "$value": 0.15,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "15% opacity - faint."
     },
     "20": {
       "$value": 0.2,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "20% opacity - subtle."
     },
     "25": {
       "$value": 0.25,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "25% opacity - quarter visible."
     },
     "30": {
       "$value": 0.3,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "30% opacity - light."
     },
     "40": {
       "$value": 0.4,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "40% opacity - moderate-light."
     },
     "50": {
       "$value": 0.5,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "50% opacity - half visible."
     },
     "60": {
       "$value": 0.6,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "60% opacity - moderate."
     },
     "70": {
       "$value": 0.7,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "70% opacity - mostly visible."
     },
     "75": {
       "$value": 0.75,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "75% opacity - three-quarters visible."
     },
     "80": {
       "$value": 0.8,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "80% opacity - largely visible."
     },
     "85": {
       "$value": 0.85,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "85% opacity - mostly opaque."
     },
     "90": {
       "$value": 0.9,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "90% opacity - nearly opaque."
     },
     "95": {
       "$value": 0.95,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "95% opacity - almost fully opaque."
     },
     "100": {
       "$value": 1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Fully opaque (default)."
     }
   },
@@ -4166,7 +4166,7 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
@@ -4223,7 +4223,7 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
@@ -4280,7 +4280,7 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
@@ -4337,7 +4337,7 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
@@ -4394,7 +4394,7 @@
     },
     "line-height": {
       "$value": "{line-height.3}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for H5 elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
@@ -4451,7 +4451,7 @@
     },
     "line-height": {
       "$value": "{line-height.3}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
@@ -4508,7 +4508,7 @@
     },
     "line-height": {
       "$value": "{line-height.3}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for introductory lede text with .lede applied directly or as a child of a .prose container."
     },
     "letter-spacing": {
@@ -4565,7 +4565,7 @@
     },
     "line-height": {
       "$value": "{line-height.3}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
@@ -4632,7 +4632,7 @@
     },
     "line-height": {
       "$value": "{line-height.4}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for P elements with .prose applied directly or that are a child of a .prose container."
     },
     "letter-spacing": {
@@ -4699,7 +4699,7 @@
     },
     "style": {
       "$value": "solid",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Standarized border style for project."
     },
     "radius-xs": {
@@ -6478,7 +6478,7 @@
   },
   "zbk-font-weight": {
     "thin": {
-      "$value": "100",
+      "$value": 100,
       "$type": "fontWeight",
       "$description": "Lightest font weight.",
       "$extensions": {
@@ -6488,7 +6488,7 @@
       }
     },
     "extralight": {
-      "$value": "200",
+      "$value": 200,
       "$type": "fontWeight",
       "$description": "Lighter font weight.",
       "$extensions": {
@@ -6498,7 +6498,7 @@
       }
     },
     "light": {
-      "$value": "300",
+      "$value": 300,
       "$type": "fontWeight",
       "$description": "Light font weight.",
       "$extensions": {
@@ -6508,7 +6508,7 @@
       }
     },
     "normal": {
-      "$value": "400",
+      "$value": 400,
       "$type": "fontWeight",
       "$description": "Default font weight.",
       "$extensions": {
@@ -6518,7 +6518,7 @@
       }
     },
     "medium": {
-      "$value": "500",
+      "$value": 500,
       "$type": "fontWeight",
       "$description": "Medium font weight.",
       "$extensions": {
@@ -6528,7 +6528,7 @@
       }
     },
     "semibold": {
-      "$value": "600",
+      "$value": 600,
       "$type": "fontWeight",
       "$description": "Semibold font weight.",
       "$extensions": {
@@ -6538,7 +6538,7 @@
       }
     },
     "bold": {
-      "$value": "700",
+      "$value": 700,
       "$type": "fontWeight",
       "$description": "Bold font weight.",
       "$extensions": {
@@ -6548,7 +6548,7 @@
       }
     },
     "extrabold": {
-      "$value": "800",
+      "$value": 800,
       "$type": "fontWeight",
       "$description": "Bolder font weight.",
       "$extensions": {
@@ -6558,7 +6558,7 @@
       }
     },
     "black": {
-      "$value": "900",
+      "$value": 900,
       "$type": "fontWeight",
       "$description": "Boldest font weight.",
       "$extensions": {
@@ -6622,52 +6622,52 @@
   },
   "zbk-line-height": {
     "1": {
-      "$value": "100%",
-      "$type": "lineHeight",
+      "$value": 1,
+      "$type": "number",
       "$description": "Smallest line height.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": "--zbk-a11y-line-height-modifier"
         }
       }
     },
     "2": {
-      "$value": "120%",
-      "$type": "lineHeight",
+      "$value": 1.2,
+      "$type": "number",
       "$description": "Smaller line height.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": "--zbk-a11y-line-height-modifier"
         }
       }
     },
     "3": {
-      "$value": "150%",
-      "$type": "lineHeight",
+      "$value": 1.5,
+      "$type": "number",
       "$description": "Base line height.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": "--zbk-a11y-line-height-modifier"
         }
       }
     },
     "4": {
-      "$value": "170%",
-      "$type": "lineHeight",
+      "$value": 1.7,
+      "$type": "number",
       "$description": "Larger line height.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": "--zbk-a11y-line-height-modifier"
         }
       }
     },
     "5": {
-      "$value": "200%",
-      "$type": "lineHeight",
+      "$value": 2,
+      "$type": "number",
       "$description": "Largest line height.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": "--zbk-a11y-line-height-modifier"
         }
       }
     }
@@ -6848,97 +6848,97 @@
   "zbk-z-index": {
     "0": {
       "$value": 0,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Base stacking level."
     },
     "10": {
       "$value": 10,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Low elevation stacking."
     },
     "20": {
       "$value": 20,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Slight elevation stacking."
     },
     "30": {
       "$value": 30,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Medium-low elevation stacking."
     },
     "40": {
       "$value": 40,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Medium elevation stacking."
     },
     "50": {
       "$value": 50,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Medium-high elevation stacking."
     },
     "60": {
       "$value": 60,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "High elevation stacking."
     },
     "70": {
       "$value": 70,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Higher elevation stacking."
     },
     "80": {
       "$value": 80,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Very high elevation stacking."
     },
     "90": {
       "$value": 90,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Near-top elevation stacking."
     },
     "100": {
       "$value": 100,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Top-level elevation stacking."
     },
     "auto": {
       "$value": "auto",
-      "$type": "zIndex",
+      "$type": "cssDimension",
       "$description": "Auto z-index, lets browser determine stacking."
     },
     "dropdown": {
       "$value": 1000,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Semantic z-index for dropdown menus."
     },
     "sticky": {
       "$value": 1020,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Semantic z-index for sticky positioned elements."
     },
     "fixed": {
       "$value": 1030,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Semantic z-index for fixed positioned elements."
     },
     "modal-backdrop": {
       "$value": 1040,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Semantic z-index for modal backdrops/overlays."
     },
     "modal": {
       "$value": 1050,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Semantic z-index for modal dialogs."
     },
     "popover": {
       "$value": 1060,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Semantic z-index for popovers."
     },
     "tooltip": {
       "$value": 1070,
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Semantic z-index for tooltips (highest)."
     }
   },
@@ -7025,7 +7025,7 @@
     },
     "border-style": {
       "$value": "{border.style}",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Border style (solid, dashed, etc) for standard buttons."
     },
     "border-radius": {
@@ -7050,7 +7050,7 @@
     },
     "line-height": {
       "$value": "{line-height.3}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Base line height for buttons."
     },
     "letter-spacing": {
@@ -7300,12 +7300,12 @@
     },
     "opacity": {
       "$value": 1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Visual opacity of button."
     },
     "opacity-loading": {
       "$value": 1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Visual opacity while the button is in its loading state."
     }
   },
@@ -7392,7 +7392,7 @@
     },
     "border-style": {
       "$value": "{border.style}",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Border style of the checkbox control."
     },
     "border-radius": {
@@ -7452,11 +7452,11 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for the checkbox label."
     },
     "letter-spacing": {
-      "$value": "{tracking.normal}",
+      "$value": "{letter-spacing.normal}",
       "$type": "cssDimension",
       "$description": "Letter spacing for the checkbox label."
     },
@@ -7557,12 +7557,12 @@
     },
     "opacity": {
       "$value": 1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Opacity of the checkbox."
     },
     "opacity-disabled": {
       "$value": "{opacity.70}",
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Control opacity when disabled."
     }
   },
@@ -7684,7 +7684,7 @@
     },
     "border-style": {
       "$value": "{border.style}",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Border style of the field box."
     },
     "border-radius": {
@@ -7709,11 +7709,11 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for the entered text."
     },
     "letter-spacing": {
-      "$value": "{tracking.normal}",
+      "$value": "{letter-spacing.normal}",
       "$type": "cssDimension",
       "$description": "Letter spacing for the entered text."
     },
@@ -7879,12 +7879,12 @@
     },
     "opacity": {
       "$value": 1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Opacity of the field."
     },
     "opacity-disabled": {
       "$value": "{opacity.70}",
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Field opacity when disabled."
     }
   },
@@ -7971,7 +7971,7 @@
     },
     "border-style": {
       "$value": "{border.style}",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Item border style."
     },
     "border-radius": {
@@ -7996,7 +7996,7 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for pagination content."
     },
     "display": {
@@ -8161,7 +8161,7 @@
     },
     "border-style": {
       "$value": "{border.style}",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Border style of the radio control."
     },
     "border-radius": {
@@ -8216,11 +8216,11 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for the radio label."
     },
     "letter-spacing": {
-      "$value": "{tracking.normal}",
+      "$value": "{letter-spacing.normal}",
       "$type": "cssDimension",
       "$description": "Letter spacing for the radio label."
     },
@@ -8321,12 +8321,12 @@
     },
     "opacity": {
       "$value": 1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Opacity of the radio."
     },
     "opacity-disabled": {
       "$value": "{opacity.70}",
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Control opacity when disabled."
     }
   },
@@ -8418,7 +8418,7 @@
     },
     "border-style": {
       "$value": "{border.style}",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Border style of the field box."
     },
     "border-radius": {
@@ -8443,11 +8443,11 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for the selected option's text."
     },
     "letter-spacing": {
-      "$value": "{tracking.normal}",
+      "$value": "{letter-spacing.normal}",
       "$type": "cssDimension",
       "$description": "Letter spacing for the selected option's text."
     },
@@ -8633,12 +8633,12 @@
     },
     "opacity": {
       "$value": 1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Opacity of the field."
     },
     "opacity-disabled": {
       "$value": "{opacity.70}",
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Field opacity when disabled."
     }
   },
@@ -8760,7 +8760,7 @@
     },
     "border-style": {
       "$value": "{border.style}",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Border style of the field box."
     },
     "border-radius": {
@@ -8785,11 +8785,11 @@
     },
     "field-line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height of the entered multi-line text."
     },
     "letter-spacing": {
-      "$value": "{tracking.normal}",
+      "$value": "{letter-spacing.normal}",
       "$type": "cssDimension",
       "$description": "Letter spacing for the entered text."
     },
@@ -8930,12 +8930,12 @@
     },
     "opacity": {
       "$value": 1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Opacity of the field."
     },
     "opacity-disabled": {
       "$value": "{opacity.70}",
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Field opacity when disabled."
     }
   },
@@ -9012,7 +9012,7 @@
     },
     "border-style": {
       "$value": "{border.style}",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Border style of the toggle track."
     },
     "border-radius": {
@@ -9092,7 +9092,7 @@
     },
     "thumb-border-style": {
       "$value": "{toggle.border-style}",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Border style of the thumb."
     },
     "thumb-radius": {
@@ -9167,11 +9167,11 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for the toggle label."
     },
     "letter-spacing": {
-      "$value": "{tracking.normal}",
+      "$value": "{letter-spacing.normal}",
       "$type": "cssDimension",
       "$description": "Letter spacing for the toggle label."
     },
@@ -9247,12 +9247,12 @@
     },
     "opacity": {
       "$value": 1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Opacity of the toggle."
     },
     "opacity-disabled": {
       "$value": "{opacity.70}",
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Track and thumb opacity when disabled."
     }
   },
@@ -9284,7 +9284,7 @@
     },
     "border-style": {
       "$value": "{border.style}",
-      "$type": "borderStyle",
+      "$type": "strokeStyle",
       "$description": "Tooltip bubble border style."
     },
     "border-radius": {
@@ -9309,11 +9309,11 @@
     },
     "line-height": {
       "$value": "{line-height.2}",
-      "$type": "lineHeight",
+      "$type": "number",
       "$description": "Line height for tooltip text."
     },
     "letter-spacing": {
-      "$value": "{tracking.normal}",
+      "$value": "{letter-spacing.normal}",
       "$type": "cssDimension",
       "$description": "Letter spacing for tooltip text."
     },
@@ -9349,7 +9349,7 @@
     },
     "z-index": {
       "$value": "{z-index.tooltip}",
-      "$type": "zIndex",
+      "$type": "number",
       "$description": "Stacking order when the top-layer popover API is unavailable."
     },
     "transition-duration": {
@@ -9389,7 +9389,7 @@
     },
     "opacity": {
       "$value": 1,
-      "$type": "opacity",
+      "$type": "number",
       "$description": "Bubble opacity."
     }
   }

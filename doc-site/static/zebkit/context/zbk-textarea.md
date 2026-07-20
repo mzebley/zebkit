@@ -105,13 +105,13 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-border-color-readonly` | `{app.border-muted}` | color | Field border color when readonly. |
 | `--zbk-textarea-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the value is invalid. |
 | `--zbk-textarea-border-width` | `{border.width-sm}` | dimension | Border thickness of the field box. |
-| `--zbk-textarea-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
+| `--zbk-textarea-border-style` | `{border.style}` | strokeStyle | Border style of the field box. |
 | `--zbk-textarea-border-radius` | `{border.radius-md}` | dimension | Corner radius of the field box. |
 | `--zbk-textarea-font-family` | `{font-family.interface}` | fontFamily | Font family for the entered text. |
 | `--zbk-textarea-font-size` | `{font-size.md}` | cssDimension | Font size for the entered text. |
 | `--zbk-textarea-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the entered text. |
-| `--zbk-textarea-field-line-height` | `{line-height.2}` | lineHeight | Line height of the entered multi-line text. |
-| `--zbk-textarea-letter-spacing` | `{tracking.normal}` | cssDimension | Letter spacing for the entered text. |
+| `--zbk-textarea-field-line-height` | `{line-height.2}` | number | Line height of the entered multi-line text. |
+| `--zbk-textarea-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the entered text. |
 | `--zbk-textarea-label-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-textarea-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-textarea-label-font-size` | `{font-size.sm}` | cssDimension | Font size for the label. |
@@ -138,8 +138,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
 | `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
 | `--zbk-textarea-transition-delay` | `0` | duration | Delay before field transitions run. |
-| `--zbk-textarea-opacity` | `1` | opacity | Opacity of the field. |
-| `--zbk-textarea-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
+| `--zbk-textarea-opacity` | `1` | number | Opacity of the field. |
+| `--zbk-textarea-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
 ## Variants
 

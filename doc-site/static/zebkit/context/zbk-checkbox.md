@@ -109,7 +109,7 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-checkbox-border-color-indeterminate` | `{checkbox.canvas-indeterminate}` | color | Control border color in the indeterminate state. |
 | `--zbk-checkbox-border-color-disabled` | `{disabled.border}` | color | Control border color when disabled. |
 | `--zbk-checkbox-border-width` | `{border.width-md}` | dimension | Border thickness of the checkbox control. |
-| `--zbk-checkbox-border-style` | `{border.style}` | borderStyle | Border style of the checkbox control. |
+| `--zbk-checkbox-border-style` | `{border.style}` | strokeStyle | Border style of the checkbox control. |
 | `--zbk-checkbox-border-radius` | `{border.radius-xs}` | dimension | Corner radius of the checkbox control. |
 | `--zbk-checkbox-indicator-color` | `{app.ink-inverse}` | color | Color of the checkmark and indeterminate bar. |
 | `--zbk-checkbox-indicator-color-disabled` | `{disabled.ink}` | color | Indicator color when disabled. |
@@ -121,8 +121,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-checkbox-font-family` | `{font-family.interface}` | fontFamily | Font family for the checkbox label. |
 | `--zbk-checkbox-font-size` | `{font-size.md}` | cssDimension | Font size for the checkbox label. |
 | `--zbk-checkbox-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the checkbox label. |
-| `--zbk-checkbox-line-height` | `{line-height.2}` | lineHeight | Line height for the checkbox label. |
-| `--zbk-checkbox-letter-spacing` | `{tracking.normal}` | cssDimension | Letter spacing for the checkbox label. |
+| `--zbk-checkbox-line-height` | `{line-height.2}` | number | Line height for the checkbox label. |
+| `--zbk-checkbox-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the checkbox label. |
 | `--zbk-checkbox-gap` | `{spacing.sm}` | dimension | Space between the control and its label. |
 | `--zbk-checkbox-align-items` | `center` | flex | Cross-axis alignment of control and label. |
 | `--zbk-checkbox-group-gap` | `{spacing.md}` | dimension | Gap between checkboxes in a .zbk-checkbox-group. |
@@ -141,8 +141,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-checkbox-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for checkbox state transitions. |
 | `--zbk-checkbox-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on state changes. |
 | `--zbk-checkbox-transition-delay` | `0` | duration | Delay before checkbox transitions run. |
-| `--zbk-checkbox-opacity` | `1` | opacity | Opacity of the checkbox. |
-| `--zbk-checkbox-opacity-disabled` | `{opacity.70}` | opacity | Control opacity when disabled. |
+| `--zbk-checkbox-opacity` | `1` | number | Opacity of the checkbox. |
+| `--zbk-checkbox-opacity-disabled` | `{opacity.70}` | number | Control opacity when disabled. |
 
 ## Variants
 

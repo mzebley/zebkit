@@ -194,7 +194,7 @@ const tokens = {
   },
   "border-style": {
     $value: "{border.style}",
-    $type: "borderStyle",
+    $type: "strokeStyle",
     $description: "Border style of the field box.",
   },
   "border-radius": {
@@ -221,11 +221,11 @@ const tokens = {
   },
   "field-line-height": {
     $value: "{line-height.2}",
-    $type: "lineHeight",
+    $type: "number",
     $description: "Line height of the entered multi-line text.",
   },
   "letter-spacing": {
-    $value: "{tracking.normal}",
+    $value: "{letter-spacing.normal}",
     $type: "cssDimension",
     $description: "Letter spacing for the entered text.",
   },
@@ -381,12 +381,12 @@ const tokens = {
   // Other
   opacity: {
     $value: 1,
-    $type: "opacity",
+    $type: "number",
     $description: "Opacity of the field.",
   },
   "opacity-disabled": {
     $value: "{opacity.70}",
-    $type: "opacity",
+    $type: "number",
     $description: "Field opacity when disabled.",
   },
 } as const satisfies Record<TextareaTokenKey, TokenObject>;

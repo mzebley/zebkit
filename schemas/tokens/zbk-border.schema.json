@@ -243,7 +243,7 @@
         "{tooltip.offset}"
       ]
     },
-    "borderStyleValue": {
+    "strokeStyleValue": {
       "type": [
         "string",
         "number"
@@ -509,10 +509,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/borderStyleValue"
+          "$ref": "#/definitions/strokeStyleValue"
         },
         "$type": {
-          "const": "borderStyle"
+          "const": "strokeStyle"
         },
         "$description": {
           "type": "string"

@@ -68542,11 +68542,11 @@
 --zbk-letter-spacing-wider: calc(.05rem * var(--zbk-a11y-letter-spacing-modifier));
 }
 :root {
---zbk-line-height-1: calc(100% * var(--zbk-a11y-line-height-modifier));
---zbk-line-height-2: calc(125% * var(--zbk-a11y-line-height-modifier));
---zbk-line-height-3: calc(150% * var(--zbk-a11y-line-height-modifier));
---zbk-line-height-4: calc(180% * var(--zbk-a11y-line-height-modifier));
---zbk-line-height-5: calc(200% * var(--zbk-a11y-line-height-modifier));
+--zbk-line-height-1: calc(1 * var(--zbk-a11y-line-height-modifier));
+--zbk-line-height-2: calc(1.25 * var(--zbk-a11y-line-height-modifier));
+--zbk-line-height-3: calc(1.5 * var(--zbk-a11y-line-height-modifier));
+--zbk-line-height-4: calc(1.8 * var(--zbk-a11y-line-height-modifier));
+--zbk-line-height-5: calc(2 * var(--zbk-a11y-line-height-modifier));
 }
 :root {
 --zbk-text-measure-1: 32ch;
@@ -69020,7 +69020,7 @@
 --zbk-button-font-size: var(--zbk-font-size-md);
 --zbk-button-font-weight: var(--zbk-font-weight-medium);
 --zbk-button-line-height: var(--zbk-line-height-2);
---zbk-button-letter-spacing: var(--zbk-tracking-normal);
+--zbk-button-letter-spacing: var(--zbk-letter-spacing-normal);
 --zbk-button-text-transform: none;
 --zbk-button-text-decoration: none;
 --zbk-button-text-align: center;
@@ -69101,7 +69101,7 @@
 --zbk-checkbox-font-size: var(--zbk-font-size-md);
 --zbk-checkbox-font-weight: var(--zbk-font-weight-normal);
 --zbk-checkbox-line-height: var(--zbk-line-height-2);
---zbk-checkbox-letter-spacing: var(--zbk-tracking-normal);
+--zbk-checkbox-letter-spacing: var(--zbk-letter-spacing-normal);
 --zbk-checkbox-gap: var(--zbk-spacing-sm);
 --zbk-checkbox-align-items: center;
 --zbk-checkbox-group-gap: var(--zbk-spacing-md);
@@ -69153,7 +69153,7 @@
 --zbk-input-font-size: var(--zbk-font-size-md);
 --zbk-input-font-weight: var(--zbk-font-weight-normal);
 --zbk-input-line-height: var(--zbk-line-height-2);
---zbk-input-letter-spacing: var(--zbk-tracking-normal);
+--zbk-input-letter-spacing: var(--zbk-letter-spacing-normal);
 --zbk-input-label-ink: var(--zbk-app-ink);
 --zbk-input-label-ink-disabled: var(--zbk-disabled-ink);
 --zbk-input-label-font-size: var(--zbk-font-size-sm);
@@ -69255,7 +69255,7 @@
 --zbk-radio-font-size: var(--zbk-font-size-md);
 --zbk-radio-font-weight: var(--zbk-font-weight-normal);
 --zbk-radio-line-height: var(--zbk-line-height-2);
---zbk-radio-letter-spacing: var(--zbk-tracking-normal);
+--zbk-radio-letter-spacing: var(--zbk-letter-spacing-normal);
 --zbk-radio-gap: var(--zbk-spacing-sm);
 --zbk-radio-align-items: center;
 --zbk-radio-group-gap: var(--zbk-spacing-md);
@@ -69301,7 +69301,7 @@
 --zbk-select-font-size: var(--zbk-font-size-md);
 --zbk-select-font-weight: var(--zbk-font-weight-normal);
 --zbk-select-line-height: var(--zbk-line-height-2);
---zbk-select-letter-spacing: var(--zbk-tracking-normal);
+--zbk-select-letter-spacing: var(--zbk-letter-spacing-normal);
 --zbk-select-label-ink: var(--zbk-app-ink);
 --zbk-select-label-ink-disabled: var(--zbk-disabled-ink);
 --zbk-select-label-font-size: var(--zbk-font-size-sm);
@@ -69370,7 +69370,7 @@
 --zbk-textarea-font-size: var(--zbk-font-size-md);
 --zbk-textarea-font-weight: var(--zbk-font-weight-normal);
 --zbk-textarea-field-line-height: var(--zbk-line-height-2);
---zbk-textarea-letter-spacing: var(--zbk-tracking-normal);
+--zbk-textarea-letter-spacing: var(--zbk-letter-spacing-normal);
 --zbk-textarea-label-ink: var(--zbk-app-ink);
 --zbk-textarea-label-ink-disabled: var(--zbk-disabled-ink);
 --zbk-textarea-label-font-size: var(--zbk-font-size-sm);
@@ -69447,7 +69447,7 @@
 --zbk-toggle-font-size: var(--zbk-font-size-md);
 --zbk-toggle-font-weight: var(--zbk-font-weight-normal);
 --zbk-toggle-line-height: var(--zbk-line-height-2);
---zbk-toggle-letter-spacing: var(--zbk-tracking-normal);
+--zbk-toggle-letter-spacing: var(--zbk-letter-spacing-normal);
 --zbk-toggle-gap: var(--zbk-spacing-sm);
 --zbk-toggle-align-items: center;
 --zbk-toggle-group-gap: var(--zbk-spacing-md);
@@ -69476,7 +69476,7 @@
 --zbk-tooltip-font-size: var(--zbk-font-size-sm);
 --zbk-tooltip-font-weight: var(--zbk-font-weight-normal);
 --zbk-tooltip-line-height: var(--zbk-line-height-2);
---zbk-tooltip-letter-spacing: var(--zbk-tracking-normal);
+--zbk-tooltip-letter-spacing: var(--zbk-letter-spacing-normal);
 --zbk-tooltip-padding-inline: var(--zbk-spacing-xs);
 --zbk-tooltip-padding-block: var(--zbk-spacing-2xs);
 --zbk-tooltip-max-width: 20rem;

@@ -122,12 +122,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-pagination-border-color-disabled` | `{color.global-transparent}` | color | Border color of a disabled previous/next control. |
 | `--zbk-pagination-border-color-selected` | `{accent-primary.500}` | color | Border color of the current page item (aria-current). |
 | `--zbk-pagination-border-width` | `{border.width-sm}` | dimension | Item border width. |
-| `--zbk-pagination-border-style` | `{border.style}` | borderStyle | Item border style. |
+| `--zbk-pagination-border-style` | `{border.style}` | strokeStyle | Item border style. |
 | `--zbk-pagination-border-radius` | `{border.radius-md}` | dimension | Item corner radius. |
 | `--zbk-pagination-font-family` | `{font-family.interface}` | fontFamily | Font family for pagination content. |
 | `--zbk-pagination-font-size` | `{font-size.md}` | cssDimension | Base font size for pagination content. |
 | `--zbk-pagination-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for pagination content. |
-| `--zbk-pagination-line-height` | `{line-height.2}` | lineHeight | Line height for pagination content. |
+| `--zbk-pagination-line-height` | `{line-height.2}` | number | Line height for pagination content. |
 | `--zbk-pagination-display` | `inline-flex` | display | Display mode for the pagination nav. |
 | `--zbk-pagination-gap` | `{spacing.2xs}` | dimension | Gap between pagination items. |
 | `--zbk-pagination-min-width` | `{a11y.min-interaction-size}` | dimension | Minimum item width to keep the tap target. |

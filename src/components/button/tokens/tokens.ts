@@ -173,7 +173,7 @@ const tokens = {
   },
   "border-style": {
     $value: "{border.style}",
-    $type: "borderStyle",
+    $type: "strokeStyle",
     $description: "Border style (solid, dashed, etc) for standard buttons.",
   },
   "border-radius": {
@@ -200,11 +200,11 @@ const tokens = {
   },
   "line-height": {
     $value: "{line-height.2}",
-    $type: "lineHeight",
+    $type: "number",
     $description: "Base line height for buttons.",
   },
   "letter-spacing": {
-    $value: "{tracking.normal}",
+    $value: "{letter-spacing.normal}",
     $type: "cssDimension",
     $description: "Letter spacing for button labels.",
   },
@@ -466,12 +466,12 @@ const tokens = {
   },
   opacity: {
     $value: 1,
-    $type: "opacity",
+    $type: "number",
     $description: "Visual opacity of button.",
   },
   "opacity-loading": {
     $value: 1,
-    $type: "opacity",
+    $type: "number",
     $description: "Visual opacity while the button is in its loading state.",
   },
 } as const satisfies Record<ButtonTokenKey, TokenObject>;

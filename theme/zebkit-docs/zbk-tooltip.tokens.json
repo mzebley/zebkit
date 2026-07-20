@@ -26,7 +26,7 @@
   },
   "border-style": {
     "$value": "{border.style}",
-    "$type": "borderStyle",
+    "$type": "strokeStyle",
     "$description": "Tooltip bubble border style."
   },
   "border-radius": {
@@ -51,11 +51,11 @@
   },
   "line-height": {
     "$value": "{line-height.2}",
-    "$type": "lineHeight",
+    "$type": "number",
     "$description": "Line height for tooltip text."
   },
   "letter-spacing": {
-    "$value": "{tracking.normal}",
+    "$value": "{letter-spacing.normal}",
     "$type": "cssDimension",
     "$description": "Letter spacing for tooltip text."
   },
@@ -91,7 +91,7 @@
   },
   "z-index": {
     "$value": "{z-index.tooltip}",
-    "$type": "zIndex",
+    "$type": "number",
     "$description": "Stacking order when the top-layer popover API is unavailable."
   },
   "transition-duration": {
@@ -131,7 +131,7 @@
   },
   "opacity": {
     "$value": 1,
-    "$type": "opacity",
+    "$type": "number",
     "$description": "Bubble opacity."
   }
 }

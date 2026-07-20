@@ -66,7 +66,7 @@
   },
   "border-style": {
     "$value": "{border.style}",
-    "$type": "borderStyle",
+    "$type": "strokeStyle",
     "$description": "Border style for standard buttons."
   },
   "border-radius": {
@@ -90,8 +90,8 @@
     "$description": "Font weight for button labels — Carbon Regular."
   },
   "line-height": {
-    "$value": "1.2857142857",
-    "$type": "lineHeight",
+    "$value": 1.2857142857,
+    "$type": "number",
     "$description": "Base line height for buttons — Carbon body-compact-01 (18/14)."
   },
   "letter-spacing": {

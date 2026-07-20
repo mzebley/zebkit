@@ -100,7 +100,7 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-radio-border-color-checked` | `{radio.canvas-checked}` | color | Control border color when selected. |
 | `--zbk-radio-border-color-disabled` | `{disabled.border}` | color | Control border color when disabled. |
 | `--zbk-radio-border-width` | `{border.width-md}` | dimension | Border thickness of the radio control. |
-| `--zbk-radio-border-style` | `{border.style}` | borderStyle | Border style of the radio control. |
+| `--zbk-radio-border-style` | `{border.style}` | strokeStyle | Border style of the radio control. |
 | `--zbk-radio-border-radius` | `50%` | cssDimension | Corner radius of the radio control (a circle by default). |
 | `--zbk-radio-indicator-color` | `{app.ink-inverse}` | color | Color of the selection dot. |
 | `--zbk-radio-indicator-color-disabled` | `{disabled.ink}` | color | Selection dot color when disabled. |
@@ -111,8 +111,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-radio-font-family` | `{font-family.interface}` | fontFamily | Font family for the radio label. |
 | `--zbk-radio-font-size` | `{font-size.md}` | cssDimension | Font size for the radio label. |
 | `--zbk-radio-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the radio label. |
-| `--zbk-radio-line-height` | `{line-height.2}` | lineHeight | Line height for the radio label. |
-| `--zbk-radio-letter-spacing` | `{tracking.normal}` | cssDimension | Letter spacing for the radio label. |
+| `--zbk-radio-line-height` | `{line-height.2}` | number | Line height for the radio label. |
+| `--zbk-radio-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the radio label. |
 | `--zbk-radio-gap` | `{spacing.sm}` | dimension | Space between the control and its label. |
 | `--zbk-radio-align-items` | `center` | flex | Cross-axis alignment of control and label. |
 | `--zbk-radio-group-gap` | `{spacing.md}` | dimension | Gap between radios in a .zbk-radio-group. |
@@ -131,8 +131,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-radio-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for radio state transitions. |
 | `--zbk-radio-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on state changes. |
 | `--zbk-radio-transition-delay` | `0` | duration | Delay before radio transitions run. |
-| `--zbk-radio-opacity` | `1` | opacity | Opacity of the radio. |
-| `--zbk-radio-opacity-disabled` | `{opacity.70}` | opacity | Control opacity when disabled. |
+| `--zbk-radio-opacity` | `1` | number | Opacity of the radio. |
+| `--zbk-radio-opacity-disabled` | `{opacity.70}` | number | Control opacity when disabled. |
 
 ## Variants
 

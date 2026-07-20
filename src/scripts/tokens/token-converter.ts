@@ -14,10 +14,7 @@ import {
   FontFallbackCategory,
 } from "@definitions/font-fallbacks";
 import { a11yMap } from "@definitions/a11y-map";
-import {
-  tokenAliasMap,
-  areTokensTypesCompatible,
-} from "@definitions/token-maps";
+import { areTokensTypesCompatible } from "@definitions/token-maps";
 import { DEFAULT_LAYER, LAYER_ORDER, LayerName } from "@definitions/layers";
 import { ZEBKIT_PREFIX } from "@config";
 
@@ -53,6 +50,11 @@ function validateCssReferencesExist(
   let valid = false;
   let invalidType = false;
 
+  // Closed-world resolution (I5): every reference must resolve against a real
+  // token module in the document. The former `tokenAliasMap` virtual targets
+  // (`font-weight.*`, `tracking.*`, `letter-spacing.*`) were retired in Phase 2e
+  // — font-weight/letter-spacing are real modules and `{tracking.*}` was
+  // repointed to `{letter-spacing.*}`.
   if (availableTokens.hasOwnProperty(`${globalPrefix}-${parent}`)) {
     if (availableTokens[`${globalPrefix}-${parent}`].hasOwnProperty(child)) {
       const tokenType =
@@ -63,36 +65,6 @@ function validateCssReferencesExist(
         invalidType = true;
         report(
           `Invalid token reference: ${value} (type '${type}' cannot reference '${tokenType}').`
-        );
-      }
-    }
-  }
-
-  if (!valid && !invalidType && tokenAliasMap.hasOwnProperty(parent)) {
-    if (typeof tokenAliasMap[parent] === "string") {
-      const tokenType = tokenAliasMap[parent] as AllowedTokenTypes;
-      if (areTokensTypesCompatible(type as AllowedTokenTypes, tokenType as AllowedTokenTypes)) {
-        valid = true;
-      } else {
-        invalidType = true;
-        report(
-          `Invalid token reference: ${value}. Token type '${type}' does not match '${tokenType}'.`
-        );
-      }
-    } else if (
-      typeof tokenAliasMap[parent] === "object" &&
-      tokenAliasMap[parent] !== null &&
-      tokenAliasMap[parent].hasOwnProperty(child)
-    ) {
-      const tokenType = (
-        tokenAliasMap[parent] as Record<string, AllowedTokenTypes>
-      )[child];
-      if (areTokensTypesCompatible(type as AllowedTokenTypes, tokenType as AllowedTokenTypes)) {
-        valid = true;
-      } else {
-        invalidType = true;
-        report(
-          `Invalid token reference: ${value}. Token type '${type}' does not match '${tokenType}'.`
         );
       }
     }

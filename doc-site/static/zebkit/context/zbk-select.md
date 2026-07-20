@@ -112,13 +112,13 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-select-border-color-disabled` | `{disabled.border}` | color | Field border color when disabled. |
 | `--zbk-select-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the selection is invalid. |
 | `--zbk-select-border-width` | `{border.width-sm}` | dimension | Border thickness of the field box. |
-| `--zbk-select-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
+| `--zbk-select-border-style` | `{border.style}` | strokeStyle | Border style of the field box. |
 | `--zbk-select-border-radius` | `{border.radius-md}` | dimension | Corner radius of the field box. |
 | `--zbk-select-font-family` | `{font-family.interface}` | fontFamily | Font family for the selected option's text. |
 | `--zbk-select-font-size` | `{font-size.md}` | cssDimension | Font size for the selected option's text. |
 | `--zbk-select-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the selected option's text. |
-| `--zbk-select-line-height` | `{line-height.2}` | lineHeight | Line height for the selected option's text. |
-| `--zbk-select-letter-spacing` | `{tracking.normal}` | cssDimension | Letter spacing for the selected option's text. |
+| `--zbk-select-line-height` | `{line-height.2}` | number | Line height for the selected option's text. |
+| `--zbk-select-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the selected option's text. |
 | `--zbk-select-label-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-select-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-select-label-font-size` | `{font-size.sm}` | cssDimension | Font size for the label. |
@@ -154,8 +154,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-select-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
 | `--zbk-select-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
 | `--zbk-select-transition-delay` | `0` | duration | Delay before field transitions run. |
-| `--zbk-select-opacity` | `1` | opacity | Opacity of the field. |
-| `--zbk-select-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
+| `--zbk-select-opacity` | `1` | number | Opacity of the field. |
+| `--zbk-select-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
 ## Variants
 

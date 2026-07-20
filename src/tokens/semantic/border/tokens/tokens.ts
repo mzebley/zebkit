@@ -34,7 +34,7 @@ const tokens = {
   },
   "style": {
     $value: "solid",
-    $type: "borderStyle",
+    $type: "strokeStyle",
     $description: "Standarized border style for project.",
   },
   "radius-xs": {

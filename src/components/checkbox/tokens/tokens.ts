@@ -152,7 +152,7 @@ const tokens = {
   },
   "border-style": {
     $value: "{border.style}",
-    $type: "borderStyle",
+    $type: "strokeStyle",
     $description: "Border style of the checkbox control.",
   },
   "border-radius": {
@@ -217,11 +217,11 @@ const tokens = {
   },
   "line-height": {
     $value: "{line-height.2}",
-    $type: "lineHeight",
+    $type: "number",
     $description: "Line height for the checkbox label.",
   },
   "letter-spacing": {
-    $value: "{tracking.normal}",
+    $value: "{letter-spacing.normal}",
     $type: "cssDimension",
     $description: "Letter spacing for the checkbox label.",
   },
@@ -330,12 +330,12 @@ const tokens = {
   // Other
   opacity: {
     $value: 1,
-    $type: "opacity",
+    $type: "number",
     $description: "Opacity of the checkbox.",
   },
   "opacity-disabled": {
     $value: "{opacity.70}",
-    $type: "opacity",
+    $type: "number",
     $description: "Control opacity when disabled.",
   },
 } as const satisfies Record<CheckboxTokenKey, TokenObject>;

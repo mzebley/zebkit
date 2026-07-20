@@ -67,7 +67,7 @@ const tokens = {
   },
   "border-style": {
     $value: "{border.style}",
-    $type: "borderStyle",
+    $type: "strokeStyle",
     $description: "Tooltip bubble border style.",
   },
   "border-radius": {
@@ -94,11 +94,11 @@ const tokens = {
   },
   "line-height": {
     $value: "{line-height.2}",
-    $type: "lineHeight",
+    $type: "number",
     $description: "Line height for tooltip text.",
   },
   "letter-spacing": {
-    $value: "{tracking.normal}",
+    $value: "{letter-spacing.normal}",
     $type: "cssDimension",
     $description: "Letter spacing for tooltip text.",
   },
@@ -138,7 +138,7 @@ const tokens = {
   },
   "z-index": {
     $value: "{z-index.tooltip}",
-    $type: "zIndex",
+    $type: "number",
     $description: "Stacking order when the top-layer popover API is unavailable.",
   },
 
@@ -171,7 +171,7 @@ const tokens = {
 
   opacity: {
     $value: 1,
-    $type: "opacity",
+    $type: "number",
     $description: "Bubble opacity.",
   },
 } as const satisfies Record<TooltipTokenKey, TokenObject>;

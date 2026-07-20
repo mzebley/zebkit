@@ -129,13 +129,13 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-input-border-color-readonly` | `{app.border-muted}` | color | Field border color when readonly. |
 | `--zbk-input-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the value is invalid. |
 | `--zbk-input-border-width` | `{border.width-sm}` | dimension | Border thickness of the field box. |
-| `--zbk-input-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
+| `--zbk-input-border-style` | `{border.style}` | strokeStyle | Border style of the field box. |
 | `--zbk-input-border-radius` | `{border.radius-md}` | dimension | Corner radius of the field box. |
 | `--zbk-input-font-family` | `{font-family.interface}` | fontFamily | Font family for the entered text. |
 | `--zbk-input-font-size` | `{font-size.md}` | cssDimension | Font size for the entered text. |
 | `--zbk-input-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the entered text. |
-| `--zbk-input-line-height` | `{line-height.2}` | lineHeight | Line height for the entered text. |
-| `--zbk-input-letter-spacing` | `{tracking.normal}` | cssDimension | Letter spacing for the entered text. |
+| `--zbk-input-line-height` | `{line-height.2}` | number | Line height for the entered text. |
+| `--zbk-input-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the entered text. |
 | `--zbk-input-label-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-input-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-input-label-font-size` | `{font-size.sm}` | cssDimension | Font size for the label. |
@@ -167,8 +167,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-input-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
 | `--zbk-input-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
 | `--zbk-input-transition-delay` | `0` | duration | Delay before field transitions run. |
-| `--zbk-input-opacity` | `1` | opacity | Opacity of the field. |
-| `--zbk-input-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
+| `--zbk-input-opacity` | `1` | number | Opacity of the field. |
+| `--zbk-input-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
 ## Variants
 

@@ -131,12 +131,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-border-color-disabled` | `{disabled.border}` | color | Border color for disabled buttons. |
 | `--zbk-button-border-color-loading` | `{button.border-color-hover}` | color | Border color while the button is in its loading state. |
 | `--zbk-button-border-width` | `0px` | dimension | Base border width. |
-| `--zbk-button-border-style` | `{border.style}` | borderStyle | Border style (solid, dashed, etc) for standard buttons. |
+| `--zbk-button-border-style` | `{border.style}` | strokeStyle | Border style (solid, dashed, etc) for standard buttons. |
 | `--zbk-button-border-radius` | `{border.radius-sm}` | dimension | Corner radius for standard buttons. |
 | `--zbk-button-font-family` | `{font-family.interface}` | fontFamily | Font family for button labels. |
 | `--zbk-button-font-size` | `{font-size.sm}` | cssDimension | Base font size for button labels. |
 | `--zbk-button-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for button labels. |
-| `--zbk-button-line-height` | `{line-height.3}` | lineHeight | Base line height for buttons. |
+| `--zbk-button-line-height` | `{line-height.3}` | number | Base line height for buttons. |
 | `--zbk-button-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for button labels. |
 | `--zbk-button-text-transform` | `none` | textTransform | Text transform for button labels. |
 | `--zbk-button-text-decoration` | `none` | textDecoration | Text decoration for button labels. |
@@ -185,8 +185,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | transitionTimingFunction | Timing function for button transitions. |
 | `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transitionProperty | CSS properties that should animate on interaction. |
 | `--zbk-button-transition-delay` | `0` | duration | Delay before CSS properties run through their animate on interaction. |
-| `--zbk-button-opacity` | `1` | opacity | Visual opacity of button. |
-| `--zbk-button-opacity-loading` | `1` | opacity | Visual opacity while the button is in its loading state. |
+| `--zbk-button-opacity` | `1` | number | Visual opacity of button. |
+| `--zbk-button-opacity-loading` | `1` | number | Visual opacity while the button is in its loading state. |
 
 ## Variants
 

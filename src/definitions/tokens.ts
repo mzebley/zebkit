@@ -12,7 +12,6 @@ import { ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
 export const allowedTokenTypes = z.enum([
   'color',
   'fontFamily',
-  'lineHeight',
   'fontWeight',
   'fontStyle',
   'textDecoration',
@@ -35,13 +34,18 @@ export const allowedTokenTypes = z.enum([
   'dimension',
   'cssDimension',
   'display',
+  // The numbers & typography leftovers (Phase 2e, decision D5): `number` is the
+  // spec type for unitless numbers — the collapsed home of `opacity`, `zIndex`,
+  // and `lineHeight` (line-heights re-authored unitless; a `z-index: auto`
+  // keyword is a `cssDimension`, the one non-numeric value those families held).
+  // `strokeStyle` is the spec successor to `borderStyle`. The legacy names —
+  // opacity, zIndex, lineHeight, borderStyle — are gone.
+  'number',
+  'strokeStyle',
   // `borderColor` collapsed into `color` (Phase 2b, decision D5) — it never had
   // its own token entries; border color surfaces are plain `color` tokens.
-  'borderStyle',
   'utility',
-  'zIndex',
   'asset',
-  'opacity',
   'content',
   'boolean',
   // The DTCG composite `shadow` type (Phase 2c, decision D5): a `$value` is one
@@ -447,9 +451,14 @@ export type TokenMap = Record<string, TokenInterface>;
  * Unified font-family token. One `$type` (`"fontFamily"`) for every font token; loading
  * metadata (source/fallback/weights/styles/faces/display) lives under
  * `$extensions["dev.zebkit"].font`. Aliases are the same shape with a `{...}` reference value.
+ *
+ * Per DTCG 2025.10 a `fontFamily` `$value` is a single family name or an ordered
+ * array of them (Phase 2e). Zebkit authors single strings today (the converter
+ * appends the fallback stack from `$extensions`); the array form is accepted for
+ * interchange.
  */
 export const fontFamilyTokenObjectSchema = z.object({
-  $value: z.union([z.string(), z.number()]),
+  $value: z.union([z.string(), z.number(), z.array(z.string())]),
   $type: z.literal("fontFamily"),
   $description: z.string(),
   $extensions: tokenExtensionsSchema.optional(),

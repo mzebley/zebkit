@@ -27,7 +27,7 @@ const tokens = {
   },
   "line-height": {
     $value: `{line-height.3}`,
-    $type: "lineHeight",
+    $type: "number",
     $description:
       "Line height for introductory lede text with .lede applied directly or as a child of a .prose container.",
   },

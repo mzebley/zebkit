@@ -66,7 +66,7 @@
   },
   "border-style": {
     "$value": "{border.style}",
-    "$type": "borderStyle",
+    "$type": "strokeStyle",
     "$description": "Border style for standard buttons."
   },
   "border-radius": {
@@ -90,8 +90,8 @@
     "$description": "Font weight for button labels — ADS Medium (500)."
   },
   "line-height": {
-    "$value": "1.4285714286",
-    "$type": "lineHeight",
+    "$value": 1.4285714286,
+    "$type": "number",
     "$description": "Base line height for buttons — ADS (20/14)."
   },
   "letter-spacing": {

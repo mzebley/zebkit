@@ -66,7 +66,7 @@
   },
   "border-style": {
     "$value": "{border.style}",
-    "$type": "borderStyle",
+    "$type": "strokeStyle",
     "$description": "Border style (solid, dashed, etc) for standard buttons."
   },
   "border-radius": {
@@ -91,11 +91,11 @@
   },
   "line-height": {
     "$value": "{line-height.2}",
-    "$type": "lineHeight",
+    "$type": "number",
     "$description": "Base line height for buttons."
   },
   "letter-spacing": {
-    "$value": "{tracking.normal}",
+    "$value": "{letter-spacing.normal}",
     "$type": "cssDimension",
     "$description": "Letter spacing for button labels."
   },
@@ -306,7 +306,7 @@
   },
   "opacity": {
     "$value": 1,
-    "$type": "opacity",
+    "$type": "number",
     "$description": "Visual opacity of button."
   }
 }

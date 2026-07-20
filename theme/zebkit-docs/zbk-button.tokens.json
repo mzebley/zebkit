@@ -81,7 +81,7 @@
   },
   "border-style": {
     "$value": "{border.style}",
-    "$type": "borderStyle",
+    "$type": "strokeStyle",
     "$description": "Border style (solid, dashed, etc) for standard buttons."
   },
   "border-radius": {
@@ -106,7 +106,7 @@
   },
   "line-height": {
     "$value": "{line-height.3}",
-    "$type": "lineHeight",
+    "$type": "number",
     "$description": "Base line height for buttons."
   },
   "letter-spacing": {
@@ -336,12 +336,12 @@
   },
   "opacity": {
     "$value": 1,
-    "$type": "opacity",
+    "$type": "number",
     "$description": "Visual opacity of button."
   },
   "opacity-loading": {
     "$value": 1,
-    "$type": "opacity",
+    "$type": "number",
     "$description": "Visual opacity while the button is in its loading state."
   },
   "transform-hover": {

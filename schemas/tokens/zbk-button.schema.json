@@ -983,7 +983,7 @@
         "{tooltip.offset}"
       ]
     },
-    "borderStyleValue": {
+    "strokeStyleValue": {
       "type": [
         "string",
         "number"
@@ -1078,6 +1078,7 @@
         "{font-size.3xl}",
         "{font-size.4xl}",
         "{font-size.5xl}",
+        "{z-index.auto}",
         "{button.font-size}",
         "{button.letter-spacing}",
         "{button.margin-inline}",
@@ -1169,12 +1170,29 @@
         "{tooltip.font-weight}"
       ]
     },
-    "lineHeightValue": {
+    "numberValue": {
       "type": [
         "string",
         "number"
       ],
       "examples": [
+        "{opacity.0}",
+        "{opacity.5}",
+        "{opacity.10}",
+        "{opacity.15}",
+        "{opacity.20}",
+        "{opacity.25}",
+        "{opacity.30}",
+        "{opacity.40}",
+        "{opacity.50}",
+        "{opacity.60}",
+        "{opacity.70}",
+        "{opacity.75}",
+        "{opacity.80}",
+        "{opacity.85}",
+        "{opacity.90}",
+        "{opacity.95}",
+        "{opacity.100}",
         "{h1.line-height}",
         "{h2.line-height}",
         "{h3.line-height}",
@@ -1189,15 +1207,49 @@
         "{line-height.3}",
         "{line-height.4}",
         "{line-height.5}",
+        "{z-index.0}",
+        "{z-index.10}",
+        "{z-index.20}",
+        "{z-index.30}",
+        "{z-index.40}",
+        "{z-index.50}",
+        "{z-index.60}",
+        "{z-index.70}",
+        "{z-index.80}",
+        "{z-index.90}",
+        "{z-index.100}",
+        "{z-index.dropdown}",
+        "{z-index.sticky}",
+        "{z-index.fixed}",
+        "{z-index.modal-backdrop}",
+        "{z-index.modal}",
+        "{z-index.popover}",
+        "{z-index.tooltip}",
         "{button.line-height}",
+        "{button.opacity}",
+        "{button.opacity-loading}",
         "{checkbox.line-height}",
+        "{checkbox.opacity}",
+        "{checkbox.opacity-disabled}",
         "{input.line-height}",
+        "{input.opacity}",
+        "{input.opacity-disabled}",
         "{pagination.line-height}",
         "{radio.line-height}",
+        "{radio.opacity}",
+        "{radio.opacity-disabled}",
         "{select.line-height}",
+        "{select.opacity}",
+        "{select.opacity-disabled}",
         "{textarea.field-line-height}",
+        "{textarea.opacity}",
+        "{textarea.opacity-disabled}",
         "{toggle.line-height}",
-        "{tooltip.line-height}"
+        "{toggle.opacity}",
+        "{toggle.opacity-disabled}",
+        "{tooltip.line-height}",
+        "{tooltip.z-index}",
+        "{tooltip.opacity}"
       ]
     },
     "textTransformValue": {
@@ -1433,46 +1485,6 @@
         "{select.transition-property}",
         "{textarea.transition-property}",
         "{toggle.transition-property}"
-      ]
-    },
-    "opacityValue": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "examples": [
-        "{opacity.0}",
-        "{opacity.5}",
-        "{opacity.10}",
-        "{opacity.15}",
-        "{opacity.20}",
-        "{opacity.25}",
-        "{opacity.30}",
-        "{opacity.40}",
-        "{opacity.50}",
-        "{opacity.60}",
-        "{opacity.70}",
-        "{opacity.75}",
-        "{opacity.80}",
-        "{opacity.85}",
-        "{opacity.90}",
-        "{opacity.95}",
-        "{opacity.100}",
-        "{button.opacity}",
-        "{button.opacity-loading}",
-        "{checkbox.opacity}",
-        "{checkbox.opacity-disabled}",
-        "{input.opacity}",
-        "{input.opacity-disabled}",
-        "{radio.opacity}",
-        "{radio.opacity-disabled}",
-        "{select.opacity}",
-        "{select.opacity-disabled}",
-        "{textarea.opacity}",
-        "{textarea.opacity-disabled}",
-        "{toggle.opacity}",
-        "{toggle.opacity-disabled}",
-        "{tooltip.opacity}"
       ]
     }
   },
@@ -2140,10 +2152,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/borderStyleValue"
+          "$ref": "#/definitions/strokeStyleValue"
         },
         "$type": {
-          "const": "borderStyle"
+          "const": "strokeStyle"
         },
         "$description": {
           "type": "string"
@@ -2439,10 +2451,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/lineHeightValue"
+          "$ref": "#/definitions/numberValue"
         },
         "$type": {
-          "const": "lineHeight"
+          "const": "number"
         },
         "$description": {
           "type": "string"
@@ -4301,10 +4313,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/opacityValue"
+          "$ref": "#/definitions/numberValue"
         },
         "$type": {
-          "const": "opacity"
+          "const": "number"
         },
         "$description": {
           "type": "string"
@@ -4339,10 +4351,10 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/opacityValue"
+          "$ref": "#/definitions/numberValue"
         },
         "$type": {
-          "const": "opacity"
+          "const": "number"
         },
         "$description": {
           "type": "string"

@@ -1,45 +1,6 @@
 import { AllowedTokenTypes } from "@definitions/tokens";
 
 /**
- * Semantic aliases that map friendly token names to underlying token types.
- * These help keep overrides readable while still validating compatibility.
- * This also allows us to reference primitives as if they were tokens (IE,font-weight.bold, tracking.tighter) even though their values are hardcoded to the css and can't be changed by token updates
- */
-export const tokenAliasMap: {
-  [key: string]: AllowedTokenTypes | { [key: string]: AllowedTokenTypes };
-} = {
-  "font-weight": {
-    thin: "fontWeight",
-    extralight: "fontWeight",
-    light: "fontWeight",
-    normal: "fontWeight",
-    medium: "fontWeight",
-    semibold: "fontWeight",
-    bold: "fontWeight",
-    extrabold: "fontWeight",
-    black: "fontWeight",
-  },
-  // Tracking vars are hand-written CSS (em-based) — a length surface the spec
-  // `dimension` type cannot represent, so referencing entries type `cssDimension`.
-  tracking: {
-    tighter: "cssDimension",
-    tight: "cssDimension",
-    normal: "cssDimension",
-    wide: "cssDimension",
-    wider: "cssDimension",
-  },
-  // Shadowed by the real letter-spacing module (structured px/rem tokens);
-  // kept aligned with its collapsed type for the fallback path.
-  "letter-spacing": {
-    tighter: "dimension",
-    tight: "dimension",
-    normal: "dimension",
-    wide: "dimension",
-    wider: "dimension",
-  },
-};
-
-/**
  * Token types that can be safely referenced from one another.
  */
 export const tokenCompatibilityMap: {
@@ -47,7 +8,6 @@ export const tokenCompatibilityMap: {
 } = {
   color: ["color"],
   fontFamily: ["fontFamily"],
-  lineHeight: ["lineHeight", "dimension", "cssDimension"],
   fontWeight: ["fontWeight"],
   textDecoration: ["textDecoration"],
   textTransform: ["textTransform"],
@@ -60,11 +20,14 @@ export const tokenCompatibilityMap: {
   dimension: ["dimension", "cssDimension"],
   cssDimension: ["cssDimension", "dimension"],
   display: ["display"],
-  borderStyle: ["borderStyle"],
+  // The numbers family (Phase 2e): opacity, z-index, and line-height are all the
+  // spec `number` type and reference one another as unitless numbers. (The lone
+  // `z-index: auto` keyword is a `cssDimension` per D4, but nothing references
+  // it, so `number` stays tight.)
+  number: ["number"],
+  strokeStyle: ["strokeStyle"],
   utility: ["utility", "boolean"],
-  zIndex: ["zIndex"],
   asset: ["asset"],
-  opacity: ["opacity"],
   content: ["content"],
   boolean: ["boolean"],
   shadow: ["shadow"],

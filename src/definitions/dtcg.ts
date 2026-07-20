@@ -136,15 +136,17 @@ export const LEGACY_TYPE_MIGRATION: Record<AllowedTokenTypes, LegacyTypeMigratio
   cubicBezier: { kind: "spec", type: "cubicBezier" },
   transitionProperty: { kind: "spec", type: "transitionProperty" },
   transitionTimingFunction: { kind: "spec", type: "transitionTimingFunction" },
-  // Numbers
-  lineHeight: { kind: "spec", type: "number" },
-  opacity: { kind: "spec", type: "number" },
-  zIndex: { kind: "spec", type: "number" },
+  // Numbers (Phase 2e): opacity, zIndex, and lineHeight collapsed into the spec
+  // `number` type (line-heights re-authored unitless). A `z-index: auto` keyword
+  // is the one non-numeric value the family held — it lands in `cssDimension`
+  // (D4), the same home as the % / keyword length surfaces.
+  number: { kind: "spec", type: "number" },
   // Typography
   fontWeight: { kind: "spec", type: "fontWeight" },
   fontFamily: { kind: "spec", type: "fontFamily" },
-  // Border style
-  borderStyle: { kind: "spec", type: "strokeStyle" },
+  // Border style (Phase 2e): the DTCG composite `strokeStyle` replaced the legacy
+  // `borderStyle` type; zebkit authors the keyword form (`solid`).
+  strokeStyle: { kind: "spec", type: "strokeStyle" },
   // Build-time settings stopped being pseudo-tokens in Phase 2a: the former
   // `setting` type is gone; scale controls live in group-level
   // `$extensions["dev.zebkit"].scale` (see TokenGroupExtensions).
