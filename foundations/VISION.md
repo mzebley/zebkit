@@ -164,7 +164,9 @@ Zebkit is built with the explicit expectation that AI agents are first-class con
 - **Never emit a raw visual value where a token exists.** If you find yourself writing a custom class with a hard-coded value, you are building an exit ramp. Stop, find the token or utility, and if it truly doesn't exist, surface that as a gap in the system rather than working around it.
 - **The component contract is load-bearing.** Do not restructure component HTML or class bindings to achieve a visual outcome. Visual outcomes are the token layer's job; if tokens can't reach the property you need, that's a component token-surface gap to report.
 - **Respect the strata.** New aliases reference primitives; new component tokens default to aliases; never wire a component token directly to a primitive.
-- **When extending the system, extend its truth.** New utilities get manifests. New tokens get schemas and descriptions. An undocumented addition is a regression of the system's central promise, even if the CSS is correct.
+- **When extending the system, extend its truth.** New utilities get manifests. New tokens get a `$type` and a `$description`. An undocumented addition is a regression of the system's central promise, even if the CSS is correct.
+- **The interchange format is DTCG.** Exported token artifacts, theme overrides, and the docs token data are conformant [Design Tokens Format Module 2025.10](https://tr.designtokens.org/format/) documents — `$value`/`$type`/`$description`, with everything zebkit-specific namespaced under `$extensions["dev.zebkit"]`. Author and ingest aliases as curly-brace references (`{group.token}`); `$ref` and `$extends` are rejected. A strict-mode export sheds zebkit's proprietary `$type`s for tools that accept only the spec vocabulary.
+- **Primitives are yours to change too.** The primitive palette is real `color` tokens, so overriding them — or repointing a family's runtime hue/saturation knobs — through a theme is supported, not just aliases and component tokens. "Change everything" is the manifesto; it does not stop at the alias layer.
 
 ---
 

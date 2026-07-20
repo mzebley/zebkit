@@ -1,7 +1,9 @@
 # Typography: Font Family Tokens
 
-Every font token uses `type: "fontFamily"`, discriminated by a `source`. The full guide lives
-on the doc site (Typography → Fonts); this is the in-repo summary.
+Every font token uses `$type: "fontFamily"`, discriminated by a `source`. Loading metadata
+(`source` / `fallback` / `weights` / `styles` / `faces` / `display`) lives under
+`$extensions["dev.zebkit"].font` — the DTCG 2025.10 entry shape. The full guide lives on the
+doc site (Typography → Fonts); this is the in-repo summary.
 
 ## Two tiers
 
@@ -27,38 +29,41 @@ never get a fallback appended.
 ```ts
 // Google — variable font (weight RANGE) with italics
 primary: {
-  value: '"Inter"',
-  type: "fontFamily",
-  source: "google",
-  fallback: "sans",
-  weights: "200..800",
-  styles: ["normal", "italic"],
-  description: "Primary UI font",
+  $value: '"Inter"',
+  $type: "fontFamily",
+  $description: "Primary UI font",
+  $extensions: {
+    "dev.zebkit": { font: { source: "google", fallback: "sans", weights: "200..800", styles: ["normal", "italic"] } },
+  },
 }
 
 // Google — static font (discrete weight LIST)
 mono: {
-  value: '"Fira Code"',
-  type: "fontFamily",
-  source: "google",
-  fallback: "mono",
-  weights: [400, 500, 700],
-  description: "Code font",
+  $value: '"Fira Code"',
+  $type: "fontFamily",
+  $description: "Code font",
+  $extensions: { "dev.zebkit": { font: { source: "google", fallback: "mono", weights: [400, 500, 700] } } },
 }
 
 // Self-hosted
 brand: {
-  value: '"Brand Sans"',
-  type: "fontFamily",
-  source: "local",
-  fallback: "sans",
-  display: "swap",
-  faces: [{ src: "BrandSans-var.woff2", weight: "100 900", style: "normal" }],
-  description: "Brand font",
+  $value: '"Brand Sans"',
+  $type: "fontFamily",
+  $description: "Brand font",
+  $extensions: {
+    "dev.zebkit": {
+      font: {
+        source: "local",
+        fallback: "sans",
+        display: "swap",
+        faces: [{ src: "BrandSans-var.woff2", weight: "100 900", style: "normal" }],
+      },
+    },
+  },
 }
 
 // System stack — zero network
-sans: { value: "{font-family.system-sans}", type: "fontFamily", description: "..." }
+sans: { $value: "{font-family.system-sans}", $type: "fontFamily", $description: "..." }
 ```
 
 - **`weights`**: array = static list; range string (`"200..800"`) = variable font.

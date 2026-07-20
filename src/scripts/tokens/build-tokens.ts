@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import type { Dirent } from "fs";
 import { allowedTokenTypes } from "@definitions/tokens";
 import type { TokenInterface } from "@definitions/tokens";
+import { isDtcgSpecType } from "@definitions/dtcg";
 import { gatherZebkitFiles } from "@token-scripts/gather-files";
 import {
   buildZebkitTokens,
@@ -1021,13 +1022,25 @@ async function writeTokenLookupFile(
   }
 }
 
+/**
+ * Write the allowed `$type` vocabulary with spec/proprietary provenance marked
+ * (plan decision D4/Phase 4): `spec` are DTCG 2025.10 types every conformant
+ * tool understands; `proprietary` are zebkit's registry (`cssDimension`,
+ * `display`, …) that a strict-mode export drops. Consumers that hard-fail on
+ * unknown types read `spec`; the split is derived from the enum via
+ * `isDtcgSpecType`, so it can never drift from what the build emits.
+ */
 async function writeAllowedTokenTypes(
   outputPath: string,
   types: string[]
 ): Promise<void> {
   try {
     await fs.ensureDir(path.dirname(outputPath));
-    await fs.writeJson(outputPath, types, { spaces: 2 });
+    const provenance = {
+      spec: types.filter((type) => isDtcgSpecType(type)),
+      proprietary: types.filter((type) => !isDtcgSpecType(type)),
+    };
+    await fs.writeJson(outputPath, provenance, { spaces: 2 });
     console.log(chalk.green(`Allowed token types written to ${outputPath}`));
   } catch (error) {
     console.error(chalk.red("Failed to write allowed token types."), error);

@@ -31,16 +31,22 @@ The font module is organized like the rest of the system — primitives feeding 
   a role is a one-line reference change.
 
 ```ts
-// source family
-primary: { value: '"Inter"', type: "fontFamily", source: "google", fallback: "sans",
-           weights: "200..800", description: "..." }
+// source family — a DTCG fontFamily token; loading metadata rides the
+// dev.zebkit font extension (source / fallback / weights / styles / faces / display)
+primary: {
+  $value: '"Inter"',
+  $type: "fontFamily",
+  $description: "...",
+  $extensions: { "dev.zebkit": { font: { source: "google", fallback: "sans", weights: "200..800" } } },
+}
 
 // role alias — pure reference
-body:    { value: "{font-family.primary}", type: "fontFamily", description: "..." }
+body: { $value: "{font-family.primary}", $type: "fontFamily", $description: "..." }
 ```
 
 Every token compiles to a custom property (`--zbk-font-family-primary`,
-`--zbk-font-family-body`, …) you reference from CSS, components, or utilities.
+`--zbk-font-family-body`, …) you reference from CSS, components, or utilities. The loading
+fields below all live under `$extensions["dev.zebkit"].font`.
 
 ## The `source` field
 
@@ -58,7 +64,10 @@ Set `fallback: "sans" | "serif" | "mono"` and the build appends a full, industry
 fallback stack after your family. Author the bare family name — don't hand-type fallbacks.
 
 ```ts
-primary: { value: '"Inter"', type: "fontFamily", source: "google", fallback: "sans", weights: "200..800" }
+primary: {
+  $value: '"Inter"', $type: "fontFamily",
+  $extensions: { "dev.zebkit": { font: { source: "google", fallback: "sans", weights: "200..800" } } },
+}
 ```
 
 ```css
@@ -87,12 +96,16 @@ Declare the family, the weights, and (optionally) italics:
 
 ```ts
 // variable font — a weight RANGE
-primary: { value: '"Inter"', type: "fontFamily", source: "google",
-           fallback: "sans", weights: "200..800", styles: ["normal", "italic"] }
+primary: {
+  $value: '"Inter"', $type: "fontFamily",
+  $extensions: { "dev.zebkit": { font: { source: "google", fallback: "sans", weights: "200..800", styles: ["normal", "italic"] } } },
+}
 
 // static font — a discrete LIST of weights
-mono: { value: '"Fira Code"', type: "fontFamily", source: "google",
-        fallback: "mono", weights: [400, 500, 700] }
+mono: {
+  $value: '"Fira Code"', $type: "fontFamily",
+  $extensions: { "dev.zebkit": { font: { source: "google", fallback: "mono", weights: [400, 500, 700] } } },
+}
 ```
 
 - **`weights` shape carries the intent.** A range string (`"200..800"`) is a variable font; an
@@ -144,15 +157,22 @@ for you:
 
 ```ts
 brand: {
-  value: '"Brand Sans"',
-  type: "fontFamily",
-  source: "local",
-  fallback: "sans",
-  display: "swap",
-  faces: [
-    { src: "BrandSans-var.woff2", weight: "100 900", style: "normal" },
-    { src: "BrandSans-italic.woff2", weight: "100 900", style: "italic" },
-  ],
+  $value: '"Brand Sans"',
+  $type: "fontFamily",
+  $description: "...",
+  $extensions: {
+    "dev.zebkit": {
+      font: {
+        source: "local",
+        fallback: "sans",
+        display: "swap",
+        faces: [
+          { src: "BrandSans-var.woff2", weight: "100 900", style: "normal" },
+          { src: "BrandSans-italic.woff2", weight: "100 900", style: "italic" },
+        ],
+      },
+    },
+  },
 }
 ```
 
