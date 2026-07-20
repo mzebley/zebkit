@@ -8,7 +8,12 @@ import { ZodSchema, z } from 'zod';
 import { TokenInterface, TokenGroupExtensions, tokenModuleSchema } from '@definitions/tokens';
 import { DEFAULT_LAYER, LayerName } from '@definitions/layers';
 import { ZEBKIT_PREFIX } from '@config';
-import { fromDtcgDocument, toDtcgDocument } from './dtcg-document';
+import {
+  fromDtcgDocument,
+  toDtcgDocuments,
+  toStrictDtcgDocument,
+  type DroppedToken,
+} from './dtcg-document';
 import {
   buildFilePayload,
   inferTokenKeyFromFilename,
@@ -32,6 +37,11 @@ export interface BuildZebkitTokensOptions {
    * overrides that still target them a warning that names the fix.
    */
   excludedComponents?: ReadonlySet<string>;
+  /**
+   * Also emit spec-only strict-mode token documents + a drop-manifest alongside
+   * the full export (decision D9). Only meaningful when `exportFile` is set.
+   */
+  exportStrict?: boolean;
 }
 
 export interface BuildZebkitTokensResult {
@@ -272,7 +282,8 @@ export async function buildZebkitTokens(
       splitMode,
       groupExtensions,
       layers,
-      externalModules
+      externalModules,
+      options.exportStrict ?? false
     );
 
   return { tokens, layers, overriddenKeys, groupExtensions, externalModules };
@@ -443,7 +454,8 @@ export async function writeTokensToFile(
   splitMode: BuildZebkitTokensOptions['splitMode'],
   groupExtensions: Record<string, TokenGroupExtensions> = {},
   layers: Record<string, LayerName> = {},
-  externalModules: ReadonlySet<string> = new Set()
+  externalModules: ReadonlySet<string> = new Set(),
+  strict = false
 ) {
   const writeSpinner = ora('Writing tokens to file(s)...').start();
   const destinationPaths: string[] = [];
@@ -453,12 +465,7 @@ export async function writeTokensToFile(
   // Each module serializes to a DTCG document: a hoisted group `$type` when the
   // module is homogeneous, plus a group-level `$extensions["dev.zebkit"]` block
   // carrying the module's layer, emission mode, and fluid-scale controls.
-  const modulePayload = (tokenKey: string): Record<string, unknown> =>
-    toDtcgDocument(tokens[tokenKey], {
-      layer: layers[tokenKey] ?? DEFAULT_LAYER,
-      cssEmission: externalModules.has(tokenKey) ? 'external' : undefined,
-      groupExtensions: groupExtensions[tokenKey],
-    });
+  const documents = toDtcgDocuments({ tokens, layers, groupExtensions, externalModules });
 
   try {
     await fs.ensureDir(destinationPath);
@@ -469,25 +476,34 @@ export async function writeTokensToFile(
           const { filePath, fileContent } = buildFilePayload(
             format,
             path.join(destinationPath, `${tokenKey}.tokens`),
-            modulePayload(tokenKey)
+            documents[tokenKey]
           );
           await fs.writeFile(filePath, fileContent);
           destinationPaths.push(filePath);
         }
       }
     } else {
-      const combined = Object.fromEntries(
-        Object.keys(tokens).map((tokenKey) => [tokenKey, modulePayload(tokenKey)])
-      );
       for (const format of normalizedFormats) {
         const { filePath, fileContent } = buildFilePayload(
           format,
           path.join(destinationPath, `${themeName}-tokens`),
-          combined
+          documents
         );
         await fs.writeFile(filePath, fileContent);
         destinationPaths.push(filePath);
       }
+    }
+
+    if (strict) {
+      destinationPaths.push(
+        ...(await writeStrictTokenExport(
+          documents,
+          destinationPath,
+          normalizedFormats,
+          themeName,
+          resolvedSplitMode
+        ))
+      );
     }
 
     writeSpinner.succeed(chalk.green('All tokens have been written successfully.'));
@@ -496,4 +512,57 @@ export async function writeTokensToFile(
     writeSpinner.fail(chalk.red('Failed to write tokens to file(s).'));
     throw error;
   }
+}
+
+/**
+ * Strict-mode export (decision D9): alongside the full export, write spec-only
+ * DTCG documents — every proprietary-typed token dropped — for tools that
+ * hard-fail on an unknown `$type`, plus a `<theme>.drop-manifest.json` recording
+ * exactly which tokens were shed per module. Returns the paths written.
+ */
+async function writeStrictTokenExport(
+  documents: Record<string, Record<string, unknown>>,
+  destinationPath: string,
+  normalizedFormats: string[],
+  themeName: string,
+  splitMode: 'combined' | 'per-module'
+): Promise<string[]> {
+  const written: string[] = [];
+  const strictDocuments: Record<string, Record<string, unknown>> = {};
+  const dropManifest: Record<string, DroppedToken[]> = {};
+
+  for (const [key, doc] of Object.entries(documents)) {
+    const { document, dropped } = toStrictDtcgDocument(doc);
+    strictDocuments[key] = document;
+    if (dropped.length > 0) dropManifest[key] = dropped;
+  }
+
+  if (splitMode === 'per-module') {
+    for (const key of Object.keys(strictDocuments)) {
+      for (const format of normalizedFormats) {
+        const { filePath, fileContent } = buildFilePayload(
+          format,
+          path.join(destinationPath, `${key}.strict.tokens`),
+          strictDocuments[key]
+        );
+        await fs.writeFile(filePath, fileContent);
+        written.push(filePath);
+      }
+    }
+  } else {
+    for (const format of normalizedFormats) {
+      const { filePath, fileContent } = buildFilePayload(
+        format,
+        path.join(destinationPath, `${themeName}-tokens.strict`),
+        strictDocuments
+      );
+      await fs.writeFile(filePath, fileContent);
+      written.push(filePath);
+    }
+  }
+
+  const manifestPath = path.join(destinationPath, `${themeName}.drop-manifest.json`);
+  await fs.writeJson(manifestPath, { theme: themeName, dropped: dropManifest }, { spaces: 2 });
+  written.push(manifestPath);
+  return written;
 }

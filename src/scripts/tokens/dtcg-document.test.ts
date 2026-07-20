@@ -4,8 +4,15 @@
 import fs from 'fs-extra';
 import path from 'node:path';
 import { glob } from 'glob';
-import { toDtcgDocument, fromDtcgDocument, validateDtcgDocument } from './dtcg-document';
+import {
+  toDtcgDocument,
+  toDtcgDocuments,
+  fromDtcgDocument,
+  toStrictDtcgDocument,
+  validateDtcgDocument,
+} from './dtcg-document';
 import { mergeTokens } from './compile-token-helpers';
+import { isDtcgSpecType } from '@definitions/dtcg';
 import type { TokenInterface } from '@definitions/tokens';
 
 describe('DTCG document transforms (Phase 3)', () => {
@@ -110,6 +117,72 @@ describe('DTCG document transforms (Phase 3)', () => {
         expect(validateDtcgDocument(doc, path.basename(file))).toEqual([]);
       }
     });
+  });
+
+  describe('toDtcgDocuments', () => {
+    it('serializes every module of a build to its DTCG document', () => {
+      const tokens = {
+        'zbk-a': { x: { $value: 1, $type: 'number', $description: 'x' } },
+        'zbk-b': { y: { $value: 'auto', $type: 'cssDimension', $description: 'y' } },
+      } as unknown as Record<string, TokenInterface>;
+
+      const docs = toDtcgDocuments({
+        tokens,
+        layers: { 'zbk-a': 'base', 'zbk-b': 'components' },
+        externalModules: new Set(['zbk-b']),
+      });
+
+      expect(Object.keys(docs).sort()).toEqual(['zbk-a', 'zbk-b']);
+      expect(docs['zbk-a'].$type).toBe('number'); // hoisted for the homogeneous module
+      expect(docs['zbk-a'].$extensions).toEqual({ 'dev.zebkit': { layer: 'base' } });
+      // The emission-external module carries its cssEmission on the group block.
+      expect(docs['zbk-b'].$extensions).toEqual({
+        'dev.zebkit': { layer: 'components', cssEmission: 'external' },
+      });
+    });
+  });
+
+  describe('toStrictDtcgDocument (D9)', () => {
+    it('keeps spec-typed entries, drops proprietary ones, and lists the drops', () => {
+      const doc = {
+        $extensions: { 'dev.zebkit': { layer: 'base' } },
+        brand: {
+          $value: { colorSpace: 'hsl', components: [0, 0, 0] },
+          $type: 'color',
+          $description: 'c',
+        },
+        gap: { $value: { value: 1, unit: 'rem' }, $type: 'dimension', $description: 'g' },
+        auto: { $value: 'auto', $type: 'cssDimension', $description: 'a' },
+        cell: { $value: 'table-cell', $type: 'display', $description: 'd' },
+      };
+
+      const { document, dropped } = toStrictDtcgDocument(doc);
+
+      const kept = fromDtcgDocument(document).entries;
+      expect(Object.keys(kept).sort()).toEqual(['brand', 'gap']);
+      for (const entry of Object.values(kept)) {
+        expect(isDtcgSpecType(entry.$type)).toBe(true);
+      }
+      expect([...dropped].sort((a, b) => a.name.localeCompare(b.name))).toEqual([
+        { name: 'auto', $type: 'cssDimension' },
+        { name: 'cell', $type: 'display' },
+      ]);
+    });
+
+    it('drops an entire module whose type is proprietary', () => {
+      const doc = {
+        $type: 'cssDimension',
+        $extensions: { 'dev.zebkit': { layer: 'base' } },
+        auto: { $value: 'auto', $description: 'a' },
+        full: { $value: '100%', $description: 'f' },
+      };
+      const { document, dropped } = toStrictDtcgDocument(doc);
+      expect(fromDtcgDocument(document).entries).toEqual({});
+      expect(dropped.map((d) => d.name).sort()).toEqual(['auto', 'full']);
+    });
+    // Corpus-level assurance (strict is spec-only across every real module, and
+    // actually sheds proprietary tokens) is hermetic and lives in the
+    // `check:dtcg-validate` gate, which builds the documents fresh from source.
   });
 
   it('re-ingests an exported module as an override to an identical merge (round-trip)', () => {

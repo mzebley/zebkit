@@ -168,6 +168,12 @@ export type TokensConfig = {
    */
   overlays?: OverlayThemeConfig[];
   exportTokens?: boolean;
+  /**
+   * Also emit spec-only strict-mode token documents + a `<theme>.drop-manifest.json`
+   * beside the full export (decision D9), for tools that reject unknown `$type`s.
+   * Requires `exportTokens`. Config-only (not promptable). Default false.
+   */
+  exportStrict?: boolean;
   splitMode?: 'combined' | 'per-module';
   outputFormats?: Array<'JSON' | 'TypeScript' | 'JavaScript'>;
   writeAllowedTokenTypes?: boolean;

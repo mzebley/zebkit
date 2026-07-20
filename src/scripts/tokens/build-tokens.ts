@@ -396,6 +396,7 @@ export async function runTokenBuild(
         splitMode: resolvedSplitMode,
         overridePaths,
         excludedComponents: componentsFilter.excluded,
+        exportStrict: tokensConfig?.exportStrict ?? false,
       },
       exportTokens
     );

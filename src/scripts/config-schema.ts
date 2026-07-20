@@ -151,6 +151,12 @@ export const ZEBKIT_CONFIG_SCHEMA = {
           default: false,
           description: 'Write authorable token artifacts alongside compiled CSS.',
         },
+        exportStrict: {
+          type: 'boolean',
+          default: false,
+          description:
+            'Also emit spec-only strict-mode token documents + a drop-manifest (D9). Requires exportTokens.',
+        },
         splitMode: {
           type: 'string',
           enum: ['combined', 'per-module'],

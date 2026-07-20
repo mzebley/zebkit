@@ -18,7 +18,7 @@
  */
 import type { TokenInterface, TokenObject, TokenGroupExtensions } from '@definitions/tokens';
 import { allowedTokenTypes, tokenObjectSchema, tokenScaleIndex } from '@definitions/tokens';
-import { ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
+import { ZEBKIT_EXTENSION_KEY, isDtcgSpecType } from '@definitions/dtcg';
 import { DEFAULT_LAYER, LayerName } from '@definitions/layers';
 
 /** JSON Pointer / inheritance alias forms zebkit deliberately does not support (D6). */
@@ -94,6 +94,35 @@ export function toDtcgDocument(
   return doc;
 }
 
+/** A compiled build's per-module outputs — everything needed to serialize its DTCG documents. */
+export interface ModuleBuildOutput {
+  tokens: Record<string, TokenInterface>;
+  layers?: Record<string, LayerName>;
+  groupExtensions?: Record<string, TokenGroupExtensions | undefined>;
+  externalModules?: ReadonlySet<string>;
+}
+
+/**
+ * Serialize every module of a build to its DTCG document, keyed by module key.
+ * This is the single source of truth for what the exporters emit — the CLI
+ * defaults snapshots (`build:defaults`), the `writeTokensToFile` exports, and
+ * the `check:dtcg-validate` gate all derive their documents from here so the
+ * validated shape can never drift from the exported one.
+ */
+export function toDtcgDocuments(
+  build: ModuleBuildOutput
+): Record<string, Record<string, unknown>> {
+  const documents: Record<string, Record<string, unknown>> = {};
+  for (const key of Object.keys(build.tokens)) {
+    documents[key] = toDtcgDocument(build.tokens[key], {
+      layer: build.layers?.[key] ?? DEFAULT_LAYER,
+      cssEmission: build.externalModules?.has(key) ? 'external' : undefined,
+      groupExtensions: build.groupExtensions?.[key],
+    });
+  }
+  return documents;
+}
+
 function flattenInto(
   out: TokenInterface,
   node: Record<string, unknown>,
@@ -148,6 +177,45 @@ export function fromDtcgDocument(doc: Record<string, unknown>): {
   flattenInto(entries, doc, '', groupType);
 
   return { entries, meta: { layer, cssEmission, groupExtensions } };
+}
+
+/** One token a strict-mode export dropped because its `$type` is proprietary (D9). */
+export interface DroppedToken {
+  /** Flattened token name within the module. */
+  name: string;
+  /** The proprietary `$type` (D4 registry) that caused the drop. */
+  $type: string;
+}
+
+/** The result of a strict-mode export: the spec-only document plus what it shed. */
+export interface StrictDtcgDocument {
+  /** The DTCG document with every proprietary-typed entry removed. */
+  document: Record<string, unknown>;
+  /** Manifest of the tokens dropped to reach spec-only conformance. */
+  dropped: DroppedToken[];
+}
+
+/**
+ * Strict-mode export (decision D9): reduce a module document to only DTCG
+ * spec-typed tokens — for consumers that hard-fail on an unknown `$type` — and
+ * report what was dropped. Proprietary-typed entries (the D4 registry:
+ * `cssDimension`, `display`, `transitionProperty`, `boolean`, …) are removed
+ * and listed in the returned drop-manifest. The survivors re-serialize through
+ * the normal boundary, so the strict document is itself a well-formed DTCG
+ * document (its group `$type` is recomputed for the entries that remain).
+ */
+export function toStrictDtcgDocument(doc: Record<string, unknown>): StrictDtcgDocument {
+  const { entries, meta } = fromDtcgDocument(doc);
+  const kept: TokenInterface = {};
+  const dropped: DroppedToken[] = [];
+  for (const [name, entry] of Object.entries(entries)) {
+    if (entry.$type && isDtcgSpecType(entry.$type)) {
+      kept[name] = entry;
+    } else {
+      dropped.push({ name, $type: entry.$type ?? '(none)' });
+    }
+  }
+  return { document: toDtcgDocument(kept, meta), dropped };
 }
 
 const ALLOWED_TYPES = new Set<string>(allowedTokenTypes.options);
