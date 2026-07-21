@@ -8,10 +8,7 @@
     "dimensionValue": {
       "oneOf": [
         {
-          "type": [
-            "string",
-            "number"
-          ]
+          "type": "string"
         },
         {
           "type": "object",
@@ -244,9 +241,24 @@
       ]
     },
     "strokeStyleValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "solid",
+            "dashed",
+            "dotted",
+            "double",
+            "groove",
+            "ridge",
+            "outset",
+            "inset"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{border.style}",
@@ -261,56 +273,8 @@
         "{toggle.thumb-border-style}",
         "{tooltip.border-style}"
       ]
-    }
-  },
-  "properties": {
-    "$extensions": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "dev.zebkit": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "scale": {
-              "type": "object",
-              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
-              "additionalProperties": {
-                "oneOf": [
-                  {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "required": [
-                      "value",
-                      "unit"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "value": {
-                        "type": "number"
-                      },
-                      "unit": {
-                        "type": "string",
-                        "enum": [
-                          "px",
-                          "rem"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
     },
-    "width-xs": {
+    "dimensionToken": {
       "type": "object",
       "description": "Smallest semantic border width.",
       "required": [
@@ -327,43 +291,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "width-sm": {
-      "type": "object",
-      "description": "Small semantic border width.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -382,125 +311,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "width-md": {
-      "type": "object",
-      "description": "Base semantic border width.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "width-lg": {
-      "type": "object",
-      "description": "Larger semantic border width.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "width-xl": {
-      "type": "object",
-      "description": "Largest semantic border width.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "style": {
+    "strokeStyleToken": {
       "type": "object",
       "description": "Standarized border style for project.",
       "required": [
@@ -517,6 +335,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -534,199 +355,423 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupType": {
+      "type": "string",
+      "enum": [
+        "color",
+        "dimension",
+        "duration",
+        "fontFamily",
+        "fontWeight",
+        "cubicBezier",
+        "number",
+        "strokeStyle",
+        "shadow",
+        "display",
+        "cursor",
+        "textTransform",
+        "textDecoration",
+        "textAlignment",
+        "fontStyle",
+        "transform",
+        "transitionProperty",
+        "transitionTimingFunction",
+        "content",
+        "flex",
+        "utility",
+        "asset",
+        "boolean",
+        "cssDimension"
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:width": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "xs": {
+          "description": "Smallest semantic border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "sm": {
+          "description": "Small semantic border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "md": {
+          "description": "Base semantic border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "lg": {
+          "description": "Larger semantic border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "xl": {
+          "description": "Largest semantic border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:radius": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "xs": {
+          "description": "Smallest semantic corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "sm": {
+          "description": "Small semantic corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "md": {
+          "description": "Base semantic corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "lg": {
+          "description": "Larger semantic corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "xl": {
+          "description": "Largest semantic corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "$type": {
+      "$ref": "#/definitions/groupType"
+    },
+    "$description": {
+      "type": "string"
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "width": {
+      "$ref": "#/definitions/group:width"
+    },
+    "width-xs": {
+      "description": "Smallest semantic border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "width-sm": {
+      "description": "Small semantic border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "width-md": {
+      "description": "Base semantic border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "width-lg": {
+      "description": "Larger semantic border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "width-xl": {
+      "description": "Largest semantic border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "style": {
+      "description": "Standarized border style for project.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/strokeStyleToken"
+        }
+      ]
+    },
+    "radius": {
+      "$ref": "#/definitions/group:radius"
     },
     "radius-xs": {
-      "type": "object",
       "description": "Smallest semantic corner radius.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "radius-sm": {
-      "type": "object",
       "description": "Small semantic corner radius.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "radius-md": {
-      "type": "object",
       "description": "Base semantic corner radius.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "radius-lg": {
-      "type": "object",
       "description": "Larger semantic corner radius.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "radius-xl": {
-      "type": "object",
       "description": "Largest semantic corner radius.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     }
   }
 }

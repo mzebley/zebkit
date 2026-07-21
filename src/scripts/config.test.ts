@@ -5,6 +5,7 @@
 import fs from 'fs-extra';
 import os from 'node:os';
 import path from 'node:path';
+import Ajv2020 from 'ajv/dist/2020';
 
 import {
   loadZebkitConfig,
@@ -80,6 +81,34 @@ describe('validateKnownConfigItems', () => {
     ).toThrow(
       /Invalid config value at `tokens\.fonts\.strategy`.*"import", "link", "preload", "manual"/
     );
+  });
+
+  it('rejects strict export unless full token export is enabled', () => {
+    expect(() =>
+      validateKnownConfigItems({
+        configVersion: 1,
+        tokens: { exportStrict: true, exportTokens: false },
+      })
+    ).toThrow(/exportTokens/);
+    expect(() =>
+      validateKnownConfigItems({
+        configVersion: 1,
+        tokens: { exportStrict: true },
+      })
+    ).toThrow(/exportTokens/);
+
+    const validateSchema = new Ajv2020({ allErrors: true, strict: false }).compile(
+      ZEBKIT_CONFIG_SCHEMA
+    );
+    expect(
+      validateSchema({ configVersion: 1, tokens: { exportStrict: true } })
+    ).toBe(false);
+    expect(
+      validateSchema({
+        configVersion: 1,
+        tokens: { exportStrict: true, exportTokens: true },
+      })
+    ).toBe(true);
   });
 
   it('rejects unknown keys in dynamic component entries', () => {

@@ -1,12 +1,9 @@
-import type { AllowedTokenTypes } from "@definitions/tokens";
-
 /**
  * Central DTCG alignment definitions.
  *
  * Spec target: DTCG Design Tokens Format Module 2025.10 (the first stable release).
- * These are the locked decisions from plans/dtcg-alignment/plan.md (D3, D4, D5) as
- * data. Later migration phases import from here instead of re-deciding; changing a
- * mapping means changing the plan's decision table first.
+ * These are the locked decisions from plans/dtcg-alignment/plan.md (D3, D4, D5)
+ * expressed as the live registry used by validation, export, and tooling.
  */
 
 /**
@@ -33,6 +30,26 @@ export const DTCG_TYPES = [
 ] as const;
 
 export type DtcgType = (typeof DTCG_TYPES)[number];
+
+/**
+ * DTCG types for which Zebkit implements value validation, CSS serialization,
+ * and strict export. The remaining normative types stay in {@link DTCG_TYPES}
+ * so the format vocabulary is represented truthfully, but are not authorable
+ * until their complete runtime behavior exists.
+ */
+export const ZEBKIT_SUPPORTED_SPEC_TYPES = [
+  "color",
+  "dimension",
+  "duration",
+  "fontFamily",
+  "fontWeight",
+  "cubicBezier",
+  "number",
+  "strokeStyle",
+  "shadow",
+] as const satisfies readonly DtcgType[];
+
+export type ZebkitSupportedSpecType = (typeof ZEBKIT_SUPPORTED_SPEC_TYPES)[number];
 
 /**
  * Zebkit's proprietary `$type` registry (decision D4): CSS-surface tokens the DTCG
@@ -66,12 +83,22 @@ export const ZEBKIT_PROPRIETARY_TYPES = [
 
 export type ZebkitProprietaryType = (typeof ZEBKIT_PROPRIETARY_TYPES)[number];
 
-/** Every `$type` zebkit emits post-alignment: the spec set plus the proprietary registry. */
-export type ZebkitDtcgType = DtcgType | ZebkitProprietaryType;
+/** Every `$type` Zebkit can author and emit. */
+export const ALLOWED_TOKEN_TYPE_VALUES = [
+  ...ZEBKIT_SUPPORTED_SPEC_TYPES,
+  ...ZEBKIT_PROPRIETARY_TYPES,
+] as const;
+
+export type ZebkitDtcgType = (typeof ALLOWED_TOKEN_TYPE_VALUES)[number];
 
 /** True when `type` is part of the DTCG 2025.10 spec vocabulary (vs. zebkit-proprietary). */
 export function isDtcgSpecType(type: string): type is DtcgType {
   return (DTCG_TYPES as readonly string[]).includes(type);
+}
+
+/** True when the type is both normative DTCG and fully implemented by Zebkit. */
+export function isZebkitSupportedSpecType(type: string): type is ZebkitSupportedSpecType {
+  return (ZEBKIT_SUPPORTED_SPEC_TYPES as readonly string[]).includes(type);
 }
 
 /**
@@ -88,77 +115,18 @@ export const ZEBKIT_EXTENSION_KEY = "dev.zebkit" as const;
  * - `font`: font-loading metadata (`source`, `fallback`, `weights`, `styles`, `faces`, `display`)
  * - `layer`: cascade-layer assignment, only where it must ride inside JSON artifacts
  *   (e.g. defaults snapshots)
+ * - `cssEmission`: external CSS ownership for the primitive palette
+ * - `emptyColorPlaceholder`, `rawCssValue`, `originalType`: transient authoring/export provenance
  */
-export const ZEBKIT_EXTENSION_SUBKEYS = ["a11y", "scale", "font", "layer"] as const;
+export const ZEBKIT_EXTENSION_SUBKEYS = [
+  "a11y",
+  "scale",
+  "font",
+  "layer",
+  "cssEmission",
+  "emptyColorPlaceholder",
+  "rawCssValue",
+  "originalType",
+] as const;
 
 export type ZebkitExtensionSubkey = (typeof ZEBKIT_EXTENSION_SUBKEYS)[number];
-
-/**
- * How one legacy zebkit token type migrates to the DTCG shape (decision D5).
- *
- * - `spec`: every value of this legacy type becomes this single `$type`.
- * - `valueDependent`: the target `$type` depends on the individual value (px/rem
- *   lengths → `dimension`; `%`/`ch`/`em`/`calc()` → `cssDimension`).
- * - `split`: one legacy type fans out into several `$type`s (transition →
- *   duration / cubicBezier / transitionProperty).
- * - `extension`: not a token post-alignment; the data moves under
- *   `$extensions["dev.zebkit"]` on the owning group (build-time settings).
- */
-export type LegacyTypeMigration =
-  | { kind: "spec"; type: ZebkitDtcgType }
-  | { kind: "valueDependent"; types: readonly ZebkitDtcgType[] }
-  | { kind: "split"; types: readonly ZebkitDtcgType[] }
-  | { kind: "extension"; subkey: ZebkitExtensionSubkey };
-
-/**
- * The spec-type mapping table (decision D5): every legacy `AllowedTokenTypes`
- * member and where its tokens land post-alignment. Phase 2 consumes this family
- * by family; Phase 4's provenance-marked `allowed-token-types.json` derives from
- * the end state.
- *
- * The dimension family collapsed in Phase 2a step 4: `spacing`, `sizing`,
- * `rootSize`, `borderWidth`, `borderRadius`, `fontSize`, `rootFontSize`, and
- * `letterSpacing` no longer exist — px/rem values are `dimension`, everything
- * else a length slot accepts is `cssDimension`.
- */
-export const LEGACY_TYPE_MIGRATION: Record<AllowedTokenTypes, LegacyTypeMigration> = {
-  // Colors (`borderColor` collapsed into `color` in Phase 2b — it had no entries)
-  color: { kind: "spec", type: "color" },
-  // The dimension family is final (Phase 2a step 4)
-  dimension: { kind: "spec", type: "dimension" },
-  cssDimension: { kind: "spec", type: "cssDimension" },
-  // Shadows are final (Phase 2c): structured shadow-layer arrays, `none` = `[]`
-  shadow: { kind: "spec", type: "shadow" },
-  // The transition conflation is final (Phase 2d): durations → spec `duration`,
-  // easing curves → spec `cubicBezier`, the property list and keyword-easing
-  // surfaces → proprietary `transitionProperty` / `transitionTimingFunction`.
-  duration: { kind: "spec", type: "duration" },
-  cubicBezier: { kind: "spec", type: "cubicBezier" },
-  transitionProperty: { kind: "spec", type: "transitionProperty" },
-  transitionTimingFunction: { kind: "spec", type: "transitionTimingFunction" },
-  // Numbers (Phase 2e): opacity, zIndex, and lineHeight collapsed into the spec
-  // `number` type (line-heights re-authored unitless). A `z-index: auto` keyword
-  // is the one non-numeric value the family held — it lands in `cssDimension`
-  // (D4), the same home as the % / keyword length surfaces.
-  number: { kind: "spec", type: "number" },
-  // Typography
-  fontWeight: { kind: "spec", type: "fontWeight" },
-  fontFamily: { kind: "spec", type: "fontFamily" },
-  // Border style (Phase 2e): the DTCG composite `strokeStyle` replaced the legacy
-  // `borderStyle` type; zebkit authors the keyword form (`solid`).
-  strokeStyle: { kind: "spec", type: "strokeStyle" },
-  // Build-time settings stopped being pseudo-tokens in Phase 2a: the former
-  // `setting` type is gone; scale controls live in group-level
-  // `$extensions["dev.zebkit"].scale` (see TokenGroupExtensions).
-  // Proprietary registry (no DTCG equivalent; type name is already final)
-  display: { kind: "spec", type: "display" },
-  fontStyle: { kind: "spec", type: "fontStyle" },
-  textDecoration: { kind: "spec", type: "textDecoration" },
-  textTransform: { kind: "spec", type: "textTransform" },
-  textAlignment: { kind: "spec", type: "textAlignment" },
-  utility: { kind: "spec", type: "utility" },
-  asset: { kind: "spec", type: "asset" },
-  content: { kind: "spec", type: "content" },
-  boolean: { kind: "spec", type: "boolean" },
-  flex: { kind: "spec", type: "flex" },
-};

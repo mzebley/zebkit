@@ -7,14 +7,20 @@ import {
   FontFaceObject,
   tokenA11y,
   tokenFontMeta,
-  tokenValueToString,
 } from "@definitions/tokens";
 import {
   FONT_FALLBACK_STACKS,
   FontFallbackCategory,
 } from "@definitions/font-fallbacks";
 import { a11yMap } from "@definitions/a11y-map";
-import { areTokensTypesCompatible } from "@definitions/token-maps";
+import {
+  buildTokenReferenceLookup,
+  isCompatibleReference,
+  parseTokenReference,
+  serializeTokenValueWithReferences,
+  tokenReferenceToCssVariable,
+  tokenReferenceToLookupId,
+} from "./token-references";
 import { DEFAULT_LAYER, LAYER_ORDER, LayerName } from "@definitions/layers";
 import { ZEBKIT_PREFIX } from "@config";
 
@@ -32,51 +38,39 @@ function validateCssReferencesExist(
   type: AllowedTokenTypes | string,
   globalPrefix: string,
   availableTokens: { [key: string]: TokenInterface },
-  errors?: string[]
+  errors?: string[],
+  referenceLookup = buildTokenReferenceLookup(availableTokens)
 ): boolean {
   const report = (message: string) => {
     console.error(chalk.red(message));
     errors?.push(message);
   };
-  const tokenPath = value.slice(1, -1).split(".");
-  if (tokenPath.length !== 2) {
+  const reference = parseTokenReference(value);
+  if (!reference) {
     report(
-      `Invalid token reference: ${value}. References must be exactly '{module.entry}' (two dot-separated segments).`
+      `Invalid token reference: ${value}. References must use non-empty dot-separated identifier segments.`
     );
     return false;
   }
-  const parent = tokenPath[0] as string;
-  const child = tokenPath[1] as string;
-  let valid = false;
-  let invalidType = false;
+  const lookupId = tokenReferenceToLookupId(reference);
+  const target = lookupId ? referenceLookup.get(lookupId) : undefined;
 
   // Closed-world resolution (I5): every reference must resolve against a real
   // token module in the document. The former `tokenAliasMap` virtual targets
   // (`font-weight.*`, `tracking.*`, `letter-spacing.*`) were retired in Phase 2e
   // — font-weight/letter-spacing are real modules and `{tracking.*}` was
   // repointed to `{letter-spacing.*}`.
-  if (availableTokens.hasOwnProperty(`${globalPrefix}-${parent}`)) {
-    if (availableTokens[`${globalPrefix}-${parent}`].hasOwnProperty(child)) {
-      const tokenType =
-        availableTokens[`${globalPrefix}-${parent}`][child].$type;
-      if (areTokensTypesCompatible(type as AllowedTokenTypes, tokenType as AllowedTokenTypes)) {
-        valid = true;
-      } else {
-        invalidType = true;
-        report(
-          `Invalid token reference: ${value} (type '${type}' cannot reference '${tokenType}').`
-        );
-      }
-    }
-  }
-
-  if (!valid && !invalidType) {
+  if (!target) {
     report(
       `Invalid token reference: ${value}. Ensure the target token or palette color exists.`
     );
+    return false;
   }
-
-  return valid;
+  if (!isCompatibleReference(type as AllowedTokenTypes, target.entry.$type)) {
+    report(`Invalid token reference: ${value} (type '${type}' cannot reference '${target.entry.$type}').`);
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -91,7 +85,8 @@ export function convertDotNotation(
   globalPrefix: string,
   availableTokens: { [key: string]: TokenInterface },
   byPass = false,
-  errors?: string[]
+  errors?: string[],
+  referenceLookup = buildTokenReferenceLookup(availableTokens)
 ): string {
   if (
     typeof value === "string" &&
@@ -100,11 +95,11 @@ export function convertDotNotation(
   ) {
     const valid =
       byPass ||
-      validateCssReferencesExist(value, type, globalPrefix, availableTokens, errors);
+      validateCssReferencesExist(value, type, globalPrefix, availableTokens, errors, referenceLookup);
 
     if (valid) {
-      const variableName = value.slice(1, -1).replace(/\./g, "-");
-      return `var(--${globalPrefix}-${variableName})`;
+      const reference = parseTokenReference(value);
+      return reference ? `var(${tokenReferenceToCssVariable(reference, globalPrefix)})` : "undefined";
     }
     return "undefined";
   }
@@ -132,6 +127,8 @@ export interface CssVarGenerationOptions {
    * Defaults to the emitted `tokens`.
    */
   referenceTokens?: { [key: string]: TokenInterface };
+  /** Emit declarations outside cascade layers (palette overrides must outrank unlayered palette SCSS). */
+  unlayered?: boolean;
 }
 
 /** Structured `<head>` requirements for `link`/`preload` font strategies, used to write the
@@ -170,9 +167,11 @@ export const convertTokensToCssVars = (
     fontStrategy = "import",
     assetFilePath,
     referenceTokens,
+    unlayered = false,
   } = options;
   // References resolve against the full theme when emitting a subset; otherwise the emitted set.
   const refTokens = (referenceTokens ?? tokens) as Record<string, TokenInterface>;
+  const referenceLookup = buildTokenReferenceLookup(refTokens);
   const perLayer: Record<LayerName, string> = {
     theme: "",
     base: "",
@@ -208,7 +207,8 @@ export const convertTokensToCssVars = (
             ZEBKIT_PREFIX,
             refTokens,
             false,
-            errors
+            errors,
+            referenceLookup
           );
         } else {
           cssVariableValue = applyFallback(rawValue, norm.fallback);
@@ -241,12 +241,17 @@ export const convertTokensToCssVars = (
         // Structured dimensions serialize to their canonical CSS string here;
         // plain strings (including references) and numbers pass through.
         let cssVariableValue: string | number = convertDotNotation(
-          tokenValueToString(item.$value),
+          serializeTokenValueWithReferences(item.$value, item.$type as AllowedTokenTypes, {
+            referenceLookup,
+            prefix: ZEBKIT_PREFIX,
+            errors,
+          }),
           item.$type as AllowedTokenTypes,
           ZEBKIT_PREFIX,
           refTokens,
           false,
-          errors
+          errors,
+          referenceLookup
         );
 
         // Entries pre-resolved by `resolveTypeScale` / `resolveSpaceScale` carry no
@@ -279,12 +284,12 @@ export const convertTokensToCssVars = (
   let css = "";
   if (importLines.length) css += `${importLines.join("\n")}\n`;
   if (faceBlocks.length) css += `${faceBlocks.join("\n")}\n`;
-  css += "@layer theme, base, components, utilities;\n\n";
+  if (!unlayered) css += "@layer theme, base, components, utilities;\n\n";
 
   for (const layer of LAYER_ORDER) {
     const body = perLayer[layer];
     if (!body) continue;
-    css += `@layer ${layer} {\n${body}}\n\n`;
+    css += unlayered ? `${body}\n` : `@layer ${layer} {\n${body}}\n\n`;
   }
 
   return {

@@ -101,44 +101,52 @@ const tokens = {
   "border": {
     $value: "",
     $type: "color",
-    $description: "Base app border color for outlines, strokes, and dividers."
+    $description: "Base app border color for outlines, strokes, and dividers.",
+    $extensions: { "dev.zebkit": { emptyColorPlaceholder: true } }
   },
   "border-subtle": {
     $value: "",
     $type: "color",
-    $description: "Subtle app border color for the least-prominent outlines and dividers."
+    $description: "Subtle app border color for the least-prominent outlines and dividers.",
+    $extensions: { "dev.zebkit": { emptyColorPlaceholder: true } }
   },
   "border-muted": {
     $value: "",
     $type: "color",
-    $description: "Muted app border color for low-emphasis outlines and dividers."
+    $description: "Muted app border color for low-emphasis outlines and dividers.",
+    $extensions: { "dev.zebkit": { emptyColorPlaceholder: true } }
   },
   "border-emphasis": {
     $value: "",
     $type: "color",
-    $description: "Emphasis app border color for high-prominence outlines and dividers."
+    $description: "Emphasis app border color for high-prominence outlines and dividers.",
+    $extensions: { "dev.zebkit": { emptyColorPlaceholder: true } }
   },
 
   // Border (inverse): app borders in inverse contexts
   "border-inverse": {
     $value: "",
     $type: "color",
-    $description: "Base inverse app border color for outlines and dividers on inverse canvases."
+    $description: "Base inverse app border color for outlines and dividers on inverse canvases.",
+    $extensions: { "dev.zebkit": { emptyColorPlaceholder: true } }
   },
   "border-inverse-subtle": {
     $value: "",
     $type: "color",
-    $description: "Subtle inverse app border color for the least-prominent outlines on inverse canvases."
+    $description: "Subtle inverse app border color for the least-prominent outlines on inverse canvases.",
+    $extensions: { "dev.zebkit": { emptyColorPlaceholder: true } }
   },
   "border-inverse-muted": {
     $value: "",
     $type: "color",
-    $description: "Muted inverse app border color for low-emphasis outlines on inverse canvases."
+    $description: "Muted inverse app border color for low-emphasis outlines on inverse canvases.",
+    $extensions: { "dev.zebkit": { emptyColorPlaceholder: true } }
   },
   "border-inverse-emphasis": {
     $value: "",
     $type: "color",
-    $description: "Emphasis inverse app border color for high-prominence outlines on inverse canvases."
+    $description: "Emphasis inverse app border color for high-prominence outlines on inverse canvases.",
+    $extensions: { "dev.zebkit": { emptyColorPlaceholder: true } }
   }
 } as const satisfies TokenInterface;
 

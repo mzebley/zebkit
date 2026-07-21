@@ -159,6 +159,19 @@ describe('pruneCss — token-graph reachability', () => {
     expect(result.tokens.droppedNames).toEqual(['--zbk-unused']);
   });
 
+  it('keeps both generated and override declarations for a reachable primitive', () => {
+    const css = [
+      ':root{--zbk-color-red-500:hsl(0 80% 58%);}',
+      ':root{--zbk-app-canvas:var(--zbk-color-red-500);}',
+      ':root{--zbk-color-red-500:#c00;}',
+      '.surface{background:var(--zbk-app-canvas)}',
+    ].join('');
+    const result = run(css, { candidates: new Set(['surface']) });
+
+    expect(result.css.split('--zbk-color-red-500:')).toHaveLength(3);
+    expect(result.css).toContain('--zbk-color-red-500:#c00');
+  });
+
   it('seeds reachability from tokenRoots (inline styles / JS / project CSS)', () => {
     const css = `:root{--zbk-brand:#f00;--zbk-orphan:#0f0}`;
     const result = run(css, {

@@ -6,9 +6,63 @@
   "additionalProperties": false,
   "definitions": {
     "colorValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "colorSpace",
+            "components"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "colorSpace": {
+              "type": "string",
+              "enum": [
+                "srgb",
+                "srgb-linear",
+                "hsl",
+                "hwb",
+                "lab",
+                "lch",
+                "oklab",
+                "oklch",
+                "display-p3",
+                "a98-rgb",
+                "prophoto-rgb",
+                "rec2020",
+                "xyz-d65",
+                "xyz-d50"
+              ]
+            },
+            "components": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "const": "none"
+                  }
+                ]
+              }
+            },
+            "alpha": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "hex": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          }
+        }
       ],
       "examples": [
         "{accent-primary.50}",
@@ -748,10 +802,7 @@
     "dimensionValue": {
       "oneOf": [
         {
-          "type": [
-            "string",
-            "number"
-          ]
+          "type": "string"
         },
         {
           "type": "object",
@@ -984,9 +1035,24 @@
       ]
     },
     "strokeStyleValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "solid",
+            "dashed",
+            "dotted",
+            "double",
+            "groove",
+            "ridge",
+            "outset",
+            "inset"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{border.style}",
@@ -1003,9 +1069,17 @@
       ]
     },
     "fontFamilyValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
       ],
       "examples": [
         "{h1.font-family}",
@@ -1039,10 +1113,7 @@
       ]
     },
     "cssDimensionValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{h1.font-size}",
         "{h1.measure}",
@@ -1133,9 +1204,39 @@
       ]
     },
     "fontWeightValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        {
+          "type": "string",
+          "enum": [
+            "thin",
+            "hairline",
+            "extra-light",
+            "ultra-light",
+            "light",
+            "normal",
+            "regular",
+            "book",
+            "medium",
+            "semi-bold",
+            "demi-bold",
+            "bold",
+            "extra-bold",
+            "ultra-bold",
+            "black",
+            "heavy",
+            "extra-black",
+            "ultra-black"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{h1.font-weight}",
@@ -1171,9 +1272,14 @@
       ]
     },
     "numberValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{opacity.0}",
@@ -1253,10 +1359,7 @@
       ]
     },
     "textTransformValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{h1.text-transform}",
         "{h2.text-transform}",
@@ -1271,28 +1374,19 @@
       ]
     },
     "textDecorationValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.text-decoration}"
       ]
     },
     "textAlignmentValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.text-align}"
       ]
     },
     "displayValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.display}",
         "{checkbox.display}",
@@ -1306,9 +1400,399 @@
       ]
     },
     "shadowValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "color",
+            "offsetX",
+            "offsetY",
+            "blur",
+            "spread"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "color": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "colorSpace",
+                    "components"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "colorSpace": {
+                      "type": "string",
+                      "enum": [
+                        "srgb",
+                        "srgb-linear",
+                        "hsl",
+                        "hwb",
+                        "lab",
+                        "lch",
+                        "oklab",
+                        "oklch",
+                        "display-p3",
+                        "a98-rgb",
+                        "prophoto-rgb",
+                        "rec2020",
+                        "xyz-d65",
+                        "xyz-d50"
+                      ]
+                    },
+                    "components": {
+                      "type": "array",
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    },
+                    "alpha": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "hex": {
+                      "type": "string",
+                      "pattern": "^#[0-9a-fA-F]{6}$"
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{[^{}]+\\}$"
+                }
+              ]
+            },
+            "offsetX": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{[^{}]+\\}$"
+                }
+              ]
+            },
+            "offsetY": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{[^{}]+\\}$"
+                }
+              ]
+            },
+            "blur": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{[^{}]+\\}$"
+                }
+              ]
+            },
+            "spread": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{[^{}]+\\}$"
+                }
+              ]
+            },
+            "inset": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "color",
+                  "offsetX",
+                  "offsetY",
+                  "blur",
+                  "spread"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "colorSpace",
+                          "components"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "colorSpace": {
+                            "type": "string",
+                            "enum": [
+                              "srgb",
+                              "srgb-linear",
+                              "hsl",
+                              "hwb",
+                              "lab",
+                              "lch",
+                              "oklab",
+                              "oklch",
+                              "display-p3",
+                              "a98-rgb",
+                              "prophoto-rgb",
+                              "rec2020",
+                              "xyz-d65",
+                              "xyz-d50"
+                            ]
+                          },
+                          "components": {
+                            "type": "array",
+                            "minItems": 3,
+                            "maxItems": 3,
+                            "items": {
+                              "oneOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "const": "none"
+                                }
+                              ]
+                            }
+                          },
+                          "alpha": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          "hex": {
+                            "type": "string",
+                            "pattern": "^#[0-9a-fA-F]{6}$"
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{[^{}]+\\}$"
+                      }
+                    ]
+                  },
+                  "offsetX": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{[^{}]+\\}$"
+                      }
+                    ]
+                  },
+                  "offsetY": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{[^{}]+\\}$"
+                      }
+                    ]
+                  },
+                  "blur": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{[^{}]+\\}$"
+                      }
+                    ]
+                  },
+                  "spread": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{[^{}]+\\}$"
+                      }
+                    ]
+                  },
+                  "inset": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              {
+                "type": "string",
+                "pattern": "^\\{[^{}]+\\}$"
+              }
+            ]
+          }
+        }
       ],
       "examples": [
         "{elevation.none}",
@@ -1363,10 +1847,7 @@
       ]
     },
     "utilityValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{a11y.spacing-modifier}",
         "{a11y.spacing-text-coupling}",
@@ -1401,10 +1882,7 @@
       ]
     },
     "flexValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.flex-direction}",
         "{button.justify-content}",
@@ -1420,9 +1898,30 @@
       ]
     },
     "durationValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "ms",
+                "s"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{transition.duration-default}",
@@ -1461,10 +1960,7 @@
       ]
     },
     "transitionTimingFunctionValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.transition-timing-function}",
         "{pagination.transition-timing-function}",
@@ -1472,10 +1968,7 @@
       ]
     },
     "transitionPropertyValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.transition-property}",
         "{checkbox.transition-property}",
@@ -1486,56 +1979,8 @@
         "{textarea.transition-property}",
         "{toggle.transition-property}"
       ]
-    }
-  },
-  "properties": {
-    "$extensions": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "dev.zebkit": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "scale": {
-              "type": "object",
-              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
-              "additionalProperties": {
-                "oneOf": [
-                  {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "required": [
-                      "value",
-                      "unit"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "value": {
-                        "type": "number"
-                      },
-                      "unit": {
-                        "type": "string",
-                        "enum": [
-                          "px",
-                          "rem"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
     },
-    "ink": {
+    "colorToken": {
       "type": "object",
       "description": "Default button label color.",
       "required": [
@@ -1552,43 +1997,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "ink-hover": {
-      "type": "object",
-      "description": "Label color when hovered.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -1607,505 +2017,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "ink-active": {
-      "type": "object",
-      "description": "Label color when active or pressed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "ink-disabled": {
-      "type": "object",
-      "description": "Label color for disabled buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "ink-loading": {
-      "type": "object",
-      "description": "Label color while the button is in its loading state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas": {
-      "type": "object",
-      "description": "Default button background.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-hover": {
-      "type": "object",
-      "description": "Background for hover state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-active": {
-      "type": "object",
-      "description": "Background for active/pressed state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-disabled": {
-      "type": "object",
-      "description": "Background for disabled buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-loading": {
-      "type": "object",
-      "description": "Background while the button is in its loading state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color": {
-      "type": "object",
-      "description": "Default button border color.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-hover": {
-      "type": "object",
-      "description": "Border color on hover.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-active": {
-      "type": "object",
-      "description": "Border color when the button is active/pressed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-disabled": {
-      "type": "object",
-      "description": "Border color for disabled buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-loading": {
-      "type": "object",
-      "description": "Border color while the button is in its loading state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-width": {
+    "dimensionToken": {
       "type": "object",
       "description": "Base border width.",
       "required": [
@@ -2122,6 +2041,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2139,11 +2061,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "border-style": {
+    "strokeStyleToken": {
       "type": "object",
       "description": "Border style (solid, dashed, etc) for standard buttons.",
       "required": [
@@ -2160,43 +2085,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-radius": {
-      "type": "object",
-      "description": "Corner radius for standard buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2215,11 +2105,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "font-family": {
+    "fontFamilyToken": {
       "type": "object",
       "description": "Font family for button labels.",
       "required": [
@@ -2235,6 +2128,9 @@
         },
         "$description": {
           "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2362,11 +2258,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "font-size": {
+    "cssDimensionToken": {
       "type": "object",
       "description": "Base font size for button labels.",
       "required": [
@@ -2383,6 +2282,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2400,11 +2302,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "font-weight": {
+    "fontWeightToken": {
       "type": "object",
       "description": "Font weight for button labels.",
       "required": [
@@ -2421,6 +2326,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2438,11 +2346,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "line-height": {
+    "numberToken": {
       "type": "object",
       "description": "Base line height for buttons.",
       "required": [
@@ -2459,43 +2370,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "letter-spacing": {
-      "type": "object",
-      "description": "Letter spacing for button labels.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2514,11 +2390,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "text-transform": {
+    "textTransformToken": {
       "type": "object",
       "description": "Text transform for button labels.",
       "required": [
@@ -2535,6 +2414,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2552,11 +2434,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "text-decoration": {
+    "textDecorationToken": {
       "type": "object",
       "description": "Text decoration for button labels.",
       "required": [
@@ -2573,6 +2458,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2590,11 +2478,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "text-align": {
+    "textAlignmentToken": {
       "type": "object",
       "description": "Text alignment for button content.",
       "required": [
@@ -2611,43 +2502,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "padding-inline": {
-      "type": "object",
-      "description": "Inline (horizontal) padding for standard buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2666,505 +2522,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "padding-block": {
-      "type": "object",
-      "description": "Block (vertical) padding for standard buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "padding-inline-start": {
-      "type": "object",
-      "description": "Inline-start padding override when needed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "padding-inline-end": {
-      "type": "object",
-      "description": "Inline-end padding override when needed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "padding-block-start": {
-      "type": "object",
-      "description": "Block-start padding override when needed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "padding-block-end": {
-      "type": "object",
-      "description": "Block-end padding override when needed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "margin-inline": {
-      "type": "object",
-      "description": "Inline margin for standalone buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "margin-block": {
-      "type": "object",
-      "description": "Block margin for standalone buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "margin-inline-start": {
-      "type": "object",
-      "description": "Inline-start margin override when needed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "margin-inline-end": {
-      "type": "object",
-      "description": "Inline-end margin override when needed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "margin-block-start": {
-      "type": "object",
-      "description": "Block-start margin override when needed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "margin-block-end": {
-      "type": "object",
-      "description": "Block-end margin override when needed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "gap": {
-      "type": "object",
-      "description": "Gap between button icon and label.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "group-gap": {
-      "type": "object",
-      "description": "Gap between buttons when rendered in a group.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "display": {
+    "displayToken": {
       "type": "object",
       "description": "Display mode for buttons.",
       "required": [
@@ -3181,43 +2546,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "width": {
-      "type": "object",
-      "description": "Default button width.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -3236,429 +2566,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "min-width": {
-      "type": "object",
-      "description": "Minimum button width.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "max-width": {
-      "type": "object",
-      "description": "Maximum button width.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "height": {
-      "type": "object",
-      "description": "Default button height.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "min-height": {
-      "type": "object",
-      "description": "Minimum height to ensure tappable area.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "max-height": {
-      "type": "object",
-      "description": "Maximum button height.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "icon-size": {
-      "type": "object",
-      "description": "Default icon size within buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "icon-start-size": {
-      "type": "object",
-      "description": "Default icon size for icons at start of buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "icon-end-size": {
-      "type": "object",
-      "description": "Default icon size for icons at end of buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "focus-color": {
-      "type": "object",
-      "description": "Outline color for focus state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "focus-width": {
-      "type": "object",
-      "description": "Outline width for focus state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "focus-offset": {
-      "type": "object",
-      "description": "Outline offset for focus state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "box-shadow": {
+    "shadowToken": {
       "type": "object",
       "description": "Default box shadow for buttons.",
       "required": [
@@ -3675,43 +2590,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "box-shadow-hover": {
-      "type": "object",
-      "description": "Box shadow on hover.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/shadowValue"
-        },
-        "$type": {
-          "const": "shadow"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -3730,87 +2610,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "box-shadow-active": {
-      "type": "object",
-      "description": "Box shadow when active/pressed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/shadowValue"
-        },
-        "$type": {
-          "const": "shadow"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "box-shadow-focus": {
-      "type": "object",
-      "description": "Box shadow in focus state (in addition to outline).",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/shadowValue"
-        },
-        "$type": {
-          "const": "shadow"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "transform": {
+    "utilityToken": {
       "type": "object",
       "description": "Default transform property for buttons.",
       "required": [
@@ -3827,43 +2634,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "transform-hover": {
-      "type": "object",
-      "description": "Transform effect on hover.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/utilityValue"
-        },
-        "$type": {
-          "const": "utility"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -3882,163 +2654,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "transform-active": {
-      "type": "object",
-      "description": "Transform effect when active/pressed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/utilityValue"
-        },
-        "$type": {
-          "const": "utility"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "transform-focus": {
-      "type": "object",
-      "description": "Transform effect in focus state (in addition to outline).",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/utilityValue"
-        },
-        "$type": {
-          "const": "utility"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "cursor": {
-      "type": "object",
-      "description": "Cursor style when hovering over buttons.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/utilityValue"
-        },
-        "$type": {
-          "const": "utility"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "cursor-loading": {
-      "type": "object",
-      "description": "Cursor style while the button is in its loading state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/utilityValue"
-        },
-        "$type": {
-          "const": "utility"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "flex-direction": {
+    "flexToken": {
       "type": "object",
       "description": "Direction of icon and label layout.",
       "required": [
@@ -4055,43 +2678,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "justify-content": {
-      "type": "object",
-      "description": "Main axis alignment for button contents.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/flexValue"
-        },
-        "$type": {
-          "const": "flex"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -4110,49 +2698,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "align-items": {
-      "type": "object",
-      "description": "Cross axis alignment for button contents.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/flexValue"
-        },
-        "$type": {
-          "const": "flex"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "transition-duration": {
+    "durationToken": {
       "type": "object",
       "description": "Duration for hover/active transitions.",
       "required": [
@@ -4169,6 +2722,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -4186,11 +2742,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "transition-timing-function": {
+    "transitionTimingFunctionToken": {
       "type": "object",
       "description": "Timing function for button transitions.",
       "required": [
@@ -4207,6 +2766,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -4224,11 +2786,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "transition-property": {
+    "transitionPropertyToken": {
       "type": "object",
       "description": "CSS properties that should animate on interaction.",
       "required": [
@@ -4245,6 +2810,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -4262,123 +2830,2212 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupType": {
+      "type": "string",
+      "enum": [
+        "color",
+        "dimension",
+        "duration",
+        "fontFamily",
+        "fontWeight",
+        "cubicBezier",
+        "number",
+        "strokeStyle",
+        "shadow",
+        "display",
+        "cursor",
+        "textTransform",
+        "textDecoration",
+        "textAlignment",
+        "fontStyle",
+        "transform",
+        "transitionProperty",
+        "transitionTimingFunction",
+        "content",
+        "flex",
+        "utility",
+        "asset",
+        "boolean",
+        "cssDimension"
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:ink": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Label color when hovered.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Label color when active or pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "disabled": {
+          "description": "Label color for disabled buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "loading": {
+          "description": "Label color while the button is in its loading state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:canvas": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Background for hover state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Background for active/pressed state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "disabled": {
+          "description": "Background for disabled buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "loading": {
+          "description": "Background while the button is in its loading state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:border": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "color": {
+          "anyOf": [
+            {
+              "description": "Default button border color.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/colorToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:border-color"
+            }
+          ]
+        },
+        "color-hover": {
+          "description": "Border color on hover.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "color-active": {
+          "description": "Border color when the button is active/pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "color-disabled": {
+          "description": "Border color for disabled buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "color-loading": {
+          "description": "Border color while the button is in its loading state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "width": {
+          "description": "Base border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "style": {
+          "description": "Border style (solid, dashed, etc) for standard buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/strokeStyleToken"
+            }
+          ]
+        },
+        "radius": {
+          "description": "Corner radius for standard buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:border-color": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Border color on hover.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Border color when the button is active/pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "disabled": {
+          "description": "Border color for disabled buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "loading": {
+          "description": "Border color while the button is in its loading state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:font": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "family": {
+          "description": "Font family for button labels.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontFamilyToken"
+            }
+          ]
+        },
+        "size": {
+          "description": "Base font size for button labels.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "weight": {
+          "description": "Font weight for button labels.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontWeightToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:line": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "height": {
+          "description": "Base line height for buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:letter": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "spacing": {
+          "description": "Letter spacing for button labels.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:text": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "transform": {
+          "description": "Text transform for button labels.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/textTransformToken"
+            }
+          ]
+        },
+        "decoration": {
+          "description": "Text decoration for button labels.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/textDecorationToken"
+            }
+          ]
+        },
+        "align": {
+          "description": "Text alignment for button content.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/textAlignmentToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:padding": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "inline": {
+          "anyOf": [
+            {
+              "description": "Inline (horizontal) padding for standard buttons.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/dimensionToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:padding-inline"
+            }
+          ]
+        },
+        "block": {
+          "anyOf": [
+            {
+              "description": "Block (vertical) padding for standard buttons.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/dimensionToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:padding-block"
+            }
+          ]
+        },
+        "inline-start": {
+          "description": "Inline-start padding override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "inline-end": {
+          "description": "Inline-end padding override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "block-start": {
+          "description": "Block-start padding override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "block-end": {
+          "description": "Block-end padding override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:padding-inline": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "start": {
+          "description": "Inline-start padding override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "end": {
+          "description": "Inline-end padding override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:padding-block": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "start": {
+          "description": "Block-start padding override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "end": {
+          "description": "Block-end padding override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:margin": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "inline": {
+          "anyOf": [
+            {
+              "description": "Inline margin for standalone buttons.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/cssDimensionToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:margin-inline"
+            }
+          ]
+        },
+        "block": {
+          "anyOf": [
+            {
+              "description": "Block margin for standalone buttons.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/cssDimensionToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:margin-block"
+            }
+          ]
+        },
+        "inline-start": {
+          "description": "Inline-start margin override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "inline-end": {
+          "description": "Inline-end margin override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "block-start": {
+          "description": "Block-start margin override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "block-end": {
+          "description": "Block-end margin override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:margin-inline": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "start": {
+          "description": "Inline-start margin override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "end": {
+          "description": "Inline-end margin override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:margin-block": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "start": {
+          "description": "Block-start margin override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "end": {
+          "description": "Block-end margin override when needed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:group": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "gap": {
+          "description": "Gap between buttons when rendered in a group.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:min": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "width": {
+          "description": "Minimum button width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "height": {
+          "description": "Minimum height to ensure tappable area.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:max": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "width": {
+          "description": "Maximum button width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "height": {
+          "description": "Maximum button height.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:icon": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "size": {
+          "description": "Default icon size within buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "start": {
+          "$ref": "#/definitions/group:icon-start"
+        },
+        "start-size": {
+          "description": "Default icon size for icons at start of buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "end": {
+          "$ref": "#/definitions/group:icon-end"
+        },
+        "end-size": {
+          "description": "Default icon size for icons at end of buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:icon-start": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "size": {
+          "description": "Default icon size for icons at start of buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:icon-end": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "size": {
+          "description": "Default icon size for icons at end of buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:focus": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "color": {
+          "description": "Outline color for focus state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "width": {
+          "description": "Outline width for focus state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "offset": {
+          "description": "Outline offset for focus state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:box": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "shadow": {
+          "anyOf": [
+            {
+              "description": "Default box shadow for buttons.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/shadowToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:box-shadow"
+            }
+          ]
+        },
+        "shadow-hover": {
+          "description": "Box shadow on hover.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        "shadow-active": {
+          "description": "Box shadow when active/pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        "shadow-focus": {
+          "description": "Box shadow in focus state (in addition to outline).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:box-shadow": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Box shadow on hover.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Box shadow when active/pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        "focus": {
+          "description": "Box shadow in focus state (in addition to outline).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:transform": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Transform effect on hover.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/utilityToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Transform effect when active/pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/utilityToken"
+            }
+          ]
+        },
+        "focus": {
+          "description": "Transform effect in focus state (in addition to outline).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/utilityToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:cursor": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "loading": {
+          "description": "Cursor style while the button is in its loading state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/utilityToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:flex": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "direction": {
+          "description": "Direction of icon and label layout.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/flexToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:justify": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "content": {
+          "description": "Main axis alignment for button contents.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/flexToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:align": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "items": {
+          "description": "Cross axis alignment for button contents.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/flexToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:transition": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "duration": {
+          "description": "Duration for hover/active transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "timing": {
+          "$ref": "#/definitions/group:transition-timing"
+        },
+        "timing-function": {
+          "description": "Timing function for button transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/transitionTimingFunctionToken"
+            }
+          ]
+        },
+        "property": {
+          "description": "CSS properties that should animate on interaction.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/transitionPropertyToken"
+            }
+          ]
+        },
+        "delay": {
+          "description": "Delay before CSS properties run through their animate on interaction.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:transition-timing": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "function": {
+          "description": "Timing function for button transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/transitionTimingFunctionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:opacity": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "loading": {
+          "description": "Visual opacity while the button is in its loading state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "$type": {
+      "$ref": "#/definitions/groupType"
+    },
+    "$description": {
+      "type": "string"
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "ink": {
+      "anyOf": [
+        {
+          "description": "Default button label color.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:ink"
+        }
+      ]
+    },
+    "ink-hover": {
+      "description": "Label color when hovered.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ink-active": {
+      "description": "Label color when active or pressed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ink-disabled": {
+      "description": "Label color for disabled buttons.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ink-loading": {
+      "description": "Label color while the button is in its loading state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas": {
+      "anyOf": [
+        {
+          "description": "Default button background.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:canvas"
+        }
+      ]
+    },
+    "canvas-hover": {
+      "description": "Background for hover state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas-active": {
+      "description": "Background for active/pressed state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas-disabled": {
+      "description": "Background for disabled buttons.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas-loading": {
+      "description": "Background while the button is in its loading state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border": {
+      "$ref": "#/definitions/group:border"
+    },
+    "border-color": {
+      "anyOf": [
+        {
+          "description": "Default button border color.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:border-color"
+        }
+      ]
+    },
+    "border-color-hover": {
+      "description": "Border color on hover.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-color-active": {
+      "description": "Border color when the button is active/pressed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-color-disabled": {
+      "description": "Border color for disabled buttons.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-color-loading": {
+      "description": "Border color while the button is in its loading state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-width": {
+      "description": "Base border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "border-style": {
+      "description": "Border style (solid, dashed, etc) for standard buttons.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/strokeStyleToken"
+        }
+      ]
+    },
+    "border-radius": {
+      "description": "Corner radius for standard buttons.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "font": {
+      "$ref": "#/definitions/group:font"
+    },
+    "font-family": {
+      "description": "Font family for button labels.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
+        }
+      ]
+    },
+    "font-size": {
+      "description": "Base font size for button labels.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "font-weight": {
+      "description": "Font weight for button labels.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontWeightToken"
+        }
+      ]
+    },
+    "line": {
+      "$ref": "#/definitions/group:line"
+    },
+    "line-height": {
+      "description": "Base line height for buttons.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "letter": {
+      "$ref": "#/definitions/group:letter"
+    },
+    "letter-spacing": {
+      "description": "Letter spacing for button labels.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "text": {
+      "$ref": "#/definitions/group:text"
+    },
+    "text-transform": {
+      "description": "Text transform for button labels.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/textTransformToken"
+        }
+      ]
+    },
+    "text-decoration": {
+      "description": "Text decoration for button labels.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/textDecorationToken"
+        }
+      ]
+    },
+    "text-align": {
+      "description": "Text alignment for button content.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/textAlignmentToken"
+        }
+      ]
+    },
+    "padding": {
+      "$ref": "#/definitions/group:padding"
+    },
+    "padding-inline": {
+      "anyOf": [
+        {
+          "description": "Inline (horizontal) padding for standard buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:padding-inline"
+        }
+      ]
+    },
+    "padding-block": {
+      "anyOf": [
+        {
+          "description": "Block (vertical) padding for standard buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:padding-block"
+        }
+      ]
+    },
+    "padding-inline-start": {
+      "description": "Inline-start padding override when needed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "padding-inline-end": {
+      "description": "Inline-end padding override when needed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "padding-block-start": {
+      "description": "Block-start padding override when needed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "padding-block-end": {
+      "description": "Block-end padding override when needed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "margin": {
+      "$ref": "#/definitions/group:margin"
+    },
+    "margin-inline": {
+      "anyOf": [
+        {
+          "description": "Inline margin for standalone buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:margin-inline"
+        }
+      ]
+    },
+    "margin-block": {
+      "anyOf": [
+        {
+          "description": "Block margin for standalone buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:margin-block"
+        }
+      ]
+    },
+    "margin-inline-start": {
+      "description": "Inline-start margin override when needed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "margin-inline-end": {
+      "description": "Inline-end margin override when needed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "margin-block-start": {
+      "description": "Block-start margin override when needed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "margin-block-end": {
+      "description": "Block-end margin override when needed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "gap": {
+      "description": "Gap between button icon and label.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "group": {
+      "$ref": "#/definitions/group:group"
+    },
+    "group-gap": {
+      "description": "Gap between buttons when rendered in a group.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "display": {
+      "description": "Display mode for buttons.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/displayToken"
+        }
+      ]
+    },
+    "width": {
+      "description": "Default button width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "min": {
+      "$ref": "#/definitions/group:min"
+    },
+    "min-width": {
+      "description": "Minimum button width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "max": {
+      "$ref": "#/definitions/group:max"
+    },
+    "max-width": {
+      "description": "Maximum button width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "height": {
+      "description": "Default button height.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "min-height": {
+      "description": "Minimum height to ensure tappable area.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "max-height": {
+      "description": "Maximum button height.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "icon": {
+      "$ref": "#/definitions/group:icon"
+    },
+    "icon-size": {
+      "description": "Default icon size within buttons.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "icon-start": {
+      "$ref": "#/definitions/group:icon-start"
+    },
+    "icon-start-size": {
+      "description": "Default icon size for icons at start of buttons.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "icon-end": {
+      "$ref": "#/definitions/group:icon-end"
+    },
+    "icon-end-size": {
+      "description": "Default icon size for icons at end of buttons.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "focus": {
+      "$ref": "#/definitions/group:focus"
+    },
+    "focus-color": {
+      "description": "Outline color for focus state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "focus-width": {
+      "description": "Outline width for focus state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "focus-offset": {
+      "description": "Outline offset for focus state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "box": {
+      "$ref": "#/definitions/group:box"
+    },
+    "box-shadow": {
+      "anyOf": [
+        {
+          "description": "Default box shadow for buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:box-shadow"
+        }
+      ]
+    },
+    "box-shadow-hover": {
+      "description": "Box shadow on hover.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/shadowToken"
+        }
+      ]
+    },
+    "box-shadow-active": {
+      "description": "Box shadow when active/pressed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/shadowToken"
+        }
+      ]
+    },
+    "box-shadow-focus": {
+      "description": "Box shadow in focus state (in addition to outline).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/shadowToken"
+        }
+      ]
+    },
+    "transform": {
+      "anyOf": [
+        {
+          "description": "Default transform property for buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/utilityToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:transform"
+        }
+      ]
+    },
+    "transform-hover": {
+      "description": "Transform effect on hover.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/utilityToken"
+        }
+      ]
+    },
+    "transform-active": {
+      "description": "Transform effect when active/pressed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/utilityToken"
+        }
+      ]
+    },
+    "transform-focus": {
+      "description": "Transform effect in focus state (in addition to outline).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/utilityToken"
+        }
+      ]
+    },
+    "cursor": {
+      "anyOf": [
+        {
+          "description": "Cursor style when hovering over buttons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/utilityToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:cursor"
+        }
+      ]
+    },
+    "cursor-loading": {
+      "description": "Cursor style while the button is in its loading state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/utilityToken"
+        }
+      ]
+    },
+    "flex": {
+      "$ref": "#/definitions/group:flex"
+    },
+    "flex-direction": {
+      "description": "Direction of icon and label layout.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/flexToken"
+        }
+      ]
+    },
+    "justify": {
+      "$ref": "#/definitions/group:justify"
+    },
+    "justify-content": {
+      "description": "Main axis alignment for button contents.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/flexToken"
+        }
+      ]
+    },
+    "align": {
+      "$ref": "#/definitions/group:align"
+    },
+    "align-items": {
+      "description": "Cross axis alignment for button contents.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/flexToken"
+        }
+      ]
+    },
+    "transition": {
+      "$ref": "#/definitions/group:transition"
+    },
+    "transition-duration": {
+      "description": "Duration for hover/active transitions.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
+        }
+      ]
+    },
+    "transition-timing": {
+      "$ref": "#/definitions/group:transition-timing"
+    },
+    "transition-timing-function": {
+      "description": "Timing function for button transitions.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/transitionTimingFunctionToken"
+        }
+      ]
+    },
+    "transition-property": {
+      "description": "CSS properties that should animate on interaction.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/transitionPropertyToken"
+        }
+      ]
     },
     "transition-delay": {
-      "type": "object",
       "description": "Delay before CSS properties run through their animate on interaction.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/durationValue"
-        },
-        "$type": {
-          "const": "duration"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "opacity": {
-      "type": "object",
-      "description": "Visual opacity of button.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
+      "anyOf": [
+        {
+          "description": "Visual opacity of button.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
             }
-          }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:opacity"
         }
-      }
+      ]
     },
     "opacity-loading": {
-      "type": "object",
       "description": "Visual opacity while the button is in its loading state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     }
   }
 }

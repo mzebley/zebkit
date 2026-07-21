@@ -6,9 +6,14 @@
   "additionalProperties": false,
   "definitions": {
     "numberValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{opacity.0}",
@@ -88,10 +93,7 @@
       ]
     },
     "cssDimensionValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{h1.font-size}",
         "{h1.measure}",
@@ -180,10 +182,8 @@
         "{tooltip.font-size}",
         "{tooltip.letter-spacing}"
       ]
-    }
-  },
-  "properties": {
-    "0": {
+    },
+    "numberToken": {
       "type": "object",
       "description": "Base stacking level.",
       "required": [
@@ -200,43 +200,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "10": {
-      "type": "object",
-      "description": "Low elevation stacking.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -255,399 +220,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "20": {
-      "type": "object",
-      "description": "Slight elevation stacking.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "30": {
-      "type": "object",
-      "description": "Medium-low elevation stacking.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "40": {
-      "type": "object",
-      "description": "Medium elevation stacking.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "50": {
-      "type": "object",
-      "description": "Medium-high elevation stacking.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "60": {
-      "type": "object",
-      "description": "High elevation stacking.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "70": {
-      "type": "object",
-      "description": "Higher elevation stacking.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "80": {
-      "type": "object",
-      "description": "Very high elevation stacking.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "90": {
-      "type": "object",
-      "description": "Near-top elevation stacking.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "100": {
-      "type": "object",
-      "description": "Top-level elevation stacking.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "$extensions": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "dev.zebkit": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "scale": {
-              "type": "object",
-              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
-              "additionalProperties": {
-                "oneOf": [
-                  {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "required": [
-                      "value",
-                      "unit"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "value": {
-                        "type": "number"
-                      },
-                      "unit": {
-                        "type": "string",
-                        "enum": [
-                          "px",
-                          "rem"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
-    "auto": {
+    "cssDimensionToken": {
       "type": "object",
       "description": "Auto z-index, lets browser determine stacking.",
       "required": [
@@ -664,6 +244,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -681,275 +264,397 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupType": {
+      "type": "string",
+      "enum": [
+        "color",
+        "dimension",
+        "duration",
+        "fontFamily",
+        "fontWeight",
+        "cubicBezier",
+        "number",
+        "strokeStyle",
+        "shadow",
+        "display",
+        "cursor",
+        "textTransform",
+        "textDecoration",
+        "textAlignment",
+        "fontStyle",
+        "transform",
+        "transitionProperty",
+        "transitionTimingFunction",
+        "content",
+        "flex",
+        "utility",
+        "asset",
+        "boolean",
+        "cssDimension"
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:modal": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "backdrop": {
+          "description": "Semantic z-index for modal backdrops/overlays.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "0": {
+      "description": "Base stacking level.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "10": {
+      "description": "Low elevation stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "20": {
+      "description": "Slight elevation stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "30": {
+      "description": "Medium-low elevation stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "40": {
+      "description": "Medium elevation stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "50": {
+      "description": "Medium-high elevation stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "60": {
+      "description": "High elevation stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "70": {
+      "description": "Higher elevation stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "80": {
+      "description": "Very high elevation stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "90": {
+      "description": "Near-top elevation stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "100": {
+      "description": "Top-level elevation stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "$type": {
+      "$ref": "#/definitions/groupType"
+    },
+    "$description": {
+      "type": "string"
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "auto": {
+      "description": "Auto z-index, lets browser determine stacking.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
     },
     "dropdown": {
-      "type": "object",
       "description": "Semantic z-index for dropdown menus.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "sticky": {
-      "type": "object",
       "description": "Semantic z-index for sticky positioned elements.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "fixed": {
-      "type": "object",
       "description": "Semantic z-index for fixed positioned elements.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
-    },
-    "modal-backdrop": {
-      "type": "object",
-      "description": "Semantic z-index for modal backdrops/overlays.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
+      ]
     },
     "modal": {
-      "type": "object",
-      "description": "Semantic z-index for modal dialogs.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
+      "anyOf": [
+        {
+          "description": "Semantic z-index for modal dialogs.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
             }
-          }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:modal"
         }
-      }
+      ]
+    },
+    "modal-backdrop": {
+      "description": "Semantic z-index for modal backdrops/overlays.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
     },
     "popover": {
-      "type": "object",
       "description": "Semantic z-index for popovers.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "tooltip": {
-      "type": "object",
       "description": "Semantic z-index for tooltips (highest).",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     }
   }
 }

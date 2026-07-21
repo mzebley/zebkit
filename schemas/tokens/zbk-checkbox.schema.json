@@ -6,10 +6,7 @@
   "additionalProperties": false,
   "definitions": {
     "displayValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.display}",
         "{checkbox.display}",
@@ -25,10 +22,7 @@
     "dimensionValue": {
       "oneOf": [
         {
-          "type": [
-            "string",
-            "number"
-          ]
+          "type": "string"
         },
         {
           "type": "object",
@@ -261,9 +255,63 @@
       ]
     },
     "colorValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "colorSpace",
+            "components"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "colorSpace": {
+              "type": "string",
+              "enum": [
+                "srgb",
+                "srgb-linear",
+                "hsl",
+                "hwb",
+                "lab",
+                "lch",
+                "oklab",
+                "oklch",
+                "display-p3",
+                "a98-rgb",
+                "prophoto-rgb",
+                "rec2020",
+                "xyz-d65",
+                "xyz-d50"
+              ]
+            },
+            "components": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "const": "none"
+                  }
+                ]
+              }
+            },
+            "alpha": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "hex": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          }
+        }
       ],
       "examples": [
         "{accent-primary.50}",
@@ -1001,9 +1049,24 @@
       ]
     },
     "strokeStyleValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "solid",
+            "dashed",
+            "dotted",
+            "double",
+            "groove",
+            "ridge",
+            "outset",
+            "inset"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{border.style}",
@@ -1020,10 +1083,7 @@
       ]
     },
     "cssDimensionValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{h1.font-size}",
         "{h1.measure}",
@@ -1114,9 +1174,17 @@
       ]
     },
     "fontFamilyValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
       ],
       "examples": [
         "{h1.font-family}",
@@ -1150,9 +1218,39 @@
       ]
     },
     "fontWeightValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        {
+          "type": "string",
+          "enum": [
+            "thin",
+            "hairline",
+            "extra-light",
+            "ultra-light",
+            "light",
+            "normal",
+            "regular",
+            "book",
+            "medium",
+            "semi-bold",
+            "demi-bold",
+            "bold",
+            "extra-bold",
+            "ultra-bold",
+            "black",
+            "heavy",
+            "extra-black",
+            "ultra-black"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{h1.font-weight}",
@@ -1188,9 +1286,14 @@
       ]
     },
     "numberValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{opacity.0}",
@@ -1270,10 +1373,7 @@
       ]
     },
     "flexValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.flex-direction}",
         "{button.justify-content}",
@@ -1289,9 +1389,399 @@
       ]
     },
     "shadowValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "color",
+            "offsetX",
+            "offsetY",
+            "blur",
+            "spread"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "color": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "colorSpace",
+                    "components"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "colorSpace": {
+                      "type": "string",
+                      "enum": [
+                        "srgb",
+                        "srgb-linear",
+                        "hsl",
+                        "hwb",
+                        "lab",
+                        "lch",
+                        "oklab",
+                        "oklch",
+                        "display-p3",
+                        "a98-rgb",
+                        "prophoto-rgb",
+                        "rec2020",
+                        "xyz-d65",
+                        "xyz-d50"
+                      ]
+                    },
+                    "components": {
+                      "type": "array",
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    },
+                    "alpha": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "hex": {
+                      "type": "string",
+                      "pattern": "^#[0-9a-fA-F]{6}$"
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{[^{}]+\\}$"
+                }
+              ]
+            },
+            "offsetX": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{[^{}]+\\}$"
+                }
+              ]
+            },
+            "offsetY": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{[^{}]+\\}$"
+                }
+              ]
+            },
+            "blur": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{[^{}]+\\}$"
+                }
+              ]
+            },
+            "spread": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{[^{}]+\\}$"
+                }
+              ]
+            },
+            "inset": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "color",
+                  "offsetX",
+                  "offsetY",
+                  "blur",
+                  "spread"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "colorSpace",
+                          "components"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "colorSpace": {
+                            "type": "string",
+                            "enum": [
+                              "srgb",
+                              "srgb-linear",
+                              "hsl",
+                              "hwb",
+                              "lab",
+                              "lch",
+                              "oklab",
+                              "oklch",
+                              "display-p3",
+                              "a98-rgb",
+                              "prophoto-rgb",
+                              "rec2020",
+                              "xyz-d65",
+                              "xyz-d50"
+                            ]
+                          },
+                          "components": {
+                            "type": "array",
+                            "minItems": 3,
+                            "maxItems": 3,
+                            "items": {
+                              "oneOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "const": "none"
+                                }
+                              ]
+                            }
+                          },
+                          "alpha": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          "hex": {
+                            "type": "string",
+                            "pattern": "^#[0-9a-fA-F]{6}$"
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{[^{}]+\\}$"
+                      }
+                    ]
+                  },
+                  "offsetX": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{[^{}]+\\}$"
+                      }
+                    ]
+                  },
+                  "offsetY": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{[^{}]+\\}$"
+                      }
+                    ]
+                  },
+                  "blur": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{[^{}]+\\}$"
+                      }
+                    ]
+                  },
+                  "spread": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{[^{}]+\\}$"
+                      }
+                    ]
+                  },
+                  "inset": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              {
+                "type": "string",
+                "pattern": "^\\{[^{}]+\\}$"
+              }
+            ]
+          }
+        }
       ],
       "examples": [
         "{elevation.none}",
@@ -1346,10 +1836,7 @@
       ]
     },
     "utilityValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{a11y.spacing-modifier}",
         "{a11y.spacing-text-coupling}",
@@ -1384,9 +1871,30 @@
       ]
     },
     "durationValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "ms",
+                "s"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{transition.duration-default}",
@@ -1425,9 +1933,34 @@
       ]
     },
     "cubicBezierValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "additionalItems": false
+        }
       ],
       "examples": [
         "{transition.playful-motion-function-default}",
@@ -1451,10 +1984,7 @@
       ]
     },
     "transitionPropertyValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.transition-property}",
         "{checkbox.transition-property}",
@@ -1465,56 +1995,8 @@
         "{textarea.transition-property}",
         "{toggle.transition-property}"
       ]
-    }
-  },
-  "properties": {
-    "$extensions": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "dev.zebkit": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "scale": {
-              "type": "object",
-              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
-              "additionalProperties": {
-                "oneOf": [
-                  {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "required": [
-                      "value",
-                      "unit"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "value": {
-                        "type": "number"
-                      },
-                      "unit": {
-                        "type": "string",
-                        "enum": [
-                          "px",
-                          "rem"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
     },
-    "display": {
+    "displayToken": {
       "type": "object",
       "description": "Display mode for the <zbk-checkbox> host element.",
       "required": [
@@ -1531,6 +2013,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -1548,11 +2033,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "control-width": {
+    "dimensionToken": {
       "type": "object",
       "description": "Width of the checkbox control.",
       "required": [
@@ -1569,43 +2057,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "control-height": {
-      "type": "object",
-      "description": "Height of the checkbox control.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -1624,11 +2077,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "canvas": {
+    "colorToken": {
       "type": "object",
       "description": "Background of an unchecked checkbox control.",
       "required": [
@@ -1645,43 +2101,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-hover": {
-      "type": "object",
-      "description": "Control background when hovered.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -1700,429 +2121,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "canvas-active": {
-      "type": "object",
-      "description": "Control background while pressed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-checked": {
-      "type": "object",
-      "description": "Control background when checked.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-indeterminate": {
-      "type": "object",
-      "description": "Control background in the indeterminate state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-disabled": {
-      "type": "object",
-      "description": "Control background when disabled.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color": {
-      "type": "object",
-      "description": "Border color of an unchecked checkbox control.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-hover": {
-      "type": "object",
-      "description": "Control border color when hovered.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-active": {
-      "type": "object",
-      "description": "Control border color while pressed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-checked": {
-      "type": "object",
-      "description": "Control border color when checked.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-indeterminate": {
-      "type": "object",
-      "description": "Control border color in the indeterminate state.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-disabled": {
-      "type": "object",
-      "description": "Control border color when disabled.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-width": {
-      "type": "object",
-      "description": "Border thickness of the checkbox control.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-style": {
+    "strokeStyleToken": {
       "type": "object",
       "description": "Border style of the checkbox control.",
       "required": [
@@ -2139,43 +2145,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-radius": {
-      "type": "object",
-      "description": "Corner radius of the checkbox control.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2194,163 +2165,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "indicator-color": {
-      "type": "object",
-      "description": "Color of the checkmark and indeterminate bar.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "indicator-color-disabled": {
-      "type": "object",
-      "description": "Indicator color when disabled.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "indicator-stroke-width": {
-      "type": "object",
-      "description": "Stroke width of the checkmark; also the indeterminate bar's thickness.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "indicator-radius": {
-      "type": "object",
-      "description": "Corner radius of the indeterminate bar.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "indicator-size": {
+    "cssDimensionToken": {
       "type": "object",
       "description": "Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it.",
       "required": [
@@ -2367,43 +2189,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "ink": {
-      "type": "object",
-      "description": "Label text color.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2422,49 +2209,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "ink-disabled": {
-      "type": "object",
-      "description": "Label text color when disabled.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "font-family": {
+    "fontFamilyToken": {
       "type": "object",
       "description": "Font family for the checkbox label.",
       "required": [
@@ -2480,6 +2232,9 @@
         },
         "$description": {
           "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2607,49 +2362,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "font-size": {
-      "type": "object",
-      "description": "Font size for the checkbox label.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "font-weight": {
+    "fontWeightToken": {
       "type": "object",
       "description": "Font weight for the checkbox label.",
       "required": [
@@ -2666,6 +2386,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2683,11 +2406,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "line-height": {
+    "numberToken": {
       "type": "object",
       "description": "Line height for the checkbox label.",
       "required": [
@@ -2704,43 +2430,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "letter-spacing": {
-      "type": "object",
-      "description": "Letter spacing for the checkbox label.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2759,49 +2450,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "gap": {
-      "type": "object",
-      "description": "Space between the control and its label.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "align-items": {
+    "flexToken": {
       "type": "object",
       "description": "Cross-axis alignment of control and label.",
       "required": [
@@ -2818,43 +2474,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "group-gap": {
-      "type": "object",
-      "description": "Gap between checkboxes in a .zbk-checkbox-group.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2873,163 +2494,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "group-direction": {
-      "type": "object",
-      "description": "Flow direction of a .zbk-checkbox-group (column or row).",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/flexValue"
-        },
-        "$type": {
-          "const": "flex"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "focus-color": {
-      "type": "object",
-      "description": "Outline color for keyboard focus.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "focus-width": {
-      "type": "object",
-      "description": "Outline width for keyboard focus.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "focus-offset": {
-      "type": "object",
-      "description": "Outline offset for keyboard focus.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "box-shadow": {
+    "shadowToken": {
       "type": "object",
       "description": "Default control shadow.",
       "required": [
@@ -3046,43 +2518,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "box-shadow-hover": {
-      "type": "object",
-      "description": "Control shadow when hovered.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/shadowValue"
-        },
-        "$type": {
-          "const": "shadow"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -3101,125 +2538,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "box-shadow-active": {
-      "type": "object",
-      "description": "Control shadow while pressed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/shadowValue"
-        },
-        "$type": {
-          "const": "shadow"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "box-shadow-checked": {
-      "type": "object",
-      "description": "Control shadow when checked.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/shadowValue"
-        },
-        "$type": {
-          "const": "shadow"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "box-shadow-focus": {
-      "type": "object",
-      "description": "Control shadow in the focus state (in addition to the outline).",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/shadowValue"
-        },
-        "$type": {
-          "const": "shadow"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "cursor": {
+    "utilityToken": {
       "type": "object",
       "description": "Cursor when hovering an enabled checkbox.",
       "required": [
@@ -3236,43 +2562,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "cursor-disabled": {
-      "type": "object",
-      "description": "Cursor when hovering a disabled checkbox.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/utilityValue"
-        },
-        "$type": {
-          "const": "utility"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -3291,11 +2582,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "transition-duration": {
+    "durationToken": {
       "type": "object",
       "description": "Duration for checkbox state transitions.",
       "required": [
@@ -3312,6 +2606,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -3329,11 +2626,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "transition-timing-function": {
+    "cubicBezierToken": {
       "type": "object",
       "description": "Easing for checkbox state transitions.",
       "required": [
@@ -3350,6 +2650,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -3367,11 +2670,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "transition-property": {
+    "transitionPropertyToken": {
       "type": "object",
       "description": "CSS properties that animate on state changes.",
       "required": [
@@ -3388,6 +2694,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -3405,123 +2714,1554 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupType": {
+      "type": "string",
+      "enum": [
+        "color",
+        "dimension",
+        "duration",
+        "fontFamily",
+        "fontWeight",
+        "cubicBezier",
+        "number",
+        "strokeStyle",
+        "shadow",
+        "display",
+        "cursor",
+        "textTransform",
+        "textDecoration",
+        "textAlignment",
+        "fontStyle",
+        "transform",
+        "transitionProperty",
+        "transitionTimingFunction",
+        "content",
+        "flex",
+        "utility",
+        "asset",
+        "boolean",
+        "cssDimension"
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:control": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "width": {
+          "description": "Width of the checkbox control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "height": {
+          "description": "Height of the checkbox control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:canvas": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Control background when hovered.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Control background while pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "checked": {
+          "description": "Control background when checked.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "indeterminate": {
+          "description": "Control background in the indeterminate state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "disabled": {
+          "description": "Control background when disabled.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:border": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "color": {
+          "anyOf": [
+            {
+              "description": "Border color of an unchecked checkbox control.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/colorToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:border-color"
+            }
+          ]
+        },
+        "color-hover": {
+          "description": "Control border color when hovered.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "color-active": {
+          "description": "Control border color while pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "color-checked": {
+          "description": "Control border color when checked.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "color-indeterminate": {
+          "description": "Control border color in the indeterminate state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "color-disabled": {
+          "description": "Control border color when disabled.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "width": {
+          "description": "Border thickness of the checkbox control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "style": {
+          "description": "Border style of the checkbox control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/strokeStyleToken"
+            }
+          ]
+        },
+        "radius": {
+          "description": "Corner radius of the checkbox control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:border-color": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Control border color when hovered.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Control border color while pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "checked": {
+          "description": "Control border color when checked.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "indeterminate": {
+          "description": "Control border color in the indeterminate state.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "disabled": {
+          "description": "Control border color when disabled.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:indicator": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "color": {
+          "anyOf": [
+            {
+              "description": "Color of the checkmark and indeterminate bar.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/colorToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:indicator-color"
+            }
+          ]
+        },
+        "color-disabled": {
+          "description": "Indicator color when disabled.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "stroke": {
+          "$ref": "#/definitions/group:indicator-stroke"
+        },
+        "stroke-width": {
+          "description": "Stroke width of the checkmark; also the indeterminate bar's thickness.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "radius": {
+          "description": "Corner radius of the indeterminate bar.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "size": {
+          "description": "Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:indicator-color": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "disabled": {
+          "description": "Indicator color when disabled.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:indicator-stroke": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "width": {
+          "description": "Stroke width of the checkmark; also the indeterminate bar's thickness.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:ink": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "disabled": {
+          "description": "Label text color when disabled.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:font": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "family": {
+          "description": "Font family for the checkbox label.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontFamilyToken"
+            }
+          ]
+        },
+        "size": {
+          "description": "Font size for the checkbox label.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "weight": {
+          "description": "Font weight for the checkbox label.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontWeightToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:line": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "height": {
+          "description": "Line height for the checkbox label.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:letter": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "spacing": {
+          "description": "Letter spacing for the checkbox label.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:align": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "items": {
+          "description": "Cross-axis alignment of control and label.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/flexToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:group": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "gap": {
+          "description": "Gap between checkboxes in a .zbk-checkbox-group.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "direction": {
+          "description": "Flow direction of a .zbk-checkbox-group (column or row).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/flexToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:focus": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "color": {
+          "description": "Outline color for keyboard focus.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "width": {
+          "description": "Outline width for keyboard focus.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "offset": {
+          "description": "Outline offset for keyboard focus.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:box": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "shadow": {
+          "anyOf": [
+            {
+              "description": "Default control shadow.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/shadowToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:box-shadow"
+            }
+          ]
+        },
+        "shadow-hover": {
+          "description": "Control shadow when hovered.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        "shadow-active": {
+          "description": "Control shadow while pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        "shadow-checked": {
+          "description": "Control shadow when checked.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        "shadow-focus": {
+          "description": "Control shadow in the focus state (in addition to the outline).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:box-shadow": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Control shadow when hovered.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Control shadow while pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        "checked": {
+          "description": "Control shadow when checked.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        "focus": {
+          "description": "Control shadow in the focus state (in addition to the outline).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:cursor": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "disabled": {
+          "description": "Cursor when hovering a disabled checkbox.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/utilityToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:transition": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "duration": {
+          "description": "Duration for checkbox state transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "timing": {
+          "$ref": "#/definitions/group:transition-timing"
+        },
+        "timing-function": {
+          "description": "Easing for checkbox state transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "property": {
+          "description": "CSS properties that animate on state changes.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/transitionPropertyToken"
+            }
+          ]
+        },
+        "delay": {
+          "description": "Delay before checkbox transitions run.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:transition-timing": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "function": {
+          "description": "Easing for checkbox state transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:opacity": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "disabled": {
+          "description": "Control opacity when disabled.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "$type": {
+      "$ref": "#/definitions/groupType"
+    },
+    "$description": {
+      "type": "string"
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "display": {
+      "description": "Display mode for the <zbk-checkbox> host element.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/displayToken"
+        }
+      ]
+    },
+    "control": {
+      "$ref": "#/definitions/group:control"
+    },
+    "control-width": {
+      "description": "Width of the checkbox control.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "control-height": {
+      "description": "Height of the checkbox control.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "canvas": {
+      "anyOf": [
+        {
+          "description": "Background of an unchecked checkbox control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:canvas"
+        }
+      ]
+    },
+    "canvas-hover": {
+      "description": "Control background when hovered.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas-active": {
+      "description": "Control background while pressed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas-checked": {
+      "description": "Control background when checked.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas-indeterminate": {
+      "description": "Control background in the indeterminate state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas-disabled": {
+      "description": "Control background when disabled.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border": {
+      "$ref": "#/definitions/group:border"
+    },
+    "border-color": {
+      "anyOf": [
+        {
+          "description": "Border color of an unchecked checkbox control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:border-color"
+        }
+      ]
+    },
+    "border-color-hover": {
+      "description": "Control border color when hovered.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-color-active": {
+      "description": "Control border color while pressed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-color-checked": {
+      "description": "Control border color when checked.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-color-indeterminate": {
+      "description": "Control border color in the indeterminate state.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-color-disabled": {
+      "description": "Control border color when disabled.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-width": {
+      "description": "Border thickness of the checkbox control.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "border-style": {
+      "description": "Border style of the checkbox control.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/strokeStyleToken"
+        }
+      ]
+    },
+    "border-radius": {
+      "description": "Corner radius of the checkbox control.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "indicator": {
+      "$ref": "#/definitions/group:indicator"
+    },
+    "indicator-color": {
+      "anyOf": [
+        {
+          "description": "Color of the checkmark and indeterminate bar.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:indicator-color"
+        }
+      ]
+    },
+    "indicator-color-disabled": {
+      "description": "Indicator color when disabled.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indicator-stroke": {
+      "$ref": "#/definitions/group:indicator-stroke"
+    },
+    "indicator-stroke-width": {
+      "description": "Stroke width of the checkmark; also the indeterminate bar's thickness.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "indicator-radius": {
+      "description": "Corner radius of the indeterminate bar.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "indicator-size": {
+      "description": "Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "ink": {
+      "anyOf": [
+        {
+          "description": "Label text color.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:ink"
+        }
+      ]
+    },
+    "ink-disabled": {
+      "description": "Label text color when disabled.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "font": {
+      "$ref": "#/definitions/group:font"
+    },
+    "font-family": {
+      "description": "Font family for the checkbox label.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
+        }
+      ]
+    },
+    "font-size": {
+      "description": "Font size for the checkbox label.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "font-weight": {
+      "description": "Font weight for the checkbox label.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontWeightToken"
+        }
+      ]
+    },
+    "line": {
+      "$ref": "#/definitions/group:line"
+    },
+    "line-height": {
+      "description": "Line height for the checkbox label.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "letter": {
+      "$ref": "#/definitions/group:letter"
+    },
+    "letter-spacing": {
+      "description": "Letter spacing for the checkbox label.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "gap": {
+      "description": "Space between the control and its label.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "align": {
+      "$ref": "#/definitions/group:align"
+    },
+    "align-items": {
+      "description": "Cross-axis alignment of control and label.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/flexToken"
+        }
+      ]
+    },
+    "group": {
+      "$ref": "#/definitions/group:group"
+    },
+    "group-gap": {
+      "description": "Gap between checkboxes in a .zbk-checkbox-group.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "group-direction": {
+      "description": "Flow direction of a .zbk-checkbox-group (column or row).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/flexToken"
+        }
+      ]
+    },
+    "focus": {
+      "$ref": "#/definitions/group:focus"
+    },
+    "focus-color": {
+      "description": "Outline color for keyboard focus.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "focus-width": {
+      "description": "Outline width for keyboard focus.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "focus-offset": {
+      "description": "Outline offset for keyboard focus.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "box": {
+      "$ref": "#/definitions/group:box"
+    },
+    "box-shadow": {
+      "anyOf": [
+        {
+          "description": "Default control shadow.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:box-shadow"
+        }
+      ]
+    },
+    "box-shadow-hover": {
+      "description": "Control shadow when hovered.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/shadowToken"
+        }
+      ]
+    },
+    "box-shadow-active": {
+      "description": "Control shadow while pressed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/shadowToken"
+        }
+      ]
+    },
+    "box-shadow-checked": {
+      "description": "Control shadow when checked.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/shadowToken"
+        }
+      ]
+    },
+    "box-shadow-focus": {
+      "description": "Control shadow in the focus state (in addition to the outline).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/shadowToken"
+        }
+      ]
+    },
+    "cursor": {
+      "anyOf": [
+        {
+          "description": "Cursor when hovering an enabled checkbox.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/utilityToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:cursor"
+        }
+      ]
+    },
+    "cursor-disabled": {
+      "description": "Cursor when hovering a disabled checkbox.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/utilityToken"
+        }
+      ]
+    },
+    "transition": {
+      "$ref": "#/definitions/group:transition"
+    },
+    "transition-duration": {
+      "description": "Duration for checkbox state transitions.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
+        }
+      ]
+    },
+    "transition-timing": {
+      "$ref": "#/definitions/group:transition-timing"
+    },
+    "transition-timing-function": {
+      "description": "Easing for checkbox state transitions.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
+        }
+      ]
+    },
+    "transition-property": {
+      "description": "CSS properties that animate on state changes.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/transitionPropertyToken"
+        }
+      ]
     },
     "transition-delay": {
-      "type": "object",
       "description": "Delay before checkbox transitions run.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/durationValue"
-        },
-        "$type": {
-          "const": "duration"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "opacity": {
-      "type": "object",
-      "description": "Opacity of the checkbox.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
+      "anyOf": [
+        {
+          "description": "Opacity of the checkbox.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
             }
-          }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:opacity"
         }
-      }
+      ]
     },
     "opacity-disabled": {
-      "type": "object",
       "description": "Control opacity when disabled.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     }
   }
 }

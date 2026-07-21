@@ -44,7 +44,9 @@ export interface ResolveTypeScaleOptions {
   /** "fluid" (default) generates clamps; "static" emits each step's authored literal. */
   mode?: TypeScaleMode;
   /** Per-module group `$extensions` (the scale controls live on the font-size group). */
-  groupExtensions?: Record<string, TokenGroupExtensions>;
+  groupExtensions?: Record<string, TokenGroupExtensions | undefined>;
+  /** Keep scale provenance in an export snapshot so a later JSON build does not reapply it. */
+  preserveProvenance?: boolean;
 }
 
 interface FluidControls {
@@ -80,7 +82,7 @@ function toRem(value: unknown): number {
 }
 
 function readControls(
-  groupExtensions: Record<string, TokenGroupExtensions> | undefined
+  groupExtensions: Record<string, TokenGroupExtensions | undefined> | undefined
 ): FluidControls | null {
   const scale = groupScale(groupExtensions?.[FONT_SIZE_KEY]);
   if (!scale) return null;
@@ -218,11 +220,43 @@ export function resolveTypeScale(
       value = buildFluidValue(index, controls!, a11y);
     }
 
-    resolvedModule[name] = {
-      $value: value,
-      $type: "cssDimension",
-      $description: step.$description,
-    };
+    if (options.preserveProvenance && mode === "fluid" && index != null && step.$value == null) {
+      const vendor = step.$extensions?.["dev.zebkit"] ?? {};
+      resolvedModule[name] = {
+        ...step,
+        $value: value,
+        $type: "cssDimension",
+        $extensions: {
+          ...step.$extensions,
+          "dev.zebkit": {
+            ...vendor,
+            scale: {
+              ...vendor.scale,
+              index,
+              valueSource: "generated",
+            },
+          },
+        },
+      };
+    } else if (options.preserveProvenance && index != null && step.$value != null) {
+      const vendor = step.$extensions?.["dev.zebkit"] ?? {};
+      resolvedModule[name] = {
+        ...step,
+        $extensions: {
+          ...step.$extensions,
+          "dev.zebkit": {
+            ...vendor,
+            scale: { ...vendor.scale, index, valueSource: "pinned" },
+          },
+        },
+      };
+    } else {
+      resolvedModule[name] = {
+        $value: value,
+        $type: "cssDimension",
+        $description: step.$description,
+      };
+    }
   }
 
   return { ...tokens, [FONT_SIZE_KEY]: resolvedModule };

@@ -29,13 +29,13 @@ function isColorRamp(entries: Record<string, { $type: string }>): boolean {
   return keys.length > 0 && keys.every((k) => STEP_RE.test(k) && entries[k].$type === 'color');
 }
 
-function buildSteps(key: string, entries: Record<string, { $value: string | number; $description: string }>): ColorStep[] {
+function buildSteps(key: string, entries: Record<string, { $displayValue: string; $description: string }>): ColorStep[] {
   return Object.entries(entries)
     .sort((a, b) => Number(a[0]) - Number(b[0]))
     .map(([step, token]) => ({
       step,
       cssVar: `--${key}-${step}`,
-      value: String(token.$value),
+      value: token.$displayValue,
       description: token.$description,
       onColor: Number(step) >= 500 ? 'light' : 'dark'
     }));
@@ -47,7 +47,7 @@ export const colorFamilies: ColorFamilyData[] = Object.keys(compiledTokens)
   .map((key) => ({
     family: key.startsWith(ZBK) ? key.slice(ZBK.length) : key,
     key,
-    steps: buildSteps(key, compiledTokens[key] as Record<string, { $value: string | number; $description: string }>)
+    steps: buildSteps(key, compiledTokens[key] as Record<string, { $displayValue: string; $description: string }>)
   }))
   .sort((a, b) => a.family.localeCompare(b.family));
 
@@ -114,13 +114,13 @@ function parseSlot(slot: string): { role: ColorRole; variant: ColorVariant; inte
 
 function buildRoles(
   key: string,
-  entries: Record<string, { $value: string | number; $description: string }>
+  entries: Record<string, { $displayValue: string; $description: string }>
 ): SemanticRoleGroup[] {
   const groups = new Map<ColorRole, SemanticSwatch[]>();
 
   for (const [slot, token] of Object.entries(entries)) {
     const { role, variant, intensity } = parseSlot(slot);
-    const value = String(token.$value ?? '');
+    const value = token.$displayValue;
     const swatch: SemanticSwatch = {
       slot,
       cssVar: `--${key}-${slot}`,
@@ -146,7 +146,7 @@ export const semanticColorFamilies: SemanticColorFamilyData[] = Object.keys(comp
   .map((key) => ({
     family: key.startsWith(ZBK) ? key.slice(ZBK.length) : key,
     key,
-    roles: buildRoles(key, compiledTokens[key] as Record<string, { $value: string | number; $description: string }>)
+    roles: buildRoles(key, compiledTokens[key] as Record<string, { $displayValue: string; $description: string }>)
   }))
   .sort((a, b) => a.family.localeCompare(b.family));
 

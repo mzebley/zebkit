@@ -6,9 +6,14 @@
   "additionalProperties": false,
   "definitions": {
     "numberValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{opacity.0}",
@@ -86,10 +91,8 @@
         "{tooltip.z-index}",
         "{tooltip.opacity}"
       ]
-    }
-  },
-  "properties": {
-    "1": {
+    },
+    "numberToken": {
       "type": "object",
       "description": "Smallest line height.",
       "required": [
@@ -106,6 +109,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -123,163 +129,53 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "2": {
-      "type": "object",
-      "description": "Smaller line height.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
         },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
+        {
           "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
         }
-      }
+      ]
     },
-    "3": {
-      "type": "object",
-      "description": "Base line height.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
+    "groupType": {
+      "type": "string",
+      "enum": [
+        "color",
+        "dimension",
+        "duration",
+        "fontFamily",
+        "fontWeight",
+        "cubicBezier",
+        "number",
+        "strokeStyle",
+        "shadow",
+        "display",
+        "cursor",
+        "textTransform",
+        "textDecoration",
+        "textAlignment",
+        "fontStyle",
+        "transform",
+        "transitionProperty",
+        "transitionTimingFunction",
+        "content",
+        "flex",
+        "utility",
+        "asset",
+        "boolean",
+        "cssDimension"
+      ]
     },
-    "4": {
-      "type": "object",
-      "description": "Larger line height.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "5": {
-      "type": "object",
-      "description": "Largest line height.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/numberValue"
-        },
-        "$type": {
-          "const": "number"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "$extensions": {
+    "groupExtensions": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -290,40 +186,194 @@
             "scale": {
               "type": "object",
               "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
-              "additionalProperties": {
-                "oneOf": [
-                  {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "required": [
-                      "value",
-                      "unit"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "value": {
-                        "type": "number"
-                      },
-                      "unit": {
-                        "type": "string",
-                        "enum": [
-                          "px",
-                          "rem"
-                        ]
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
                       }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
                     }
-                  }
-                ]
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
               }
             }
           }
         }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
       }
+    }
+  },
+  "properties": {
+    "1": {
+      "description": "Smallest line height.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "2": {
+      "description": "Smaller line height.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "3": {
+      "description": "Base line height.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "4": {
+      "description": "Larger line height.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "5": {
+      "description": "Largest line height.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "$type": {
+      "$ref": "#/definitions/groupType"
+    },
+    "$description": {
+      "type": "string"
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
     }
   }
 }

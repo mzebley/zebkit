@@ -216,7 +216,7 @@ describe('convertTokensToCssVars — error collection', () => {
     spy.mockRestore();
   });
 
-  it('rejects references that are not exactly two dot-separated segments', () => {
+  it('accepts arbitrary-depth reference syntax and rejects unknown exact targets', () => {
     const spy = errorSpy();
     const result = convertTokensToCssVars({
       'zbk-h1': {
@@ -225,8 +225,25 @@ describe('convertTokensToCssVars — error collection', () => {
     } as unknown as { [key: string]: TokenInterface });
 
     expect(result.errors).toHaveLength(1);
-    expect(result.errors[0]).toContain("exactly '{module.entry}'");
+    expect(result.errors[0]).toContain('Ensure the target token or palette color exists');
     spy.mockRestore();
+  });
+
+  it('resolves arbitrary-depth and reserved $root references to flattened CSS variables', () => {
+    const result = convertTokensToCssVars({
+      'zbk-color': {
+        'accent-root': {
+          $value: { colorSpace: 'srgb', components: [1, 0, 0] },
+          $type: 'color',
+          $description: 'Accent.',
+        },
+      },
+      'zbk-app': {
+        nested: { $value: '{color.accent.$root}', $type: 'color', $description: 'Nested.' },
+      },
+    } as unknown as Record<string, TokenInterface>);
+    expect(result.errors).toEqual([]);
+    expect(result.css).toContain('--zbk-app-nested: var(--zbk-color-accent-root);');
   });
 
   it('reports no errors for a clean token map', () => {
@@ -270,7 +287,7 @@ describe('serializeColorValue — DTCG color serialization', () => {
     );
     expect(
       serializeColorValue({ colorSpace: 'oklch', components: [0.7, 0.1, 200] })
-    ).toBe('color(oklch 0.7 0.1 200)');
+    ).toBe('oklch(0.7 0.1 200)');
   });
 
   it('emits structured color values through the converter', () => {
@@ -328,6 +345,12 @@ describe('serializeShadowValue — DTCG shadow serialization', () => {
     );
   });
 
+  it('requires collection context for shadow references', () => {
+    expect(() => serializeShadowValue(['{elevation.sm}'])).toThrow(
+      /without a token collection resolver/
+    );
+  });
+
   it('emits structured shadow values through the converter', () => {
     const result = convertTokensToCssVars({
       'zbk-elevation': {
@@ -345,6 +368,63 @@ describe('serializeShadowValue — DTCG shadow serialization', () => {
       '--zbk-elevation-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);'
     );
     expect(result.css).toContain('--zbk-elevation-none: none;');
+  });
+
+  it('serializes and validates shadow composite references with the Zebkit prefix', () => {
+    const result = convertTokensToCssVars({
+      'zbk-color': {
+        ink: {
+          $value: { colorSpace: 'srgb', components: [0, 0, 0] },
+          $type: 'color',
+          $description: 'Ink.',
+        },
+      },
+      'zbk-spacing': {
+        '025': { $value: { value: 0.25, unit: 'rem' }, $type: 'dimension', $description: 'Space.' },
+      },
+      'zbk-elevation': {
+        focus: {
+          $type: 'shadow',
+          $description: 'Focus.',
+          $value: [{
+            color: '{color.ink}',
+            offsetX: { value: 0, unit: 'px' },
+            offsetY: '{spacing.025}',
+            blur: { value: 2, unit: 'px' },
+            spread: { value: 0, unit: 'px' },
+          }],
+        },
+      },
+    } as unknown as Record<string, TokenInterface>);
+    expect(result.errors).toEqual([]);
+    expect(result.css).toContain(
+      '--zbk-elevation-focus: 0 var(--zbk-spacing-025) 2px 0 var(--zbk-color-ink);'
+    );
+  });
+
+  it('reports missing and incompatible shadow composite references', () => {
+    const result = convertTokensToCssVars({
+      'zbk-spacing': {
+        sm: { $value: { value: 1, unit: 'rem' }, $type: 'dimension', $description: 'Space.' },
+      },
+      'zbk-elevation': {
+        invalid: {
+          $type: 'shadow',
+          $description: 'Invalid.',
+          $value: [{
+            color: '{spacing.sm}',
+            offsetX: '{spacing.missing}',
+            offsetY: { value: 0, unit: 'px' },
+            blur: { value: 2, unit: 'px' },
+            spread: { value: 0, unit: 'px' },
+          }],
+        },
+      },
+    } as unknown as Record<string, TokenInterface>);
+    expect(result.errors).toEqual(expect.arrayContaining([
+      expect.stringContaining("type 'color' cannot reference 'dimension'"),
+      expect.stringContaining('{spacing.missing}'),
+    ]));
   });
 });
 

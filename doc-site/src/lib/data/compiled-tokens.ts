@@ -5,36 +5,41 @@ export type DurationValue = { value: number; unit: 'ms' | 's' };
 export type CubicBezierValue = [number, number, number, number];
 export type ColorValue = {
   colorSpace: string;
-  components: [number, number, number];
+  components: [number | 'none', number | 'none', number | 'none'];
   alpha?: number;
   hex?: string;
 };
 export type ShadowValue = {
-  color: ColorValue;
-  offsetX: DimensionValue;
-  offsetY: DimensionValue;
-  blur: DimensionValue;
-  spread: DimensionValue;
+  color: ColorValue | string;
+  offsetX: DimensionValue | string;
+  offsetY: DimensionValue | string;
+  blur: DimensionValue | string;
+  spread: DimensionValue | string;
   inset?: boolean;
 };
 
 export type CompiledToken = {
   $type: string;
   $description: string;
+  $deprecated?: boolean | string;
   $value?:
     | string
     | number
+    | boolean
+    | string[]
     | DimensionValue
     | DurationValue
     | CubicBezierValue
     | ColorValue
     | ShadowValue
-    | ShadowValue[];
-  $extensions?: {
+    | Array<ShadowValue | string>;
+  /** Canonical source-side serialization for docs display and search. */
+  $displayValue: string;
+  $extensions?: Record<string, unknown> & {
     'dev.zebkit'?: {
       a11y?: boolean | string;
       font?: Record<string, unknown>;
-      scale?: { index?: number };
+      scale?: { index?: number; valueSource?: 'generated' | 'pinned' };
     };
   };
 };

@@ -66,11 +66,13 @@ import {
   buildTokenLookup,
   computeEmissionClosure,
   extractReferencedColorFamilies,
+  findChangedTokenEntries,
   resolveActiveBreakpointMap,
   resolveLookupOutputPath,
   slugifyFileSegment,
 } from './build-helpers';
 import { PALETTE_GLOBALS } from '../../tokens/colors/palette/tokens/palette-definition';
+import { fromDtcgDocument } from './dtcg-document';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -89,13 +91,15 @@ export {
   buildTokenLookup,
   computeEmissionClosure,
   extractReferencedColorFamilies,
+  findChangedTokenEntries,
   resolveLookupOutputPath,
   slugifyFileSegment,
 } from './build-helpers';
 
 /**
  * Interactive entry point for building Zebkit tokens and CSS.
- * Expects each token folder to export `key` and a default token map alongside a `token-schema.ts`.
+ * Expects each token folder to export `key` and a default token map. A bespoke
+ * `token-schema.ts` is optional when the generic DTCG module schema is insufficient.
  */
 function displayWelcome() {
   console.log(chalk.cyan("============================"));
@@ -387,7 +391,7 @@ export async function runTokenBuild(
     const resolvedSplitMode =
       splitMode as BuildZebkitTokensOptions["splitMode"];
 
-    const { tokens, layers, groupExtensions, externalModules } = await buildZebkitTokens(
+    const { tokens, layers, groupExtensions, externalModules, overriddenKeys, externalOverriddenKeys } = await buildZebkitTokens(
       themeName,
       files.tokenFiles,
       resolvedDestinationPath,
@@ -401,6 +405,26 @@ export async function runTokenBuild(
       },
       exportTokens
     );
+
+    // Installed presets are materialized snapshots, so their source override
+    // provenance is not otherwise available at build time. Compare external
+    // modules to the canonical bundled defaults to recover exactly which
+    // primitive declarations the preset (or project override) must append.
+    const bundledExternalOverrideKeys: Record<string, Set<string>> = {};
+    if (zebkitPackageRoot && tokenDefaultsDir) {
+      for (const externalKey of externalModules) {
+        const baselinePath = path.join(tokenDefaultsDir, `${externalKey}.json`);
+        if (!(await fs.pathExists(baselinePath))) {
+          throw new Error(
+            `Bundled default for external token module '${externalKey}' is missing at ${baselinePath}.`
+          );
+        }
+        const baselineDocument = (await fs.readJson(baselinePath)) as Record<string, unknown>;
+        const { entries: baseline } = fromDtcgDocument(baselineDocument, { mode: 'runtime' });
+        const changed = findChangedTokenEntries(tokens[externalKey], baseline);
+        if (changed.size > 0) bundledExternalOverrideKeys[externalKey] = changed;
+      }
+    }
 
     // The base theme always emits at `:root`; overlays (built later) carry their own
     // scoped selectors.
@@ -443,6 +467,21 @@ export async function runTokenBuild(
     // map so `{color.*}` targets validate, but their CSS rides the generated
     // palette SCSS — never the converter.
     const referenceTokens = cssVarTokens;
+    const paletteOverrides: Record<string, TokenInterface> = {};
+    for (const externalKey of externalModules) {
+      const changed = new Set([
+        ...(externalOverriddenKeys[externalKey] ?? []),
+        ...(overriddenKeys[externalKey] ?? []),
+        ...(bundledExternalOverrideKeys[externalKey] ?? []),
+      ]);
+      if (changed.size === 0) continue;
+      const entries = cssVarTokens[externalKey] ?? {};
+      const selected: TokenInterface = {};
+      for (const key of changed) {
+        if (entries[key]) selected[key] = entries[key];
+      }
+      if (Object.keys(selected).length) paletteOverrides[externalKey] = selected;
+    }
     if (externalModules.size > 0) {
       cssVarTokens = { ...cssVarTokens };
       for (const externalKey of externalModules) delete cssVarTokens[externalKey];
@@ -458,6 +497,11 @@ export async function runTokenBuild(
       referenceTokens,
     });
     failOnConversionErrors(conversionErrors);
+    const { css: paletteOverrideCss, errors: paletteOverrideErrors } = convertTokensToCssVars(
+      paletteOverrides,
+      { selector: ':root', referenceTokens, unlayered: true }
+    );
+    failOnConversionErrors(paletteOverrideErrors);
     const tokenLookupOutputPath = resolveLookupOutputPath(
       tokensConfig?.tokenLookupOutputPath,
       resolvedDestinationPath
@@ -527,27 +571,8 @@ export async function runTokenBuild(
     }
 
     let allStylesheets = [...files.stylesheets, ...extraStylesheets];
-
-    // Smart color filtering: only include palette families referenced in the token chain.
     let additionalModuleUses = "";
     let finalVariantCss = inlineCss;
-    if (tokensConfig?.extendedTokens?.colors === "smart") {
-      const referencedFamilies = extractReferencedColorFamilies(tokens);
-      allStylesheets = allStylesheets.filter((sheet) => {
-        const isPaletteEntry =
-          sheet.includes("colors/palette/styles.scss") ||
-          sheet.includes("colors\\palette\\styles.scss");
-        return !isPaletteEntry;
-      });
-      additionalModuleUses = [...referencedFamilies]
-        .sort()
-        .map(
-          (family, i) =>
-            `@use 'tokens/colors/palette/${family}' as zbk_smart_palette_${i};\n`
-        )
-        .join("");
-      finalVariantCss = `${inlineCss}\n${paletteGlobalColors()}`;
-    }
 
     const activeBreakpoints = resolveActiveBreakpointMap(
       tokens,
@@ -598,6 +623,49 @@ export async function runTokenBuild(
       }
     }
 
+    // Smart color filtering includes families used by the base token graph,
+    // explicit base/preset primitive overrides, and every scoped overlay. The
+    // overlay output must be known first because it may be the only consumer of
+    // a palette family in the complete build.
+    if (tokensConfig?.extendedTokens?.colors === "smart") {
+      const explicitPrimitiveNames = new Set<string>();
+      for (const externalKey of externalModules) {
+        for (const name of externalOverriddenKeys[externalKey] ?? []) {
+          explicitPrimitiveNames.add(name);
+        }
+        for (const name of overriddenKeys[externalKey] ?? []) {
+          explicitPrimitiveNames.add(name);
+        }
+        for (const name of bundledExternalOverrideKeys[externalKey] ?? []) {
+          explicitPrimitiveNames.add(name);
+        }
+      }
+      for (const output of overlayOutputs) {
+        for (const token of extractZbkTokens(output.css)) {
+          const name = token.match(/^--zbk-color-(.+)$/)?.[1];
+          if (name) explicitPrimitiveNames.add(name);
+        }
+      }
+      const referencedFamilies = extractReferencedColorFamilies(
+        tokens,
+        explicitPrimitiveNames
+      );
+      allStylesheets = allStylesheets.filter((sheet) => {
+        const isPaletteEntry =
+          sheet.includes("colors/palette/styles.scss") ||
+          sheet.includes("colors\\palette\\styles.scss");
+        return !isPaletteEntry;
+      });
+      additionalModuleUses = [...referencedFamilies]
+        .sort()
+        .map(
+          (family, i) =>
+            `@use 'tokens/colors/palette/${family}' as zbk_smart_palette_${i};\n`
+        )
+        .join("");
+      finalVariantCss = `${inlineCss}\n${paletteGlobalColors()}`;
+    }
+
     if (resolvedPrune) {
       const roots = new Set(resolvedPrune.request.engineOptions.tokenRoots);
       for (const output of overlayOutputs) {
@@ -616,6 +684,7 @@ export async function runTokenBuild(
         cssVarPrefix: { value: ZEBKIT_PREFIX, modify: false },
       },
       variantCss: finalVariantCss,
+      trailingCss: paletteOverrideCss,
       zebkitPackageRoot,
       activeBreakpoints,
       additionalModuleUses,
@@ -921,19 +990,18 @@ async function computeOverlayCss(
   // overlay selector — makes the whole chain re-resolve in-scope. Still per-entry minimal.
   const closure = computeEmissionClosure(scaled, overriddenKeys);
   const emitted: Record<string, TokenInterface> = {};
+  const paletteEmitted: Record<string, TokenInterface> = {};
   for (const [moduleKey, resolvedModule] of Object.entries(scaled)) {
-    // Palette entries can never be closure seeds (their overrides are rejected)
-    // and carry no references, but keep emission-external modules out of
-    // overlays defensively — their CSS only ever comes from the palette SCSS.
-    if (externalModules.has(moduleKey)) continue;
     const picked: TokenInterface = {};
     for (const [entry, value] of Object.entries(resolvedModule)) {
       if (closure.has(`${moduleKey}.${entry}`)) picked[entry] = value;
     }
-    if (Object.keys(picked).length > 0) emitted[moduleKey] = picked;
+    if (Object.keys(picked).length > 0) {
+      (externalModules.has(moduleKey) ? paletteEmitted : emitted)[moduleKey] = picked;
+    }
   }
 
-  if (Object.keys(emitted).length === 0) {
+  if (Object.keys(emitted).length === 0 && Object.keys(paletteEmitted).length === 0) {
     console.warn(
       chalk.yellow(
         `Overlay "${overlay.themeName}": overridden tokens did not survive scale resolution. Nothing to emit.`
@@ -952,11 +1020,20 @@ async function computeOverlayCss(
     referenceTokens: scaled,
   });
   failOnConversionErrors(overlayConversionErrors);
+  const { css: paletteCss, errors: paletteErrors } = convertTokensToCssVars(paletteEmitted, {
+    selector,
+    referenceTokens: scaled,
+    unlayered: true,
+  });
+  failOnConversionErrors(paletteErrors);
 
   // Overlays get the same postcss pass as the base bundle (autoprefixer +
   // optional cssnano) but keep the `zbk-<name>.css` filename either way — the
   // overlay link href shouldn't change with the minify setting.
-  const processed = await postProcessCss(css, options.minify);
+  const processed = await postProcessCss(
+    paletteCss.trim() ? `${css}\n${paletteCss}` : css,
+    options.minify
+  );
   const outFile = path.join(destination, `zbk-${slugifyFileSegment(overlay.themeName)}.css`);
 
   const emitsFontSnippet =

@@ -6,10 +6,7 @@
   "additionalProperties": false,
   "definitions": {
     "cssDimensionValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{h1.font-size}",
         "{h1.measure}",
@@ -98,56 +95,8 @@
         "{tooltip.font-size}",
         "{tooltip.letter-spacing}"
       ]
-    }
-  },
-  "properties": {
-    "$extensions": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "dev.zebkit": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "scale": {
-              "type": "object",
-              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
-              "additionalProperties": {
-                "oneOf": [
-                  {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "required": [
-                      "value",
-                      "unit"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "value": {
-                        "type": "number"
-                      },
-                      "unit": {
-                        "type": "string",
-                        "enum": [
-                          "px",
-                          "rem"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
     },
-    "3xs": {
+    "cssDimensionScaledToken": {
       "type": "object",
       "description": "Smallest font size.",
       "required": [
@@ -164,6 +113,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -185,495 +137,312 @@
                   "additionalProperties": false,
                   "properties": {
                     "index": {
-                      "type": "number"
+                      "type": "integer"
+                    },
+                    "valueSource": {
+                      "type": "string",
+                      "enum": [
+                        "generated",
+                        "pinned"
+                      ]
                     }
                   }
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupType": {
+      "type": "string",
+      "enum": [
+        "color",
+        "dimension",
+        "duration",
+        "fontFamily",
+        "fontWeight",
+        "cubicBezier",
+        "number",
+        "strokeStyle",
+        "shadow",
+        "display",
+        "cursor",
+        "textTransform",
+        "textDecoration",
+        "textAlignment",
+        "fontStyle",
+        "transform",
+        "transitionProperty",
+        "transitionTimingFunction",
+        "content",
+        "flex",
+        "utility",
+        "asset",
+        "boolean",
+        "cssDimension"
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    }
+  },
+  "properties": {
+    "$type": {
+      "$ref": "#/definitions/groupType"
+    },
+    "$description": {
+      "type": "string"
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "3xs": {
+      "description": "Smallest font size.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
+        }
+      ]
     },
     "2xs": {
-      "type": "object",
       "description": "Second smallest font size.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "scale": {
-                  "type": "object",
-                  "description": "Generated-scale step metadata (index 0 = base step).",
-                  "additionalProperties": false,
-                  "properties": {
-                    "index": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "xs": {
-      "type": "object",
       "description": "Extra small font size.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "scale": {
-                  "type": "object",
-                  "description": "Generated-scale step metadata (index 0 = base step).",
-                  "additionalProperties": false,
-                  "properties": {
-                    "index": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "sm": {
-      "type": "object",
       "description": "Small font size.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "scale": {
-                  "type": "object",
-                  "description": "Generated-scale step metadata (index 0 = base step).",
-                  "additionalProperties": false,
-                  "properties": {
-                    "index": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "md": {
-      "type": "object",
       "description": "Base / body font size.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "scale": {
-                  "type": "object",
-                  "description": "Generated-scale step metadata (index 0 = base step).",
-                  "additionalProperties": false,
-                  "properties": {
-                    "index": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "lg": {
-      "type": "object",
       "description": "Large font size.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "scale": {
-                  "type": "object",
-                  "description": "Generated-scale step metadata (index 0 = base step).",
-                  "additionalProperties": false,
-                  "properties": {
-                    "index": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "xl": {
-      "type": "object",
       "description": "Extra large font size.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "scale": {
-                  "type": "object",
-                  "description": "Generated-scale step metadata (index 0 = base step).",
-                  "additionalProperties": false,
-                  "properties": {
-                    "index": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "2xl": {
-      "type": "object",
       "description": "Double extra large font size.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "scale": {
-                  "type": "object",
-                  "description": "Generated-scale step metadata (index 0 = base step).",
-                  "additionalProperties": false,
-                  "properties": {
-                    "index": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "3xl": {
-      "type": "object",
       "description": "Triple extra large font size.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "scale": {
-                  "type": "object",
-                  "description": "Generated-scale step metadata (index 0 = base step).",
-                  "additionalProperties": false,
-                  "properties": {
-                    "index": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "4xl": {
-      "type": "object",
       "description": "Quadruple extra large font size.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "scale": {
-                  "type": "object",
-                  "description": "Generated-scale step metadata (index 0 = base step).",
-                  "additionalProperties": false,
-                  "properties": {
-                    "index": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "5xl": {
-      "type": "object",
       "description": "Quintuple extra large font size.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "scale": {
-                  "type": "object",
-                  "description": "Generated-scale step metadata (index 0 = base step).",
-                  "additionalProperties": false,
-                  "properties": {
-                    "index": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     }
   }
 }

@@ -27,7 +27,6 @@ src/components/{name}/
   styles.scss              # auto-discovered by the token build (glob **/styles.scss)
   README.md
   tokens/tokens.ts         # auto-discovered (glob **/tokens/tokens.ts)
-  tokens/token-schema.ts
   variants/                # only if the plan specifies variants
     index.ts  types.ts  {variant}.ts
 ```
@@ -126,7 +125,7 @@ Commit regenerated artifacts (`custom-elements.json`, `doc-site/static/zebkit/co
 
 - [ ] All files from "Files every component ships", including the three external edits
 - [ ] Skeleton, attributes, behavior, ARIA, tokens, variants, events, warnings match the plan sections exactly
-- [ ] `token-schema.ts` keys identical to `tokens.ts` keys
+- [ ] `tokens.ts` satisfies its explicit token-key union; add `token-schema.ts` only for a documented structural constraint
 - [ ] No raw visual values outside structural literals; no primitives referenced from component tokens
 - [ ] Keyboard path exercised in tests; accessible-name warning tested where the plan requires one
 - [ ] All six Verify commands pass; regenerated artifacts committed

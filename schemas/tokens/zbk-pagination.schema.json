@@ -6,9 +6,63 @@
   "additionalProperties": false,
   "definitions": {
     "colorValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "colorSpace",
+            "components"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "colorSpace": {
+              "type": "string",
+              "enum": [
+                "srgb",
+                "srgb-linear",
+                "hsl",
+                "hwb",
+                "lab",
+                "lch",
+                "oklab",
+                "oklch",
+                "display-p3",
+                "a98-rgb",
+                "prophoto-rgb",
+                "rec2020",
+                "xyz-d65",
+                "xyz-d50"
+              ]
+            },
+            "components": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "const": "none"
+                  }
+                ]
+              }
+            },
+            "alpha": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "hex": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          }
+        }
       ],
       "examples": [
         "{accent-primary.50}",
@@ -748,10 +802,7 @@
     "dimensionValue": {
       "oneOf": [
         {
-          "type": [
-            "string",
-            "number"
-          ]
+          "type": "string"
         },
         {
           "type": "object",
@@ -984,9 +1035,24 @@
       ]
     },
     "strokeStyleValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "solid",
+            "dashed",
+            "dotted",
+            "double",
+            "groove",
+            "ridge",
+            "outset",
+            "inset"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{border.style}",
@@ -1003,9 +1069,17 @@
       ]
     },
     "fontFamilyValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
       ],
       "examples": [
         "{h1.font-family}",
@@ -1039,10 +1113,7 @@
       ]
     },
     "cssDimensionValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{h1.font-size}",
         "{h1.measure}",
@@ -1133,9 +1204,39 @@
       ]
     },
     "fontWeightValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        {
+          "type": "string",
+          "enum": [
+            "thin",
+            "hairline",
+            "extra-light",
+            "ultra-light",
+            "light",
+            "normal",
+            "regular",
+            "book",
+            "medium",
+            "semi-bold",
+            "demi-bold",
+            "bold",
+            "extra-bold",
+            "ultra-bold",
+            "black",
+            "heavy",
+            "extra-black",
+            "ultra-black"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{h1.font-weight}",
@@ -1171,9 +1272,14 @@
       ]
     },
     "numberValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\{[^{}]+\\}$"
+        }
       ],
       "examples": [
         "{opacity.0}",
@@ -1253,10 +1359,7 @@
       ]
     },
     "displayValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.display}",
         "{checkbox.display}",
@@ -1270,10 +1373,7 @@
       ]
     },
     "transitionPropertyValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.transition-property}",
         "{checkbox.transition-property}",
@@ -1286,9 +1386,30 @@
       ]
     },
     "durationValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "ms",
+                "s"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{transition.duration-default}",
@@ -1327,10 +1448,7 @@
       ]
     },
     "transitionTimingFunctionValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{button.transition-timing-function}",
         "{pagination.transition-timing-function}",
@@ -1338,10 +1456,7 @@
       ]
     },
     "utilityValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
       "examples": [
         "{a11y.spacing-modifier}",
         "{a11y.spacing-text-coupling}",
@@ -1374,56 +1489,8 @@
         "{toggle.cursor}",
         "{toggle.cursor-disabled}"
       ]
-    }
-  },
-  "properties": {
-    "$extensions": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "dev.zebkit": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "scale": {
-              "type": "object",
-              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
-              "additionalProperties": {
-                "oneOf": [
-                  {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "required": [
-                      "value",
-                      "unit"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "value": {
-                        "type": "number"
-                      },
-                      "unit": {
-                        "type": "string",
-                        "enum": [
-                          "px",
-                          "rem"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
     },
-    "ink": {
+    "colorToken": {
       "type": "object",
       "description": "Label color of page, previous, and next items.",
       "required": [
@@ -1440,43 +1507,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "ink-hover": {
-      "type": "object",
-      "description": "Item label color when hovered.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -1495,505 +1527,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "ink-active": {
-      "type": "object",
-      "description": "Item label color when pressed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "ink-disabled": {
-      "type": "object",
-      "description": "Label color of a disabled previous/next control.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "ink-selected": {
-      "type": "object",
-      "description": "Label color of the current page item (aria-current).",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas": {
-      "type": "object",
-      "description": "Item background at rest.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-hover": {
-      "type": "object",
-      "description": "Item background when hovered.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-active": {
-      "type": "object",
-      "description": "Item background when pressed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-disabled": {
-      "type": "object",
-      "description": "Background of a disabled previous/next control.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "canvas-selected": {
-      "type": "object",
-      "description": "Background of the current page item (aria-current).",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color": {
-      "type": "object",
-      "description": "Item border color at rest.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-hover": {
-      "type": "object",
-      "description": "Item border color when hovered.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-active": {
-      "type": "object",
-      "description": "Item border color when pressed.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-disabled": {
-      "type": "object",
-      "description": "Border color of a disabled previous/next control.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-color-selected": {
-      "type": "object",
-      "description": "Border color of the current page item (aria-current).",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-width": {
+    "dimensionToken": {
       "type": "object",
       "description": "Item border width.",
       "required": [
@@ -2010,6 +1551,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2027,11 +1571,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "border-style": {
+    "strokeStyleToken": {
       "type": "object",
       "description": "Item border style.",
       "required": [
@@ -2048,43 +1595,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "border-radius": {
-      "type": "object",
-      "description": "Item corner radius.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2103,11 +1615,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "font-family": {
+    "fontFamilyToken": {
       "type": "object",
       "description": "Font family for pagination content.",
       "required": [
@@ -2123,6 +1638,9 @@
         },
         "$description": {
           "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2250,11 +1768,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "font-size": {
+    "cssDimensionToken": {
       "type": "object",
       "description": "Base font size for pagination content.",
       "required": [
@@ -2271,6 +1792,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2288,11 +1812,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "font-weight": {
+    "fontWeightToken": {
       "type": "object",
       "description": "Font weight for pagination content.",
       "required": [
@@ -2309,6 +1836,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2326,11 +1856,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "line-height": {
+    "numberToken": {
       "type": "object",
       "description": "Line height for pagination content.",
       "required": [
@@ -2347,6 +1880,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2364,11 +1900,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "display": {
+    "displayToken": {
       "type": "object",
       "description": "Display mode for the pagination nav.",
       "required": [
@@ -2385,43 +1924,8 @@
         "$description": {
           "type": "string"
         },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "gap": {
-      "type": "object",
-      "description": "Gap between pagination items.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
         "$extensions": {
           "type": "object",
@@ -2440,391 +1944,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "min-width": {
-      "type": "object",
-      "description": "Minimum item width to keep the tap target.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "min-height": {
-      "type": "object",
-      "description": "Minimum item height to keep the tap target.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "padding-inline": {
-      "type": "object",
-      "description": "Inline padding inside each item.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "padding-block": {
-      "type": "object",
-      "description": "Block padding inside each item.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "icon-size": {
-      "type": "object",
-      "description": "Size of the previous/next glyphs (drawn or slotted).",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/cssDimensionValue"
-        },
-        "$type": {
-          "const": "cssDimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "ellipsis-ink": {
-      "type": "object",
-      "description": "Color of the non-interactive ellipsis separators.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "status-ink": {
-      "type": "object",
-      "description": "Color of the compact-mode \"Page X of Y\" status text.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "focus-color": {
-      "type": "object",
-      "description": "Outline color for a focused item.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "$type": {
-          "const": "color"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "focus-width": {
-      "type": "object",
-      "description": "Outline width for a focused item.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "focus-offset": {
-      "type": "object",
-      "description": "Outline offset for a focused item.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/dimensionValue"
-        },
-        "$type": {
-          "const": "dimension"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "transition-property": {
+    "transitionPropertyToken": {
       "type": "object",
       "description": "CSS properties that animate on item interaction.",
       "required": [
@@ -2841,6 +1968,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2858,11 +1988,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "transition-duration": {
+    "durationToken": {
       "type": "object",
       "description": "Duration for item hover/active transitions.",
       "required": [
@@ -2879,6 +2012,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2896,11 +2032,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "transition-timing-function": {
+    "transitionTimingFunctionToken": {
       "type": "object",
       "description": "Timing function for item transitions.",
       "required": [
@@ -2917,6 +2056,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2934,11 +2076,14 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
     },
-    "cursor": {
+    "utilityToken": {
       "type": "object",
       "description": "Cursor over interactive pagination items.",
       "required": [
@@ -2955,6 +2100,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -2972,9 +2120,1149 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupType": {
+      "type": "string",
+      "enum": [
+        "color",
+        "dimension",
+        "duration",
+        "fontFamily",
+        "fontWeight",
+        "cubicBezier",
+        "number",
+        "strokeStyle",
+        "shadow",
+        "display",
+        "cursor",
+        "textTransform",
+        "textDecoration",
+        "textAlignment",
+        "fontStyle",
+        "transform",
+        "transitionProperty",
+        "transitionTimingFunction",
+        "content",
+        "flex",
+        "utility",
+        "asset",
+        "boolean",
+        "cssDimension"
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:ink": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Item label color when hovered.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Item label color when pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "disabled": {
+          "description": "Label color of a disabled previous/next control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "selected": {
+          "description": "Label color of the current page item (aria-current).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:canvas": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Item background when hovered.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Item background when pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "disabled": {
+          "description": "Background of a disabled previous/next control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "selected": {
+          "description": "Background of the current page item (aria-current).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:border": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "color": {
+          "anyOf": [
+            {
+              "description": "Item border color at rest.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/colorToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:border-color"
+            }
+          ]
+        },
+        "color-hover": {
+          "description": "Item border color when hovered.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "color-active": {
+          "description": "Item border color when pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "color-disabled": {
+          "description": "Border color of a disabled previous/next control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "color-selected": {
+          "description": "Border color of the current page item (aria-current).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "width": {
+          "description": "Item border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "style": {
+          "description": "Item border style.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/strokeStyleToken"
+            }
+          ]
+        },
+        "radius": {
+          "description": "Item corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:border-color": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "hover": {
+          "description": "Item border color when hovered.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "active": {
+          "description": "Item border color when pressed.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "disabled": {
+          "description": "Border color of a disabled previous/next control.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "selected": {
+          "description": "Border color of the current page item (aria-current).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:font": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "family": {
+          "description": "Font family for pagination content.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontFamilyToken"
+            }
+          ]
+        },
+        "size": {
+          "description": "Base font size for pagination content.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "weight": {
+          "description": "Font weight for pagination content.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontWeightToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:line": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "height": {
+          "description": "Line height for pagination content.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:min": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "width": {
+          "description": "Minimum item width to keep the tap target.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "height": {
+          "description": "Minimum item height to keep the tap target.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:padding": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "inline": {
+          "description": "Inline padding inside each item.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "block": {
+          "description": "Block padding inside each item.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:icon": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "size": {
+          "description": "Size of the previous/next glyphs (drawn or slotted).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:ellipsis": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "ink": {
+          "description": "Color of the non-interactive ellipsis separators.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:status": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "ink": {
+          "description": "Color of the compact-mode \"Page X of Y\" status text.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:focus": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "color": {
+          "description": "Outline color for a focused item.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "width": {
+          "description": "Outline width for a focused item.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "offset": {
+          "description": "Outline offset for a focused item.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:transition": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "property": {
+          "description": "CSS properties that animate on item interaction.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/transitionPropertyToken"
+            }
+          ]
+        },
+        "duration": {
+          "description": "Duration for item hover/active transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "timing": {
+          "$ref": "#/definitions/group:transition-timing"
+        },
+        "timing-function": {
+          "description": "Timing function for item transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/transitionTimingFunctionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:transition-timing": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "function": {
+          "description": "Timing function for item transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/transitionTimingFunctionToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "$type": {
+      "$ref": "#/definitions/groupType"
+    },
+    "$description": {
+      "type": "string"
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "ink": {
+      "anyOf": [
+        {
+          "description": "Label color of page, previous, and next items.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:ink"
+        }
+      ]
+    },
+    "ink-hover": {
+      "description": "Item label color when hovered.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ink-active": {
+      "description": "Item label color when pressed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ink-disabled": {
+      "description": "Label color of a disabled previous/next control.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ink-selected": {
+      "description": "Label color of the current page item (aria-current).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas": {
+      "anyOf": [
+        {
+          "description": "Item background at rest.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:canvas"
+        }
+      ]
+    },
+    "canvas-hover": {
+      "description": "Item background when hovered.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas-active": {
+      "description": "Item background when pressed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas-disabled": {
+      "description": "Background of a disabled previous/next control.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "canvas-selected": {
+      "description": "Background of the current page item (aria-current).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border": {
+      "$ref": "#/definitions/group:border"
+    },
+    "border-color": {
+      "anyOf": [
+        {
+          "description": "Item border color at rest.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:border-color"
+        }
+      ]
+    },
+    "border-color-hover": {
+      "description": "Item border color when hovered.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-color-active": {
+      "description": "Item border color when pressed.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-color-disabled": {
+      "description": "Border color of a disabled previous/next control.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-color-selected": {
+      "description": "Border color of the current page item (aria-current).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-width": {
+      "description": "Item border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "border-style": {
+      "description": "Item border style.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/strokeStyleToken"
+        }
+      ]
+    },
+    "border-radius": {
+      "description": "Item corner radius.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "font": {
+      "$ref": "#/definitions/group:font"
+    },
+    "font-family": {
+      "description": "Font family for pagination content.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
+        }
+      ]
+    },
+    "font-size": {
+      "description": "Base font size for pagination content.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "font-weight": {
+      "description": "Font weight for pagination content.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontWeightToken"
+        }
+      ]
+    },
+    "line": {
+      "$ref": "#/definitions/group:line"
+    },
+    "line-height": {
+      "description": "Line height for pagination content.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "display": {
+      "description": "Display mode for the pagination nav.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/displayToken"
+        }
+      ]
+    },
+    "gap": {
+      "description": "Gap between pagination items.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "min": {
+      "$ref": "#/definitions/group:min"
+    },
+    "min-width": {
+      "description": "Minimum item width to keep the tap target.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "min-height": {
+      "description": "Minimum item height to keep the tap target.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "padding": {
+      "$ref": "#/definitions/group:padding"
+    },
+    "padding-inline": {
+      "description": "Inline padding inside each item.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "padding-block": {
+      "description": "Block padding inside each item.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "icon": {
+      "$ref": "#/definitions/group:icon"
+    },
+    "icon-size": {
+      "description": "Size of the previous/next glyphs (drawn or slotted).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "ellipsis": {
+      "$ref": "#/definitions/group:ellipsis"
+    },
+    "ellipsis-ink": {
+      "description": "Color of the non-interactive ellipsis separators.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "status": {
+      "$ref": "#/definitions/group:status"
+    },
+    "status-ink": {
+      "description": "Color of the compact-mode \"Page X of Y\" status text.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "focus": {
+      "$ref": "#/definitions/group:focus"
+    },
+    "focus-color": {
+      "description": "Outline color for a focused item.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "focus-width": {
+      "description": "Outline width for a focused item.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "focus-offset": {
+      "description": "Outline offset for a focused item.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "transition": {
+      "$ref": "#/definitions/group:transition"
+    },
+    "transition-property": {
+      "description": "CSS properties that animate on item interaction.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/transitionPropertyToken"
+        }
+      ]
+    },
+    "transition-duration": {
+      "description": "Duration for item hover/active transitions.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
+        }
+      ]
+    },
+    "transition-timing": {
+      "$ref": "#/definitions/group:transition-timing"
+    },
+    "transition-timing-function": {
+      "description": "Timing function for item transitions.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/transitionTimingFunctionToken"
+        }
+      ]
+    },
+    "cursor": {
+      "description": "Cursor over interactive pagination items.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/utilityToken"
+        }
+      ]
     }
   }
 }

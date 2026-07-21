@@ -45,24 +45,229 @@ describe('compile-tokens helpers', () => {
     expect(isVariantOverrideFile('/tmp/zbk-button.tokens.json')).toBe(false);
   });
 
-  it('merges valid overrides and ignores invalid ones', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-
+  it('merges valid overrides and records every explicitly authored entry', () => {
+    const touched = new Set<string>();
     const merged = mergeTokens(
       defaultTokens,
       {
-        canvas: { $value: '#000' },
-        radius: ['bad'],
-        extra: { $value: 'ignored' },
+        canvas: { $value: '#000000' },
+        radius: { $value: '4px' },
       },
       tokenSchema,
-      'zbk-button'
+      'zbk-button',
+      touched
     );
 
-    expect(merged.canvas.$value).toBe('#000');
+    expect(merged.canvas.$value).toBe('#000000');
     expect(merged.radius.$value).toBe('4px');
-    expect('extra' in merged).toBe(false);
-    expect(warnSpy).toHaveBeenCalled();
+    expect([...touched]).toEqual(['canvas', 'radius']);
+
+    const changedOnly = new Set<string>();
+    mergeTokens(
+      defaultTokens,
+      { canvas: { $value: '#000000' }, radius: { $value: '4px' } },
+      tokenSchema,
+      'zbk-button',
+      changedOnly,
+      true
+    );
+    expect([...changedOnly]).toEqual(['canvas']);
+  });
+
+  it('fails invalid and unknown overrides instead of falling back to defaults', () => {
+    expect(() =>
+      mergeTokens(
+        defaultTokens,
+        { radius: ['bad'], extra: { $value: 'ignored' } },
+        tokenSchema,
+        'zbk-button'
+      )
+    ).toThrow(/zbk-button\.radius[\s\S]*zbk-button\.extra/);
+  });
+
+  it('rejects unsupported raw values and incompatible explicit types', () => {
+    expect(() =>
+      mergeTokens(
+        defaultTokens,
+        { canvas: { $value: 'not-a-color' } },
+        tokenSchema,
+        'zbk-button'
+      )
+    ).toThrow(/unsupported raw CSS value/);
+    expect(() =>
+      mergeTokens(
+        defaultTokens,
+        { canvas: { $value: 'hsl(360, 90%, 50%)' } },
+        tokenSchema,
+        'zbk-button'
+      )
+    ).toThrow(/unsupported raw CSS value|outside the hsl range/);
+    expect(() =>
+      mergeTokens(
+        defaultTokens,
+        { canvas: { $value: '#000000', $type: 'duration' } },
+        tokenSchema,
+        'zbk-button'
+      )
+    ).toThrow(/explicit \$type 'duration' is incompatible with base type 'color'/);
+
+    expect(
+      mergeTokens(
+        defaultTokens,
+        { canvas: { $value: 'hsl(10, 90%, 50%)' } },
+        tokenSchema,
+        'zbk-button'
+      ).canvas.$value
+    ).toBe('hsl(10, 90%, 50%)');
+
+    expect(
+      mergeTokens(
+        defaultTokens,
+        { radius: { $value: '0.67em' } },
+        tokenSchema,
+        'zbk-button'
+      ).radius.$value
+    ).toBe('0.67em');
+  });
+
+  it('clears stale value provenance while preserving and merging author metadata', () => {
+    const defaults = {
+      border: {
+        $value: '',
+        $type: 'color',
+        $description: 'Base description',
+        $extensions: {
+          'dev.zebkit': {
+            emptyColorPlaceholder: true,
+            rawCssValue: 'transparent',
+            originalType: 'color',
+            a11y: true,
+          },
+          'example.vendor': { retained: true },
+        },
+      },
+    } as unknown as TokenInterface;
+
+    const merged = mergeTokens(
+      defaults,
+      {
+        border: {
+          $value: '{brand.border}',
+          $description: 'Theme border',
+          $deprecated: 'Use border-subtle.',
+          $extensions: {
+            'dev.zebkit': { a11y: '--custom-modifier' },
+            'theme.vendor': { retained: true },
+          },
+        },
+      },
+      undefined,
+      'zbk-app'
+    ) as unknown as Record<string, any>;
+
+    expect(merged.border).toMatchObject({
+      $value: '{brand.border}',
+      $type: 'color',
+      $description: 'Theme border',
+      $deprecated: 'Use border-subtle.',
+      $extensions: {
+        'dev.zebkit': { a11y: '--custom-modifier' },
+        'example.vendor': { retained: true },
+        'theme.vendor': { retained: true },
+      },
+    });
+    expect(merged.border.$extensions['dev.zebkit']).not.toHaveProperty('emptyColorPlaceholder');
+    expect(merged.border.$extensions['dev.zebkit']).not.toHaveProperty('rawCssValue');
+    expect(merged.border.$extensions['dev.zebkit']).not.toHaveProperty('originalType');
+  });
+
+  it('does not manufacture an empty-color marker for non-color strings', () => {
+    const defaults = {
+      content: {
+        $value: 'initial',
+        $type: 'content',
+        $description: 'Generated content.',
+      },
+    } as TokenInterface;
+    const merged = mergeTokens(
+      defaults,
+      { content: { $value: '' } },
+      undefined,
+      'zbk-example'
+    ) as unknown as Record<string, any>;
+
+    expect(merged.content.$value).toBe('');
+    expect(merged.content.$extensions).toBeUndefined();
+  });
+
+  it('field-merges known metadata and clears generated scale provenance', () => {
+    const defaults = {
+      primary: {
+        $value: 'System UI',
+        $type: 'fontFamily',
+        $description: 'Primary family.',
+        $extensions: {
+          'dev.zebkit': {
+            font: { source: 'google', fallback: 'sans', weights: '300..700' },
+          },
+        },
+      },
+      size: {
+        $value: '1rem',
+        $type: 'cssDimension',
+        $description: 'Generated size.',
+        $extensions: {
+          'dev.zebkit': { scale: { index: 1, valueSource: 'generated' } },
+        },
+      },
+    } as unknown as TokenInterface;
+
+    const merged = mergeTokens(
+      defaults,
+      {
+        primary: {
+          $value: 'Inter',
+          $extensions: { 'dev.zebkit': { font: { weights: [400, 700] } } },
+        },
+        size: { $value: '1.125rem' },
+      },
+      undefined,
+      'zbk-example'
+    ) as unknown as Record<string, any>;
+
+    expect(merged.primary.$extensions['dev.zebkit'].font).toEqual({
+      source: 'google',
+      fallback: 'sans',
+      weights: [400, 700],
+    });
+    expect(merged.size.$extensions['dev.zebkit'].scale).toEqual({ index: 1 });
+  });
+
+  it('preserves a base custom a11y variable when an override uses generic opt-in', () => {
+    const defaults = {
+      size: {
+        $value: '1rem',
+        $type: 'dimension',
+        $description: 'Size.',
+        $extensions: { 'dev.zebkit': { a11y: '--zbk-a11y-spacing-modifier' } },
+      },
+    } as unknown as TokenInterface;
+
+    const merged = mergeTokens(
+      defaults,
+      {
+        size: {
+          $value: '2rem',
+          $extensions: { 'dev.zebkit': { a11y: true } },
+        },
+      },
+      undefined,
+      'zbk-spacing'
+    ) as unknown as Record<string, any>;
+
+    expect(merged.size.$extensions['dev.zebkit'].a11y).toBe(
+      '--zbk-a11y-spacing-modifier'
+    );
   });
 
   it('merges group scale extensions control-by-control and records touched controls', () => {
@@ -101,12 +306,33 @@ describe('compile-tokens helpers', () => {
       'min-base': '1.125rem',
     });
 
-    // Invalid extension blocks are ignored, leaving the collected state alone.
+    groupExtensions['zbk-palette'] = {
+      'com.example.base': { retained: true },
+      'dev.zebkit': { layer: 'tokens', cssEmission: 'external' },
+    };
     mergeGroupExtensions(
-      'zbk-spacing',
-      { 'dev.zebkit': { scale: 'not-an-object' } },
+      'zbk-palette',
+      {
+        'com.example.override': { authored: true },
+        'dev.zebkit': { layer: 'theme' },
+      },
       groupExtensions
     );
+    expect(groupExtensions['zbk-palette']).toEqual({
+      'com.example.base': { retained: true },
+      'com.example.override': { authored: true },
+      'dev.zebkit': { layer: 'theme', cssEmission: 'external' },
+    });
+
+    // Invalid extension blocks are fatal; configured scale input must never be
+    // discarded in favor of a default build.
+    expect(() =>
+      mergeGroupExtensions(
+        'zbk-spacing',
+        { 'dev.zebkit': { scale: 'not-an-object' } },
+        groupExtensions
+      )
+    ).toThrow(/Invalid group \$extensions for 'zbk-spacing'/);
     expect(groupExtensions['zbk-spacing']['dev.zebkit']?.scale).toEqual({
       'max-scale': 1.175,
     });

@@ -5,6 +5,8 @@ import {
   extractVariantOverrideEntries,
   isVariantOverrideFile,
 } from '../scripts/tokens/compile-variant-helpers';
+import { fromDtcgDocument, toDtcgDocument } from '../scripts/tokens/dtcg-document';
+import type { TokenInterface } from '../definitions/tokens';
 
 export const PULL_STATE_VERSION = 1;
 export const PULL_STATE_RELATIVE_PATH = '.zebkit/pull-state.json';
@@ -139,11 +141,13 @@ export async function readTokenSnapshot(
     if (!isRecord(raw)) {
       throw new Error(`Bundled token module ${module.file} must contain a JSON object.`);
     }
-    // Emission-external modules (the primitive palette) are not authorable:
-    // their CSS is generated from the palette definition, and entry-level
-    // overrides are rejected at build time.
-    if (raw._cssEmission === 'external') continue;
-    const tokens = getAuthorableTokenData(raw);
+    // Restore runtime/authoring values before materializing the pull snapshot.
+    // This removes export-only generated scale values and restores raw CSS
+    // values/types from their DTCG provenance extensions. Palette documents use
+    // external emission for their defaults but remain authorable.
+    const { entries, meta } = fromDtcgDocument(raw, { mode: 'runtime' });
+    const authorableEntries = getAuthorableTokenData(entries) as TokenInterface;
+    const tokens = toDtcgDocument(authorableEntries, meta, { mode: 'authoring' });
     if (Object.keys(tokens).length === 0) continue;
     modules[module.key] = {
       file: `${module.key}.tokens.json`,

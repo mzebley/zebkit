@@ -1,10 +1,12 @@
 import path from 'path';
+import { isDeepStrictEqual } from 'node:util';
 import { tokenValueToString } from '@definitions/tokens';
 import type { TokenInterface } from '@definitions/tokens';
 import {
   EXTENDED_TOKEN_BREAKPOINTS,
   type ExtendedTokenBreakpoint,
 } from '../config';
+import { enumerateTokenReferences, tokenReferenceToInternalId } from './token-references';
 
 const ZEBKIT_PREFIX = 'zbk';
 
@@ -57,23 +59,22 @@ export function computeEmissionClosure(
     }
   }
 
-  // id -> the single reference target it depends on (token values are whole-value refs or literals).
-  const dependsOn = new Map<string, string>();
+  // id -> reference targets, including supported composite sub-value references.
+  const dependsOn = new Map<string, Set<string>>();
   for (const [moduleKey, entries] of Object.entries(scaled)) {
     for (const [entry, obj] of Object.entries(entries)) {
-      const value = (obj as { $value?: unknown })?.$value;
-      if (typeof value !== 'string' || !value.startsWith('{') || !value.endsWith('}')) continue;
-      const [parent, child] = value.slice(1, -1).split('.');
-      if (!parent || !child) continue;
-      dependsOn.set(`${moduleKey}.${entry}`, `${ZEBKIT_PREFIX}-${parent}.${child}`);
+      const references = enumerateTokenReferences(obj.$value, obj.$type)
+        .map((reference) => tokenReferenceToInternalId(reference.target, ZEBKIT_PREFIX))
+        .filter((reference): reference is string => reference !== undefined);
+      if (references.length > 0) dependsOn.set(`${moduleKey}.${entry}`, new Set(references));
     }
   }
 
   let changed = true;
   while (changed) {
     changed = false;
-    for (const [id, target] of dependsOn) {
-      if (!closure.has(id) && closure.has(target)) {
+    for (const [id, targets] of dependsOn) {
+      if (!closure.has(id) && [...targets].some((target) => closure.has(target))) {
         closure.add(id);
         changed = true;
       }
@@ -83,7 +84,8 @@ export function computeEmissionClosure(
 }
 
 export function extractReferencedColorFamilies(
-  tokens: Record<string, TokenInterface>
+  tokens: Record<string, TokenInterface>,
+  explicitPrimitiveNames: Iterable<string> = []
 ): Set<string> {
   const families = new Set<string>();
   const pattern = /\{color\.([a-z]+)-\d+\}/g;
@@ -96,7 +98,23 @@ export function extractReferencedColorFamilies(
       }
     }
   }
+  for (const name of explicitPrimitiveNames) {
+    const match = name.match(/^([a-z]+)-\d+$/);
+    if (match) families.add(match[1]);
+  }
   return families;
+}
+
+/** Entries whose effective token objects differ from the canonical module. */
+export function findChangedTokenEntries(
+  current: TokenInterface | undefined,
+  baseline: TokenInterface | undefined
+): Set<string> {
+  const changed = new Set<string>();
+  for (const [name, entry] of Object.entries(current ?? {})) {
+    if (!isDeepStrictEqual(entry, baseline?.[name])) changed.add(name);
+  }
+  return changed;
 }
 
 /**

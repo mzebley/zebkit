@@ -92,6 +92,18 @@ export const ZEBKIT_CONFIG_SCHEMA = {
       type: 'object',
       description: 'Token, CSS, theme, overlay, font, and pruning build settings.',
       additionalProperties: false,
+      allOf: [
+        {
+          if: {
+            properties: { exportStrict: { const: true } },
+            required: ['exportStrict'],
+          },
+          then: {
+            properties: { exportTokens: { const: true } },
+            required: ['exportTokens'],
+          },
+        },
+      ],
       properties: {
         destinationPath: {
           type: 'string',

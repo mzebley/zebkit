@@ -10,6 +10,7 @@ import {
   buildTokenLookup,
   computeEmissionClosure,
   extractReferencedColorFamilies,
+  findChangedTokenEntries,
   resolveActiveBreakpointMap,
   resolveLookupOutputPath,
   slugifyFileSegment,
@@ -40,6 +41,23 @@ describe('build-tokens helpers', () => {
     } as Record<string, TokenInterface>;
 
     expect([...extractReferencedColorFamilies(tokens)].sort()).toEqual(['blue', 'red']);
+    expect([...extractReferencedColorFamilies({}, ['mint-500', 'global-black'])]).toEqual([
+      'mint',
+    ]);
+  });
+
+  it('finds effective token changes against a bundled default module', () => {
+    const baseline = {
+      red: { $value: '#ff0000', $type: 'color', $description: 'Red.' },
+      blue: { $value: '#0000ff', $type: 'color', $description: 'Blue.' },
+    } as unknown as TokenInterface;
+    const current = {
+      ...baseline,
+      red: { ...baseline.red, $value: '#cc0000' },
+    } as unknown as TokenInterface;
+
+    expect([...findChangedTokenEntries(current, baseline)]).toEqual(['red']);
+    expect(findChangedTokenEntries(baseline, baseline).size).toBe(0);
   });
 
   it('normalizes breakpoint config', () => {
@@ -188,6 +206,33 @@ describe('build-tokens helpers', () => {
       expect(closure.has('zbk-toggle.thumb-size')).toBe(true);
       expect(closure.has('zbk-toggle.border-radius')).toBe(true);
       expect(closure.has('zbk-toggle.thumb-inset')).toBe(false);
+    });
+
+    it('follows reverse dependencies through shadow composite references', () => {
+      const tokens = {
+        'zbk-app': {
+          ink: {
+            $type: 'color',
+            $value: { colorSpace: 'srgb', components: [0, 0, 0] },
+            $description: 'Ink.',
+          },
+        },
+        'zbk-elevation': {
+          focus: {
+            $type: 'shadow',
+            $description: 'Focus.',
+            $value: [{
+              color: '{app.ink}',
+              offsetX: { value: 0, unit: 'px' },
+              offsetY: { value: 0, unit: 'px' },
+              blur: { value: 2, unit: 'px' },
+              spread: { value: 0, unit: 'px' },
+            }],
+          },
+        },
+      } as unknown as Record<string, TokenInterface>;
+      const closure = computeEmissionClosure(tokens, { 'zbk-app': new Set(['ink']) });
+      expect(closure.has('zbk-elevation.focus')).toBe(true);
     });
   });
 });

@@ -36,85 +36,153 @@
       "$description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'"
     },
     "min-interaction-size": {
-      "$value": "28px",
+      "$value": {
+        "value": 28,
+        "unit": "px"
+      },
       "$type": "dimension",
-      "$description": "Minimum height and width for interactive elements like links or buttons. WCAG AA is >= 24px, AAA is 44px"
+      "$description": "Minimum height and width for interactive elements like links or buttons. WCAG AA is >= 24px, AAA is 44px",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "28px",
+          "originalType": "dimension"
+        }
+      }
     }
   },
   "zbk-breakpoint": {
-    "$type": "dimension",
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
       }
     },
     "tablet": {
-      "$value": "40rem",
-      "$description": "Small tablets and large phones in landscape (640px)."
+      "$value": {
+        "value": 40,
+        "unit": "rem"
+      },
+      "$type": "dimension",
+      "$description": "Small tablets and large phones in landscape (640px).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "40rem",
+          "originalType": "dimension"
+        }
+      }
     },
     "tablet-lg": {
-      "$value": "50rem",
-      "$description": "Large tablets (800px)."
+      "$value": {
+        "value": 50,
+        "unit": "rem"
+      },
+      "$type": "dimension",
+      "$description": "Large tablets (800px).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "50rem",
+          "originalType": "dimension"
+        }
+      }
     },
     "desktop": {
-      "$value": "70rem",
-      "$description": "Small desktops and laptops (1120px)."
+      "$value": {
+        "value": 70,
+        "unit": "rem"
+      },
+      "$type": "dimension",
+      "$description": "Small desktops and laptops (1120px).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "70rem",
+          "originalType": "dimension"
+        }
+      }
     },
     "desktop-lg": {
-      "$value": "80rem",
-      "$description": "Large desktops (1280px)."
+      "$value": {
+        "value": 80,
+        "unit": "rem"
+      },
+      "$type": "dimension",
+      "$description": "Large desktops (1280px).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "80rem",
+          "originalType": "dimension"
+        }
+      }
     },
     "widescreen": {
-      "$value": "100rem",
-      "$description": "Widescreen and ultra-wide displays (1600px)."
+      "$value": {
+        "value": 100,
+        "unit": "rem"
+      },
+      "$type": "dimension",
+      "$description": "Widescreen and ultra-wide displays (1600px).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "100rem",
+          "originalType": "dimension"
+        }
+      }
     }
   },
   "zbk-accent-primary": {
     "50": {
       "$value": "{color.sea-50}",
+      "$type": "color",
       "$description": "For primary accent surfaces."
     },
     "100": {
       "$value": "{color.sea-100}",
-      "$description": "For primary accent surfaces."
+      "$type": "color",
+      "$description": "Primary accent surface."
     },
     "200": {
       "$value": "{color.sea-200}",
-      "$description": "For primary accent surfaces."
+      "$type": "color",
+      "$description": "Primary accent surface."
     },
     "300": {
       "$value": "{color.sea-300}",
-      "$description": "For primary accent surfaces."
+      "$type": "color",
+      "$description": "Primary accent surface."
     },
     "400": {
       "$value": "{color.sea-400}",
-      "$description": "For primary accent surfaces."
+      "$type": "color",
+      "$description": "Primary accent surface."
     },
     "500": {
       "$value": "{color.sea-500}",
-      "$description": "For primary accent surfaces."
+      "$type": "color",
+      "$description": "Primary accent surface."
     },
     "600": {
       "$value": "{color.sea-600}",
-      "$description": "For primary accent surfaces."
+      "$type": "color",
+      "$description": "Primary accent surface."
     },
     "700": {
       "$value": "{color.sea-700}",
-      "$description": "For primary accent surfaces."
+      "$type": "color",
+      "$description": "Primary accent surface."
     },
     "800": {
       "$value": "{color.sea-800}",
-      "$description": "For primary accent surfaces."
+      "$type": "color",
+      "$description": "Primary accent surface."
     },
     "900": {
       "$value": "{color.sea-900}",
-      "$description": "For primary accent surfaces."
+      "$type": "color",
+      "$description": "Primary accent surface."
     },
     "950": {
       "$value": "{color.sea-950}",
-      "$description": "For primary accent surfaces."
+      "$type": "color",
+      "$description": "Primary accent surface."
     },
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -122,147 +190,181 @@
     },
     "canvas": {
       "$value": "{accent-primary.500}",
+      "$type": "color",
       "$description": "Base primary-accent canvas color for primary accent surfaces."
     },
     "canvas-subtle": {
       "$value": "{accent-primary.50}",
+      "$type": "color",
       "$description": "Subtle primary-accent canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{accent-primary.100}",
+      "$type": "color",
       "$description": "Muted primary-accent canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{accent-primary.600}",
+      "$type": "color",
       "$description": "Emphasis primary-accent canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{accent-primary.400}",
+      "$type": "color",
       "$description": "Base inverse primary-accent canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{accent-primary.900}",
+      "$type": "color",
       "$description": "Subtle inverse primary-accent canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{accent-primary.800}",
+      "$type": "color",
       "$description": "Muted inverse primary-accent canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{accent-primary.300}",
+      "$type": "color",
       "$description": "Emphasis inverse primary-accent canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{accent-primary.300}",
+      "$type": "color",
       "$description": "Base primary-accent ink color (the accent hue) for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{accent-primary.200}",
+      "$type": "color",
       "$description": "Subtle primary-accent ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{accent-primary.400}",
+      "$type": "color",
       "$description": "Muted primary-accent ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{accent-primary.50}",
+      "$type": "color",
       "$description": "Emphasis primary-accent ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{accent-primary.300}",
+      "$type": "color",
       "$description": "Base inverse primary-accent ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{accent-primary.500}",
+      "$type": "color",
       "$description": "Subtle inverse primary-accent ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{accent-primary.400}",
+      "$type": "color",
       "$description": "Muted inverse primary-accent ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{accent-primary.200}",
+      "$type": "color",
       "$description": "Emphasis inverse primary-accent ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{accent-primary.500}",
+      "$type": "color",
       "$description": "Base primary-accent border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{accent-primary.200}",
+      "$type": "color",
       "$description": "Subtle primary-accent border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{accent-primary.300}",
+      "$type": "color",
       "$description": "Muted primary-accent border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{accent-primary.600}",
+      "$type": "color",
       "$description": "Emphasis primary-accent border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{accent-primary.500}",
+      "$type": "color",
       "$description": "Base inverse primary-accent border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{accent-primary.800}",
+      "$type": "color",
       "$description": "Subtle inverse primary-accent border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{accent-primary.700}",
+      "$type": "color",
       "$description": "Muted inverse primary-accent border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{accent-primary.400}",
+      "$type": "color",
       "$description": "Emphasis inverse primary-accent border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-accent-secondary": {
     "50": {
       "$value": "{color.butterfield-50}",
+      "$type": "color",
       "$description": "For secondary accent surfaces."
     },
     "100": {
       "$value": "{color.butterfield-100}",
-      "$description": "For secondary accent surfaces."
+      "$type": "color",
+      "$description": "Secondary accent surface."
     },
     "200": {
       "$value": "{color.butterfield-200}",
-      "$description": "For secondary accent surfaces."
+      "$type": "color",
+      "$description": "Secondary accent surface."
     },
     "300": {
       "$value": "{color.butterfield-300}",
-      "$description": "For secondary accent surfaces."
+      "$type": "color",
+      "$description": "Secondary accent surface."
     },
     "400": {
       "$value": "{color.butterfield-400}",
-      "$description": "For secondary accent surfaces."
+      "$type": "color",
+      "$description": "Secondary accent surface."
     },
     "500": {
       "$value": "{color.butterfield-500}",
-      "$description": "For secondary accent surfaces."
+      "$type": "color",
+      "$description": "Secondary accent surface."
     },
     "600": {
       "$value": "{color.butterfield-600}",
-      "$description": "For secondary accent surfaces."
+      "$type": "color",
+      "$description": "Secondary accent surface."
     },
     "700": {
       "$value": "{color.butterfield-700}",
-      "$description": "For secondary accent surfaces."
+      "$type": "color",
+      "$description": "Secondary accent surface."
     },
     "800": {
       "$value": "{color.butterfield-800}",
-      "$description": "For secondary accent surfaces."
+      "$type": "color",
+      "$description": "Secondary accent surface."
     },
     "900": {
       "$value": "{color.butterfield-900}",
-      "$description": "For secondary accent surfaces."
+      "$type": "color",
+      "$description": "Secondary accent surface."
     },
     "950": {
       "$value": "{color.butterfield-950}",
-      "$description": "For secondary accent surfaces."
+      "$type": "color",
+      "$description": "Secondary accent surface."
     },
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -270,147 +372,181 @@
     },
     "canvas": {
       "$value": "{accent-secondary.500}",
+      "$type": "color",
       "$description": "Base secondary-accent canvas color for secondary accent surfaces."
     },
     "canvas-subtle": {
       "$value": "{accent-secondary.50}",
+      "$type": "color",
       "$description": "Subtle secondary-accent canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{accent-secondary.100}",
+      "$type": "color",
       "$description": "Muted secondary-accent canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{accent-secondary.600}",
+      "$type": "color",
       "$description": "Emphasis secondary-accent canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{accent-secondary.400}",
+      "$type": "color",
       "$description": "Base inverse secondary-accent canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{accent-secondary.900}",
+      "$type": "color",
       "$description": "Subtle inverse secondary-accent canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{accent-secondary.800}",
+      "$type": "color",
       "$description": "Muted inverse secondary-accent canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{accent-secondary.300}",
+      "$type": "color",
       "$description": "Emphasis inverse secondary-accent canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{accent-secondary.300}",
+      "$type": "color",
       "$description": "Base secondary-accent ink color (the accent hue) for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{accent-secondary.400}",
+      "$type": "color",
       "$description": "Subtle secondary-accent ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{accent-secondary.500}",
+      "$type": "color",
       "$description": "Muted secondary-accent ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{accent-secondary.100}",
+      "$type": "color",
       "$description": "Emphasis secondary-accent ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{accent-secondary.300}",
+      "$type": "color",
       "$description": "Base inverse secondary-accent ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{accent-secondary.500}",
+      "$type": "color",
       "$description": "Subtle inverse secondary-accent ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{accent-secondary.400}",
+      "$type": "color",
       "$description": "Muted inverse secondary-accent ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{accent-secondary.200}",
+      "$type": "color",
       "$description": "Emphasis inverse secondary-accent ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{accent-secondary.500}",
+      "$type": "color",
       "$description": "Base secondary-accent border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{accent-secondary.200}",
+      "$type": "color",
       "$description": "Subtle secondary-accent border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{accent-secondary.300}",
+      "$type": "color",
       "$description": "Muted secondary-accent border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{accent-secondary.600}",
+      "$type": "color",
       "$description": "Emphasis secondary-accent border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{accent-secondary.500}",
+      "$type": "color",
       "$description": "Base inverse secondary-accent border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{accent-secondary.800}",
+      "$type": "color",
       "$description": "Subtle inverse secondary-accent border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{accent-secondary.700}",
+      "$type": "color",
       "$description": "Muted inverse secondary-accent border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{accent-secondary.400}",
+      "$type": "color",
       "$description": "Emphasis inverse secondary-accent border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-brand": {
     "50": {
       "$value": "{color.dusk-50}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Brand / identity surfaces (dusk warm cream) — the docs' warm paper identity; drives branded surfaces like button canvases."
     },
     "100": {
       "$value": "{color.dusk-100}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Branded surface."
     },
     "200": {
       "$value": "{color.dusk-200}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Branded surface."
     },
     "300": {
       "$value": "{color.dusk-300}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Branded surface."
     },
     "400": {
       "$value": "{color.dusk-400}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Branded surface."
     },
     "500": {
       "$value": "{color.dusk-500}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Branded surface."
     },
     "600": {
       "$value": "{color.dusk-600}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Branded surface."
     },
     "700": {
       "$value": "{color.dusk-700}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Branded surface."
     },
     "800": {
       "$value": "{color.dusk-800}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Branded surface."
     },
     "900": {
       "$value": "{color.dusk-900}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Branded surface."
     },
     "950": {
       "$value": "{color.dusk-950}",
-      "$description": "For primary branded surfaces."
+      "$type": "color",
+      "$description": "Branded surface."
     },
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -418,147 +554,181 @@
     },
     "canvas": {
       "$value": "{brand.900}",
+      "$type": "color",
       "$description": "Base brand canvas color for primary branded surfaces."
     },
     "canvas-subtle": {
       "$value": "{brand.800}",
+      "$type": "color",
       "$description": "Subtle brand canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{brand.950}",
+      "$type": "color",
       "$description": "Muted brand canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{brand.600}",
+      "$type": "color",
       "$description": "Emphasis brand canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{brand.100}",
+      "$type": "color",
       "$description": "Base inverse brand canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{brand.200}",
+      "$type": "color",
       "$description": "Subtle inverse brand canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{brand.50}",
+      "$type": "color",
       "$description": "Muted inverse brand canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{brand.300}",
+      "$type": "color",
       "$description": "Emphasis inverse brand canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{brand.100}",
+      "$type": "color",
       "$description": "Base brand ink color (the brand hue) for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{brand.200}",
+      "$type": "color",
       "$description": "Subtle brand ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{brand.300}",
+      "$type": "color",
       "$description": "Muted brand ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{brand.50}",
+      "$type": "color",
       "$description": "Emphasis brand ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{brand.900}",
+      "$type": "color",
       "$description": "Base inverse brand ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{brand.800}",
+      "$type": "color",
       "$description": "Subtle inverse brand ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{brand.700}",
+      "$type": "color",
       "$description": "Muted inverse brand ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{brand.950}",
+      "$type": "color",
       "$description": "Emphasis inverse brand ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{brand.700}",
+      "$type": "color",
       "$description": "Base brand border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{brand.800}",
+      "$type": "color",
       "$description": "Subtle brand border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{brand.950}",
+      "$type": "color",
       "$description": "Muted brand border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{brand.600}",
+      "$type": "color",
       "$description": "Emphasis brand border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{brand.500}",
+      "$type": "color",
       "$description": "Base inverse brand border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{brand.800}",
+      "$type": "color",
       "$description": "Subtle inverse brand border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{brand.700}",
+      "$type": "color",
       "$description": "Muted inverse brand border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{brand.400}",
+      "$type": "color",
       "$description": "Emphasis inverse brand border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-neutral": {
     "50": {
       "$value": "{color.stone-50}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surfaces (stone warm gray) — the docs' natural warm-neutral grays."
     },
     "100": {
       "$value": "{color.stone-100}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surface."
     },
     "200": {
       "$value": "{color.stone-200}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surface."
     },
     "300": {
       "$value": "{color.stone-300}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surface."
     },
     "400": {
       "$value": "{color.stone-400}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surface."
     },
     "500": {
       "$value": "{color.stone-500}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surface."
     },
     "600": {
       "$value": "{color.stone-600}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surface."
     },
     "700": {
       "$value": "{color.stone-700}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surface."
     },
     "800": {
       "$value": "{color.stone-800}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surface."
     },
     "900": {
       "$value": "{color.stone-900}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surface."
     },
     "950": {
       "$value": "{color.stone-950}",
-      "$description": "For neutral surfaces."
+      "$type": "color",
+      "$description": "Neutral surface."
     },
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -3636,51 +3806,483 @@
     }
   },
   "zbk-elevation": {
-    "$type": "shadow",
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
       }
     },
     "none": {
-      "$value": "none",
-      "$description": "No shadow."
+      "$value": [],
+      "$type": "shadow",
+      "$description": "No shadow.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "xs": {
-      "$value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "$description": "Extra-small shadow for subtle elevation."
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.05
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ],
+      "$type": "shadow",
+      "$description": "Extra-small shadow for subtle elevation.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+          "originalType": "shadow"
+        }
+      }
     },
     "sm": {
-      "$value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-      "$description": "Small shadow for low elevation."
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 3,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -1,
+            "unit": "px"
+          }
+        }
+      ],
+      "$type": "shadow",
+      "$description": "Small shadow for low elevation.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+          "originalType": "shadow"
+        }
+      }
     },
     "md": {
-      "$value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-      "$description": "Medium shadow for moderate elevation."
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 4,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 6,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -1,
+            "unit": "px"
+          }
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 2,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 4,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -2,
+            "unit": "px"
+          }
+        }
+      ],
+      "$type": "shadow",
+      "$description": "Medium shadow for moderate elevation.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+          "originalType": "shadow"
+        }
+      }
     },
     "lg": {
-      "$value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-      "$description": "Large shadow for high elevation."
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 10,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 15,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -3,
+            "unit": "px"
+          }
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 4,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 6,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -4,
+            "unit": "px"
+          }
+        }
+      ],
+      "$type": "shadow",
+      "$description": "Large shadow for high elevation.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+          "originalType": "shadow"
+        }
+      }
     },
     "xl": {
-      "$value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-      "$description": "Extra-large shadow for very high elevation."
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 20,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 25,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -5,
+            "unit": "px"
+          }
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 8,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 10,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -6,
+            "unit": "px"
+          }
+        }
+      ],
+      "$type": "shadow",
+      "$description": "Extra-large shadow for very high elevation.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+          "originalType": "shadow"
+        }
+      }
     },
     "2xl": {
-      "$value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
-      "$description": "2XL shadow for maximum elevation."
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.25
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 25,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 50,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -12,
+            "unit": "px"
+          }
+        }
+      ],
+      "$type": "shadow",
+      "$description": "2XL shadow for maximum elevation.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+          "originalType": "shadow"
+        }
+      }
     },
     "inner": {
-      "$value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
-      "$description": "Inner shadow for inset/pressed effect."
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.05
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 2,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 4,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        }
+      ],
+      "$type": "shadow",
+      "$description": "Inner shadow for inset/pressed effect.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
+          "originalType": "shadow"
+        }
+      }
     },
     "inner-sm": {
-      "$value": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      "$description": "Small inner shadow."
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.05
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        }
+      ],
+      "$type": "shadow",
+      "$description": "Small inner shadow.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
+          "originalType": "shadow"
+        }
+      }
     },
     "inner-lg": {
-      "$value": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
-      "$description": "Large inner shadow."
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 4,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 6,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        }
+      ],
+      "$type": "shadow",
+      "$description": "Large inner shadow.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "inset 0 4px 6px 0 rgb(0 0 0 / 0.1)",
+          "originalType": "shadow"
+        }
+      }
     }
   },
   "zbk-focus": {
@@ -3692,7 +4294,7 @@
     "color": {
       "$value": "{accent-primary.600}",
       "$type": "color",
-      "$description": "Color of focus outline"
+      "$description": "Focus outline color — the ember accent, so focus rings read as the docs' single interactive accent."
     },
     "width": {
       "$value": "{spacing.025}",
@@ -3708,73 +4310,89 @@
   "zbk-opacity": {
     "0": {
       "$value": 0,
+      "$type": "number",
       "$description": "Fully transparent (invisible)."
     },
     "5": {
       "$value": 0.05,
+      "$type": "number",
       "$description": "5% opacity - barely visible."
     },
     "10": {
       "$value": 0.1,
+      "$type": "number",
       "$description": "10% opacity - very faint."
     },
     "15": {
       "$value": 0.15,
+      "$type": "number",
       "$description": "15% opacity - faint."
     },
     "20": {
       "$value": 0.2,
+      "$type": "number",
       "$description": "20% opacity - subtle."
     },
     "25": {
       "$value": 0.25,
+      "$type": "number",
       "$description": "25% opacity - quarter visible."
     },
     "30": {
       "$value": 0.3,
+      "$type": "number",
       "$description": "30% opacity - light."
     },
     "40": {
       "$value": 0.4,
+      "$type": "number",
       "$description": "40% opacity - moderate-light."
     },
     "50": {
       "$value": 0.5,
+      "$type": "number",
       "$description": "50% opacity - half visible."
     },
     "60": {
       "$value": 0.6,
+      "$type": "number",
       "$description": "60% opacity - moderate."
     },
     "70": {
       "$value": 0.7,
+      "$type": "number",
       "$description": "70% opacity - mostly visible."
     },
     "75": {
       "$value": 0.75,
+      "$type": "number",
       "$description": "75% opacity - three-quarters visible."
     },
     "80": {
       "$value": 0.8,
+      "$type": "number",
       "$description": "80% opacity - largely visible."
     },
     "85": {
       "$value": 0.85,
+      "$type": "number",
       "$description": "85% opacity - mostly opaque."
     },
     "90": {
       "$value": 0.9,
+      "$type": "number",
       "$description": "90% opacity - nearly opaque."
     },
     "95": {
       "$value": 0.95,
+      "$type": "number",
       "$description": "95% opacity - almost fully opaque."
     },
     "100": {
       "$value": 1,
+      "$type": "number",
       "$description": "Fully opaque (default)."
     },
-    "$type": "number",
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -3800,12 +4418,12 @@
     "font-weight": {
       "$value": "{font-weight.normal}",
       "$type": "fontWeight",
-      "$description": "Font weight for H1 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Instrument Serif ships only 400 — synthesized bold smears the high-contrast face."
     },
     "line-height": {
       "$value": "{line-height.2}",
       "$type": "number",
-      "$description": "Line height for H1 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Solid display leading for the page title."
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
@@ -3825,7 +4443,7 @@
     "spacing-after": {
       "$value": "{spacing.1}",
       "$type": "dimension",
-      "$description": "Amount of margin inline end for H1 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Breathing room between the page title and its lede."
     },
     "color": {
       "$value": "{app.ink}",
@@ -3862,12 +4480,12 @@
     "font-weight": {
       "$value": "{font-weight.normal}",
       "$type": "fontWeight",
-      "$description": "Font weight for H2 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Instrument Serif ships only 400 — synthesized bold smears the high-contrast face."
     },
     "line-height": {
       "$value": "{line-height.2}",
       "$type": "number",
-      "$description": "Line height for H2 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Tight sub-head leading."
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
@@ -3887,7 +4505,7 @@
     "spacing-after": {
       "$value": "{spacing.1}",
       "$type": "dimension",
-      "$description": "Amount of margin inline end for H2 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Section heads tuck close to the copy they introduce."
     },
     "color": {
       "$value": "{app.ink}",
@@ -3914,7 +4532,7 @@
     "font-family": {
       "$value": "{font-family.primary}",
       "$type": "fontFamily",
-      "$description": "Font size for H3 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Sub-heads drop to the reading face — Instrument Serif is used large only."
     },
     "font-size": {
       "$value": "{font-size.lg}",
@@ -3929,7 +4547,7 @@
     "line-height": {
       "$value": "{line-height.2}",
       "$type": "number",
-      "$description": "Line height for H3 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Tight sub-head leading."
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
@@ -3944,12 +4562,12 @@
     "spacing-before": {
       "$value": "{spacing.2}",
       "$type": "dimension",
-      "$description": "Amount of margin inline start for H3 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Sub-sections separate less than full sections."
     },
     "spacing-after": {
       "$value": "{spacing.05}",
       "$type": "dimension",
-      "$description": "Amount of margin inline end for H3 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Sub-heads sit on their copy."
     },
     "color": {
       "$value": "{app.ink}",
@@ -3976,7 +4594,7 @@
     "font-family": {
       "$value": "{font-family.primary}",
       "$type": "fontFamily",
-      "$description": "Font size for H4 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Sub-heads drop to the reading face — Instrument Serif is used large only."
     },
     "font-size": {
       "$value": "{font-size.md}",
@@ -3991,7 +4609,7 @@
     "line-height": {
       "$value": "{line-height.2}",
       "$type": "number",
-      "$description": "Line height for H4 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Tight sub-head leading."
     },
     "letter-spacing": {
       "$value": "{letter-spacing.normal}",
@@ -4006,12 +4624,12 @@
     "spacing-before": {
       "$value": "{spacing.105}",
       "$type": "dimension",
-      "$description": "Amount of margin inline start for H4 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Minor heads separate modestly."
     },
     "spacing-after": {
       "$value": "{spacing.05}",
       "$type": "dimension",
-      "$description": "Amount of margin inline end for H4 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Minor heads sit on their copy."
     },
     "color": {
       "$value": "{app.ink}",
@@ -4038,7 +4656,7 @@
     "font-family": {
       "$value": "{font-family.primary}",
       "$type": "fontFamily",
-      "$description": "Font size for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Sub-heads drop to the reading face — Instrument Serif is used large only."
     },
     "font-size": {
       "$value": "{font-size.sm}",
@@ -4068,12 +4686,12 @@
     "spacing-before": {
       "$value": "{spacing.105}",
       "$type": "dimension",
-      "$description": "Amount of margin inline start for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Minor heads separate modestly."
     },
     "spacing-after": {
       "$value": "{spacing.05}",
       "$type": "dimension",
-      "$description": "Amount of margin inline end for H5 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Minor heads sit on their copy."
     },
     "color": {
       "$value": "{app.ink}",
@@ -4100,17 +4718,17 @@
     "font-family": {
       "$value": "{font-family.interface}",
       "$type": "fontFamily",
-      "$description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Deepest heading level becomes an instrument label — mono, the 'this is data' register."
     },
     "font-size": {
       "$value": "{font-size.xs}",
       "$type": "cssDimension",
-      "$description": "Font size for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Label scale."
     },
     "font-weight": {
       "$value": "{font-weight.normal}",
       "$type": "fontWeight",
-      "$description": "Font weight for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Space Mono needs no added weight at label sizes."
     },
     "line-height": {
       "$value": "{line-height.3}",
@@ -4120,7 +4738,7 @@
     "letter-spacing": {
       "$value": "{letter-spacing.wide}",
       "$type": "dimension",
-      "$description": "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Uppercase labels want extra tracking."
     },
     "measure": {
       "$value": "{text-measure.3}",
@@ -4130,17 +4748,17 @@
     "spacing-before": {
       "$value": "{spacing.105}",
       "$type": "dimension",
-      "$description": "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Minor heads separate modestly."
     },
     "spacing-after": {
       "$value": "{spacing.05}",
       "$type": "dimension",
-      "$description": "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Minor heads sit on their copy."
     },
     "color": {
       "$value": "{app.ink-subtle}",
       "$type": "color",
-      "$description": "Color of H6 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Labels recede from body ink."
     },
     "font-style": {
       "$value": "none",
@@ -4150,7 +4768,7 @@
     "text-transform": {
       "$value": "uppercase",
       "$type": "textTransform",
-      "$description": "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Instrument label treatment."
     }
   },
   "zbk-lede": {
@@ -4187,7 +4805,7 @@
     "measure": {
       "$value": "{text-measure.1}",
       "$type": "cssDimension",
-      "$description": "Maximum width for introductory lede text with .lede applied directly or as a child of a .prose container."
+      "$description": "Ledes run shorter than body measure."
     },
     "spacing-before": {
       "$value": "{spacing.0}",
@@ -4321,7 +4939,7 @@
     "measure": {
       "$value": "{text-measure.3}",
       "$type": "cssDimension",
-      "$description": "Maximum width for P elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Paragraphs share the editorial column's 65ch reading measure (default measure-4 overshoots it)."
     },
     "spacing-before": {
       "$value": "{spacing.0}",
@@ -4331,7 +4949,7 @@
     "spacing-after": {
       "$value": "{spacing.1}",
       "$type": "dimension",
-      "$description": "Amount of margin inline end for P elements with .prose applied directly or that are a child of a .prose container."
+      "$description": "Editorial paragraph gap — roughly two-thirds of a line at base leading."
     },
     "color": {
       "$value": "{app.ink}",
@@ -4412,7 +5030,6 @@
     }
   },
   "zbk-action": {
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4420,103 +5037,126 @@
     },
     "canvas": {
       "$value": "{color.ember-700}",
+      "$type": "color",
       "$description": "Base action canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.ember-800}",
-      "$description": "Subtle action canvas color for the least-prominent, lightly tinted surfaces."
+      "$type": "color",
+      "$description": "Soft action canvas color for lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.ember-900}",
-      "$description": "Muted action canvas color for low-emphasis, recessed surfaces."
+      "$type": "color",
+      "$description": "Muted action canvas color for low-emphasis surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.ember-600}",
-      "$description": "Emphasis action canvas color for high-prominence surfaces."
+      "$type": "color",
+      "$description": "Strong action canvas color for high-emphasis surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.ember-300}",
+      "$type": "color",
       "$description": "Base inverse action canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.ember-400}",
-      "$description": "Subtle inverse action canvas color for the least-prominent surfaces in inverse contexts."
+      "$type": "color",
+      "$description": "Soft inverse action canvas color for lightly tinted surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.ember-600}",
+      "$type": "color",
       "$description": "Muted inverse action canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.ember-200}",
-      "$description": "Emphasis inverse action canvas color for high-prominence surfaces in inverse contexts."
+      "$type": "color",
+      "$description": "Strong inverse action canvas color for high-emphasis surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.ember-300}",
-      "$description": "Base action ink color for body text and icons on neutral or light canvases."
+      "$type": "color",
+      "$description": "Base action ink color for text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.ember-200}",
-      "$description": "Subtle action ink color for the least-prominent, tertiary text and icons."
+      "$type": "color",
+      "$description": "Soft action ink color for lower-emphasis text and icons."
     },
     "ink-muted": {
       "$value": "{color.ember-400}",
-      "$description": "Muted action ink color for secondary text and icons."
+      "$type": "color",
+      "$description": "Muted action ink color for subtle or secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.ember-100}",
+      "$type": "color",
       "$description": "Emphasis action ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.ember-900}",
-      "$description": "Base inverse action ink color for body text and icons on inverse or dark canvases."
+      "$type": "color",
+      "$description": "Base inverse action ink color for text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.ember-800}",
-      "$description": "Subtle inverse action ink color for the least-prominent text and icons on inverse canvases."
+      "$type": "color",
+      "$description": "Soft inverse action ink color for lower-emphasis text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.ember-700}",
-      "$description": "Muted inverse action ink color for secondary text and icons on inverse canvases."
+      "$type": "color",
+      "$description": "Muted inverse action ink color for subtle text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.ember-950}",
+      "$type": "color",
       "$description": "Emphasis inverse action ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{color.ember-600}",
+      "$type": "color",
       "$description": "Base action border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{color.ember-500}",
-      "$description": "Subtle action border color for the least-prominent outlines and dividers."
+      "$type": "color",
+      "$description": "Soft action border color for low-emphasis outlines and dividers."
     },
     "border-muted": {
       "$value": "{color.ember-700}",
-      "$description": "Muted action border color for low-emphasis outlines and dividers."
+      "$type": "color",
+      "$description": "Muted action border color for subtle outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{color.ember-200}",
-      "$description": "Emphasis action border color for high-prominence outlines and dividers."
+      "$type": "color",
+      "$description": "Strong action border color for high-emphasis outlines and dividers."
     },
     "border-inverse": {
       "$value": "{color.ember-700}",
+      "$type": "color",
       "$description": "Base inverse action border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{color.ember-800}",
-      "$description": "Subtle inverse action border color for the least-prominent outlines on inverse canvases."
+      "$type": "color",
+      "$description": "Soft inverse action border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{color.ember-900}",
-      "$description": "Muted inverse action border color for low-emphasis outlines on inverse canvases."
+      "$type": "color",
+      "$description": "Muted inverse action border color for subtle outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{color.ember-500}",
-      "$description": "Emphasis inverse action border color for high-prominence outlines on inverse canvases."
+      "$type": "color",
+      "$description": "Strong inverse action border color for high-emphasis outlines on inverse canvases."
     }
   },
   "zbk-app": {
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4524,103 +5164,126 @@
     },
     "canvas": {
       "$value": "{brand.canvas}",
-      "$description": "Base app canvas color for primary surfaces."
+      "$type": "color",
+      "$description": "Base app canvas — warm paper off-white."
     },
     "canvas-subtle": {
       "$value": "{brand.canvas-subtle}",
-      "$description": "Subtle app canvas color for the least-prominent, lightly tinted surfaces."
+      "$type": "color",
+      "$description": "Soft canvas — raised cards / surfaces lifted off the paper."
     },
     "canvas-muted": {
       "$value": "{brand.canvas-muted}",
-      "$description": "Muted app canvas color for low-emphasis, recessed surfaces."
+      "$type": "color",
+      "$description": "Muted canvas — low-emphasis warm surfaces (code blocks, wells)."
     },
     "canvas-emphasis": {
       "$value": "{brand.canvas-emphasis}",
+      "$type": "color",
       "$description": "Emphasis app canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{brand.canvas-inverse}",
+      "$type": "color",
       "$description": "Base inverse app canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{brand.canvas-inverse-subtle}",
+      "$type": "color",
       "$description": "Subtle inverse app canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{brand.canvas-inverse-muted}",
+      "$type": "color",
       "$description": "Muted inverse app canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{brand.canvas-inverse-emphasis}",
+      "$type": "color",
       "$description": "Emphasis inverse app canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{brand.ink}",
-      "$description": "Base app ink color for body text and icons on neutral or light canvases."
+      "$type": "color",
+      "$description": "Base ink — warm near-black for body text and headings."
     },
     "ink-subtle": {
       "$value": "{brand.ink-subtle}",
-      "$description": "Subtle app ink color for the least-prominent, tertiary text and icons."
+      "$type": "color",
+      "$description": "Soft ink — lower-emphasis text, captions, marginalia."
     },
     "ink-muted": {
       "$value": "{brand.ink-muted}",
-      "$description": "Muted app ink color for secondary text and icons."
+      "$type": "color",
+      "$description": "Muted ink — secondary text."
     },
     "ink-emphasis": {
       "$value": "{brand.ink-emphasis}",
+      "$type": "color",
       "$description": "Emphasis app ink color for high-prominence text such as headings."
     },
     "ink-inverse": {
       "$value": "{brand.ink-inverse}",
+      "$type": "color",
       "$description": "Base inverse app ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{brand.ink-inverse-subtle}",
+      "$type": "color",
       "$description": "Subtle inverse app ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{brand.ink-inverse-muted}",
+      "$type": "color",
       "$description": "Muted inverse app ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{brand.ink-inverse-emphasis}",
+      "$type": "color",
       "$description": "Emphasis inverse app ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{brand.border}",
-      "$description": "Base app border color for outlines, strokes, and dividers."
+      "$type": "color",
+      "$description": "Base hairline border for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{brand.border-subtle}",
-      "$description": "Subtle app border color for the least-prominent outlines and dividers."
+      "$type": "color",
+      "$description": "Softest hairline for low-emphasis dividers."
     },
     "border-muted": {
       "$value": "{brand.border-muted}",
-      "$description": "Muted app border color for low-emphasis outlines and dividers."
+      "$type": "color",
+      "$description": "Slightly stronger subtle border."
     },
     "border-emphasis": {
       "$value": "{brand.border-emphasis}",
-      "$description": "Emphasis app border color for high-prominence outlines and dividers."
+      "$type": "color",
+      "$description": "High-emphasis border."
     },
     "border-inverse": {
       "$value": "{brand.border-inverse}",
-      "$description": "Base inverse app border color for outlines and dividers on inverse canvases."
+      "$type": "color",
+      "$description": "Base border on dark/inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{brand.border-inverse-subtle}",
-      "$description": "Subtle inverse app border color for the least-prominent outlines on inverse canvases."
+      "$type": "color",
+      "$description": "Softest border on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{brand.border-inverse-muted}",
-      "$description": "Muted inverse app border color for low-emphasis outlines on inverse canvases."
+      "$type": "color",
+      "$description": "Subtle border on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{brand.border-inverse-emphasis}",
-      "$description": "Emphasis inverse app border color for high-prominence outlines on inverse canvases."
+      "$type": "color",
+      "$description": "High-emphasis border on inverse canvases."
     }
   },
   "zbk-caution": {
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4628,103 +5291,126 @@
     },
     "canvas": {
       "$value": "{color.gold-500}",
+      "$type": "color",
       "$description": "Base caution canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.gold-50}",
+      "$type": "color",
       "$description": "Subtle caution canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.gold-100}",
+      "$type": "color",
       "$description": "Muted caution canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.gold-600}",
+      "$type": "color",
       "$description": "Emphasis caution canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.gold-400}",
+      "$type": "color",
       "$description": "Base inverse caution canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.gold-900}",
+      "$type": "color",
       "$description": "Subtle inverse caution canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.gold-800}",
+      "$type": "color",
       "$description": "Muted inverse caution canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.gold-300}",
+      "$type": "color",
       "$description": "Emphasis inverse caution canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.gold-700}",
+      "$type": "color",
       "$description": "Base caution ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.gold-400}",
+      "$type": "color",
       "$description": "Subtle caution ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.gold-500}",
+      "$type": "color",
       "$description": "Muted caution ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.gold-800}",
+      "$type": "color",
       "$description": "Emphasis caution ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.gold-300}",
+      "$type": "color",
       "$description": "Base inverse caution ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.gold-500}",
+      "$type": "color",
       "$description": "Subtle inverse caution ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.gold-400}",
+      "$type": "color",
       "$description": "Muted inverse caution ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.gold-200}",
+      "$type": "color",
       "$description": "Emphasis inverse caution ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{color.gold-500}",
+      "$type": "color",
       "$description": "Base caution border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{color.gold-200}",
+      "$type": "color",
       "$description": "Subtle caution border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{color.gold-300}",
+      "$type": "color",
       "$description": "Muted caution border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{color.gold-600}",
+      "$type": "color",
       "$description": "Emphasis caution border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{color.gold-500}",
+      "$type": "color",
       "$description": "Base inverse caution border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{color.gold-800}",
+      "$type": "color",
       "$description": "Subtle inverse caution border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{color.gold-700}",
+      "$type": "color",
       "$description": "Muted inverse caution border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{color.gold-400}",
+      "$type": "color",
       "$description": "Emphasis inverse caution border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-critical": {
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4732,103 +5418,126 @@
     },
     "canvas": {
       "$value": "{color.red-500}",
+      "$type": "color",
       "$description": "Base critical canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.red-50}",
+      "$type": "color",
       "$description": "Subtle critical canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.red-100}",
+      "$type": "color",
       "$description": "Muted critical canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.red-600}",
+      "$type": "color",
       "$description": "Emphasis critical canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.red-400}",
+      "$type": "color",
       "$description": "Base inverse critical canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.red-900}",
+      "$type": "color",
       "$description": "Subtle inverse critical canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.red-800}",
+      "$type": "color",
       "$description": "Muted inverse critical canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.red-300}",
+      "$type": "color",
       "$description": "Emphasis inverse critical canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.red-700}",
+      "$type": "color",
       "$description": "Base critical ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.red-400}",
+      "$type": "color",
       "$description": "Subtle critical ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.red-500}",
+      "$type": "color",
       "$description": "Muted critical ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.red-800}",
+      "$type": "color",
       "$description": "Emphasis critical ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.red-300}",
+      "$type": "color",
       "$description": "Base inverse critical ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.red-500}",
+      "$type": "color",
       "$description": "Subtle inverse critical ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.red-400}",
+      "$type": "color",
       "$description": "Muted inverse critical ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.red-200}",
+      "$type": "color",
       "$description": "Emphasis inverse critical ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{color.red-500}",
+      "$type": "color",
       "$description": "Base critical border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{color.red-200}",
+      "$type": "color",
       "$description": "Subtle critical border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{color.red-300}",
+      "$type": "color",
       "$description": "Muted critical border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{color.red-600}",
+      "$type": "color",
       "$description": "Emphasis critical border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{color.red-500}",
+      "$type": "color",
       "$description": "Base inverse critical border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{color.red-800}",
+      "$type": "color",
       "$description": "Subtle inverse critical border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{color.red-700}",
+      "$type": "color",
       "$description": "Muted inverse critical border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{color.red-400}",
+      "$type": "color",
       "$description": "Emphasis inverse critical border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-disabled": {
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -4836,103 +5545,126 @@
     },
     "canvas": {
       "$value": "{color.charcoal-400}",
+      "$type": "color",
       "$description": "Base disabled canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.charcoal-50}",
+      "$type": "color",
       "$description": "Subtle disabled canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.charcoal-200}",
+      "$type": "color",
       "$description": "Muted disabled canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.charcoal-800}",
+      "$type": "color",
       "$description": "Emphasis disabled canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.charcoal-800}",
+      "$type": "color",
       "$description": "Base inverse disabled canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.charcoal-950}",
+      "$type": "color",
       "$description": "Subtle inverse disabled canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.charcoal-900}",
+      "$type": "color",
       "$description": "Muted inverse disabled canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.charcoal-200}",
+      "$type": "color",
       "$description": "Emphasis inverse disabled canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.charcoal-800}",
+      "$type": "color",
       "$description": "Base disabled ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.charcoal-400}",
+      "$type": "color",
       "$description": "Subtle disabled ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.charcoal-600}",
+      "$type": "color",
       "$description": "Muted disabled ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.charcoal-900}",
+      "$type": "color",
       "$description": "Emphasis disabled ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.charcoal-200}",
+      "$type": "color",
       "$description": "Base inverse disabled ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.charcoal-800}",
+      "$type": "color",
       "$description": "Subtle inverse disabled ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.charcoal-500}",
+      "$type": "color",
       "$description": "Muted inverse disabled ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.charcoal-100}",
+      "$type": "color",
       "$description": "Emphasis inverse disabled ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{disabled.ink}",
+      "$type": "color",
       "$description": "Base disabled border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{disabled.ink-subtle}",
+      "$type": "color",
       "$description": "Subtle disabled border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{disabled.ink-muted}",
+      "$type": "color",
       "$description": "Muted disabled border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{disabled.ink-emphasis}",
+      "$type": "color",
       "$description": "Emphasis disabled border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{disabled.ink-inverse}",
+      "$type": "color",
       "$description": "Base inverse disabled border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{disabled.ink-inverse-subtle}",
+      "$type": "color",
       "$description": "Subtle inverse disabled border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{disabled.ink-inverse-muted}",
+      "$type": "color",
       "$description": "Muted inverse disabled border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{disabled.ink-inverse-emphasis}",
+      "$type": "color",
       "$description": "Emphasis inverse disabled border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-info": {
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4940,103 +5672,126 @@
     },
     "canvas": {
       "$value": "{color.cyan-500}",
+      "$type": "color",
       "$description": "Base info canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.cyan-50}",
+      "$type": "color",
       "$description": "Subtle info canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.cyan-100}",
+      "$type": "color",
       "$description": "Muted info canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.cyan-600}",
+      "$type": "color",
       "$description": "Emphasis info canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.cyan-400}",
+      "$type": "color",
       "$description": "Base inverse info canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.cyan-900}",
+      "$type": "color",
       "$description": "Subtle inverse info canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.cyan-800}",
+      "$type": "color",
       "$description": "Muted inverse info canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.cyan-300}",
+      "$type": "color",
       "$description": "Emphasis inverse info canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.cyan-700}",
+      "$type": "color",
       "$description": "Base info ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.cyan-400}",
+      "$type": "color",
       "$description": "Subtle info ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.cyan-500}",
+      "$type": "color",
       "$description": "Muted info ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.cyan-800}",
+      "$type": "color",
       "$description": "Emphasis info ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.cyan-300}",
+      "$type": "color",
       "$description": "Base inverse info ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.cyan-500}",
+      "$type": "color",
       "$description": "Subtle inverse info ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.cyan-400}",
+      "$type": "color",
       "$description": "Muted inverse info ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.cyan-200}",
+      "$type": "color",
       "$description": "Emphasis inverse info ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{color.cyan-500}",
+      "$type": "color",
       "$description": "Base info border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{color.cyan-200}",
+      "$type": "color",
       "$description": "Subtle info border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{color.cyan-300}",
+      "$type": "color",
       "$description": "Muted info border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{color.cyan-600}",
+      "$type": "color",
       "$description": "Emphasis info border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{color.cyan-500}",
+      "$type": "color",
       "$description": "Base inverse info border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{color.cyan-800}",
+      "$type": "color",
       "$description": "Subtle inverse info border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{color.cyan-700}",
+      "$type": "color",
       "$description": "Muted inverse info border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{color.cyan-400}",
+      "$type": "color",
       "$description": "Emphasis inverse info border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-positive": {
-    "$type": "color",
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -5044,596 +5799,915 @@
     },
     "canvas": {
       "$value": "{color.green-500}",
+      "$type": "color",
       "$description": "Base positive canvas color for primary surfaces."
     },
     "canvas-subtle": {
       "$value": "{color.green-50}",
+      "$type": "color",
       "$description": "Subtle positive canvas color for the least-prominent, lightly tinted surfaces."
     },
     "canvas-muted": {
       "$value": "{color.green-100}",
+      "$type": "color",
       "$description": "Muted positive canvas color for low-emphasis, recessed surfaces."
     },
     "canvas-emphasis": {
       "$value": "{color.green-600}",
+      "$type": "color",
       "$description": "Emphasis positive canvas color for high-prominence surfaces."
     },
     "canvas-inverse": {
       "$value": "{color.green-400}",
+      "$type": "color",
       "$description": "Base inverse positive canvas color for surfaces on dark or inverted contexts."
     },
     "canvas-inverse-subtle": {
       "$value": "{color.green-900}",
+      "$type": "color",
       "$description": "Subtle inverse positive canvas color for the least-prominent surfaces in inverse contexts."
     },
     "canvas-inverse-muted": {
       "$value": "{color.green-800}",
+      "$type": "color",
       "$description": "Muted inverse positive canvas color for low-emphasis surfaces in inverse contexts."
     },
     "canvas-inverse-emphasis": {
       "$value": "{color.green-300}",
+      "$type": "color",
       "$description": "Emphasis inverse positive canvas color for high-prominence surfaces in inverse contexts."
     },
     "ink": {
       "$value": "{color.green-700}",
+      "$type": "color",
       "$description": "Base positive ink color for body text and icons on neutral or light canvases."
     },
     "ink-subtle": {
       "$value": "{color.green-400}",
+      "$type": "color",
       "$description": "Subtle positive ink color for the least-prominent, tertiary text and icons."
     },
     "ink-muted": {
       "$value": "{color.green-500}",
+      "$type": "color",
       "$description": "Muted positive ink color for secondary text and icons."
     },
     "ink-emphasis": {
       "$value": "{color.green-800}",
+      "$type": "color",
       "$description": "Emphasis positive ink color for high-prominence text and icons."
     },
     "ink-inverse": {
       "$value": "{color.green-300}",
+      "$type": "color",
       "$description": "Base inverse positive ink color for body text and icons on inverse or dark canvases."
     },
     "ink-inverse-subtle": {
       "$value": "{color.green-500}",
+      "$type": "color",
       "$description": "Subtle inverse positive ink color for the least-prominent text and icons on inverse canvases."
     },
     "ink-inverse-muted": {
       "$value": "{color.green-400}",
+      "$type": "color",
       "$description": "Muted inverse positive ink color for secondary text and icons on inverse canvases."
     },
     "ink-inverse-emphasis": {
       "$value": "{color.green-200}",
+      "$type": "color",
       "$description": "Emphasis inverse positive ink color for high-prominence text on inverse canvases."
     },
     "border": {
       "$value": "{color.green-500}",
+      "$type": "color",
       "$description": "Base positive border color for outlines, strokes, and dividers."
     },
     "border-subtle": {
       "$value": "{color.green-200}",
+      "$type": "color",
       "$description": "Subtle positive border color for the least-prominent outlines and dividers."
     },
     "border-muted": {
       "$value": "{color.green-300}",
+      "$type": "color",
       "$description": "Muted positive border color for low-emphasis outlines and dividers."
     },
     "border-emphasis": {
       "$value": "{color.green-600}",
+      "$type": "color",
       "$description": "Emphasis positive border color for high-prominence outlines and dividers."
     },
     "border-inverse": {
       "$value": "{color.green-500}",
+      "$type": "color",
       "$description": "Base inverse positive border color for outlines and dividers on inverse canvases."
     },
     "border-inverse-subtle": {
       "$value": "{color.green-800}",
+      "$type": "color",
       "$description": "Subtle inverse positive border color for the least-prominent outlines on inverse canvases."
     },
     "border-inverse-muted": {
       "$value": "{color.green-700}",
+      "$type": "color",
       "$description": "Muted inverse positive border color for low-emphasis outlines on inverse canvases."
     },
     "border-inverse-emphasis": {
       "$value": "{color.green-400}",
+      "$type": "color",
       "$description": "Emphasis inverse positive border color for high-prominence outlines on inverse canvases."
     }
   },
   "zbk-spacing": {
     "0": {
-      "$value": "0px",
-      "$description": "Zero spacing."
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      },
+      "$type": "dimension",
+      "$description": "Zero spacing.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0px",
+          "originalType": "dimension"
+        }
+      }
     },
     "1": {
-      "$value": "1rem",
+      "$value": {
+        "value": 1,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Small spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "1rem",
+          "originalType": "dimension"
         }
       }
     },
     "2": {
-      "$value": "2rem",
+      "$value": {
+        "value": 2,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Base spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "2rem",
+          "originalType": "dimension"
         }
       }
     },
     "3": {
-      "$value": "3rem",
+      "$value": {
+        "value": 3,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Medium spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "3rem",
+          "originalType": "dimension"
         }
       }
     },
     "4": {
-      "$value": "4rem",
+      "$value": {
+        "value": 4,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Medium-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "4rem",
+          "originalType": "dimension"
         }
       }
     },
     "5": {
-      "$value": "5rem",
+      "$value": {
+        "value": 5,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Large spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "5rem",
+          "originalType": "dimension"
         }
       }
     },
     "6": {
-      "$value": "6rem",
+      "$value": {
+        "value": 6,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Large-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "6rem",
+          "originalType": "dimension"
         }
       }
     },
     "7": {
-      "$value": "7rem",
+      "$value": {
+        "value": 7,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "XL spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "7rem",
+          "originalType": "dimension"
         }
       }
     },
     "8": {
-      "$value": "8rem",
+      "$value": {
+        "value": 8,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "XL-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "8rem",
+          "originalType": "dimension"
         }
       }
     },
     "9": {
-      "$value": "9rem",
+      "$value": {
+        "value": 9,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "2XL spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "9rem",
+          "originalType": "dimension"
         }
       }
     },
     "10": {
-      "$value": "10rem",
+      "$value": {
+        "value": 10,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "2XL-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "10rem",
+          "originalType": "dimension"
         }
       }
     },
     "15": {
-      "$value": "15rem",
+      "$value": {
+        "value": 15,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "3XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "15rem",
+          "originalType": "dimension"
         }
       }
     },
     "20": {
-      "$value": "20rem",
+      "$value": {
+        "value": 20,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "4XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "20rem",
+          "originalType": "dimension"
         }
       }
     },
     "25": {
-      "$value": "25rem",
+      "$value": {
+        "value": 25,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "5XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "25rem",
+          "originalType": "dimension"
         }
       }
     },
     "30": {
-      "$value": "30rem",
+      "$value": {
+        "value": 30,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "6XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "30rem",
+          "originalType": "dimension"
         }
       }
     },
     "40": {
-      "$value": "40rem",
+      "$value": {
+        "value": 40,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "7XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "40rem",
+          "originalType": "dimension"
         }
       }
     },
     "50": {
-      "$value": "50rem",
+      "$value": {
+        "value": 50,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "8XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "50rem",
+          "originalType": "dimension"
         }
       }
     },
     "60": {
-      "$value": "60rem",
+      "$value": {
+        "value": 60,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "9XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "60rem",
+          "originalType": "dimension"
         }
       }
     },
     "70": {
-      "$value": "70rem",
+      "$value": {
+        "value": 70,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "10XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "70rem",
+          "originalType": "dimension"
         }
       }
     },
     "80": {
-      "$value": "80rem",
+      "$value": {
+        "value": 80,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "11XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "80rem",
+          "originalType": "dimension"
         }
       }
     },
     "90": {
-      "$value": "90rem",
+      "$value": {
+        "value": 90,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "12XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "90rem",
+          "originalType": "dimension"
         }
       }
     },
     "100": {
-      "$value": "100rem",
+      "$value": {
+        "value": 100,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "13XL layout spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "100rem",
+          "originalType": "dimension"
         }
       }
     },
     "105": {
-      "$value": "1.5rem",
+      "$value": {
+        "value": 1.5,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Small-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "1.5rem",
+          "originalType": "dimension"
         }
       }
     },
     "205": {
-      "$value": "2.5rem",
+      "$value": {
+        "value": 2.5,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Base-plus spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "2.5rem",
+          "originalType": "dimension"
         }
       }
     },
-    "$type": "dimension",
     "$extensions": {
       "dev.zebkit": {
-        "layer": "base",
         "scale": {
           "max-scale": 1.175
-        }
+        },
+        "layer": "base"
       }
     },
     "2xs": {
       "$value": "{spacing.2px}",
+      "$type": "dimension",
       "$description": "Smallest semantic spacing value."
     },
     "xs": {
       "$value": "{spacing.025}",
+      "$type": "dimension",
       "$description": "Second smallest semantic spacing value."
     },
     "sm": {
       "$value": "{spacing.05}",
+      "$type": "dimension",
       "$description": "Third smallest semantic spacing value."
     },
     "md": {
       "$value": "{spacing.1}",
+      "$type": "dimension",
       "$description": "Base semantic spacing value."
     },
     "lg": {
       "$value": "{spacing.2}",
+      "$type": "dimension",
       "$description": "Large semantic spacing value."
     },
     "xl": {
       "$value": "{spacing.3}",
+      "$type": "dimension",
       "$description": "Third largest semantic spacing value."
     },
     "2xl": {
       "$value": "{spacing.5}",
+      "$type": "dimension",
       "$description": "Second largest semantic spacing value."
     },
     "3xl": {
       "$value": "{spacing.10}",
+      "$type": "dimension",
       "$description": "Largest semantic spacing value."
     },
     "card": {
       "$value": "{spacing.15}",
+      "$type": "dimension",
       "$description": "Size of a basic card."
     },
     "mobile": {
       "$value": "{spacing.25}",
+      "$type": "dimension",
       "$description": "Size of a small mobile device."
     },
     "mobile-lg": {
       "$value": "{spacing.30}",
+      "$type": "dimension",
       "$description": "Size of a larger mobile device."
     },
     "tablet": {
       "$value": "{spacing.40}",
+      "$type": "dimension",
       "$description": "Size of a tablet device."
     },
     "tablet-lg": {
       "$value": "{spacing.60}",
+      "$type": "dimension",
       "$description": "Size of a larger tablet device."
     },
     "desktop": {
       "$value": "{spacing.70}",
+      "$type": "dimension",
       "$description": "Size of a small desktop device."
     },
     "desktop-lg": {
       "$value": "{spacing.80}",
+      "$type": "dimension",
       "$description": "Size of a larger desktop device."
     },
     "widescreen": {
       "$value": "{spacing.90}",
+      "$type": "dimension",
       "$description": "Size of a large desktop device."
     },
     "section": {
       "$value": "{spacing.60}",
+      "$type": "dimension",
       "$description": "Ideal max size of a page section."
     },
     "section-margin-block": {
       "$value": "{spacing.2}",
+      "$type": "dimension",
       "$description": "Preferred vertical margin for page sections."
     },
     "section-margin-inline": {
       "$value": "{spacing.0}",
+      "$type": "dimension",
       "$description": "Preferred horizontal margin for page sections."
     },
     "aside": {
       "$value": "{spacing.15}",
+      "$type": "dimension",
       "$description": "Preferred size for an aside element."
     },
     "page-padding-block": {
       "$value": "{spacing.1}",
+      "$type": "dimension",
       "$description": "Preferred vertical padding for page."
     },
     "page-padding-inline": {
       "$value": "{spacing.105}",
+      "$type": "dimension",
       "$description": "Preferred horizontal padding for page."
     },
     "neg-15": {
-      "$value": "-15rem",
+      "$value": {
+        "value": -15,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Extremely large negative spacing (major overlap or pull effects).",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-15rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-10": {
-      "$value": "-10rem",
+      "$value": {
+        "value": -10,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Very large negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-10rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-9": {
-      "$value": "-9rem",
+      "$value": {
+        "value": -9,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Large negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-9rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-8": {
-      "$value": "-8rem",
+      "$value": {
+        "value": -8,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Large negative spacing (slightly smaller).",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-8rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-7": {
-      "$value": "-7rem",
+      "$value": {
+        "value": -7,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Medium-large negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-7rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-6": {
-      "$value": "-6rem",
+      "$value": {
+        "value": -6,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Medium negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-6rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-5": {
-      "$value": "-5rem",
+      "$value": {
+        "value": -5,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Medium negative spacing (slightly smaller).",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-5rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-4": {
-      "$value": "-4rem",
+      "$value": {
+        "value": -4,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Small-medium negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-4rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-3": {
-      "$value": "-3rem",
+      "$value": {
+        "value": -3,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Small negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-3rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-205": {
-      "$value": "-2.5rem",
+      "$value": {
+        "value": -2.5,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Extra-small negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-2.5rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-2": {
-      "$value": "-2rem",
+      "$value": {
+        "value": -2,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Tiny negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-2rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-105": {
-      "$value": "-1.5rem",
+      "$value": {
+        "value": -1.5,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Very tiny negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-1.5rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-1": {
-      "$value": "-1rem",
+      "$value": {
+        "value": -1,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Minimal negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-1rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-05": {
-      "$value": "-.5rem",
+      "$value": {
+        "value": -0.5,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Minimal negative spacing (smaller).",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-.5rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-025": {
-      "$value": "-.25rem",
+      "$value": {
+        "value": -0.25,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Hairline negative spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-.25rem",
+          "originalType": "dimension"
         }
       }
     },
     "neg-2px": {
-      "$value": "-2px",
+      "$value": {
+        "value": -2,
+        "unit": "px"
+      },
+      "$type": "dimension",
       "$description": "Precision negative spacing (coarse).",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-2px",
+          "originalType": "dimension"
         }
       }
     },
     "neg-1px": {
-      "$value": "-1px",
+      "$value": {
+        "value": -1,
+        "unit": "px"
+      },
+      "$type": "dimension",
       "$description": "Precision negative spacing (fine).",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "-1px",
+          "originalType": "dimension"
         }
       }
     },
     "1px": {
-      "$value": "1px",
+      "$value": {
+        "value": 1,
+        "unit": "px"
+      },
+      "$type": "dimension",
       "$description": "Precision spacing (fine).",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "1px",
+          "originalType": "dimension"
         }
       }
     },
     "2px": {
-      "$value": "2px",
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "$type": "dimension",
       "$description": "Precision spacing (coarse).",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "2px",
+          "originalType": "dimension"
         }
       }
     },
     "025": {
-      "$value": ".25rem",
+      "$value": {
+        "value": 0.25,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Extra-tiny spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": ".25rem",
+          "originalType": "dimension"
         }
       }
     },
     "05": {
-      "$value": ".5rem",
+      "$value": {
+        "value": 0.5,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "Tiny spacing.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": ".5rem",
+          "originalType": "dimension"
         }
       }
     }
@@ -5645,218 +6719,424 @@
       }
     },
     "duration-default": {
-      "$value": "325ms",
+      "$value": {
+        "value": 325,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "325ms",
+          "originalType": "duration"
         }
       }
     },
     "duration-slow": {
-      "$value": "625ms",
+      "$value": {
+        "value": 625,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "625ms",
+          "originalType": "duration"
         }
       }
     },
     "duration-fast": {
-      "$value": "125ms",
+      "$value": {
+        "value": 125,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "125ms",
+          "originalType": "duration"
         }
       }
     },
     "playful-motion-function-default": {
-      "$value": "cubic-bezier(0.38, 1.21, 0.22, 1.00)",
+      "$value": [
+        0.38,
+        1.21,
+        0.22,
+        1
+      ],
       "$type": "cubicBezier",
-      "$description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate."
+      "$description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.38, 1.21, 0.22, 1.00)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "playful-motion-function-slow": {
-      "$value": "cubic-bezier(0.39, 1.29, 0.35, 0.98)",
+      "$value": [
+        0.39,
+        1.29,
+        0.35,
+        0.98
+      ],
       "$type": "cubicBezier",
-      "$description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt."
+      "$description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.39, 1.29, 0.35, 0.98)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "playful-motion-function-fast": {
-      "$value": "cubic-bezier(0.42, 1.67, 0.21, 0.90)",
+      "$value": [
+        0.42,
+        1.67,
+        0.21,
+        0.9
+      ],
       "$type": "cubicBezier",
-      "$description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid."
+      "$description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.42, 1.67, 0.21, 0.90)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "playful-motion-duration-default": {
-      "$value": "500ms",
+      "$value": {
+        "value": 500,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "500ms",
+          "originalType": "duration"
         }
       }
     },
     "playful-motion-duration-slow": {
-      "$value": "650ms",
+      "$value": {
+        "value": 650,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "650ms",
+          "originalType": "duration"
         }
       }
     },
     "playful-motion-duration-fast": {
-      "$value": "350ms",
+      "$value": {
+        "value": 350,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "350ms",
+          "originalType": "duration"
         }
       }
     },
     "playful-fx-function-default": {
-      "$value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
+      "$value": [
+        0.34,
+        0.8,
+        0.34,
+        1
+      ],
       "$type": "cubicBezier",
-      "$description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
+      "$description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "playful-fx-function-slow": {
-      "$value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
+      "$value": [
+        0.34,
+        0.88,
+        0.34,
+        1
+      ],
       "$type": "cubicBezier",
-      "$description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce."
+      "$description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "playful-fx-function-fast": {
-      "$value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
+      "$value": [
+        0.31,
+        0.94,
+        0.34,
+        1
+      ],
       "$type": "cubicBezier",
-      "$description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth."
+      "$description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "playful-fx-duration-default": {
-      "$value": "200ms",
+      "$value": {
+        "value": 200,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "200ms",
+          "originalType": "duration"
         }
       }
     },
     "playful-fx-duration-slow": {
-      "$value": "300ms",
+      "$value": {
+        "value": 300,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "300ms",
+          "originalType": "duration"
         }
       }
     },
     "playful-fx-duration-fast": {
-      "$value": "150ms",
+      "$value": {
+        "value": 150,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "150ms",
+          "originalType": "duration"
         }
       }
     },
     "calm-motion-function-default": {
-      "$value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "$value": [
+        0.27,
+        1.06,
+        0.18,
+        1
+      ],
       "$type": "cubicBezier",
-      "$description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish."
+      "$description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "calm-motion-function-slow": {
-      "$value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "$value": [
+        0.27,
+        1.06,
+        0.18,
+        1
+      ],
       "$type": "cubicBezier",
-      "$description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate."
+      "$description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "calm-motion-function-fast": {
-      "$value": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+      "$value": [
+        0.27,
+        1.06,
+        0.18,
+        1
+      ],
       "$type": "cubicBezier",
-      "$description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion."
+      "$description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.27, 1.06, 0.18, 1.00)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "calm-motion-duration-default": {
-      "$value": "500ms",
+      "$value": {
+        "value": 500,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "500ms",
+          "originalType": "duration"
         }
       }
     },
     "calm-motion-duration-slow": {
-      "$value": "750ms",
+      "$value": {
+        "value": 750,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "750ms",
+          "originalType": "duration"
         }
       }
     },
     "calm-motion-duration-fast": {
-      "$value": "350ms",
+      "$value": {
+        "value": 350,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "350ms",
+          "originalType": "duration"
         }
       }
     },
     "calm-fx-function-default": {
-      "$value": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
+      "$value": [
+        0.34,
+        0.8,
+        0.34,
+        1
+      ],
       "$type": "cubicBezier",
-      "$description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate."
+      "$description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.34, 0.80, 0.34, 1.00)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "calm-fx-function-slow": {
-      "$value": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
+      "$value": [
+        0.34,
+        0.88,
+        0.34,
+        1
+      ],
       "$type": "cubicBezier",
-      "$description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained."
+      "$description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.34, 0.88, 0.34, 1.00)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "calm-fx-function-fast": {
-      "$value": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
+      "$value": [
+        0.31,
+        0.94,
+        0.34,
+        1
+      ],
       "$type": "cubicBezier",
-      "$description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention."
+      "$description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "cubic-bezier(0.31, 0.94, 0.34, 1.00)",
+          "originalType": "cubicBezier"
+        }
+      }
     },
     "calm-fx-duration-default": {
-      "$value": "200ms",
+      "$value": {
+        "value": 200,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "200ms",
+          "originalType": "duration"
         }
       }
     },
     "calm-fx-duration-slow": {
-      "$value": "300ms",
+      "$value": {
+        "value": 300,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "300ms",
+          "originalType": "duration"
         }
       }
     },
     "calm-fx-duration-fast": {
-      "$value": "150ms",
+      "$value": {
+        "value": 150,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "150ms",
+          "originalType": "duration"
         }
       }
     }
   },
   "zbk-font-family": {
-    "$type": "fontFamily",
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -5865,6 +7145,7 @@
     "primary": {
       "$value": "\"Proza Libre\"",
       "$description": "Primary font family for use in the system. Usually used for body content and interface items.",
+      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -5888,6 +7169,7 @@
     "alt": {
       "$value": "\"Fraunces\"",
       "$description": "Alternate font family for use in the system. Primarily used for headings.",
+      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -5905,6 +7187,7 @@
     "monospace": {
       "$value": "\"Inconsolata\"",
       "$description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
+      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -5922,6 +7205,7 @@
     "system-sans": {
       "$value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
       "$description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
+      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -5933,6 +7217,7 @@
     "system-serif": {
       "$value": "ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif",
       "$description": "System serif stack. Zero network cost.",
+      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -5944,6 +7229,7 @@
     "system-mono": {
       "$value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
       "$description": "System monospace stack. Zero network cost.",
+      "$type": "fontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -5954,23 +7240,26 @@
     },
     "interface": {
       "$value": "{font-family.primary}",
-      "$description": "Font family used for things like buttons or input fields."
+      "$description": "Font family used for things like buttons or input fields.",
+      "$type": "fontFamily"
     },
     "heading": {
       "$value": "{font-family.alt}",
-      "$description": "Font family used for heading elements."
+      "$description": "Font family used for heading elements.",
+      "$type": "fontFamily"
     },
     "body": {
       "$value": "{font-family.primary}",
-      "$description": "Font family used for <p>, <li>, etc."
+      "$description": "Font family used for <p>, <li>, etc.",
+      "$type": "fontFamily"
     },
     "code": {
       "$value": "{font-family.monospace}",
-      "$description": "Font family used within <code> blocks"
+      "$description": "Font family used within <code> blocks",
+      "$type": "fontFamily"
     }
   },
   "zbk-font-weight": {
-    "$type": "fontWeight",
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -5978,6 +7267,7 @@
     },
     "thin": {
       "$value": 100,
+      "$type": "fontWeight",
       "$description": "Lightest font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -5987,6 +7277,7 @@
     },
     "extralight": {
       "$value": 200,
+      "$type": "fontWeight",
       "$description": "Lighter font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -5996,6 +7287,7 @@
     },
     "light": {
       "$value": 300,
+      "$type": "fontWeight",
       "$description": "Light font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6005,6 +7297,7 @@
     },
     "normal": {
       "$value": 400,
+      "$type": "fontWeight",
       "$description": "Default font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6014,6 +7307,7 @@
     },
     "medium": {
       "$value": 500,
+      "$type": "fontWeight",
       "$description": "Medium font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6023,6 +7317,7 @@
     },
     "semibold": {
       "$value": 600,
+      "$type": "fontWeight",
       "$description": "Semibold font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6032,6 +7327,7 @@
     },
     "bold": {
       "$value": 700,
+      "$type": "fontWeight",
       "$description": "Bold font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6041,6 +7337,7 @@
     },
     "extrabold": {
       "$value": 800,
+      "$type": "fontWeight",
       "$description": "Bolder font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6050,6 +7347,7 @@
     },
     "black": {
       "$value": 900,
+      "$type": "fontWeight",
       "$description": "Boldest font weight.",
       "$extensions": {
         "dev.zebkit": {
@@ -6059,54 +7357,83 @@
     }
   },
   "zbk-letter-spacing": {
-    "$type": "dimension",
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
       }
     },
     "tighter": {
-      "$value": "-.05rem",
+      "$value": {
+        "value": -0.05,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-letter-spacing-modifier"
+          "a11y": "--zbk-a11y-letter-spacing-modifier",
+          "rawCssValue": "-.05rem",
+          "originalType": "dimension"
         }
       }
     },
     "tight": {
-      "$value": "-.025rem",
+      "$value": {
+        "value": -0.025,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-letter-spacing-modifier"
+          "a11y": "--zbk-a11y-letter-spacing-modifier",
+          "rawCssValue": "-.025rem",
+          "originalType": "dimension"
         }
       }
     },
     "normal": {
-      "$value": "0rem",
+      "$value": {
+        "value": 0,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-letter-spacing-modifier"
+          "a11y": "--zbk-a11y-letter-spacing-modifier",
+          "rawCssValue": "0rem",
+          "originalType": "dimension"
         }
       }
     },
     "wide": {
-      "$value": ".025rem",
+      "$value": {
+        "value": 0.025,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-letter-spacing-modifier"
+          "a11y": "--zbk-a11y-letter-spacing-modifier",
+          "rawCssValue": ".025rem",
+          "originalType": "dimension"
         }
       }
     },
     "wider": {
-      "$value": ".05rem",
+      "$value": {
+        "value": 0.05,
+        "unit": "rem"
+      },
+      "$type": "dimension",
       "$description": "",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": "--zbk-a11y-letter-spacing-modifier"
+          "a11y": "--zbk-a11y-letter-spacing-modifier",
+          "rawCssValue": ".05rem",
+          "originalType": "dimension"
         }
       }
     }
@@ -6114,7 +7441,8 @@
   "zbk-line-height": {
     "1": {
       "$value": 1,
-      "$description": "Smallest line height.",
+      "$type": "number",
+      "$description": "Solid — large display headings.",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-line-height-modifier"
@@ -6123,7 +7451,8 @@
     },
     "2": {
       "$value": 1.2,
-      "$description": "Smaller line height.",
+      "$type": "number",
+      "$description": "Tight — sub-heads (slightly tighter than default for crisp headings).",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-line-height-modifier"
@@ -6132,7 +7461,8 @@
     },
     "3": {
       "$value": 1.5,
-      "$description": "Base line height.",
+      "$type": "number",
+      "$description": "Base reading leading — generous, editorial.",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-line-height-modifier"
@@ -6141,7 +7471,8 @@
     },
     "4": {
       "$value": 1.7,
-      "$description": "Larger line height.",
+      "$type": "number",
+      "$description": "Roomy — long-form passages.",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-line-height-modifier"
@@ -6150,14 +7481,14 @@
     },
     "5": {
       "$value": 2,
-      "$description": "Largest line height.",
+      "$type": "number",
+      "$description": "Largest — airy marginalia / spacing.",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-line-height-modifier"
         }
       }
     },
-    "$type": "number",
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -6167,25 +7498,29 @@
   "zbk-text-measure": {
     "1": {
       "$value": "34ch",
-      "$description": "Cards, sidebars, tight UI."
+      "$type": "cssDimension",
+      "$description": "Cards, sidebars, marginalia."
     },
     "2": {
       "$value": "48ch",
+      "$type": "cssDimension",
       "$description": "Short text blocks, captions."
     },
     "3": {
       "$value": "60ch",
-      "$description": "Base body content measure."
+      "$type": "cssDimension",
+      "$description": "Base editorial reading measure."
     },
     "4": {
       "$value": "72ch",
-      "$description": "Articles, long-form content."
+      "$type": "cssDimension",
+      "$description": "Long-form articles."
     },
     "5": {
       "$value": "84ch",
-      "$description": "Articles, long-form content."
+      "$type": "cssDimension",
+      "$description": "Widest long-form measure."
     },
-    "$type": "cssDimension",
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -6196,7 +7531,6 @@
     "$type": "cssDimension",
     "$extensions": {
       "dev.zebkit": {
-        "layer": "base",
         "scale": {
           "min-viewport": "360px",
           "max-viewport": "1240px",
@@ -6204,7 +7538,8 @@
           "max-base": "1.175rem",
           "min-ratio": 1.2,
           "max-ratio": 1.25
-        }
+        },
+        "layer": "base"
       }
     },
     "3xs": {
@@ -6213,10 +7548,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-3xs",
           "scale": {
-            "index": -4
+            "index": -4,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(0.4813rem * var(--zbk-a11y-font-size-modifier-3xs)), calc((0.4827rem + -0.0018vw) * var(--zbk-a11y-font-size-modifier-3xs)), calc(0.4823rem * var(--zbk-a11y-font-size-modifier-3xs)))"
     },
     "2xs": {
       "$description": "Second smallest font size.",
@@ -6224,10 +7561,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-2xs",
           "scale": {
-            "index": -3
+            "index": -3,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(0.5787rem * var(--zbk-a11y-font-size-modifier-2xs)), calc((0.5693rem + 0.0416vw) * var(--zbk-a11y-font-size-modifier-2xs)), calc(0.6016rem * var(--zbk-a11y-font-size-modifier-2xs)))"
     },
     "xs": {
       "$description": "Extra small font size.",
@@ -6235,10 +7574,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-xs",
           "scale": {
-            "index": -2
+            "index": -2,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(0.6944rem * var(--zbk-a11y-font-size-modifier-xs)), calc((0.6709rem + 0.1046vw) * var(--zbk-a11y-font-size-modifier-xs)), calc(0.752rem * var(--zbk-a11y-font-size-modifier-xs)))"
     },
     "sm": {
       "$description": "Small font size.",
@@ -6246,10 +7587,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-sm",
           "scale": {
-            "index": -1
+            "index": -1,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(0.8333rem * var(--zbk-a11y-font-size-modifier-sm)), calc((0.7897rem + 0.1939vw) * var(--zbk-a11y-font-size-modifier-sm)), calc(0.94rem * var(--zbk-a11y-font-size-modifier-sm)))"
     },
     "md": {
       "$description": "Base / body font size.",
@@ -6257,10 +7600,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-md",
           "scale": {
-            "index": 0
+            "index": 0,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(1rem * var(--zbk-a11y-font-size-modifier-md)), calc((0.9284rem + 0.3182vw) * var(--zbk-a11y-font-size-modifier-md)), calc(1.175rem * var(--zbk-a11y-font-size-modifier-md)))"
     },
     "lg": {
       "$description": "Large font size.",
@@ -6268,10 +7613,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-lg",
           "scale": {
-            "index": 1
+            "index": 1,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(1.2rem * var(--zbk-a11y-font-size-modifier-lg)), calc((1.0901rem + 0.4886vw) * var(--zbk-a11y-font-size-modifier-lg)), calc(1.4688rem * var(--zbk-a11y-font-size-modifier-lg)))"
     },
     "xl": {
       "$description": "Extra large font size.",
@@ -6279,10 +7626,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-xl",
           "scale": {
-            "index": 2
+            "index": 2,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(1.44rem * var(--zbk-a11y-font-size-modifier-xl)), calc((1.278rem + 0.7199vw) * var(--zbk-a11y-font-size-modifier-xl)), calc(1.8359rem * var(--zbk-a11y-font-size-modifier-xl)))"
     },
     "2xl": {
       "$description": "Double extra large font size.",
@@ -6290,10 +7639,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-2xl",
           "scale": {
-            "index": 3
+            "index": 3,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(1.728rem * var(--zbk-a11y-font-size-modifier-2xl)), calc((1.4961rem + 1.0308vw) * var(--zbk-a11y-font-size-modifier-2xl)), calc(2.2949rem * var(--zbk-a11y-font-size-modifier-2xl)))"
     },
     "3xl": {
       "$description": "Triple extra large font size.",
@@ -6301,10 +7652,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-3xl",
           "scale": {
-            "index": 4
+            "index": 4,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(2.0736rem * var(--zbk-a11y-font-size-modifier-3xl)), calc((1.7484rem + 1.4455vw) * var(--zbk-a11y-font-size-modifier-3xl)), calc(2.8687rem * var(--zbk-a11y-font-size-modifier-3xl)))"
     },
     "4xl": {
       "$description": "Quadruple extra large font size.",
@@ -6312,10 +7665,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-4xl",
           "scale": {
-            "index": 5
+            "index": 5,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(2.4883rem * var(--zbk-a11y-font-size-modifier-4xl)), calc((2.0393rem + 1.9954vw) * var(--zbk-a11y-font-size-modifier-4xl)), calc(3.5858rem * var(--zbk-a11y-font-size-modifier-4xl)))"
     },
     "5xl": {
       "$description": "Quintuple extra large font size.",
@@ -6323,10 +7678,12 @@
         "dev.zebkit": {
           "a11y": "--zbk-a11y-font-size-modifier-5xl",
           "scale": {
-            "index": 6
+            "index": 6,
+            "valueSource": "generated"
           }
         }
-      }
+      },
+      "$value": "clamp(calc(2.986rem * var(--zbk-a11y-font-size-modifier-5xl)), calc((2.3739rem + 2.7205vw) * var(--zbk-a11y-font-size-modifier-5xl)), calc(4.4823rem * var(--zbk-a11y-font-size-modifier-5xl)))"
     }
   },
   "zbk-z-index": {
@@ -6513,9 +7870,18 @@
       "$description": "Border color while the button is in its loading state."
     },
     "border-width": {
-      "$value": "0px",
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      },
       "$type": "dimension",
-      "$description": "Base border width."
+      "$description": "Base border width.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0px",
+          "originalType": "dimension"
+        }
+      }
     },
     "border-style": {
       "$value": "{border.style}",
@@ -6703,24 +8069,65 @@
       "$description": "Outline offset for focus state."
     },
     "box-shadow": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Default box shadow for buttons."
+      "$description": "Default box shadow for buttons.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-hover": {
-      "$value": "0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)",
+      "$value": [
+        {
+          "color": "{action.border-inverse-muted}",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": "{spacing.025}",
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ],
       "$type": "shadow",
-      "$description": "Box shadow on hover."
+      "$description": "Box shadow on hover.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-active": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Box shadow when active/pressed."
+      "$description": "Box shadow when active/pressed.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-focus": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Box shadow in focus state (in addition to outline)."
+      "$description": "Box shadow in focus state (in addition to outline).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "transform": {
       "$value": "translateY(0)",
@@ -6788,9 +8195,18 @@
       "$description": "CSS properties that should animate on interaction."
     },
     "transition-delay": {
-      "$value": "0",
+      "$value": {
+        "value": 0,
+        "unit": "ms"
+      },
       "$type": "duration",
-      "$description": "Delay before CSS properties run through their animate on interaction."
+      "$description": "Delay before CSS properties run through their animate on interaction.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0",
+          "originalType": "duration"
+        }
+      }
     },
     "opacity": {
       "$value": 1,
@@ -6995,29 +8411,59 @@
       "$description": "Outline offset for keyboard focus."
     },
     "box-shadow": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Default control shadow."
+      "$description": "Default control shadow.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-hover": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Control shadow when hovered."
+      "$description": "Control shadow when hovered.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-active": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Control shadow while pressed."
+      "$description": "Control shadow while pressed.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-checked": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Control shadow when checked."
+      "$description": "Control shadow when checked.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-focus": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Control shadow in the focus state (in addition to the outline)."
+      "$description": "Control shadow in the focus state (in addition to the outline).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "cursor": {
       "$value": "pointer",
@@ -7050,9 +8496,18 @@
       "$description": "CSS properties that animate on state changes."
     },
     "transition-delay": {
-      "$value": "0",
+      "$value": {
+        "value": 0,
+        "unit": "ms"
+      },
       "$type": "duration",
-      "$description": "Delay before checkbox transitions run."
+      "$description": "Delay before checkbox transitions run.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0",
+          "originalType": "duration"
+        }
+      }
     },
     "opacity": {
       "$value": 1,
@@ -7292,9 +8747,18 @@
       "$description": "Maximum width of the field box."
     },
     "min-height": {
-      "$value": "44px",
+      "$value": {
+        "value": 44,
+        "unit": "px"
+      },
       "$type": "dimension",
-      "$description": "Minimum field height to ensure a tappable area."
+      "$description": "Minimum field height to ensure a tappable area.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "44px",
+          "originalType": "dimension"
+        }
+      }
     },
     "group-gap": {
       "$value": "{spacing.md}",
@@ -7322,29 +8786,59 @@
       "$description": "Outline offset for keyboard focus."
     },
     "box-shadow": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Default field shadow."
+      "$description": "Default field shadow.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-hover": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow when hovered."
+      "$description": "Field shadow when hovered.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-focus": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow while focused (in addition to the outline)."
+      "$description": "Field shadow while focused (in addition to the outline).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-active": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow while pressed."
+      "$description": "Field shadow while pressed.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-invalid": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow when the value is invalid."
+      "$description": "Field shadow when the value is invalid.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "cursor": {
       "$value": "text",
@@ -7377,9 +8871,18 @@
       "$description": "CSS properties that animate on state changes."
     },
     "transition-delay": {
-      "$value": "0",
+      "$value": {
+        "value": 0,
+        "unit": "ms"
+      },
       "$type": "duration",
-      "$description": "Delay before field transitions run."
+      "$description": "Delay before field transitions run.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0",
+          "originalType": "duration"
+        }
+      }
     },
     "opacity": {
       "$value": 1,
@@ -7774,29 +9277,59 @@
       "$description": "Outline offset for keyboard focus."
     },
     "box-shadow": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Default control shadow."
+      "$description": "Default control shadow.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-hover": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Control shadow when hovered."
+      "$description": "Control shadow when hovered.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-active": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Control shadow while pressed."
+      "$description": "Control shadow while pressed.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-checked": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Control shadow when selected."
+      "$description": "Control shadow when selected.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-focus": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Control shadow in the focus state (in addition to the outline)."
+      "$description": "Control shadow in the focus state (in addition to the outline).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "cursor": {
       "$value": "pointer",
@@ -7829,9 +9362,18 @@
       "$description": "CSS properties that animate on state changes."
     },
     "transition-delay": {
-      "$value": "0",
+      "$value": {
+        "value": 0,
+        "unit": "ms"
+      },
       "$type": "duration",
-      "$description": "Delay before radio transitions run."
+      "$description": "Delay before radio transitions run.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0",
+          "originalType": "duration"
+        }
+      }
     },
     "opacity": {
       "$value": 1,
@@ -8061,9 +9603,18 @@
       "$description": "Maximum width of the field box."
     },
     "min-height": {
-      "$value": "44px",
+      "$value": {
+        "value": 44,
+        "unit": "px"
+      },
       "$type": "dimension",
-      "$description": "Minimum field height to ensure a tappable area."
+      "$description": "Minimum field height to ensure a tappable area.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "44px",
+          "originalType": "dimension"
+        }
+      }
     },
     "group-gap": {
       "$value": "{spacing.md}",
@@ -8091,29 +9642,59 @@
       "$description": "Outline offset for keyboard focus."
     },
     "box-shadow": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Default field shadow."
+      "$description": "Default field shadow.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-hover": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow when hovered."
+      "$description": "Field shadow when hovered.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-focus": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow while focused (in addition to the outline)."
+      "$description": "Field shadow while focused (in addition to the outline).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-active": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow while pressed."
+      "$description": "Field shadow while pressed.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-invalid": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow when the selection is invalid."
+      "$description": "Field shadow when the selection is invalid.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "cursor": {
       "$value": "pointer",
@@ -8146,9 +9727,18 @@
       "$description": "CSS properties that animate on state changes."
     },
     "transition-delay": {
-      "$value": "0",
+      "$value": {
+        "value": 0,
+        "unit": "ms"
+      },
       "$type": "duration",
-      "$description": "Delay before field transitions run."
+      "$description": "Delay before field transitions run.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0",
+          "originalType": "duration"
+        }
+      }
     },
     "opacity": {
       "$value": 1,
@@ -8373,9 +9963,18 @@
       "$description": "Maximum width of the field box."
     },
     "min-block-size": {
-      "$value": "44px",
+      "$value": {
+        "value": 44,
+        "unit": "px"
+      },
       "$type": "dimension",
-      "$description": "Minimum field height for a multi-line box; also a tappable floor."
+      "$description": "Minimum field height for a multi-line box; also a tappable floor.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "44px",
+          "originalType": "dimension"
+        }
+      }
     },
     "focus-color": {
       "$value": "{focus.color}",
@@ -8393,29 +9992,59 @@
       "$description": "Outline offset for keyboard focus."
     },
     "box-shadow": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Default field shadow."
+      "$description": "Default field shadow.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-hover": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow when hovered."
+      "$description": "Field shadow when hovered.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-focus": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow while focused (in addition to the outline)."
+      "$description": "Field shadow while focused (in addition to the outline).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-active": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow while pressed."
+      "$description": "Field shadow while pressed.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-invalid": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Field shadow when the value is invalid."
+      "$description": "Field shadow when the value is invalid.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "cursor": {
       "$value": "text",
@@ -8448,9 +10077,18 @@
       "$description": "CSS properties that animate on state changes."
     },
     "transition-delay": {
-      "$value": "0",
+      "$value": {
+        "value": 0,
+        "unit": "ms"
+      },
       "$type": "duration",
-      "$description": "Delay before field transitions run."
+      "$description": "Delay before field transitions run.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0",
+          "originalType": "duration"
+        }
+      }
     },
     "opacity": {
       "$value": 1,
@@ -8550,29 +10188,59 @@
       "$description": "Corner radius of the track (track-height yields a pill)."
     },
     "box-shadow": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Default track shadow."
+      "$description": "Default track shadow.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-hover": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Track shadow when hovered."
+      "$description": "Track shadow when hovered.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-active": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Track shadow while pressed."
+      "$description": "Track shadow while pressed.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-checked": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Track shadow when the toggle is on."
+      "$description": "Track shadow when the toggle is on.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "box-shadow-focus": {
-      "$value": "none",
+      "$value": [],
       "$type": "shadow",
-      "$description": "Track shadow in the focus state (in addition to the outline)."
+      "$description": "Track shadow in the focus state (in addition to the outline).",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "none",
+          "originalType": "shadow"
+        }
+      }
     },
     "thumb-size": {
       "$value": "{toggle.track-height}",
@@ -8630,9 +10298,35 @@
       "$description": "Corner radius of the thumb (a circle by default)."
     },
     "thumb-shadow": {
-      "$value": "0 0 0 2px var(--zbk-app-canvas-muted)",
+      "$value": [
+        {
+          "color": "{app.canvas-muted}",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 2,
+            "unit": "px"
+          }
+        }
+      ],
       "$type": "shadow",
-      "$description": "Default thumb shadow."
+      "$description": "Default thumb shadow.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0 0 0 2px var(--zbk-app-canvas-muted)",
+          "originalType": "shadow"
+        }
+      }
     },
     "thumb-shadow-hover": {
       "$value": "{toggle.thumb-shadow}",
@@ -8770,9 +10464,18 @@
       "$description": "CSS properties that animate on track state changes."
     },
     "transition-delay": {
-      "$value": "0",
+      "$value": {
+        "value": 0,
+        "unit": "ms"
+      },
       "$type": "duration",
-      "$description": "Delay before toggle transitions run."
+      "$description": "Delay before toggle transitions run.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "0",
+          "originalType": "duration"
+        }
+      }
     },
     "opacity": {
       "$value": 1,
@@ -8807,9 +10510,23 @@
       "$description": "Tooltip text color."
     },
     "border-color": {
-      "$value": "transparent",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0
+      },
       "$type": "color",
-      "$description": "Tooltip bubble border color."
+      "$description": "Tooltip bubble border color.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "transparent",
+          "originalType": "color"
+        }
+      }
     },
     "border-width": {
       "$value": "{border.width-sm}",
@@ -8862,14 +10579,32 @@
       "$description": "Block padding inside the bubble."
     },
     "max-width": {
-      "$value": "20rem",
+      "$value": {
+        "value": 20,
+        "unit": "rem"
+      },
       "$type": "dimension",
-      "$description": "Maximum bubble width before text wraps."
+      "$description": "Maximum bubble width before text wraps.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "20rem",
+          "originalType": "dimension"
+        }
+      }
     },
     "arrow-size": {
-      "$value": "8px",
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      },
       "$type": "dimension",
-      "$description": "Arrow square size; also sets the default trigger-to-bubble gap."
+      "$description": "Arrow square size; also sets the default trigger-to-bubble gap.",
+      "$extensions": {
+        "dev.zebkit": {
+          "rawCssValue": "8px",
+          "originalType": "dimension"
+        }
+      }
     },
     "offset": {
       "$value": "{tooltip.arrow-size}",
@@ -8887,12 +10622,17 @@
       "$description": "Stacking order when the top-layer popover API is unavailable."
     },
     "transition-duration": {
-      "$value": "150ms",
+      "$value": {
+        "value": 150,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Show/hide transition duration.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "150ms",
+          "originalType": "duration"
         }
       }
     },
@@ -8902,22 +10642,32 @@
       "$description": "Show/hide transition timing function."
     },
     "show-delay": {
-      "$value": "150ms",
+      "$value": {
+        "value": 150,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Delay before a hint tooltip shows on hover/focus. Read by the element at runtime.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "150ms",
+          "originalType": "duration"
         }
       }
     },
     "hide-grace": {
-      "$value": "120ms",
+      "$value": {
+        "value": 120,
+        "unit": "ms"
+      },
       "$type": "duration",
       "$description": "Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime.",
       "$extensions": {
         "dev.zebkit": {
-          "a11y": true
+          "a11y": true,
+          "rawCssValue": "120ms",
+          "originalType": "duration"
         }
       }
     },

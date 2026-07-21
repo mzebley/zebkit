@@ -6,9 +6,17 @@
   "additionalProperties": false,
   "definitions": {
     "fontFamilyValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
       ],
       "examples": [
         "{h1.font-family}",
@@ -40,56 +48,8 @@
         "{toggle.font-family}",
         "{tooltip.font-family}"
       ]
-    }
-  },
-  "properties": {
-    "$extensions": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "dev.zebkit": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "scale": {
-              "type": "object",
-              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
-              "additionalProperties": {
-                "oneOf": [
-                  {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "required": [
-                      "value",
-                      "unit"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "value": {
-                        "type": "number"
-                      },
-                      "unit": {
-                        "type": "string",
-                        "enum": [
-                          "px",
-                          "rem"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
     },
-    "primary": {
+    "fontFamilyToken": {
       "type": "object",
       "description": "Primary font family for use in the system. Usually used for body content and interface items.",
       "required": [
@@ -106,6 +66,9 @@
         "$description": {
           "type": "string"
         },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
         "$extensions": {
           "type": "object",
           "additionalProperties": false,
@@ -232,1332 +195,337 @@
                 }
               }
             }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
           }
         }
       }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupType": {
+      "type": "string",
+      "enum": [
+        "color",
+        "dimension",
+        "duration",
+        "fontFamily",
+        "fontWeight",
+        "cubicBezier",
+        "number",
+        "strokeStyle",
+        "shadow",
+        "display",
+        "cursor",
+        "textTransform",
+        "textDecoration",
+        "textAlignment",
+        "fontStyle",
+        "transform",
+        "transitionProperty",
+        "transitionTimingFunction",
+        "content",
+        "flex",
+        "utility",
+        "asset",
+        "boolean",
+        "cssDimension"
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:system": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "$ref": "#/definitions/groupType"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "sans": {
+          "description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontFamilyToken"
+            }
+          ]
+        },
+        "serif": {
+          "description": "System serif stack. Zero network cost.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontFamilyToken"
+            }
+          ]
+        },
+        "mono": {
+          "description": "System monospace stack. Zero network cost.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontFamilyToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "$type": {
+      "$ref": "#/definitions/groupType"
+    },
+    "$description": {
+      "type": "string"
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "primary": {
+      "description": "Primary font family for use in the system. Usually used for body content and interface items.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
+        }
+      ]
     },
     "alt": {
-      "type": "object",
       "description": "Alternate font family for use in the system. Primarily used for headings.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
-        },
-        "$type": {
-          "const": "fontFamily"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "font": {
-                  "type": "object",
-                  "description": "Font-loading metadata for this family.",
-                  "additionalProperties": false,
-                  "properties": {
-                    "source": {
-                      "type": "string",
-                      "enum": [
-                        "system",
-                        "google",
-                        "local"
-                      ],
-                      "description": "Where this font family is loaded from."
-                    },
-                    "fallback": {
-                      "type": "string",
-                      "enum": [
-                        "sans",
-                        "serif",
-                        "mono"
-                      ],
-                      "description": "Fallback stack category appended to the authored family."
-                    },
-                    "weights": {
-                      "description": "Static font weights or a variable-font range such as 200..800.",
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "uniqueItems": true
-                        }
-                      ]
-                    },
-                    "styles": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "enum": [
-                          "normal",
-                          "italic"
-                        ]
-                      },
-                      "uniqueItems": true
-                    },
-                    "faces": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "src"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "src": {
-                            "type": "string"
-                          },
-                          "weight": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "style": {
-                            "type": "string",
-                            "enum": [
-                              "normal",
-                              "italic",
-                              "oblique"
-                            ]
-                          },
-                          "display": {
-                            "type": "string",
-                            "enum": [
-                              "auto",
-                              "block",
-                              "swap",
-                              "fallback",
-                              "optional"
-                            ]
-                          },
-                          "format": {
-                            "type": "string"
-                          },
-                          "unicodeRange": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "display": {
-                      "type": "string",
-                      "enum": [
-                        "auto",
-                        "block",
-                        "swap",
-                        "fallback",
-                        "optional"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
         }
-      }
+      ]
     },
     "monospace": {
-      "type": "object",
       "description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
-        },
-        "$type": {
-          "const": "fontFamily"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "font": {
-                  "type": "object",
-                  "description": "Font-loading metadata for this family.",
-                  "additionalProperties": false,
-                  "properties": {
-                    "source": {
-                      "type": "string",
-                      "enum": [
-                        "system",
-                        "google",
-                        "local"
-                      ],
-                      "description": "Where this font family is loaded from."
-                    },
-                    "fallback": {
-                      "type": "string",
-                      "enum": [
-                        "sans",
-                        "serif",
-                        "mono"
-                      ],
-                      "description": "Fallback stack category appended to the authored family."
-                    },
-                    "weights": {
-                      "description": "Static font weights or a variable-font range such as 200..800.",
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "uniqueItems": true
-                        }
-                      ]
-                    },
-                    "styles": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "enum": [
-                          "normal",
-                          "italic"
-                        ]
-                      },
-                      "uniqueItems": true
-                    },
-                    "faces": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "src"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "src": {
-                            "type": "string"
-                          },
-                          "weight": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "style": {
-                            "type": "string",
-                            "enum": [
-                              "normal",
-                              "italic",
-                              "oblique"
-                            ]
-                          },
-                          "display": {
-                            "type": "string",
-                            "enum": [
-                              "auto",
-                              "block",
-                              "swap",
-                              "fallback",
-                              "optional"
-                            ]
-                          },
-                          "format": {
-                            "type": "string"
-                          },
-                          "unicodeRange": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "display": {
-                      "type": "string",
-                      "enum": [
-                        "auto",
-                        "block",
-                        "swap",
-                        "fallback",
-                        "optional"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
         }
-      }
+      ]
+    },
+    "system": {
+      "$ref": "#/definitions/group:system"
     },
     "system-sans": {
-      "type": "object",
       "description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
-        },
-        "$type": {
-          "const": "fontFamily"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "font": {
-                  "type": "object",
-                  "description": "Font-loading metadata for this family.",
-                  "additionalProperties": false,
-                  "properties": {
-                    "source": {
-                      "type": "string",
-                      "enum": [
-                        "system",
-                        "google",
-                        "local"
-                      ],
-                      "description": "Where this font family is loaded from."
-                    },
-                    "fallback": {
-                      "type": "string",
-                      "enum": [
-                        "sans",
-                        "serif",
-                        "mono"
-                      ],
-                      "description": "Fallback stack category appended to the authored family."
-                    },
-                    "weights": {
-                      "description": "Static font weights or a variable-font range such as 200..800.",
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "uniqueItems": true
-                        }
-                      ]
-                    },
-                    "styles": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "enum": [
-                          "normal",
-                          "italic"
-                        ]
-                      },
-                      "uniqueItems": true
-                    },
-                    "faces": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "src"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "src": {
-                            "type": "string"
-                          },
-                          "weight": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "style": {
-                            "type": "string",
-                            "enum": [
-                              "normal",
-                              "italic",
-                              "oblique"
-                            ]
-                          },
-                          "display": {
-                            "type": "string",
-                            "enum": [
-                              "auto",
-                              "block",
-                              "swap",
-                              "fallback",
-                              "optional"
-                            ]
-                          },
-                          "format": {
-                            "type": "string"
-                          },
-                          "unicodeRange": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "display": {
-                      "type": "string",
-                      "enum": [
-                        "auto",
-                        "block",
-                        "swap",
-                        "fallback",
-                        "optional"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
         }
-      }
+      ]
     },
     "system-serif": {
-      "type": "object",
       "description": "System serif stack. Zero network cost.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
-        },
-        "$type": {
-          "const": "fontFamily"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "font": {
-                  "type": "object",
-                  "description": "Font-loading metadata for this family.",
-                  "additionalProperties": false,
-                  "properties": {
-                    "source": {
-                      "type": "string",
-                      "enum": [
-                        "system",
-                        "google",
-                        "local"
-                      ],
-                      "description": "Where this font family is loaded from."
-                    },
-                    "fallback": {
-                      "type": "string",
-                      "enum": [
-                        "sans",
-                        "serif",
-                        "mono"
-                      ],
-                      "description": "Fallback stack category appended to the authored family."
-                    },
-                    "weights": {
-                      "description": "Static font weights or a variable-font range such as 200..800.",
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "uniqueItems": true
-                        }
-                      ]
-                    },
-                    "styles": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "enum": [
-                          "normal",
-                          "italic"
-                        ]
-                      },
-                      "uniqueItems": true
-                    },
-                    "faces": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "src"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "src": {
-                            "type": "string"
-                          },
-                          "weight": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "style": {
-                            "type": "string",
-                            "enum": [
-                              "normal",
-                              "italic",
-                              "oblique"
-                            ]
-                          },
-                          "display": {
-                            "type": "string",
-                            "enum": [
-                              "auto",
-                              "block",
-                              "swap",
-                              "fallback",
-                              "optional"
-                            ]
-                          },
-                          "format": {
-                            "type": "string"
-                          },
-                          "unicodeRange": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "display": {
-                      "type": "string",
-                      "enum": [
-                        "auto",
-                        "block",
-                        "swap",
-                        "fallback",
-                        "optional"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
         }
-      }
+      ]
     },
     "system-mono": {
-      "type": "object",
       "description": "System monospace stack. Zero network cost.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
-        },
-        "$type": {
-          "const": "fontFamily"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "font": {
-                  "type": "object",
-                  "description": "Font-loading metadata for this family.",
-                  "additionalProperties": false,
-                  "properties": {
-                    "source": {
-                      "type": "string",
-                      "enum": [
-                        "system",
-                        "google",
-                        "local"
-                      ],
-                      "description": "Where this font family is loaded from."
-                    },
-                    "fallback": {
-                      "type": "string",
-                      "enum": [
-                        "sans",
-                        "serif",
-                        "mono"
-                      ],
-                      "description": "Fallback stack category appended to the authored family."
-                    },
-                    "weights": {
-                      "description": "Static font weights or a variable-font range such as 200..800.",
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "uniqueItems": true
-                        }
-                      ]
-                    },
-                    "styles": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "enum": [
-                          "normal",
-                          "italic"
-                        ]
-                      },
-                      "uniqueItems": true
-                    },
-                    "faces": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "src"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "src": {
-                            "type": "string"
-                          },
-                          "weight": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "style": {
-                            "type": "string",
-                            "enum": [
-                              "normal",
-                              "italic",
-                              "oblique"
-                            ]
-                          },
-                          "display": {
-                            "type": "string",
-                            "enum": [
-                              "auto",
-                              "block",
-                              "swap",
-                              "fallback",
-                              "optional"
-                            ]
-                          },
-                          "format": {
-                            "type": "string"
-                          },
-                          "unicodeRange": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "display": {
-                      "type": "string",
-                      "enum": [
-                        "auto",
-                        "block",
-                        "swap",
-                        "fallback",
-                        "optional"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
         }
-      }
+      ]
     },
     "interface": {
-      "type": "object",
       "description": "Font family used for things like buttons or input fields.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
-        },
-        "$type": {
-          "const": "fontFamily"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "font": {
-                  "type": "object",
-                  "description": "Font-loading metadata for this family.",
-                  "additionalProperties": false,
-                  "properties": {
-                    "source": {
-                      "type": "string",
-                      "enum": [
-                        "system",
-                        "google",
-                        "local"
-                      ],
-                      "description": "Where this font family is loaded from."
-                    },
-                    "fallback": {
-                      "type": "string",
-                      "enum": [
-                        "sans",
-                        "serif",
-                        "mono"
-                      ],
-                      "description": "Fallback stack category appended to the authored family."
-                    },
-                    "weights": {
-                      "description": "Static font weights or a variable-font range such as 200..800.",
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "uniqueItems": true
-                        }
-                      ]
-                    },
-                    "styles": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "enum": [
-                          "normal",
-                          "italic"
-                        ]
-                      },
-                      "uniqueItems": true
-                    },
-                    "faces": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "src"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "src": {
-                            "type": "string"
-                          },
-                          "weight": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "style": {
-                            "type": "string",
-                            "enum": [
-                              "normal",
-                              "italic",
-                              "oblique"
-                            ]
-                          },
-                          "display": {
-                            "type": "string",
-                            "enum": [
-                              "auto",
-                              "block",
-                              "swap",
-                              "fallback",
-                              "optional"
-                            ]
-                          },
-                          "format": {
-                            "type": "string"
-                          },
-                          "unicodeRange": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "display": {
-                      "type": "string",
-                      "enum": [
-                        "auto",
-                        "block",
-                        "swap",
-                        "fallback",
-                        "optional"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
         }
-      }
+      ]
     },
     "heading": {
-      "type": "object",
       "description": "Font family used for heading elements.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
-        },
-        "$type": {
-          "const": "fontFamily"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "font": {
-                  "type": "object",
-                  "description": "Font-loading metadata for this family.",
-                  "additionalProperties": false,
-                  "properties": {
-                    "source": {
-                      "type": "string",
-                      "enum": [
-                        "system",
-                        "google",
-                        "local"
-                      ],
-                      "description": "Where this font family is loaded from."
-                    },
-                    "fallback": {
-                      "type": "string",
-                      "enum": [
-                        "sans",
-                        "serif",
-                        "mono"
-                      ],
-                      "description": "Fallback stack category appended to the authored family."
-                    },
-                    "weights": {
-                      "description": "Static font weights or a variable-font range such as 200..800.",
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "uniqueItems": true
-                        }
-                      ]
-                    },
-                    "styles": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "enum": [
-                          "normal",
-                          "italic"
-                        ]
-                      },
-                      "uniqueItems": true
-                    },
-                    "faces": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "src"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "src": {
-                            "type": "string"
-                          },
-                          "weight": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "style": {
-                            "type": "string",
-                            "enum": [
-                              "normal",
-                              "italic",
-                              "oblique"
-                            ]
-                          },
-                          "display": {
-                            "type": "string",
-                            "enum": [
-                              "auto",
-                              "block",
-                              "swap",
-                              "fallback",
-                              "optional"
-                            ]
-                          },
-                          "format": {
-                            "type": "string"
-                          },
-                          "unicodeRange": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "display": {
-                      "type": "string",
-                      "enum": [
-                        "auto",
-                        "block",
-                        "swap",
-                        "fallback",
-                        "optional"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
         }
-      }
+      ]
     },
     "body": {
-      "type": "object",
       "description": "Font family used for <p>, <li>, etc.",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
-        },
-        "$type": {
-          "const": "fontFamily"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "font": {
-                  "type": "object",
-                  "description": "Font-loading metadata for this family.",
-                  "additionalProperties": false,
-                  "properties": {
-                    "source": {
-                      "type": "string",
-                      "enum": [
-                        "system",
-                        "google",
-                        "local"
-                      ],
-                      "description": "Where this font family is loaded from."
-                    },
-                    "fallback": {
-                      "type": "string",
-                      "enum": [
-                        "sans",
-                        "serif",
-                        "mono"
-                      ],
-                      "description": "Fallback stack category appended to the authored family."
-                    },
-                    "weights": {
-                      "description": "Static font weights or a variable-font range such as 200..800.",
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "uniqueItems": true
-                        }
-                      ]
-                    },
-                    "styles": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "enum": [
-                          "normal",
-                          "italic"
-                        ]
-                      },
-                      "uniqueItems": true
-                    },
-                    "faces": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "src"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "src": {
-                            "type": "string"
-                          },
-                          "weight": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "style": {
-                            "type": "string",
-                            "enum": [
-                              "normal",
-                              "italic",
-                              "oblique"
-                            ]
-                          },
-                          "display": {
-                            "type": "string",
-                            "enum": [
-                              "auto",
-                              "block",
-                              "swap",
-                              "fallback",
-                              "optional"
-                            ]
-                          },
-                          "format": {
-                            "type": "string"
-                          },
-                          "unicodeRange": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "display": {
-                      "type": "string",
-                      "enum": [
-                        "auto",
-                        "block",
-                        "swap",
-                        "fallback",
-                        "optional"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
         }
-      }
+      ]
     },
     "code": {
-      "type": "object",
       "description": "Font family used within <code> blocks",
-      "required": [
-        "$value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
-        },
-        "$type": {
-          "const": "fontFamily"
-        },
-        "$description": {
-          "type": "string"
-        },
-        "$extensions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dev.zebkit": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "a11y": {
-                  "type": [
-                    "boolean",
-                    "string"
-                  ],
-                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
-                },
-                "font": {
-                  "type": "object",
-                  "description": "Font-loading metadata for this family.",
-                  "additionalProperties": false,
-                  "properties": {
-                    "source": {
-                      "type": "string",
-                      "enum": [
-                        "system",
-                        "google",
-                        "local"
-                      ],
-                      "description": "Where this font family is loaded from."
-                    },
-                    "fallback": {
-                      "type": "string",
-                      "enum": [
-                        "sans",
-                        "serif",
-                        "mono"
-                      ],
-                      "description": "Fallback stack category appended to the authored family."
-                    },
-                    "weights": {
-                      "description": "Static font weights or a variable-font range such as 200..800.",
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "uniqueItems": true
-                        }
-                      ]
-                    },
-                    "styles": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "enum": [
-                          "normal",
-                          "italic"
-                        ]
-                      },
-                      "uniqueItems": true
-                    },
-                    "faces": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "src"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "src": {
-                            "type": "string"
-                          },
-                          "weight": {
-                            "type": [
-                              "string",
-                              "number"
-                            ]
-                          },
-                          "style": {
-                            "type": "string",
-                            "enum": [
-                              "normal",
-                              "italic",
-                              "oblique"
-                            ]
-                          },
-                          "display": {
-                            "type": "string",
-                            "enum": [
-                              "auto",
-                              "block",
-                              "swap",
-                              "fallback",
-                              "optional"
-                            ]
-                          },
-                          "format": {
-                            "type": "string"
-                          },
-                          "unicodeRange": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "display": {
-                      "type": "string",
-                      "enum": [
-                        "auto",
-                        "block",
-                        "swap",
-                        "fallback",
-                        "optional"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
         }
-      }
+      ]
     }
   }
 }

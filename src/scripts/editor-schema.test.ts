@@ -4,7 +4,10 @@
 
 import fs from 'fs-extra';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import Ajv from 'ajv';
+import { tokenForGroupRoot } from './editor-schema-paths';
+import { AUTHORABLE_VALUE_SCHEMAS } from './editor-value-schemas';
 
 type ManifestModule = { key: string; file: string };
 
@@ -20,27 +23,31 @@ function jsonFilesBelow(directory: string): string[] {
 }
 
 describe('generated editor token schemas', () => {
-  const manifest = fs.readJsonSync(
-    path.resolve('dist/cli/defaults/manifest.json')
-  ) as { modules: ManifestModule[] };
+  let manifest: { modules: ManifestModule[] };
+
+  beforeAll(() => {
+    // `dist` is intentionally ignored. Build the fixture when this suite runs
+    // in a fresh clone, rather than relying on a developer's previous package
+    // build to make the source test pass.
+    execFileSync('npm', ['run', 'build:defaults'], {
+      cwd: process.cwd(),
+      stdio: 'pipe',
+    });
+    execFileSync('npm', ['run', 'build:editor'], {
+      cwd: process.cwd(),
+      stdio: 'pipe',
+    });
+    const manifestPath = path.resolve('dist/cli/defaults/manifest.json');
+    manifest = fs.readJsonSync(manifestPath) as { modules: ManifestModule[] };
+  }, 240000);
 
   it('tracks one canonical repository schema for every authorable token module', () => {
     const settings = fs.readJsonSync(path.resolve('.vscode/settings.json')) as {
       'json.schemas': Array<{ fileMatch: string[]; url: string }>;
     };
 
-    // Emission-external modules (the primitive palette) are not overridable and
-    // get no schema or theme-file association. The emission mode rides the
-    // group-level `$extensions["dev.zebkit"]` block (Phase 3 DTCG documents).
-    const authorableModules = manifest.modules.filter((module) => {
-      const data = fs.readJsonSync(
-        path.resolve('dist/cli/defaults', module.file)
-      ) as { $extensions?: { 'dev.zebkit'?: { cssEmission?: string } } };
-      return data.$extensions?.['dev.zebkit']?.cssEmission !== 'external';
-    });
-
-    expect(settings['json.schemas']).toHaveLength(authorableModules.length);
-    for (const module of authorableModules) {
+    expect(settings['json.schemas']).toHaveLength(manifest.modules.length);
+    for (const module of manifest.modules) {
       const schemaFile = `${module.key}.schema.json`;
       expect(settings['json.schemas']).toContainEqual({
         fileMatch: [`/theme/**/${module.key}.tokens.json`],
@@ -48,6 +55,10 @@ describe('generated editor token schemas', () => {
       });
       expect(fs.pathExistsSync(path.resolve('schemas/tokens', schemaFile))).toBe(true);
     }
+    expect(settings['json.schemas']).toContainEqual({
+      fileMatch: ['/theme/**/zbk-color.tokens.json'],
+      url: './schemas/tokens/zbk-color.schema.json',
+    });
   });
 
   it('accepts every checked-in token override file', () => {
@@ -71,6 +82,173 @@ describe('generated editor token schemas', () => {
         valid: true,
       });
     }
+  });
+
+  it('accepts nested groups, metadata, and unknown vendor extensions', () => {
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    const validate = ajv.compile(
+      fs.readJsonSync(path.resolve('schemas/tokens/zbk-color.schema.json'))
+    );
+    const document = {
+      $description: 'Nested override fixture',
+      $deprecated: false,
+      $extensions: { 'com.example.tool': { source: 'fixture' } },
+      red: {
+        $type: 'color',
+        $description: 'Red palette group',
+        '500': {
+          $value: { colorSpace: 'hsl', components: [0, 80, 50] },
+          $deprecated: 'Use red.600',
+          $extensions: { 'com.example.tool': { reviewed: true } },
+        },
+        '600': {
+          $value: '{color.red-500}',
+          $description: 'Nested token',
+        },
+      },
+    };
+
+    expect({ errors: validate.errors, valid: validate(document) }).toEqual({
+      errors: null,
+      valid: true,
+    });
+  });
+
+  it('maps group $root only to a known literal -root token', () => {
+    const groupToken = { $type: 'color' };
+    const literalRootToken = { $type: 'number' };
+    const entries = {
+      family: groupToken,
+      'family-root': literalRootToken,
+    };
+
+    expect(tokenForGroupRoot(entries, 'family')).toBe(literalRootToken);
+    expect(tokenForGroupRoot({ family: groupToken }, 'family')).toBeUndefined();
+
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    const validate = ajv.compile(
+      fs.readJsonSync(path.resolve('schemas/tokens/zbk-color.schema.json'))
+    );
+    expect(validate({ red: { '600': { $root: { $value: '{color.red-500}' } } } })).toBe(
+      false
+    );
+  });
+
+  it('accepts hyphenated group names when they flatten to known tokens', () => {
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    const validate = ajv.compile(
+      fs.readJsonSync(path.resolve('schemas/tokens/zbk-button.schema.json'))
+    );
+
+    expect(
+      validate({
+        'padding-inline': {
+          start: { $value: '{spacing.2}' },
+          end: { $value: '{spacing.2}' },
+        },
+      })
+    ).toBe(true);
+  });
+
+  it.each([
+    ['color', { colorSpace: 'hsl', components: [10, 50] }],
+    ['dimension', { value: 1, unit: 'em' }],
+    ['dimension', 1],
+    ['duration', { value: 100, unit: 'min' }],
+    ['duration', 100],
+    ['cubicBezier', [2, 0, 0, 1]],
+    ['shadow', { offsetX: { value: 0, unit: 'px' } }],
+    ['fontFamily', ['Inter', 42]],
+    ['fontWeight', 0],
+    ['number', '12'],
+    ['strokeStyle', 'wavy'],
+    ['boolean', 'true'],
+    ['cssDimension', 1],
+    ['display', 1],
+    ['cursor', 1],
+    ['fontStyle', 1],
+    ['textDecoration', 1],
+    ['textTransform', 1],
+    ['textAlignment', 1],
+    ['transform', 1],
+    ['transitionProperty', 1],
+    ['transitionTimingFunction', 1],
+    ['utility', 1],
+    ['asset', 1],
+    ['content', 1],
+    ['flex', 1],
+  ])('rejects an invalid %s value', ($type, $value) => {
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    const validate = ajv.compile(
+      AUTHORABLE_VALUE_SCHEMAS[$type as keyof typeof AUTHORABLE_VALUE_SCHEMAS]
+    );
+
+    expect(validate($value)).toBe(false);
+  });
+
+  it.each([
+    ['color', { colorSpace: 'hsl', components: [10, 50, 50] }],
+    ['dimension', { value: 1, unit: 'rem' }],
+    ['duration', { value: 100, unit: 'ms' }],
+    ['cubicBezier', [0.2, 0, 0.8, 1]],
+    ['shadow', ['{elevation.sm}']],
+    ['fontFamily', ['Inter', 'sans-serif']],
+    ['fontWeight', 400],
+    ['number', 0.5],
+    ['strokeStyle', 'solid'],
+    ['boolean', true],
+    ['cssDimension', '1em'],
+    ['display', 'grid'],
+    ['cursor', 'grab'],
+    ['fontStyle', 'italic'],
+    ['textDecoration', 'underline'],
+    ['textTransform', 'uppercase'],
+    ['textAlignment', 'start'],
+    ['transform', 'translateX(0)'],
+    ['transitionProperty', 'opacity'],
+    ['transitionTimingFunction', 'ease-out'],
+    ['utility', '1'],
+    ['asset', 'url(icon.svg)'],
+    ['content', '"Required"'],
+    ['flex', '1 1 auto'],
+  ])('accepts a valid %s value and a whole-value alias', ($type, $value) => {
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    const validate = ajv.compile(
+      AUTHORABLE_VALUE_SCHEMAS[$type as keyof typeof AUTHORABLE_VALUE_SCHEMAS]
+    );
+
+    expect(validate($value)).toBe(true);
+    expect(validate('{app.canvas}')).toBe(true);
+  });
+
+  it('rejects unknown flattened and nested token paths', () => {
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    const validate = ajv.compile(
+      fs.readJsonSync(path.resolve('schemas/tokens/zbk-color.schema.json'))
+    );
+
+    expect(validate({ probe: { $type: 'color', $value: '{color.red-500}' } })).toBe(
+      false
+    );
+    expect(
+      validate({ red: { unknown: { $value: '{color.red-500}' } } })
+    ).toBe(false);
+  });
+
+  it('rejects unknown reserved properties and invalid scale controls', () => {
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    const validate = ajv.compile(
+      fs.readJsonSync(path.resolve('schemas/tokens/zbk-color.schema.json'))
+    );
+
+    expect(validate({ $unknown: true })).toBe(false);
+    expect(
+      validate({
+        $extensions: {
+          'dev.zebkit': { scale: { 'min-viewport': 'nope' } },
+        },
+      })
+    ).toBe(false);
   });
 
 });

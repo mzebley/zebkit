@@ -73,8 +73,7 @@ describe('pull command', () => {
       }
       if (target === '/pkg/dist/cli/defaults/zbk-button.json') {
         return {
-          _key: 'zbk-button',
-          _layer: 'base',
+          $extensions: { 'dev.zebkit': { layer: 'base' } },
           canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
         };
       }
@@ -89,6 +88,7 @@ describe('pull command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
       {
+        $extensions: { 'dev.zebkit': { layer: 'base' } },
         canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
       },
       { spaces: 2 }
@@ -124,13 +124,13 @@ describe('pull command', () => {
       }
       if (target === '/pkg/dist/cli/defaults/zbk-button.json') {
         return {
-          _key: 'zbk-button',
-          _layer: 'base',
+          $extensions: { 'dev.zebkit': { layer: 'base' } },
           canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
         };
       }
       if (target === '/workspace/project/tokens/zbk-button.tokens.json') {
         return {
+          $extensions: { 'dev.zebkit': { layer: 'base' } },
           canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
         };
       }
@@ -173,8 +173,7 @@ describe('pull command', () => {
       }
       if (target === '/pkg/dist/cli/defaults/zbk-button.json') {
         return {
-          _key: 'zbk-button',
-          _layer: 'base',
+          $extensions: { 'dev.zebkit': { layer: 'base' } },
           canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
           newKey: { $value: '#000', $type: 'color', $description: 'New key.' },
         };
@@ -194,6 +193,7 @@ describe('pull command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
       {
+        $extensions: { 'dev.zebkit': { layer: 'base' } },
         canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
         newKey: { $value: '#000', $type: 'color', $description: 'New key.' },
       },
@@ -235,8 +235,7 @@ describe('pull command', () => {
       }
       if (target === `${presetDir}/zbk-button.json`) {
         return {
-          _key: 'zbk-button',
-          _layer: 'base',
+          $extensions: { 'dev.zebkit': { layer: 'base' } },
           canvas: { $value: '#123', $type: 'color', $description: 'Preset background.' },
         };
       }
@@ -251,6 +250,7 @@ describe('pull command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
       {
+        $extensions: { 'dev.zebkit': { layer: 'base' } },
         canvas: { $value: '#123', $type: 'color', $description: 'Preset background.' },
       },
       { spaces: 2 }

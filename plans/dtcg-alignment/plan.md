@@ -21,7 +21,7 @@ This plan is written to survive the codebase changing underneath it and to make 
 | I3 | The `@layer` structure and layer assignment of every declaration never changes | Golden baseline diff |
 | I4 | Every token still carries a non-empty description; every module still fails the build on schema mismatch (no silent partial themes) | Zod/refinement validation + existing build-failure semantics |
 | I5 | Aliases resolve only against targets that exist in the token document (no "virtual" targets) — *from Phase 2b onward* | Reference validator (closed-world mode) |
-| I6 | Exported token JSON artifacts validate against the DTCG 2025.10 document rules — *from Phase 3 onward* | DTCG validation step in `npm run check` |
+| I6 | Full JSON artifacts validate against the Zebkit DTCG 2025.10 profile; strict artifacts contain only supported spec types and are reference-closed | DTCG validation step in `npm run check` |
 | I7 | No behavior may depend on token entry ordering | Order-shuffle test added in Phase 0 |
 | I8 | The variant system (`compile-variants`, `variants/*.ts`, variant JSON overlays) is untouched — raw-string overrides are not DTCG documents | Scope exclusion; no variant file appears in any phase's diff |
 
@@ -40,15 +40,15 @@ Decisions the phases assume. Changing one of these means updating this table *fi
 
 | # | Decision | Choice |
 |---|---|---|
-| D1 | Depth of alignment | Conformant DTCG document + documented proprietary `$type` registry for CSS-surface tokens the spec can't type. No token surface is dropped to chase strictness |
-| D2 | Authoring format | TS modules (`tokens/tokens.ts` + schema) **remain the authoring layer**, restructured to DTCG entry shape. All *JSON interchange* (exports, defaults snapshots, theme overrides, docs data) becomes spec-conformant. Moving authoring itself to `.tokens.json` is a possible later step, deliberately not part of this effort |
+| D1 | Depth of alignment | Full output is the **Zebkit DTCG 2025.10 profile**: DTCG structure plus a documented proprietary `$type` registry. Strict output contains only the DTCG types zebkit fully implements, with closed references and validation. No token surface is dropped to overstate strictness |
+| D2 | Authoring format | TS modules (`tokens/tokens.ts` + optional structural schema) remain the source authoring layer. JSON exports, defaults snapshots, overrides, and docs data use the Zebkit profile; strict export is the conformant interoperability surface |
 | D3 | `$extensions` vendor key | One namespace for everything zebkit-specific: `"dev.zebkit"` (swap once if the project settles on a different domain — one constant in `src/definitions/`). Sub-keys: `a11y`, `scale` (fluid settings/`index` steps), `font` (`source`/`fallback`/`weights`/`styles`/`faces`/`display`), `layer` (only where it must ride in JSON, e.g. defaults snapshots) |
 | D4 | Proprietary `$type` registry | Kept, minimized, and centrally defined next to the DTCG set: `display`, `cursor`, `textTransform`, `textDecoration`, `textAlignment`, `fontStyle`, `transform`, `transitionProperty`, `transitionTimingFunction`, `content`, `flex`, `utility`, `asset`, `boolean`, `cssDimension` (CSS sizing values DTCG's `dimension` can't express: `%`, `ch`, `em`, `calc()`, the sizing keywords `auto`/`none`, and unitless `0` — anything valid where a length is expected but not a px/rem `{value, unit}` pair). `transitionTimingFunction` (added Phase 2d) is the `<easing-function>` keyword surface (`ease-out`, `linear`, …) DTCG's `cubicBezier` type — explicit `[x1,y1,x2,y2]` curves only — cannot express. Everything else moves to a spec type |
 | D5 | Spec type mapping | `color`/`borderColor` → `color` · `spacing`/`sizing`/`dimension`/`rootSize`/`borderWidth`/`borderRadius`/`fontSize`/`rootFontSize`/`letterSpacing` → `dimension` (px/rem values) or `cssDimension` (rest) · `boxShadow` → `shadow` · `transition` splits → `duration` / `cubicBezier` / `transitionProperty` / `transitionTimingFunction` (Phase 2d: durations and explicit curves take the two spec types; CSS property-name lists and `<easing-function>` keywords take the two proprietary types) · `lineHeight`/`opacity`/`zIndex` → `number` · `fontWeight` → `fontWeight` · `fontFamily` → `fontFamily` (metadata → `$extensions`) · `borderStyle` → `strokeStyle` · `setting` → not a token: moves to `$extensions` on the group (see Phase 2a) |
 | D6 | Aliases | Curly-brace references only, both authoring and ingestion. `$ref` (JSON Pointer) and `$extends` are **rejected with a clear error** naming this limitation. Zebkit authors two-level refs; the resolver accepts arbitrary depth and flattens group paths to CSS var names by joining with `-` |
-| D7 | Primitive palette | Materialized as real `color` tokens (source of truth), from which the SCSS ramp variables are **generated**. `paletteMap` and the SCSS-parsing in the docs palette build are retired. Overriding primitives via theme overrides becomes technically possible; whether it is *supported or lint-blocked* gets one sentence in VISION during Phase 5 (default: allowed — "change everything" is the manifesto) |
+| D7 | Primitive palette | Materialized as real `color` tokens (source of truth), from which the SCSS ramp variables are generated. `paletteMap` and docs-side SCSS parsing are retired. Base and overlay primitive overrides are supported and emit unlayered after the generated palette so they win the cascade |
 | D8 | `transparent` | Materialized as `color.global-transparent` = `{colorSpace:"srgb", components:[0,0,0], alpha:0}`; literal `"transparent"` in token values becomes an alias to it. (`currentColor`, if ever needed, enters the proprietary registry) |
-| D9 | Strict-mode export | The exporter gains a `strict` flag: emits only spec-typed tokens (proprietary-typed tokens dropped, with a manifest of what was dropped) for tools that hard-fail on unknown `$type`. Default export is the full document |
+| D9 | Strict-mode export | `tokens.exportStrict` emits only the implemented DTCG spec types, validates references before and after pruning, and records direct/transitive drops in a manifest. It requires `tokens.exportTokens`; default export is the full profile document |
 | D10 | `$description` | Required on every token by zebkit's own validation (spec makes it optional; the discipline stays) |
 | D11 | Codemod | Checked in under `scripts/` for the migration PRs, deleted at the end of Phase 4. It is a migration tool, not a compat layer |
 
@@ -110,7 +110,7 @@ The interchange layer becomes real DTCG.
 3. Zod strategy consolidation: one generic DTCG-document schema + per-module refinements replaces the 55 near-identical `token-schema.ts` files where possible (net deletion; modules keep a schema file only if they have module-specific constraints).
 4. Docs static serving emits `application/design-tokens+json` where the host allows.
 
-**Gate:** every exported artifact passes DTCG validation (the Phase 4 validator, run locally here); a round-trip test (export → re-ingest as override → identical build) passes; golden baseline **still byte-identical**.
+**Gate:** every full artifact passes Zebkit-profile validation; every strict artifact passes supported-type and reference-closure validation; export → re-ingest produces an identical build; the golden baseline remains byte-identical.
 
 ### Phase 4 — Locks (2–3 d)
 

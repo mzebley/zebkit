@@ -68,8 +68,7 @@ describe('init command', () => {
     }
     if (target === '/pkg/dist/cli/presets/dynamowaves/zbk-button.json') {
       return {
-        _key: 'zbk-button',
-        _layer: 'components',
+        $extensions: { 'dev.zebkit': { layer: 'components' } },
         canvas: { $value: '#fff', $type: 'color' },
       };
     }
@@ -112,7 +111,10 @@ describe('init command', () => {
     expect(mockEnsureDir).toHaveBeenCalledWith('/workspace/project/tokens');
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
-      { canvas: { $value: '#fff', $type: 'color' } },
+      {
+        $extensions: { 'dev.zebkit': { layer: 'components' } },
+        canvas: { $value: '#fff', $type: 'color' },
+      },
       { spaces: 2 }
     );
 

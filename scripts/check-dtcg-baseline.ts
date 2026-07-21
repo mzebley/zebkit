@@ -30,6 +30,7 @@ import { convertTokensToCssVars } from "../src/scripts/tokens/token-converter.js
 import type { ZebkitConfig, TokensConfig } from "../src/scripts/config.js";
 import type { TokenGroupExtensions, TokenInterface } from "../src/definitions/tokens.js";
 import type { LayerName } from "../src/definitions/layers.js";
+import { withoutTokenArtifactOutputs } from "../src/scripts/tokens/baseline-config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const REPO_ROOT = path.resolve(path.dirname(__filename), "..");
@@ -59,15 +60,10 @@ function absFromRoot(p: string): string {
 /** Strips export/lookup side-outputs and forces minify-off into a temp destination. */
 function toBaselineTokensConfig(tokens: TokensConfig, name: string): TokensConfig {
   const next: TokensConfig = {
-    ...tokens,
+    ...withoutTokenArtifactOutputs(tokens),
     destinationPath: buildDir(name),
     minify: false,
-    exportTokens: false,
-    writeVariantRegistry: false,
-    writeTokenLookup: false,
-    writeAllowedTokenTypes: false,
   };
-  delete next.tokenLookupOutputPath;
   if (next.tokenPath) next.tokenPath = absFromRoot(next.tokenPath);
   if (next.overlays) {
     next.overlays = next.overlays.map((overlay) => ({

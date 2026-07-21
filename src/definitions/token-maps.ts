@@ -20,6 +20,8 @@ export const tokenCompatibilityMap: {
   dimension: ["dimension", "cssDimension"],
   cssDimension: ["cssDimension", "dimension"],
   display: ["display"],
+  cursor: ["cursor"],
+  transform: ["transform"],
   // The numbers family (Phase 2e): opacity, z-index, and line-height are all the
   // spec `number` type and reference one another as unitless numbers. (The lone
   // `z-index: auto` keyword is a `cssDimension` per D4, but nothing references

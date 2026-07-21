@@ -103,6 +103,69 @@ describe('pull state reconciliation', () => {
     );
   });
 
+  it('keeps palette overrides whose external emission is declared in DTCG metadata', async () => {
+    const sourceDir = path.join(projectDir, 'snapshot');
+    await fs.ensureDir(sourceDir);
+    await fs.writeJson(path.join(sourceDir, 'manifest.json'), {
+      modules: [{ key: 'zbk-color', file: 'zbk-color.json' }],
+    });
+    await fs.writeJson(path.join(sourceDir, 'zbk-color.json'), {
+      $extensions: { 'dev.zebkit': { cssEmission: 'external' } },
+      blue: { $value: '#00f', $type: 'color' },
+    });
+
+    await expect(readTokenSnapshot(sourceDir, deps)).resolves.toEqual({
+      manifest: { modules: [{ key: 'zbk-color', file: 'zbk-color.json' }] },
+      modules: {
+        'zbk-color': {
+          file: 'zbk-color.tokens.json',
+          tokens: {
+            $extensions: { 'dev.zebkit': { cssEmission: 'external' } },
+            blue: { $value: '#00f', $type: 'color' },
+          },
+        },
+      },
+    });
+  });
+
+  it('restores authoring form before creating a pulled token snapshot', async () => {
+    const sourceDir = path.join(projectDir, 'snapshot');
+    await fs.ensureDir(sourceDir);
+    await fs.writeJson(path.join(sourceDir, 'manifest.json'), {
+      modules: [{ key: 'zbk-font-size', file: 'zbk-font-size.json' }],
+    });
+    await fs.writeJson(path.join(sourceDir, 'zbk-font-size.json'), {
+      $type: 'cssDimension',
+      $extensions: {
+        'dev.zebkit': { scale: { 'min-base': '1rem', 'max-base': '1.25rem' } },
+      },
+      generated: {
+        $value: 'clamp(1rem, 2vw, 1.25rem)',
+        $extensions: {
+          'dev.zebkit': { scale: { index: 0, valueSource: 'generated' } },
+        },
+      },
+      pinned: {
+        $value: '2rem',
+        $extensions: {
+          'dev.zebkit': { scale: { index: 1, valueSource: 'pinned' } },
+        },
+      },
+    });
+
+    const result = await readTokenSnapshot(sourceDir, deps);
+    expect(result.modules['zbk-font-size'].tokens).toEqual({
+      $type: 'cssDimension',
+      $extensions: {
+        'dev.zebkit': { scale: { 'min-base': '1rem', 'max-base': '1.25rem' } },
+      },
+      pinned: {
+        $value: '2rem',
+        $extensions: { 'dev.zebkit': { scale: { index: 1 } } },
+      },
+    });
+  });
+
   it('reads effective shipped variants, including preset patches and component filters', async () => {
     const defaultsDir = path.join(projectDir, 'defaults');
     const presetDir = path.join(projectDir, 'preset');

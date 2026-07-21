@@ -1,16 +1,23 @@
 import path from 'path';
+import { isDeepStrictEqual } from 'node:util';
 import chalk from 'chalk';
 import { z, ZodSchema } from 'zod';
-import type { TokenGroupExtensions, TokenInterface, ZebkitExtension } from '@definitions/tokens';
+import type {
+  AllowedTokenTypes,
+  TokenGroupExtensions,
+  TokenInterface,
+  TokenObject,
+} from '@definitions/tokens';
 import {
   groupScale,
-  tokenFontMeta,
   tokenGroupExtensionsSchema,
   tokenObjectSchema,
-  zbkExtension,
+  isWholeValueAlias,
 } from '@definitions/tokens';
 import { ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
+import { areTokensTypesCompatible } from '@definitions/token-maps';
 import { ZEBKIT_PREFIX } from '@config';
+import { assertRawTokenValueNormalizable } from './dtcg-document';
 
 export { isVariantOverrideFile } from './compile-variant-helpers';
 
@@ -51,25 +58,32 @@ export function mergeGroupExtensions(
 ): void {
   const parsed = tokenGroupExtensionsSchema.safeParse(extensions);
   if (!parsed.success) {
-    console.warn(
-      chalk.yellow(`Group $extensions for '${moduleKey}' are invalid. Ignoring.`)
+    throw new Error(
+      `Invalid group $extensions for '${moduleKey}':\n${parsed.error.issues
+        .map((issue) => `  - ${issue.path.join('.') || '(root)'}: ${issue.message}`)
+        .join('\n')}`
     );
-    return;
   }
+  const existing = groupExtensions[moduleKey] ?? {};
+  const existingVendor = existing[ZEBKIT_EXTENSION_KEY] ?? {};
+  const overrideVendor = parsed.data[ZEBKIT_EXTENSION_KEY] ?? {};
   const overrideScale = groupScale(parsed.data);
-  if (!overrideScale || Object.keys(overrideScale).length === 0) return;
+  const existingScale = groupScale(existing);
+  const mergedVendor = { ...existingVendor, ...overrideVendor };
 
-  const existingScale = groupScale(groupExtensions[moduleKey]) ?? {};
+  if (existingScale || overrideScale) {
+    mergedVendor.scale = { ...existingScale, ...overrideScale };
+  }
+
   groupExtensions[moduleKey] = {
-    [ZEBKIT_EXTENSION_KEY]: {
-      ...groupExtensions[moduleKey]?.[ZEBKIT_EXTENSION_KEY],
-      scale: { ...existingScale, ...overrideScale },
-    },
+    ...existing,
+    ...parsed.data,
+    [ZEBKIT_EXTENSION_KEY]: mergedVendor,
   };
 
   if (touched) {
     const keyTouched = (touched[moduleKey] ??= new Set<string>());
-    for (const control of Object.keys(overrideScale)) keyTouched.add(control);
+    for (const control of Object.keys(overrideScale ?? {})) keyTouched.add(control);
   }
 }
 
@@ -79,9 +93,12 @@ export function mergeOverrideObject(
   tokenSchemas: Record<string, ZodSchema>,
   touched?: Record<string, Set<string>>,
   /** Module keys (e.g. `zbk-accordion`) removed by the components config. */
-  excludedModuleKeys?: ReadonlySet<string>
+  excludedModuleKeys?: ReadonlySet<string>,
+  /** External snapshots use this to avoid re-emitting unchanged generated palette entries. */
+  touchOnlyChanged = false
 ) {
   const validKeys = Object.keys(tokens);
+  const errors: string[] = [];
   for (const key of Object.keys(overrideData)) {
     if (!validKeys.includes(key)) {
       if (excludedModuleKeys?.has(key)) {
@@ -90,7 +107,7 @@ export function mergeOverrideObject(
             `Remove the override or re-include the component.`
         );
       } else {
-        console.warn(`Custom tokens contain an unrecognized key '${key}'. Skipping.`);
+        errors.push(`Custom tokens contain an unrecognized module '${key}'.`);
       }
       continue;
     }
@@ -99,12 +116,120 @@ export function mergeOverrideObject(
     const keyTouched = touched ? (touched[key] ??= new Set<string>()) : undefined;
 
     try {
-      const mergedTokens = mergeTokens(tokens[key], overrideData[key], tokenSchema, key, keyTouched);
+      const mergedTokens = mergeTokens(
+        tokens[key],
+        overrideData[key],
+        tokenSchema,
+        key,
+        keyTouched,
+        touchOnlyChanged
+      );
       tokens[key] = mergedTokens;
-    } catch {
-      console.warn(`Custom tokens for '${key}' are invalid. Using default tokens.`);
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
     }
   }
+
+  if (errors.length > 0) {
+    throw new Error(`Invalid token overrides:\n${errors.map((error) => `  - ${error}`).join('\n')}`);
+  }
+}
+
+function isRecord(value: unknown): value is Record<string, any> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function mergeObjectFields(
+  base: Record<string, unknown> | undefined,
+  override: Record<string, unknown> | undefined
+): Record<string, unknown> | undefined {
+  if (!base && !override) return undefined;
+  return { ...base, ...override };
+}
+
+/**
+ * Merge token metadata while removing runtime/export provenance that no longer
+ * describes a newly-authored value. Unknown vendor namespaces are retained.
+ */
+function mergeTokenExtensions(
+  baseToken: Record<string, any>,
+  overrideToken: Record<string, any> | undefined,
+  overrideValue: unknown
+): Record<string, unknown> | undefined {
+  const baseExtensions = isRecord(baseToken.$extensions) ? baseToken.$extensions : undefined;
+  const overrideExtensions = isRecord(overrideToken?.$extensions)
+    ? overrideToken.$extensions
+    : undefined;
+  if (!baseExtensions && !overrideExtensions && overrideValue !== '') return undefined;
+
+  const merged: Record<string, unknown> = { ...baseExtensions, ...overrideExtensions };
+  const baseVendor = isRecord(baseExtensions?.[ZEBKIT_EXTENSION_KEY])
+    ? { ...baseExtensions[ZEBKIT_EXTENSION_KEY] }
+    : {};
+  const overrideVendor = isRecord(overrideExtensions?.[ZEBKIT_EXTENSION_KEY])
+    ? overrideExtensions[ZEBKIT_EXTENSION_KEY]
+    : {};
+
+  delete baseVendor.emptyColorPlaceholder;
+  delete baseVendor.rawCssValue;
+  delete baseVendor.originalType;
+  if (isRecord(baseVendor.scale)) {
+    const { valueSource: _valueSource, ...scale } = baseVendor.scale;
+    baseVendor.scale = scale;
+  }
+
+  const vendor: Record<string, unknown> = { ...baseVendor, ...overrideVendor };
+  for (const key of ['font', 'scale']) {
+    const value = mergeObjectFields(
+      isRecord(baseVendor[key]) ? baseVendor[key] : undefined,
+      isRecord(overrideVendor[key]) ? overrideVendor[key] : undefined
+    );
+    if (value) vendor[key] = value;
+  }
+  if (overrideVendor.a11y === true && typeof baseVendor.a11y === 'string') {
+    vendor.a11y = baseVendor.a11y;
+  }
+
+  // An empty semantic color is the only value for which this marker is valid.
+  // Conversely, an explicit empty override must carry the marker so the normal
+  // color registry cannot mistake an arbitrary empty string for a color.
+  if (baseToken.$type === 'color' && overrideValue === '') vendor.emptyColorPlaceholder = true;
+  else delete vendor.emptyColorPlaceholder;
+
+  if (Object.keys(vendor).length > 0) merged[ZEBKIT_EXTENSION_KEY] = vendor;
+  else delete merged[ZEBKIT_EXTENSION_KEY];
+  return Object.keys(merged).length > 0 ? merged : undefined;
+}
+
+function validateMergedToken(
+  token: Record<string, any>,
+  schema: ZodSchema
+): void {
+  const rawDtcgTypes = new Set(['color', 'dimension', 'duration', 'cubicBezier', 'shadow']);
+  if (
+    rawDtcgTypes.has(token.$type) &&
+    typeof token.$value === 'string' &&
+    !isWholeValueAlias(token.$value)
+  ) {
+    // Raw authoring is allowed only when the canonical DTCG exporter knows how
+    // to normalize this token type. Unsupported raw values fail here rather
+    // than being warned away and replaced with a default.
+    const normalized = assertRawTokenValueNormalizable(
+      token as TokenObject,
+      'override value'
+    );
+    if (schema.safeParse(token).success) return;
+    // Validate the merged metadata and module-specific constraints with the
+    // canonical structured value substituted for the legacy raw string.
+    // A legacy dimension that cannot be represented by the spec (`em`, `%`,
+    // `none`, `calc()`) exports as Zebkit's `cssDimension` extension type. Its
+    // base module schema necessarily still expects `dimension`, so validate the
+    // complete normalized token against the shared registry in that case.
+    if (normalized.$type !== token.$type) tokenObjectSchema.parse(normalized);
+    else schema.parse(normalized);
+    return;
+  }
+  schema.parse(token);
 }
 
 export function mergeTokens(
@@ -112,15 +237,17 @@ export function mergeTokens(
   customTokens: Record<string, any>,
   schema: ZodSchema | undefined,
   keyPath: string,
-  touched?: Set<string>
+  touched?: Set<string>,
+  touchOnlyChanged = false
 ): TokenInterface {
   const merged: TokenInterface = { ...defaultTokens };
+  const errors: string[] = [];
 
   for (const key in customTokens) {
     if (!Object.prototype.hasOwnProperty.call(customTokens, key)) continue;
 
     if (!defaultTokens.hasOwnProperty(key)) {
-      console.warn(`Extra key '${keyPath}.${key}' not found in default tokens. Ignoring.`);
+      errors.push(`Extra token '${keyPath}.${key}' is not defined by the base module.`);
       continue;
     }
 
@@ -131,7 +258,7 @@ export function mergeTokens(
     // guards for every other module (Phase 3 schema consolidation).
     const subSchema = schema instanceof z.ZodObject ? schema.shape[key] : undefined;
     if (schema instanceof z.ZodObject && !subSchema) {
-      console.warn(`Invalid key '${keyPath}.${key}' not defined in schema. Ignoring.`);
+      errors.push(`Token '${keyPath}.${key}' is not defined by the module schema.`);
       continue;
     }
 
@@ -148,39 +275,50 @@ export function mergeTokens(
           ? (customValue as Record<string, any>).$value
           : customValue;
 
-      const nextToken = {
-        ...defaultTokens[key],
-        $value: overrideValue,
-      };
-
-      // Allow overrides to carry font metadata (`$extensions["dev.zebkit"].font`). A theme may
-      // swap to a family whose loading differs from the base font's (a different `source`,
-      // weight axis, fallback category, or self-hosted `faces`), and the emitted
-      // import/@font-face must follow the override, not the base. Field-level merge into the
-      // base metadata; `$type` and `a11y` stay base-controlled. The schema parse below
-      // validates the result.
-      const overrideFont = tokenFontMeta(customValue);
-      if (overrideFont) {
-        const baseExtension: ZebkitExtension = zbkExtension(defaultTokens[key]) ?? {};
-        (nextToken as Record<string, unknown>).$extensions = {
-          [ZEBKIT_EXTENSION_KEY]: {
-            ...baseExtension,
-            font: { ...baseExtension.font, ...overrideFont },
-          },
-        };
+      const overrideToken = isRecord(customValue) && '$value' in customValue
+        ? customValue
+        : undefined;
+      const baseToken = defaultTokens[key] as Record<string, any>;
+      const explicitType = overrideToken?.$type;
+      if (
+        explicitType !== undefined &&
+        (typeof explicitType !== 'string' ||
+          !areTokensTypesCompatible(
+            baseToken.$type as AllowedTokenTypes,
+            explicitType as AllowedTokenTypes
+          ))
+      ) {
+        throw new Error(
+          `explicit $type '${String(explicitType)}' is incompatible with base type '${baseToken.$type}'`
+        );
       }
 
-      // Validate the merged entry: the module's bespoke subschema when it has
-      // one, otherwise the generic DTCG entry schema (which accepts every
-      // structured `$value`). A parse failure falls through to the default below.
-      (subSchema ?? tokenObjectSchema).parse(nextToken);
-      merged[key] = nextToken;
-      touched?.add(key);
-    } catch {
-      console.warn(`Invalid value for '${keyPath}.${key}'. Using default value.`);
-      merged[key] = defaultTokens[key];
+      const nextToken: Record<string, any> = {
+        ...baseToken,
+        $value: overrideValue,
+        $type: baseToken.$type,
+      };
+
+      if (overrideToken && Object.prototype.hasOwnProperty.call(overrideToken, '$description')) {
+        nextToken.$description = overrideToken.$description;
+      }
+      if (overrideToken && Object.prototype.hasOwnProperty.call(overrideToken, '$deprecated')) {
+        nextToken.$deprecated = overrideToken.$deprecated;
+      }
+      nextToken.$extensions = mergeTokenExtensions(baseToken, overrideToken, overrideValue);
+      if (!nextToken.$extensions) delete nextToken.$extensions;
+
+      validateMergedToken(nextToken, subSchema ?? tokenObjectSchema);
+      merged[key] = nextToken as TokenInterface[string];
+      if (!touchOnlyChanged || !isDeepStrictEqual(nextToken, baseToken)) touched?.add(key);
+    } catch (error) {
+      errors.push(
+        `${keyPath}.${key}: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
+
+  if (errors.length > 0) throw new Error(errors.join('\n'));
 
   return merged;
 }

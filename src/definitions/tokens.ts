@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
+import { ALLOWED_TOKEN_TYPE_VALUES, ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
 import { LAYER_ORDER } from '@definitions/layers';
 
 /**
@@ -10,51 +10,7 @@ import { LAYER_ORDER } from '@definitions/layers';
  * zebkit-specific metadata under `$extensions["dev.zebkit"]` (a11y modifier opt-in,
  * font-loading metadata). See plans/dtcg-alignment/plan.md.
  */
-export const allowedTokenTypes = z.enum([
-  'color',
-  'fontFamily',
-  'fontWeight',
-  'fontStyle',
-  'textDecoration',
-  'textTransform',
-  'textAlignment',
-  // The transition split (Phase 2c→2d, decision D5): the conflated `transition`
-  // type fanned out. Durations are spec `duration` ({value, unit} ms/s), easing
-  // curves are spec `cubicBezier` ([x1,y1,x2,y2]); the CSS-property list and the
-  // `<easing-function>` keyword surface (`ease-out`, …) DTCG can't type are the
-  // proprietary `transitionProperty` / `transitionTimingFunction`.
-  'duration',
-  'cubicBezier',
-  'transitionProperty',
-  'transitionTimingFunction',
-  // The dimension family (Phase 2a step 4, decision D5): `dimension` is the
-  // spec type for structured `{value, unit}` px/rem lengths; `cssDimension`
-  // covers every other CSS length surface (%, ch, em, keywords, unitless 0,
-  // calc()/clamp() expressions). The legacy names — spacing, sizing, rootSize,
-  // borderWidth, borderRadius, fontSize, rootFontSize, letterSpacing — are gone.
-  'dimension',
-  'cssDimension',
-  'display',
-  // The numbers & typography leftovers (Phase 2e, decision D5): `number` is the
-  // spec type for unitless numbers — the collapsed home of `opacity`, `zIndex`,
-  // and `lineHeight` (line-heights re-authored unitless; a `z-index: auto`
-  // keyword is a `cssDimension`, the one non-numeric value those families held).
-  // `strokeStyle` is the spec successor to `borderStyle`. The legacy names —
-  // opacity, zIndex, lineHeight, borderStyle — are gone.
-  'number',
-  'strokeStyle',
-  // `borderColor` collapsed into `color` (Phase 2b, decision D5) — it never had
-  // its own token entries; border color surfaces are plain `color` tokens.
-  'utility',
-  'asset',
-  'content',
-  'boolean',
-  // The DTCG composite `shadow` type (Phase 2c, decision D5): a `$value` is one
-  // shadow-layer object or an array of them; the empty array is `box-shadow:
-  // none`. The legacy `boxShadow` name is gone.
-  'shadow',
-  'flex'
-]);
+export const allowedTokenTypes = z.enum(ALLOWED_TOKEN_TYPE_VALUES);
 
 export type AllowedTokenTypes = z.infer<typeof allowedTokenTypes>;
 
@@ -66,9 +22,9 @@ export type AllowedTokenTypes = z.infer<typeof allowedTokenTypes>;
  */
 export const DIMENSION_UNITS = ["px", "rem"] as const;
 export const dimensionValueSchema = z.object({
-  value: z.number(),
+  value: z.number().finite(),
   unit: z.enum(DIMENSION_UNITS),
-});
+}).strict();
 export type DimensionValue = z.infer<typeof dimensionValueSchema>;
 
 /** True when `v` is a structured `{value, unit}` dimension value. */
@@ -115,9 +71,47 @@ export const DTCG_COLOR_SPACES = [
 ] as const;
 export const colorValueSchema = z.object({
   colorSpace: z.enum(DTCG_COLOR_SPACES),
-  components: z.tuple([z.number(), z.number(), z.number()]),
-  alpha: z.number().min(0).max(1).optional(),
+  components: z.tuple([
+    z.union([z.number().finite(), z.literal("none")]),
+    z.union([z.number().finite(), z.literal("none")]),
+    z.union([z.number().finite(), z.literal("none")]),
+  ]),
+  alpha: z.number().finite().min(0).max(1).optional(),
   hex: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+}).strict().superRefine((color, ctx) => {
+  const ranges: Record<string, Array<[number, number] | null>> = {
+    srgb: [[0, 1], [0, 1], [0, 1]],
+    "srgb-linear": [[0, 1], [0, 1], [0, 1]],
+    hsl: [[0, 360], [0, 100], [0, 100]],
+    hwb: [[0, 360], [0, 100], [0, 100]],
+    lab: [[0, 100], null, null],
+    lch: [[0, 100], [0, Number.POSITIVE_INFINITY], [0, 360]],
+    oklab: [[0, 1], null, null],
+    oklch: [[0, 1], [0, Number.POSITIVE_INFINITY], [0, 360]],
+    "display-p3": [[0, 1], [0, 1], [0, 1]],
+    "a98-rgb": [[0, 1], [0, 1], [0, 1]],
+    "prophoto-rgb": [[0, 1], [0, 1], [0, 1]],
+    rec2020: [[0, 1], [0, 1], [0, 1]],
+    "xyz-d65": [[0, 1], [0, 1], [0, 1]],
+    "xyz-d50": [[0, 1], [0, 1], [0, 1]],
+  };
+  const colorRanges = ranges[color.colorSpace];
+  color.components.forEach((component, index) => {
+    if (component === "none" || !colorRanges[index]) return;
+    const [min, max] = colorRanges[index]!;
+    const upperExclusive = color.colorSpace === "hsl" || color.colorSpace === "hwb"
+      ? index === 0
+      : color.colorSpace === "lch" || color.colorSpace === "oklch"
+        ? index === 2
+        : false;
+    if (component < min || component > max || (upperExclusive && component === max)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["components", index],
+        message: `component ${index} is outside the ${color.colorSpace} range`,
+      });
+    }
+  });
 });
 export type ColorValue = z.infer<typeof colorValueSchema>;
 
@@ -131,6 +125,26 @@ export function isColorValue(v: unknown): v is ColorValue {
   );
 }
 
+/** Parse Zebkit's supported DTCG curly-reference syntax, including terminal `$root`. */
+export function parseWholeValueAlias(value: unknown): string | undefined {
+  if (typeof value !== 'string' || !/^\{[^{}]+\}$/.test(value)) return undefined;
+  const segments = value.slice(1, -1).split('.');
+  if (
+    segments.length < 2 ||
+    !segments.every((segment, index) =>
+      /^[A-Za-z0-9_-]+$/.test(segment) || (segment === '$root' && index === segments.length - 1)
+    )
+  ) {
+    return undefined;
+  }
+  return segments.join('.');
+}
+
+/** True for the supported whole-value alias form. Literal validation is deferred to the collection. */
+export function isWholeValueAlias(value: unknown): value is string {
+  return parseWholeValueAlias(value) !== undefined;
+}
+
 /**
  * Canonical CSS serialization for a structured color. Byte-driven rules (the
  * palette SCSS and docs data must reproduce today's output exactly):
@@ -142,20 +156,42 @@ export function isColorValue(v: unknown): v is ColorValue {
 export function serializeColorValue(v: ColorValue): string {
   const alpha = v.alpha ?? 1;
   const [c1, c2, c3] = v.components;
-  if (alpha === 0 && c1 === 0 && c2 === 0 && c3 === 0) return "transparent";
-  if (v.hex && alpha === 1) return v.hex;
+  const allNumeric = v.components.every((component): component is number => typeof component === "number");
+  const percent = (component: number | "none") => component === "none" ? "none" : `${component}%`;
+  if (allNumeric && alpha === 0 && c1 === 0 && c2 === 0 && c3 === 0) return "transparent";
+  if (allNumeric && v.hex && alpha === 1) return v.hex;
+  const suffix = alpha === 1 ? "" : ` / ${alpha}`;
   if (v.colorSpace === "hsl") {
-    return alpha === 1
-      ? `hsl(${c1}, ${c2}%, ${c3}%)`
-      : `hsla(${c1}, ${c2}%, ${c3}%, ${alpha})`;
+    return allNumeric
+      ? alpha === 1
+        ? `hsl(${c1}, ${c2}%, ${c3}%)`
+        : `hsla(${c1}, ${c2}%, ${c3}%, ${alpha})`
+      : `hsl(${c1} ${percent(c2)} ${percent(c3)}${suffix})`;
   }
-  if (v.colorSpace === "srgb") {
+  if (v.colorSpace === "hwb") {
+    return `hwb(${c1} ${percent(c2)} ${percent(c3)}${suffix})`;
+  }
+  if (v.colorSpace === "lab") {
+    return `lab(${percent(c1)} ${c2} ${c3}${suffix})`;
+  }
+  if (v.colorSpace === "lch") {
+    return `lch(${percent(c1)} ${c2} ${c3}${suffix})`;
+  }
+  if (v.colorSpace === "oklab") {
+    return `oklab(${c1} ${c2} ${c3}${suffix})`;
+  }
+  if (v.colorSpace === "oklch") {
+    return `oklch(${c1} ${c2} ${c3}${suffix})`;
+  }
+  if (v.colorSpace === "srgb" && allNumeric) {
+    const [r, g, b] = v.components as [number, number, number];
     const to255 = (n: number) => Math.round(n * 255);
     return alpha === 1
-      ? `rgb(${to255(c1)}, ${to255(c2)}, ${to255(c3)})`
-      : `rgba(${to255(c1)}, ${to255(c2)}, ${to255(c3)}, ${alpha})`;
+      ? `rgb(${to255(r)}, ${to255(g)}, ${to255(b)})`
+      : `rgba(${to255(r)}, ${to255(g)}, ${to255(b)}, ${alpha})`;
   }
-  return `color(${v.colorSpace} ${c1} ${c2} ${c3}${alpha === 1 ? "" : ` / ${alpha}`})`;
+  const colorSpace = v.colorSpace === "rec2020" ? "rec2020" : v.colorSpace;
+  return `color(${colorSpace} ${c1} ${c2} ${c3}${suffix})`;
 }
 
 /**
@@ -166,14 +202,21 @@ export function serializeColorValue(v: ColorValue): string {
  * `box-shadow: none` (Phase 2c). Zebkit's elevation ramp authors srgb
  * black-with-alpha layers.
  */
+const tokenReferenceValueSchema = z.string().refine(isWholeValueAlias, 'invalid token reference');
+
 export const shadowValueSchema = z.object({
-  color: colorValueSchema,
-  offsetX: dimensionValueSchema,
-  offsetY: dimensionValueSchema,
-  blur: dimensionValueSchema,
-  spread: dimensionValueSchema,
+  // DTCG composite sub-values may be explicit values or references to a token
+  // of the matching type (Format Module 2025.10 §9.6).
+  color: z.union([colorValueSchema, tokenReferenceValueSchema]),
+  offsetX: z.union([dimensionValueSchema, tokenReferenceValueSchema]),
+  offsetY: z.union([dimensionValueSchema, tokenReferenceValueSchema]),
+  blur: z.union([
+    dimensionValueSchema.refine((dimension) => dimension.value >= 0, 'shadow blur must not be negative'),
+    tokenReferenceValueSchema,
+  ]),
+  spread: z.union([dimensionValueSchema, tokenReferenceValueSchema]),
   inset: z.boolean().optional(),
-});
+}).strict();
 export type ShadowValue = z.infer<typeof shadowValueSchema>;
 
 function isSingleShadow(v: unknown): boolean {
@@ -191,35 +234,69 @@ function isSingleShadow(v: unknown): boolean {
  * the empty `none` array. A non-empty array of non-shadow entries (e.g. a
  * future `cubicBezier` number tuple) is not a shadow.
  */
-export function isShadowValue(v: unknown): v is ShadowValue | ShadowValue[] {
-  if (Array.isArray(v)) return v.length === 0 || v.every(isSingleShadow);
+export function isShadowValue(v: unknown): v is ShadowTokenValue {
+  if (Array.isArray(v)) {
+    return v.length === 0 || v.every((layer) => isSingleShadow(layer) || isWholeValueAlias(layer));
+  }
   return isSingleShadow(v);
 }
 
 /** Shadow offsets drop the unit at zero magnitude (`0`, not `0px`) — the authored CSS form. */
-function serializeShadowDimension(d: DimensionValue): string {
+export type ShadowReferenceResolver = (
+  reference: string,
+  expectedType: 'shadow' | 'color' | 'dimension'
+) => string;
+
+function serializeShadowReference(
+  value: string,
+  expectedType: 'shadow' | 'color' | 'dimension',
+  resolveReference: ShadowReferenceResolver | undefined
+): string {
+  const reference = parseWholeValueAlias(value);
+  if (!reference) return value;
+  if (!resolveReference) {
+    throw new Error(
+      `Cannot serialize shadow reference '{${reference}}' without a token collection resolver.`
+    );
+  }
+  return resolveReference(reference, expectedType);
+}
+
+function serializeShadowDimension(
+  d: DimensionValue | string,
+  resolveReference: ShadowReferenceResolver | undefined
+): string {
+  if (typeof d === "string") return serializeShadowReference(d, 'dimension', resolveReference);
   return d.value === 0 ? "0" : serializeDimensionValue(d);
 }
 
 /** Shadow colors render in CSS Color 4 space notation (srgb → `rgb(r g b[ / a])`). */
-function serializeShadowColor(c: ColorValue): string {
+function serializeShadowColor(
+  c: ColorValue | string,
+  resolveReference: ShadowReferenceResolver | undefined
+): string {
+  if (typeof c === "string") return serializeShadowReference(c, 'color', resolveReference);
   const alpha = c.alpha ?? 1;
-  if (c.colorSpace === "srgb") {
+  const allNumeric = c.components.every((component): component is number => typeof component === "number");
+  if (c.colorSpace === "srgb" && allNumeric) {
     const to255 = (n: number) => Math.round(n * 255);
-    const [r, g, b] = c.components;
+    const [r, g, b] = c.components as [number, number, number];
     const rgb = `${to255(r)} ${to255(g)} ${to255(b)}`;
     return alpha === 1 ? `rgb(${rgb})` : `rgb(${rgb} / ${alpha})`;
   }
   return serializeColorValue(c);
 }
 
-function serializeShadowLayer(s: ShadowValue): string {
+function serializeShadowLayer(
+  s: ShadowValue,
+  resolveReference: ShadowReferenceResolver | undefined
+): string {
   const body = [
-    serializeShadowDimension(s.offsetX),
-    serializeShadowDimension(s.offsetY),
-    serializeShadowDimension(s.blur),
-    serializeShadowDimension(s.spread),
-    serializeShadowColor(s.color),
+    serializeShadowDimension(s.offsetX, resolveReference),
+    serializeShadowDimension(s.offsetY, resolveReference),
+    serializeShadowDimension(s.blur, resolveReference),
+    serializeShadowDimension(s.spread, resolveReference),
+    serializeShadowColor(s.color, resolveReference),
   ].join(" ");
   return s.inset ? `inset ${body}` : body;
 }
@@ -230,10 +307,19 @@ function serializeShadowLayer(s: ShadowValue): string {
  * `[inset ]<offsetX> <offsetY> <blur> <spread> <color>`, layers join with
  * `, `, and the empty array is `none`.
  */
-export function serializeShadowValue(v: ShadowValue | ShadowValue[]): string {
+export type ShadowTokenValue = ShadowValue | Array<ShadowValue | string>;
+
+export function serializeShadowValue(
+  v: ShadowTokenValue,
+  resolveReference?: ShadowReferenceResolver
+): string {
   const layers = Array.isArray(v) ? v : [v];
   if (layers.length === 0) return "none";
-  return layers.map(serializeShadowLayer).join(", ");
+  return layers
+    .map((layer) => typeof layer === "string"
+      ? serializeShadowReference(layer, 'shadow', resolveReference)
+      : serializeShadowLayer(layer, resolveReference))
+    .join(", ");
 }
 
 /**
@@ -243,9 +329,9 @@ export function serializeShadowValue(v: ShadowValue | ShadowValue[]): string {
  */
 export const DURATION_UNITS = ["ms", "s"] as const;
 export const durationValueSchema = z.object({
-  value: z.number(),
+  value: z.number().finite().nonnegative(),
   unit: z.enum(DURATION_UNITS),
-});
+}).strict();
 export type DurationValue = z.infer<typeof durationValueSchema>;
 
 /** True when `v` is a structured `{value, unit}` duration (ms/s). */
@@ -271,10 +357,10 @@ export function serializeDurationValue(v: DurationValue): string {
  * it). Keyword easings (`ease-out`) are `transitionTimingFunction`, not this.
  */
 export const cubicBezierValueSchema = z.tuple([
-  z.number(),
-  z.number(),
-  z.number(),
-  z.number(),
+  z.number().finite().min(0).max(1),
+  z.number().finite(),
+  z.number().finite().min(0).max(1),
+  z.number().finite(),
 ]);
 export type CubicBezierValue = z.infer<typeof cubicBezierValueSchema>;
 
@@ -349,7 +435,9 @@ export type ZebkitFontExtension = z.infer<typeof zebkitFontExtensionSchema>;
  * scale-step entry: `index` positions the step in the fluid scale (base = 0).
  */
 export const zebkitScaleStepSchema = z.object({
-  index: z.number().int(),
+  index: z.number().finite().int(),
+  /** Export provenance retained only in literal DTCG reads. */
+  valueSource: z.enum(["generated", "pinned"]).optional(),
 });
 export type ZebkitScaleStep = z.infer<typeof zebkitScaleStepSchema>;
 
@@ -364,38 +452,181 @@ export const zebkitExtensionSchema = z.object({
   a11y: z.union([z.boolean(), z.string()]).optional(),
   font: zebkitFontExtensionSchema.optional(),
   scale: zebkitScaleStepSchema.optional(),
-});
+  /** Authoring-only empty semantic color placeholder, materialized at export. */
+  emptyColorPlaceholder: z.literal(true).optional(),
+  /** Original raw theme CSS value restored when an exported DTCG document is re-ingested. */
+  rawCssValue: z.string().optional(),
+  /** Original type when an export uses a DTCG interchange type for a raw CSS value. */
+  originalType: allowedTokenTypes.optional(),
+}).passthrough();
 export type ZebkitExtension = z.infer<typeof zebkitExtensionSchema>;
 
-/** The `$extensions` member: zebkit's vendor namespace (other vendors rejected pre-Phase 3). */
+/** `$extensions` validates Zebkit's namespace and preserves unknown vendor namespaces. */
 export const tokenExtensionsSchema = z.object({
   [ZEBKIT_EXTENSION_KEY]: zebkitExtensionSchema.optional(),
-});
+}).passthrough();
 export type TokenExtensions = z.infer<typeof tokenExtensionsSchema>;
+
+const stringTokenValueSchema = z.string();
+const booleanTokenValueSchema = z.boolean();
+const numberTokenValueSchema = z.number().finite();
+
+/** The exact named aliases defined by DTCG Format Module 2025.10 §8.4. */
+export const DTCG_2025_10_WEIGHT_ALIASES = [
+  "thin",
+  "hairline",
+  "extra-light",
+  "ultra-light",
+  "light",
+  "normal",
+  "regular",
+  "book",
+  "medium",
+  "semi-bold",
+  "demi-bold",
+  "bold",
+  "extra-bold",
+  "ultra-bold",
+  "black",
+  "heavy",
+  "extra-black",
+  "ultra-black",
+] as const;
+
+export const fontWeightValueSchema = z.union([
+  z.number().finite().min(1).max(1000),
+  z.enum(DTCG_2025_10_WEIGHT_ALIASES),
+]);
+
+export const strokeStyleKeywordSchema = z.enum([
+  "solid",
+  "dashed",
+  "dotted",
+  "double",
+  "groove",
+  "ridge",
+  "outset",
+  "inset",
+]);
+
+// Zebkit's border-style surface uses the DTCG keyword form. The structured
+// SVG dash form is not authorable until it has a corresponding CSS target.
+export const strokeStyleValueSchema = strokeStyleKeywordSchema;
+export type StrokeStyleValue = z.infer<typeof strokeStyleValueSchema>;
+
+/**
+ * One conformance registry for authored and exported token values. Whole-value
+ * aliases are intentionally accepted for every type here; the collection
+ * validator resolves their target and checks type compatibility.
+ */
+export function tokenValueSchemaForType(type: AllowedTokenTypes): z.ZodTypeAny {
+  switch (type) {
+    case "number":
+      return numberTokenValueSchema;
+    case "color":
+      return colorValueSchema;
+    case "dimension":
+      return dimensionValueSchema;
+    case "duration":
+      return durationValueSchema;
+    case "cubicBezier":
+      return cubicBezierValueSchema;
+    case "shadow":
+      return z.union([shadowValueSchema, z.array(z.union([shadowValueSchema, tokenReferenceValueSchema]))]);
+    case "fontFamily":
+      return z.union([z.string(), z.array(z.string())]);
+    case "fontWeight":
+      return fontWeightValueSchema;
+    case "boolean":
+      return booleanTokenValueSchema;
+    case "flex":
+    case "cssDimension":
+    case "display":
+    case "cursor":
+    case "fontStyle":
+    case "textDecoration":
+    case "textTransform":
+    case "textAlignment":
+    case "transitionProperty":
+    case "transitionTimingFunction":
+    case "transform":
+    case "utility":
+    case "asset":
+    case "content":
+      return stringTokenValueSchema;
+    case "strokeStyle":
+      return strokeStyleValueSchema;
+  }
+}
+
+/** Check a literal against the registry, leaving whole-value aliases to reference validation. */
+export function validateTokenValue(
+  type: AllowedTokenTypes,
+  value: unknown,
+  options: { allowAuthoringPlaceholders?: boolean; emptyColorPlaceholder?: boolean } = {}
+): z.SafeParseReturnType<unknown, unknown> {
+  if (isWholeValueAlias(value)) return { success: true, data: value };
+  if (
+    options.allowAuthoringPlaceholders &&
+    options.emptyColorPlaceholder &&
+    type === "color" &&
+    value === ""
+  ) {
+    return { success: true, data: value };
+  }
+  return tokenValueSchemaForType(type).safeParse(value);
+}
 
 /**
  * Zod schema describing a single token entry.
  */
 export const tokenObjectSchema = z.object({
-  $value: z.union([
-    z.string(),
-    z.number(),
-    dimensionValueSchema,
-    durationValueSchema,
-    colorValueSchema,
-    cubicBezierValueSchema,
-    shadowValueSchema,
-    z.array(shadowValueSchema),
-  ]),
+  $value: z.unknown(),
   $type: allowedTokenTypes,
   $description: z.string(),
   $extensions: tokenExtensionsSchema.optional(),
+  $deprecated: z.union([z.boolean(), z.string()]).optional(),
+}).superRefine((entry, ctx) => {
+  if (entry.$value === undefined) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["$value"], message: "$value is required" });
+    return;
+  }
+  const result = validateTokenValue(entry.$type, entry.$value, {
+    allowAuthoringPlaceholders: true,
+    emptyColorPlaceholder: zbkExtension(entry)?.emptyColorPlaceholder === true,
+  });
+  if (!result.success) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["$value"],
+      message: `value does not match $type '${entry.$type}'`,
+    });
+  }
 });
 
 /**
  * Shape of an individual token entry.
  */
-export interface TokenObject extends z.infer<typeof tokenObjectSchema> {}
+export type TokenValue =
+  | string
+  | number
+  | boolean
+  | DimensionValue
+  | DurationValue
+  | ColorValue
+  | CubicBezierValue
+  | ShadowTokenValue
+  | StrokeStyleValue
+  | string[];
+
+export interface TokenObject {
+  $value?: TokenValue;
+  $type: AllowedTokenTypes;
+  $description: string;
+  $extensions?: TokenExtensions;
+  $deprecated?: boolean | string;
+  [key: string]: unknown;
+}
 
 /**
  * Generic authoring schema for a token module's default export: a record of
@@ -415,24 +646,67 @@ export const tokenModuleSchema = z.record(tokenObjectSchema);
  * custom properties. Token modules author them via a named `extensions` export;
  * override documents author them via a top-level `$extensions` member.
  */
-export const tokenGroupScaleSchema = z.record(
-  z.union([z.string(), z.number(), dimensionValueSchema])
-);
-export type TokenGroupScale = z.infer<typeof tokenGroupScaleSchema>;
+const scaleLengthSchema = z.union([
+  dimensionValueSchema,
+  z.string().regex(/^-?(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem)$/),
+]);
+const positiveFiniteSchema = z.number().finite().positive();
+
+export const typeScaleControlsSchema = z.object({
+  'min-viewport': scaleLengthSchema.optional(),
+  'max-viewport': scaleLengthSchema.optional(),
+  'min-base': scaleLengthSchema.optional(),
+  'max-base': scaleLengthSchema.optional(),
+  'min-ratio': positiveFiniteSchema.optional(),
+  'max-ratio': positiveFiniteSchema.optional(),
+}).strict().superRefine((controls, ctx) => {
+  const lengthToPx = (value: string | DimensionValue | undefined): number | undefined => {
+    if (value === undefined) return undefined;
+    if (typeof value === 'string') {
+      const amount = Number.parseFloat(value);
+      return value.endsWith('rem') ? amount * 16 : amount;
+    }
+    return value.unit === 'rem' ? value.value * 16 : value.value;
+  };
+  const minViewport = lengthToPx(controls['min-viewport']);
+  const maxViewport = lengthToPx(controls['max-viewport']);
+  if (minViewport !== undefined && maxViewport !== undefined && maxViewport <= minViewport) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['max-viewport'],
+      message: 'max-viewport must be greater than min-viewport',
+    });
+  }
+});
+
+export const spaceScaleControlsSchema = z.object({
+  'max-scale': positiveFiniteSchema.optional(),
+}).strict();
+
+export const tokenGroupScaleSchema = z.union([typeScaleControlsSchema, spaceScaleControlsSchema]);
+export interface TokenGroupScale {
+  'min-viewport'?: string | DimensionValue;
+  'max-viewport'?: string | DimensionValue;
+  'min-base'?: string | DimensionValue;
+  'max-base'?: string | DimensionValue;
+  'min-ratio'?: number;
+  'max-ratio'?: number;
+  'max-scale'?: number;
+}
 
 export const tokenGroupExtensionsSchema = z.object({
   [ZEBKIT_EXTENSION_KEY]: z
     .object({
       scale: tokenGroupScaleSchema.optional(),
       // A module's cascade layer and emission mode ride here in exported DTCG
-      // documents (Phase 3), replacing the `_layer` / `_cssEmission` snapshot
-      // sidecars. Authoring TS modules still declare these via `layer` /
+      // documents. This replaced the historical `_layer` / `_cssEmission`
+      // snapshot sidecars; authoring TS modules still declare these via `layer` /
       // `cssEmission` exports; the exporter folds them into this group block.
       layer: z.enum(LAYER_ORDER as [string, ...string[]]).optional(),
       cssEmission: z.literal('external').optional(),
-    })
+    }).passthrough()
     .optional(),
-});
+}).passthrough();
 export type TokenGroupExtensions = z.infer<typeof tokenGroupExtensionsSchema>;
 
 /**
@@ -476,10 +750,11 @@ export type TokenMap = Record<string, TokenInterface>;
  * interchange.
  */
 export const fontFamilyTokenObjectSchema = z.object({
-  $value: z.union([z.string(), z.number(), z.array(z.string())]),
+  $value: z.union([z.string(), z.array(z.string())]),
   $type: z.literal("fontFamily"),
   $description: z.string(),
   $extensions: tokenExtensionsSchema.optional(),
+  $deprecated: z.union([z.boolean(), z.string()]).optional(),
 });
 export type FontFamilyTokenObject = z.infer<typeof fontFamilyTokenObjectSchema>;
 

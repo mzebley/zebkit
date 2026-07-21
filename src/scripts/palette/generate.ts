@@ -86,6 +86,27 @@ async function main() {
   const checkOnly = process.argv.includes("--check");
   const drifted: string[] = [];
 
+  // Palette family partials share a directory with hand-authored source. Only
+  // files carrying this generator's header are owned here, so stale generated
+  // families can be reconciled without deleting consumer-authored SCSS.
+  const generatedPaletteFiles = (await fs.readdir(path.resolve(rootDir, PALETTE_DIR)))
+    .filter((name) => name.endsWith(".scss"))
+    .map((name) => `${PALETTE_DIR}/${name}`)
+    .filter((relPath) => {
+      const filePath = path.resolve(rootDir, relPath);
+      return fs.readFileSync(filePath, "utf8").startsWith(GENERATED_HEADER);
+    });
+  const retiredFiles = generatedPaletteFiles.filter((relPath) => !outputs.has(relPath));
+
+  if (checkOnly) {
+    drifted.push(...retiredFiles);
+  } else {
+    for (const relPath of retiredFiles) {
+      await fs.remove(path.resolve(rootDir, relPath));
+      console.log(`removed retired ${relPath}`);
+    }
+  }
+
   for (const [relPath, output] of outputs) {
     const outputPath = path.resolve(rootDir, relPath);
     if (checkOnly) {

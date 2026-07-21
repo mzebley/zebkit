@@ -15,7 +15,7 @@ import { buildZebkitTokens } from '../src/scripts/tokens/compile-tokens.js';
 import { discoverVariantConfigs } from '../src/scripts/tokens/compile-variants.js';
 import { isVariantOverrideFile } from '../src/scripts/tokens/compile-variant-helpers.js';
 import { getKnownComponents } from '../src/scripts/known-components.js';
-import { toDtcgDocuments } from '../src/scripts/tokens/dtcg-document.js';
+import { toDtcgDocuments, type ModuleMeta } from '../src/scripts/tokens/dtcg-document.js';
 import type { LayerName } from '../src/definitions/layers.js';
 import type { TokenInterface, TokenGroupExtensions } from '../src/definitions/tokens.js';
 import { getBuiltInThemeNames, DEFAULT_THEME_NAME, resolveSourceThemeOverridePath } from '../src/scripts/theme-presets.js';
@@ -25,6 +25,7 @@ const __dirname = path.dirname(__filename);
 
 const defaultsDir = path.resolve(__dirname, '../dist/cli/defaults');
 const presetsDir = path.resolve(__dirname, '../dist/cli/presets');
+const SHARED_DEFAULT_ARTIFACTS = new Set(['component-tokens.json']);
 
 interface ManifestModule {
   key: string;
@@ -34,21 +35,32 @@ interface ManifestModule {
 
 async function buildDefaults() {
   console.log('Building token defaults for CLI distribution...');
+  // `component-tokens.json` shares this directory but is owned by
+  // build:components. Snapshot modules are reconciled after generation so
+  // retired modules disappear without deleting another generator's output.
   await fs.ensureDir(defaultsDir);
-  await fs.ensureDir(presetsDir);
+  await fs.emptyDir(presetsDir);
+  const previousDefaultModuleFiles = await readManifestModuleFiles(defaultsDir);
 
   // Gather all core token files (no components, no SCSS needed)
   const files = await gatherZebkitFiles();
 
   // Run the full token pipeline in-memory (no CSS compilation, no file export)
-  const { tokens, layers, groupExtensions, externalModules } = await buildZebkitTokens(DEFAULT_THEME_NAME, files.tokenFiles, defaultsDir, undefined, [], { splitMode: 'combined' }, false);
+  const { tokens, layers, moduleMetadata, groupExtensions, externalModules } = await buildZebkitTokens(DEFAULT_THEME_NAME, files.tokenFiles, defaultsDir, undefined, [], { splitMode: 'combined' }, false);
 
   if (Object.keys(tokens).length === 0) {
     console.error('No tokens found — aborting.');
     process.exit(1);
   }
 
-  await writeSnapshotDir(defaultsDir, tokens, layers, groupExtensions, externalModules);
+  const defaultManifest = await writeSnapshotDir(
+    defaultsDir,
+    tokens,
+    layers,
+    groupExtensions,
+    externalModules,
+    moduleMetadata
+  );
 
   // Snapshot built-in variant configs (raw, as-authored) so the installed CLI can
   // register them without the TS sources — those don't ship, and the bundled CLI
@@ -65,6 +77,8 @@ async function buildDefaults() {
   await fs.writeJson(componentsPath, componentNames, { spaces: 2 });
   console.log(`Wrote ${componentNames.length} component name(s) to ${componentsPath}`);
 
+  await removeRetiredDefaultModules(previousDefaultModuleFiles, defaultManifest);
+
   const builtInThemes = await getBuiltInThemeNames();
   const presetThemeNames = builtInThemes.filter((theme) => theme !== DEFAULT_THEME_NAME);
 
@@ -78,6 +92,7 @@ async function buildDefaults() {
     const {
       tokens: presetTokens,
       layers: presetLayers,
+      moduleMetadata: presetModuleMetadata,
       groupExtensions: presetGroupExtensions,
       externalModules: presetExternalModules,
     } = await buildZebkitTokens(
@@ -98,7 +113,8 @@ async function buildDefaults() {
       presetTokens,
       presetLayers,
       presetGroupExtensions,
-      presetExternalModules
+      presetExternalModules,
+      presetModuleMetadata
     );
     await copyVariantOverrideFiles(overridePath, path.join(presetOutputDir, 'variant-overrides'));
   }
@@ -134,12 +150,48 @@ async function copyVariantOverrideFiles(sourceDir: string, outputDir: string) {
   }
 }
 
+async function readManifestModuleFiles(directory: string): Promise<Set<string>> {
+  try {
+    const manifest = (await fs.readJson(path.join(directory, 'manifest.json'))) as {
+      modules?: Array<{ file?: unknown }>;
+    };
+    const modules = Array.isArray(manifest.modules) ? manifest.modules : [];
+    return new Set(
+      modules
+        .map((module) => module.file)
+        .filter(
+          (file): file is string =>
+            typeof file === 'string' &&
+            path.basename(file) === file &&
+            file.endsWith('.json') &&
+            !SHARED_DEFAULT_ARTIFACTS.has(file)
+        )
+    );
+  } catch {
+    return new Set();
+  }
+}
+
+async function removeRetiredDefaultModules(
+  previousFiles: ReadonlySet<string>,
+  manifest: { modules: ManifestModule[] }
+) {
+  const expectedFiles = new Set(manifest.modules.map((module) => module.file));
+
+  await Promise.all(
+    [...previousFiles]
+      .filter((file) => !expectedFiles.has(file))
+      .map((file) => fs.remove(path.join(defaultsDir, file)))
+  );
+}
+
 async function writeSnapshotDir(
   outputDir: string,
   tokens: Record<string, unknown>,
   layers: Record<string, LayerName>,
   groupExtensions: Record<string, unknown> = {},
-  externalModules: ReadonlySet<string> = new Set()
+  externalModules: ReadonlySet<string> = new Set(),
+  moduleMetadata: Record<string, ModuleMeta> = {}
 ) {
   const manifest: { modules: ManifestModule[] } = { modules: [] };
 
@@ -154,6 +206,7 @@ async function writeSnapshotDir(
     layers,
     groupExtensions: groupExtensions as Record<string, TokenGroupExtensions | undefined>,
     externalModules,
+    moduleMetadata,
   });
 
   for (const tokenKey of Object.keys(tokens)) {
@@ -167,6 +220,7 @@ async function writeSnapshotDir(
 
   console.log(`\nWrote ${manifest.modules.length} token modules to ${outputDir}`);
   console.log(`Manifest: ${path.join(outputDir, 'manifest.json')}`);
+  return manifest;
 }
 
 buildDefaults().catch((err) => {

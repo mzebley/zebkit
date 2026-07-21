@@ -4,8 +4,8 @@
  *
  * Rebuilds the exported token documents fresh from source — the default theme
  * plus every built-in preset, exactly as `build:defaults` emits them — and runs
- * `validateDtcgDocument` over each module. This turns "the exports are valid
- * DTCG" from a fact that happens to be true today into one the build enforces:
+ * profile validation over each module, then strict supported-type and reference
+ * validation. This turns the interchange contracts into build-enforced facts:
  * deleting a `$`-field, mistyping a `$type`, or slipping in a `$ref`/`$extends`
  * fails `npm run check` with a message that names the module and token.
  *
@@ -23,10 +23,10 @@ import { buildZebkitTokens } from '../src/scripts/tokens/compile-tokens.js';
 import {
   fromDtcgDocument,
   toDtcgDocuments,
-  toStrictDtcgDocument,
-  validateDtcgDocument,
+  toStrictDtcgDocuments,
+  validateDtcgDocuments,
 } from '../src/scripts/tokens/dtcg-document.js';
-import { isDtcgSpecType } from '../src/definitions/dtcg.js';
+import { isZebkitSupportedSpecType } from '../src/definitions/dtcg.js';
 import {
   getBuiltInThemeNames,
   DEFAULT_THEME_NAME,
@@ -42,7 +42,7 @@ async function documentsForTheme(
   tokenFiles: string[],
   overridePaths: string[]
 ): Promise<Record<string, Record<string, unknown>>> {
-  const { tokens, layers, groupExtensions, externalModules } = await buildZebkitTokens(
+  const { tokens, layers, moduleMetadata, groupExtensions, externalModules } = await buildZebkitTokens(
     themeName,
     tokenFiles,
     path.join(REPO_ROOT, 'tmp', 'dtcg-validate', themeName),
@@ -51,7 +51,13 @@ async function documentsForTheme(
     { splitMode: 'combined', overridePaths },
     false
   );
-  return toDtcgDocuments({ tokens, layers, groupExtensions, externalModules });
+  return toDtcgDocuments({
+    tokens,
+    layers,
+    groupExtensions,
+    externalModules,
+    moduleMetadata,
+  });
 }
 
 async function main(): Promise<void> {
@@ -74,20 +80,18 @@ async function main(): Promise<void> {
   for (const build of builds) {
     console.log(chalk.cyan(`\n--- validating export: ${build.theme} ---`));
     const documents = await documentsForTheme(build.theme, files.tokenFiles, build.overridePaths);
-    for (const [key, doc] of Object.entries(documents)) {
-      moduleCount += 1;
-      const label = `${build.theme}/${key}`;
-      for (const error of validateDtcgDocument(doc, label)) problems.push(error);
+    moduleCount += Object.keys(documents).length;
+    problems.push(...validateDtcgDocuments(documents, build.theme));
 
-      // Strict-mode export (D9): the spec-only reduction must itself be valid and
-      // contain no proprietary `$type` — it is what tools that reject unknown
-      // types will consume.
-      const { document, dropped } = toStrictDtcgDocument(doc);
-      strictDropTotal += dropped.length;
-      for (const error of validateDtcgDocument(document, `${label} (strict)`)) problems.push(error);
-      for (const [name, entry] of Object.entries(fromDtcgDocument(document).entries)) {
-        if (!isDtcgSpecType(entry.$type)) {
-          problems.push(`${label} (strict).${name}: non-spec $type '${entry.$type}' survived strict export`);
+    // Strict conversion is collection-level: aliases can cross module
+    // boundaries, so filtering one document at a time cannot prove closure.
+    const { documents: strictDocuments, dropped } = toStrictDtcgDocuments(documents);
+    strictDropTotal += Object.values(dropped).reduce((total, entries) => total + entries.length, 0);
+    problems.push(...validateDtcgDocuments(strictDocuments, `${build.theme} (strict)`, { strict: true }));
+    for (const [key, document] of Object.entries(strictDocuments)) {
+      for (const [name, entry] of Object.entries(fromDtcgDocument(document, { mode: 'literal' }).entries)) {
+        if (!isZebkitSupportedSpecType(entry.$type)) {
+          problems.push(`${build.theme}/${key} (strict).${name}: unsupported strict $type '${entry.$type}' survived strict export`);
         }
       }
     }
@@ -106,9 +110,10 @@ async function main(): Promise<void> {
     for (const problem of problems) console.error(chalk.red(`  - ${problem}`));
     console.error(
       chalk.yellow(
-        '\nEvery exported token document must be conformant DTCG: each leaf needs a ' +
-          '$value (or a fluid-scale index), a $type in the allowed set, and a $description; ' +
-          '$ref / $extends are rejected (use a {curly-brace} reference).'
+        '\nFull exports must satisfy the Zebkit DTCG 2025.10 profile; strict exports ' +
+          'must contain only implemented spec types with closed references. Each leaf needs ' +
+          'a $value, a supported $type, and a $description. $ref / $extends are rejected ' +
+          '(use a {curly-brace} reference).'
       )
     );
     process.exitCode = 1;
@@ -117,8 +122,8 @@ async function main(): Promise<void> {
 
   console.log(
     chalk.green(
-      `\nDTCG export validation OK — ${moduleCount} module document(s) across ${builds.length} theme(s) conformant ` +
-        `(strict mode sheds ${strictDropTotal} proprietary-typed token(s)).`
+      `\nToken export validation OK — ${moduleCount} full-profile module document(s) across ${builds.length} theme(s); ` +
+        `strict documents are DTCG 2025.10 conformant and shed ${strictDropTotal} unsupported token(s).`
     )
   );
 }

@@ -2,7 +2,7 @@
 
 Token modules are the token language: each folder under `src/tokens/` contributes a typed map of visual decisions to the build. Add a module when the scale or semantic meaning belongs in the shared vocabulary; component-specific surfaces belong beside their component instead.
 
-Entries follow the [DTCG 2025.10](https://tr.designtokens.org/format/) design-token shape — `$value` / `$type` / `$description`, with anything zebkit-specific namespaced under `$extensions["dev.zebkit"]` (the `a11y` modifier opt-in, font-loading metadata, generated-scale steps). See the [manifesto](../../foundations/VISION.md) and [plans/dtcg-alignment/](../../plans/dtcg-alignment/).
+Entries follow the [DTCG 2025.10](https://www.designtokens.org/TR/2025.10/format/) design-token shape — `$value` / `$type` / `$description`, with anything zebkit-specific namespaced under `$extensions["dev.zebkit"]` (the `a11y` modifier opt-in, font-loading metadata, generated-scale steps). See the [manifesto](../../foundations/VISION.md) and [plans/dtcg-alignment/](../../plans/dtcg-alignment/).
 
 ## The pieces
 
@@ -28,7 +28,40 @@ export default {
 
 Discovery is automatic: the build finds every `**/tokens/tokens.ts` beneath `src/tokens/`; component modules at `src/components/{name}/tokens/` follow the same convention. There is no registration list.
 
-Every module is validated. A module with a sibling `token-schema.ts` uses it; the rest validate against the generic `tokenModuleSchema` — a record of DTCG entries — so most modules need no schema file at all. A failed parse or a value-conversion failure stops the build, and the golden baseline plus component lint catch a dropped or mistyped entry the per-module exact-key schemas used to. Exported artifacts are additionally validated as conformant DTCG documents by `npm run check:dtcg-validate`.
+Every module is validated. A module with a sibling `token-schema.ts` uses it; the rest validate against the generic `tokenModuleSchema` — a record of DTCG entries — so most modules need no schema file at all. A failed parse, invalid override, unknown token, broken reference, or value-conversion failure stops the build.
+
+Full exports use the **Zebkit DTCG 2025.10 profile**: standard document structure plus the documented proprietary types required by zebkit's CSS surface. Curly aliases may have arbitrary depth and nested groups flatten with `-`; `$ref` and `$extends` are rejected deliberately. Strict exports contain only zebkit's fully implemented DTCG types, are reference-closed, and pass `npm run check:dtcg-validate` as DTCG 2025.10 documents.
+
+## Theme overrides and exports
+
+Override any shipped token, including primitive colors, with a structured value, a compatible curly alias, or a supported raw CSS shorthand. Unknown tokens and malformed or incompatible values fail the build; raw CSS that cannot be normalized fails when token export is requested.
+
+```json
+{
+  "red": {
+    "$type": "color",
+    "600": {
+      "$value": { "colorSpace": "hsl", "components": [8, 80, 48] }
+    }
+  }
+}
+```
+
+Full and strict combined exports:
+
+```json
+{
+  "configVersion": 1,
+  "tokens": {
+    "exportTokens": true,
+    "exportStrict": true,
+    "splitMode": "combined",
+    "outputFormats": ["JSON"]
+  }
+}
+```
+
+This writes `<theme>-tokens.json`, `<theme>-tokens.strict.json`, and `<theme>.drop-manifest.json`. Set `splitMode` to `per-module` for `zbk-<module>.tokens.json` and `zbk-<module>.strict.tokens.json`; the drop manifest remains theme-level. `exportStrict: true` requires `exportTokens: true`.
 
 ## Keys and utility bindings
 
@@ -42,4 +75,4 @@ Utility manifests bind `tokens.group` to this key. When a token-bound family der
 2. Build the docs token set: `npm run build:tokens -- --config theme/zebkit.docs.config.json`.
 3. Run `npm run check` before handing off the change.
 
-The docs token build writes the static token artifacts; `doc-site/scripts/copy-tokens.js` syncs them into the generated docs data. `npm run build:defaults` only creates the snapshots bundled with the CLI.
+The docs token build writes the static profile artifacts; `npm run build:doc-token-data` parses them through the shared DTCG boundary and writes the flat, display-ready docs projection. `doc-site/scripts/copy-tokens.js` only copies already-generated artifacts. `npm run build:defaults` creates the snapshots bundled with the CLI.
