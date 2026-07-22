@@ -6,9 +6,12 @@ import { AllowedTokenTypes } from "@definitions/tokens";
 export const tokenCompatibilityMap: {
   [key in AllowedTokenTypes]: AllowedTokenTypes[];
 } = {
-  color: ["color"],
-  fontFamily: ["fontFamily"],
-  fontWeight: ["fontWeight"],
+  color: ["color", "cssColor"],
+  cssColor: ["cssColor", "color"],
+  fontFamily: ["fontFamily", "cssFontFamily"],
+  cssFontFamily: ["cssFontFamily", "fontFamily"],
+  fontWeight: ["fontWeight", "cssFontWeight"],
+  cssFontWeight: ["cssFontWeight", "fontWeight"],
   textDecoration: ["textDecoration"],
   textTransform: ["textTransform"],
   fontStyle: ["fontStyle"],
@@ -19,28 +22,28 @@ export const tokenCompatibilityMap: {
   // clamp()/calc() strings regardless of which side authored the floor.
   dimension: ["dimension", "cssDimension"],
   cssDimension: ["cssDimension", "dimension"],
+  duration: ["duration", "cssDuration"],
+  cssDuration: ["cssDuration", "duration"],
   display: ["display"],
   cursor: ["cursor"],
   transform: ["transform"],
-  // The numbers family (Phase 2e): opacity, z-index, and line-height are all the
-  // spec `number` type and reference one another as unitless numbers. (The lone
-  // `z-index: auto` keyword is a `cssDimension` per D4, but nothing references
-  // it, so `number` stays tight.)
-  number: ["number"],
-  strokeStyle: ["strokeStyle"],
-  utility: ["utility", "boolean"],
+  // The numbers family covers literal numbers plus property-level CSS such as
+  // `auto`, percentages, and calc()/var() expressions.
+  number: ["number", "cssNumber"],
+  cssNumber: ["cssNumber", "number"],
+  strokeStyle: ["strokeStyle", "cssStrokeStyle"],
+  cssStrokeStyle: ["cssStrokeStyle", "strokeStyle"],
   asset: ["asset"],
   content: ["content"],
   boolean: ["boolean"],
-  shadow: ["shadow"],
+  shadow: ["shadow", "cssShadow"],
+  cssShadow: ["cssShadow", "shadow"],
   flex: ["flex"],
-  // The transition split (Phase 2d). A timing-function slot accepts either a
-  // keyword easing or a `cubicBezier` curve reference, so the two are mutually
-  // compatible; durations and property lists stand alone.
-  duration: ["duration"],
-  cubicBezier: ["cubicBezier", "transitionTimingFunction"],
+  resize: ["resize"],
+  // DTCG cubicBezier values and CSS easing functions share one destination.
+  cubicBezier: ["cubicBezier", "cssEasingFunction"],
+  cssEasingFunction: ["cssEasingFunction", "cubicBezier"],
   transitionProperty: ["transitionProperty"],
-  transitionTimingFunction: ["transitionTimingFunction", "cubicBezier"]
 };
 
 /**

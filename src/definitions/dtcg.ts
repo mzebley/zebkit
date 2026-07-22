@@ -56,12 +56,21 @@ export type ZebkitSupportedSpecType = (typeof ZEBKIT_SUPPORTED_SPEC_TYPES)[numbe
  * vocabulary cannot express. Kept minimal and documented; a strict-mode export
  * (decision D9) can drop these for tools that hard-fail on unknown `$type`.
  *
- * `cssDimension` covers CSS sizing values DTCG's `dimension` cannot represent:
- * `%`, `ch`, `em`, `calc()` expressions, the sizing keywords `auto`/`none`, and
- * unitless `0` (DTCG dimensions are `{value, unit}` with unit limited to
- * `px`/`rem`).
+ * Each supported DTCG type has a predictable `css<Type>` partner for valid
+ * property-level CSS that the interchange type cannot represent. Full-profile
+ * exports retain those values and their original type as Zebkit metadata;
+ * strict exports omit them because proprietary types are not DTCG-conformant.
  */
 export const ZEBKIT_PROPRIETARY_TYPES = [
+  "cssColor",
+  "cssDimension",
+  "cssDuration",
+  "cssFontFamily",
+  "cssFontWeight",
+  "cssEasingFunction",
+  "cssNumber",
+  "cssStrokeStyle",
+  "cssShadow",
   "display",
   "cursor",
   "textTransform",
@@ -70,18 +79,29 @@ export const ZEBKIT_PROPRIETARY_TYPES = [
   "fontStyle",
   "transform",
   "transitionProperty",
-  // The CSS `<easing-function>` keyword surface (`ease-out`, `linear`, …) DTCG's
-  // `cubicBezier` type (explicit `[x1,y1,x2,y2]` curves) cannot express.
-  "transitionTimingFunction",
   "content",
   "flex",
-  "utility",
+  "resize",
   "asset",
   "boolean",
-  "cssDimension",
 ] as const;
 
 export type ZebkitProprietaryType = (typeof ZEBKIT_PROPRIETARY_TYPES)[number];
+
+/** The grammatical raw-CSS fallback for every DTCG type Zebkit supports. */
+export const CSS_FALLBACK_TYPE_BY_DTCG_TYPE = {
+  color: "cssColor",
+  dimension: "cssDimension",
+  duration: "cssDuration",
+  fontFamily: "cssFontFamily",
+  fontWeight: "cssFontWeight",
+  cubicBezier: "cssEasingFunction",
+  number: "cssNumber",
+  strokeStyle: "cssStrokeStyle",
+  shadow: "cssShadow",
+} as const satisfies Record<ZebkitSupportedSpecType, ZebkitProprietaryType>;
+
+export type CssFallbackType = (typeof CSS_FALLBACK_TYPE_BY_DTCG_TYPE)[ZebkitSupportedSpecType];
 
 /** Every `$type` Zebkit can author and emit. */
 export const ALLOWED_TOKEN_TYPE_VALUES = [

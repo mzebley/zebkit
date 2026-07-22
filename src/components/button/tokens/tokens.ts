@@ -396,34 +396,34 @@ const tokens = {
   // Transformation
   "transform": {
     $value: "translateY(0)",
-    $type: "utility",
+    $type: "transform",
     $description: "Default transform property for buttons.",
   },
   "transform-hover": {
     $value: "translateY(-1%)",
-    $type: "utility",
+    $type: "transform",
     $description: "Transform effect on hover.",
   },
   "transform-active": {
     $value: "translateY(0)",
-    $type: "utility",
+    $type: "transform",
     $description: "Transform effect when active/pressed.",
   },
   "transform-focus": {
     $value: "translateY(0)",
-    $type: "utility",
+    $type: "transform",
     $description: "Transform effect in focus state (in addition to outline).",
   },
 
   // Interaction behavior & layout alignment
   cursor: {
     $value: "pointer",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor style when hovering over buttons.",
   },
   "cursor-loading": {
     $value: "progress",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor style while the button is in its loading state.",
   },
   "flex-direction": {
@@ -451,7 +451,7 @@ const tokens = {
   },
   "transition-timing-function": {
     $value: "ease-out",
-    $type: "transitionTimingFunction",
+    $type: "cssEasingFunction",
     $description: "Timing function for button transitions.",
   },
   "transition-property": {

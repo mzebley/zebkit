@@ -357,6 +357,20 @@ export const CONFIG_OPTIONS: ConfigOption[] = [
     }),
   },
   {
+    path: 'tokens.exportStrict',
+    id: 'exportStrict',
+    tier: 'advanced',
+    default: false,
+    parse: parseBoolean,
+    when: (answers) => answers.exportTokens === true,
+    buildQuestion: (def) => ({
+      type: 'confirm',
+      name: 'exportStrict',
+      message: 'Also export one combined, standard DTCG document and drop manifest?',
+      default: def,
+    }),
+  },
+  {
     path: 'tokens.outputFormats',
     id: 'outputFormats',
     tier: 'advanced',

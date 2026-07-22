@@ -8,13 +8,20 @@
     "fontFamilyValue": {
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{font-family.system-sans}",
+            "{font-family.system-serif}",
+            "{font-family.system-mono}"
+          ]
         },
         {
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         }
       ],
@@ -31,9 +38,6 @@
         "{font-family.primary}",
         "{font-family.alt}",
         "{font-family.monospace}",
-        "{font-family.system-sans}",
-        "{font-family.system-serif}",
-        "{font-family.system-mono}",
         "{font-family.interface}",
         "{font-family.heading}",
         "{font-family.body}",
@@ -49,6 +53,15 @@
         "{tooltip.font-family}"
       ]
     },
+    "cssFontFamilyValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{font-family.system-sans}",
+        "{font-family.system-serif}",
+        "{font-family.system-mono}"
+      ]
+    },
     "fontFamilyToken": {
       "type": "object",
       "description": "Primary font family for use in the system. Usually used for body content and interface items.",
@@ -58,13 +71,219 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/fontFamilyValue"
+            },
+            {
+              "$ref": "#/definitions/cssFontFamilyValue"
+            }
+          ]
         },
         "$type": {
-          "const": "fontFamily"
+          "type": "string",
+          "enum": [
+            "fontFamily",
+            "cssFontFamily"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                },
+                "font": {
+                  "type": "object",
+                  "description": "Font-loading metadata for this family.",
+                  "additionalProperties": false,
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "enum": [
+                        "system",
+                        "google",
+                        "local"
+                      ],
+                      "description": "Where this font family is loaded from."
+                    },
+                    "fallback": {
+                      "type": "string",
+                      "enum": [
+                        "sans",
+                        "serif",
+                        "mono"
+                      ],
+                      "description": "Fallback stack category appended to the authored family."
+                    },
+                    "weights": {
+                      "description": "Static font weights or a variable-font range such as 200..800.",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": [
+                              "string",
+                              "number"
+                            ]
+                          },
+                          "uniqueItems": true
+                        }
+                      ]
+                    },
+                    "styles": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "normal",
+                          "italic"
+                        ]
+                      },
+                      "uniqueItems": true
+                    },
+                    "faces": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "src"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "src": {
+                            "type": "string"
+                          },
+                          "weight": {
+                            "type": [
+                              "string",
+                              "number"
+                            ]
+                          },
+                          "style": {
+                            "type": "string",
+                            "enum": [
+                              "normal",
+                              "italic",
+                              "oblique"
+                            ]
+                          },
+                          "display": {
+                            "type": "string",
+                            "enum": [
+                              "auto",
+                              "block",
+                              "swap",
+                              "fallback",
+                              "optional"
+                            ]
+                          },
+                          "format": {
+                            "type": "string"
+                          },
+                          "unicodeRange": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "display": {
+                      "type": "string",
+                      "enum": [
+                        "auto",
+                        "block",
+                        "swap",
+                        "fallback",
+                        "optional"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "fontFamily"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/fontFamilyValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssFontFamily"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssFontFamilyValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "cssFontFamilyToken": {
+      "type": "object",
+      "description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
+      "required": [
+        "$value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "$ref": "#/definitions/cssFontFamilyValue"
+        },
+        "$type": {
+          "const": "cssFontFamily"
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -210,35 +429,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "groupType": {
-      "type": "string",
-      "enum": [
-        "color",
-        "dimension",
-        "duration",
-        "fontFamily",
-        "fontWeight",
-        "cubicBezier",
-        "number",
-        "strokeStyle",
-        "shadow",
-        "display",
-        "cursor",
-        "textTransform",
-        "textDecoration",
-        "textAlignment",
-        "fontStyle",
-        "transform",
-        "transitionProperty",
-        "transitionTimingFunction",
-        "content",
-        "flex",
-        "utility",
-        "asset",
-        "boolean",
-        "cssDimension"
       ]
     },
     "groupExtensions": {
@@ -389,14 +579,18 @@
     },
     "group:system": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "fontFamily",
+            "cssFontFamily"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -408,7 +602,7 @@
           "description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
           "allOf": [
             {
-              "$ref": "#/definitions/fontFamilyToken"
+              "$ref": "#/definitions/cssFontFamilyToken"
             }
           ]
         },
@@ -416,7 +610,7 @@
           "description": "System serif stack. Zero network cost.",
           "allOf": [
             {
-              "$ref": "#/definitions/fontFamilyToken"
+              "$ref": "#/definitions/cssFontFamilyToken"
             }
           ]
         },
@@ -424,7 +618,7 @@
           "description": "System monospace stack. Zero network cost.",
           "allOf": [
             {
-              "$ref": "#/definitions/fontFamilyToken"
+              "$ref": "#/definitions/cssFontFamilyToken"
             }
           ]
         }
@@ -433,10 +627,15 @@
   },
   "properties": {
     "$type": {
-      "$ref": "#/definitions/groupType"
+      "type": "string",
+      "enum": [
+        "fontFamily",
+        "cssFontFamily"
+      ]
     },
     "$description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "$deprecated": {
       "$ref": "#/definitions/deprecated"
@@ -475,7 +674,7 @@
       "description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
       "allOf": [
         {
-          "$ref": "#/definitions/fontFamilyToken"
+          "$ref": "#/definitions/cssFontFamilyToken"
         }
       ]
     },
@@ -483,7 +682,7 @@
       "description": "System serif stack. Zero network cost.",
       "allOf": [
         {
-          "$ref": "#/definitions/fontFamilyToken"
+          "$ref": "#/definitions/cssFontFamilyToken"
         }
       ]
     },
@@ -491,7 +690,7 @@
       "description": "System monospace stack. Zero network cost.",
       "allOf": [
         {
-          "$ref": "#/definitions/fontFamilyToken"
+          "$ref": "#/definitions/cssFontFamilyToken"
         }
       ]
     },

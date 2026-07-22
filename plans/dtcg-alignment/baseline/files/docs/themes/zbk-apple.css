@@ -85,7 +85,7 @@
 --zbk-h1-spacing-before: 0.67em;
 --zbk-h1-spacing-after: 0.67em;
 --zbk-h1-color: var(--zbk-app-ink);
---zbk-h1-font-style: none;
+--zbk-h1-font-style: normal;
 --zbk-h1-text-transform: none;
 }
 [data-zbk-theme="apple"] {
@@ -138,7 +138,7 @@
 --zbk-h2-spacing-before: .83em;
 --zbk-h2-spacing-after: .83em;
 --zbk-h2-color: var(--zbk-app-ink);
---zbk-h2-font-style: none;
+--zbk-h2-font-style: normal;
 --zbk-h2-text-transform: none;
 }
 [data-zbk-theme="apple"] {
@@ -151,7 +151,7 @@
 --zbk-h3-spacing-before: 1em;
 --zbk-h3-spacing-after: 1em;
 --zbk-h3-color: var(--zbk-app-ink);
---zbk-h3-font-style: none;
+--zbk-h3-font-style: normal;
 --zbk-h3-text-transform: none;
 }
 [data-zbk-theme="apple"] {
@@ -202,7 +202,7 @@
 --zbk-p-spacing-before: 1em;
 --zbk-p-spacing-after: 1em;
 --zbk-p-color: var(--zbk-app-ink);
---zbk-p-font-style: none;
+--zbk-p-font-style: normal;
 --zbk-p-text-transform: none;
 }
 [data-zbk-theme="apple"] {
@@ -243,14 +243,14 @@
 --zbk-action-border-inverse-emphasis: ;
 }
 [data-zbk-theme="apple"] {
---zbk-app-canvas: rgb(255,255,255);
+--zbk-app-canvas: rgb(255, 255, 255);
 --zbk-app-canvas-subtle: #fafafa;
 --zbk-app-canvas-muted: rgb(245, 245, 247);
 --zbk-app-canvas-emphasis: #e8e8ed;
---zbk-app-ink: rgb(29,29,31);
+--zbk-app-ink: rgb(29, 29, 31);
 --zbk-app-ink-subtle: #6e6e73;
 --zbk-app-ink-muted: rgba(0, 0, 0, 0.56);
---zbk-app-border: rgb(210,210,215);
+--zbk-app-border: rgb(210, 210, 215);
 --zbk-app-border-subtle: #e8e8ed;
 --zbk-app-border-muted: #d2d2d7;
 --zbk-app-border-emphasis: #86868b;
@@ -382,7 +382,7 @@
 --zbk-button-min-width: var(--zbk-spacing-3);
 --zbk-button-max-width: none;
 --zbk-button-height: auto;
---zbk-button-min-height: none;
+--zbk-button-min-height: 0px;
 --zbk-button-max-height: none;
 --zbk-button-icon-size: 1.125rem;
 --zbk-button-icon-start-size: var(--zbk-button-icon-size);
@@ -402,7 +402,7 @@
 --zbk-button-transition-duration: calc(0ms * var(--zbk-a11y-transition-duration-modifier));
 --zbk-button-transition-timing-function: ease-out;
 --zbk-button-transition-property: background-color, color, border-color, box-shadow, transform, outline;
---zbk-button-transition-delay: 0;
+--zbk-button-transition-delay: 0ms;
 --zbk-button-opacity: 1;
 }
 [data-zbk-theme="apple"] {

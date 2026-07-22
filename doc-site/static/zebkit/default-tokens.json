@@ -1,38 +1,38 @@
 {
-  "zbk-a11y": {
+  "a11y": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
       }
     },
     "spacing-modifier": {
-      "$value": "1",
-      "$type": "utility",
+      "$value": 1,
+      "$type": "number",
       "$description": "Amount to multiply spacing variables by (independent density dial)."
     },
     "spacing-text-coupling": {
-      "$value": "0.5",
-      "$type": "utility",
+      "$value": 0.5,
+      "$type": "number",
       "$description": "How hard spacing follows body (md) font-size growth: 1 = 1:1, 0 = decoupled. Lets containers grow with text without a separate density bump."
     },
     "line-height-modifier": {
-      "$value": "1",
-      "$type": "utility",
+      "$value": 1,
+      "$type": "number",
       "$description": "Amount to multiply line height variables by."
     },
     "letter-spacing-modifier": {
-      "$value": "1",
-      "$type": "utility",
+      "$value": 1,
+      "$type": "number",
       "$description": "Amount to multiply letter spacing variables by."
     },
     "fallback-font-size-modifier": {
-      "$value": "1",
-      "$type": "utility",
+      "$value": 1,
+      "$type": "number",
       "$description": "Fallback amount to multiply font size variables by in the event their specific modifier isn't set."
     },
     "transition-duration-modifier": {
-      "$value": "1",
-      "$type": "utility",
+      "$value": 1,
+      "$type": "number",
       "$description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'"
     },
     "min-interaction-size": {
@@ -50,7 +50,7 @@
       }
     }
   },
-  "zbk-breakpoint": {
+  "breakpoint": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -127,7 +127,7 @@
       }
     }
   },
-  "zbk-accent-primary": {
+  "accent-primary": {
     "50": {
       "$value": "{color.sea-50}",
       "$type": "color",
@@ -309,7 +309,7 @@
       "$description": "Emphasis inverse primary-accent border color for high-prominence outlines on inverse canvases."
     }
   },
-  "zbk-accent-secondary": {
+  "accent-secondary": {
     "50": {
       "$value": "{color.butterfield-50}",
       "$type": "color",
@@ -491,7 +491,7 @@
       "$description": "Emphasis inverse secondary-accent border color for high-prominence outlines on inverse canvases."
     }
   },
-  "zbk-brand": {
+  "brand": {
     "50": {
       "$value": "{color.dusk-50}",
       "$type": "color",
@@ -673,7 +673,7 @@
       "$description": "Emphasis inverse brand border color for high-prominence outlines on inverse canvases."
     }
   },
-  "zbk-neutral": {
+  "neutral": {
     "50": {
       "$value": "{color.stone-50}",
       "$type": "color",
@@ -735,7 +735,7 @@
       }
     }
   },
-  "zbk-color": {
+  "color": {
     "$type": "color",
     "$extensions": {
       "dev.zebkit": {
@@ -3805,7 +3805,7 @@
       "$description": "Fully transparent color for surfaces that must not paint."
     }
   },
-  "zbk-elevation": {
+  "elevation": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4285,7 +4285,7 @@
       }
     }
   },
-  "zbk-focus": {
+  "focus": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4307,7 +4307,7 @@
       "$description": "Offset distance of focus outline"
     }
   },
-  "zbk-opacity": {
+  "opacity": {
     "0": {
       "$value": 0,
       "$type": "number",
@@ -4399,7 +4399,7 @@
       }
     }
   },
-  "zbk-h1": {
+  "h1": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -4451,7 +4451,7 @@
       "$description": "Color of H1 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-style": {
-      "$value": "none",
+      "$value": "normal",
       "$type": "fontStyle",
       "$description": "Font style for H1 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -4461,7 +4461,7 @@
       "$description": "Text transform for H1 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
-  "zbk-h2": {
+  "h2": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4513,7 +4513,7 @@
       "$description": "Color of H2 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-style": {
-      "$value": "none",
+      "$value": "normal",
       "$type": "fontStyle",
       "$description": "Font style for H2 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -4523,7 +4523,7 @@
       "$description": "Text transform for H2 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
-  "zbk-h3": {
+  "h3": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4575,7 +4575,7 @@
       "$description": "Color of H3 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-style": {
-      "$value": "none",
+      "$value": "normal",
       "$type": "fontStyle",
       "$description": "Font style for H3 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -4585,7 +4585,7 @@
       "$description": "Text transform for H3 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
-  "zbk-h4": {
+  "h4": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4637,7 +4637,7 @@
       "$description": "Color of H4 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-style": {
-      "$value": "none",
+      "$value": "normal",
       "$type": "fontStyle",
       "$description": "Font style for H4 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -4647,7 +4647,7 @@
       "$description": "Text transform for H4 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
-  "zbk-h5": {
+  "h5": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4709,7 +4709,7 @@
       "$description": "Text transform for H5 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
-  "zbk-h6": {
+  "h6": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4761,7 +4761,7 @@
       "$description": "Labels recede from body ink."
     },
     "font-style": {
-      "$value": "none",
+      "$value": "normal",
       "$type": "fontStyle",
       "$description": "Font style for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -4771,7 +4771,7 @@
       "$description": "Instrument label treatment."
     }
   },
-  "zbk-lede": {
+  "lede": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -4823,7 +4823,7 @@
       "$description": "Text color for introductory lede text with .lede applied directly or as a child of a .prose container."
     },
     "font-style": {
-      "$value": "none",
+      "$value": "normal",
       "$type": "fontStyle",
       "$description": "Font style for introductory lede text with .lede applied directly or as a child of a .prose container."
     },
@@ -4833,7 +4833,7 @@
       "$description": "Text transform for introductory lede text with .lede applied directly or as a child of a .prose container."
     }
   },
-  "zbk-list": {
+  "list": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4895,7 +4895,7 @@
       "$description": "Color of H6 elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-style": {
-      "$value": "none",
+      "$value": "normal",
       "$type": "fontStyle",
       "$description": "Font style for H6 elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -4905,7 +4905,7 @@
       "$description": "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container."
     }
   },
-  "zbk-p": {
+  "p": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -4957,7 +4957,7 @@
       "$description": "Color of P elements with .prose applied directly or that are a child of a .prose container."
     },
     "font-style": {
-      "$value": "none",
+      "$value": "normal",
       "$type": "fontStyle",
       "$description": "Font style for P elements with .prose applied directly or that are a child of a .prose container."
     },
@@ -4967,7 +4967,7 @@
       "$description": "Text transform for P elements with .prose applied directly or that are a child of a .prose container."
     }
   },
-  "zbk-border": {
+  "border": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -5029,7 +5029,7 @@
       "$description": "Largest semantic corner radius."
     }
   },
-  "zbk-action": {
+  "action": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -5156,7 +5156,7 @@
       "$description": "Strong inverse action border color for high-emphasis outlines on inverse canvases."
     }
   },
-  "zbk-app": {
+  "app": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -5283,7 +5283,7 @@
       "$description": "High-emphasis border on inverse canvases."
     }
   },
-  "zbk-caution": {
+  "caution": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -5410,7 +5410,7 @@
       "$description": "Emphasis inverse caution border color for high-prominence outlines on inverse canvases."
     }
   },
-  "zbk-critical": {
+  "critical": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -5537,7 +5537,7 @@
       "$description": "Emphasis inverse critical border color for high-prominence outlines on inverse canvases."
     }
   },
-  "zbk-disabled": {
+  "disabled": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -5664,7 +5664,7 @@
       "$description": "Emphasis inverse disabled border color for high-prominence outlines on inverse canvases."
     }
   },
-  "zbk-info": {
+  "info": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -5791,7 +5791,7 @@
       "$description": "Emphasis inverse info border color for high-prominence outlines on inverse canvases."
     }
   },
-  "zbk-positive": {
+  "positive": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -5918,7 +5918,7 @@
       "$description": "Emphasis inverse positive border color for high-prominence outlines on inverse canvases."
     }
   },
-  "zbk-spacing": {
+  "spacing": {
     "0": {
       "$value": {
         "value": 0,
@@ -6712,7 +6712,7 @@
       }
     }
   },
-  "zbk-transition": {
+  "transition": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -7136,14 +7136,14 @@
       }
     }
   },
-  "zbk-font-family": {
+  "font-family": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
       }
     },
     "primary": {
-      "$value": "\"Proza Libre\"",
+      "$value": "Proza Libre",
       "$description": "Primary font family for use in the system. Usually used for body content and interface items.",
       "$type": "fontFamily",
       "$extensions": {
@@ -7167,7 +7167,7 @@
       }
     },
     "alt": {
-      "$value": "\"Fraunces\"",
+      "$value": "Fraunces",
       "$description": "Alternate font family for use in the system. Primarily used for headings.",
       "$type": "fontFamily",
       "$extensions": {
@@ -7185,7 +7185,7 @@
       }
     },
     "monospace": {
-      "$value": "\"Inconsolata\"",
+      "$value": "Inconsolata",
       "$description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
       "$type": "fontFamily",
       "$extensions": {
@@ -7205,7 +7205,7 @@
     "system-sans": {
       "$value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
       "$description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
-      "$type": "fontFamily",
+      "$type": "cssFontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -7217,7 +7217,7 @@
     "system-serif": {
       "$value": "ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif",
       "$description": "System serif stack. Zero network cost.",
-      "$type": "fontFamily",
+      "$type": "cssFontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -7229,7 +7229,7 @@
     "system-mono": {
       "$value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
       "$description": "System monospace stack. Zero network cost.",
-      "$type": "fontFamily",
+      "$type": "cssFontFamily",
       "$extensions": {
         "dev.zebkit": {
           "font": {
@@ -7259,7 +7259,7 @@
       "$type": "fontFamily"
     }
   },
-  "zbk-font-weight": {
+  "font-weight": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -7356,7 +7356,7 @@
       }
     }
   },
-  "zbk-letter-spacing": {
+  "letter-spacing": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "theme"
@@ -7368,7 +7368,7 @@
         "unit": "rem"
       },
       "$type": "dimension",
-      "$description": "",
+      "$description": "Strongly condensed tracking for short display text.",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-letter-spacing-modifier",
@@ -7383,7 +7383,7 @@
         "unit": "rem"
       },
       "$type": "dimension",
-      "$description": "",
+      "$description": "Condensed tracking for headings and compact labels.",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-letter-spacing-modifier",
@@ -7398,7 +7398,7 @@
         "unit": "rem"
       },
       "$type": "dimension",
-      "$description": "",
+      "$description": "Neutral tracking that preserves the font's default spacing.",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-letter-spacing-modifier",
@@ -7413,7 +7413,7 @@
         "unit": "rem"
       },
       "$type": "dimension",
-      "$description": "",
+      "$description": "Expanded tracking for labels and small uppercase text.",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-letter-spacing-modifier",
@@ -7428,7 +7428,7 @@
         "unit": "rem"
       },
       "$type": "dimension",
-      "$description": "",
+      "$description": "Strongly expanded tracking for short display text.",
       "$extensions": {
         "dev.zebkit": {
           "a11y": "--zbk-a11y-letter-spacing-modifier",
@@ -7438,7 +7438,7 @@
       }
     }
   },
-  "zbk-line-height": {
+  "line-height": {
     "1": {
       "$value": 1,
       "$type": "number",
@@ -7495,7 +7495,7 @@
       }
     }
   },
-  "zbk-text-measure": {
+  "text-measure": {
     "1": {
       "$value": "34ch",
       "$type": "cssDimension",
@@ -7527,7 +7527,7 @@
       }
     }
   },
-  "zbk-font-size": {
+  "font-size": {
     "$type": "cssDimension",
     "$extensions": {
       "dev.zebkit": {
@@ -7686,7 +7686,7 @@
       "$value": "clamp(calc(2.986rem * var(--zbk-a11y-font-size-modifier-5xl)), calc((2.3739rem + 2.7205vw) * var(--zbk-a11y-font-size-modifier-5xl)), calc(4.4823rem * var(--zbk-a11y-font-size-modifier-5xl)))"
     }
   },
-  "zbk-z-index": {
+  "z-index": {
     "0": {
       "$value": 0,
       "$type": "number",
@@ -7749,7 +7749,7 @@
     },
     "auto": {
       "$value": "auto",
-      "$type": "cssDimension",
+      "$type": "cssNumber",
       "$description": "Auto z-index, lets browser determine stacking."
     },
     "dropdown": {
@@ -7788,7 +7788,7 @@
       "$description": "Semantic z-index for tooltips (highest)."
     }
   },
-  "zbk-button": {
+  "button": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -8080,25 +8080,8 @@
       }
     },
     "box-shadow-hover": {
-      "$value": [
-        {
-          "color": "{action.border-inverse-muted}",
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": "{spacing.025}",
-          "blur": {
-            "value": 0,
-            "unit": "px"
-          },
-          "spread": {
-            "value": 0,
-            "unit": "px"
-          }
-        }
-      ],
-      "$type": "shadow",
+      "$value": "0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)",
+      "$type": "cssShadow",
       "$description": "Box shadow on hover.",
       "$extensions": {
         "dev.zebkit": {
@@ -8131,32 +8114,32 @@
     },
     "transform": {
       "$value": "translateY(0)",
-      "$type": "utility",
+      "$type": "transform",
       "$description": "Default transform property for buttons."
     },
     "transform-hover": {
       "$value": "translateY(-2%)",
-      "$type": "utility",
+      "$type": "transform",
       "$description": "Transform effect on hover."
     },
     "transform-active": {
       "$value": "translateY(0)",
-      "$type": "utility",
+      "$type": "transform",
       "$description": "Transform effect when active/pressed."
     },
     "transform-focus": {
       "$value": "translateY(0)",
-      "$type": "utility",
+      "$type": "transform",
       "$description": "Transform effect in focus state (in addition to outline)."
     },
     "cursor": {
       "$value": "pointer",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor style when hovering over buttons."
     },
     "cursor-loading": {
       "$value": "progress",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor style while the button is in its loading state."
     },
     "flex-direction": {
@@ -8186,7 +8169,7 @@
     },
     "transition-timing-function": {
       "$value": "{transition.playful-motion-function-default}",
-      "$type": "transitionTimingFunction",
+      "$type": "cssEasingFunction",
       "$description": "Timing function for button transitions."
     },
     "transition-property": {
@@ -8203,7 +8186,7 @@
       "$description": "Delay before CSS properties run through their animate on interaction.",
       "$extensions": {
         "dev.zebkit": {
-          "rawCssValue": "0",
+          "rawCssValue": "0ms",
           "originalType": "duration"
         }
       }
@@ -8219,7 +8202,7 @@
       "$description": "Visual opacity while the button is in its loading state."
     }
   },
-  "zbk-checkbox": {
+  "checkbox": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -8467,12 +8450,12 @@
     },
     "cursor": {
       "$value": "pointer",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor when hovering an enabled checkbox."
     },
     "cursor-disabled": {
       "$value": "not-allowed",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor when hovering a disabled checkbox."
     },
     "transition-duration": {
@@ -8504,7 +8487,7 @@
       "$description": "Delay before checkbox transitions run.",
       "$extensions": {
         "dev.zebkit": {
-          "rawCssValue": "0",
+          "rawCssValue": "0ms",
           "originalType": "duration"
         }
       }
@@ -8520,7 +8503,7 @@
       "$description": "Control opacity when disabled."
     }
   },
-  "zbk-input": {
+  "input": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -8842,12 +8825,12 @@
     },
     "cursor": {
       "$value": "text",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor over the editable field."
     },
     "cursor-disabled": {
       "$value": "not-allowed",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor over a disabled field."
     },
     "transition-duration": {
@@ -8879,7 +8862,7 @@
       "$description": "Delay before field transitions run.",
       "$extensions": {
         "dev.zebkit": {
-          "rawCssValue": "0",
+          "rawCssValue": "0ms",
           "originalType": "duration"
         }
       }
@@ -8895,7 +8878,7 @@
       "$description": "Field opacity when disabled."
     }
   },
-  "zbk-pagination": {
+  "pagination": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -9091,16 +9074,16 @@
     },
     "transition-timing-function": {
       "$value": "ease-out",
-      "$type": "transitionTimingFunction",
+      "$type": "cssEasingFunction",
       "$description": "Timing function for item transitions."
     },
     "cursor": {
       "$value": "pointer",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor over interactive pagination items."
     }
   },
-  "zbk-radio": {
+  "radio": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -9333,12 +9316,12 @@
     },
     "cursor": {
       "$value": "pointer",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor when hovering an enabled radio."
     },
     "cursor-disabled": {
       "$value": "not-allowed",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor when hovering a disabled radio."
     },
     "transition-duration": {
@@ -9370,7 +9353,7 @@
       "$description": "Delay before radio transitions run.",
       "$extensions": {
         "dev.zebkit": {
-          "rawCssValue": "0",
+          "rawCssValue": "0ms",
           "originalType": "duration"
         }
       }
@@ -9386,7 +9369,7 @@
       "$description": "Control opacity when disabled."
     }
   },
-  "zbk-select": {
+  "select": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -9698,12 +9681,12 @@
     },
     "cursor": {
       "$value": "pointer",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor over an enabled select."
     },
     "cursor-disabled": {
       "$value": "not-allowed",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor over a disabled select."
     },
     "transition-duration": {
@@ -9735,7 +9718,7 @@
       "$description": "Delay before field transitions run.",
       "$extensions": {
         "dev.zebkit": {
-          "rawCssValue": "0",
+          "rawCssValue": "0ms",
           "originalType": "duration"
         }
       }
@@ -9751,7 +9734,7 @@
       "$description": "Field opacity when disabled."
     }
   },
-  "zbk-textarea": {
+  "textarea": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -9944,7 +9927,7 @@
     },
     "resize": {
       "$value": "vertical",
-      "$type": "utility",
+      "$type": "resize",
       "$description": "CSS resize behavior of the field (vertical, horizontal, both, none)."
     },
     "width": {
@@ -10048,12 +10031,12 @@
     },
     "cursor": {
       "$value": "text",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor over the editable field."
     },
     "cursor-disabled": {
       "$value": "not-allowed",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor over a disabled field."
     },
     "transition-duration": {
@@ -10085,7 +10068,7 @@
       "$description": "Delay before field transitions run.",
       "$extensions": {
         "dev.zebkit": {
-          "rawCssValue": "0",
+          "rawCssValue": "0ms",
           "originalType": "duration"
         }
       }
@@ -10101,7 +10084,7 @@
       "$description": "Field opacity when disabled."
     }
   },
-  "zbk-toggle": {
+  "toggle": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -10298,28 +10281,8 @@
       "$description": "Corner radius of the thumb (a circle by default)."
     },
     "thumb-shadow": {
-      "$value": [
-        {
-          "color": "{app.canvas-muted}",
-          "offsetX": {
-            "value": 0,
-            "unit": "px"
-          },
-          "offsetY": {
-            "value": 0,
-            "unit": "px"
-          },
-          "blur": {
-            "value": 0,
-            "unit": "px"
-          },
-          "spread": {
-            "value": 2,
-            "unit": "px"
-          }
-        }
-      ],
-      "$type": "shadow",
+      "$value": "0 0 0 2px var(--zbk-app-canvas-muted)",
+      "$type": "cssShadow",
       "$description": "Default thumb shadow.",
       "$extensions": {
         "dev.zebkit": {
@@ -10345,22 +10308,22 @@
     },
     "thumb-transform": {
       "$value": "none",
-      "$type": "utility",
+      "$type": "transform",
       "$description": "Default thumb transform (travel is handled structurally)."
     },
     "thumb-transform-hover": {
       "$value": "none",
-      "$type": "utility",
+      "$type": "transform",
       "$description": "Thumb transform when hovered (e.g. a translateY lift)."
     },
     "thumb-transform-active": {
       "$value": "none",
-      "$type": "utility",
+      "$type": "transform",
       "$description": "Thumb transform while pressed (e.g. a press-down)."
     },
     "thumb-transform-checked": {
       "$value": "none",
-      "$type": "utility",
+      "$type": "transform",
       "$description": "Thumb transform when the toggle is on."
     },
     "ink": {
@@ -10435,12 +10398,12 @@
     },
     "cursor": {
       "$value": "pointer",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor when hovering an enabled toggle."
     },
     "cursor-disabled": {
       "$value": "not-allowed",
-      "$type": "utility",
+      "$type": "cursor",
       "$description": "Cursor when hovering a disabled toggle."
     },
     "transition-duration": {
@@ -10472,7 +10435,7 @@
       "$description": "Delay before toggle transitions run.",
       "$extensions": {
         "dev.zebkit": {
-          "rawCssValue": "0",
+          "rawCssValue": "0ms",
           "originalType": "duration"
         }
       }
@@ -10488,7 +10451,7 @@
       "$description": "Track and thumb opacity when disabled."
     }
   },
-  "zbk-tooltip": {
+  "tooltip": {
     "$extensions": {
       "dev.zebkit": {
         "layer": "base"
@@ -10638,7 +10601,7 @@
     },
     "transition-timing-function": {
       "$value": "ease-out",
-      "$type": "transitionTimingFunction",
+      "$type": "cssEasingFunction",
       "$description": "Show/hide transition timing function."
     },
     "show-delay": {

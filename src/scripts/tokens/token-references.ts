@@ -15,6 +15,8 @@ export interface TokenReferenceTarget {
   expectedType: AllowedTokenTypes;
   /** Composite member containing the reference, absent for a whole-value alias. */
   member?: 'color' | 'offsetX' | 'offsetY' | 'blur' | 'spread';
+  /** True when the alias occupies one slot in a DTCG shadow array. */
+  arrayElement?: boolean;
 }
 
 /** Parse a DTCG whole-value alias without imposing a legacy segment limit. */
@@ -22,17 +24,68 @@ export function parseTokenReference(value: unknown): string | undefined {
   return parseWholeValueAlias(value);
 }
 
+const CSS_SAFE_TOKEN_SEGMENT = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+function suggestedCssSafeSegment(segment: string): string {
+  const suggestion = segment
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return suggestion || 'token-name';
+}
+
 export function tokenReferenceToCssVariable(reference: string, prefix: string): string {
   const segments = reference.split('.').map((segment) => segment === '$root' ? 'root' : segment);
+  const unsafe = segments.find((segment) => !CSS_SAFE_TOKEN_SEGMENT.test(segment));
+  if (unsafe) {
+    throw new Error(
+      `Token reference '{${reference}}' is valid DTCG, but segment '${unsafe}' cannot be ` +
+        `projected to a Zebkit CSS custom property. Use lowercase kebab-case such as ` +
+        `'${suggestedCssSafeSegment(unsafe)}'.`
+    );
+  }
   return `--${prefix}-${segments.join('-')}`;
 }
 
 /** Canonical flat collection key used by Zebkit's internal token maps. */
-export function tokenReferenceToLookupId(reference: string): string | undefined {
+export function tokenReferenceToLookupId(reference: string, moduleId?: string): string | undefined {
   const segments = reference.split('.');
-  const [moduleId, ...entryPath] = segments;
-  if (!moduleId || entryPath.length === 0) return undefined;
-  return `${moduleId}.${entryPath.map((segment) => segment === '$root' ? 'root' : segment).join('-')}`;
+  if (segments.length === 1) {
+    if (!moduleId) return undefined;
+    const name = segments[0] === '$root' ? 'root' : segments[0];
+    return `${moduleId}.${name}`;
+  }
+  const [rootModuleId, ...entryPath] = segments;
+  if (!rootModuleId || entryPath.length === 0) return undefined;
+  return `${rootModuleId}.${entryPath.map((segment) => segment === '$root' ? 'root' : segment).join('-')}`;
+}
+
+/**
+ * Resolve aliases using DTCG document-root precedence. A dotted alias whose
+ * first segment names a known module is global; otherwise it is a nested path
+ * in the current module. One-segment aliases are always local.
+ */
+export function resolveTokenReferenceLookupId(
+  reference: string,
+  lookup: ReadonlyMap<string, unknown>,
+  moduleId?: string
+): string | undefined {
+  const segments = reference.split('.');
+  if (segments.length > 1) {
+    const globalId = tokenReferenceToLookupId(reference);
+    const [rootSegment] = segments;
+    const knownGlobalModule = [...lookup.keys()].some((id) => id.startsWith(`${rootSegment}.`));
+    if (globalId && knownGlobalModule) return globalId;
+  }
+  if (moduleId) {
+    const localName = segments
+      .map((segment) => segment === '$root' ? 'root' : segment)
+      .join('-');
+    const localId = `${moduleId}.${localName}`;
+    if (lookup.has(localId)) return localId;
+  }
+  return tokenReferenceToLookupId(reference, moduleId);
 }
 
 /** Convert a public DTCG id to the flat internal `zbk-<module>.<entry>` id. */
@@ -101,7 +154,7 @@ export function enumerateTokenReferences(
   for (const layer of layers) {
     const layerReference = parseTokenReference(layer);
     if (layerReference) {
-      references.push({ target: layerReference, expectedType: 'shadow' });
+      references.push({ target: layerReference, expectedType: 'shadow', arrayElement: true });
       continue;
     }
     if (!layer || typeof layer !== 'object' || Array.isArray(layer)) continue;
@@ -130,11 +183,13 @@ export function buildTokenReferenceGraph(
   tokens: Record<string, TokenInterface>
 ): Map<string, string[]> {
   const graph = new Map<string, string[]>();
-  for (const [id, target] of buildTokenReferenceLookup(tokens)) {
+  const lookup = buildTokenReferenceLookup(tokens);
+  for (const [id, target] of lookup) {
+    const moduleId = id.slice(0, id.indexOf('.'));
     graph.set(
       id,
       enumerateTokenReferences(target.entry.$value, target.entry.$type)
-        .map((reference) => tokenReferenceToLookupId(reference.target))
+        .map((reference) => resolveTokenReferenceLookupId(reference.target, lookup, moduleId))
         .filter((reference): reference is string => reference !== undefined)
         .sort()
     );
@@ -191,6 +246,8 @@ export function isCompatibleReference(
 
 export interface ReferenceSerializationOptions {
   referenceLookup: ReturnType<typeof buildTokenReferenceLookup>;
+  /** Current document module for legal one-segment aliases such as `{base}`. */
+  moduleId?: string;
   prefix?: string;
   errors?: string[];
 }
@@ -201,10 +258,10 @@ export function serializeTokenValueWithReferences(
   type: AllowedTokenTypes,
   options: ReferenceSerializationOptions
 ): string {
-  if (type !== 'shadow' || !isShadowValue(value)) return tokenValueToString(value);
+  if (type !== 'shadow' || !isShadowValue(value)) return tokenValueToString(value, type);
   const prefix = options.prefix ?? 'zbk';
   return serializeShadowValue(value, (reference, expectedType) => {
-    const lookupId = tokenReferenceToLookupId(reference);
+    const lookupId = resolveTokenReferenceLookupId(reference, options.referenceLookup, options.moduleId);
     const target = lookupId ? options.referenceLookup.get(lookupId) : undefined;
     let message: string | undefined;
     if (!target) {
@@ -218,6 +275,6 @@ export function serializeTokenValueWithReferences(
       options.errors?.push(message);
       return 'undefined';
     }
-    return `var(${tokenReferenceToCssVariable(reference, prefix)})`;
+    return `var(${tokenReferenceToCssVariable(lookupId!, prefix)})`;
   });
 }

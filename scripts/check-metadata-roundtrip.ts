@@ -64,6 +64,9 @@ async function main(): Promise<void> {
 
   try {
     await fs.writeJson(basePath, baseDocument, { spaces: 2 });
+    // Absolute JSON inputs model installed package snapshots, whose sibling
+    // CSS destination artifact is part of the runtime contract.
+    await fs.writeJson(path.join(tmpDir, 'css-properties.json'), {}, { spaces: 2 });
     await fs.ensureDir(overrideDir);
     await fs.writeJson(
       path.join(overrideDir, 'zbk-probe.tokens.json'),
@@ -129,7 +132,12 @@ async function main(): Promise<void> {
     });
     await fs.writeJson(path.join(snapshotDir, 'zbk-probe.json'), firstDocument);
     const pulled = await readTokenSnapshot(snapshotDir, { readJson: fs.readJson });
-    assert.deepEqual(pulled.modules['zbk-probe'].tokens, firstDocument);
+    const authoringDocument = JSON.parse(JSON.stringify(firstDocument));
+    delete authoringDocument.$extensions['dev.zebkit'];
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(pulled.modules['zbk-probe'].tokens)),
+      authoringDocument
+    );
 
     await fs.ensureDir(rebuildOverrides);
     await fs.writeJson(

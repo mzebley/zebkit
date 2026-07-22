@@ -15,7 +15,8 @@
             !q ||
             r.token.toLowerCase().includes(q) ||
             r.description.toLowerCase().includes(q) ||
-            String(r.value).toLowerCase().includes(q);
+            String(r.value).toLowerCase().includes(q) ||
+            r.cssProperties.some((property) => property.includes(q));
           return matchesType && matchesQuery;
         });
         return { ...group, rows };
@@ -33,7 +34,7 @@
       <input
         type="search"
         bind:value={query}
-        placeholder="name, value, or description…"
+        placeholder="name, value, property, or description…"
         aria-label="Search tokens"
       />
     </label>

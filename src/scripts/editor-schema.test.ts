@@ -8,6 +8,7 @@ import { execFileSync } from 'node:child_process';
 import Ajv from 'ajv';
 import { tokenForGroupRoot } from './editor-schema-paths';
 import { AUTHORABLE_VALUE_SCHEMAS } from './editor-value-schemas';
+import { readTokenSnapshot } from '../cli/pull-state';
 
 type ManifestModule = { key: string; file: string };
 
@@ -84,6 +85,32 @@ describe('generated editor token schemas', () => {
     }
   });
 
+  it('accepts the authoring document emitted by pull without package-owned metadata', async () => {
+    const snapshot = await readTokenSnapshot(path.resolve('dist/cli/defaults'), {
+      readJson: fs.readJson,
+    });
+    const pulled = snapshot.modules['zbk-color'].tokens;
+    const validate = new Ajv({ allErrors: true, strict: false }).compile(
+      fs.readJsonSync(path.resolve('schemas/tokens/zbk-color.schema.json'))
+    );
+
+    expect(pulled).not.toHaveProperty('$extensions');
+    const valid = validate(pulled);
+    expect({ errors: validate.errors, valid }).toEqual({
+      errors: null,
+      valid: true,
+    });
+
+    const emptyDescription = structuredClone(pulled) as any;
+    emptyDescription['red-50'].$description = '';
+    expect(validate(emptyDescription)).toBe(false);
+    expect(validate.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ instancePath: '/red-50/$description', keyword: 'minLength' }),
+      ])
+    );
+  });
+
   it('accepts nested groups, metadata, and unknown vendor extensions', () => {
     const ajv = new Ajv({ allErrors: true, strict: false });
     const validate = ajv.compile(
@@ -150,6 +177,18 @@ describe('generated editor token schemas', () => {
     ).toBe(true);
   });
 
+  it('accepts empty known groups and compatible homogeneous group types', () => {
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    const validate = ajv.compile(
+      fs.readJsonSync(path.resolve('schemas/tokens/zbk-color.schema.json'))
+    );
+
+    expect(validate({ red: {} })).toBe(true);
+    expect(validate({ red: { $type: 'color' } })).toBe(true);
+    expect(validate({ red: { $type: 'cssColor' } })).toBe(true);
+    expect(validate({ red: { $type: 'duration' } })).toBe(false);
+  });
+
   it.each([
     ['color', { colorSpace: 'hsl', components: [10, 50] }],
     ['dimension', { value: 1, unit: 'em' }],
@@ -160,8 +199,8 @@ describe('generated editor token schemas', () => {
     ['shadow', { offsetX: { value: 0, unit: 'px' } }],
     ['fontFamily', ['Inter', 42]],
     ['fontWeight', 0],
-    ['number', '12'],
-    ['strokeStyle', 'wavy'],
+    ['number', {}],
+    ['strokeStyle', {}],
     ['boolean', 'true'],
     ['cssDimension', 1],
     ['display', 1],
@@ -172,11 +211,18 @@ describe('generated editor token schemas', () => {
     ['textAlignment', 1],
     ['transform', 1],
     ['transitionProperty', 1],
-    ['transitionTimingFunction', 1],
-    ['utility', 1],
+    ['cssEasingFunction', 1],
+    ['cssColor', 1],
+    ['cssDuration', 1],
+    ['cssFontFamily', 1],
+    ['cssFontWeight', 1],
+    ['cssNumber', 1],
+    ['cssStrokeStyle', 1],
+    ['cssShadow', 1],
     ['asset', 1],
     ['content', 1],
     ['flex', 1],
+    ['resize', 1],
   ])('rejects an invalid %s value', ($type, $value) => {
     const ajv = new Ajv({ allErrors: true, strict: false });
     const validate = ajv.compile(
@@ -206,11 +252,18 @@ describe('generated editor token schemas', () => {
     ['textAlignment', 'start'],
     ['transform', 'translateX(0)'],
     ['transitionProperty', 'opacity'],
-    ['transitionTimingFunction', 'ease-out'],
-    ['utility', '1'],
+    ['cssEasingFunction', 'ease-out'],
+    ['cssColor', 'color-mix(in srgb, red, blue)'],
+    ['cssDuration', '1ms'],
+    ['cssFontFamily', 'Inter, sans-serif'],
+    ['cssFontWeight', 'bolder'],
+    ['cssNumber', 'calc(1 + 1)'],
+    ['cssStrokeStyle', 'solid'],
+    ['cssShadow', '0 1px 2px black'],
     ['asset', 'url(icon.svg)'],
     ['content', '"Required"'],
     ['flex', '1 1 auto'],
+    ['resize', 'block'],
   ])('accepts a valid %s value and a whole-value alias', ($type, $value) => {
     const ajv = new Ajv({ allErrors: true, strict: false });
     const validate = ajv.compile(

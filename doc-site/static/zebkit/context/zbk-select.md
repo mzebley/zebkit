@@ -148,12 +148,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-select-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
 | `--zbk-select-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
 | `--zbk-select-box-shadow-invalid` | `none` | shadow | Field shadow when the selection is invalid. |
-| `--zbk-select-cursor` | `pointer` | utility | Cursor over an enabled select. |
-| `--zbk-select-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled select. |
+| `--zbk-select-cursor` | `pointer` | cursor | Cursor over an enabled select. |
+| `--zbk-select-cursor-disabled` | `not-allowed` | cursor | Cursor over a disabled select. |
 | `--zbk-select-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
 | `--zbk-select-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
 | `--zbk-select-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
-| `--zbk-select-transition-delay` | `0` | duration | Delay before field transitions run. |
+| `--zbk-select-transition-delay` | `0ms` | duration | Delay before field transitions run. |
 | `--zbk-select-opacity` | `1` | number | Opacity of the field. |
 | `--zbk-select-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 

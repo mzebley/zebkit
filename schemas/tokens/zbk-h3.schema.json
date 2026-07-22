@@ -8,13 +8,27 @@
     "fontFamilyValue": {
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{h1.text-transform}",
+            "{h2.text-transform}",
+            "{h3.text-transform}",
+            "{h4.text-transform}",
+            "{h5.text-transform}",
+            "{h6.text-transform}",
+            "{lede.text-transform}",
+            "{list.text-transform}",
+            "{p.text-transform}",
+            "{button.text-transform}"
+          ]
         },
         {
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         }
       ],
@@ -31,9 +45,6 @@
         "{font-family.primary}",
         "{font-family.alt}",
         "{font-family.monospace}",
-        "{font-family.system-sans}",
-        "{font-family.system-serif}",
-        "{font-family.system-mono}",
         "{font-family.interface}",
         "{font-family.heading}",
         "{font-family.body}",
@@ -49,95 +60,36 @@
         "{tooltip.font-family}"
       ]
     },
+    "cssFontFamilyValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{h1.text-transform}",
+        "{h2.text-transform}",
+        "{h3.text-transform}",
+        "{h4.text-transform}",
+        "{h5.text-transform}",
+        "{h6.text-transform}",
+        "{lede.text-transform}",
+        "{list.text-transform}",
+        "{p.text-transform}",
+        "{button.text-transform}"
+      ]
+    },
     "cssDimensionValue": {
       "type": "string",
+      "minLength": 1,
       "examples": [
-        "{h1.font-size}",
-        "{h1.measure}",
-        "{h2.font-size}",
-        "{h2.measure}",
-        "{h3.font-size}",
-        "{h3.measure}",
-        "{h4.font-size}",
-        "{h4.measure}",
-        "{h5.font-size}",
-        "{h5.measure}",
-        "{h6.font-size}",
-        "{h6.measure}",
-        "{lede.font-size}",
-        "{lede.measure}",
-        "{list.font-size}",
-        "{list.measure}",
-        "{p.font-size}",
-        "{p.measure}",
-        "{text-measure.1}",
-        "{text-measure.2}",
-        "{text-measure.3}",
-        "{text-measure.4}",
-        "{text-measure.5}",
-        "{font-size.3xs}",
-        "{font-size.2xs}",
-        "{font-size.xs}",
-        "{font-size.sm}",
-        "{font-size.md}",
-        "{font-size.lg}",
-        "{font-size.xl}",
-        "{font-size.2xl}",
-        "{font-size.3xl}",
-        "{font-size.4xl}",
-        "{font-size.5xl}",
-        "{z-index.auto}",
-        "{button.font-size}",
-        "{button.letter-spacing}",
-        "{button.margin-inline}",
-        "{button.margin-block}",
-        "{button.margin-inline-start}",
-        "{button.margin-inline-end}",
-        "{button.margin-block-start}",
-        "{button.margin-block-end}",
-        "{button.width}",
-        "{button.max-width}",
-        "{button.height}",
-        "{button.max-height}",
-        "{button.icon-size}",
-        "{button.icon-start-size}",
-        "{button.icon-end-size}",
-        "{checkbox.indicator-size}",
-        "{checkbox.font-size}",
-        "{checkbox.letter-spacing}",
-        "{input.font-size}",
-        "{input.letter-spacing}",
-        "{input.label-font-size}",
-        "{input.icon-size}",
-        "{input.width}",
-        "{input.min-width}",
-        "{input.max-width}",
-        "{pagination.font-size}",
-        "{pagination.icon-size}",
-        "{radio.border-radius}",
-        "{radio.indicator-size}",
-        "{radio.indicator-radius}",
-        "{radio.font-size}",
-        "{radio.letter-spacing}",
-        "{select.font-size}",
-        "{select.letter-spacing}",
-        "{select.label-font-size}",
-        "{select.icon-size}",
-        "{select.indicator-size}",
-        "{select.width}",
-        "{select.min-width}",
-        "{select.max-width}",
-        "{textarea.font-size}",
-        "{textarea.letter-spacing}",
-        "{textarea.label-font-size}",
-        "{textarea.width}",
-        "{textarea.min-width}",
-        "{textarea.max-width}",
-        "{toggle.thumb-radius}",
-        "{toggle.font-size}",
-        "{toggle.letter-spacing}",
-        "{tooltip.font-size}",
-        "{tooltip.letter-spacing}"
+        "{h1.text-transform}",
+        "{h2.text-transform}",
+        "{h3.text-transform}",
+        "{h4.text-transform}",
+        "{h5.text-transform}",
+        "{h6.text-transform}",
+        "{lede.text-transform}",
+        "{list.text-transform}",
+        "{p.text-transform}",
+        "{button.text-transform}"
       ]
     },
     "fontWeightValue": {
@@ -149,30 +101,19 @@
         },
         {
           "type": "string",
-          "enum": [
-            "thin",
-            "hairline",
-            "extra-light",
-            "ultra-light",
-            "light",
-            "normal",
-            "regular",
-            "book",
-            "medium",
-            "semi-bold",
-            "demi-bold",
-            "bold",
-            "extra-bold",
-            "ultra-bold",
-            "black",
-            "heavy",
-            "extra-black",
-            "ultra-black"
+          "minLength": 1,
+          "examples": [
+            "{h1.text-transform}",
+            "{h2.text-transform}",
+            "{h3.text-transform}",
+            "{h4.text-transform}",
+            "{h5.text-transform}",
+            "{h6.text-transform}",
+            "{lede.text-transform}",
+            "{list.text-transform}",
+            "{p.text-transform}",
+            "{button.text-transform}"
           ]
-        },
-        {
-          "type": "string",
-          "pattern": "^\\{[^{}]+\\}$"
         }
       ],
       "examples": [
@@ -208,6 +149,22 @@
         "{tooltip.font-weight}"
       ]
     },
+    "cssFontWeightValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{h1.text-transform}",
+        "{h2.text-transform}",
+        "{h3.text-transform}",
+        "{h4.text-transform}",
+        "{h5.text-transform}",
+        "{h6.text-transform}",
+        "{lede.text-transform}",
+        "{list.text-transform}",
+        "{p.text-transform}",
+        "{button.text-transform}"
+      ]
+    },
     "numberValue": {
       "oneOf": [
         {
@@ -215,10 +172,28 @@
         },
         {
           "type": "string",
-          "pattern": "^\\{[^{}]+\\}$"
+          "minLength": 1,
+          "examples": [
+            "{h1.text-transform}",
+            "{h2.text-transform}",
+            "{h3.text-transform}",
+            "{h4.text-transform}",
+            "{h5.text-transform}",
+            "{h6.text-transform}",
+            "{lede.text-transform}",
+            "{list.text-transform}",
+            "{p.text-transform}",
+            "{button.text-transform}"
+          ]
         }
       ],
       "examples": [
+        "{a11y.spacing-modifier}",
+        "{a11y.spacing-text-coupling}",
+        "{a11y.line-height-modifier}",
+        "{a11y.letter-spacing-modifier}",
+        "{a11y.fallback-font-size-modifier}",
+        "{a11y.transition-duration-modifier}",
         "{opacity.0}",
         "{opacity.5}",
         "{opacity.10}",
@@ -295,10 +270,39 @@
         "{tooltip.opacity}"
       ]
     },
+    "cssNumberValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{h1.text-transform}",
+        "{h2.text-transform}",
+        "{h3.text-transform}",
+        "{h4.text-transform}",
+        "{h5.text-transform}",
+        "{h6.text-transform}",
+        "{lede.text-transform}",
+        "{list.text-transform}",
+        "{p.text-transform}",
+        "{button.text-transform}"
+      ]
+    },
     "dimensionValue": {
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{h1.text-transform}",
+            "{h2.text-transform}",
+            "{h3.text-transform}",
+            "{h4.text-transform}",
+            "{h5.text-transform}",
+            "{h6.text-transform}",
+            "{lede.text-transform}",
+            "{list.text-transform}",
+            "{p.text-transform}",
+            "{button.text-transform}"
+          ]
         },
         {
           "type": "object",
@@ -586,7 +590,329 @@
               "type": "string",
               "pattern": "^#[0-9a-fA-F]{6}$"
             }
-          }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "enum": [
+                      "srgb",
+                      "srgb-linear",
+                      "display-p3",
+                      "a98-rgb",
+                      "prophoto-rgb",
+                      "rec2020",
+                      "xyz-d65",
+                      "xyz-d50"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "enum": [
+                      "hsl",
+                      "hwb"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "lab"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "lch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "oklab"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "oklch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
         }
       ],
       "examples": [
@@ -1324,22 +1650,41 @@
         "{tooltip.border-color}"
       ]
     },
+    "cssColorValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{h1.text-transform}",
+        "{h2.text-transform}",
+        "{h3.text-transform}",
+        "{h4.text-transform}",
+        "{h5.text-transform}",
+        "{h6.text-transform}",
+        "{lede.text-transform}",
+        "{list.text-transform}",
+        "{p.text-transform}",
+        "{button.text-transform}"
+      ]
+    },
     "fontStyleValue": {
       "type": "string",
+      "minLength": 1,
       "examples": [
-        "{h1.font-style}",
-        "{h2.font-style}",
-        "{h3.font-style}",
-        "{h4.font-style}",
-        "{h5.font-style}",
-        "{h6.font-style}",
-        "{lede.font-style}",
-        "{list.font-style}",
-        "{p.font-style}"
+        "{h1.text-transform}",
+        "{h2.text-transform}",
+        "{h3.text-transform}",
+        "{h4.text-transform}",
+        "{h5.text-transform}",
+        "{h6.text-transform}",
+        "{lede.text-transform}",
+        "{list.text-transform}",
+        "{p.text-transform}",
+        "{button.text-transform}"
       ]
     },
     "textTransformValue": {
       "type": "string",
+      "minLength": 1,
       "examples": [
         "{h1.text-transform}",
         "{h2.text-transform}",
@@ -1362,13 +1707,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/fontFamilyValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/fontFamilyValue"
+            },
+            {
+              "$ref": "#/definitions/cssFontFamilyValue"
+            }
+          ]
         },
         "$type": {
-          "const": "fontFamily"
+          "type": "string",
+          "enum": [
+            "fontFamily",
+            "cssFontFamily"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1504,7 +1861,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "fontFamily"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/fontFamilyValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssFontFamily"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssFontFamilyValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "cssDimensionToken": {
       "type": "object",
@@ -1521,7 +1918,8 @@
           "const": "cssDimension"
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1559,13 +1957,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/fontWeightValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/fontWeightValue"
+            },
+            {
+              "$ref": "#/definitions/cssFontWeightValue"
+            }
+          ]
         },
         "$type": {
-          "const": "fontWeight"
+          "type": "string",
+          "enum": [
+            "fontWeight",
+            "cssFontWeight"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1592,7 +2002,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "fontWeight"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/fontWeightValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssFontWeight"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssFontWeightValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "numberToken": {
       "type": "object",
@@ -1603,13 +2053,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/numberValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/numberValue"
+            },
+            {
+              "$ref": "#/definitions/cssNumberValue"
+            }
+          ]
         },
         "$type": {
-          "const": "number"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1636,7 +2098,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "number"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/numberValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssNumber"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssNumberValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "dimensionToken": {
       "type": "object",
@@ -1647,13 +2149,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/dimensionValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/dimensionValue"
+            },
+            {
+              "$ref": "#/definitions/cssDimensionValue"
+            }
+          ]
         },
         "$type": {
-          "const": "dimension"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1680,7 +2194,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "dimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/dimensionValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssDimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssDimensionValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "colorToken": {
       "type": "object",
@@ -1691,13 +2245,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/colorValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/colorValue"
+            },
+            {
+              "$ref": "#/definitions/cssColorValue"
+            }
+          ]
         },
         "$type": {
-          "const": "color"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1724,7 +2290,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "color"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/colorValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssColor"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssColorValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "fontStyleToken": {
       "type": "object",
@@ -1741,7 +2347,8 @@
           "const": "fontStyle"
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1785,7 +2392,8 @@
           "const": "textTransform"
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1822,35 +2430,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "groupType": {
-      "type": "string",
-      "enum": [
-        "color",
-        "dimension",
-        "duration",
-        "fontFamily",
-        "fontWeight",
-        "cubicBezier",
-        "number",
-        "strokeStyle",
-        "shadow",
-        "display",
-        "cursor",
-        "textTransform",
-        "textDecoration",
-        "textAlignment",
-        "fontStyle",
-        "transform",
-        "transitionProperty",
-        "transitionTimingFunction",
-        "content",
-        "flex",
-        "utility",
-        "asset",
-        "boolean",
-        "cssDimension"
       ]
     },
     "groupExtensions": {
@@ -2001,14 +2580,11 @@
     },
     "group:font": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
-        "$type": {
-          "$ref": "#/definitions/groupType"
-        },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2052,14 +2628,18 @@
     },
     "group:line": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2079,14 +2659,18 @@
     },
     "group:letter": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2106,14 +2690,18 @@
     },
     "group:spacing": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2141,14 +2729,17 @@
     },
     "group:text": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "textTransform"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2168,11 +2759,9 @@
     }
   },
   "properties": {
-    "$type": {
-      "$ref": "#/definitions/groupType"
-    },
     "$description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "$deprecated": {
       "$ref": "#/definitions/deprecated"

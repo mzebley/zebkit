@@ -261,7 +261,7 @@
   },
   "cursor": {
     "$value": "pointer",
-    "$type": "utility",
+    "$type": "cursor",
     "$description": "Cursor style when hovering over buttons."
   },
   "flex-direction": {
@@ -291,7 +291,7 @@
   },
   "transition-timing-function": {
     "$value": "ease-out",
-    "$type": "transitionTimingFunction",
+    "$type": "cssEasingFunction",
     "$description": "Timing function for button transitions."
   },
   "transition-property": {
@@ -300,7 +300,7 @@
     "$description": "CSS properties that should animate on interaction."
   },
   "transition-delay": {
-    "$value": "0",
+    "$value": "0ms",
     "$type": "duration",
     "$description": "Delay before CSS properties run through their animate on interaction."
   },

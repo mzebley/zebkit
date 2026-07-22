@@ -1,0 +1,197 @@
+---
+title: Authoring tokens
+description: Add or override a Zebkit token with the right stratum, DTCG type, CSS value, reference, documentation, and verification.
+layout: editorial
+section: Foundations
+status: draft
+---
+
+# Authoring tokens
+
+A Zebkit token is a named visual decision with one place in the three-strata grammar, one
+DTCG-shaped value, and a traceable set of CSS destinations. Adding one should feel mechanical:
+decide what the value means, put it in the layer that owns that meaning, and let the build
+validate and document it.
+
+<aside class="editorial-marginalia">
+Start by searching the <a href="/tokens">token catalog</a>. Two spellings for one intent make
+the grammar harder to guess; extend an existing family when its meaning already fits.
+</aside>
+
+## Choose the stratum first
+
+<table class="authoring-strata">
+  <thead>
+    <tr><th>Stratum</th><th>It answers</th><th>Value rule</th><th>Example</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Primitive</td><td>What raw material exists?</td><td>Literal value</td><td><code>color.ember-600</code></td></tr>
+    <tr><td>Alias</td><td>What does that material mean here?</td><td>Reference to a primitive</td><td><code>action.canvas</code></td></tr>
+    <tr><td>Component</td><td>What does this component use?</td><td>Reference to an alias</td><td><code>button.canvas</code></td></tr>
+  </tbody>
+</table>
+
+References flow downward only. If a button token reaches directly into `color`, the missing
+piece is usually an alias that names the intended role. A new component token belongs beside
+that component; shared primitive and semantic vocabulary belongs under `src/tokens/`.
+
+```ts
+export const key = 'notice';
+
+export default {
+  canvas: {
+    $value: '{info.canvas}',
+    $type: 'color',
+    $description: 'Background color of an informational notice.'
+  }
+};
+```
+
+The key and nested token path become the CSS variable `--zbk-notice-canvas`. Use kebab-case,
+describe the rendered decision rather than its current appearance, and keep state suffixes
+consistent with the [component grammar](https://github.com/mzebley/zebkit/blob/main/foundations/GRAMMAR.md#4-states).
+
+## Choose the value by its CSS destination
+
+`$type` describes what a value is allowed to become when Zebkit emits CSS. Prefer a standard
+DTCG type when it can represent the value without loss:
+
+```ts
+gap: {
+  $value: { value: 12, unit: 'px' },
+  $type: 'dimension',
+  $description: 'Gap between the notice icon and its content.'
+}
+```
+
+CSS is broader than the DTCG type vocabulary. A sizing token might reasonably need `50%`,
+`auto`, `min-content`, `clamp(...)`, or another valid value accepted by the property it drives.
+Zebkit's proprietary types preserve that vocabulary in the full profile instead of narrowing
+the design surface to fit an interchange format. The build still rejects malformed CSS; the
+escape hatch is flexibility, not unchecked strings.
+
+Each supported DTCG type has a predictably named CSS fallback. Use the narrowest type that still
+describes every sensible value at the destination:
+
+- `color` / `cssColor`
+- `dimension` / `cssDimension`
+- `duration` / `cssDuration`
+- `fontFamily` / `cssFontFamily`
+- `fontWeight` / `cssFontWeight`
+- `cubicBezier` / `cssEasingFunction`
+- `number` / `cssNumber`
+- `strokeStyle` / `cssStrokeStyle`
+- `shadow` / `cssShadow`
+- Property-family types such as `cursor`, `display`, `transform`, and `transitionProperty` when
+  DTCG has no complete equivalent.
+- Curly aliases such as `{spacing.2}` when the value should move with another token.
+
+Do not choose a type from the default value alone. A width that happens to be `1rem` today may
+still be a `cssDimension` if the exposed surface promises consumers `auto` or `fit-content`.
+For fonts, a standard `fontFamily` string is one family name and an array is an ordered family
+list; Zebkit quotes and escapes each item for CSS. Use `cssFontFamily` only for a verbatim CSS
+value such as `var(--brand-font)` or an already-authored stack.
+
+### Trace the destination
+
+The build derives destinations from every shipped `var(--zbk-*)` declaration and propagates
+them backward through aliases. A token used by `padding`, `gap`, and `inline-size` must accept a
+value valid at all three properties; if those needs diverge, split the token by purpose. New raw
+CSS types and orphaned ambiguous tokens fail until the source has an authoritative property
+binding.
+
+Generated token tables show the resulting CSS properties beside each token. The same map ships
+with the CLI defaults as `css-properties.json`, so installed builds validate against the source
+contract rather than a hand-maintained keyword list.
+
+## Authoring files
+
+Source modules export a `key` and a token map from `tokens/tokens.ts`. Discovery is automatic:
+
+```text
+src/tokens/{family}/tokens/tokens.ts
+src/components/{component}/tokens/tokens.ts
+```
+
+Theme overrides are unwrapped `zbk-<module>.tokens.json` documents. They may supply a new
+`$value`, a compatible reference, and supported metadata, but may not invent unknown shipped
+tokens:
+
+```json
+{
+  "canvas": {
+    "$value": "color(display-p3 0.08 0.1 0.14)",
+    "$type": "color"
+  },
+  "inline-size": {
+    "$value": "min(72ch, 100%)",
+    "$type": "cssDimension"
+  }
+}
+```
+
+An override keeps the shipped token's semantic type. When a raw CSS value is broader than that
+standard type, the full export records the corresponding `css<Type>` fallback and preserves the
+original type in Zebkit metadata; the strict export omits it. Source modules should author the
+canonical structured form when one exists.
+
+Run `zebkit pull` to materialize the current editable modules and their editor schemas instead
+of reconstructing override files from generated CSS.
+
+## Full profile and strict interchange
+
+The normal export is the **Zebkit DTCG 2025.10 profile**. It preserves every token Zebkit can
+paint, including proprietary CSS-surface types and metadata under
+`$extensions["dev.zebkit"]`.
+
+The strict export is one combined, reference-closed DTCG 2025.10 document containing only the
+standard types Zebkit fully supports. References resolve from that document's root. A sibling
+drop manifest explains which full-profile tokens could not be represented and whether removal
+was direct or caused by a dependency.
+
+The docs build publishes both contracts as inspectable examples: the
+[full Zebkit profile](/zebkit/default-tokens.json), the
+[strict DTCG document](/zebkit/default-tokens.strict.json), and its
+[drop manifest](/zebkit/default.drop-manifest.json).
+
+```json
+{
+  "tokens": {
+    "exportTokens": true,
+    "exportStrict": true,
+    "splitMode": "combined",
+    "outputFormats": ["JSON"]
+  }
+}
+```
+
+Use the full profile to build Zebkit. Use the strict document for tools that require only
+standard DTCG types. A strict export is not a lossy replacement for the full theme.
+
+## What a useful error says
+
+Token validation stops the build and names the token path, the rejected value, and the valid
+shape or vocabulary. Common fixes are:
+
+- **Unknown token:** pull the current module or add the token to source before overriding it.
+- **Broken alias:** use a document-root token path such as `{spacing.2}` and ensure the target
+  exists and has a compatible type.
+- **Malformed CSS:** correct the value's syntax; valid property-level CSS remains authorable.
+- **Wrong DTCG shape:** use the structured value required by the selected standard type.
+- **Unsupported strict type:** keep the token in the full profile and inspect the drop manifest.
+
+If an error does not tell you how to fix the value, treat that diagnostic as a Zebkit bug.
+
+## Pull-request checklist
+
+1. Search the catalog and confirm the intent does not already have a token.
+2. Put the token in the correct stratum and use the established family/state spelling.
+3. Choose `$type` from the CSS destination's complete useful value space.
+4. Write a `$description` that explains what changes when the token changes.
+5. Bind the emitted `--zbk-*` variable at the visual property; never leave the token orphaned.
+6. Add focused coverage for a new rule or grammar boundary, not a duplicate test for every value.
+7. Run `npm run check` and inspect any strict drop-manifest change before opening the PR.
+
+New proprietary types are public interchange vocabulary. Add one only when no existing type
+accurately describes the CSS destination, then update the central registry, runtime validation,
+editor schema, serializer, allowed-types artifact, and this guide as one change.

@@ -295,12 +295,12 @@ const tokens = {
   // Interaction behavior
   cursor: {
     $value: "pointer",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor when hovering an enabled checkbox.",
   },
   "cursor-disabled": {
     $value: "not-allowed",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor when hovering a disabled checkbox.",
   },
 

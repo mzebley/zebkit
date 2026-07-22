@@ -286,12 +286,12 @@
   },
   "cursor": {
     "$value": "pointer",
-    "$type": "utility",
+    "$type": "cursor",
     "$description": "Cursor style when hovering over buttons."
   },
   "cursor-loading": {
     "$value": "progress",
-    "$type": "utility",
+    "$type": "cursor",
     "$description": "Cursor style while the button is in its loading state."
   },
   "flex-direction": {
@@ -321,7 +321,7 @@
   },
   "transition-timing-function": {
     "$value": "{transition.playful-motion-function-default}",
-    "$type": "transitionTimingFunction",
+    "$type": "cssEasingFunction",
     "$description": "Timing function for button transitions."
   },
   "transition-property": {
@@ -330,7 +330,7 @@
     "$description": "CSS properties that should animate on interaction."
   },
   "transition-delay": {
-    "$value": "0",
+    "$value": "0ms",
     "$type": "duration",
     "$description": "Delay before CSS properties run through their animate on interaction."
   },
@@ -349,17 +349,17 @@
   },
   "transform": {
     "$value": "translateY(0)",
-    "$type": "utility",
+    "$type": "transform",
     "$description": "Default transform property for buttons."
   },
   "transform-active": {
     "$value": "translateY(0)",
-    "$type": "utility",
+    "$type": "transform",
     "$description": "Transform effect when active/pressed."
   },
   "transform-focus": {
     "$value": "translateY(0)",
-    "$type": "utility",
+    "$type": "transform",
     "$description": "Transform effect in focus state (in addition to outline)."
   }
 }

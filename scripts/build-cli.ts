@@ -28,8 +28,8 @@ await build({
   banner: {
     js: [
       '#!/usr/bin/env node',
-      "import { createRequire } from 'module';",
-      'const require = createRequire(import.meta.url);',
+      "import { createRequire as createZebkitRequire } from 'module';",
+      'const require = createZebkitRequire(import.meta.url);',
     ].join('\n'),
   },
   // esbuild reads tsconfig.json and respects path aliases (@config, @definitions/*, etc.)
@@ -44,6 +44,9 @@ await build({
     'postcss-selector-parser',
     'autoprefixer',
     'cssnano',
+    // css-tree loads its grammar data from package-relative JSON files. Keep it
+    // external so those files resolve from the installed runtime dependency.
+    'css-tree',
     // commander uses CJS internally; marking external lets Node resolve its
     // native ESM export at runtime, avoiding the dynamic-require-in-ESM error.
     'commander',

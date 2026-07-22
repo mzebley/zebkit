@@ -14,30 +14,12 @@
         },
         {
           "type": "string",
-          "enum": [
-            "thin",
-            "hairline",
-            "extra-light",
-            "ultra-light",
-            "light",
-            "normal",
-            "regular",
-            "book",
-            "medium",
-            "semi-bold",
-            "demi-bold",
-            "bold",
-            "extra-bold",
-            "ultra-bold",
-            "black",
-            "heavy",
-            "extra-black",
-            "ultra-black"
+          "minLength": 1,
+          "examples": [
+            "{font-family.system-sans}",
+            "{font-family.system-serif}",
+            "{font-family.system-mono}"
           ]
-        },
-        {
-          "type": "string",
-          "pattern": "^\\{[^{}]+\\}$"
         }
       ],
       "examples": [
@@ -73,6 +55,15 @@
         "{tooltip.font-weight}"
       ]
     },
+    "cssFontWeightValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{font-family.system-sans}",
+        "{font-family.system-serif}",
+        "{font-family.system-mono}"
+      ]
+    },
     "fontWeightToken": {
       "type": "object",
       "description": "Lightest font weight.",
@@ -82,13 +73,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/fontWeightValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/fontWeightValue"
+            },
+            {
+              "$ref": "#/definitions/cssFontWeightValue"
+            }
+          ]
         },
         "$type": {
-          "const": "fontWeight"
+          "type": "string",
+          "enum": [
+            "fontWeight",
+            "cssFontWeight"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -115,7 +118,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "fontWeight"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/fontWeightValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssFontWeight"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssFontWeightValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "deprecated": {
       "oneOf": [
@@ -125,35 +168,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "groupType": {
-      "type": "string",
-      "enum": [
-        "color",
-        "dimension",
-        "duration",
-        "fontFamily",
-        "fontWeight",
-        "cubicBezier",
-        "number",
-        "strokeStyle",
-        "shadow",
-        "display",
-        "cursor",
-        "textTransform",
-        "textDecoration",
-        "textAlignment",
-        "fontStyle",
-        "transform",
-        "transitionProperty",
-        "transitionTimingFunction",
-        "content",
-        "flex",
-        "utility",
-        "asset",
-        "boolean",
-        "cssDimension"
       ]
     },
     "groupExtensions": {
@@ -305,10 +319,15 @@
   },
   "properties": {
     "$type": {
-      "$ref": "#/definitions/groupType"
+      "type": "string",
+      "enum": [
+        "fontWeight",
+        "cssFontWeight"
+      ]
     },
     "$description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "$deprecated": {
       "$ref": "#/definitions/deprecated"

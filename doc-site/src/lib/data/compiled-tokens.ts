@@ -35,6 +35,8 @@ export type CompiledToken = {
     | Array<ShadowValue | string>;
   /** Canonical source-side serialization for docs display and search. */
   $displayValue: string;
+  /** CSS properties reached directly or through token aliases. */
+  $cssProperties: string[];
   $extensions?: Record<string, unknown> & {
     'dev.zebkit'?: {
       a11y?: boolean | string;

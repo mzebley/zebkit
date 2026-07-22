@@ -8,7 +8,21 @@
     "dimensionValue": {
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{border.style}",
+            "{button.border-style}",
+            "{checkbox.border-style}",
+            "{input.border-style}",
+            "{pagination.border-style}",
+            "{radio.border-style}",
+            "{select.border-style}",
+            "{textarea.border-style}",
+            "{toggle.border-style}",
+            "{toggle.thumb-border-style}",
+            "{tooltip.border-style}"
+          ]
         },
         {
           "type": "object",
@@ -240,26 +254,43 @@
         "{tooltip.offset}"
       ]
     },
+    "cssDimensionValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{border.style}",
+        "{button.border-style}",
+        "{checkbox.border-style}",
+        "{input.border-style}",
+        "{pagination.border-style}",
+        "{radio.border-style}",
+        "{select.border-style}",
+        "{textarea.border-style}",
+        "{toggle.border-style}",
+        "{toggle.thumb-border-style}",
+        "{tooltip.border-style}"
+      ]
+    },
     "strokeStyleValue": {
-      "oneOf": [
-        {
-          "type": "string",
-          "enum": [
-            "solid",
-            "dashed",
-            "dotted",
-            "double",
-            "groove",
-            "ridge",
-            "outset",
-            "inset"
-          ]
-        },
-        {
-          "type": "string",
-          "pattern": "^\\{[^{}]+\\}$"
-        }
-      ],
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{border.style}",
+        "{button.border-style}",
+        "{checkbox.border-style}",
+        "{input.border-style}",
+        "{pagination.border-style}",
+        "{radio.border-style}",
+        "{select.border-style}",
+        "{textarea.border-style}",
+        "{toggle.border-style}",
+        "{toggle.thumb-border-style}",
+        "{tooltip.border-style}"
+      ]
+    },
+    "cssStrokeStyleValue": {
+      "type": "string",
+      "minLength": 1,
       "examples": [
         "{border.style}",
         "{button.border-style}",
@@ -283,13 +314,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/dimensionValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/dimensionValue"
+            },
+            {
+              "$ref": "#/definitions/cssDimensionValue"
+            }
+          ]
         },
         "$type": {
-          "const": "dimension"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -316,7 +359,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "dimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/dimensionValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssDimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssDimensionValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "strokeStyleToken": {
       "type": "object",
@@ -327,13 +410,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/strokeStyleValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/strokeStyleValue"
+            },
+            {
+              "$ref": "#/definitions/cssStrokeStyleValue"
+            }
+          ]
         },
         "$type": {
-          "const": "strokeStyle"
+          "type": "string",
+          "enum": [
+            "strokeStyle",
+            "cssStrokeStyle"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -360,7 +455,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "strokeStyle"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/strokeStyleValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssStrokeStyle"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssStrokeStyleValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "deprecated": {
       "oneOf": [
@@ -370,35 +505,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "groupType": {
-      "type": "string",
-      "enum": [
-        "color",
-        "dimension",
-        "duration",
-        "fontFamily",
-        "fontWeight",
-        "cubicBezier",
-        "number",
-        "strokeStyle",
-        "shadow",
-        "display",
-        "cursor",
-        "textTransform",
-        "textDecoration",
-        "textAlignment",
-        "fontStyle",
-        "transform",
-        "transitionProperty",
-        "transitionTimingFunction",
-        "content",
-        "flex",
-        "utility",
-        "asset",
-        "boolean",
-        "cssDimension"
       ]
     },
     "groupExtensions": {
@@ -549,14 +655,18 @@
     },
     "group:width": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -608,14 +718,18 @@
     },
     "group:radius": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -667,11 +781,9 @@
     }
   },
   "properties": {
-    "$type": {
-      "$ref": "#/definitions/groupType"
-    },
     "$description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "$deprecated": {
       "$ref": "#/definitions/deprecated"

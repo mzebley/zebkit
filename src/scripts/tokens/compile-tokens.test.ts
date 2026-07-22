@@ -58,8 +58,14 @@ describe('compile-tokens helpers', () => {
       touched
     );
 
-    expect(merged.canvas.$value).toBe('#000000');
-    expect(merged.radius.$value).toBe('4px');
+    expect(merged.canvas).toMatchObject({
+      $value: { colorSpace: 'srgb', components: [0, 0, 0], hex: '#000000' },
+      $type: 'color',
+      $extensions: {
+        'dev.zebkit': { rawCssValue: '#000000', originalType: 'color' },
+      },
+    });
+    expect(merged.radius.$value).toEqual({ value: 4, unit: 'px' });
     expect([...touched]).toEqual(['canvas', 'radius']);
 
     const changedOnly = new Set<string>();
@@ -85,23 +91,32 @@ describe('compile-tokens helpers', () => {
     ).toThrow(/zbk-button\.radius[\s\S]*zbk-button\.extra/);
   });
 
-  it('rejects unsupported raw values and incompatible explicit types', () => {
+  it('rejects an empty authored token description', () => {
     expect(() =>
       mergeTokens(
         defaultTokens,
-        { canvas: { $value: 'not-a-color' } },
-        tokenSchema,
+        { canvas: { $value: '#000000', $description: '' } },
+        undefined,
         'zbk-button'
       )
-    ).toThrow(/unsupported raw CSS value/);
-    expect(() =>
+    ).toThrow(/zbk-button\.canvas[\s\S]*\$description must not be empty/);
+  });
+
+  it('preserves flexible raw CSS values and rejects incompatible explicit types', () => {
+    expect(
       mergeTokens(
         defaultTokens,
         { canvas: { $value: 'hsl(360, 90%, 50%)' } },
         tokenSchema,
         'zbk-button'
-      )
-    ).toThrow(/unsupported raw CSS value|outside the hsl range/);
+      ).canvas
+    ).toMatchObject({
+      $value: 'hsl(360, 90%, 50%)',
+      $type: 'cssColor',
+      $extensions: {
+        'dev.zebkit': { rawCssValue: 'hsl(360, 90%, 50%)', originalType: 'color' },
+      },
+    });
     expect(() =>
       mergeTokens(
         defaultTokens,
@@ -117,8 +132,14 @@ describe('compile-tokens helpers', () => {
         { canvas: { $value: 'hsl(10, 90%, 50%)' } },
         tokenSchema,
         'zbk-button'
-      ).canvas.$value
-    ).toBe('hsl(10, 90%, 50%)');
+      ).canvas
+    ).toMatchObject({
+      $value: { colorSpace: 'hsl', components: [10, 90, 50] },
+      $type: 'color',
+      $extensions: {
+        'dev.zebkit': { rawCssValue: 'hsl(10, 90%, 50%)', originalType: 'color' },
+      },
+    });
 
     expect(
       mergeTokens(
@@ -126,8 +147,14 @@ describe('compile-tokens helpers', () => {
         { radius: { $value: '0.67em' } },
         tokenSchema,
         'zbk-button'
-      ).radius.$value
-    ).toBe('0.67em');
+      ).radius
+    ).toMatchObject({
+      $value: '0.67em',
+      $type: 'cssDimension',
+      $extensions: {
+        'dev.zebkit': { rawCssValue: '0.67em', originalType: 'dimension' },
+      },
+    });
   });
 
   it('clears stale value provenance while preserving and merging author metadata', () => {
@@ -181,7 +208,7 @@ describe('compile-tokens helpers', () => {
     expect(merged.border.$extensions['dev.zebkit']).not.toHaveProperty('originalType');
   });
 
-  it('does not manufacture an empty-color marker for non-color strings', () => {
+  it('rejects empty raw CSS values for non-color tokens', () => {
     const defaults = {
       content: {
         $value: 'initial',
@@ -189,15 +216,9 @@ describe('compile-tokens helpers', () => {
         $description: 'Generated content.',
       },
     } as TokenInterface;
-    const merged = mergeTokens(
-      defaults,
-      { content: { $value: '' } },
-      undefined,
-      'zbk-example'
-    ) as unknown as Record<string, any>;
-
-    expect(merged.content.$value).toBe('');
-    expect(merged.content.$extensions).toBeUndefined();
+    expect(() =>
+      mergeTokens(defaults, { content: { $value: '' } }, undefined, 'zbk-example')
+    ).toThrow(/zbk-example\.content[\s\S]*must not be empty/);
   });
 
   it('field-merges known metadata and clears generated scale provenance', () => {

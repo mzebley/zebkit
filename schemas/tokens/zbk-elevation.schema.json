@@ -8,7 +8,8 @@
     "shadowValue": {
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         {
           "type": "object",
@@ -74,11 +75,333 @@
                       "type": "string",
                       "pattern": "^#[0-9a-fA-F]{6}$"
                     }
-                  }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "enum": [
+                              "srgb",
+                              "srgb-linear",
+                              "display-p3",
+                              "a98-rgb",
+                              "prophoto-rgb",
+                              "rec2020",
+                              "xyz-d65",
+                              "xyz-d50"
+                            ]
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "enum": [
+                              "hsl",
+                              "hwb"
+                            ]
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "exclusiveMaximum": 360
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "const": "lab"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "const": "lch"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "exclusiveMaximum": 360
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "const": "oklab"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "const": "oklch"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "exclusiveMaximum": 360
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
                 },
                 {
                   "type": "string",
-                  "pattern": "^\\{[^{}]+\\}$"
+                  "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
                 }
               ]
             },
@@ -106,7 +429,7 @@
                 },
                 {
                   "type": "string",
-                  "pattern": "^\\{[^{}]+\\}$"
+                  "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
                 }
               ]
             },
@@ -134,7 +457,7 @@
                 },
                 {
                   "type": "string",
-                  "pattern": "^\\{[^{}]+\\}$"
+                  "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
                 }
               ]
             },
@@ -149,7 +472,8 @@
                   "additionalProperties": false,
                   "properties": {
                     "value": {
-                      "type": "number"
+                      "type": "number",
+                      "minimum": 0
                     },
                     "unit": {
                       "type": "string",
@@ -162,7 +486,7 @@
                 },
                 {
                   "type": "string",
-                  "pattern": "^\\{[^{}]+\\}$"
+                  "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
                 }
               ]
             },
@@ -190,7 +514,7 @@
                 },
                 {
                   "type": "string",
-                  "pattern": "^\\{[^{}]+\\}$"
+                  "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
                 }
               ]
             },
@@ -267,11 +591,333 @@
                             "type": "string",
                             "pattern": "^#[0-9a-fA-F]{6}$"
                           }
-                        }
+                        },
+                        "allOf": [
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "enum": [
+                                    "srgb",
+                                    "srgb-linear",
+                                    "display-p3",
+                                    "a98-rgb",
+                                    "prophoto-rgb",
+                                    "rec2020",
+                                    "xyz-d65",
+                                    "xyz-d50"
+                                  ]
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 1
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 1
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 1
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "enum": [
+                                    "hsl",
+                                    "hwb"
+                                  ]
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "exclusiveMaximum": 360
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 100
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 100
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "const": "lab"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 100
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "const": "lch"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 100
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "exclusiveMaximum": 360
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "const": "oklab"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 1
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "const": "oklch"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 1
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "exclusiveMaximum": 360
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        ]
                       },
                       {
                         "type": "string",
-                        "pattern": "^\\{[^{}]+\\}$"
+                        "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
                       }
                     ]
                   },
@@ -299,7 +945,7 @@
                       },
                       {
                         "type": "string",
-                        "pattern": "^\\{[^{}]+\\}$"
+                        "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
                       }
                     ]
                   },
@@ -327,7 +973,7 @@
                       },
                       {
                         "type": "string",
-                        "pattern": "^\\{[^{}]+\\}$"
+                        "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
                       }
                     ]
                   },
@@ -342,7 +988,8 @@
                         "additionalProperties": false,
                         "properties": {
                           "value": {
-                            "type": "number"
+                            "type": "number",
+                            "minimum": 0
                           },
                           "unit": {
                             "type": "string",
@@ -355,7 +1002,7 @@
                       },
                       {
                         "type": "string",
-                        "pattern": "^\\{[^{}]+\\}$"
+                        "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
                       }
                     ]
                   },
@@ -383,7 +1030,7 @@
                       },
                       {
                         "type": "string",
-                        "pattern": "^\\{[^{}]+\\}$"
+                        "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
                       }
                     ]
                   },
@@ -394,7 +1041,7 @@
               },
               {
                 "type": "string",
-                "pattern": "^\\{[^{}]+\\}$"
+                "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
               }
             ]
           }
@@ -452,6 +1099,10 @@
         "{tooltip.box-shadow}"
       ]
     },
+    "cssShadowValue": {
+      "type": "string",
+      "minLength": 1
+    },
     "shadowToken": {
       "type": "object",
       "description": "No shadow.",
@@ -461,13 +1112,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/shadowValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/shadowValue"
+            },
+            {
+              "$ref": "#/definitions/cssShadowValue"
+            }
+          ]
         },
         "$type": {
-          "const": "shadow"
+          "type": "string",
+          "enum": [
+            "shadow",
+            "cssShadow"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -494,7 +1157,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "shadow"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/shadowValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssShadow"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssShadowValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "deprecated": {
       "oneOf": [
@@ -504,35 +1207,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "groupType": {
-      "type": "string",
-      "enum": [
-        "color",
-        "dimension",
-        "duration",
-        "fontFamily",
-        "fontWeight",
-        "cubicBezier",
-        "number",
-        "strokeStyle",
-        "shadow",
-        "display",
-        "cursor",
-        "textTransform",
-        "textDecoration",
-        "textAlignment",
-        "fontStyle",
-        "transform",
-        "transitionProperty",
-        "transitionTimingFunction",
-        "content",
-        "flex",
-        "utility",
-        "asset",
-        "boolean",
-        "cssDimension"
       ]
     },
     "groupExtensions": {
@@ -683,14 +1357,18 @@
     },
     "group:inner": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "shadow",
+            "cssShadow"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -719,10 +1397,15 @@
   },
   "properties": {
     "$type": {
-      "$ref": "#/definitions/groupType"
+      "type": "string",
+      "enum": [
+        "shadow",
+        "cssShadow"
+      ]
     },
     "$description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "$deprecated": {
       "$ref": "#/definitions/deprecated"

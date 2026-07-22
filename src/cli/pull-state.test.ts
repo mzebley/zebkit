@@ -9,6 +9,7 @@ import {
   createPullState,
   getAuthorableTokenData,
   getPullStatePath,
+  PULL_STATE_VERSION,
   readTokenSnapshot,
   readVariantSnapshot,
   syncTokenSnapshot,
@@ -103,7 +104,7 @@ describe('pull state reconciliation', () => {
     );
   });
 
-  it('keeps palette overrides whose external emission is declared in DTCG metadata', async () => {
+  it('keeps palette tokens but strips package-owned external-emission metadata', async () => {
     const sourceDir = path.join(projectDir, 'snapshot');
     await fs.ensureDir(sourceDir);
     await fs.writeJson(path.join(sourceDir, 'manifest.json'), {
@@ -120,7 +121,6 @@ describe('pull state reconciliation', () => {
         'zbk-color': {
           file: 'zbk-color.tokens.json',
           tokens: {
-            $extensions: { 'dev.zebkit': { cssEmission: 'external' } },
             blue: { $value: '#00f', $type: 'color' },
           },
         },
@@ -268,6 +268,114 @@ describe('pull state reconciliation', () => {
     expect(result.defaultsUpdated).toBe(1);
   });
 
+  it('reconciles nested token leaves, $root, and group metadata independently', async () => {
+    const old = snapshot({
+      'zbk-app': {
+        surface: {
+          $description: 'Old surface group.',
+          $deprecated: false,
+          $extensions: {
+            'dev.zebkit': { scale: { min: '1rem', max: '2rem' } },
+          },
+          $root: token('#root-old'),
+          customized: token('#customizable-old'),
+          updated: token('#updated-old'),
+          restored: token('#restored'),
+          retired: token('#retired-old'),
+          'retired-custom': token('#retired-custom-old'),
+          reserved: {},
+        },
+      },
+    });
+    const current = snapshot({
+      'zbk-app': {
+        surface: {
+          $description: 'New surface group.',
+          $deprecated: false,
+          $extensions: {
+            'dev.zebkit': {
+              scale: { min: '1.25rem', max: '2.5rem', ratio: 1.2 },
+            },
+          },
+          $root: token('#root-new'),
+          customized: token('#customizable-new'),
+          updated: token('#updated-new'),
+          restored: token('#restored'),
+          added: token('#added'),
+          reserved: {},
+        },
+      },
+    });
+    await writePullState(configPath, createPullState('default', old), deps);
+    await fs.writeJson(path.join(tokensDir, 'zbk-app.tokens.json'), {
+      surface: {
+        $description: 'Old surface group.',
+        $extensions: {
+          'dev.zebkit': { scale: { min: '9rem', max: '2rem' } },
+        },
+        $root: token('#root-old'),
+        customized: token('#project-custom'),
+        updated: token('#updated-old'),
+        retired: token('#retired-old'),
+        'retired-custom': token('#project-retired'),
+      },
+    });
+
+    const result = await syncTokenSnapshot({
+      tokensDir,
+      configPath,
+      basePreset: 'default',
+      snapshot: current,
+      deps,
+    });
+
+    expect(await fs.readJson(path.join(tokensDir, 'zbk-app.tokens.json'))).toEqual({
+      surface: {
+        $description: 'New surface group.',
+        $deprecated: false,
+        $extensions: {
+          'dev.zebkit': { scale: { min: '9rem', max: '2.5rem', ratio: 1.2 } },
+        },
+        $root: token('#root-new'),
+        customized: token('#project-custom'),
+        updated: token('#updated-new'),
+        restored: token('#restored'),
+        'retired-custom': token('#project-retired'),
+        added: token('#added'),
+        reserved: {},
+      },
+    });
+    expect(result).toMatchObject({
+      keysAdded: 5,
+      defaultsUpdated: 4,
+      keysRemoved: 1,
+      preservedRetired: ['zbk-app.surface.retired-custom'],
+    });
+  });
+
+  it('reports a fix-oriented token-to-group shape conflict before writing', async () => {
+    const old = snapshot({ 'zbk-app': { layout: token('#old') } });
+    const current = snapshot({
+      'zbk-app': { layout: { compact: token('#new') } },
+    });
+    await writePullState(configPath, createPullState('default', old), deps);
+    const filePath = path.join(tokensDir, 'zbk-app.tokens.json');
+    await fs.writeJson(filePath, { layout: token('#old') });
+
+    await expect(
+      syncTokenSnapshot({
+        tokensDir,
+        configPath,
+        basePreset: 'default',
+        snapshot: current,
+        deps,
+      })
+    ).rejects.toThrow(
+      /Token shape conflict at 'zbk-app\.layout'.*package defines a group.*project file contains a token.*run zebkit pull again/i
+    );
+    expect(await fs.readJson(filePath)).toEqual({ layout: token('#old') });
+  });
+
   it('removes untouched retirements and preserves customized retired values', async () => {
     const old = snapshot({
       'zbk-app': { canvas: token('#fff'), retired: token('#old') },
@@ -386,10 +494,15 @@ describe('pull state reconciliation', () => {
   it('rejects non-canonical filenames in pull state before touching token files', async () => {
     await fs.ensureDir(path.dirname(getPullStatePath(configPath)));
     await fs.writeJson(getPullStatePath(configPath), {
-      stateVersion: 1,
+      stateVersion: PULL_STATE_VERSION,
       basePreset: 'default',
       modules: {
-        'zbk-app': { file: 'zbk-app.json', tokens: { canvas: 'hash' } },
+        'zbk-app': {
+          file: 'zbk-app.json',
+          tokens: { canvas: 'hash' },
+          groups: [],
+          groupMetadata: {},
+        },
       },
     });
 

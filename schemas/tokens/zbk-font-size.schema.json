@@ -7,6 +7,7 @@
   "definitions": {
     "cssDimensionValue": {
       "type": "string",
+      "minLength": 1,
       "examples": [
         "{h1.font-size}",
         "{h1.measure}",
@@ -42,7 +43,6 @@
         "{font-size.3xl}",
         "{font-size.4xl}",
         "{font-size.5xl}",
-        "{z-index.auto}",
         "{button.font-size}",
         "{button.letter-spacing}",
         "{button.margin-inline}",
@@ -111,7 +111,8 @@
           "const": "cssDimension"
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -165,35 +166,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "groupType": {
-      "type": "string",
-      "enum": [
-        "color",
-        "dimension",
-        "duration",
-        "fontFamily",
-        "fontWeight",
-        "cubicBezier",
-        "number",
-        "strokeStyle",
-        "shadow",
-        "display",
-        "cursor",
-        "textTransform",
-        "textDecoration",
-        "textAlignment",
-        "fontStyle",
-        "transform",
-        "transitionProperty",
-        "transitionTimingFunction",
-        "content",
-        "flex",
-        "utility",
-        "asset",
-        "boolean",
-        "cssDimension"
       ]
     },
     "groupExtensions": {
@@ -345,10 +317,15 @@
   },
   "properties": {
     "$type": {
-      "$ref": "#/definitions/groupType"
+      "type": "string",
+      "enum": [
+        "dimension",
+        "cssDimension"
+      ]
     },
     "$description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "$deprecated": {
       "$ref": "#/definitions/deprecated"

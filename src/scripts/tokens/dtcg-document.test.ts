@@ -5,8 +5,9 @@ import fs from 'fs-extra';
 import {
   toDtcgDocument,
   toDtcgDocuments,
+  toCombinedDtcgDocument,
   fromDtcgDocument,
-  toStrictDtcgDocuments,
+  toStrictDtcgDocument,
   validateDtcgDocument,
   validateDtcgDocuments,
   assertRawTokenValueNormalizable,
@@ -151,6 +152,42 @@ describe('DTCG document transforms (Phase 3)', () => {
     );
   });
 
+  it('round-trips empty and metadata-only groups without inventing tokens', () => {
+    const document = {
+      empty: {},
+      experimental: {
+        $description: 'Work in progress.',
+        $extensions: { 'com.example': { owner: 'design-systems' } },
+      },
+    };
+
+    const parsed = fromDtcgDocument(document, { mode: 'literal' });
+    expect(parsed.entries).toEqual({});
+    expect(validateDtcgDocument(document)).toEqual([]);
+    expect(toDtcgDocument(parsed.entries, parsed.meta, { mode: 'authoring' })).toEqual(document);
+  });
+
+  it('round-trips legal names that overlap JavaScript prototype keys', () => {
+    const document = JSON.parse(`{
+      "$type": "number",
+      "__proto__": { "$value": 1, "$description": "Prototype key." },
+      "constructor": { "$value": 2, "$description": "Constructor key." },
+      "prototype": { "$value": 3, "$description": "Prototype property." }
+    }`) as Record<string, unknown>;
+
+    const parsed = fromDtcgDocument(document, { mode: 'literal' });
+    expect(Object.keys(parsed.entries).sort()).toEqual(['__proto__', 'constructor', 'prototype']);
+    expect(Object.prototype.hasOwnProperty.call(parsed.entries, '__proto__')).toBe(true);
+
+    const exported = toDtcgDocument(parsed.entries, parsed.meta, { mode: 'authoring' });
+    expect(JSON.parse(JSON.stringify(exported))).toEqual(document);
+    const combined = toCombinedDtcgDocument({ 'zbk-constructor': exported });
+    expect(Object.prototype.hasOwnProperty.call(combined, 'constructor')).toBe(true);
+    expect(Object.prototype.hasOwnProperty.call(combined['constructor'], '__proto__')).toBe(true);
+    expect(Object.keys(fromDtcgDocument(combined['constructor'], { mode: 'literal' }).entries).sort())
+      .toEqual(['__proto__', 'constructor', 'prototype']);
+  });
+
   it('rejects token paths that become a token/group collision during reconstruction', () => {
     expect(() =>
       toDtcgDocument(
@@ -184,6 +221,14 @@ describe('DTCG document transforms (Phase 3)', () => {
 
     it('flags a rejected reference form', () => {
       expect(validateDtcgDocument({ a: { $ref: '#/x' } })[0]).toMatch(/\$ref/);
+    });
+
+    it.each(['', '   \t'])('rejects a token description without visible text', ($description) => {
+      expect(validateDtcgDocument({
+        value: { $type: 'number', $value: 1, $description },
+      })).toEqual([
+        expect.stringContaining('must contain non-whitespace text that says what changing this token affects'),
+      ]);
     });
 
     it('requires a value even when a scale index is present', () => {
@@ -342,7 +387,9 @@ describe('DTCG document transforms (Phase 3)', () => {
         'strict',
         { strict: true }
       );
-      expect(errors).toEqual([expect.stringContaining("non-spec $type 'cssDimension'")]);
+      expect(errors).toEqual([
+        expect.stringContaining("non-spec $type 'cssDimension'"),
+      ]);
     });
 
     it.each([
@@ -532,6 +579,10 @@ describe('DTCG document transforms (Phase 3)', () => {
       expect(docs['zbk-b'].$extensions).toEqual({
         'dev.zebkit': { layer: 'components', cssEmission: 'external' },
       });
+      expect(toCombinedDtcgDocument(docs)).toEqual({
+        a: docs['zbk-a'],
+        b: docs['zbk-b'],
+      });
     });
 
     it('materializes fluid scale values and exposes explicit literal/runtime read modes', () => {
@@ -651,10 +702,14 @@ describe('DTCG document transforms (Phase 3)', () => {
       expect(resolved).toBe('calc(3rem * var(--zbk-a11y-font-size-modifier-md))');
     });
 
-    it('fails truthfully when a raw shadow cannot be represented', () => {
-      expect(() => toDtcgDocument({
+    it('preserves a whole property-level shadow variable through the CSS fallback', () => {
+      const document = toDtcgDocument({
         shadow: { $value: 'var(--brand-shadow)', $type: 'shadow', $description: 'Shadow.' },
-      } as unknown as TokenInterface, { layer: 'base' })).toThrow(/shadow.*var\(--brand-shadow\)/i);
+      } as unknown as TokenInterface, { layer: 'base' });
+      expect(document.$type).toBe('cssShadow');
+      expect(fromDtcgDocument(document).entries.shadow).toEqual(
+        expect.objectContaining({ $type: 'shadow', $value: 'var(--brand-shadow)' })
+      );
     });
 
     it('normalizes representable CSS-variable shadow sub-values as DTCG references', () => {
@@ -715,20 +770,55 @@ describe('DTCG document transforms (Phase 3)', () => {
     });
 
     it('validates raw shadow grammar before a collection lookup exists', () => {
-      expect(() => assertRawTokenValueNormalizable({
+      const normalized = assertRawTokenValueNormalizable({
         $type: 'shadow',
         $value: '0 0 0 2px var(--zbk-app-canvas-muted)',
         $description: 'Theme shadow.',
-      }, 'zbk-toggle.thumb-shadow')).not.toThrow();
+      }, 'zbk-toggle.thumb-shadow');
+      expect(normalized).toMatchObject({
+        $type: 'cssShadow',
+        $value: '0 0 0 2px var(--zbk-app-canvas-muted)',
+      });
+      expect(JSON.stringify(normalized)).not.toContain('unresolved.');
     });
 
-    it('rejects unsupported raw shadows with the token path', () => {
+    it('rejects malformed raw shadows with the token path', () => {
       expect(() => toDtcgDocument({
-        invalid: { $type: 'shadow', $value: '#000000 1px', $description: 'Invalid.' },
+        invalid: { $type: 'shadow', $value: 'var(brand-shadow)', $description: 'Invalid.' },
       } as unknown as TokenInterface, { layer: 'base', label: 'zbk-shadow' })).toThrow(
-        /zbk-shadow\.invalid.*unsupported raw CSS value/i
+        /zbk-shadow\.invalid.*complete CSS value.*canonical DTCG shadow/i
       );
     });
+
+    it.each([
+      ['color', 'color-mix(in srgb, red 40%, blue)', 'cssColor'],
+      ['dimension', 'clamp(1rem, 2vw, 3rem)', 'cssDimension'],
+      ['duration', 'var(--motion-duration)', 'cssDuration'],
+      ['fontWeight', 'var(--brand-weight)', 'cssFontWeight'],
+      ['cubicBezier', 'ease-in-out', 'cssEasingFunction'],
+      ['number', 'calc(1 + var(--density))', 'cssNumber'],
+      ['strokeStyle', 'none', 'cssStrokeStyle'],
+      ['shadow', 'var(--brand-shadow)', 'cssShadow'],
+    ] as const)('preserves valid property-level %s CSS %s as %s', ($type, $value, fallbackType) => {
+      const document = toDtcgDocument({
+        flexible: { $type, $value, $description: 'Flexible.' },
+      } as unknown as TokenInterface, { layer: 'base', label: 'zbk-flexible' });
+      expect(document.$type).toBe(fallbackType);
+      expect(fromDtcgDocument(document, { mode: 'runtime' }).entries.flexible).toEqual(
+        expect.objectContaining({ $type, $value })
+      );
+    });
+
+    it.each(['calc(', 'var(spacing)', '1rem; color: red'])(
+      'rejects syntactically malformed dimension CSS %s with the token path and fix',
+      ($value) => {
+        expect(() => assertRawTokenValueNormalizable({
+          $type: 'dimension',
+          $value,
+          $description: 'Invalid.',
+        }, 'zbk-layout.invalid')).toThrow(/zbk-layout\.invalid.*complete CSS value.*canonical DTCG dimension/i);
+      }
+    );
 
     it('normalizes raw theme CSS values for export and restores them on re-ingest', () => {
       const entries = {
@@ -751,7 +841,7 @@ describe('DTCG document transforms (Phase 3)', () => {
     });
   });
 
-  describe('strict DTCG document sets (D9)', () => {
+  describe('canonical strict DTCG document (D9)', () => {
     it('keeps spec-typed entries, drops proprietary ones, and lists the drops', () => {
       const doc = {
         $extensions: { 'dev.zebkit': { layer: 'base' } },
@@ -765,16 +855,16 @@ describe('DTCG document transforms (Phase 3)', () => {
         cell: { $value: 'table-cell', $type: 'display', $description: 'd' },
       };
 
-      const { documents, dropped } = toStrictDtcgDocuments({ 'zbk-app': doc });
+      const { document, dropped } = toStrictDtcgDocument({ 'zbk-app': doc });
 
-      const kept = fromDtcgDocument(documents['zbk-app']).entries;
+      const kept = fromDtcgDocument(document.app).entries;
       expect(Object.keys(kept).sort()).toEqual(['brand', 'gap']);
       for (const entry of Object.values(kept)) {
         expect(isDtcgSpecType(entry.$type)).toBe(true);
       }
-      expect(dropped['zbk-app'].sort((a, b) => a.name.localeCompare(b.name))).toEqual([
-        expect.objectContaining({ name: 'auto', $type: 'cssDimension', reason: 'proprietary-type' }),
-        expect.objectContaining({ name: 'cell', $type: 'display', reason: 'proprietary-type' }),
+      expect(dropped['zbk-app']).toEqual([
+        expect.objectContaining({ path: 'auto', $type: 'cssDimension', reason: 'proprietary-type' }),
+        expect.objectContaining({ path: 'cell', $type: 'display', reason: 'proprietary-type' }),
       ]);
     });
 
@@ -793,16 +883,71 @@ describe('DTCG document transforms (Phase 3)', () => {
           valid: { $type: 'color', $value: '{color.blue}', $description: 'Valid.' },
         },
       };
-      const result = toStrictDtcgDocuments(documents);
-      expect(fromDtcgDocument(result.documents['zbk-component']).entries).toEqual({
+      const result = toStrictDtcgDocument(documents);
+      expect(fromDtcgDocument(result.document.component).entries).toEqual({
         valid: documents['zbk-component'].valid,
       });
+      expect(result.document.component.valid).toEqual(
+        expect.objectContaining({ $value: '{color.blue}' })
+      );
+      expect(
+        '{color.blue}'.slice(1, -1).split('.').reduce<unknown>(
+          (node, segment) => (node as Record<string, unknown>)[segment],
+          result.document
+        )
+      ).toEqual(result.document.color.blue);
+      expect(validateDtcgDocuments(result.document, 'strict', { strict: true })).toEqual([]);
       expect(result.dropped['zbk-component']).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ name: 'direct', reason: 'referenced-proprietary', referencedTarget: 'layout.auto' }),
-          expect.objectContaining({ name: 'transitive', reason: 'referenced-dropped', referencedTarget: 'component.direct' }),
+          expect.objectContaining({ path: 'direct', reason: 'referenced-proprietary', referencedTarget: 'layout.auto' }),
+          expect.objectContaining({ path: 'transitive', reason: 'referenced-dropped', referencedTarget: 'component.direct' }),
         ])
       );
+    });
+
+    it('resolves local aliases and qualifies them when modules become root groups', () => {
+      const result = toStrictDtcgDocument({
+        'zbk-test': {
+          $type: 'number',
+          base: { $value: 1, $description: 'Base.' },
+          group: {
+            $root: { $value: 2, $description: 'Group root.' },
+            nested: { $value: 3, $description: 'Nested.' },
+          },
+          local: { $value: '{base}', $description: 'Local root token.' },
+          nested: { $value: '{group.nested}', $description: 'Local nested token.' },
+          groupRoot: { $value: '{group.$root}', $description: 'Local group root token.' },
+        },
+      });
+
+      expect((result.document.test.local as Record<string, unknown>).$value).toBe('{test.base}');
+      expect((result.document.test.nested as Record<string, unknown>).$value).toBe('{test.group.nested}');
+      expect((result.document.test.groupRoot as Record<string, unknown>).$value).toBe('{test.group.$root}');
+      expect(validateDtcgDocuments(result.document, 'strict', { strict: true })).toEqual([]);
+    });
+
+    it('keeps dotted aliases global when their root collides with a local nested path', () => {
+      const result = toStrictDtcgDocument({
+        'zbk-focus': {
+          $type: 'color',
+          color: {
+            $value: { colorSpace: 'srgb', components: [0, 0.4, 0.8] },
+            $description: 'Global focus color.',
+          },
+        },
+        'zbk-button': {
+          $type: 'color',
+          focus: {
+            color: { $value: '{focus.color}', $description: 'Button focus color.' },
+          },
+        },
+      });
+
+      expect(
+        ((result.document.button.focus as Record<string, unknown>).color as Record<string, unknown>)
+          .$value
+      ).toBe('{focus.color}');
+      expect(validateDtcgDocuments(result.document, 'strict', { strict: true })).toEqual([]);
     });
 
     it('reports missing and incompatible references with the source path', () => {
@@ -824,34 +969,132 @@ describe('DTCG document transforms (Phase 3)', () => {
       ]));
     });
 
+    it('allows a single shadow alias in an array but rejects and drops aliases to shadow arrays', () => {
+      const layer = {
+        color: { colorSpace: 'srgb', components: [0, 0, 0], alpha: 0.2 },
+        offsetX: { value: 0, unit: 'px' },
+        offsetY: { value: 1, unit: 'px' },
+        blur: { value: 2, unit: 'px' },
+        spread: { value: 0, unit: 'px' },
+      };
+      const documents = {
+        'zbk-shadow': {
+          single: { $type: 'shadow', $value: layer, $description: 'One shadow layer.' },
+          multi: { $type: 'shadow', $value: [layer, layer], $description: 'Two shadow layers.' },
+          allowed: {
+            $type: 'shadow',
+            $value: ['{shadow.single}'],
+            $description: 'One referenced shadow layer.',
+          },
+          rejected: {
+            $type: 'shadow',
+            $value: ['{shadow.multi}'],
+            $description: 'A nested shadow array.',
+          },
+        },
+      };
+
+      const errors = validateDtcgDocuments(documents);
+      expect(errors).toEqual([
+        expect.stringContaining(
+          "zbk-shadow.rejected: reference 'shadow.multi' resolves to a shadow array"
+        ),
+      ]);
+      expect(errors[0]).toContain(
+        'reference the multi-layer token as the whole $value or reference a single-layer shadow token'
+      );
+
+      const result = toStrictDtcgDocument(documents);
+      expect(result.document.shadow.allowed).toEqual(
+        expect.objectContaining({ $value: ['{shadow.single}'] })
+      );
+      expect(result.document.shadow.rejected).toBeUndefined();
+      expect(result.dropped['zbk-shadow']).toEqual([
+        expect.objectContaining({
+          path: 'rejected',
+          reason: 'array-reference-cardinality',
+          referencedTarget: 'shadow.multi',
+        }),
+      ]);
+    });
+
+    it('rejects and drops shadow blur aliases that resolve transitively to a negative dimension', () => {
+      const shadowValue = (blur: string) => ({
+        color: { colorSpace: 'srgb', components: [0, 0, 0], alpha: 0.2 },
+        offsetX: { value: 0, unit: 'px' },
+        offsetY: { value: 1, unit: 'px' },
+        blur,
+        spread: { value: 0, unit: 'px' },
+      });
+      const documents = {
+        'zbk-dimension': {
+          negative: {
+            $type: 'dimension',
+            $value: { value: -1, unit: 'px' },
+            $description: 'A negative dimension.',
+          },
+          indirect: {
+            $type: 'dimension',
+            $value: '{dimension.negative}',
+            $description: 'Alias to a negative dimension.',
+          },
+          zero: {
+            $type: 'dimension',
+            $value: { value: 0, unit: 'px' },
+            $description: 'Zero dimension.',
+          },
+        },
+        'zbk-shadow': {
+          valid: {
+            $type: 'shadow',
+            $value: shadowValue('{dimension.zero}'),
+            $description: 'A valid referenced blur.',
+          },
+          rejected: {
+            $type: 'shadow',
+            $value: shadowValue('{dimension.indirect}'),
+            $description: 'An invalid referenced blur.',
+          },
+        },
+      };
+
+      const errors = validateDtcgDocuments(documents);
+      expect(errors).toEqual([
+        expect.stringContaining(
+          "zbk-shadow.rejected: shadow blur reference 'dimension.indirect' resolves to a negative dimension"
+        ),
+      ]);
+      expect(errors[0]).toContain('DTCG shadow blur must be zero or greater');
+
+      const result = toStrictDtcgDocument(documents);
+      expect(result.document.shadow.valid).toBeDefined();
+      expect(result.document.shadow.rejected).toBeUndefined();
+      expect(result.dropped['zbk-shadow']).toEqual([
+        expect.objectContaining({
+          path: 'rejected',
+          reason: 'negative-shadow-blur',
+          referencedTarget: 'dimension.indirect',
+        }),
+      ]);
+    });
+
     it('drops raw proprietary dimension normalization and records the manifest entry', () => {
       const full = toDtcgDocument({
         percent: { $type: 'dimension', $value: '50%', $description: 'Half.' },
       } as unknown as TokenInterface, { layer: 'base' });
       expect(full.$type).toBe('cssDimension');
-      const result = toStrictDtcgDocuments({ 'zbk-layout': full });
+      const result = toStrictDtcgDocument({ 'zbk-layout': full });
       expect(result.dropped['zbk-layout']).toEqual([
-        expect.objectContaining({ name: 'percent', reason: 'proprietary-type' }),
+        expect.objectContaining({ path: 'percent', reason: 'proprietary-type' }),
       ]);
-      expect(Object.keys(fromDtcgDocument(result.documents['zbk-layout'], { mode: 'literal' }).entries)).toEqual([]);
+      expect(Object.keys(fromDtcgDocument(result.document.layout, { mode: 'literal' }).entries)).toEqual([]);
       expect(validateDtcgDocuments({
         'zbk-layout': { percent: { $type: 'cssDimension', $value: '50%', $description: 'Half.' } },
       }, 'strict', { strict: true })[0]).toContain('non-spec');
     });
 
-    it('uses the shared compatibility map for utility-to-boolean aliases', () => {
-      expect(validateDtcgDocuments({
-        'zbk-utility': {
-          flag: { $type: 'boolean', $value: true, $description: 'Flag.' },
-        },
-        'zbk-component': {
-          utility: { $type: 'utility', $value: '{utility.flag}', $description: 'Utility.' },
-        },
-      })).toEqual([]);
-    });
-
     it('drops normative types that Zebkit cannot validate or serialize', () => {
-      const result = toStrictDtcgDocuments({
+      const result = toStrictDtcgDocument({
         'zbk-border': {
           unsupported: {
             $type: 'border',
@@ -861,17 +1104,69 @@ describe('DTCG document transforms (Phase 3)', () => {
         },
       });
       expect(result.dropped['zbk-border']).toEqual([
-        expect.objectContaining({ name: 'unsupported', reason: 'unsupported-type' }),
+        expect.objectContaining({ path: 'unsupported', reason: 'unsupported-type' }),
+      ]);
+    });
+
+    it('removes proprietary group types after pruning without weakening leaf types', () => {
+      const result = toStrictDtcgDocument({
+        'zbk-mixed': {
+          $type: 'cssDimension',
+          kept: { $type: 'number', $value: 1, $description: 'Kept.' },
+          dropped: { $value: 'auto', $description: 'Dropped.' },
+        },
+      });
+
+      expect(result.document.mixed.$type).toBeUndefined();
+      expect(result.document.mixed.kept).toEqual(
+        expect.objectContaining({ $type: 'number', $value: 1 })
+      );
+      expect(validateDtcgDocuments(result.document, 'strict', { strict: true })).toEqual([]);
+    });
+
+    it('reports public structural paths in the drop manifest', () => {
+      const result = toStrictDtcgDocument({
+        'zbk-layout': {
+          accent: {
+            red: { $type: 'cssColor', $value: 'currentColor', $description: 'Red.' },
+            $root: { $type: 'cssColor', $value: 'currentColor', $description: 'Root.' },
+          },
+        },
+      });
+
+      expect(result.dropped['zbk-layout']).toEqual([
+        expect.objectContaining({ path: 'accent.$root' }),
+        expect.objectContaining({ path: 'accent.red' }),
+      ]);
+    });
+
+    it('rejects proprietary group types in strict validation even when leaves override them', () => {
+      expect(validateDtcgDocuments({
+        mixed: {
+          $type: 'cssDimension',
+          kept: { $type: 'number', $value: 1, $description: 'Kept.' },
+        },
+      }, 'strict', { strict: true })).toEqual([
+        expect.stringContaining("group $type 'cssDimension' is not supported"),
       ]);
     });
 
     it('rejects cyclic strict input before pruning', () => {
-      expect(() => toStrictDtcgDocuments({
+      expect(() => toStrictDtcgDocument({
         'zbk-color': {
           one: { $type: 'color', $value: '{color.two}', $description: 'One.' },
           two: { $type: 'color', $value: '{color.one}', $description: 'Two.' },
         },
       })).toThrow(/reference cycles.*color\.one -> color\.two -> color\.one/i);
+    });
+
+    it('detects cycles through one-segment local aliases', () => {
+      expect(() => toStrictDtcgDocument({
+        'zbk-test': {
+          one: { $type: 'number', $value: '{two}', $description: 'One.' },
+          two: { $type: 'number', $value: '{one}', $description: 'Two.' },
+        },
+      })).toThrow(/reference cycles.*test\.one -> test\.two -> test\.one/i);
     });
     // Corpus-level assurance (strict is spec-only across every real module, and
     // actually sheds proprietary tokens) is hermetic and lives in the

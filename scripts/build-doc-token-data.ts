@@ -7,6 +7,11 @@ import {
   projectDocsTokenData,
   projectPrimitivePalette,
 } from '../src/scripts/tokens/docs-token-data';
+import { fromDtcgDocument } from '../src/scripts/tokens/dtcg-document';
+import {
+  deriveDirectTokenCssDestinations,
+  propagateTokenCssDestinations,
+} from '../src/scripts/tokens/css-token-destinations';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sourcePath = path.join(
@@ -30,7 +35,20 @@ async function main(): Promise<void> {
     string,
     Record<string, unknown>
   >;
-  const registry = projectDocsTokenData(combined);
+  const tokenMaps = Object.fromEntries(
+    Object.entries(combined).map(([moduleId, document]) => [
+      moduleId.startsWith('zbk-') ? moduleId : `zbk-${moduleId}`,
+      fromDtcgDocument(document, { mode: 'literal' }).entries,
+    ])
+  );
+  const directDestinations = await deriveDirectTokenCssDestinations(
+    tokenMaps,
+    path.join(repoRoot, 'src')
+  );
+  const registry = projectDocsTokenData(
+    combined,
+    propagateTokenCssDestinations(tokenMaps, directDestinations)
+  );
   const serialized = JSON.stringify(registry);
   const invalidSentinel = ['[object Object]', 'NaN', 'undefined'].find((value) =>
     serialized.includes(value)
@@ -54,4 +72,3 @@ main().catch((error) => {
   console.error('Failed to build docs token data:', error);
   process.exitCode = 1;
 });
-

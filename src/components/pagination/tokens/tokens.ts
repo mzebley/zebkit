@@ -249,14 +249,14 @@ const tokens = {
   },
   "transition-timing-function": {
     $value: "ease-out",
-    $type: "transitionTimingFunction",
+    $type: "cssEasingFunction",
     $description: "Timing function for item transitions.",
   },
 
   // Interaction behavior
   cursor: {
     $value: "pointer",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor over interactive pagination items.",
   },
 } as const satisfies Record<PaginationTokenKey, TokenObject>;

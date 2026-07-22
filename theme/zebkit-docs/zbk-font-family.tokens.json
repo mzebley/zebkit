@@ -1,6 +1,6 @@
 {
   "primary": {
-    "$value": "\"Proza Libre\"",
+    "$value": "Proza Libre",
     "$type": "fontFamily",
     "$extensions": {
       "dev.zebkit": {
@@ -23,7 +23,7 @@
     }
   },
   "alt": {
-    "$value": "\"Fraunces\"",
+    "$value": "Fraunces",
     "$type": "fontFamily",
     "$extensions": {
       "dev.zebkit": {
@@ -40,7 +40,7 @@
     }
   },
   "monospace": {
-    "$value": "\"Inconsolata\"",
+    "$value": "Inconsolata",
     "$type": "fontFamily",
     "$extensions": {
       "dev.zebkit": {
@@ -62,7 +62,7 @@
   "system-sans": {
     "$value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
     "$description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
-    "$type": "fontFamily",
+    "$type": "cssFontFamily",
     "$extensions": {
       "dev.zebkit": {
         "font": {
@@ -74,7 +74,7 @@
   "system-serif": {
     "$value": "ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif",
     "$description": "System serif stack. Zero network cost.",
-    "$type": "fontFamily",
+    "$type": "cssFontFamily",
     "$extensions": {
       "dev.zebkit": {
         "font": {
@@ -86,7 +86,7 @@
   "system-mono": {
     "$value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
     "$description": "System monospace stack. Zero network cost.",
-    "$type": "fontFamily",
+    "$type": "cssFontFamily",
     "$extensions": {
       "dev.zebkit": {
         "font": {

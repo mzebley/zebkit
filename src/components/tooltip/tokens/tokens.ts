@@ -151,7 +151,7 @@ const tokens = {
   },
   "transition-timing-function": {
     $value: "ease-out",
-    $type: "transitionTimingFunction",
+    $type: "cssEasingFunction",
     $description: "Show/hide transition timing function.",
   },
   "show-delay": {

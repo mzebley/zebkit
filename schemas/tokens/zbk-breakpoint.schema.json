@@ -8,7 +8,8 @@
     "dimensionValue": {
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         {
           "type": "object",
@@ -240,6 +241,10 @@
         "{tooltip.offset}"
       ]
     },
+    "cssDimensionValue": {
+      "type": "string",
+      "minLength": 1
+    },
     "dimensionToken": {
       "type": "object",
       "description": "Small tablets and large phones in landscape (640px).",
@@ -249,13 +254,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/dimensionValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/dimensionValue"
+            },
+            {
+              "$ref": "#/definitions/cssDimensionValue"
+            }
+          ]
         },
         "$type": {
-          "const": "dimension"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -282,7 +299,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "dimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/dimensionValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssDimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssDimensionValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "deprecated": {
       "oneOf": [
@@ -292,35 +349,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "groupType": {
-      "type": "string",
-      "enum": [
-        "color",
-        "dimension",
-        "duration",
-        "fontFamily",
-        "fontWeight",
-        "cubicBezier",
-        "number",
-        "strokeStyle",
-        "shadow",
-        "display",
-        "cursor",
-        "textTransform",
-        "textDecoration",
-        "textAlignment",
-        "fontStyle",
-        "transform",
-        "transitionProperty",
-        "transitionTimingFunction",
-        "content",
-        "flex",
-        "utility",
-        "asset",
-        "boolean",
-        "cssDimension"
       ]
     },
     "groupExtensions": {
@@ -471,14 +499,18 @@
     },
     "group:tablet": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -498,14 +530,18 @@
     },
     "group:desktop": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -526,10 +562,15 @@
   },
   "properties": {
     "$type": {
-      "$ref": "#/definitions/groupType"
+      "type": "string",
+      "enum": [
+        "dimension",
+        "cssDimension"
+      ]
     },
     "$description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "$deprecated": {
       "$ref": "#/definitions/deprecated"

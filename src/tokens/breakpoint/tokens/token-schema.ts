@@ -9,7 +9,7 @@ import { dimensionValueSchema } from "@definitions/tokens";
 const breakpointToken = z.object({
   $value: z.union([dimensionValueSchema, z.string(), z.null()]),
   $type: z.literal("dimension"),
-  $description: z.string(),
+  $description: z.string().min(1, "$description must not be empty"),
 });
 
 export const tokenSchema = z.object({

@@ -15,6 +15,7 @@ import {
   isWholeValueAlias,
 } from '@definitions/tokens';
 import { ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
+import { CSS_FALLBACK_TYPE_BY_DTCG_TYPE } from '@definitions/dtcg';
 import { areTokensTypesCompatible } from '@definitions/token-maps';
 import { ZEBKIT_PREFIX } from '@config';
 import { assertRawTokenValueNormalizable } from './dtcg-document';
@@ -201,11 +202,8 @@ function mergeTokenExtensions(
   return Object.keys(merged).length > 0 ? merged : undefined;
 }
 
-function validateMergedToken(
-  token: Record<string, any>,
-  schema: ZodSchema
-): void {
-  const rawDtcgTypes = new Set(['color', 'dimension', 'duration', 'cubicBezier', 'shadow']);
+function normalizeMergedToken(token: Record<string, any>): Record<string, any> {
+  const rawDtcgTypes = new Set(Object.keys(CSS_FALLBACK_TYPE_BY_DTCG_TYPE));
   if (
     rawDtcgTypes.has(token.$type) &&
     typeof token.$value === 'string' &&
@@ -214,22 +212,20 @@ function validateMergedToken(
     // Raw authoring is allowed only when the canonical DTCG exporter knows how
     // to normalize this token type. Unsupported raw values fail here rather
     // than being warned away and replaced with a default.
-    const normalized = assertRawTokenValueNormalizable(
+    return assertRawTokenValueNormalizable(
       token as TokenObject,
       'override value'
     );
-    if (schema.safeParse(token).success) return;
-    // Validate the merged metadata and module-specific constraints with the
-    // canonical structured value substituted for the legacy raw string.
-    // A legacy dimension that cannot be represented by the spec (`em`, `%`,
-    // `none`, `calc()`) exports as Zebkit's `cssDimension` extension type. Its
-    // base module schema necessarily still expects `dimension`, so validate the
-    // complete normalized token against the shared registry in that case.
-    if (normalized.$type !== token.$type) tokenObjectSchema.parse(normalized);
-    else schema.parse(normalized);
-    return;
   }
-  schema.parse(token);
+  return token;
+}
+
+function validateMergedToken(token: Record<string, any>, schema: ZodSchema): void {
+  if (schema.safeParse(token).success) return;
+  // Compatible css<Type> fallbacks can no longer satisfy a bespoke module
+  // schema whose base token is canonical. The key remains closed by the module
+  // schema; validate the normalized entry through the shared token registry.
+  tokenObjectSchema.parse(token);
 }
 
 export function mergeTokens(
@@ -246,7 +242,7 @@ export function mergeTokens(
   for (const key in customTokens) {
     if (!Object.prototype.hasOwnProperty.call(customTokens, key)) continue;
 
-    if (!defaultTokens.hasOwnProperty(key)) {
+    if (!Object.prototype.hasOwnProperty.call(defaultTokens, key)) {
       errors.push(`Extra token '${keyPath}.${key}' is not defined by the base module.`);
       continue;
     }
@@ -293,10 +289,10 @@ export function mergeTokens(
         );
       }
 
-      const nextToken: Record<string, any> = {
+      let nextToken: Record<string, any> = {
         ...baseToken,
         $value: overrideValue,
-        $type: baseToken.$type,
+        $type: explicitType ?? baseToken.$type,
       };
 
       if (overrideToken && Object.prototype.hasOwnProperty.call(overrideToken, '$description')) {
@@ -308,9 +304,11 @@ export function mergeTokens(
       nextToken.$extensions = mergeTokenExtensions(baseToken, overrideToken, overrideValue);
       if (!nextToken.$extensions) delete nextToken.$extensions;
 
+      nextToken = normalizeMergedToken(nextToken);
       validateMergedToken(nextToken, subSchema ?? tokenObjectSchema);
       merged[key] = nextToken as TokenInterface[string];
-      if (!touchOnlyChanged || !isDeepStrictEqual(nextToken, baseToken)) touched?.add(key);
+      const normalizedBase = normalizeMergedToken({ ...baseToken });
+      if (!touchOnlyChanged || !isDeepStrictEqual(nextToken, normalizedBase)) touched?.add(key);
     } catch (error) {
       errors.push(
         `${keyPath}.${key}: ${error instanceof Error ? error.message : String(error)}`
@@ -342,7 +340,7 @@ export function buildFilePayload(
     case 'javascript':
       return {
         filePath: `${basePath}.js`,
-        fileContent: `module.exports = ${JSON.stringify(payload, null, 2)};\n`,
+        fileContent: `export default ${JSON.stringify(payload, null, 2)};\n`,
       };
     default:
       throw new Error(`Unsupported format: ${format}`);

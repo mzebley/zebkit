@@ -12,10 +12,16 @@
         },
         {
           "type": "string",
-          "pattern": "^\\{[^{}]+\\}$"
+          "minLength": 1
         }
       ],
       "examples": [
+        "{a11y.spacing-modifier}",
+        "{a11y.spacing-text-coupling}",
+        "{a11y.line-height-modifier}",
+        "{a11y.letter-spacing-modifier}",
+        "{a11y.fallback-font-size-modifier}",
+        "{a11y.transition-duration-modifier}",
         "{opacity.0}",
         "{opacity.5}",
         "{opacity.10}",
@@ -92,6 +98,10 @@
         "{tooltip.opacity}"
       ]
     },
+    "cssNumberValue": {
+      "type": "string",
+      "minLength": 1
+    },
     "numberToken": {
       "type": "object",
       "description": "Fully transparent (invisible).",
@@ -101,13 +111,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/numberValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/numberValue"
+            },
+            {
+              "$ref": "#/definitions/cssNumberValue"
+            }
+          ]
         },
         "$type": {
-          "const": "number"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -134,7 +156,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "number"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/numberValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssNumber"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssNumberValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "deprecated": {
       "oneOf": [
@@ -144,35 +206,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "groupType": {
-      "type": "string",
-      "enum": [
-        "color",
-        "dimension",
-        "duration",
-        "fontFamily",
-        "fontWeight",
-        "cubicBezier",
-        "number",
-        "strokeStyle",
-        "shadow",
-        "display",
-        "cursor",
-        "textTransform",
-        "textDecoration",
-        "textAlignment",
-        "fontStyle",
-        "transform",
-        "transitionProperty",
-        "transitionTimingFunction",
-        "content",
-        "flex",
-        "utility",
-        "asset",
-        "boolean",
-        "cssDimension"
       ]
     },
     "groupExtensions": {
@@ -460,10 +493,15 @@
       ]
     },
     "$type": {
-      "$ref": "#/definitions/groupType"
+      "type": "string",
+      "enum": [
+        "number",
+        "cssNumber"
+      ]
     },
     "$description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "$deprecated": {
       "$ref": "#/definitions/deprecated"

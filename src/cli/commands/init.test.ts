@@ -112,7 +112,6 @@ describe('init command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
       {
-        $extensions: { 'dev.zebkit': { layer: 'components' } },
         canvas: { $value: '#fff', $type: 'color' },
       },
       { spaces: 2 }
@@ -139,7 +138,7 @@ describe('init command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/.zebkit/pull-state.json',
       expect.objectContaining({
-        stateVersion: 1,
+        stateVersion: 2,
         basePreset: 'dynamowaves',
         modules: expect.objectContaining({
           'zbk-button': expect.objectContaining({ file: 'zbk-button.tokens.json' }),

@@ -5,6 +5,7 @@ export interface TokenRow {
   type: string;
   value: string | number;
   description: string;
+  cssProperties: string[];
 }
 
 export type { CompiledToken };
@@ -42,5 +43,6 @@ export function buildTokenRows(
           ? formatTokenValue(token.$value, token.$displayValue)
           : token.$extensions?.['dev.zebkit']?.scale?.index ?? '',
       description: token.$description,
+      cssProperties: token.$cssProperties ?? [],
     }));
 }

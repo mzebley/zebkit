@@ -73,6 +73,15 @@ The prose context styles matching descendant elements; use it for long-form cont
 
 - Use .lede for the short introductory paragraph that summarizes or frames a page, article, or section.
 
+### prose-list
+
+Ordered and unordered list typography and spacing inside a .prose context.
+
+Defines: `prose`.
+The prose context styles matching descendant elements; use it for long-form content rather than as an element-by-element utility.
+
+- Use semantic ul/ol markup; list tokens keep typography and rhythm aligned with the surrounding prose.
+
 ## Text utilities
 
 Control over how text behaves when it runs out of horizontal space within its container.

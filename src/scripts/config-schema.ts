@@ -167,13 +167,13 @@ export const ZEBKIT_CONFIG_SCHEMA = {
           type: 'boolean',
           default: false,
           description:
-            'Also emit spec-only strict-mode token documents + a drop-manifest (D9). Requires exportTokens.',
+            'Emit one combined, reference-closed DTCG 2025.10 document plus a drop manifest. Requires exportTokens; splitMode applies only to the full-profile export.',
         },
         splitMode: {
           type: 'string',
           enum: ['combined', 'per-module'],
           default: 'combined',
-          description: 'Write one token export per format or one per token module.',
+          description: 'Write the full-profile export as one document per format or one file per token module. Strict output is always combined.',
         },
         outputFormats: {
           type: 'array',

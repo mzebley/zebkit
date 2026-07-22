@@ -60,7 +60,7 @@ const tokens = {
       "Color of P elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-style": {
-    $value: `none`,
+    $value: `normal`,
     $type: "fontStyle",
     $description:
       "Font style for P elements with .prose applied directly or that are a child of a .prose container.",

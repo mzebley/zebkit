@@ -30,7 +30,11 @@ Discovery is automatic: the build finds every `**/tokens/tokens.ts` beneath `src
 
 Every module is validated. A module with a sibling `token-schema.ts` uses it; the rest validate against the generic `tokenModuleSchema` — a record of DTCG entries — so most modules need no schema file at all. A failed parse, invalid override, unknown token, broken reference, or value-conversion failure stops the build.
 
-Full exports use the **Zebkit DTCG 2025.10 profile**: standard document structure plus the documented proprietary types required by zebkit's CSS surface. Curly aliases may have arbitrary depth and nested groups flatten with `-`; `$ref` and `$extends` are rejected deliberately. Strict exports contain only zebkit's fully implemented DTCG types, are reference-closed, and pass `npm run check:dtcg-validate` as DTCG 2025.10 documents.
+Full exports use the **Zebkit DTCG 2025.10 profile**: standard document structure plus the documented proprietary types required by zebkit's CSS surface. Curly aliases may have arbitrary depth and nested groups flatten with `-`; `$ref` and `$extends` are rejected deliberately. The strict export is one combined, reference-closed DTCG 2025.10 document containing only the standard types zebkit fully supports. References resolve from its document root; the theme-level drop manifest explains every token omitted from it.
+
+Choose a token's `$type` from the complete useful value space of the CSS property it reaches, not only its current default. Standard structured types are preferred when they are lossless. Zebkit's CSS-surface types deliberately preserve valid property values such as sizing keywords, percentages, and functions that DTCG cannot represent; malformed CSS still fails with the token path and expected grammar.
+
+The standard/raw-CSS pairs are grammatical: `color`/`cssColor`, `dimension`/`cssDimension`, `duration`/`cssDuration`, `fontFamily`/`cssFontFamily`, `fontWeight`/`cssFontWeight`, `cubicBezier`/`cssEasingFunction`, `number`/`cssNumber`, `strokeStyle`/`cssStrokeStyle`, and `shadow`/`cssShadow`. The build derives each token's concrete CSS properties from shipped source, propagates them through aliases, and writes `css-properties.json` with the installed defaults; a raw value must be valid at every property the token can reach.
 
 ## Theme overrides and exports
 
@@ -61,7 +65,7 @@ Full and strict combined exports:
 }
 ```
 
-This writes `<theme>-tokens.json`, `<theme>-tokens.strict.json`, and `<theme>.drop-manifest.json`. Set `splitMode` to `per-module` for `zbk-<module>.tokens.json` and `zbk-<module>.strict.tokens.json`; the drop manifest remains theme-level. `exportStrict: true` requires `exportTokens: true`.
+This writes `<theme>-tokens.json`, `<theme>-tokens.strict.json`, and `<theme>.drop-manifest.json`. `splitMode: "per-module"` splits the full-profile export into editable `zbk-<module>.tokens.json` files; the canonical strict export and its drop manifest remain theme-level combined artifacts. `exportStrict: true` requires `exportTokens: true`.
 
 ## Keys and utility bindings
 
@@ -71,8 +75,12 @@ Utility manifests bind `tokens.group` to this key. When a token-bound family der
 
 ## Workflow
 
-1. Add `tokens/tokens.ts` anywhere under `src/tokens/`. Add a `token-schema.ts` only if the module has structural constraints the generic schema cannot express.
-2. Build the docs token set: `npm run build:tokens -- --config theme/zebkit.docs.config.json`.
-3. Run `npm run check` before handing off the change.
+1. Search the token catalog and choose the primitive, alias, or component stratum. References flow downward: components → aliases → primitives.
+2. Add `tokens/tokens.ts` anywhere under `src/tokens/`. Add a `token-schema.ts` only if the module has structural constraints the generic schema cannot express.
+3. Bind the emitted `--zbk-{key}-{name}` variable to the visual property and write a description that says what changing it changes.
+4. Build the docs token set: `npm run build:tokens -- --config theme/zebkit.docs.config.json`.
+5. Run `npm run check` and inspect any strict drop-manifest change before handing off the change.
+
+The contributor-facing [token authoring guide](../../doc-site/src/routes/foundations/token-authoring/+page.mdx) covers type selection, raw CSS flexibility, aliases, overrides, diagnostics, and the pull-request checklist.
 
 The docs token build writes the static profile artifacts; `npm run build:doc-token-data` parses them through the shared DTCG boundary and writes the flat, display-ready docs projection. `doc-site/scripts/copy-tokens.js` only copies already-generated artifacts. `npm run build:defaults` creates the snapshots bundled with the CLI.

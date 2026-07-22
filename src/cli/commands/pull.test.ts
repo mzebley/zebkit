@@ -88,7 +88,6 @@ describe('pull command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
       {
-        $extensions: { 'dev.zebkit': { layer: 'base' } },
         canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
       },
       { spaces: 2 }
@@ -193,7 +192,6 @@ describe('pull command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
       {
-        $extensions: { 'dev.zebkit': { layer: 'base' } },
         canvas: { $value: '#fff', $type: 'color', $description: 'Background.' },
         newKey: { $value: '#000', $type: 'color', $description: 'New key.' },
       },
@@ -250,7 +248,6 @@ describe('pull command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
       {
-        $extensions: { 'dev.zebkit': { layer: 'base' } },
         canvas: { $value: '#123', $type: 'color', $description: 'Preset background.' },
       },
       { spaces: 2 }

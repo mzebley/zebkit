@@ -9,21 +9,21 @@ export type FontFamilyTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   primary: {
-    $value: `"Atkinson Hyperlegible Next"`,
+    $value: "Atkinson Hyperlegible Next",
     $description:
       "Primary font family for use in the system. Usually used for body content and interface items.",
     $type: "fontFamily",
     $extensions: { "dev.zebkit": { font: { source: "google", fallback: "sans", weights: "200..800" } } },
   },
   alt: {
-    $value: `"Merriweather"`,
+    $value: "Merriweather",
     $description:
       "Alternate font family for use in the system. Primarily used for headings.",
     $type: "fontFamily",
     $extensions: { "dev.zebkit": { font: { source: "google", fallback: "serif" } } },
   },
   monospace: {
-    $value: `"Fira Code"`,
+    $value: "Fira Code",
     $description:
       "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
     $type: "fontFamily",
@@ -33,19 +33,19 @@ const tokens = {
     $value: FONT_FALLBACK_STACKS.sans,
     $description:
       "System sans-serif stack. Zero network cost; uses the platform UI font.",
-    $type: "fontFamily",
+    $type: "cssFontFamily",
     $extensions: { "dev.zebkit": { font: { source: "system" } } },
   },
   "system-serif": {
     $value: FONT_FALLBACK_STACKS.serif,
     $description: "System serif stack. Zero network cost.",
-    $type: "fontFamily",
+    $type: "cssFontFamily",
     $extensions: { "dev.zebkit": { font: { source: "system" } } },
   },
   "system-mono": {
     $value: FONT_FALLBACK_STACKS.mono,
     $description: "System monospace stack. Zero network cost.",
-    $type: "fontFamily",
+    $type: "cssFontFamily",
     $extensions: { "dev.zebkit": { font: { source: "system" } } },
   },
   interface: {

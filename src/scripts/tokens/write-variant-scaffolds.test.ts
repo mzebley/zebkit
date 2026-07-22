@@ -85,7 +85,8 @@ describe('writeVariantScaffolds', () => {
     expect(ts).toContain('export default');
 
     const js = await fs.readFile(path.join(tmpDir, 'acme-variants.js'), 'utf8');
-    expect(js).toContain('module.exports');
+    expect(js).toContain('export default');
+    expect(js).not.toContain('module.exports');
   });
 
   it('persists a non-default class name', async () => {

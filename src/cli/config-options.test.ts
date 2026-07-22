@@ -125,6 +125,7 @@ describe('applyOptionValues', () => {
 describe('getOptionByPath', () => {
   it('locates an option by its dot-path', () => {
     expect(getOptionByPath('tokens.splitMode')?.id).toBe('splitMode');
+    expect(getOptionByPath('tokens.exportStrict')?.id).toBe('exportStrict');
     expect(getOptionByPath('tokens.tokenPath')).toBeUndefined();
   });
 });

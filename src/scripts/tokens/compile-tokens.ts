@@ -11,8 +11,9 @@ import { ZEBKIT_PREFIX } from '@config';
 import {
   fromDtcgDocument,
   mergeModuleMetadata,
+  toCombinedDtcgDocument,
   toDtcgDocuments,
-  toStrictDtcgDocuments,
+  toStrictDtcgDocument,
   validateDtcgDocuments,
   type ModuleMeta,
 } from './dtcg-document';
@@ -26,6 +27,13 @@ import {
   mergeTokens,
   validateTokenExport,
 } from './compile-token-helpers';
+import {
+  loadTokenCssDestinations,
+  propagateTokenCssDestinations,
+  unmappedCssTokens,
+  validateTokenCssValues,
+  type TokenCssDestinations,
+} from './css-token-destinations';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -76,6 +84,8 @@ export interface BuildZebkitTokensResult {
   externalModules: Set<string>;
   /** Overrides applied through base-context paths, retained for external CSS emission. */
   externalOverriddenKeys: Record<string, Set<string>>;
+  /** Final token-to-CSS-property reachability, used by docs and validation. */
+  cssDestinations: TokenCssDestinations;
 }
 
 /**
@@ -257,6 +267,7 @@ export async function buildZebkitTokens(
   const resolvedDestination = path.isAbsolute(destinationPath)
     ? destinationPath
     : path.resolve(process.cwd(), destinationPath);
+  const directCssDestinations = await loadTokenCssDestinations(tokens, files);
 
   // `overridePaths` supply base context (source/variant theme overrides) and are NOT
   // tracked. Only `customTokenPath` is tracked into `overriddenKeys`, so an overlay build
@@ -271,7 +282,8 @@ export async function buildZebkitTokens(
       undefined,
       options.excludedComponents,
       externalModules,
-      externalOverriddenKeys
+      externalOverriddenKeys,
+      directCssDestinations
     );
   }
   if (customTokenPath) {
@@ -283,13 +295,29 @@ export async function buildZebkitTokens(
       moduleMetadata,
       overriddenKeys,
       options.excludedComponents,
-      externalModules
+      externalModules,
+      undefined,
+      directCssDestinations
     );
   }
 
   if (Object.keys(tokens).length === 0) {
     throw new Error(
       'No valid token modules were loaded — the build would emit empty CSS. Check the token source paths.'
+    );
+  }
+
+  const cssDestinations = propagateTokenCssDestinations(tokens, directCssDestinations);
+  const unmapped = unmappedCssTokens(tokens, cssDestinations);
+  const cssValueProblems = validateTokenCssValues(tokens, cssDestinations);
+  if (unmapped.length > 0 || cssValueProblems.length > 0) {
+    throw new Error(
+      `Token CSS destination validation failed:\n${[
+        ...unmapped.map((id) =>
+          `  - ${id}: no authoritative CSS destination; replace an ambiguous token type or bind it in shipped CSS.`
+        ),
+        ...cssValueProblems.map((problem) => `  - ${problem}`),
+      ].join('\n')}`
     );
   }
 
@@ -331,6 +359,7 @@ export async function buildZebkitTokens(
     groupExtensions,
     externalModules,
     externalOverriddenKeys,
+    cssDestinations,
   };
 }
 
@@ -343,7 +372,8 @@ async function applyCustomOverrides(
   touched?: Record<string, Set<string>>,
   excludedComponents?: ReadonlySet<string>,
   externalModules?: ReadonlySet<string>,
-  externalTouched?: Record<string, Set<string>>
+  externalTouched?: Record<string, Set<string>>,
+  directCssDestinations: TokenCssDestinations = {}
 ) {
   const spinner = ora('Processing custom token overrides...').start();
   const resolvedOverridePath = path.isAbsolute(overridePath)
@@ -413,6 +443,12 @@ async function applyCustomOverrides(
         }
       }
       if (overrideErrors.length > 0) {
+        const cssDestinations = propagateTokenCssDestinations(tokens, directCssDestinations);
+        overrideErrors.push(
+          ...validateTokenCssValues(tokens, cssDestinations).map(
+            (problem) => `CSS destination validation: ${problem}`
+          )
+        );
         throw new Error(
           `Invalid token override files:\n${overrideErrors
             .map((error) => `  - ${error}`)
@@ -584,7 +620,7 @@ export async function writeTokensToFile(
         const { filePath, fileContent } = buildFilePayload(
           format,
           path.join(destinationPath, `${themeName}-tokens`),
-          documents
+          toCombinedDtcgDocument(documents)
         );
         await fs.writeFile(filePath, fileContent);
         destinationPaths.push(filePath);
@@ -597,8 +633,7 @@ export async function writeTokensToFile(
           documents,
           destinationPath,
           normalizedFormats,
-          themeName,
-          resolvedSplitMode
+          themeName
         ))
       );
     }
@@ -613,42 +648,29 @@ export async function writeTokensToFile(
 
 /**
  * Strict-mode export (decision D9): alongside the full export, write spec-only
- * DTCG documents — every proprietary-typed token dropped — for tools that
+ * DTCG document — every proprietary-typed token dropped — for tools that
  * hard-fail on an unknown `$type`, plus a `<theme>.drop-manifest.json` recording
- * exactly which tokens were shed per module. Returns the paths written.
+ * exactly which tokens were shed per module. Strict output is always one
+ * canonical combined document so every alias resolves from the document root;
+ * `splitMode` controls only the full-profile export. Returns the paths written.
  */
 async function writeStrictTokenExport(
   documents: Record<string, Record<string, unknown>>,
   destinationPath: string,
   normalizedFormats: string[],
-  themeName: string,
-  splitMode: 'combined' | 'per-module'
+  themeName: string
 ): Promise<string[]> {
   const written: string[] = [];
-  const { documents: strictDocuments, dropped: dropManifest } = toStrictDtcgDocuments(documents);
+  const { document: strictDocument, dropped: dropManifest } = toStrictDtcgDocument(documents);
 
-  if (splitMode === 'per-module') {
-    for (const key of Object.keys(strictDocuments)) {
-      for (const format of normalizedFormats) {
-        const { filePath, fileContent } = buildFilePayload(
-          format,
-          path.join(destinationPath, `${key}.strict.tokens`),
-          strictDocuments[key]
-        );
-        await fs.writeFile(filePath, fileContent);
-        written.push(filePath);
-      }
-    }
-  } else {
-    for (const format of normalizedFormats) {
-      const { filePath, fileContent } = buildFilePayload(
-        format,
-        path.join(destinationPath, `${themeName}-tokens.strict`),
-        strictDocuments
-      );
-      await fs.writeFile(filePath, fileContent);
-      written.push(filePath);
-    }
+  for (const format of normalizedFormats) {
+    const { filePath, fileContent } = buildFilePayload(
+      format,
+      path.join(destinationPath, `${themeName}-tokens.strict`),
+      strictDocument
+    );
+    await fs.writeFile(filePath, fileContent);
+    written.push(filePath);
   }
 
   const manifestPath = path.join(destinationPath, `${themeName}.drop-manifest.json`);

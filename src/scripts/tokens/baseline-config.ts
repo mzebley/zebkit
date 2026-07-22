@@ -12,4 +12,3 @@ export function withoutTokenArtifactOutputs(tokens: TokensConfig): TokensConfig 
     writeAllowedTokenTypes: false,
   };
 }
-

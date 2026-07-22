@@ -196,12 +196,12 @@
   },
   "cursor": {
     "$value": "pointer",
-    "$type": "utility",
+    "$type": "cursor",
     "$description": "Cursor when hovering an enabled radio."
   },
   "cursor-disabled": {
     "$value": "not-allowed",
-    "$type": "utility",
+    "$type": "cursor",
     "$description": "Cursor when hovering a disabled radio."
   },
   "transition-duration": {
@@ -225,7 +225,7 @@
     "$description": "CSS properties that animate on state changes."
   },
   "transition-delay": {
-    "$value": "0",
+    "$value": "0ms",
     "$type": "duration",
     "$description": "Delay before radio transitions run."
   },

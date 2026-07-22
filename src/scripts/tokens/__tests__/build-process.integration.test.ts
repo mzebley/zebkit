@@ -86,7 +86,7 @@ describe('build smoke tests', () => {
       path.join(overlayDir, 'zbk-font-family.tokens.json'),
       {
         alt: {
-          $value: '"Inter"',
+          $value: 'Inter',
           $extensions: {
             'dev.zebkit': { font: { source: 'system', fallback: 'sans' } },
           },
@@ -257,15 +257,15 @@ describe('build smoke tests', () => {
       const strict = await fs.readJson(
         path.join(destinationPath, 'palette-override-tokens.strict.json')
       );
-      expect(full['zbk-color']['merlot-500'].$value).toEqual({
+      expect(full.color['merlot-500'].$value).toEqual({
         colorSpace: 'hsl',
         components: [10, 90, 50],
         hex: '#f2330d',
       });
-      expect(strict['zbk-color']['merlot-500'].$value).toEqual(
-        full['zbk-color']['merlot-500'].$value
+      expect(strict.color['merlot-500'].$value).toEqual(
+        full.color['merlot-500'].$value
       );
-      expect(strict['zbk-color']['merlot-600'].$value).toBe('{color.blue-500}');
+      expect(strict.color['merlot-600'].$value).toBe('{color.blue-500}');
     } finally {
       await fs.remove(tmpDir);
     }
@@ -299,7 +299,7 @@ describe('build smoke tests', () => {
         })
       ).rejects.toMatchObject({
         stderr: expect.stringMatching(
-          /zbk-color\.tokens\.json[\s\S]*zbk-color\.red-500[\s\S]*unsupported raw CSS value[\s\S]*zbk-spacing\.tokens\.json[\s\S]*zbk-spacing\.not-a-token/
+          /zbk-spacing\.tokens\.json[\s\S]*zbk-spacing\.not-a-token[\s\S]*CSS destination validation: zbk-color\.red-500[\s\S]*fails background[\s\S]*color/
         ),
       });
       expect(

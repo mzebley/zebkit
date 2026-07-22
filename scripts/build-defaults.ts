@@ -19,13 +19,17 @@ import { toDtcgDocuments, type ModuleMeta } from '../src/scripts/tokens/dtcg-doc
 import type { LayerName } from '../src/definitions/layers.js';
 import type { TokenInterface, TokenGroupExtensions } from '../src/definitions/tokens.js';
 import { getBuiltInThemeNames, DEFAULT_THEME_NAME, resolveSourceThemeOverridePath } from '../src/scripts/theme-presets.js';
+import {
+  cssDestinationArtifactName,
+  deriveDirectTokenCssDestinations,
+} from '../src/scripts/tokens/css-token-destinations.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const defaultsDir = path.resolve(__dirname, '../dist/cli/defaults');
 const presetsDir = path.resolve(__dirname, '../dist/cli/presets');
-const SHARED_DEFAULT_ARTIFACTS = new Set(['component-tokens.json']);
+const SHARED_DEFAULT_ARTIFACTS = new Set(['component-tokens.json', 'css-properties.json']);
 
 interface ManifestModule {
   key: string;
@@ -60,6 +64,11 @@ async function buildDefaults() {
     groupExtensions,
     externalModules,
     moduleMetadata
+  );
+  await fs.writeJson(
+    path.join(defaultsDir, cssDestinationArtifactName()),
+    await deriveDirectTokenCssDestinations(tokens),
+    { spaces: 2 }
   );
 
   // Snapshot built-in variant configs (raw, as-authored) so the installed CLI can

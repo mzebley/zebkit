@@ -9,10 +9,13 @@ import {
   buildTokenReferenceLookup,
   serializeTokenValueWithReferences,
 } from './token-references';
+import type { TokenCssDestinations } from './css-token-destinations';
 
 export interface DocsToken extends TokenObject {
   /** Canonical CSS-facing representation used by the decoupled docs app. */
   $displayValue: string;
+  /** CSS properties reached directly or through aliases. */
+  $cssProperties: string[];
 }
 
 export type DocsTokenRegistry = Record<string, Record<string, DocsToken>>;
@@ -52,6 +55,7 @@ export function projectThemeTokenDiff(
       .map(([tokenKey, entry]) => {
         const display = serializeTokenValueWithReferences(entry.$value, entry.$type, {
           referenceLookup,
+          moduleId: moduleKey,
           errors,
         }).replace(/^\{[^.{}]+\.(.+)\}$/, '$1');
         return [`${moduleKey}-${tokenKey}`, display];
@@ -69,12 +73,13 @@ export function projectThemeTokenDiff(
  * the source side so the decoupled Svelte build does not implement DTCG again.
  */
 export function projectDocsTokenData(
-  combined: Record<string, Record<string, unknown>>
+  combined: Record<string, Record<string, unknown>>,
+  cssDestinations: TokenCssDestinations = {}
 ): DocsTokenRegistry {
   const projected: DocsTokenRegistry = {};
   const parsed = Object.fromEntries(
-    Object.entries(combined).map(([moduleKey, document]) => [
-      moduleKey,
+    Object.entries(combined).map(([rootGroup, document]) => [
+      rootGroup.startsWith('zbk-') ? rootGroup : `zbk-${rootGroup}`,
       fromDtcgDocument(document, { mode: 'literal' }).entries,
     ])
   );
@@ -87,9 +92,14 @@ export function projectDocsTokenData(
         name,
         {
           ...entry,
+          $cssProperties:
+            cssDestinations[
+              `${moduleKey.replace(/^zbk-/, '')}.${name}`
+            ] ?? [],
           $displayValue: serializeTokenValueWithReferences(entry.$value, entry.$type, {
             referenceLookup,
             errors,
+            moduleId: moduleKey.replace(/^zbk-/, ''),
           }),
         },
       ])

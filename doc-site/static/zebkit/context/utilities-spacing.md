@@ -39,7 +39,7 @@ Width/height sizing and top/right/bottom/left position-offset utilities bound to
 
 Sets the element's block size (height).
 
-Grammar: `height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `height-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Accessibility: Fixed heights can clip content when users enlarge text; prefer min-height or auto.
 - Prefer intrinsic sizing (auto, min-content, max-content) over fixed heights so content is never clipped when it grows or text is enlarged by the a11y dial.
@@ -48,19 +48,19 @@ Grammar: `height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 2
 
 Sets the element's minimum block size.
 
-Grammar: `min-height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `min-height-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 ### max-height
 
 Sets the element's maximum block size.
 
-Grammar: `max-height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `max-height-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 ### width
 
 Sets the element's inline size (width).
 
-Grammar: `width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `width-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Prefer intrinsic or percentage widths over fixed widths so layouts reflow; a fixed width can force horizontal scrolling at small viewports or large text.
 
@@ -68,13 +68,13 @@ Grammar: `width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 20
 
 Sets the element's minimum inline size.
 
-Grammar: `min-width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `min-width-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 ### max-width
 
 Sets the element's maximum inline size.
 
-Grammar: `max-width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `max-width-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - max-width on text containers improves readability; prefer the measure/prose utilities for body copy line length.
 

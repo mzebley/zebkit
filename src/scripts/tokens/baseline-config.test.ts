@@ -23,4 +23,3 @@ describe('withoutTokenArtifactOutputs', () => {
     expect(source.exportStrict).toBe(true);
   });
 });
-

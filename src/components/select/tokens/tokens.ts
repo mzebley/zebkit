@@ -368,12 +368,12 @@ const tokens = {
   // Interaction behavior
   cursor: {
     $value: "pointer",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor over an enabled select.",
   },
   "cursor-disabled": {
     $value: "not-allowed",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor over a disabled select.",
   },
 

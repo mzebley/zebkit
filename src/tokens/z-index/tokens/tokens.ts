@@ -7,7 +7,7 @@ export const layer: LayerName = "base";
 const tokens = {
   "auto": {
     $value: "auto",
-    $type: "cssDimension",
+    $type: "cssNumber",
     $description: "Auto z-index, lets browser determine stacking.",
   },
   "0": {

@@ -59,7 +59,14 @@
               <code class="val">{String(row.value)}</code>
             </div>
           </td>
-          <td class="desc">{row.description}</td>
+          <td class="desc">
+            <span>{row.description}</span>
+            {#if row.cssProperties.length}
+              <span class="destinations">
+                CSS: {row.cssProperties.join(', ')}
+              </span>
+            {/if}
+          </td>
         </tr>
       {/each}
     </tbody>
@@ -73,7 +80,7 @@
       current={clampedPage}
       total={pageCount}
       aria-label="Token table pages"
-      on:zbk-page-change={handlePageChange}
+      onzbk-page-change={handlePageChange}
     ></zbk-pagination>
     <p class="pagination-count">
       {(clampedPage - 1) * pageSize + 1}–{Math.min(clampedPage * pageSize, rows.length)} of {rows.length} tokens
@@ -148,6 +155,14 @@
     color: var(--zbk-app-ink-subtle);
     font-size: var(--zbk-font-size-xs);
     max-width: 40ch;
+  }
+
+  .destinations {
+    display: block;
+    margin-top: var(--zbk-spacing-025);
+    color: var(--zbk-app-ink-muted);
+    font-family: var(--zbk-font-family-code);
+    font-size: var(--zbk-font-size-2xs);
   }
 
   .pagination-row {

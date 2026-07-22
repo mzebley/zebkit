@@ -1,9 +1,9 @@
 /**
  * DTCG document <-> internal token-map transforms (Phase 3, plan decisions
- * D2/D5/D6). Exported artifacts (per-module snapshots, combined exports, the
- * docs `default-tokens.json`) are real DTCG documents; the internal pipeline
- * works with a flat `TokenInterface` (record of leaf entries, each carrying its
- * own `$type`). These two functions are the single boundary between the shapes:
+ * D2/D5/D6). Per-module snapshots are Zebkit-profile fragments; combined full
+ * and strict exports are document-root-valid DTCG documents. The internal
+ * pipeline works with a flat `TokenInterface` (record of leaf entries, each
+ * carrying its own `$type`). These functions are the boundary between shapes:
  *
  *   toDtcgDocument   flat entries + module metadata -> DTCG document
  *                    (hoists a shared `$type` to the group; folds layer /
@@ -25,10 +25,15 @@ import {
   tokenGroupExtensionsSchema,
   validateTokenValue,
 } from '@definitions/tokens';
-import { ZEBKIT_EXTENSION_KEY, isDtcgSpecType, isZebkitSupportedSpecType } from '@definitions/dtcg';
 import {
-  buildTokenReferenceGraph,
-  buildTokenReferenceLookup,
+  CSS_FALLBACK_TYPE_BY_DTCG_TYPE,
+  ZEBKIT_EXTENSION_KEY,
+  isDtcgSpecType,
+  isZebkitSupportedSpecType,
+  type ZebkitSupportedSpecType,
+} from '@definitions/dtcg';
+import { cssTokenValueError, type CssTokenValueType } from '@definitions/css-token-values';
+import {
   buildCssVariableReferenceLookup,
   enumerateTokenReferences,
   findTokenReferenceCycles,
@@ -79,6 +84,14 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+function stringRecord<T>(): Record<string, T> {
+  return Object.create(null) as Record<string, T>;
+}
+
+function ownValue<T>(record: Record<string, T>, key: string): T | undefined {
+  return Object.prototype.hasOwnProperty.call(record, key) ? record[key] : undefined;
+}
+
 function mergeMetadataRecords(
   base: Record<string, unknown> | undefined,
   override: Record<string, unknown> | undefined
@@ -86,9 +99,15 @@ function mergeMetadataRecords(
   if (!base && !override) return undefined;
   const merged: Record<string, unknown> = { ...base };
   for (const [key, value] of Object.entries(override ?? {})) {
-    merged[key] = isRecord(merged[key]) && isRecord(value)
-      ? mergeMetadataRecords(merged[key] as Record<string, unknown>, value)
-      : value;
+    const current = ownValue(merged, key);
+    Object.defineProperty(merged, key, {
+      value: isRecord(current) && isRecord(value)
+        ? mergeMetadataRecords(current, value)
+        : value,
+      enumerable: true,
+      configurable: true,
+      writable: true,
+    });
   }
   return merged;
 }
@@ -154,18 +173,26 @@ export function mergeModuleMetadata(
 export type DtcgReadMode = 'runtime' | 'literal';
 
 /**
- * True when a document member is a leaf token rather than a nested group. A
- * leaf usually carries `$value`, but zebkit's fluid generated-scale steps
- * (font sizes) omit it — they are derived at build from the group's scale
- * controls — so a member with only `$`-prefixed data and no nested token/group
- * children (e.g. `{ $type, $description, $extensions }`) is also a leaf.
+ * True when a document member is a leaf token rather than a nested group.
+ * DTCG defines an object without `$value` as a group, including empty and
+ * metadata-only groups. Zebkit's one intentional exception is a generated
+ * fluid-scale authoring step, identified explicitly by its vendor scale index.
  */
 function isLeafToken(value: unknown): value is Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const record = value as Record<string, unknown>;
   if ('$value' in record) return true;
   if ('$root' in record) return false;
-  return !Object.keys(record).some((key) => !key.startsWith('$') && !key.startsWith('_'));
+  if (Object.keys(record).some((key) => !key.startsWith('$') && !key.startsWith('_'))) {
+    return false;
+  }
+  const extensions = isRecord(record.$extensions) ? record.$extensions : undefined;
+  const vendor = extensions && isRecord(extensions[ZEBKIT_EXTENSION_KEY])
+    ? extensions[ZEBKIT_EXTENSION_KEY]
+    : undefined;
+  if (vendor?.emptyColorPlaceholder === true) return true;
+  const scale = vendor && isRecord(vendor.scale) ? vendor.scale : undefined;
+  return typeof scale?.index === 'number' && Number.isFinite(scale.index);
 }
 
 const TOKEN_PROPERTIES = new Set(['$value', '$type', '$description', '$extensions', '$deprecated']);
@@ -195,15 +222,11 @@ function rawValueExtension(entry: TokenObject, rawCssValue: string, originalType
 
 function parseRawColor(
   value: string,
-  cssVariables: ReadonlyMap<string, string>,
-  allowUnresolvedCssVariables = false
+  cssVariables: ReadonlyMap<string, string>
 ): ColorValue | string | undefined {
   if (value === 'transparent') return { colorSpace: 'srgb', components: [0, 0, 0], alpha: 0 };
   const reference = parseCssVariableReference(value, cssVariables);
   if (reference) return `{${reference}}`;
-  if (allowUnresolvedCssVariables && /^var\(--[A-Za-z0-9_-]+\)$/.test(value)) {
-    return '{unresolved.color}';
-  }
   const hex = value.match(/^#([0-9a-f]{6})$/i);
   if (hex) {
     const components = [0, 2, 4].map((offset) =>
@@ -265,8 +288,7 @@ function splitCssComponents(value: string): string[] {
 
 function parseRawShadow(
   value: string,
-  cssVariables: ReadonlyMap<string, string>,
-  allowUnresolvedCssVariables = false
+  cssVariables: ReadonlyMap<string, string>
 ): unknown[] | undefined {
   if (value === 'none') return [];
   const layers = splitCssList(value).map((layer) => {
@@ -276,12 +298,8 @@ function parseRawShadow(
     if (inset) parts.splice(insetIndex, 1);
     if (parts.length < 3 || parts.length > 5) return undefined;
 
-    const firstColor = parseRawColor(parts[0], cssVariables, allowUnresolvedCssVariables);
-    const lastColor = parseRawColor(
-      parts[parts.length - 1],
-      cssVariables,
-      allowUnresolvedCssVariables
-    );
+    const firstColor = parseRawColor(parts[0], cssVariables);
+    const lastColor = parseRawColor(parts[parts.length - 1], cssVariables);
     const color = firstColor ?? lastColor;
     if (!color) return undefined;
     const dimensionParts = firstColor ? parts.slice(1) : parts.slice(0, -1);
@@ -289,9 +307,6 @@ function parseRawShadow(
     const dimension = (part: string): DimensionValue | string | undefined => {
       const reference = parseCssVariableReference(part, cssVariables);
       if (reference) return `{${reference}}`;
-      if (allowUnresolvedCssVariables && /^var\(--[A-Za-z0-9_-]+\)$/.test(part)) {
-        return '{unresolved.dimension}';
-      }
       const match = part.match(/^(-?(?:\d+(?:\.\d+)?|\.\d+))(px|rem)?$/i);
       if (!match) return undefined;
       const value = Number(match[1]);
@@ -323,20 +338,34 @@ function parseRawUnit<T extends string>(value: string, units: readonly T[]): { v
 function normalizeExportEntry(
   entry: TokenObject,
   pathLabel: string,
-  cssVariables: ReadonlyMap<string, string>,
-  allowUnresolvedCssVariables = false
+  cssVariables: ReadonlyMap<string, string>
 ): TokenObject {
   if (typeof entry.$value !== 'string' || isWholeValueAlias(entry.$value)) return entry;
   const raw = String(entry.$value);
   if (entry.$type === 'color' && raw === '' && zbkExtension(entry)?.emptyColorPlaceholder === true) {
     return entry;
   }
+  const preserveRawCss = (originalType: ZebkitSupportedSpecType): TokenObject => {
+    const fallbackType = CSS_FALLBACK_TYPE_BY_DTCG_TYPE[originalType];
+    const error = cssTokenValueError(fallbackType as CssTokenValueType, raw);
+    if (error) {
+      throw new Error(
+        `Cannot export ${pathLabel}: ${JSON.stringify(raw)} ${error}. ` +
+          `Use a complete CSS value for the property or a canonical DTCG ${originalType} value.`
+      );
+    }
+    return {
+      ...entry,
+      $type: fallbackType,
+      $extensions: rawValueExtension(entry, raw, originalType),
+    };
+  };
   if (entry.$type === 'color') {
-    const parsed = parseRawColor(raw, cssVariables, allowUnresolvedCssVariables);
+    const parsed = parseRawColor(raw, cssVariables);
     if (parsed && validateTokenValue('color', parsed).success) {
       return { ...entry, $value: parsed, $extensions: rawValueExtension(entry, raw) };
     }
-    throw new Error(`Cannot export ${pathLabel} as DTCG color: unsupported raw CSS value ${JSON.stringify(raw)}`);
+    return preserveRawCss('color');
   }
   if (entry.$type === 'dimension') {
     const parsed = parseRawUnit(raw, ['px', 'rem']);
@@ -346,14 +375,14 @@ function normalizeExportEntry(
       }
       return { ...entry, $value: parsed, $extensions: rawValueExtension(entry, raw) };
     }
-    return { ...entry, $type: 'cssDimension', $extensions: rawValueExtension(entry, raw, 'dimension') };
+    return preserveRawCss('dimension');
   }
   if (entry.$type === 'duration') {
     const parsed = parseRawUnit(raw, ['ms', 's']);
     if (parsed && validateTokenValue('duration', parsed).success) {
       return { ...entry, $value: parsed, $extensions: rawValueExtension(entry, raw) };
     }
-    throw new Error(`Cannot export ${pathLabel} as DTCG duration: unsupported raw CSS value ${JSON.stringify(raw)}`);
+    return preserveRawCss('duration');
   }
   if (entry.$type === 'cubicBezier') {
     const match = raw.match(/^cubic-bezier\(\s*([\d.-]+)\s*,\s*([\d.-]+)\s*,\s*([\d.-]+)\s*,\s*([\d.-]+)\s*\)$/i);
@@ -363,25 +392,32 @@ function normalizeExportEntry(
         return { ...entry, $value: parsed, $extensions: rawValueExtension(entry, raw) };
       }
     }
-    throw new Error(`Cannot export ${pathLabel} as DTCG cubicBezier: unsupported raw CSS value ${JSON.stringify(raw)}`);
+    return preserveRawCss('cubicBezier');
   }
   if (entry.$type === 'shadow') {
-    const parsed = parseRawShadow(raw, cssVariables, allowUnresolvedCssVariables);
+    const parsed = parseRawShadow(raw, cssVariables);
     if (parsed && validateTokenValue('shadow', parsed).success) {
       return { ...entry, $value: parsed as any, $extensions: rawValueExtension(entry, raw) };
     }
-    throw new Error(`Cannot export ${pathLabel} as DTCG shadow: unsupported raw CSS value ${JSON.stringify(raw)}`);
+    return preserveRawCss('shadow');
   }
+  if (entry.$type === 'fontWeight') {
+    return validateTokenValue('fontWeight', raw).success ? entry : preserveRawCss('fontWeight');
+  }
+  if (entry.$type === 'strokeStyle') {
+    return validateTokenValue('strokeStyle', raw).success ? entry : preserveRawCss('strokeStyle');
+  }
+  if (entry.$type === 'number') return preserveRawCss('number');
   return entry;
 }
 
 /**
- * Validate raw override grammar before the full collection exists. CSS-variable
- * references are represented by typed sentinels here; the final collection
- * export still resolves every variable through the exact generated lookup.
+ * Validate raw override grammar before the full collection exists. Unknown CSS
+ * variables remain verbatim proprietary CSS; the final collection export can
+ * normalize variables that resolve through the exact generated lookup.
  */
 export function assertRawTokenValueNormalizable(entry: TokenObject, pathLabel: string): TokenObject {
-  return normalizeExportEntry(entry, pathLabel, new Map(), true);
+  return normalizeExportEntry(entry, pathLabel, new Map());
 }
 
 /**
@@ -399,7 +435,7 @@ export function toDtcgDocument(
   const mode = options.mode ?? 'export';
   const names = Object.keys(entries);
   const paths = Object.fromEntries(
-    names.map((name) => [name, meta.entryPaths?.[name] ?? [name]])
+    names.map((name) => [name, meta.entryPaths ? ownValue(meta.entryPaths, name) ?? [name] : [name]])
   ) as Record<string, string[]>;
   for (let leftIndex = 0; leftIndex < names.length; leftIndex += 1) {
     const leftName = names[leftIndex];
@@ -443,7 +479,7 @@ export function toDtcgDocument(
 
   const existingExtensions = meta.extensions ?? meta.groupExtensions ?? {};
 
-  const doc: Record<string, unknown> = {};
+  const doc = stringRecord<unknown>();
   if (groupType) doc.$type = groupType;
   if (meta.description !== undefined) doc.$description = meta.description;
   if (meta.deprecated !== undefined) doc.$deprecated = meta.deprecated;
@@ -462,6 +498,30 @@ export function toDtcgDocument(
     else delete vendor.cssEmission;
     if (scale) vendor.scale = scale;
     doc.$extensions = { ...existingExtensions, [ZEBKIT_EXTENSION_KEY]: vendor };
+  }
+
+  // Empty and metadata-only groups are valid DTCG structure. Materialize them
+  // independently of token paths so a read/write round trip preserves them.
+  for (const metadata of [...(meta.groupMetadata ?? [])].sort((left, right) =>
+    left.path.length - right.path.length || left.path.join('\0').localeCompare(right.path.join('\0'))
+  )) {
+    let group = doc;
+    for (let index = 0; index < metadata.path.length; index += 1) {
+      const segment = metadata.path[index];
+      const existing = group[segment];
+      if (existing !== undefined && (!isRecord(existing) || '$value' in existing)) {
+        throw new Error(
+          `${meta.label ?? 'module'}: group metadata path '${metadata.path.join('.')}' ` +
+            `collides with a token; rename the token or group so each path has one meaning`
+        );
+      }
+      if (!isRecord(existing)) group[segment] = stringRecord<unknown>();
+      group = group[segment] as Record<string, unknown>;
+      if (index === metadata.path.length - 1) {
+        const { path: _path, ...properties } = metadata;
+        Object.assign(group, properties);
+      }
+    }
   }
 
   for (const name of names) {
@@ -494,9 +554,10 @@ export function toDtcgDocument(
     for (let index = 0; index < normalSegments.length; index += 1) {
       const segment = normalSegments[index];
       if (!group[segment] || typeof group[segment] !== 'object' || Array.isArray(group[segment])) {
-        group[segment] = {
-          ...(groupMetadata.get(JSON.stringify(normalSegments.slice(0, index + 1))) ?? {}),
-        };
+        group[segment] = Object.assign(
+          stringRecord<unknown>(),
+          groupMetadata.get(JSON.stringify(normalSegments.slice(0, index + 1))) ?? {}
+        );
       }
       group = group[segment] as Record<string, unknown>;
     }
@@ -530,7 +591,7 @@ export function toDtcgDocuments(
     groupExtensions: build.groupExtensions,
     preserveProvenance: true,
   });
-  const documents: Record<string, Record<string, unknown>> = {};
+  const documents = stringRecord<Record<string, unknown>>();
   const cssVariableReferences = buildCssVariableReferenceLookup(materializedTokens);
   for (const key of Object.keys(materializedTokens)) {
     documents[key] = toDtcgDocument(materializedTokens[key], {
@@ -649,9 +710,9 @@ function parseDtcgDocument(
   mode: DtcgReadMode,
   label: string
 ): ParsedDtcgDocument {
-  const entries: TokenInterface = {};
+  const entries = stringRecord<TokenObject>() as TokenInterface;
   const errors: string[] = [];
-  const entryPaths: Record<string, string[]> = {};
+  const entryPaths = stringRecord<string[]>();
   const groupMetadata: PreservedGroupMetadata[] = [];
 
   const validateProperties = (
@@ -685,7 +746,7 @@ function parseDtcgDocument(
       errors.push(`${pathLabel}: '$root' is only valid inside a named group`);
       return;
     }
-    if (entries[name]) {
+    if (Object.prototype.hasOwnProperty.call(entries, name)) {
       errors.push(`${pathLabel}: flattened token name '${name}' collides with '${entryPaths[name].join('.')}'`);
       return;
     }
@@ -707,6 +768,11 @@ function parseDtcgDocument(
     }
     if (node.$description !== undefined && typeof node.$description !== 'string') {
       errors.push(`${pathLabel}.$description: expected a string`);
+    } else if (typeof node.$description === 'string' && node.$description.trim().length === 0) {
+      errors.push(
+        `${pathLabel}.$description: must contain non-whitespace text; ` +
+          `describe what this group contains or remove $description`
+      );
     }
     if (
       node.$deprecated !== undefined &&
@@ -815,19 +881,28 @@ export function fromDtcgDocument(
 
 /** One token a strict-mode export dropped or pruned to keep references closed (D9). */
 export interface DroppedToken {
-  /** Flattened token name within the module. */
-  name: string;
+  /** Public structural path within the module, preserving dots and terminal `$root`. */
+  path: string;
   /** The token's effective type. */
   $type: string;
   /** Why the token was removed from strict output. */
-  reason: 'proprietary-type' | 'unsupported-type' | 'missing-reference' | 'referenced-proprietary' | 'referenced-dropped' | 'incompatible-reference';
+  reason:
+    | 'proprietary-type'
+    | 'unsupported-type'
+    | 'missing-reference'
+    | 'referenced-proprietary'
+    | 'referenced-dropped'
+    | 'incompatible-reference'
+    | 'array-reference-cardinality'
+    | 'negative-shadow-blur';
   /** The flattened collection id that caused a dependency drop, when applicable. */
   referencedTarget?: string;
 }
 
 /** The result of a strict-mode export over a complete theme document set. */
-export interface StrictDtcgDocuments {
-  documents: Record<string, Record<string, unknown>>;
+export interface StrictDtcgDocument {
+  /** One canonical, reference-closed document rooted at public module ids. */
+  document: Record<string, Record<string, unknown>>;
   dropped: Record<string, DroppedToken[]>;
 }
 
@@ -838,8 +913,62 @@ interface FlattenedDocument {
   meta: ModuleMeta;
 }
 
+function publicEntryPath(doc: FlattenedDocument, name: string): string {
+  return (doc.meta.entryPaths ? ownValue(doc.meta.entryPaths, name) : undefined)?.join('.') ?? name;
+}
+
 function moduleIdForDocument(key: string): string {
   return key.startsWith('zbk-') ? key.slice(4) : key;
+}
+
+/**
+ * Assemble per-module profile documents under their public DTCG root paths.
+ * The `zbk-` prefix belongs to filenames and CSS variables, not token paths:
+ * `{color.sea-50}` must resolve by ordinary document-root navigation.
+ */
+export function toCombinedDtcgDocument(
+  documents: Record<string, Record<string, unknown>>
+): Record<string, Record<string, unknown>> {
+  const combined = stringRecord<Record<string, unknown>>();
+  const moduleIds = new Set(Object.keys(documents).map(moduleIdForDocument));
+  for (const [key, document] of Object.entries(documents)) {
+    const moduleId = moduleIdForDocument(key);
+    if (!validName(moduleId)) {
+      throw new Error(
+        `Cannot combine module '${key}' at the DTCG document root. Rename it so the public ` +
+          `module id does not begin with '$' or contain '.', '{', or '}'.`
+      );
+    }
+    if (Object.prototype.hasOwnProperty.call(combined, moduleId)) {
+      throw new Error(
+        `Cannot combine modules because more than one maps to DTCG root group '${moduleId}'. ` +
+          `Rename one module so every public root group is unique.`
+      );
+    }
+    const rewriteValue = (value: unknown): unknown => {
+      const reference = parseTokenReference(value);
+      if (reference) {
+        const [rootSegment] = reference.split('.');
+        const isLocal = !reference.includes('.') || !moduleIds.has(rootSegment);
+        return isLocal ? `{${moduleId}.${reference}}` : value;
+      }
+      if (Array.isArray(value)) return value.map(rewriteValue);
+      if (isRecord(value)) {
+        return Object.fromEntries(
+          Object.entries(value).map(([property, member]) => [property, rewriteValue(member)])
+        );
+      }
+      return value;
+    };
+    const rewriteDocument = (node: Record<string, unknown>): Record<string, unknown> =>
+      Object.fromEntries(Object.entries(node).map(([property, value]) => {
+        if (property === '$value') return [property, rewriteValue(value)];
+        if (!property.startsWith('$') && isRecord(value)) return [property, rewriteDocument(value)];
+        return [property, value];
+      }));
+    combined[moduleId] = rewriteDocument(document);
+  }
+  return combined;
 }
 
 function flattenDocuments(
@@ -862,21 +991,114 @@ function buildReferenceLookup(flattened: FlattenedDocument[]): Map<string, { ent
   return lookup;
 }
 
+function referenceLookupId(
+  reference: string,
+  source: FlattenedDocument,
+  lookup: ReadonlyMap<string, { entry: TokenObject; key: string; name: string }>
+): string | undefined {
+  const [rootSegment, ...entryPath] = reference.split('.');
+  if (entryPath.length > 0) {
+    const globalId = tokenReferenceToLookupId(reference);
+    const knownGlobalModule = [...lookup.keys()].some((id) => id.startsWith(`${rootSegment}.`));
+    if (globalId && knownGlobalModule) return globalId;
+  }
+  const localName = Object.entries(source.meta.entryPaths ?? {}).find(
+    ([, segments]) => segments.join('.') === reference
+  )?.[0];
+  const localId = localName ? `${source.moduleId}.${localName}` : undefined;
+  if (localId && lookup.has(localId)) return localId;
+  const localPath = [rootSegment, ...entryPath]
+    .map((segment) => segment === '$root' ? 'root' : segment)
+    .join('-');
+  return `${source.moduleId}.${localPath}`;
+}
+
+type ReferenceLookupEntry = { entry: TokenObject; key: string; name: string };
+
+/** Follow whole-value aliases so composite-slot checks apply to the concrete value. */
+function resolveTerminalReferenceEntry(
+  target: ReferenceLookupEntry,
+  byKey: ReadonlyMap<string, FlattenedDocument>,
+  lookup: ReadonlyMap<string, ReferenceLookupEntry>
+): ReferenceLookupEntry | undefined {
+  let current = target;
+  const visited = new Set<string>();
+  while (true) {
+    const id = `${current.key}.${current.name}`;
+    if (visited.has(id)) return undefined;
+    visited.add(id);
+
+    const reference = parseTokenReference(current.entry.$value);
+    if (!reference) return current;
+    const sourceDoc = byKey.get(current.key);
+    const lookupId = sourceDoc ? referenceLookupId(reference, sourceDoc, lookup) : undefined;
+    const next = lookupId ? lookup.get(lookupId) : undefined;
+    if (!next) return undefined;
+    current = next;
+  }
+}
+
+function resolvesToShadowArray(
+  target: ReferenceLookupEntry,
+  byKey: ReadonlyMap<string, FlattenedDocument>,
+  lookup: ReadonlyMap<string, ReferenceLookupEntry>
+): boolean {
+  const terminal = resolveTerminalReferenceEntry(target, byKey, lookup);
+  return terminal !== undefined && Array.isArray(terminal.entry.$value);
+}
+
+function resolvesToNegativeDimension(
+  target: ReferenceLookupEntry,
+  byKey: ReadonlyMap<string, FlattenedDocument>,
+  lookup: ReadonlyMap<string, ReferenceLookupEntry>
+): boolean {
+  const terminal = resolveTerminalReferenceEntry(target, byKey, lookup);
+  const value = terminal?.entry.$value;
+  if (!isRecord(value)) return false;
+  const dimension = value as Record<string, unknown>;
+  return typeof dimension.value === 'number' && dimension.value < 0;
+}
+
+function buildDocumentReferenceGraph(
+  flattened: FlattenedDocument[],
+  lookup: ReadonlyMap<string, { entry: TokenObject; key: string; name: string }>
+): Map<string, string[]> {
+  const graph = new Map<string, string[]>();
+  for (const doc of flattened) {
+    for (const [name, entry] of Object.entries(doc.entries)) {
+      const direct = parseTokenReference(entry.$value);
+      const references = direct
+        ? [direct]
+        : entry.$type
+          ? enumerateTokenReferences(entry.$value, entry.$type).map((reference) => reference.target)
+          : [];
+      graph.set(
+        `${doc.moduleId}.${name}`,
+        references
+          .map((reference) => referenceLookupId(reference, doc, lookup))
+          .filter((reference): reference is string => reference !== undefined)
+          .sort()
+      );
+    }
+  }
+  return graph;
+}
+
 /**
  * Strict-mode export (D9) over a complete theme. Proprietary tokens are removed
  * first, then aliases to absent/dropped/type-incompatible targets are repeatedly
  * removed until the remaining document set is reference-closed.
  */
-export function toStrictDtcgDocuments(
+export function toStrictDtcgDocument(
   documents: Record<string, Record<string, unknown>>
-): StrictDtcgDocuments {
+): StrictDtcgDocument {
   const flattened = flattenDocuments(documents, 'literal');
-  const tokenMap = Object.fromEntries(flattened.map((doc) => [doc.key, doc.entries]));
-  const cycles = findTokenReferenceCycles(buildTokenReferenceGraph(tokenMap));
+  const lookup = buildReferenceLookup(flattened);
+  const byKey = new Map(flattened.map((doc) => [doc.key, doc]));
+  const cycles = findTokenReferenceCycles(buildDocumentReferenceGraph(flattened, lookup));
   if (cycles.length > 0) {
     throw new Error(`Strict DTCG export cannot contain reference cycles: ${cycles.map((cycle) => cycle.join(' -> ')).join('; ')}`);
   }
-  const lookup = buildReferenceLookup(flattened);
   const resolvingTypes = new Set<string>();
   const resolveType = (id: string): string | undefined => {
     const target = lookup.get(id);
@@ -884,7 +1106,10 @@ export function toStrictDtcgDocuments(
     if (target.entry.$type) return target.entry.$type;
     if (resolvingTypes.has(id)) return undefined;
     const reference = parseTokenReference(target.entry.$value);
-    const referenceId = reference ? tokenReferenceToLookupId(reference) : undefined;
+    const sourceDoc = byKey.get(target.key);
+    const referenceId = reference && sourceDoc
+      ? referenceLookupId(reference, sourceDoc, lookup)
+      : undefined;
     if (!referenceId) return undefined;
     resolvingTypes.add(id);
     const inferred = resolveType(referenceId);
@@ -894,7 +1119,7 @@ export function toStrictDtcgDocuments(
   };
   for (const id of lookup.keys()) resolveType(id);
   const kept = new Map<string, Set<string>>();
-  const dropped: Record<string, DroppedToken[]> = {};
+  const dropped = stringRecord<DroppedToken[]>();
   const dropById = new Map<string, DroppedToken>();
 
   for (const doc of flattened) {
@@ -905,7 +1130,7 @@ export function toStrictDtcgDocuments(
         kept.get(doc.key)!.add(name);
       } else {
         const drop: DroppedToken = {
-          name,
+          path: publicEntryPath(doc, name),
           $type: entry.$type ?? '(none)',
           reason: entry.$type && isDtcgSpecType(entry.$type) ? 'unsupported-type' : 'proprietary-type',
         };
@@ -922,7 +1147,7 @@ export function toStrictDtcgDocuments(
       for (const name of [...kept.get(doc.key)!]) {
         const entry = doc.entries[name];
         for (const reference of enumerateTokenReferences(entry.$value, entry.$type)) {
-          const lookupId = tokenReferenceToLookupId(reference.target);
+          const lookupId = referenceLookupId(reference.target, doc, lookup);
           const targetInfo = lookupId ? lookup.get(lookupId) : undefined;
           const targetIsKept = targetInfo ? kept.get(targetInfo.key)?.has(targetInfo.name) === true : false;
           let reason: DroppedToken['reason'] | undefined;
@@ -930,11 +1155,20 @@ export function toStrictDtcgDocuments(
           else if (!targetIsKept) reason = (lookupId && dropById.get(lookupId)?.reason === 'proprietary-type')
             ? 'referenced-proprietary'
             : 'referenced-dropped';
-          else if (!isCompatibleReference(reference.expectedType as any, targetInfo.entry.$type)) reason = 'incompatible-reference';
+          else if (!isCompatibleReference(reference.expectedType as any, targetInfo.entry.$type)) {
+            reason = 'incompatible-reference';
+          } else if (reference.arrayElement && resolvesToShadowArray(targetInfo, byKey, lookup)) {
+            reason = 'array-reference-cardinality';
+          } else if (
+            reference.member === 'blur' &&
+            resolvesToNegativeDimension(targetInfo, byKey, lookup)
+          ) {
+            reason = 'negative-shadow-blur';
+          }
           if (!reason) continue;
           kept.get(doc.key)!.delete(name);
           const drop: DroppedToken = {
-            name,
+            path: publicEntryPath(doc, name),
             $type: entry.$type ?? '(none)',
             reason,
             referencedTarget: reference.target,
@@ -948,16 +1182,27 @@ export function toStrictDtcgDocuments(
     }
   }
 
-  const strictDocuments: Record<string, Record<string, unknown>> = {};
+  const strictModules = stringRecord<Record<string, unknown>>();
   for (const doc of flattened) {
-    const entries: TokenInterface = {};
+    const entries = stringRecord<TokenObject>() as TokenInterface;
     for (const name of kept.get(doc.key)!) entries[name] = doc.entries[name];
-    strictDocuments[doc.key] = toDtcgDocument(entries, doc.meta);
+    const strictMeta: ModuleMeta = {
+      ...doc.meta,
+      rootType: doc.meta.rootType && isZebkitSupportedSpecType(doc.meta.rootType)
+        ? doc.meta.rootType
+        : undefined,
+      groupMetadata: doc.meta.groupMetadata?.map((metadata) => {
+        if (!metadata.$type || isZebkitSupportedSpecType(metadata.$type)) return metadata;
+        const { $type: _type, ...withoutType } = metadata;
+        return withoutType;
+      }),
+    };
+    strictModules[doc.key] = toDtcgDocument(entries, strictMeta);
   }
   for (const key of Object.keys(dropped)) {
-    dropped[key].sort((a, b) => a.name.localeCompare(b.name) || a.reason.localeCompare(b.reason));
+    dropped[key].sort((a, b) => a.path.localeCompare(b.path) || a.reason.localeCompare(b.reason));
   }
-  return { documents: strictDocuments, dropped };
+  return { document: toCombinedDtcgDocument(strictModules), dropped };
 }
 
 const ALLOWED_TYPES = new Set<string>(allowedTokenTypes.options);
@@ -980,7 +1225,7 @@ export function validateDtcgDocument(
   }
   const parsed = parseDtcgDocument(doc as Record<string, unknown>, 'literal', label);
   const errors = [...parsed.errors];
-  errors.push(...validateParsedMetadata(parsed, label));
+  errors.push(...validateParsedMetadata(parsed, label, options));
   errors.push(...validateParsedEntries(parsed, label, options));
   return errors;
 }
@@ -992,13 +1237,30 @@ function schemaIssue(pathLabel: string, result: { success: boolean; error?: { is
   );
 }
 
-function validateParsedMetadata(parsed: ParsedDtcgDocument, label: string): string[] {
+function validateParsedMetadata(
+  parsed: ParsedDtcgDocument,
+  label: string,
+  options: { strict?: boolean } = {}
+): string[] {
   const errors: string[] = [];
+  const validateGroupType = (type: string | undefined, pathLabel: string) => {
+    if (!type) return;
+    if (!ALLOWED_TYPES.has(type)) {
+      errors.push(`${pathLabel}: unknown group $type '${type}'; use a registered token type`);
+    } else if (options.strict && !isZebkitSupportedSpecType(type)) {
+      errors.push(
+        `${pathLabel}: group $type '${type}' is not supported in strict DTCG output; ` +
+          `remove it or use a supported DTCG 2025.10 type`
+      );
+    }
+  };
+  validateGroupType(parsed.meta.rootType, `${label}.$type`);
   if (parsed.meta.extensions) {
     errors.push(...schemaIssue(`${label}.$extensions`, tokenGroupExtensionsSchema.safeParse(parsed.meta.extensions)));
   }
   for (const metadata of parsed.meta.groupMetadata ?? []) {
     const name = metadata.path.join('.');
+    validateGroupType(metadata.$type, `${label}.${name}.$type`);
     if (metadata.$extensions) {
       errors.push(...schemaIssue(`${label}.${name}.$extensions`, tokenGroupExtensionsSchema.safeParse(metadata.$extensions)));
     }
@@ -1034,7 +1296,15 @@ function validateParsedEntries(
       continue;
     }
     if (typeof entry.$description !== 'string') {
-      errors.push(`${label}.${name}: missing $description`);
+      errors.push(
+        `${label}.${name}: missing $description; add a non-empty description that says ` +
+          `what changing this token affects`
+      );
+    } else if (entry.$description.trim().length === 0) {
+      errors.push(
+        `${label}.${name}.$description: must contain non-whitespace text that says ` +
+          `what changing this token affects`
+      );
     }
     if (entry.$deprecated !== undefined && typeof entry.$deprecated !== 'boolean' && typeof entry.$deprecated !== 'string') {
       errors.push(`${label}.${name}.$deprecated: expected a boolean or string`);
@@ -1068,10 +1338,11 @@ export function validateDtcgDocuments(
       continue;
     }
     const parsed = parseDtcgDocument(document, 'literal', documentLabel);
-    errors.push(...parsed.errors, ...validateParsedMetadata(parsed, documentLabel));
+    errors.push(...parsed.errors, ...validateParsedMetadata(parsed, documentLabel, options));
     flattened.push({ key, moduleId: moduleIdForDocument(key), entries: parsed.entries, meta: parsed.meta });
   }
   const lookup = buildReferenceLookup(flattened);
+  const byKey = new Map(flattened.map((doc) => [doc.key, doc]));
   const effectiveTypes = new Map<string, string>();
   const resolvingTypes = new Set<string>();
   const resolveEffectiveType = (id: string): string | undefined => {
@@ -1084,7 +1355,10 @@ export function validateDtcgDocuments(
       return target.entry.$type;
     }
     const reference = parseTokenReference(target.entry.$value);
-    const referenceId = reference ? tokenReferenceToLookupId(reference) : undefined;
+    const sourceDoc = byKey.get(target.key);
+    const referenceId = reference && sourceDoc
+      ? referenceLookupId(reference, sourceDoc, lookup)
+      : undefined;
     if (!referenceId) return undefined;
     resolvingTypes.add(id);
     const inferred = resolveEffectiveType(referenceId);
@@ -1115,7 +1389,7 @@ export function validateDtcgDocuments(
         entry.$value,
         sourceType as Parameters<typeof enumerateTokenReferences>[1]
       )) {
-        const lookupId = tokenReferenceToLookupId(reference.target);
+        const lookupId = referenceLookupId(reference.target, doc, lookup);
         const targetInfo = lookupId ? lookup.get(lookupId) : undefined;
         if (!targetInfo) {
           errors.push(`${source}: missing reference target '${reference.target}'`);
@@ -1123,13 +1397,28 @@ export function validateDtcgDocuments(
           const targetType = lookupId ? resolveEffectiveType(lookupId) : undefined;
           if (!targetType || !isCompatibleReference(reference.expectedType, targetType)) {
             errors.push(`${source}: reference '${reference.target}' has type '${targetType ?? '(none)'}', expected '${reference.expectedType}'`);
+          } else if (reference.arrayElement && resolvesToShadowArray(targetInfo, byKey, lookup)) {
+            errors.push(
+              `${source}: reference '${reference.target}' resolves to a shadow array, but an alias ` +
+                `inside a shadow array must resolve to one shadow object because DTCG arrays do not ` +
+                `flatten; reference the multi-layer token as the whole $value or reference a ` +
+                `single-layer shadow token`
+            );
+          } else if (
+            reference.member === 'blur' &&
+            resolvesToNegativeDimension(targetInfo, byKey, lookup)
+          ) {
+            errors.push(
+              `${source}: shadow blur reference '${reference.target}' resolves to a negative ` +
+                `dimension, but DTCG shadow blur must be zero or greater; set the referenced ` +
+                `dimension to a nonnegative value or reference another dimension token`
+            );
           }
         }
       }
     }
   }
-  const tokenMap = Object.fromEntries(flattened.map((doc) => [doc.key, doc.entries]));
-  for (const cycle of findTokenReferenceCycles(buildTokenReferenceGraph(tokenMap))) {
+  for (const cycle of findTokenReferenceCycles(buildDocumentReferenceGraph(flattened, lookup))) {
     errors.push(`${label}: reference cycle ${cycle.join(' -> ')}`);
   }
   return errors;

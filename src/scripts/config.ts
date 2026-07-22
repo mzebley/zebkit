@@ -169,9 +169,9 @@ export type TokensConfig = {
   overlays?: OverlayThemeConfig[];
   exportTokens?: boolean;
   /**
-   * Also emit spec-only strict-mode token documents + a `<theme>.drop-manifest.json`
-   * beside the full export (decision D9), for tools that reject unknown `$type`s.
-   * Requires `exportTokens`. Config-only (not promptable). Default false.
+   * Also emit one combined, reference-closed DTCG 2025.10 document plus a
+   * `<theme>.drop-manifest.json` beside the full-profile export. Requires
+   * `exportTokens`; `splitMode` applies only to the full-profile export.
    */
   exportStrict?: boolean;
   splitMode?: 'combined' | 'per-module';

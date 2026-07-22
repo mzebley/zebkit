@@ -191,8 +191,9 @@ describe('packed consumer workflow', () => {
       await runCli(['build']);
       expect(await fs.pathExists(path.join(destinationPath, 'zbk-color.tokens.json'))).toBe(true);
       expect(
-        await fs.pathExists(path.join(destinationPath, 'zbk-color.strict.tokens.json'))
+        await fs.pathExists(path.join(destinationPath, `${themeName}-tokens.strict.json`))
       ).toBe(true);
+      expect(await fs.pathExists(path.join(destinationPath, 'zbk-color.strict.tokens.json'))).toBe(false);
     } finally {
       await fs.remove(packDir);
       await fs.remove(consumerRoot);

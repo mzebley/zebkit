@@ -169,22 +169,22 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-focus-width` | `{focus.width}` | dimension | Outline width for focus state. |
 | `--zbk-button-focus-offset` | `{focus.offset}` | dimension | Outline offset for focus state. |
 | `--zbk-button-box-shadow` | `none` | shadow | Default box shadow for buttons. |
-| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 0 var(--zbk-action-border-inverse-muted)` | shadow | Box shadow on hover. |
+| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)` | cssShadow | Box shadow on hover. |
 | `--zbk-button-box-shadow-active` | `none` | shadow | Box shadow when active/pressed. |
 | `--zbk-button-box-shadow-focus` | `none` | shadow | Box shadow in focus state (in addition to outline). |
-| `--zbk-button-transform` | `translateY(0)` | utility | Default transform property for buttons. |
-| `--zbk-button-transform-hover` | `translateY(-2%)` | utility | Transform effect on hover. |
-| `--zbk-button-transform-active` | `translateY(0)` | utility | Transform effect when active/pressed. |
-| `--zbk-button-transform-focus` | `translateY(0)` | utility | Transform effect in focus state (in addition to outline). |
-| `--zbk-button-cursor` | `pointer` | utility | Cursor style when hovering over buttons. |
-| `--zbk-button-cursor-loading` | `progress` | utility | Cursor style while the button is in its loading state. |
+| `--zbk-button-transform` | `translateY(0)` | transform | Default transform property for buttons. |
+| `--zbk-button-transform-hover` | `translateY(-2%)` | transform | Transform effect on hover. |
+| `--zbk-button-transform-active` | `translateY(0)` | transform | Transform effect when active/pressed. |
+| `--zbk-button-transform-focus` | `translateY(0)` | transform | Transform effect in focus state (in addition to outline). |
+| `--zbk-button-cursor` | `pointer` | cursor | Cursor style when hovering over buttons. |
+| `--zbk-button-cursor-loading` | `progress` | cursor | Cursor style while the button is in its loading state. |
 | `--zbk-button-flex-direction` | `row` | flex | Direction of icon and label layout. |
 | `--zbk-button-justify-content` | `center` | flex | Main axis alignment for button contents. |
 | `--zbk-button-align-items` | `center` | flex | Cross axis alignment for button contents. |
 | `--zbk-button-transition-duration` | `{transition.playful-motion-duration-default}` | duration | Duration for hover/active transitions. **(a11y)** |
-| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | transitionTimingFunction | Timing function for button transitions. |
+| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | cssEasingFunction | Timing function for button transitions. |
 | `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transitionProperty | CSS properties that should animate on interaction. |
-| `--zbk-button-transition-delay` | `0` | duration | Delay before CSS properties run through their animate on interaction. |
+| `--zbk-button-transition-delay` | `0ms` | duration | Delay before CSS properties run through their animate on interaction. |
 | `--zbk-button-opacity` | `1` | number | Visual opacity of button. |
 | `--zbk-button-opacity-loading` | `1` | number | Visual opacity while the button is in its loading state. |
 

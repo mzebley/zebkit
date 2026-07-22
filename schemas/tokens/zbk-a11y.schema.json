@@ -5,8 +5,16 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "utilityValue": {
-      "type": "string",
+    "numberValue": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "minLength": 1
+        }
+      ],
       "examples": [
         "{a11y.spacing-modifier}",
         "{a11y.spacing-text-coupling}",
@@ -14,36 +22,91 @@
         "{a11y.letter-spacing-modifier}",
         "{a11y.fallback-font-size-modifier}",
         "{a11y.transition-duration-modifier}",
-        "{button.transform}",
-        "{button.transform-hover}",
-        "{button.transform-active}",
-        "{button.transform-focus}",
-        "{button.cursor}",
-        "{button.cursor-loading}",
-        "{checkbox.cursor}",
-        "{checkbox.cursor-disabled}",
-        "{input.cursor}",
-        "{input.cursor-disabled}",
-        "{pagination.cursor}",
-        "{radio.cursor}",
-        "{radio.cursor-disabled}",
-        "{select.cursor}",
-        "{select.cursor-disabled}",
-        "{textarea.resize}",
-        "{textarea.cursor}",
-        "{textarea.cursor-disabled}",
-        "{toggle.thumb-transform}",
-        "{toggle.thumb-transform-hover}",
-        "{toggle.thumb-transform-active}",
-        "{toggle.thumb-transform-checked}",
-        "{toggle.cursor}",
-        "{toggle.cursor-disabled}"
+        "{opacity.0}",
+        "{opacity.5}",
+        "{opacity.10}",
+        "{opacity.15}",
+        "{opacity.20}",
+        "{opacity.25}",
+        "{opacity.30}",
+        "{opacity.40}",
+        "{opacity.50}",
+        "{opacity.60}",
+        "{opacity.70}",
+        "{opacity.75}",
+        "{opacity.80}",
+        "{opacity.85}",
+        "{opacity.90}",
+        "{opacity.95}",
+        "{opacity.100}",
+        "{h1.line-height}",
+        "{h2.line-height}",
+        "{h3.line-height}",
+        "{h4.line-height}",
+        "{h5.line-height}",
+        "{h6.line-height}",
+        "{lede.line-height}",
+        "{list.line-height}",
+        "{p.line-height}",
+        "{line-height.1}",
+        "{line-height.2}",
+        "{line-height.3}",
+        "{line-height.4}",
+        "{line-height.5}",
+        "{z-index.0}",
+        "{z-index.10}",
+        "{z-index.20}",
+        "{z-index.30}",
+        "{z-index.40}",
+        "{z-index.50}",
+        "{z-index.60}",
+        "{z-index.70}",
+        "{z-index.80}",
+        "{z-index.90}",
+        "{z-index.100}",
+        "{z-index.dropdown}",
+        "{z-index.sticky}",
+        "{z-index.fixed}",
+        "{z-index.modal-backdrop}",
+        "{z-index.modal}",
+        "{z-index.popover}",
+        "{z-index.tooltip}",
+        "{button.line-height}",
+        "{button.opacity}",
+        "{button.opacity-loading}",
+        "{checkbox.line-height}",
+        "{checkbox.opacity}",
+        "{checkbox.opacity-disabled}",
+        "{input.line-height}",
+        "{input.opacity}",
+        "{input.opacity-disabled}",
+        "{pagination.line-height}",
+        "{radio.line-height}",
+        "{radio.opacity}",
+        "{radio.opacity-disabled}",
+        "{select.line-height}",
+        "{select.opacity}",
+        "{select.opacity-disabled}",
+        "{textarea.field-line-height}",
+        "{textarea.opacity}",
+        "{textarea.opacity-disabled}",
+        "{toggle.line-height}",
+        "{toggle.opacity}",
+        "{toggle.opacity-disabled}",
+        "{tooltip.line-height}",
+        "{tooltip.z-index}",
+        "{tooltip.opacity}"
       ]
+    },
+    "cssNumberValue": {
+      "type": "string",
+      "minLength": 1
     },
     "dimensionValue": {
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         {
           "type": "object",
@@ -275,7 +338,11 @@
         "{tooltip.offset}"
       ]
     },
-    "utilityToken": {
+    "cssDimensionValue": {
+      "type": "string",
+      "minLength": 1
+    },
+    "numberToken": {
       "type": "object",
       "description": "Amount to multiply spacing variables by (independent density dial).",
       "required": [
@@ -284,13 +351,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/utilityValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/numberValue"
+            },
+            {
+              "$ref": "#/definitions/cssNumberValue"
+            }
+          ]
         },
         "$type": {
-          "const": "utility"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -317,7 +396,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "number"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/numberValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssNumber"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssNumberValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "dimensionToken": {
       "type": "object",
@@ -328,13 +447,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/dimensionValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/dimensionValue"
+            },
+            {
+              "$ref": "#/definitions/cssDimensionValue"
+            }
+          ]
         },
         "$type": {
-          "const": "dimension"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -361,7 +492,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "dimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/dimensionValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssDimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssDimensionValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "deprecated": {
       "oneOf": [
@@ -371,35 +542,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "groupType": {
-      "type": "string",
-      "enum": [
-        "color",
-        "dimension",
-        "duration",
-        "fontFamily",
-        "fontWeight",
-        "cubicBezier",
-        "number",
-        "strokeStyle",
-        "shadow",
-        "display",
-        "cursor",
-        "textTransform",
-        "textDecoration",
-        "textAlignment",
-        "fontStyle",
-        "transform",
-        "transitionProperty",
-        "transitionTimingFunction",
-        "content",
-        "flex",
-        "utility",
-        "asset",
-        "boolean",
-        "cssDimension"
       ]
     },
     "groupExtensions": {
@@ -550,14 +692,18 @@
     },
     "group:spacing": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -569,7 +715,7 @@
           "description": "Amount to multiply spacing variables by (independent density dial).",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         },
@@ -580,7 +726,7 @@
           "description": "How hard spacing follows body (md) font-size growth: 1 = 1:1, 0 = decoupled. Lets containers grow with text without a separate density bump.",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -588,14 +734,18 @@
     },
     "group:spacing-text": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -607,7 +757,7 @@
           "description": "How hard spacing follows body (md) font-size growth: 1 = 1:1, 0 = decoupled. Lets containers grow with text without a separate density bump.",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -615,14 +765,18 @@
     },
     "group:line": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -637,7 +791,7 @@
           "description": "Amount to multiply line height variables by.",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -645,14 +799,18 @@
     },
     "group:line-height": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -664,7 +822,7 @@
           "description": "Amount to multiply line height variables by.",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -672,14 +830,18 @@
     },
     "group:letter": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -694,7 +856,7 @@
           "description": "Amount to multiply letter spacing variables by.",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -702,14 +864,18 @@
     },
     "group:letter-spacing": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -721,7 +887,7 @@
           "description": "Amount to multiply letter spacing variables by.",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -729,14 +895,18 @@
     },
     "group:fallback": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -754,7 +924,7 @@
           "description": "Fallback amount to multiply font size variables by in the event their specific modifier isn't set.",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -762,14 +932,18 @@
     },
     "group:fallback-font": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -784,7 +958,7 @@
           "description": "Fallback amount to multiply font size variables by in the event their specific modifier isn't set.",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -792,14 +966,18 @@
     },
     "group:fallback-font-size": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -811,7 +989,7 @@
           "description": "Fallback amount to multiply font size variables by in the event their specific modifier isn't set.",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -819,14 +997,18 @@
     },
     "group:transition": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -841,7 +1023,7 @@
           "description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -849,14 +1031,18 @@
     },
     "group:transition-duration": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -868,7 +1054,7 @@
           "description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'",
           "allOf": [
             {
-              "$ref": "#/definitions/utilityToken"
+              "$ref": "#/definitions/numberToken"
             }
           ]
         }
@@ -876,14 +1062,18 @@
     },
     "group:min": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -906,14 +1096,18 @@
     },
     "group:min-interaction": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -933,11 +1127,9 @@
     }
   },
   "properties": {
-    "$type": {
-      "$ref": "#/definitions/groupType"
-    },
     "$description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "$deprecated": {
       "$ref": "#/definitions/deprecated"
@@ -952,7 +1144,7 @@
       "description": "Amount to multiply spacing variables by (independent density dial).",
       "allOf": [
         {
-          "$ref": "#/definitions/utilityToken"
+          "$ref": "#/definitions/numberToken"
         }
       ]
     },
@@ -963,7 +1155,7 @@
       "description": "How hard spacing follows body (md) font-size growth: 1 = 1:1, 0 = decoupled. Lets containers grow with text without a separate density bump.",
       "allOf": [
         {
-          "$ref": "#/definitions/utilityToken"
+          "$ref": "#/definitions/numberToken"
         }
       ]
     },
@@ -977,7 +1169,7 @@
       "description": "Amount to multiply line height variables by.",
       "allOf": [
         {
-          "$ref": "#/definitions/utilityToken"
+          "$ref": "#/definitions/numberToken"
         }
       ]
     },
@@ -991,7 +1183,7 @@
       "description": "Amount to multiply letter spacing variables by.",
       "allOf": [
         {
-          "$ref": "#/definitions/utilityToken"
+          "$ref": "#/definitions/numberToken"
         }
       ]
     },
@@ -1008,7 +1200,7 @@
       "description": "Fallback amount to multiply font size variables by in the event their specific modifier isn't set.",
       "allOf": [
         {
-          "$ref": "#/definitions/utilityToken"
+          "$ref": "#/definitions/numberToken"
         }
       ]
     },
@@ -1022,7 +1214,7 @@
       "description": "Amount to multiply transition durations by (automatically set to 0 with media query match for 'prefers-reduced-motion'",
       "allOf": [
         {
-          "$ref": "#/definitions/utilityToken"
+          "$ref": "#/definitions/numberToken"
         }
       ]
     },

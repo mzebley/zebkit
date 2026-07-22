@@ -5,6 +5,7 @@ import {
   FontSource,
   FontFallback,
   FontFaceObject,
+  serializeFontFamilyValue,
   tokenA11y,
   tokenFontMeta,
 } from "@definitions/tokens";
@@ -17,9 +18,9 @@ import {
   buildTokenReferenceLookup,
   isCompatibleReference,
   parseTokenReference,
+  resolveTokenReferenceLookupId,
   serializeTokenValueWithReferences,
   tokenReferenceToCssVariable,
-  tokenReferenceToLookupId,
 } from "./token-references";
 import { DEFAULT_LAYER, LAYER_ORDER, LayerName } from "@definitions/layers";
 import { ZEBKIT_PREFIX } from "@config";
@@ -39,7 +40,8 @@ function validateCssReferencesExist(
   globalPrefix: string,
   availableTokens: { [key: string]: TokenInterface },
   errors?: string[],
-  referenceLookup = buildTokenReferenceLookup(availableTokens)
+  referenceLookup = buildTokenReferenceLookup(availableTokens),
+  moduleId?: string
 ): boolean {
   const report = (message: string) => {
     console.error(chalk.red(message));
@@ -52,7 +54,7 @@ function validateCssReferencesExist(
     );
     return false;
   }
-  const lookupId = tokenReferenceToLookupId(reference);
+  const lookupId = resolveTokenReferenceLookupId(reference, referenceLookup, moduleId);
   const target = lookupId ? referenceLookup.get(lookupId) : undefined;
 
   // Closed-world resolution (I5): every reference must resolve against a real
@@ -86,7 +88,8 @@ export function convertDotNotation(
   availableTokens: { [key: string]: TokenInterface },
   byPass = false,
   errors?: string[],
-  referenceLookup = buildTokenReferenceLookup(availableTokens)
+  referenceLookup = buildTokenReferenceLookup(availableTokens),
+  moduleId?: string
 ): string {
   if (
     typeof value === "string" &&
@@ -95,11 +98,17 @@ export function convertDotNotation(
   ) {
     const valid =
       byPass ||
-      validateCssReferencesExist(value, type, globalPrefix, availableTokens, errors, referenceLookup);
+      validateCssReferencesExist(value, type, globalPrefix, availableTokens, errors, referenceLookup, moduleId);
 
     if (valid) {
       const reference = parseTokenReference(value);
-      return reference ? `var(${tokenReferenceToCssVariable(reference, globalPrefix)})` : "undefined";
+      const lookupId = reference
+        ? resolveTokenReferenceLookupId(reference, referenceLookup, moduleId)
+        : undefined;
+      const cssReference = lookupId ?? (byPass ? reference : undefined);
+      return cssReference
+        ? `var(${tokenReferenceToCssVariable(cssReference, globalPrefix)})`
+        : "undefined";
     }
     return "undefined";
   }
@@ -186,6 +195,7 @@ export const convertTokensToCssVars = (
   const errors: string[] = [];
 
   Object.entries(tokens).forEach(([key, tokenProperties]) => {
+    const moduleId = key.replace(/^zbk-/, '');
     const layer = layers[key] ?? defaultLayer;
     let currentStyles = `${selector} {\n`;
     Object.entries(tokenProperties).forEach(([propertyKey, item]) => {
@@ -208,7 +218,8 @@ export const convertTokensToCssVars = (
             refTokens,
             false,
             errors,
-            referenceLookup
+            referenceLookup,
+            moduleId
           );
         } else {
           cssVariableValue = applyFallback(rawValue, norm.fallback);
@@ -245,13 +256,15 @@ export const convertTokensToCssVars = (
             referenceLookup,
             prefix: ZEBKIT_PREFIX,
             errors,
+            moduleId,
           }),
           item.$type as AllowedTokenTypes,
           ZEBKIT_PREFIX,
           refTokens,
           false,
           errors,
-          referenceLookup
+          referenceLookup,
+          moduleId
         );
 
         // Entries pre-resolved by `resolveTypeScale` / `resolveSpaceScale` carry no
@@ -330,7 +343,13 @@ function isFontToken(item: unknown): boolean {
 function normalizeFontToken(item: Record<string, unknown>): NormalizedFontToken {
   const font = tokenFontMeta(item) ?? {};
   return {
-    value: String(item.$value ?? ""),
+    value: typeof item.$value === 'string' && parseTokenReference(item.$value)
+      ? item.$value
+      : Array.isArray(item.$value) && item.$value.every((family) => typeof family === 'string')
+        ? serializeFontFamilyValue(item.$value)
+        : typeof item.$value === 'string'
+          ? serializeFontFamilyValue([item.$value])
+          : String(item.$value ?? ""),
     source: (font.source as FontSource) ?? "system",
     fallback: font.fallback as FontFallback | undefined,
     weights: font.weights as NormalizedFontToken["weights"],

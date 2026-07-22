@@ -3,10 +3,6 @@
 @use 'tokens/styles/mixins/generators' as gen;
 
 @layer utilities {
-  .height-neg-1px {
-    height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-  }
-
   .height-0 {
     height: var(--#{prefix.$cssVar}-spacing-0);
   }
@@ -181,10 +177,6 @@
 
   .height-inherit {
     height: inherit;
-  }
-
-  .min-height-neg-1px {
-    min-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
   }
 
   .min-height-0 {
@@ -363,10 +355,6 @@
     min-height: inherit;
   }
 
-  .max-height-neg-1px {
-    max-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-  }
-
   .max-height-0 {
     max-height: var(--#{prefix.$cssVar}-spacing-0);
   }
@@ -541,10 +529,6 @@
 
   .max-height-inherit {
     max-height: inherit;
-  }
-
-  .width-neg-1px {
-    width: var(--#{prefix.$cssVar}-spacing-neg-1px);
   }
 
   .width-0 {
@@ -723,10 +707,6 @@
     width: inherit;
   }
 
-  .min-width-neg-1px {
-    min-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
-  }
-
   .min-width-0 {
     min-width: var(--#{prefix.$cssVar}-spacing-0);
   }
@@ -901,10 +881,6 @@
 
   .min-width-inherit {
     min-width: inherit;
-  }
-
-  .max-width-neg-1px {
-    max-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
   }
 
   .max-width-0 {
@@ -1788,10 +1764,6 @@
   }
 
   @include gen.from-breakpoint('tablet') {
-    .tablet\:height-neg-1px {
-      height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .tablet\:height-0 {
       height: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -1966,10 +1938,6 @@
 
     .tablet\:height-inherit {
       height: inherit;
-    }
-
-    .tablet\:min-height-neg-1px {
-      min-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .tablet\:min-height-0 {
@@ -2148,10 +2116,6 @@
       min-height: inherit;
     }
 
-    .tablet\:max-height-neg-1px {
-      max-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .tablet\:max-height-0 {
       max-height: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -2326,10 +2290,6 @@
 
     .tablet\:max-height-inherit {
       max-height: inherit;
-    }
-
-    .tablet\:width-neg-1px {
-      width: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .tablet\:width-0 {
@@ -2508,10 +2468,6 @@
       width: inherit;
     }
 
-    .tablet\:min-width-neg-1px {
-      min-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .tablet\:min-width-0 {
       min-width: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -2686,10 +2642,6 @@
 
     .tablet\:min-width-inherit {
       min-width: inherit;
-    }
-
-    .tablet\:max-width-neg-1px {
-      max-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .tablet\:max-width-0 {
@@ -3574,10 +3526,6 @@
   }
 
   @include gen.from-breakpoint('tablet-lg') {
-    .tablet-lg\:height-neg-1px {
-      height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .tablet-lg\:height-0 {
       height: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -3752,10 +3700,6 @@
 
     .tablet-lg\:height-inherit {
       height: inherit;
-    }
-
-    .tablet-lg\:min-height-neg-1px {
-      min-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .tablet-lg\:min-height-0 {
@@ -3934,10 +3878,6 @@
       min-height: inherit;
     }
 
-    .tablet-lg\:max-height-neg-1px {
-      max-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .tablet-lg\:max-height-0 {
       max-height: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -4112,10 +4052,6 @@
 
     .tablet-lg\:max-height-inherit {
       max-height: inherit;
-    }
-
-    .tablet-lg\:width-neg-1px {
-      width: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .tablet-lg\:width-0 {
@@ -4294,10 +4230,6 @@
       width: inherit;
     }
 
-    .tablet-lg\:min-width-neg-1px {
-      min-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .tablet-lg\:min-width-0 {
       min-width: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -4472,10 +4404,6 @@
 
     .tablet-lg\:min-width-inherit {
       min-width: inherit;
-    }
-
-    .tablet-lg\:max-width-neg-1px {
-      max-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .tablet-lg\:max-width-0 {
@@ -5360,10 +5288,6 @@
   }
 
   @include gen.from-breakpoint('desktop') {
-    .desktop\:height-neg-1px {
-      height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .desktop\:height-0 {
       height: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -5538,10 +5462,6 @@
 
     .desktop\:height-inherit {
       height: inherit;
-    }
-
-    .desktop\:min-height-neg-1px {
-      min-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .desktop\:min-height-0 {
@@ -5720,10 +5640,6 @@
       min-height: inherit;
     }
 
-    .desktop\:max-height-neg-1px {
-      max-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .desktop\:max-height-0 {
       max-height: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -5898,10 +5814,6 @@
 
     .desktop\:max-height-inherit {
       max-height: inherit;
-    }
-
-    .desktop\:width-neg-1px {
-      width: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .desktop\:width-0 {
@@ -6080,10 +5992,6 @@
       width: inherit;
     }
 
-    .desktop\:min-width-neg-1px {
-      min-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .desktop\:min-width-0 {
       min-width: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -6258,10 +6166,6 @@
 
     .desktop\:min-width-inherit {
       min-width: inherit;
-    }
-
-    .desktop\:max-width-neg-1px {
-      max-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .desktop\:max-width-0 {
@@ -7146,10 +7050,6 @@
   }
 
   @include gen.from-breakpoint('desktop-lg') {
-    .desktop-lg\:height-neg-1px {
-      height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .desktop-lg\:height-0 {
       height: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -7324,10 +7224,6 @@
 
     .desktop-lg\:height-inherit {
       height: inherit;
-    }
-
-    .desktop-lg\:min-height-neg-1px {
-      min-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .desktop-lg\:min-height-0 {
@@ -7506,10 +7402,6 @@
       min-height: inherit;
     }
 
-    .desktop-lg\:max-height-neg-1px {
-      max-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .desktop-lg\:max-height-0 {
       max-height: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -7684,10 +7576,6 @@
 
     .desktop-lg\:max-height-inherit {
       max-height: inherit;
-    }
-
-    .desktop-lg\:width-neg-1px {
-      width: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .desktop-lg\:width-0 {
@@ -7866,10 +7754,6 @@
       width: inherit;
     }
 
-    .desktop-lg\:min-width-neg-1px {
-      min-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .desktop-lg\:min-width-0 {
       min-width: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -8044,10 +7928,6 @@
 
     .desktop-lg\:min-width-inherit {
       min-width: inherit;
-    }
-
-    .desktop-lg\:max-width-neg-1px {
-      max-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .desktop-lg\:max-width-0 {
@@ -8932,10 +8812,6 @@
   }
 
   @include gen.from-breakpoint('widescreen') {
-    .widescreen\:height-neg-1px {
-      height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .widescreen\:height-0 {
       height: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -9110,10 +8986,6 @@
 
     .widescreen\:height-inherit {
       height: inherit;
-    }
-
-    .widescreen\:min-height-neg-1px {
-      min-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .widescreen\:min-height-0 {
@@ -9292,10 +9164,6 @@
       min-height: inherit;
     }
 
-    .widescreen\:max-height-neg-1px {
-      max-height: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .widescreen\:max-height-0 {
       max-height: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -9470,10 +9338,6 @@
 
     .widescreen\:max-height-inherit {
       max-height: inherit;
-    }
-
-    .widescreen\:width-neg-1px {
-      width: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .widescreen\:width-0 {
@@ -9652,10 +9516,6 @@
       width: inherit;
     }
 
-    .widescreen\:min-width-neg-1px {
-      min-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
-    }
-
     .widescreen\:min-width-0 {
       min-width: var(--#{prefix.$cssVar}-spacing-0);
     }
@@ -9830,10 +9690,6 @@
 
     .widescreen\:min-width-inherit {
       min-width: inherit;
-    }
-
-    .widescreen\:max-width-neg-1px {
-      max-width: var(--#{prefix.$cssVar}-spacing-neg-1px);
     }
 
     .widescreen\:max-width-0 {

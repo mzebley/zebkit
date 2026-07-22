@@ -104,14 +104,14 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-thumb-border-width` | `{toggle.border-width}` | dimension | Border thickness of the thumb. |
 | `--zbk-toggle-thumb-border-style` | `{toggle.border-style}` | strokeStyle | Border style of the thumb. |
 | `--zbk-toggle-thumb-radius` | `50%` | cssDimension | Corner radius of the thumb (a circle by default). |
-| `--zbk-toggle-thumb-shadow` | `0 0 0 2px var(--zbk-app-canvas-muted)` | shadow | Default thumb shadow. |
+| `--zbk-toggle-thumb-shadow` | `0 0 0 2px var(--zbk-app-canvas-muted)` | cssShadow | Default thumb shadow. |
 | `--zbk-toggle-thumb-shadow-hover` | `{toggle.thumb-shadow}` | shadow | Thumb shadow when hovered. |
 | `--zbk-toggle-thumb-shadow-active` | `{toggle.thumb-shadow}` | shadow | Thumb shadow while pressed. |
 | `--zbk-toggle-thumb-shadow-checked` | `{toggle.thumb-shadow}` | shadow | Thumb shadow when the toggle is on. |
-| `--zbk-toggle-thumb-transform` | `none` | utility | Default thumb transform (travel is handled structurally). |
-| `--zbk-toggle-thumb-transform-hover` | `none` | utility | Thumb transform when hovered (e.g. a translateY lift). |
-| `--zbk-toggle-thumb-transform-active` | `none` | utility | Thumb transform while pressed (e.g. a press-down). |
-| `--zbk-toggle-thumb-transform-checked` | `none` | utility | Thumb transform when the toggle is on. |
+| `--zbk-toggle-thumb-transform` | `none` | transform | Default thumb transform (travel is handled structurally). |
+| `--zbk-toggle-thumb-transform-hover` | `none` | transform | Thumb transform when hovered (e.g. a translateY lift). |
+| `--zbk-toggle-thumb-transform-active` | `none` | transform | Thumb transform while pressed (e.g. a press-down). |
+| `--zbk-toggle-thumb-transform-checked` | `none` | transform | Thumb transform when the toggle is on. |
 | `--zbk-toggle-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-toggle-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-toggle-font-family` | `{font-family.interface}` | fontFamily | Font family for the toggle label. |
@@ -126,12 +126,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
 | `--zbk-toggle-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
 | `--zbk-toggle-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
-| `--zbk-toggle-cursor` | `pointer` | utility | Cursor when hovering an enabled toggle. |
-| `--zbk-toggle-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled toggle. |
+| `--zbk-toggle-cursor` | `pointer` | cursor | Cursor when hovering an enabled toggle. |
+| `--zbk-toggle-cursor-disabled` | `not-allowed` | cursor | Cursor when hovering a disabled toggle. |
 | `--zbk-toggle-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for toggle state transitions, including thumb travel. **(a11y)** |
 | `--zbk-toggle-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for toggle state transitions. |
 | `--zbk-toggle-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on track state changes. |
-| `--zbk-toggle-transition-delay` | `0` | duration | Delay before toggle transitions run. |
+| `--zbk-toggle-transition-delay` | `0ms` | duration | Delay before toggle transitions run. |
 | `--zbk-toggle-opacity` | `1` | number | Opacity of the toggle. |
 | `--zbk-toggle-opacity-disabled` | `{opacity.70}` | number | Track and thumb opacity when disabled. |
 

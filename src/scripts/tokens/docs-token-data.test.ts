@@ -8,38 +8,45 @@ import {
 
 describe('docs token data projection', () => {
   it('flattens DTCG groups and adds canonical display values', () => {
-    const projected = projectDocsTokenData({
-      'zbk-demo': {
-        nested: {
-          $type: 'duration',
-          slow: {
-            $value: { value: 250, unit: 'ms' },
-            $description: 'Slow duration',
+    const projected = projectDocsTokenData(
+      {
+        demo: {
+          nested: {
+            $type: 'duration',
+            slow: {
+              $value: { value: 250, unit: 'ms' },
+              $description: 'Slow duration',
+            },
+          },
+          enabled: {
+            $value: true,
+            $type: 'boolean',
+            $description: 'Enabled',
           },
         },
-        enabled: {
-          $value: true,
-          $type: 'boolean',
-          $description: 'Enabled',
-        },
       },
-    });
+      { 'demo.nested-slow': ['transition-duration'] }
+    );
 
     expect(projected['zbk-demo']['nested-slow'].$displayValue).toBe('250ms');
+    expect(projected['zbk-demo']['nested-slow'].$cssProperties).toEqual([
+      'transition-duration',
+    ]);
     expect(projected['zbk-demo'].enabled.$displayValue).toBe('true');
+    expect(projected['zbk-demo'].enabled.$cssProperties).toEqual([]);
     expect(JSON.stringify(projected)).not.toContain('[object Object]');
   });
 
   it('resolves structured shadow references through the full token collection', () => {
     const projected = projectDocsTokenData({
-      'zbk-color': {
+      color: {
         ink: {
           $type: 'color',
           $value: { colorSpace: 'srgb', components: [0, 0, 0] },
           $description: 'Ink.',
         },
       },
-      'zbk-elevation': {
+      elevation: {
         focus: {
           $type: 'shadow',
           $description: 'Focus.',
@@ -59,9 +66,34 @@ describe('docs token data projection', () => {
     );
   });
 
+  it('qualifies local composite aliases when projecting CSS variables', () => {
+    const projected = projectDocsTokenData({
+      demo: {
+        ink: {
+          $type: 'color',
+          $value: { colorSpace: 'srgb', components: [0, 0, 0] },
+          $description: 'Ink.',
+        },
+        focus: {
+          $type: 'shadow',
+          $description: 'Focus.',
+          $value: [{
+            color: '{ink}',
+            offsetX: { value: 0, unit: 'px' },
+            offsetY: { value: 1, unit: 'px' },
+            blur: { value: 2, unit: 'px' },
+            spread: { value: 0, unit: 'px' },
+          }],
+        },
+      },
+    });
+
+    expect(projected['zbk-demo'].focus.$displayValue).toContain('var(--zbk-demo-ink)');
+  });
+
   it('derives primitive palette docs from structured color tokens', () => {
     const registry = projectDocsTokenData({
-      'zbk-color': {
+      color: {
         $type: 'color',
         'ember-500': {
           $value: { colorSpace: 'hsl', components: [18, 80, 50] },

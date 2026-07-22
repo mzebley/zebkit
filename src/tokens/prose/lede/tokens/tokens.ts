@@ -60,7 +60,7 @@ const tokens = {
       "Text color for introductory lede text with .lede applied directly or as a child of a .prose container.",
   },
   "font-style": {
-    $value: `none`,
+    $value: `normal`,
     $type: "fontStyle",
     $description:
       "Font style for introductory lede text with .lede applied directly or as a child of a .prose container.",

@@ -201,7 +201,7 @@ describe('published pull command', () => {
 
       const palettePath = path.join(tokensDir, 'zbk-color.tokens.json');
       const palette = await fs.readJson(palettePath);
-      expect(palette.$extensions?.['dev.zebkit']?.cssEmission).toBe('external');
+      expect(palette.$extensions?.['dev.zebkit']?.cssEmission).toBeUndefined();
       expect(palette['red-500'].$value).toBeDefined();
 
       await execFileAsync(process.execPath, [CLI_PATH, 'build', '--config', configPath], {

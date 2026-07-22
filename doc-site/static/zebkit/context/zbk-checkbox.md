@@ -135,12 +135,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-checkbox-box-shadow-active` | `none` | shadow | Control shadow while pressed. |
 | `--zbk-checkbox-box-shadow-checked` | `none` | shadow | Control shadow when checked. |
 | `--zbk-checkbox-box-shadow-focus` | `none` | shadow | Control shadow in the focus state (in addition to the outline). |
-| `--zbk-checkbox-cursor` | `pointer` | utility | Cursor when hovering an enabled checkbox. |
-| `--zbk-checkbox-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled checkbox. |
+| `--zbk-checkbox-cursor` | `pointer` | cursor | Cursor when hovering an enabled checkbox. |
+| `--zbk-checkbox-cursor-disabled` | `not-allowed` | cursor | Cursor when hovering a disabled checkbox. |
 | `--zbk-checkbox-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for checkbox state transitions. **(a11y)** |
 | `--zbk-checkbox-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for checkbox state transitions. |
 | `--zbk-checkbox-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on state changes. |
-| `--zbk-checkbox-transition-delay` | `0` | duration | Delay before checkbox transitions run. |
+| `--zbk-checkbox-transition-delay` | `0ms` | duration | Delay before checkbox transitions run. |
 | `--zbk-checkbox-opacity` | `1` | number | Opacity of the checkbox. |
 | `--zbk-checkbox-opacity-disabled` | `{opacity.70}` | number | Control opacity when disabled. |
 

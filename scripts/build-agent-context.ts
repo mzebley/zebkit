@@ -333,7 +333,7 @@ function renderComponent(
     for (const [name, token] of tokenEntries) {
       const a11y = token.$extensions?.['dev.zebkit']?.a11y ? ' **(a11y)**' : '';
       lines.push(
-        `| \`--${tag}-${name}\` | \`${cell(token.$displayValue ?? (token.$value == null ? '' : tokenValueToString(token.$value)))}\` | ${cell(
+        `| \`--${tag}-${name}\` | \`${cell(token.$displayValue ?? (token.$value == null ? '' : tokenValueToString(token.$value, token.$type)))}\` | ${cell(
           token.$type
         )} | ${cell(token.$description)}${a11y} |`
       );

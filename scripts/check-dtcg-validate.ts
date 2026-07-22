@@ -22,8 +22,9 @@ import { gatherZebkitFiles } from '../src/scripts/tokens/gather-files.js';
 import { buildZebkitTokens } from '../src/scripts/tokens/compile-tokens.js';
 import {
   fromDtcgDocument,
+  toCombinedDtcgDocument,
   toDtcgDocuments,
-  toStrictDtcgDocuments,
+  toStrictDtcgDocument,
   validateDtcgDocuments,
 } from '../src/scripts/tokens/dtcg-document.js';
 import { isZebkitSupportedSpecType } from '../src/definitions/dtcg.js';
@@ -82,13 +83,17 @@ async function main(): Promise<void> {
     const documents = await documentsForTheme(build.theme, files.tokenFiles, build.overridePaths);
     moduleCount += Object.keys(documents).length;
     problems.push(...validateDtcgDocuments(documents, build.theme));
+    problems.push(...validateDtcgDocuments(
+      toCombinedDtcgDocument(documents),
+      `${build.theme} (combined full profile)`
+    ));
 
     // Strict conversion is collection-level: aliases can cross module
     // boundaries, so filtering one document at a time cannot prove closure.
-    const { documents: strictDocuments, dropped } = toStrictDtcgDocuments(documents);
+    const { document: strictDocument, dropped } = toStrictDtcgDocument(documents);
     strictDropTotal += Object.values(dropped).reduce((total, entries) => total + entries.length, 0);
-    problems.push(...validateDtcgDocuments(strictDocuments, `${build.theme} (strict)`, { strict: true }));
-    for (const [key, document] of Object.entries(strictDocuments)) {
+    problems.push(...validateDtcgDocuments(strictDocument, `${build.theme} (strict)`, { strict: true }));
+    for (const [key, document] of Object.entries(strictDocument)) {
       for (const [name, entry] of Object.entries(fromDtcgDocument(document, { mode: 'literal' }).entries)) {
         if (!isZebkitSupportedSpecType(entry.$type)) {
           problems.push(`${build.theme}/${key} (strict).${name}: unsupported strict $type '${entry.$type}' survived strict export`);
@@ -123,7 +128,7 @@ async function main(): Promise<void> {
   console.log(
     chalk.green(
       `\nToken export validation OK — ${moduleCount} full-profile module document(s) across ${builds.length} theme(s); ` +
-        `strict documents are DTCG 2025.10 conformant and shed ${strictDropTotal} unsupported token(s).`
+        `canonical strict documents are DTCG 2025.10 conformant and shed ${strictDropTotal} unsupported token(s).`
     )
   );
 }

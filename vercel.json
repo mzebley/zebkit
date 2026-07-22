@@ -11,6 +11,12 @@
       ]
     },
     {
+      "source": "/zebkit/default-tokens.strict.json",
+      "headers": [
+        { "key": "Content-Type", "value": "application/design-tokens+json; charset=utf-8" }
+      ]
+    },
+    {
       "source": "/zebkit/(.*)\\.tokens\\.json",
       "headers": [
         { "key": "Content-Type", "value": "application/design-tokens+json; charset=utf-8" }

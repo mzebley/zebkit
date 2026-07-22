@@ -1,5 +1,4 @@
 import {
-  DTCG_2025_10_WEIGHT_ALIASES,
   DTCG_COLOR_SPACES,
   DIMENSION_UNITS,
   DURATION_UNITS,
@@ -10,8 +9,25 @@ type JsonSchema = Record<string, unknown>;
 
 const wholeValueAliasSchema: JsonSchema = {
   type: 'string',
-  pattern: '^\\{[^{}]+\\}$',
+  pattern: '^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$',
 };
+
+const cssStringSchema: JsonSchema = { type: 'string', minLength: 1 };
+const colorCssStringSchema: JsonSchema = { type: 'string' };
+
+function componentSchema(minimum?: number, maximum?: number, exclusiveMaximum?: number): JsonSchema {
+  return {
+    oneOf: [
+      {
+        type: 'number',
+        ...(minimum === undefined ? {} : { minimum }),
+        ...(maximum === undefined ? {} : { maximum }),
+        ...(exclusiveMaximum === undefined ? {} : { exclusiveMaximum }),
+      },
+      { const: 'none' },
+    ],
+  };
+}
 
 export const structuredDimensionSchema = {
   type: 'object',
@@ -48,10 +64,49 @@ const structuredColorSchema = {
     alpha: { type: 'number', minimum: 0, maximum: 1 },
     hex: { type: 'string', pattern: '^#[0-9a-fA-F]{6}$' },
   },
+  allOf: [
+    {
+      if: { properties: { colorSpace: { enum: ['srgb', 'srgb-linear', 'display-p3', 'a98-rgb', 'prophoto-rgb', 'rec2020', 'xyz-d65', 'xyz-d50'] } } },
+      then: { properties: { components: { items: [componentSchema(0, 1), componentSchema(0, 1), componentSchema(0, 1)] } } },
+    },
+    {
+      if: { properties: { colorSpace: { enum: ['hsl', 'hwb'] } } },
+      then: { properties: { components: { items: [componentSchema(0, undefined, 360), componentSchema(0, 100), componentSchema(0, 100)] } } },
+    },
+    {
+      if: { properties: { colorSpace: { const: 'lab' } } },
+      then: { properties: { components: { items: [componentSchema(0, 100), componentSchema(), componentSchema()] } } },
+    },
+    {
+      if: { properties: { colorSpace: { const: 'lch' } } },
+      then: { properties: { components: { items: [componentSchema(0, 100), componentSchema(0), componentSchema(0, undefined, 360)] } } },
+    },
+    {
+      if: { properties: { colorSpace: { const: 'oklab' } } },
+      then: { properties: { components: { items: [componentSchema(0, 1), componentSchema(), componentSchema()] } } },
+    },
+    {
+      if: { properties: { colorSpace: { const: 'oklch' } } },
+      then: { properties: { components: { items: [componentSchema(0, 1), componentSchema(0), componentSchema(0, undefined, 360)] } } },
+    },
+  ],
 };
 
 const shadowDimensionSchema = {
   oneOf: [structuredDimensionSchema, wholeValueAliasSchema],
+};
+
+const nonnegativeShadowDimensionSchema = {
+  oneOf: [
+    {
+      ...structuredDimensionSchema,
+      properties: {
+        ...structuredDimensionSchema.properties,
+        value: { type: 'number', minimum: 0 },
+      },
+    },
+    wholeValueAliasSchema,
+  ],
 };
 
 const shadowLayerSchema = {
@@ -62,7 +117,7 @@ const shadowLayerSchema = {
     color: { oneOf: [structuredColorSchema, wholeValueAliasSchema] },
     offsetX: shadowDimensionSchema,
     offsetY: shadowDimensionSchema,
-    blur: shadowDimensionSchema,
+    blur: nonnegativeShadowDimensionSchema,
     spread: shadowDimensionSchema,
     inset: { type: 'boolean' },
   },
@@ -70,12 +125,12 @@ const shadowLayerSchema = {
 
 /** Exhaustive editor projection of the canonical runtime token-type registry. */
 export const AUTHORABLE_VALUE_SCHEMAS: Record<AllowedTokenTypes, JsonSchema> = {
-  color: { oneOf: [{ type: 'string' }, structuredColorSchema] },
-  dimension: { oneOf: [{ type: 'string' }, structuredDimensionSchema] },
-  duration: { oneOf: [{ type: 'string' }, structuredDurationSchema] },
+  color: { oneOf: [colorCssStringSchema, structuredColorSchema] },
+  dimension: { oneOf: [cssStringSchema, structuredDimensionSchema] },
+  duration: { oneOf: [cssStringSchema, structuredDurationSchema] },
   cubicBezier: {
     oneOf: [
-      { type: 'string' },
+      cssStringSchema,
       {
         type: 'array',
         minItems: 4,
@@ -92,7 +147,7 @@ export const AUTHORABLE_VALUE_SCHEMAS: Record<AllowedTokenTypes, JsonSchema> = {
   },
   shadow: {
     oneOf: [
-      { type: 'string' },
+      cssStringSchema,
       shadowLayerSchema,
       {
         type: 'array',
@@ -102,40 +157,38 @@ export const AUTHORABLE_VALUE_SCHEMAS: Record<AllowedTokenTypes, JsonSchema> = {
   },
   fontFamily: {
     oneOf: [
-      { type: 'string' },
-      { type: 'array', minItems: 1, items: { type: 'string' } },
+      cssStringSchema,
+      { type: 'array', minItems: 1, items: { type: 'string', minLength: 1 } },
     ],
   },
   fontWeight: {
     oneOf: [
       { type: 'number', minimum: 1, maximum: 1000 },
-      { type: 'string', enum: [...DTCG_2025_10_WEIGHT_ALIASES] },
-      wholeValueAliasSchema,
+      cssStringSchema,
     ],
   },
-  number: { oneOf: [{ type: 'number' }, wholeValueAliasSchema] },
-  strokeStyle: {
-    oneOf: [
-      {
-        type: 'string',
-        enum: ['solid', 'dashed', 'dotted', 'double', 'groove', 'ridge', 'outset', 'inset'],
-      },
-      wholeValueAliasSchema,
-    ],
-  },
+  number: { oneOf: [{ type: 'number' }, cssStringSchema] },
+  strokeStyle: cssStringSchema,
   boolean: { oneOf: [{ type: 'boolean' }, wholeValueAliasSchema] },
-  cssDimension: { type: 'string' },
-  display: { type: 'string' },
-  cursor: { type: 'string' },
-  fontStyle: { type: 'string' },
-  textDecoration: { type: 'string' },
-  textTransform: { type: 'string' },
-  textAlignment: { type: 'string' },
-  transform: { type: 'string' },
-  transitionProperty: { type: 'string' },
-  transitionTimingFunction: { type: 'string' },
-  utility: { type: 'string' },
-  asset: { type: 'string' },
-  content: { type: 'string' },
-  flex: { type: 'string' },
+  cssColor: cssStringSchema,
+  cssDimension: cssStringSchema,
+  cssDuration: cssStringSchema,
+  cssFontFamily: cssStringSchema,
+  cssFontWeight: cssStringSchema,
+  cssEasingFunction: cssStringSchema,
+  cssNumber: cssStringSchema,
+  cssStrokeStyle: cssStringSchema,
+  cssShadow: cssStringSchema,
+  display: cssStringSchema,
+  cursor: cssStringSchema,
+  fontStyle: cssStringSchema,
+  textDecoration: cssStringSchema,
+  textTransform: cssStringSchema,
+  textAlignment: cssStringSchema,
+  transform: cssStringSchema,
+  transitionProperty: cssStringSchema,
+  asset: cssStringSchema,
+  content: cssStringSchema,
+  flex: cssStringSchema,
+  resize: cssStringSchema,
 };

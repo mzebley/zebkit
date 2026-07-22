@@ -61,7 +61,329 @@
               "type": "string",
               "pattern": "^#[0-9a-fA-F]{6}$"
             }
-          }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "enum": [
+                      "srgb",
+                      "srgb-linear",
+                      "display-p3",
+                      "a98-rgb",
+                      "prophoto-rgb",
+                      "rec2020",
+                      "xyz-d65",
+                      "xyz-d50"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "enum": [
+                      "hsl",
+                      "hwb"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "lab"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "lch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "oklab"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "oklch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
         }
       ],
       "examples": [
@@ -799,6 +1121,10 @@
         "{tooltip.border-color}"
       ]
     },
+    "cssColorValue": {
+      "type": "string",
+      "minLength": 1
+    },
     "colorToken": {
       "type": "object",
       "description": "Primitive red ramp, step 50 (98% lightness).",
@@ -808,13 +1134,25 @@
       "additionalProperties": false,
       "properties": {
         "$value": {
-          "$ref": "#/definitions/colorValue"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/colorValue"
+            },
+            {
+              "$ref": "#/definitions/cssColorValue"
+            }
+          ]
         },
         "$type": {
-          "const": "color"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -841,7 +1179,47 @@
             "^(?!dev\\.zebkit$).+": {}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "color"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/colorValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssColor"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssColorValue"
+              }
+            }
+          }
+        }
+      ]
     },
     "deprecated": {
       "oneOf": [
@@ -851,35 +1229,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "groupType": {
-      "type": "string",
-      "enum": [
-        "color",
-        "dimension",
-        "duration",
-        "fontFamily",
-        "fontWeight",
-        "cubicBezier",
-        "number",
-        "strokeStyle",
-        "shadow",
-        "display",
-        "cursor",
-        "textTransform",
-        "textDecoration",
-        "textAlignment",
-        "fontStyle",
-        "transform",
-        "transitionProperty",
-        "transitionTimingFunction",
-        "content",
-        "flex",
-        "utility",
-        "asset",
-        "boolean",
-        "cssDimension"
       ]
     },
     "groupExtensions": {
@@ -1030,7 +1379,6 @@
     },
     "group:red": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -1122,10 +1470,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1137,7 +1490,6 @@
     },
     "group:pink": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -1229,10 +1581,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1244,7 +1601,6 @@
     },
     "group:orange": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -1336,10 +1692,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1351,7 +1712,6 @@
     },
     "group:gold": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -1443,10 +1803,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1458,7 +1823,6 @@
     },
     "group:yellow": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -1550,10 +1914,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1565,7 +1934,6 @@
     },
     "group:lime": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -1657,10 +2025,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1672,7 +2045,6 @@
     },
     "group:green": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -1764,10 +2136,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1779,7 +2156,6 @@
     },
     "group:teal": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -1871,10 +2247,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1886,7 +2267,6 @@
     },
     "group:cyan": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -1978,10 +2358,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -1993,7 +2378,6 @@
     },
     "group:blue": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -2085,10 +2469,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2100,7 +2489,6 @@
     },
     "group:indigo": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -2192,10 +2580,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2207,7 +2600,6 @@
     },
     "group:violet": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -2299,10 +2691,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2314,7 +2711,6 @@
     },
     "group:merlot": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -2406,10 +2802,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2421,7 +2822,6 @@
     },
     "group:butterfield": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -2513,10 +2913,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2528,7 +2933,6 @@
     },
     "group:mint": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -2620,10 +3024,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2635,7 +3044,6 @@
     },
     "group:sea": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -2727,10 +3135,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2742,7 +3155,6 @@
     },
     "group:dusk": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -2834,10 +3246,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2849,7 +3266,6 @@
     },
     "group:stone": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -2941,10 +3357,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -2956,7 +3377,6 @@
     },
     "group:charcoal": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -3048,10 +3468,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -3063,7 +3488,6 @@
     },
     "group:lavenderfield": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -3155,10 +3579,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -3170,7 +3599,6 @@
     },
     "group:rosewater": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -3262,10 +3690,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -3277,7 +3710,6 @@
     },
     "group:ember": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -3369,10 +3801,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -3384,7 +3821,6 @@
     },
     "group:deepcurrent": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -3476,10 +3912,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -3491,7 +3932,6 @@
     },
     "group:foxglove": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -3583,10 +4023,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -3598,7 +4043,6 @@
     },
     "group:chestnut": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "50": {
@@ -3690,10 +4134,15 @@
           ]
         },
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -3705,14 +4154,18 @@
     },
     "group:global": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": false,
       "properties": {
         "$type": {
-          "$ref": "#/definitions/groupType"
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
         "$description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "$deprecated": {
           "$ref": "#/definitions/deprecated"
@@ -3749,10 +4202,15 @@
   },
   "properties": {
     "$type": {
-      "$ref": "#/definitions/groupType"
+      "type": "string",
+      "enum": [
+        "color",
+        "cssColor"
+      ]
     },
     "$description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "$deprecated": {
       "$ref": "#/definitions/deprecated"

@@ -182,22 +182,22 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-focus-width` | `{focus.width}` | dimension | Outline width for focus state. |
 | `--zbk-button-focus-offset` | `{focus.offset}` | dimension | Outline offset for focus state. |
 | `--zbk-button-box-shadow` | `none` | shadow | Default box shadow for buttons. |
-| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 0 var(--zbk-action-border-inverse-muted)` | shadow | Box shadow on hover. |
+| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)` | cssShadow | Box shadow on hover. |
 | `--zbk-button-box-shadow-active` | `none` | shadow | Box shadow when active/pressed. |
 | `--zbk-button-box-shadow-focus` | `none` | shadow | Box shadow in focus state (in addition to outline). |
-| `--zbk-button-transform` | `translateY(0)` | utility | Default transform property for buttons. |
-| `--zbk-button-transform-hover` | `translateY(-2%)` | utility | Transform effect on hover. |
-| `--zbk-button-transform-active` | `translateY(0)` | utility | Transform effect when active/pressed. |
-| `--zbk-button-transform-focus` | `translateY(0)` | utility | Transform effect in focus state (in addition to outline). |
-| `--zbk-button-cursor` | `pointer` | utility | Cursor style when hovering over buttons. |
-| `--zbk-button-cursor-loading` | `progress` | utility | Cursor style while the button is in its loading state. |
+| `--zbk-button-transform` | `translateY(0)` | transform | Default transform property for buttons. |
+| `--zbk-button-transform-hover` | `translateY(-2%)` | transform | Transform effect on hover. |
+| `--zbk-button-transform-active` | `translateY(0)` | transform | Transform effect when active/pressed. |
+| `--zbk-button-transform-focus` | `translateY(0)` | transform | Transform effect in focus state (in addition to outline). |
+| `--zbk-button-cursor` | `pointer` | cursor | Cursor style when hovering over buttons. |
+| `--zbk-button-cursor-loading` | `progress` | cursor | Cursor style while the button is in its loading state. |
 | `--zbk-button-flex-direction` | `row` | flex | Direction of icon and label layout. |
 | `--zbk-button-justify-content` | `center` | flex | Main axis alignment for button contents. |
 | `--zbk-button-align-items` | `center` | flex | Cross axis alignment for button contents. |
 | `--zbk-button-transition-duration` | `{transition.playful-motion-duration-default}` | duration | Duration for hover/active transitions. **(a11y)** |
-| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | transitionTimingFunction | Timing function for button transitions. |
+| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | cssEasingFunction | Timing function for button transitions. |
 | `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transitionProperty | CSS properties that should animate on interaction. |
-| `--zbk-button-transition-delay` | `0` | duration | Delay before CSS properties run through their animate on interaction. |
+| `--zbk-button-transition-delay` | `0ms` | duration | Delay before CSS properties run through their animate on interaction. |
 | `--zbk-button-opacity` | `1` | number | Visual opacity of button. |
 | `--zbk-button-opacity-loading` | `1` | number | Visual opacity while the button is in its loading state. |
 
@@ -354,12 +354,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-checkbox-box-shadow-active` | `none` | shadow | Control shadow while pressed. |
 | `--zbk-checkbox-box-shadow-checked` | `none` | shadow | Control shadow when checked. |
 | `--zbk-checkbox-box-shadow-focus` | `none` | shadow | Control shadow in the focus state (in addition to the outline). |
-| `--zbk-checkbox-cursor` | `pointer` | utility | Cursor when hovering an enabled checkbox. |
-| `--zbk-checkbox-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled checkbox. |
+| `--zbk-checkbox-cursor` | `pointer` | cursor | Cursor when hovering an enabled checkbox. |
+| `--zbk-checkbox-cursor-disabled` | `not-allowed` | cursor | Cursor when hovering a disabled checkbox. |
 | `--zbk-checkbox-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for checkbox state transitions. **(a11y)** |
 | `--zbk-checkbox-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for checkbox state transitions. |
 | `--zbk-checkbox-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on state changes. |
-| `--zbk-checkbox-transition-delay` | `0` | duration | Delay before checkbox transitions run. |
+| `--zbk-checkbox-transition-delay` | `0ms` | duration | Delay before checkbox transitions run. |
 | `--zbk-checkbox-opacity` | `1` | number | Opacity of the checkbox. |
 | `--zbk-checkbox-opacity-disabled` | `{opacity.70}` | number | Control opacity when disabled. |
 
@@ -563,12 +563,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-input-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
 | `--zbk-input-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
 | `--zbk-input-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
-| `--zbk-input-cursor` | `text` | utility | Cursor over the editable field. |
-| `--zbk-input-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
+| `--zbk-input-cursor` | `text` | cursor | Cursor over the editable field. |
+| `--zbk-input-cursor-disabled` | `not-allowed` | cursor | Cursor over a disabled field. |
 | `--zbk-input-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
 | `--zbk-input-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
 | `--zbk-input-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
-| `--zbk-input-transition-delay` | `0` | duration | Delay before field transitions run. |
+| `--zbk-input-transition-delay` | `0ms` | duration | Delay before field transitions run. |
 | `--zbk-input-opacity` | `1` | number | Opacity of the field. |
 | `--zbk-input-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
@@ -729,8 +729,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-pagination-focus-offset` | `{focus.offset}` | dimension | Outline offset for a focused item. |
 | `--zbk-pagination-transition-property` | `background-color, color, border-color, outline` | transitionProperty | CSS properties that animate on item interaction. |
 | `--zbk-pagination-transition-duration` | `150ms` | duration | Duration for item hover/active transitions. **(a11y)** |
-| `--zbk-pagination-transition-timing-function` | `ease-out` | transitionTimingFunction | Timing function for item transitions. |
-| `--zbk-pagination-cursor` | `pointer` | utility | Cursor over interactive pagination items. |
+| `--zbk-pagination-transition-timing-function` | `ease-out` | cssEasingFunction | Timing function for item transitions. |
+| `--zbk-pagination-cursor` | `pointer` | cursor | Cursor over interactive pagination items. |
 
 ## Variants
 
@@ -872,12 +872,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-radio-box-shadow-active` | `none` | shadow | Control shadow while pressed. |
 | `--zbk-radio-box-shadow-checked` | `none` | shadow | Control shadow when selected. |
 | `--zbk-radio-box-shadow-focus` | `none` | shadow | Control shadow in the focus state (in addition to the outline). |
-| `--zbk-radio-cursor` | `pointer` | utility | Cursor when hovering an enabled radio. |
-| `--zbk-radio-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled radio. |
+| `--zbk-radio-cursor` | `pointer` | cursor | Cursor when hovering an enabled radio. |
+| `--zbk-radio-cursor-disabled` | `not-allowed` | cursor | Cursor when hovering a disabled radio. |
 | `--zbk-radio-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for radio state transitions. **(a11y)** |
 | `--zbk-radio-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for radio state transitions. |
 | `--zbk-radio-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on state changes. |
-| `--zbk-radio-transition-delay` | `0` | duration | Delay before radio transitions run. |
+| `--zbk-radio-transition-delay` | `0ms` | duration | Delay before radio transitions run. |
 | `--zbk-radio-opacity` | `1` | number | Opacity of the radio. |
 | `--zbk-radio-opacity-disabled` | `{opacity.70}` | number | Control opacity when disabled. |
 
@@ -1044,12 +1044,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-select-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
 | `--zbk-select-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
 | `--zbk-select-box-shadow-invalid` | `none` | shadow | Field shadow when the selection is invalid. |
-| `--zbk-select-cursor` | `pointer` | utility | Cursor over an enabled select. |
-| `--zbk-select-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled select. |
+| `--zbk-select-cursor` | `pointer` | cursor | Cursor over an enabled select. |
+| `--zbk-select-cursor-disabled` | `not-allowed` | cursor | Cursor over a disabled select. |
 | `--zbk-select-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
 | `--zbk-select-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
 | `--zbk-select-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
-| `--zbk-select-transition-delay` | `0` | duration | Delay before field transitions run. |
+| `--zbk-select-transition-delay` | `0ms` | duration | Delay before field transitions run. |
 | `--zbk-select-opacity` | `1` | number | Opacity of the field. |
 | `--zbk-select-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
@@ -1187,7 +1187,7 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-label-gap` | `{spacing.2xs}` | dimension | Space between the label and the field box. |
 | `--zbk-textarea-padding-inline` | `{spacing.sm}` | dimension | Inline (horizontal) padding of the field box. |
 | `--zbk-textarea-padding-block` | `{spacing.2xs}` | dimension | Block (vertical) padding of the field box. |
-| `--zbk-textarea-resize` | `vertical` | utility | CSS resize behavior of the field (vertical, horizontal, both, none). |
+| `--zbk-textarea-resize` | `vertical` | resize | CSS resize behavior of the field (vertical, horizontal, both, none). |
 | `--zbk-textarea-width` | `auto` | cssDimension | Width of the field box. |
 | `--zbk-textarea-min-width` | `0` | cssDimension | Minimum width of the field box. |
 | `--zbk-textarea-max-width` | `100%` | cssDimension | Maximum width of the field box. |
@@ -1200,12 +1200,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
 | `--zbk-textarea-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
 | `--zbk-textarea-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
-| `--zbk-textarea-cursor` | `text` | utility | Cursor over the editable field. |
-| `--zbk-textarea-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
+| `--zbk-textarea-cursor` | `text` | cursor | Cursor over the editable field. |
+| `--zbk-textarea-cursor-disabled` | `not-allowed` | cursor | Cursor over a disabled field. |
 | `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
 | `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
 | `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
-| `--zbk-textarea-transition-delay` | `0` | duration | Delay before field transitions run. |
+| `--zbk-textarea-transition-delay` | `0ms` | duration | Delay before field transitions run. |
 | `--zbk-textarea-opacity` | `1` | number | Opacity of the field. |
 | `--zbk-textarea-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
@@ -1328,14 +1328,14 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-thumb-border-width` | `{toggle.border-width}` | dimension | Border thickness of the thumb. |
 | `--zbk-toggle-thumb-border-style` | `{toggle.border-style}` | strokeStyle | Border style of the thumb. |
 | `--zbk-toggle-thumb-radius` | `50%` | cssDimension | Corner radius of the thumb (a circle by default). |
-| `--zbk-toggle-thumb-shadow` | `0 0 0 2px var(--zbk-app-canvas-muted)` | shadow | Default thumb shadow. |
+| `--zbk-toggle-thumb-shadow` | `0 0 0 2px var(--zbk-app-canvas-muted)` | cssShadow | Default thumb shadow. |
 | `--zbk-toggle-thumb-shadow-hover` | `{toggle.thumb-shadow}` | shadow | Thumb shadow when hovered. |
 | `--zbk-toggle-thumb-shadow-active` | `{toggle.thumb-shadow}` | shadow | Thumb shadow while pressed. |
 | `--zbk-toggle-thumb-shadow-checked` | `{toggle.thumb-shadow}` | shadow | Thumb shadow when the toggle is on. |
-| `--zbk-toggle-thumb-transform` | `none` | utility | Default thumb transform (travel is handled structurally). |
-| `--zbk-toggle-thumb-transform-hover` | `none` | utility | Thumb transform when hovered (e.g. a translateY lift). |
-| `--zbk-toggle-thumb-transform-active` | `none` | utility | Thumb transform while pressed (e.g. a press-down). |
-| `--zbk-toggle-thumb-transform-checked` | `none` | utility | Thumb transform when the toggle is on. |
+| `--zbk-toggle-thumb-transform` | `none` | transform | Default thumb transform (travel is handled structurally). |
+| `--zbk-toggle-thumb-transform-hover` | `none` | transform | Thumb transform when hovered (e.g. a translateY lift). |
+| `--zbk-toggle-thumb-transform-active` | `none` | transform | Thumb transform while pressed (e.g. a press-down). |
+| `--zbk-toggle-thumb-transform-checked` | `none` | transform | Thumb transform when the toggle is on. |
 | `--zbk-toggle-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-toggle-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-toggle-font-family` | `{font-family.interface}` | fontFamily | Font family for the toggle label. |
@@ -1350,12 +1350,12 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-toggle-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
 | `--zbk-toggle-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
 | `--zbk-toggle-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
-| `--zbk-toggle-cursor` | `pointer` | utility | Cursor when hovering an enabled toggle. |
-| `--zbk-toggle-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled toggle. |
+| `--zbk-toggle-cursor` | `pointer` | cursor | Cursor when hovering an enabled toggle. |
+| `--zbk-toggle-cursor-disabled` | `not-allowed` | cursor | Cursor when hovering a disabled toggle. |
 | `--zbk-toggle-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for toggle state transitions, including thumb travel. **(a11y)** |
 | `--zbk-toggle-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for toggle state transitions. |
 | `--zbk-toggle-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on track state changes. |
-| `--zbk-toggle-transition-delay` | `0` | duration | Delay before toggle transitions run. |
+| `--zbk-toggle-transition-delay` | `0ms` | duration | Delay before toggle transitions run. |
 | `--zbk-toggle-opacity` | `1` | number | Opacity of the toggle. |
 | `--zbk-toggle-opacity-disabled` | `{opacity.70}` | number | Track and thumb opacity when disabled. |
 
@@ -1477,7 +1477,7 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-tooltip-box-shadow` | `{elevation.sm}` | shadow | Bubble shadow. |
 | `--zbk-tooltip-z-index` | `{z-index.tooltip}` | number | Stacking order when the top-layer popover API is unavailable. |
 | `--zbk-tooltip-transition-duration` | `150ms` | duration | Show/hide transition duration. **(a11y)** |
-| `--zbk-tooltip-transition-timing-function` | `ease-out` | transitionTimingFunction | Show/hide transition timing function. |
+| `--zbk-tooltip-transition-timing-function` | `ease-out` | cssEasingFunction | Show/hide transition timing function. |
 | `--zbk-tooltip-show-delay` | `150ms` | duration | Delay before a hint tooltip shows on hover/focus. Read by the element at runtime. **(a11y)** |
 | `--zbk-tooltip-hide-grace` | `120ms` | duration | Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime. **(a11y)** |
 | `--zbk-tooltip-opacity` | `1` | number | Bubble opacity. |
@@ -1903,7 +1903,7 @@ Width/height sizing and top/right/bottom/left position-offset utilities bound to
 
 Sets the element's block size (height).
 
-Grammar: `height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `height-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Accessibility: Fixed heights can clip content when users enlarge text; prefer min-height or auto.
 - Prefer intrinsic sizing (auto, min-content, max-content) over fixed heights so content is never clipped when it grows or text is enlarged by the a11y dial.
@@ -1912,19 +1912,19 @@ Grammar: `height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 2
 
 Sets the element's minimum block size.
 
-Grammar: `min-height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `min-height-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 ### max-height
 
 Sets the element's maximum block size.
 
-Grammar: `max-height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `max-height-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 ### width
 
 Sets the element's inline size (width).
 
-Grammar: `width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `width-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Prefer intrinsic or percentage widths over fixed widths so layouts reflow; a fixed width can force horizontal scrolling at small viewports or large text.
 
@@ -1932,13 +1932,13 @@ Grammar: `width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 20
 
 Sets the element's minimum inline size.
 
-Grammar: `min-width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `min-width-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 ### max-width
 
 Sets the element's maximum inline size.
 
-Grammar: `max-width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `max-width-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - max-width on text containers improves readability; prefer the measure/prose utilities for body copy line length.
 
@@ -2069,6 +2069,15 @@ Defines: `prose`, `lede`.
 The prose context styles matching descendant elements; use it for long-form content rather than as an element-by-element utility.
 
 - Use .lede for the short introductory paragraph that summarizes or frames a page, article, or section.
+
+### prose-list
+
+Ordered and unordered list typography and spacing inside a .prose context.
+
+Defines: `prose`.
+The prose context styles matching descendant elements; use it for long-form content rather than as an element-by-element utility.
+
+- Use semantic ul/ol markup; list tokens keep typography and rhythm aligned with the surrounding prose.
 
 ## Text utilities
 

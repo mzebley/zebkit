@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { ALLOWED_TOKEN_TYPE_VALUES, ZEBKIT_EXTENSION_KEY } from '@definitions/dtcg';
 import { LAYER_ORDER } from '@definitions/layers';
+import { cssTokenValueError, type CssTokenValueType } from '@definitions/css-token-values';
 
 /**
  * Shared token typing used across Zebkit token builders and validators.
@@ -125,14 +126,19 @@ export function isColorValue(v: unknown): v is ColorValue {
   );
 }
 
-/** Parse Zebkit's supported DTCG curly-reference syntax, including terminal `$root`. */
+/**
+ * Parse DTCG curly-reference syntax, including one-segment paths, legal spaces,
+ * and terminal `$root`. DTCG names may contain any character except `.`, `{`,
+ * or `}`, and may not begin with `$`; CSS-safe naming is enforced only when a
+ * reference is projected to a Zebkit custom property.
+ */
 export function parseWholeValueAlias(value: unknown): string | undefined {
   if (typeof value !== 'string' || !/^\{[^{}]+\}$/.test(value)) return undefined;
   const segments = value.slice(1, -1).split('.');
   if (
-    segments.length < 2 ||
-    !segments.every((segment, index) =>
-      /^[A-Za-z0-9_-]+$/.test(segment) || (segment === '$root' && index === segments.length - 1)
+    segments.some((segment, index) =>
+      segment.length === 0 ||
+      (segment.startsWith('$') && !(segment === '$root' && index === segments.length - 1))
     )
   ) {
     return undefined;
@@ -324,12 +330,12 @@ export function serializeShadowValue(
 
 /**
  * DTCG duration value (2025.10): a `{value, unit}` pair with unit limited to
- * `ms`/`s`. Zebkit authors `ms`. A zero-magnitude duration serializes to the
- * bare `0` the CSS surface uses (`transition-delay: 0`), not `0ms`.
+ * `ms`/`s`. Zebkit authors `ms`, including the explicit `0ms` required by
+ * CSS time-valued properties.
  */
 export const DURATION_UNITS = ["ms", "s"] as const;
 export const durationValueSchema = z.object({
-  value: z.number().finite().nonnegative(),
+  value: z.number().finite(),
   unit: z.enum(DURATION_UNITS),
 }).strict();
 export type DurationValue = z.infer<typeof durationValueSchema>;
@@ -344,9 +350,9 @@ export function isDurationValue(v: unknown): v is DurationValue {
   );
 }
 
-/** Canonical CSS serialization for a duration; zero drops its unit (`0`, not `0ms`). */
+/** Canonical CSS serialization for a duration, preserving its DTCG unit. */
 export function serializeDurationValue(v: DurationValue): string {
-  return v.value === 0 ? "0" : `${v.value}${v.unit}`;
+  return `${v.value}${v.unit}`;
 }
 
 /**
@@ -354,7 +360,8 @@ export function serializeDurationValue(v: DurationValue): string {
  * `[x1, y1, x2, y2]`. Zebkit's easing curves author two-decimal coordinates
  * (`1.00`, `0.90`); the serializer pins that precision so the emitted
  * `cubic-bezier(...)` string is byte-identical (module-level self-checks guard
- * it). Keyword easings (`ease-out`) are `transitionTimingFunction`, not this.
+ * it). Other CSS easing functions (`ease-out`, `steps()`, `linear()`) use the
+ * predictable `cssEasingFunction` fallback type instead.
  */
 export const cubicBezierValueSchema = z.tuple([
   z.number().finite().min(0).max(1),
@@ -374,8 +381,34 @@ export function serializeCubicBezierValue(v: CubicBezierValue): string {
   return `cubic-bezier(${v.map((n) => n.toFixed(2)).join(", ")})`;
 }
 
-/** A token `$value` as its CSS string: structured dimensions/durations/colors/beziers/shadows serialize, the rest stringify. */
-export function tokenValueToString(v: unknown): string {
+const CSS_GENERIC_FONT_FAMILIES = new Set([
+  'serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui',
+  'ui-serif', 'ui-sans-serif', 'ui-monospace', 'ui-rounded', 'math', 'emoji', 'fangsong',
+]);
+
+/** Serialize a DTCG font-family list without losing individual family boundaries. */
+export function serializeFontFamilyValue(families: readonly string[]): string {
+  return families.map((family) => {
+    const trimmed = family.trim();
+    if (CSS_GENERIC_FONT_FAMILIES.has(trimmed.toLowerCase())) return trimmed.toLowerCase();
+    const escaped = family
+      .replace(/\\/g, '\\\\')
+      .replace(/"/g, '\\"')
+      .replace(/\r\n|\r|\n|\f/g, (character) =>
+        `\\${character === '\f' ? 'c' : character === '\r' ? 'd' : 'a'} `
+      );
+    return `"${escaped}"`;
+  }).join(', ');
+}
+
+/** A token `$value` as its CSS string: structured values and typed font-family arrays serialize, the rest stringify. */
+export function tokenValueToString(v: unknown, type?: AllowedTokenTypes): string {
+  if (type === 'fontFamily') {
+    if (typeof v === 'string' && !isWholeValueAlias(v)) return serializeFontFamilyValue([v]);
+    if (Array.isArray(v) && v.every((family) => typeof family === 'string')) {
+      return serializeFontFamilyValue(v);
+    }
+  }
   if (isDimensionValue(v)) return serializeDimensionValue(v);
   if (isDurationValue(v)) return serializeDurationValue(v);
   if (isColorValue(v)) return serializeColorValue(v);
@@ -467,9 +500,15 @@ export const tokenExtensionsSchema = z.object({
 }).passthrough();
 export type TokenExtensions = z.infer<typeof tokenExtensionsSchema>;
 
-const stringTokenValueSchema = z.string();
 const booleanTokenValueSchema = z.boolean();
 const numberTokenValueSchema = z.number().finite();
+
+function cssStringTokenValueSchema(type: CssTokenValueType): z.ZodType<string> {
+  return z.string().superRefine((value, ctx) => {
+    const error = cssTokenValueError(type, value);
+    if (error) ctx.addIssue({ code: z.ZodIssueCode.custom, message: error });
+  });
+}
 
 /** The exact named aliases defined by DTCG Format Module 2025.10 §8.4. */
 export const DTCG_2025_10_WEIGHT_ALIASES = [
@@ -534,13 +573,20 @@ export function tokenValueSchemaForType(type: AllowedTokenTypes): z.ZodTypeAny {
     case "shadow":
       return z.union([shadowValueSchema, z.array(z.union([shadowValueSchema, tokenReferenceValueSchema]))]);
     case "fontFamily":
-      return z.union([z.string(), z.array(z.string())]);
+      return z.union([z.string().min(1), z.array(z.string().min(1)).min(1)]);
     case "fontWeight":
       return fontWeightValueSchema;
     case "boolean":
       return booleanTokenValueSchema;
-    case "flex":
+    case "cssColor":
     case "cssDimension":
+    case "cssDuration":
+    case "cssFontFamily":
+    case "cssFontWeight":
+    case "cssEasingFunction":
+    case "cssNumber":
+    case "cssStrokeStyle":
+    case "cssShadow":
     case "display":
     case "cursor":
     case "fontStyle":
@@ -548,12 +594,12 @@ export function tokenValueSchemaForType(type: AllowedTokenTypes): z.ZodTypeAny {
     case "textTransform":
     case "textAlignment":
     case "transitionProperty":
-    case "transitionTimingFunction":
     case "transform":
-    case "utility":
     case "asset":
     case "content":
-      return stringTokenValueSchema;
+    case "flex":
+    case "resize":
+      return cssStringTokenValueSchema(type);
     case "strokeStyle":
       return strokeStyleValueSchema;
   }
@@ -583,7 +629,7 @@ export function validateTokenValue(
 export const tokenObjectSchema = z.object({
   $value: z.unknown(),
   $type: allowedTokenTypes,
-  $description: z.string(),
+  $description: z.string().min(1, "$description must not be empty"),
   $extensions: tokenExtensionsSchema.optional(),
   $deprecated: z.union([z.boolean(), z.string()]).optional(),
 }).superRefine((entry, ctx) => {
@@ -596,10 +642,11 @@ export const tokenObjectSchema = z.object({
     emptyColorPlaceholder: zbkExtension(entry)?.emptyColorPlaceholder === true,
   });
   if (!result.success) {
+    const detail = result.error.issues.map((issue) => issue.message).join('; ');
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ["$value"],
-      message: `value does not match $type '${entry.$type}'`,
+      message: `value does not match $type '${entry.$type}': ${detail}`,
     });
   }
 });
@@ -721,7 +768,7 @@ export type TokenGroupExtensions = z.infer<typeof tokenGroupExtensionsSchema>;
 export const fontSizeStepSchema = z.object({
   $value: z.union([z.string(), z.number(), dimensionValueSchema]).optional(),
   $type: z.literal('cssDimension'),
-  $description: z.string(),
+  $description: z.string().min(1, "$description must not be empty"),
   $extensions: tokenExtensionsSchema.optional(),
 });
 
@@ -752,7 +799,7 @@ export type TokenMap = Record<string, TokenInterface>;
 export const fontFamilyTokenObjectSchema = z.object({
   $value: z.union([z.string(), z.array(z.string())]),
   $type: z.literal("fontFamily"),
-  $description: z.string(),
+  $description: z.string().min(1, "$description must not be empty"),
   $extensions: tokenExtensionsSchema.optional(),
   $deprecated: z.union([z.boolean(), z.string()]).optional(),
 });

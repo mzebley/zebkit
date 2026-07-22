@@ -378,12 +378,12 @@ const tokens = {
   // Interaction behavior
   cursor: {
     $value: "text",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor over the editable field.",
   },
   "cursor-disabled": {
     $value: "not-allowed",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor over a disabled field.",
   },
 

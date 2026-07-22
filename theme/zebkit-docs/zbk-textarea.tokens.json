@@ -186,7 +186,7 @@
   },
   "resize": {
     "$value": "vertical",
-    "$type": "utility",
+    "$type": "resize",
     "$description": "CSS resize behavior of the field (vertical, horizontal, both, none)."
   },
   "width": {
@@ -251,12 +251,12 @@
   },
   "cursor": {
     "$value": "text",
-    "$type": "utility",
+    "$type": "cursor",
     "$description": "Cursor over the editable field."
   },
   "cursor-disabled": {
     "$value": "not-allowed",
-    "$type": "utility",
+    "$type": "cursor",
     "$description": "Cursor over a disabled field."
   },
   "transition-duration": {
@@ -280,7 +280,7 @@
     "$description": "CSS properties that animate on state changes."
   },
   "transition-delay": {
-    "$value": "0",
+    "$value": "0ms",
     "$type": "duration",
     "$description": "Delay before field transitions run."
   },

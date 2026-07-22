@@ -20,7 +20,8 @@ import {
   tokenScaleIndex,
   type AllowedTokenTypes,
 } from '../src/definitions/tokens';
-import { ALLOWED_TOKEN_TYPE_VALUES } from '../src/definitions/dtcg';
+import { ALLOWED_TOKEN_TYPE_VALUES, CSS_FALLBACK_TYPE_BY_DTCG_TYPE } from '../src/definitions/dtcg';
+import { areTokensTypesCompatible } from '../src/definitions/token-maps';
 import { fromDtcgDocument, type ModuleMeta } from '../src/scripts/tokens/dtcg-document';
 import { tokenForGroupRoot } from '../src/scripts/editor-schema-paths';
 import {
@@ -67,7 +68,16 @@ async function readModuleSnapshot(
   const { entries, meta } = fromDtcgDocument(doc as Record<string, unknown>, {
     mode: 'literal',
   });
-  return { entries: entries as unknown as TokenData, meta };
+  const tokenData = entries as unknown as TokenData;
+  for (const token of Object.values(tokenData)) {
+    const originalType = (
+      token.$extensions?.['dev.zebkit'] as { originalType?: unknown } | undefined
+    )?.originalType;
+    if (ALLOWED_TOKEN_TYPE_VALUES.includes(originalType as AllowedTokenTypes)) {
+      token.$type = originalType as AllowedTokenTypes;
+    }
+  }
+  return { entries: tokenData, meta };
 }
 
 type JsonSchema = Record<string, unknown>;
@@ -134,7 +144,7 @@ function zebkitExtensionsSchema(type: string, includeScale: boolean) {
         'Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable.',
     },
   };
-  if (type === 'fontFamily') {
+  if (type === 'fontFamily' || type === 'cssFontFamily') {
     vendorProperties.font = {
       type: 'object',
       description: 'Font-loading metadata for this family.',
@@ -214,13 +224,21 @@ function groupExtensionsSchema() {
 }
 
 function generateTokenDefinition(token: TokenObject): JsonSchema {
+  const fallbackType = CSS_FALLBACK_TYPE_BY_DTCG_TYPE[
+    token.$type as keyof typeof CSS_FALLBACK_TYPE_BY_DTCG_TYPE
+  ];
+  const valueSchemas = [
+    { $ref: `#/definitions/${token.$type}Value` },
+    ...(fallbackType ? [{ $ref: `#/definitions/${fallbackType}Value` }] : []),
+  ];
   const tokenProperties: Record<string, unknown> = {
-    $value: { $ref: `#/definitions/${token.$type}Value` },
-    $type: {
-      const: token.$type,
-    },
+    $value: valueSchemas.length === 1 ? valueSchemas[0] : { anyOf: valueSchemas },
+    $type: fallbackType
+      ? { type: 'string', enum: [token.$type, fallbackType] }
+      : { const: token.$type },
     $description: {
       type: 'string',
+      minLength: 1,
     },
     $deprecated: { $ref: '#/definitions/deprecated' },
     $extensions: zebkitExtensionsSchema(token.$type, tokenScaleIndex(token) != null),
@@ -232,6 +250,18 @@ function generateTokenDefinition(token: TokenObject): JsonSchema {
     required: ['$value'],
     additionalProperties: false,
     properties: tokenProperties,
+    ...(fallbackType ? {
+      allOf: [
+        {
+          if: { required: ['$type'], properties: { $type: { const: token.$type } } },
+          then: { properties: { $value: { $ref: `#/definitions/${token.$type}Value` } } },
+        },
+        {
+          if: { required: ['$type'], properties: { $type: { const: fallbackType } } },
+          then: { properties: { $value: { $ref: `#/definitions/${fallbackType}Value` } } },
+        },
+      ],
+    } : {}),
   };
 }
 
@@ -264,6 +294,10 @@ function generateValueDefinitions(
     const key = `${type}Value`;
     definitions[key] = AUTHORABLE_VALUE_SCHEMAS[type];
     if (refsByType[type]?.length) definitions[key].examples = refsByType[type];
+    const fallbackType = CSS_FALLBACK_TYPE_BY_DTCG_TYPE[
+      type as keyof typeof CSS_FALLBACK_TYPE_BY_DTCG_TYPE
+    ];
+    if (fallbackType) definitions[`${fallbackType}Value`] = AUTHORABLE_VALUE_SCHEMAS[fallbackType];
   }
 
   for (const token of Object.values(tokenData)) {
@@ -283,17 +317,13 @@ function generateTokenSchema(
 ): object {
   const definitions = generateValueDefinitions(tokenData, refsByType);
   definitions.deprecated = deprecatedSchema;
-  definitions.groupType = {
-    type: 'string',
-    enum: [...ALLOWED_TOKEN_TYPE_VALUES],
-  };
   definitions.groupExtensions = groupExtensionsSchema();
-  const groupMetadata = {
-    $type: { $ref: '#/definitions/groupType' },
-    $description: { type: 'string' },
+  const groupMetadata = (types: readonly AllowedTokenTypes[]) => ({
+    ...(types.length > 0 ? { $type: { type: 'string', enum: [...types] } } : {}),
+    $description: { type: 'string', minLength: 1 },
     $deprecated: { $ref: '#/definitions/deprecated' },
     $extensions: { $ref: '#/definitions/groupExtensions' },
-  };
+  });
   const entries = Object.fromEntries(
     Object.entries(tokenData).filter(
       ([name, entry]) =>
@@ -314,6 +344,16 @@ function generateTokenSchema(
   );
 
   const groupDefinitionName = (prefix: string) => `group:${prefix}`;
+  const compatibleGroupTypes = (prefix?: string): AllowedTokenTypes[] => {
+    const descendantTypes = new Set(
+      Object.entries(entries)
+        .filter(([name]) => !prefix || name === prefix || name.startsWith(`${prefix}-`))
+        .map(([, token]) => token.$type as AllowedTokenTypes)
+    );
+    return ALLOWED_TOKEN_TYPE_VALUES.filter((candidate) =>
+      [...descendantTypes].every((type) => areTokensTypesCompatible(candidate, type))
+    );
+  };
   const groupRef = (prefix: string) => ({
     $ref: `#/definitions/${groupDefinitionName(prefix)}`,
   });
@@ -327,7 +367,7 @@ function generateTokenSchema(
   };
 
   for (const prefix of groupPrefixes) {
-    const properties: Record<string, JsonSchema> = { ...groupMetadata };
+    const properties: Record<string, JsonSchema> = { ...groupMetadata(compatibleGroupTypes(prefix)) };
     const rootToken = tokenForGroupRoot(entries, prefix);
     if (rootToken) {
       properties.$root = generateTokenProperty(rootToken);
@@ -339,13 +379,12 @@ function generateTokenSchema(
     }
     definitions[groupDefinitionName(prefix)] = {
       type: 'object',
-      minProperties: 1,
       additionalProperties: false,
       properties,
     };
   }
 
-  const properties: Record<string, JsonSchema> = { ...groupMetadata };
+  const properties: Record<string, JsonSchema> = { ...groupMetadata(compatibleGroupTypes()) };
   for (const prefix of knownPrefixes) properties[prefix] = pathNode(prefix);
   if (entries.root) properties.$root = generateTokenProperty(entries.root);
 
@@ -366,17 +405,25 @@ function generateTokenSchema(
 function getTokenTypeSyntax(type: string): string | undefined {
   const syntaxMap: Record<string, string> = {
     'color': '<color>',
+    'cssColor': '<color>',
     'dimension': '<length>',
     'cssDimension': '<length-percentage>',
-    'fontFamily': '<family-name>',
-    'fontWeight': '<number>',
-    'number': '<number>',
-    'strokeStyle': '<line-style>',
-    'shadow': '<shadow>',
     'duration': '<time>',
+    'cssDuration': '<time>',
+    'fontFamily': '<family-name>',
+    'cssFontFamily': '<family-name>',
+    'fontWeight': '<number>',
+    'cssFontWeight': '<font-weight-absolute>',
+    'number': '<number>',
+    'cssNumber': '<number>',
+    'strokeStyle': '<line-style>',
+    'cssStrokeStyle': '<line-style>',
+    'shadow': '<shadow>',
+    'cssShadow': '<shadow>',
     'cubicBezier': '<easing-function>',
+    'cssEasingFunction': '<easing-function>',
     'transitionProperty': '<single-transition-property>#',
-    'transitionTimingFunction': '<easing-function>',
+    'resize': 'none | both | horizontal | vertical | block | inline',
   };
 
   return syntaxMap[type];

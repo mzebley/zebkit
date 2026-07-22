@@ -60,7 +60,7 @@ const tokens = {
       "Color of H3 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-style": {
-    $value: `none`,
+    $value: `normal`,
     $type: "fontStyle",
     $description:
       "Font style for H3 elements with .prose applied directly or that are a child of a .prose container.",

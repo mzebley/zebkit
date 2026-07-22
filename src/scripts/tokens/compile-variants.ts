@@ -13,6 +13,7 @@ import type { TokenInterface } from '@definitions/tokens';
 import type { VariantConfig } from '@definitions/token-variants';
 import type { ComponentsFilter } from '../components-config';
 import { convertDotNotation } from './token-converter';
+import { buildTokenReferenceLookup } from './token-references';
 import { computeEmissionClosure } from './build-helpers';
 import { ZEBKIT_PREFIX } from '@config';
 import {
@@ -545,6 +546,7 @@ function buildVariantOutputs(
   const inlineCssBlocks: string[] = [];
   const extraStylesheetSet = new Set<string>();
   const referenceErrors: string[] = [];
+  const referenceLookup = buildTokenReferenceLookup(tokens);
 
   for (const [component, variants] of Object.entries(registry)) {
     const tokenKey = `${ZEBKIT_PREFIX}-${component}`;
@@ -567,7 +569,9 @@ function buildVariantOutputs(
                 ZEBKIT_PREFIX,
                 tokens,
                 false,
-                referenceErrors
+                referenceErrors,
+                referenceLookup,
+                component
               )
             : String(value);
         declarations.push(`--${tokenKey}-${key}: ${resolvedValue};`);
@@ -595,9 +599,11 @@ function buildVariantOutputs(
                 ZEBKIT_PREFIX,
                 tokens,
                 false,
-                referenceErrors
+                referenceErrors,
+                referenceLookup,
+                component
               )
-            : tokenValueToString(raw);
+            : tokenValueToString(raw, sourceToken.$type);
         declarations.push(`--${tokenKey}-${key}: ${resolvedValue};`);
       }
 

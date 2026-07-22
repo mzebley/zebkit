@@ -20,6 +20,7 @@ import {
   resolveSourceThemeOverridePath,
 } from '../src/scripts/theme-presets.js';
 import { extractZbkTokens } from '../src/scripts/prune/content-scan.js';
+import { deriveDirectTokenCssDestinations } from '../src/scripts/tokens/css-token-destinations.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DEFAULTS_DIR = path.join(REPO_ROOT, 'dist', 'cli', 'defaults');
@@ -118,6 +119,13 @@ async function assertArtifactParity(): Promise<void> {
       );
       const snapshotDir =
         theme === DEFAULT_THEME_NAME ? DEFAULTS_DIR : path.join(PRESETS_DIR, theme);
+      if (theme === DEFAULT_THEME_NAME) {
+        assertEqual(
+          await fs.readJson(path.join(DEFAULTS_DIR, 'css-properties.json')),
+          await deriveDirectTokenCssDestinations(source.tokens),
+          'css-properties.json does not match shipped CSS bindings'
+        );
+      }
       const { manifest, documents } = await readSnapshot(snapshotDir);
       const sourceDocuments = toDtcgDocuments({
         tokens: source.tokens,
@@ -203,6 +211,7 @@ async function assertNoStaleArtifacts(): Promise<void> {
     'manifest.json',
     'components.json',
     'component-tokens.json',
+    'css-properties.json',
     'variants.json',
     ...defaults.manifest.modules.map((module) => module.file),
   ]);

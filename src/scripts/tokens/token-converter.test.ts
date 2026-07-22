@@ -10,7 +10,19 @@ import {
   type ShadowValue,
   type TokenInterface,
 } from '@definitions/tokens';
-import { convertTokensToCssVars } from './token-converter';
+import { convertDotNotation, convertTokensToCssVars } from './token-converter';
+
+describe('convertDotNotation — bypass projection', () => {
+  it('preserves unchecked references while qualifying local references when context exists', () => {
+    expect(convertDotNotation('{external.value}', 'color', 'zbk', {}, true)).toBe(
+      'var(--zbk-external-value)'
+    );
+    expect(convertDotNotation('{base}', 'color', 'zbk', {}, true)).toBe('var(--zbk-base)');
+    expect(convertDotNotation('{base}', 'color', 'zbk', {}, true, undefined, undefined, 'test')).toBe(
+      'var(--zbk-test-base)'
+    );
+  });
+});
 
 describe('convertTokensToCssVars — selector scoping (rootSelector)', () => {
   const tokens = {
@@ -87,15 +99,29 @@ describe('convertTokensToCssVars — font tokens', () => {
 
   it('appends the canonical fallback stack to a concrete value', () => {
     const { css } = convertTokensToCssVars(
-      fontTokens({ $value: '"Inter"', $type: 'fontFamily', $extensions: { "dev.zebkit": { font: { source: 'system', fallback: 'sans' } } }, })
+      fontTokens({ $value: 'Inter', $type: 'fontFamily', $extensions: { "dev.zebkit": { font: { source: 'system', fallback: 'sans' } } }, })
     );
     expect(css).toContain('--zbk-font-family-primary: "Inter", ui-sans-serif, system-ui');
+  });
+
+  it('serializes DTCG font-family arrays without losing family boundaries', () => {
+    const { css } = convertTokensToCssVars(
+      fontTokens({
+        $value: ['Acme, Inc', 'Say "Hello"', 'Back\\Slash', 'serif'],
+        $type: 'fontFamily',
+        $extensions: { 'dev.zebkit': { font: { source: 'system' } } },
+      })
+    );
+
+    expect(css).toContain(
+      '--zbk-font-family-primary: "Acme, Inc", "Say \\"Hello\\"", "Back\\\\Slash", serif;'
+    );
   });
 
   it('does not append a fallback to a reference value', () => {
     const { css } = convertTokensToCssVars({
       'zbk-font-family': {
-        primary: { $value: '"Inter"', $type: 'fontFamily', $extensions: { "dev.zebkit": { font: { source: 'system' } } } },
+        primary: { $value: 'Inter', $type: 'fontFamily', $extensions: { "dev.zebkit": { font: { source: 'system' } } } },
         body: {
           $value: '{font-family.primary}',
           $type: 'fontFamily',
@@ -112,7 +138,7 @@ describe('convertTokensToCssVars — font tokens', () => {
     const result = convertTokensToCssVars(
       fontTokens({
         $value: 'ui-sans-serif, system-ui, sans-serif',
-        $type: 'fontFamily',
+        $type: 'cssFontFamily',
         $extensions: { "dev.zebkit": { font: { source: 'system' } } },
       })
     );
@@ -124,7 +150,7 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('google variable range builds a wght@min..max css2 URL (import strategy)', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        $value: '"Inter"',
+        $value: 'Inter',
         $type: 'fontFamily',
         $extensions: { "dev.zebkit": { font: { source: 'google', weights: '200..800' } } },
       })
@@ -137,7 +163,7 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('google static array builds a semicolon-joined wght list', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        $value: '"Fira Code"',
+        $value: 'Fira Code',
         $type: 'fontFamily',
         $extensions: { "dev.zebkit": { font: { source: 'google', weights: [400, 500, 700] } } },
       })
@@ -148,7 +174,7 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('google italic composes the ital axis combinatorially with weights', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        $value: '"Inter"',
+        $value: 'Inter',
         $type: 'fontFamily',
         $extensions: { "dev.zebkit": { font: { source: 'google', weights: [400, 700], styles: ['normal', 'italic'] } } },
       })
@@ -159,7 +185,7 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('link strategy emits no @import and populates fontHead', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        $value: '"Inter"',
+        $value: 'Inter',
         $type: 'fontFamily',
         $extensions: { "dev.zebkit": { font: { source: 'google', weights: '200..800' } } },
       }),
@@ -174,7 +200,7 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('local source emits @font-face, resolving bare src against assetFilePath', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        $value: '"Brand Sans"',
+        $value: 'Brand Sans',
         $type: 'fontFamily',
         $extensions: { "dev.zebkit": { font: { source: 'local', faces: [{ src: 'BrandSans.woff2', weight: '100 900', style: 'normal' }] } } },
       }),
@@ -189,7 +215,7 @@ describe('convertTokensToCssVars — font tokens', () => {
   it('local source uses verbatim src for absolute/remote URLs', () => {
     const result = convertTokensToCssVars(
       fontTokens({
-        $value: '"Brand Sans"',
+        $value: 'Brand Sans',
         $type: 'fontFamily',
         $extensions: { "dev.zebkit": { font: { source: 'local', faces: [{ src: 'https://cdn.example/BrandSans.woff2' }] } } },
       }),
@@ -431,7 +457,7 @@ describe('serializeShadowValue — DTCG shadow serialization', () => {
 describe('serializeDurationValue / serializeCubicBezierValue — DTCG transition split', () => {
   it('serializes durations, dropping the unit only at zero', () => {
     expect(serializeDurationValue({ value: 325, unit: 'ms' })).toBe('325ms');
-    expect(serializeDurationValue({ value: 0, unit: 'ms' })).toBe('0');
+    expect(serializeDurationValue({ value: 0, unit: 'ms' })).toBe('0ms');
     expect(serializeDurationValue({ value: 2, unit: 's' })).toBe('2s');
   });
 

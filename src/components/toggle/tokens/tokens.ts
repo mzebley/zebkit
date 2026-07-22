@@ -277,22 +277,22 @@ const tokens = {
   },
   "thumb-transform": {
     $value: "none",
-    $type: "utility",
+    $type: "transform",
     $description: "Default thumb transform (travel is handled structurally).",
   },
   "thumb-transform-hover": {
     $value: "none",
-    $type: "utility",
+    $type: "transform",
     $description: "Thumb transform when hovered (e.g. a translateY lift).",
   },
   "thumb-transform-active": {
     $value: "none",
-    $type: "utility",
+    $type: "transform",
     $description: "Thumb transform while pressed (e.g. a press-down).",
   },
   "thumb-transform-checked": {
     $value: "none",
-    $type: "utility",
+    $type: "transform",
     $description: "Thumb transform when the toggle is on.",
   },
 
@@ -375,12 +375,12 @@ const tokens = {
   // Interaction behavior
   cursor: {
     $value: "pointer",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor when hovering an enabled toggle.",
   },
   "cursor-disabled": {
     $value: "not-allowed",
-    $type: "utility",
+    $type: "cursor",
     $description: "Cursor when hovering a disabled toggle.",
   },
 
