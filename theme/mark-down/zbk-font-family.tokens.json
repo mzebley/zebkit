@@ -1,46 +1,69 @@
 {
   "primary": {
-    "value": "\"Puritan\"",
-    "description": "Primary font family for use in the system. Usually used for body content and interface items.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "weights": [400, 700]
+    "$value": "Puritan",
+    "$description": "Primary font family for use in the system. Usually used for body content and interface items.",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "weights": [
+            400,
+            700
+          ]
+        }
+      }
+    }
   },
   "alt": {
-    "value": "\"Special Gothic Condensed One\"",
-    "description": "Alternate font family for use in the system. Primarily used for headings.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "weights": [400]
+    "$value": "Special Gothic Condensed One",
+    "$description": "Alternate font family for use in the system. Primarily used for headings.",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "weights": [
+            400
+          ]
+        }
+      }
+    }
   },
   "monospace": {
-    "value": "\"Inconsolata\"",
-    "description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "mono",
-    "weights": "400"
+    "$value": "Inconsolata",
+    "$description": "Monospaced font family for use in the system. Primarily used for displaying code or for accessibility.",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "mono",
+          "weights": "400"
+        }
+      }
+    }
   },
   "interface": {
-    "value": "{font-family.primary}",
-    "description": "Font family used for things like buttons or input fields.",
-    "type": "fontFamily"
+    "$value": "{font-family.primary}",
+    "$description": "Font family used for things like buttons or input fields.",
+    "$type": "fontFamily"
   },
   "heading": {
-    "value": "{font-family.primary}",
-    "description": "Font family used for heading elements.",
-    "type": "fontFamily"
+    "$value": "{font-family.primary}",
+    "$description": "Font family used for heading elements.",
+    "$type": "fontFamily"
   },
   "body": {
-    "value": "{font-family.primary}",
-    "description": "Font family used for <p>, <li>, etc.",
-    "type": "fontFamily"
+    "$value": "{font-family.primary}",
+    "$description": "Font family used for <p>, <li>, etc.",
+    "$type": "fontFamily"
   },
   "code": {
-    "value": "{font-family.monospace}",
-    "description": "Font family used within <code> blocks",
-    "type": "fontFamily"
+    "$value": "{font-family.monospace}",
+    "$description": "Font family used within <code> blocks",
+    "$type": "fontFamily"
   }
 }

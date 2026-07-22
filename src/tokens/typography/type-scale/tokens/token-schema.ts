@@ -1,25 +1,19 @@
 import { z } from "zod";
-import { settingTokenSchema, rootFontSizeStepSchema } from "@definitions/tokens";
+import { fontSizeStepSchema } from "@definitions/tokens";
 
+// The fluid scale controls (viewport anchors, base sizes, ratios) are group-level
+// metadata under the module's `extensions` export — build-time only, never tokens.
 export const tokenSchema = z.object({
-  // Fluid scale controls (build-time only — never emitted as CSS vars).
-  // The only literals in the type system; the named steps derive from these.
-  "min-viewport": settingTokenSchema,
-  "max-viewport": settingTokenSchema,
-  "min-base": settingTokenSchema,
-  "max-base": settingTokenSchema,
-  "min-ratio": settingTokenSchema,
-  "max-ratio": settingTokenSchema,
   // Named steps. `md` is the base (index 0); negative indices step down, positive up.
-  "3xs": rootFontSizeStepSchema,
-  "2xs": rootFontSizeStepSchema,
-  xs: rootFontSizeStepSchema,
-  sm: rootFontSizeStepSchema,
-  md: rootFontSizeStepSchema,
-  lg: rootFontSizeStepSchema,
-  xl: rootFontSizeStepSchema,
-  "2xl": rootFontSizeStepSchema,
-  "3xl": rootFontSizeStepSchema,
-  "4xl": rootFontSizeStepSchema,
-  "5xl": rootFontSizeStepSchema,
+  "3xs": fontSizeStepSchema,
+  "2xs": fontSizeStepSchema,
+  xs: fontSizeStepSchema,
+  sm: fontSizeStepSchema,
+  md: fontSizeStepSchema,
+  lg: fontSizeStepSchema,
+  xl: fontSizeStepSchema,
+  "2xl": fontSizeStepSchema,
+  "3xl": fontSizeStepSchema,
+  "4xl": fontSizeStepSchema,
+  "5xl": fontSizeStepSchema,
 });

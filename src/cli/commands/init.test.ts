@@ -68,9 +68,8 @@ describe('init command', () => {
     }
     if (target === '/pkg/dist/cli/presets/dynamowaves/zbk-button.json') {
       return {
-        _key: 'zbk-button',
-        _layer: 'components',
-        canvas: { value: '#fff', type: 'color' },
+        $extensions: { 'dev.zebkit': { layer: 'components' } },
+        canvas: { $value: '#fff', $type: 'color' },
       };
     }
     if (target === '/pkg/dist/cli/defaults/manifest.json') {
@@ -112,7 +111,9 @@ describe('init command', () => {
     expect(mockEnsureDir).toHaveBeenCalledWith('/workspace/project/tokens');
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/tokens/zbk-button.tokens.json',
-      { canvas: { value: '#fff', type: 'color' } },
+      {
+        canvas: { $value: '#fff', $type: 'color' },
+      },
       { spaces: 2 }
     );
 
@@ -137,7 +138,7 @@ describe('init command', () => {
     expect(mockWriteJson).toHaveBeenCalledWith(
       '/workspace/project/.zebkit/pull-state.json',
       expect.objectContaining({
-        stateVersion: 1,
+        stateVersion: 2,
         basePreset: 'dynamowaves',
         modules: expect.objectContaining({
           'zbk-button': expect.objectContaining({ file: 'zbk-button.tokens.json' }),

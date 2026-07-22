@@ -84,7 +84,7 @@ export async function gatherZebkitFiles(options?: GatherOptions) {
         // manifest/variants/components are pipeline snapshots and
         // component-tokens.json is the component-consumed-vars list for prune —
         // none of them is a token module.
-        ignore: ['manifest.json', 'variants.json', 'components.json', 'component-tokens.json'],
+        ignore: ['manifest.json', 'variants.json', 'components.json', 'component-tokens.json', 'css-properties.json'],
       });
       const excludedModuleKeys = new Set(
         [...excluded].map((component) => `zbk-${component}`)

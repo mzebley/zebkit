@@ -5,12 +5,57 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "zIndexValue": {
-      "type": [
-        "string",
-        "number"
+    "numberValue": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{z-index.auto}"
+          ]
+        }
       ],
       "examples": [
+        "{a11y.spacing-modifier}",
+        "{a11y.spacing-text-coupling}",
+        "{a11y.line-height-modifier}",
+        "{a11y.letter-spacing-modifier}",
+        "{a11y.fallback-font-size-modifier}",
+        "{a11y.transition-duration-modifier}",
+        "{opacity.0}",
+        "{opacity.5}",
+        "{opacity.10}",
+        "{opacity.15}",
+        "{opacity.20}",
+        "{opacity.25}",
+        "{opacity.30}",
+        "{opacity.40}",
+        "{opacity.50}",
+        "{opacity.60}",
+        "{opacity.70}",
+        "{opacity.75}",
+        "{opacity.80}",
+        "{opacity.85}",
+        "{opacity.90}",
+        "{opacity.95}",
+        "{opacity.100}",
+        "{h1.line-height}",
+        "{h2.line-height}",
+        "{h3.line-height}",
+        "{h4.line-height}",
+        "{h5.line-height}",
+        "{h6.line-height}",
+        "{lede.line-height}",
+        "{list.line-height}",
+        "{p.line-height}",
+        "{line-height.1}",
+        "{line-height.2}",
+        "{line-height.3}",
+        "{line-height.4}",
+        "{line-height.5}",
         "{z-index.0}",
         "{z-index.10}",
         "{z-index.20}",
@@ -22,7 +67,6 @@
         "{z-index.80}",
         "{z-index.90}",
         "{z-index.100}",
-        "{z-index.auto}",
         "{z-index.dropdown}",
         "{z-index.sticky}",
         "{z-index.fixed}",
@@ -30,618 +74,545 @@
         "{z-index.modal}",
         "{z-index.popover}",
         "{z-index.tooltip}",
-        "{tooltip.z-index}"
+        "{button.line-height}",
+        "{button.opacity}",
+        "{button.opacity-loading}",
+        "{checkbox.line-height}",
+        "{checkbox.opacity}",
+        "{checkbox.opacity-disabled}",
+        "{input.line-height}",
+        "{input.opacity}",
+        "{input.opacity-disabled}",
+        "{pagination.line-height}",
+        "{radio.line-height}",
+        "{radio.opacity}",
+        "{radio.opacity-disabled}",
+        "{select.line-height}",
+        "{select.opacity}",
+        "{select.opacity-disabled}",
+        "{textarea.field-line-height}",
+        "{textarea.opacity}",
+        "{textarea.opacity-disabled}",
+        "{toggle.line-height}",
+        "{toggle.opacity}",
+        "{toggle.opacity-disabled}",
+        "{tooltip.line-height}",
+        "{tooltip.z-index}",
+        "{tooltip.opacity}"
       ]
+    },
+    "cssNumberValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{z-index.auto}"
+      ]
+    },
+    "numberToken": {
+      "type": "object",
+      "description": "Base stacking level.",
+      "required": [
+        "$value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/numberValue"
+            },
+            {
+              "$ref": "#/definitions/cssNumberValue"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "number"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/numberValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssNumber"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssNumberValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "cssNumberToken": {
+      "type": "object",
+      "description": "Auto z-index, lets browser determine stacking.",
+      "required": [
+        "$value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "$ref": "#/definitions/cssNumberValue"
+        },
+        "$type": {
+          "const": "cssNumber"
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:modal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "backdrop": {
+          "description": "Semantic z-index for modal backdrops/overlays.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
+            }
+          ]
+        }
+      }
     }
   },
   "properties": {
     "0": {
-      "type": "object",
       "description": "Base stacking level.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "10": {
-      "type": "object",
       "description": "Low elevation stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "20": {
-      "type": "object",
       "description": "Slight elevation stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "30": {
-      "type": "object",
       "description": "Medium-low elevation stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "40": {
-      "type": "object",
       "description": "Medium elevation stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "50": {
-      "type": "object",
       "description": "Medium-high elevation stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "60": {
-      "type": "object",
       "description": "High elevation stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "70": {
-      "type": "object",
       "description": "Higher elevation stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "80": {
-      "type": "object",
       "description": "Very high elevation stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "90": {
-      "type": "object",
       "description": "Near-top elevation stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "100": {
-      "type": "object",
       "description": "Top-level elevation stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
+    },
+    "$type": {
+      "type": "string",
+      "enum": [
+        "number",
+        "cssNumber"
+      ]
+    },
+    "$description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
     },
     "auto": {
-      "type": "object",
       "description": "Auto z-index, lets browser determine stacking.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssNumberToken"
         }
-      }
+      ]
     },
     "dropdown": {
-      "type": "object",
       "description": "Semantic z-index for dropdown menus.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "sticky": {
-      "type": "object",
       "description": "Semantic z-index for sticky positioned elements.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "fixed": {
-      "type": "object",
       "description": "Semantic z-index for fixed positioned elements.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
-    },
-    "modal-backdrop": {
-      "type": "object",
-      "description": "Semantic z-index for modal backdrops/overlays.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
+      ]
     },
     "modal": {
-      "type": "object",
-      "description": "Semantic z-index for modal dialogs.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+      "anyOf": [
+        {
+          "description": "Semantic z-index for modal dialogs.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "$ref": "#/definitions/group:modal"
         }
-      }
+      ]
+    },
+    "modal-backdrop": {
+      "description": "Semantic z-index for modal backdrops/overlays.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
     },
     "popover": {
-      "type": "object",
       "description": "Semantic z-index for popovers.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "tooltip": {
-      "type": "object",
       "description": "Semantic z-index for tooltips (highest).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
-        },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     }
   }
 }

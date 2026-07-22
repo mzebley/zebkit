@@ -1,12 +1,18 @@
 import chalk from "chalk";
 import { ZEBKIT_PREFIX } from "@config";
-import type { TokenInterface, TokenObject } from "@definitions/tokens";
+import { groupScale, tokenValueToString } from "@definitions/tokens";
+import type {
+  DimensionValue,
+  TokenGroupExtensions,
+  TokenInterface,
+  TokenObject,
+} from "@definitions/tokens";
 
 /**
  * Resolves the spacing scale into emittable tokens — the spacing counterpart to
  * `resolveTypeScale`.
  *
- * Each spacing primitive (`type: "rootSize"`) carries its size at the MIN (mobile) viewport
+ * Each spacing primitive carries its size at the MIN (mobile) viewport
  * anchor as `value` — a guaranteed floor that never shrinks below what was authored; this pass
  * derives the max-anchor size (`value × growth`) and fits a fluid `clamp()` across the anchors
  * shared with the font scale. `growth` is per-token: a continuous log curve (see `curveGrowth`)
@@ -21,13 +27,19 @@ import type { TokenInterface, TokenObject } from "@definitions/tokens";
  *
  * Precision px tokens skip the viewport interpolation (fluidizing a 1px hairline is nonsense)
  * but still get the density + coupling multiplier — every spacing token, rem or px, honors the
- * runtime a11y dials. Only `0` is emitted exact (scaling zero is pointless). Semantic spacing
- * aliases are `type: "spacing"` with `{…}` references and pass through untouched — they resolve
- * to the primitive var, which already carries the fluid + coupling behavior.
+ * runtime a11y dials. Only `0` is emitted exact (scaling zero is pointless).
  *
- * Viewport anchors are read from the font-size module so type and space share one
- * responsive rhythm; run this BEFORE `resolveTypeScale` strips those settings (or it falls
- * back to the same defaults). Runs on a copy so exported token artifacts keep their
+ * What resolves vs. passes through is decided by VALUE SHAPE, not `$type` (the D5
+ * collapse typed the whole family `dimension`): any concrete value — a structured
+ * `{value, unit}` floor or a raw px/rem string substituted by a theme override —
+ * is a scale floor and resolves; `{…}` references are semantic aliases and pass
+ * through untouched, landing on the primitive var that already carries the fluid +
+ * coupling behavior. Resolved entries re-emit as `cssDimension` (their values are
+ * calc()/clamp() expressions).
+ *
+ * Viewport anchors are read from the font-size group's `$extensions["dev.zebkit"].scale`
+ * so type and space share one responsive rhythm; `max-scale` comes from the spacing
+ * group's scale metadata. Runs on a copy so exported token artifacts keep their
  * authorable form.
  */
 
@@ -61,6 +73,8 @@ export type SpaceScaleMode = "fluid" | "static";
 export interface ResolveSpaceScaleOptions {
   /** "fluid" (default) generates clamps; "static" drops the viewport interpolation. */
   mode?: SpaceScaleMode;
+  /** Per-module group `$extensions` (viewport anchors on the font-size group, `max-scale` on spacing). */
+  groupExtensions?: Record<string, TokenGroupExtensions>;
 }
 
 interface SpaceControls {
@@ -73,19 +87,21 @@ function r(n: number): number {
   return Math.round(n * 10000) / 10000;
 }
 
-function toPx(value: string | number): number {
+function toPx(value: string | number | DimensionValue): number {
   if (typeof value === "number") return value;
-  const v = value.trim();
+  const v = tokenValueToString(value).trim();
   if (v.endsWith("rem")) return parseFloat(v) * ROOT_PX;
   return parseFloat(v);
 }
 
-function readControls(tokens: Record<string, TokenInterface>): SpaceControls {
-  const font = tokens[FONT_SIZE_KEY];
-  const spacing = tokens[SPACING_KEY];
-  const minVp = font?.["min-viewport"]?.value;
-  const maxVp = font?.["max-viewport"]?.value;
-  const maxScale = spacing?.["max-scale"]?.value;
+function readControls(
+  groupExtensions: Record<string, TokenGroupExtensions> | undefined
+): SpaceControls {
+  const fontScale = groupScale(groupExtensions?.[FONT_SIZE_KEY]);
+  const spacingScale = groupScale(groupExtensions?.[SPACING_KEY]);
+  const minVp = fontScale?.["min-viewport"];
+  const maxVp = fontScale?.["max-viewport"];
+  const maxScale = spacingScale?.["max-scale"];
 
   return {
     minViewportPx: minVp != null ? toPx(minVp) : DEFAULT_MIN_VIEWPORT_PX,
@@ -152,16 +168,16 @@ function buildFluidValue(
   return `clamp(calc(${r(lo)}rem${m}), calc((${preferred})${m}), calc(${r(hi)}rem${m}))`;
 }
 
-/** Resolves a single rootSize primitive's value (rem → fluid; px/0 → exact). */
+/** Resolves a single scale floor's value (rem → fluid; px/0 → exact). */
 function resolveValue(
-  raw: string | number,
+  raw: string | number | DimensionValue,
   c: SpaceControls,
   mode: SpaceScaleMode,
   growthOverride?: number
 ): string {
-  if (typeof raw === "string" && raw.trim().startsWith("{")) return String(raw);
-
-  const v = String(raw).trim();
+  // Structured floors serialize to their canonical string first; from there the
+  // px/rem/zero handling below is identical to the raw-string path.
+  const v = tokenValueToString(raw).trim();
   if (v === "0" || v === "0px") return "0";
   // Precision/non-rem values skip the viewport interpolation — fluidizing a 1px hairline
   // is nonsense — but they STILL get the a11y multiplier. Every spacing token (rem or px)
@@ -190,7 +206,7 @@ export function resolveSpaceScale(
   const module = tokens[SPACING_KEY];
   if (!module) return tokens;
 
-  const controls = readControls(tokens);
+  const controls = readControls(options.groupExtensions);
   if (!Number.isFinite(controls.maxScale) || controls.maxScale <= 0) {
     console.warn(
       chalk.yellow(
@@ -202,10 +218,14 @@ export function resolveSpaceScale(
 
   const resolvedModule: TokenInterface = {};
   for (const [name, entry] of Object.entries(module)) {
-    // Strip the build-time control — it must not become a CSS variable.
-    if (name === "max-scale") continue;
-
-    if (!entry || entry.type !== "rootSize" || !("value" in entry)) {
+    // Concrete values (structured floors, or raw strings substituted by theme
+    // overrides) are scale floors; `{…}` references are semantic aliases.
+    const isFloor =
+      entry &&
+      "$value" in entry &&
+      entry.$value != null &&
+      !(typeof entry.$value === "string" && entry.$value.trim().startsWith("{"));
+    if (!isFloor) {
       resolvedModule[name] = entry;
       continue;
     }
@@ -215,15 +235,15 @@ export function resolveSpaceScale(
     // consumed here — it is not re-emitted, so it never leaks to a CSS variable.
     const growthOverride = (entry as { growth?: number }).growth;
     const value = resolveValue(
-      entry.value as string | number,
+      entry.$value as string | number | DimensionValue,
       controls,
       mode,
       growthOverride
     );
     resolvedModule[name] = {
-      value,
-      type: "rootSize",
-      description: entry.description,
+      $value: value,
+      $type: "cssDimension",
+      $description: entry.$description,
     } as TokenObject;
   }
 

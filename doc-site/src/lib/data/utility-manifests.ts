@@ -102,7 +102,7 @@ if (duplicateKeys.length) {
   throw new Error(`Duplicate utility manifest keys: ${[...new Set(duplicateKeys)].join(', ')}`);
 }
 
-type TokenEntry = { type: string };
+type TokenEntry = { $type: string };
 
 /** Values derived from the family's bound token group, filtered by allowed types. */
 function tokenGroupValues(family: ManifestFamily): string[] {
@@ -111,7 +111,7 @@ function tokenGroupValues(family: ManifestFamily): string[] {
   if (!group) return [];
   let keys = Object.keys(group);
   const types = family.tokens.types;
-  if (types && types.length) keys = keys.filter((k) => types.includes(group[k].type));
+  if (types && types.length) keys = keys.filter((k) => types.includes(group[k].$type));
   return keys;
 }
 

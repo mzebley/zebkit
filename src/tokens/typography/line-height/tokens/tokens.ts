@@ -1,42 +1,47 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
+import { ZEBKIT_PREFIX } from "@config";
 
 export const key = "line-height";
 export const layer: LayerName = "theme";
-export type LineHeightTokens = z.infer<typeof tokenSchema>;
+
+// Line heights are unitless (DTCG `number`, Phase 2e): the factor form inherits
+// the multiplier rather than a computed length, avoiding compounding. Each entry
+// names the reduced-motion/readability modifier explicitly — the generic
+// `number` type no longer identifies it (the letter-spacing precedent).
+const a11y = `--${ZEBKIT_PREFIX}-a11y-line-height-modifier`;
 
 const tokens = {
   1: {
-    value: `100%`,
-    type: "lineHeight",
-    description: "Smallest line height.",
-    a11y: true,
+    $value: 1,
+    $type: "number",
+    $description: "Smallest line height.",
+    $extensions: { "dev.zebkit": { a11y } },
   },
   2: {
-    value: `125%`,
-    type: "lineHeight",
-    description: "Smaller line height.",
-    a11y: true,
+    $value: 1.25,
+    $type: "number",
+    $description: "Smaller line height.",
+    $extensions: { "dev.zebkit": { a11y } },
   },
   3: {
-    value: `150%`,
-    type: "lineHeight",
-    description: "Base line height.",
-    a11y: true,
+    $value: 1.5,
+    $type: "number",
+    $description: "Base line height.",
+    $extensions: { "dev.zebkit": { a11y } },
   },
   4: {
-    value: `180%`,
-    type: "lineHeight",
-    description: "Larger line height.",
-    a11y: true,
+    $value: 1.8,
+    $type: "number",
+    $description: "Larger line height.",
+    $extensions: { "dev.zebkit": { a11y } },
   },
   5: {
-    value: `200%`,
-    type: "lineHeight",
-    description: "Largest line height.",
-    a11y: true,
+    $value: 2,
+    $type: "number",
+    $description: "Largest line height.",
+    $extensions: { "dev.zebkit": { a11y } },
   },
-} as const satisfies LineHeightTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

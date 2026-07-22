@@ -5,7 +5,7 @@
 //
 // Inputs are tracked build artifacts plus the hand-authored manifests:
 //   - custom-elements.json                                  (build:cem)
-//   - doc-site/src/lib/data/generated/default-tokens.json       (build:defaults)
+//   - doc-site/src/lib/data/generated/default-tokens.json   (build:doc-token-data)
 //   - doc-site/static/zebkit/zbk-default-variants.json          (build:defaults)
 //   - src/components/*/zbk-*.manifest.json                  (hand-authored;
 //     the guidance layer: slots, usage, keyboard, examples — lint:components
@@ -28,6 +28,7 @@ import {
   loadTokenModules,
   resolvePatternValues,
 } from '../src/scripts/utilities/token-source.js';
+import { tokenValueToString } from '../src/definitions/tokens.js';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(repoRoot, 'doc-site', 'static', 'zebkit', 'context');
@@ -75,10 +76,14 @@ interface CemDeclaration {
 }
 
 interface TokenEntry {
-  value?: string | number;
-  type?: string;
-  description?: string;
-  a11y?: boolean | string;
+  $value?: unknown;
+  $displayValue?: string;
+  $type?: string;
+  $description?: string;
+  $deprecated?: boolean | string;
+  $extensions?: Record<string, unknown> & {
+    'dev.zebkit'?: { a11y?: boolean | string };
+  };
 }
 
 interface VariantEntry {
@@ -312,7 +317,10 @@ function renderComponent(
     }
   }
 
-  const tokenEntries = Object.entries(tokens ?? {});
+  // Skip the group-level $extensions member — it is scale metadata, not a token.
+  const tokenEntries = Object.entries(tokens ?? {}).filter(
+    ([name]) => !name.startsWith('$')
+  );
   if (tokenEntries.length > 0) {
     lines.push('## Tokens (CSS custom properties)');
     lines.push('');
@@ -323,11 +331,11 @@ function renderComponent(
     lines.push('| Token | Default | Type | Description |');
     lines.push('|---|---|---|---|');
     for (const [name, token] of tokenEntries) {
-      const a11y = token.a11y ? ' **(a11y)**' : '';
+      const a11y = token.$extensions?.['dev.zebkit']?.a11y ? ' **(a11y)**' : '';
       lines.push(
-        `| \`--${tag}-${name}\` | \`${cell(String(token.value ?? ''))}\` | ${cell(
-          token.type
-        )} | ${cell(token.description)}${a11y} |`
+        `| \`--${tag}-${name}\` | \`${cell(token.$displayValue ?? (token.$value == null ? '' : tokenValueToString(token.$value, token.$type)))}\` | ${cell(
+          token.$type
+        )} | ${cell(token.$description)}${a11y} |`
       );
     }
     lines.push('');
@@ -654,6 +662,29 @@ async function main(): Promise<void> {
     if (!fs.statSync(filePath).isFile()) continue;
     if (fs.readFileSync(filePath, 'utf8').startsWith(stamp)) {
       fs.unlinkSync(filePath);
+    }
+  }
+
+  const invalidPatterns = [
+    /var\(--spacing-/,
+    /var\(--app-/,
+    /\[object Object\]/,
+    /\bNaN\b/,
+    /\|\s*`undefined`\s*\|/,
+    /:\s*undefined(?:;|\s*\|)/,
+  ];
+  for (const file of [
+    ...expectedContextFiles,
+    path.relative(outDir, path.join(docsStaticDir, 'llms.txt')),
+    path.relative(outDir, path.join(docsStaticDir, 'llms-full.txt')),
+  ]) {
+    const filePath = path.resolve(outDir, file);
+    const content = fs.readFileSync(filePath, 'utf8');
+    const pattern = invalidPatterns.find((candidate) => candidate.test(content));
+    if (pattern) {
+      throw new Error(
+        `Generated agent context ${path.relative(repoRoot, filePath)} matches ${pattern}.`
+      );
     }
   }
 

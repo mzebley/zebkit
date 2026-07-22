@@ -119,6 +119,8 @@ export interface CompileSassOptions {
    * that should be appended to the compiled bundle.
    */
   variantCss?: string;
+  /** Unlayered declarations that must follow generated SCSS (e.g. palette overrides). */
+  trailingCss?: string;
   /**
    * Root of the zebkit package installation. Required when running from the
    * installed CLI so Sass can resolve stylesheet paths inside zebkit's src/.
@@ -160,6 +162,7 @@ export async function compileSass(options: CompileSassOptions): Promise<CompileS
       'tokens/semantic/color/',
     ],
     variantCss = '',
+    trailingCss = '',
     zebkitPackageRoot,
     activeBreakpoints = {},
     additionalModuleUses = '',
@@ -245,7 +248,7 @@ export async function compileSass(options: CompileSassOptions): Promise<CompileS
     const importBlock = importLines.join('\n');
     const filteredCssVars = otherLines.join('\n');
 
-    const cssCode = `${importBlock ? `${importBlock}\n` : ''}${LAYER_ORDERING}\n${sassResult.css}\n${filteredCssVars}\n${variantCss}`;
+    const cssCode = `${importBlock ? `${importBlock}\n` : ''}${LAYER_ORDERING}\n${sassResult.css}\n${filteredCssVars}\n${variantCss}${trailingCss ? `\n${trailingCss}` : ''}`;
 
     const outputFilePath = path.join(
       resolvedDestination,

@@ -1,107 +1,105 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "z-index";
 export const layer: LayerName = "base";
-export type ZIndexTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "auto": {
-    value: "auto",
-    type: "zIndex",
-    description: "Auto z-index, lets browser determine stacking.",
+    $value: "auto",
+    $type: "cssNumber",
+    $description: "Auto z-index, lets browser determine stacking.",
   },
   "0": {
-    value: 0,
-    type: "zIndex",
-    description: "Base stacking level.",
+    $value: 0,
+    $type: "number",
+    $description: "Base stacking level.",
   },
   "10": {
-    value: 10,
-    type: "zIndex",
-    description: "Low elevation stacking.",
+    $value: 10,
+    $type: "number",
+    $description: "Low elevation stacking.",
   },
   "20": {
-    value: 20,
-    type: "zIndex",
-    description: "Slight elevation stacking.",
+    $value: 20,
+    $type: "number",
+    $description: "Slight elevation stacking.",
   },
   "30": {
-    value: 30,
-    type: "zIndex",
-    description: "Medium-low elevation stacking.",
+    $value: 30,
+    $type: "number",
+    $description: "Medium-low elevation stacking.",
   },
   "40": {
-    value: 40,
-    type: "zIndex",
-    description: "Medium elevation stacking.",
+    $value: 40,
+    $type: "number",
+    $description: "Medium elevation stacking.",
   },
   "50": {
-    value: 50,
-    type: "zIndex",
-    description: "Medium-high elevation stacking.",
+    $value: 50,
+    $type: "number",
+    $description: "Medium-high elevation stacking.",
   },
   "60": {
-    value: 60,
-    type: "zIndex",
-    description: "High elevation stacking.",
+    $value: 60,
+    $type: "number",
+    $description: "High elevation stacking.",
   },
   "70": {
-    value: 70,
-    type: "zIndex",
-    description: "Higher elevation stacking.",
+    $value: 70,
+    $type: "number",
+    $description: "Higher elevation stacking.",
   },
   "80": {
-    value: 80,
-    type: "zIndex",
-    description: "Very high elevation stacking.",
+    $value: 80,
+    $type: "number",
+    $description: "Very high elevation stacking.",
   },
   "90": {
-    value: 90,
-    type: "zIndex",
-    description: "Near-top elevation stacking.",
+    $value: 90,
+    $type: "number",
+    $description: "Near-top elevation stacking.",
   },
   "100": {
-    value: 100,
-    type: "zIndex",
-    description: "Top-level elevation stacking.",
+    $value: 100,
+    $type: "number",
+    $description: "Top-level elevation stacking.",
   },
   "dropdown": {
-    value: 1000,
-    type: "zIndex",
-    description: "Semantic z-index for dropdown menus.",
+    $value: 1000,
+    $type: "number",
+    $description: "Semantic z-index for dropdown menus.",
   },
   "sticky": {
-    value: 1020,
-    type: "zIndex",
-    description: "Semantic z-index for sticky positioned elements.",
+    $value: 1020,
+    $type: "number",
+    $description: "Semantic z-index for sticky positioned elements.",
   },
   "fixed": {
-    value: 1030,
-    type: "zIndex",
-    description: "Semantic z-index for fixed positioned elements.",
+    $value: 1030,
+    $type: "number",
+    $description: "Semantic z-index for fixed positioned elements.",
   },
   "modal-backdrop": {
-    value: 1040,
-    type: "zIndex",
-    description: "Semantic z-index for modal backdrops/overlays.",
+    $value: 1040,
+    $type: "number",
+    $description: "Semantic z-index for modal backdrops/overlays.",
   },
   "modal": {
-    value: 1050,
-    type: "zIndex",
-    description: "Semantic z-index for modal dialogs.",
+    $value: 1050,
+    $type: "number",
+    $description: "Semantic z-index for modal dialogs.",
   },
   "popover": {
-    value: 1060,
-    type: "zIndex",
-    description: "Semantic z-index for popovers.",
+    $value: 1060,
+    $type: "number",
+    $description: "Semantic z-index for popovers.",
   },
   "tooltip": {
-    value: 1070,
-    type: "zIndex",
-    description: "Semantic z-index for tooltips (highest).",
+    $value: 1070,
+    $type: "number",
+    $description: "Semantic z-index for tooltips (highest).",
   },
-} as const satisfies ZIndexTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

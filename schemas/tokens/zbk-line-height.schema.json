@@ -5,12 +5,45 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "lineHeightValue": {
-      "type": [
-        "string",
-        "number"
+    "numberValue": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{font-family.system-sans}",
+            "{font-family.system-serif}",
+            "{font-family.system-mono}"
+          ]
+        }
       ],
       "examples": [
+        "{a11y.spacing-modifier}",
+        "{a11y.spacing-text-coupling}",
+        "{a11y.line-height-modifier}",
+        "{a11y.letter-spacing-modifier}",
+        "{a11y.fallback-font-size-modifier}",
+        "{a11y.transition-duration-modifier}",
+        "{opacity.0}",
+        "{opacity.5}",
+        "{opacity.10}",
+        "{opacity.15}",
+        "{opacity.20}",
+        "{opacity.25}",
+        "{opacity.30}",
+        "{opacity.40}",
+        "{opacity.50}",
+        "{opacity.60}",
+        "{opacity.70}",
+        "{opacity.75}",
+        "{opacity.80}",
+        "{opacity.85}",
+        "{opacity.90}",
+        "{opacity.95}",
+        "{opacity.100}",
         "{h1.line-height}",
         "{h2.line-height}",
         "{h3.line-height}",
@@ -25,178 +58,370 @@
         "{line-height.3}",
         "{line-height.4}",
         "{line-height.5}",
+        "{z-index.0}",
+        "{z-index.10}",
+        "{z-index.20}",
+        "{z-index.30}",
+        "{z-index.40}",
+        "{z-index.50}",
+        "{z-index.60}",
+        "{z-index.70}",
+        "{z-index.80}",
+        "{z-index.90}",
+        "{z-index.100}",
+        "{z-index.dropdown}",
+        "{z-index.sticky}",
+        "{z-index.fixed}",
+        "{z-index.modal-backdrop}",
+        "{z-index.modal}",
+        "{z-index.popover}",
+        "{z-index.tooltip}",
         "{button.line-height}",
+        "{button.opacity}",
+        "{button.opacity-loading}",
         "{checkbox.line-height}",
+        "{checkbox.opacity}",
+        "{checkbox.opacity-disabled}",
         "{input.line-height}",
+        "{input.opacity}",
+        "{input.opacity-disabled}",
         "{pagination.line-height}",
         "{radio.line-height}",
+        "{radio.opacity}",
+        "{radio.opacity-disabled}",
         "{select.line-height}",
+        "{select.opacity}",
+        "{select.opacity-disabled}",
         "{textarea.field-line-height}",
+        "{textarea.opacity}",
+        "{textarea.opacity-disabled}",
         "{toggle.line-height}",
-        "{tooltip.line-height}"
+        "{toggle.opacity}",
+        "{toggle.opacity-disabled}",
+        "{tooltip.line-height}",
+        "{tooltip.z-index}",
+        "{tooltip.opacity}"
       ]
+    },
+    "cssNumberValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{font-family.system-sans}",
+        "{font-family.system-serif}",
+        "{font-family.system-mono}"
+      ]
+    },
+    "numberToken": {
+      "type": "object",
+      "description": "Smallest line height.",
+      "required": [
+        "$value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/numberValue"
+            },
+            {
+              "$ref": "#/definitions/cssNumberValue"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "number"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/numberValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssNumber"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssNumberValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
     }
   },
   "properties": {
     "1": {
-      "type": "object",
       "description": "Smallest line height.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/lineHeightValue"
-        },
-        "type": {
-          "const": "lineHeight"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "2": {
-      "type": "object",
       "description": "Smaller line height.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/lineHeightValue"
-        },
-        "type": {
-          "const": "lineHeight"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "3": {
-      "type": "object",
       "description": "Base line height.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/lineHeightValue"
-        },
-        "type": {
-          "const": "lineHeight"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "4": {
-      "type": "object",
       "description": "Larger line height.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/lineHeightValue"
-        },
-        "type": {
-          "const": "lineHeight"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     },
     "5": {
-      "type": "object",
       "description": "Largest line height.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/lineHeightValue"
-        },
-        "type": {
-          "const": "lineHeight"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
+    },
+    "$type": {
+      "type": "string",
+      "enum": [
+        "number",
+        "cssNumber"
+      ]
+    },
+    "$description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
     }
   }
 }

@@ -6,26 +6,394 @@
   "additionalProperties": false,
   "definitions": {
     "displayValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+      "type": "string",
+      "minLength": 1,
       "examples": [
-        "{button.display}",
-        "{checkbox.display}",
-        "{input.display}",
-        "{pagination.display}",
-        "{radio.display}",
-        "{select.display}",
-        "{textarea.display}",
-        "{toggle.display}",
-        "{tooltip.display}"
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
       ]
     },
     "colorValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "colorSpace",
+            "components"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "colorSpace": {
+              "type": "string",
+              "enum": [
+                "srgb",
+                "srgb-linear",
+                "hsl",
+                "hwb",
+                "lab",
+                "lch",
+                "oklab",
+                "oklch",
+                "display-p3",
+                "a98-rgb",
+                "prophoto-rgb",
+                "rec2020",
+                "xyz-d65",
+                "xyz-d50"
+              ]
+            },
+            "components": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "const": "none"
+                  }
+                ]
+              }
+            },
+            "alpha": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "hex": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "enum": [
+                      "srgb",
+                      "srgb-linear",
+                      "display-p3",
+                      "a98-rgb",
+                      "prophoto-rgb",
+                      "rec2020",
+                      "xyz-d65",
+                      "xyz-d50"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "enum": [
+                      "hsl",
+                      "hwb"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "lab"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "lch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "oklab"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "oklch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
       ],
       "examples": [
         "{accent-primary.50}",
@@ -144,6 +512,284 @@
         "{neutral.800}",
         "{neutral.900}",
         "{neutral.950}",
+        "{color.red-50}",
+        "{color.red-100}",
+        "{color.red-200}",
+        "{color.red-300}",
+        "{color.red-400}",
+        "{color.red-500}",
+        "{color.red-600}",
+        "{color.red-700}",
+        "{color.red-800}",
+        "{color.red-900}",
+        "{color.red-950}",
+        "{color.pink-50}",
+        "{color.pink-100}",
+        "{color.pink-200}",
+        "{color.pink-300}",
+        "{color.pink-400}",
+        "{color.pink-500}",
+        "{color.pink-600}",
+        "{color.pink-700}",
+        "{color.pink-800}",
+        "{color.pink-900}",
+        "{color.pink-950}",
+        "{color.orange-50}",
+        "{color.orange-100}",
+        "{color.orange-200}",
+        "{color.orange-300}",
+        "{color.orange-400}",
+        "{color.orange-500}",
+        "{color.orange-600}",
+        "{color.orange-700}",
+        "{color.orange-800}",
+        "{color.orange-900}",
+        "{color.orange-950}",
+        "{color.gold-50}",
+        "{color.gold-100}",
+        "{color.gold-200}",
+        "{color.gold-300}",
+        "{color.gold-400}",
+        "{color.gold-500}",
+        "{color.gold-600}",
+        "{color.gold-700}",
+        "{color.gold-800}",
+        "{color.gold-900}",
+        "{color.gold-950}",
+        "{color.yellow-50}",
+        "{color.yellow-100}",
+        "{color.yellow-200}",
+        "{color.yellow-300}",
+        "{color.yellow-400}",
+        "{color.yellow-500}",
+        "{color.yellow-600}",
+        "{color.yellow-700}",
+        "{color.yellow-800}",
+        "{color.yellow-900}",
+        "{color.yellow-950}",
+        "{color.lime-50}",
+        "{color.lime-100}",
+        "{color.lime-200}",
+        "{color.lime-300}",
+        "{color.lime-400}",
+        "{color.lime-500}",
+        "{color.lime-600}",
+        "{color.lime-700}",
+        "{color.lime-800}",
+        "{color.lime-900}",
+        "{color.lime-950}",
+        "{color.green-50}",
+        "{color.green-100}",
+        "{color.green-200}",
+        "{color.green-300}",
+        "{color.green-400}",
+        "{color.green-500}",
+        "{color.green-600}",
+        "{color.green-700}",
+        "{color.green-800}",
+        "{color.green-900}",
+        "{color.green-950}",
+        "{color.teal-50}",
+        "{color.teal-100}",
+        "{color.teal-200}",
+        "{color.teal-300}",
+        "{color.teal-400}",
+        "{color.teal-500}",
+        "{color.teal-600}",
+        "{color.teal-700}",
+        "{color.teal-800}",
+        "{color.teal-900}",
+        "{color.teal-950}",
+        "{color.cyan-50}",
+        "{color.cyan-100}",
+        "{color.cyan-200}",
+        "{color.cyan-300}",
+        "{color.cyan-400}",
+        "{color.cyan-500}",
+        "{color.cyan-600}",
+        "{color.cyan-700}",
+        "{color.cyan-800}",
+        "{color.cyan-900}",
+        "{color.cyan-950}",
+        "{color.blue-50}",
+        "{color.blue-100}",
+        "{color.blue-200}",
+        "{color.blue-300}",
+        "{color.blue-400}",
+        "{color.blue-500}",
+        "{color.blue-600}",
+        "{color.blue-700}",
+        "{color.blue-800}",
+        "{color.blue-900}",
+        "{color.blue-950}",
+        "{color.indigo-50}",
+        "{color.indigo-100}",
+        "{color.indigo-200}",
+        "{color.indigo-300}",
+        "{color.indigo-400}",
+        "{color.indigo-500}",
+        "{color.indigo-600}",
+        "{color.indigo-700}",
+        "{color.indigo-800}",
+        "{color.indigo-900}",
+        "{color.indigo-950}",
+        "{color.violet-50}",
+        "{color.violet-100}",
+        "{color.violet-200}",
+        "{color.violet-300}",
+        "{color.violet-400}",
+        "{color.violet-500}",
+        "{color.violet-600}",
+        "{color.violet-700}",
+        "{color.violet-800}",
+        "{color.violet-900}",
+        "{color.violet-950}",
+        "{color.merlot-50}",
+        "{color.merlot-100}",
+        "{color.merlot-200}",
+        "{color.merlot-300}",
+        "{color.merlot-400}",
+        "{color.merlot-500}",
+        "{color.merlot-600}",
+        "{color.merlot-700}",
+        "{color.merlot-800}",
+        "{color.merlot-900}",
+        "{color.merlot-950}",
+        "{color.butterfield-50}",
+        "{color.butterfield-100}",
+        "{color.butterfield-200}",
+        "{color.butterfield-300}",
+        "{color.butterfield-400}",
+        "{color.butterfield-500}",
+        "{color.butterfield-600}",
+        "{color.butterfield-700}",
+        "{color.butterfield-800}",
+        "{color.butterfield-900}",
+        "{color.butterfield-950}",
+        "{color.mint-50}",
+        "{color.mint-100}",
+        "{color.mint-200}",
+        "{color.mint-300}",
+        "{color.mint-400}",
+        "{color.mint-500}",
+        "{color.mint-600}",
+        "{color.mint-700}",
+        "{color.mint-800}",
+        "{color.mint-900}",
+        "{color.mint-950}",
+        "{color.sea-50}",
+        "{color.sea-100}",
+        "{color.sea-200}",
+        "{color.sea-300}",
+        "{color.sea-400}",
+        "{color.sea-500}",
+        "{color.sea-600}",
+        "{color.sea-700}",
+        "{color.sea-800}",
+        "{color.sea-900}",
+        "{color.sea-950}",
+        "{color.dusk-50}",
+        "{color.dusk-100}",
+        "{color.dusk-200}",
+        "{color.dusk-300}",
+        "{color.dusk-400}",
+        "{color.dusk-500}",
+        "{color.dusk-600}",
+        "{color.dusk-700}",
+        "{color.dusk-800}",
+        "{color.dusk-900}",
+        "{color.dusk-950}",
+        "{color.stone-50}",
+        "{color.stone-100}",
+        "{color.stone-200}",
+        "{color.stone-300}",
+        "{color.stone-400}",
+        "{color.stone-500}",
+        "{color.stone-600}",
+        "{color.stone-700}",
+        "{color.stone-800}",
+        "{color.stone-900}",
+        "{color.stone-950}",
+        "{color.charcoal-50}",
+        "{color.charcoal-100}",
+        "{color.charcoal-200}",
+        "{color.charcoal-300}",
+        "{color.charcoal-400}",
+        "{color.charcoal-500}",
+        "{color.charcoal-600}",
+        "{color.charcoal-700}",
+        "{color.charcoal-800}",
+        "{color.charcoal-900}",
+        "{color.charcoal-950}",
+        "{color.lavenderfield-50}",
+        "{color.lavenderfield-100}",
+        "{color.lavenderfield-200}",
+        "{color.lavenderfield-300}",
+        "{color.lavenderfield-400}",
+        "{color.lavenderfield-500}",
+        "{color.lavenderfield-600}",
+        "{color.lavenderfield-700}",
+        "{color.lavenderfield-800}",
+        "{color.lavenderfield-900}",
+        "{color.lavenderfield-950}",
+        "{color.rosewater-50}",
+        "{color.rosewater-100}",
+        "{color.rosewater-200}",
+        "{color.rosewater-300}",
+        "{color.rosewater-400}",
+        "{color.rosewater-500}",
+        "{color.rosewater-600}",
+        "{color.rosewater-700}",
+        "{color.rosewater-800}",
+        "{color.rosewater-900}",
+        "{color.rosewater-950}",
+        "{color.ember-50}",
+        "{color.ember-100}",
+        "{color.ember-200}",
+        "{color.ember-300}",
+        "{color.ember-400}",
+        "{color.ember-500}",
+        "{color.ember-600}",
+        "{color.ember-700}",
+        "{color.ember-800}",
+        "{color.ember-900}",
+        "{color.ember-950}",
+        "{color.deepcurrent-50}",
+        "{color.deepcurrent-100}",
+        "{color.deepcurrent-200}",
+        "{color.deepcurrent-300}",
+        "{color.deepcurrent-400}",
+        "{color.deepcurrent-500}",
+        "{color.deepcurrent-600}",
+        "{color.deepcurrent-700}",
+        "{color.deepcurrent-800}",
+        "{color.deepcurrent-900}",
+        "{color.deepcurrent-950}",
+        "{color.foxglove-50}",
+        "{color.foxglove-100}",
+        "{color.foxglove-200}",
+        "{color.foxglove-300}",
+        "{color.foxglove-400}",
+        "{color.foxglove-500}",
+        "{color.foxglove-600}",
+        "{color.foxglove-700}",
+        "{color.foxglove-800}",
+        "{color.foxglove-900}",
+        "{color.foxglove-950}",
+        "{color.chestnut-50}",
+        "{color.chestnut-100}",
+        "{color.chestnut-200}",
+        "{color.chestnut-300}",
+        "{color.chestnut-400}",
+        "{color.chestnut-500}",
+        "{color.chestnut-600}",
+        "{color.chestnut-700}",
+        "{color.chestnut-800}",
+        "{color.chestnut-900}",
+        "{color.chestnut-950}",
+        "{color.global-black}",
+        "{color.global-white}",
+        "{color.global-transparent}",
         "{focus.color}",
         "{h1.color}",
         "{h2.color}",
@@ -484,87 +1130,302 @@
         "{tooltip.border-color}"
       ]
     },
-    "borderWidthValue": {
-      "type": [
-        "string",
-        "number"
+    "cssColorValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
+      ]
+    },
+    "dimensionValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{button.transition-timing-function}",
+            "{pagination.transition-timing-function}",
+            "{tooltip.transition-timing-function}"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
+        "{a11y.min-interaction-size}",
+        "{breakpoint.tablet}",
+        "{breakpoint.tablet-lg}",
+        "{breakpoint.desktop}",
+        "{breakpoint.desktop-lg}",
+        "{breakpoint.widescreen}",
+        "{focus.width}",
+        "{focus.offset}",
+        "{h1.letter-spacing}",
+        "{h1.spacing-before}",
+        "{h1.spacing-after}",
+        "{h2.letter-spacing}",
+        "{h2.spacing-before}",
+        "{h2.spacing-after}",
+        "{h3.letter-spacing}",
+        "{h3.spacing-before}",
+        "{h3.spacing-after}",
+        "{h4.letter-spacing}",
+        "{h4.spacing-before}",
+        "{h4.spacing-after}",
+        "{h5.letter-spacing}",
+        "{h5.spacing-before}",
+        "{h5.spacing-after}",
+        "{h6.letter-spacing}",
+        "{h6.spacing-before}",
+        "{h6.spacing-after}",
+        "{lede.letter-spacing}",
+        "{lede.spacing-before}",
+        "{lede.spacing-after}",
+        "{list.letter-spacing}",
+        "{list.spacing-before}",
+        "{list.spacing-after}",
+        "{list.padding-block-start}",
+        "{list.padding-block-end}",
+        "{p.letter-spacing}",
+        "{p.spacing-before}",
+        "{p.spacing-after}",
         "{border.width-xs}",
         "{border.width-sm}",
         "{border.width-md}",
         "{border.width-lg}",
         "{border.width-xl}",
-        "{button.border-width}",
-        "{button.focus-width}",
-        "{checkbox.border-width}",
-        "{checkbox.indicator-stroke-width}",
-        "{checkbox.focus-width}",
-        "{input.border-width}",
-        "{input.focus-width}",
-        "{pagination.border-width}",
-        "{pagination.focus-width}",
-        "{radio.border-width}",
-        "{radio.focus-width}",
-        "{select.border-width}",
-        "{select.indicator-stroke-width}",
-        "{select.focus-width}",
-        "{textarea.border-width}",
-        "{textarea.focus-width}",
-        "{toggle.border-width}",
-        "{toggle.thumb-border-width}",
-        "{toggle.focus-width}",
-        "{tooltip.border-width}"
-      ]
-    },
-    "borderStyleValue": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "examples": [
-        "{border.style}",
-        "{button.border-style}",
-        "{checkbox.border-style}",
-        "{input.border-style}",
-        "{pagination.border-style}",
-        "{radio.border-style}",
-        "{select.border-style}",
-        "{textarea.border-style}",
-        "{toggle.border-style}",
-        "{toggle.thumb-border-style}",
-        "{tooltip.border-style}"
-      ]
-    },
-    "borderRadiusValue": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "examples": [
         "{border.radius-xs}",
         "{border.radius-sm}",
         "{border.radius-md}",
         "{border.radius-lg}",
         "{border.radius-xl}",
+        "{spacing.0}",
+        "{spacing.1}",
+        "{spacing.2}",
+        "{spacing.3}",
+        "{spacing.4}",
+        "{spacing.5}",
+        "{spacing.6}",
+        "{spacing.7}",
+        "{spacing.8}",
+        "{spacing.9}",
+        "{spacing.10}",
+        "{spacing.15}",
+        "{spacing.20}",
+        "{spacing.25}",
+        "{spacing.30}",
+        "{spacing.40}",
+        "{spacing.50}",
+        "{spacing.60}",
+        "{spacing.70}",
+        "{spacing.80}",
+        "{spacing.90}",
+        "{spacing.100}",
+        "{spacing.105}",
+        "{spacing.205}",
+        "{spacing.2xs}",
+        "{spacing.xs}",
+        "{spacing.sm}",
+        "{spacing.md}",
+        "{spacing.lg}",
+        "{spacing.xl}",
+        "{spacing.2xl}",
+        "{spacing.3xl}",
+        "{spacing.card}",
+        "{spacing.mobile}",
+        "{spacing.mobile-lg}",
+        "{spacing.tablet}",
+        "{spacing.tablet-lg}",
+        "{spacing.desktop}",
+        "{spacing.desktop-lg}",
+        "{spacing.widescreen}",
+        "{spacing.section}",
+        "{spacing.section-margin-block}",
+        "{spacing.section-margin-inline}",
+        "{spacing.aside}",
+        "{spacing.page-padding-block}",
+        "{spacing.page-padding-inline}",
+        "{spacing.neg-15}",
+        "{spacing.neg-10}",
+        "{spacing.neg-9}",
+        "{spacing.neg-8}",
+        "{spacing.neg-7}",
+        "{spacing.neg-6}",
+        "{spacing.neg-5}",
+        "{spacing.neg-4}",
+        "{spacing.neg-3}",
+        "{spacing.neg-205}",
+        "{spacing.neg-2}",
+        "{spacing.neg-105}",
+        "{spacing.neg-1}",
+        "{spacing.neg-05}",
+        "{spacing.neg-025}",
+        "{spacing.neg-2px}",
+        "{spacing.neg-1px}",
+        "{spacing.1px}",
+        "{spacing.2px}",
+        "{spacing.025}",
+        "{spacing.05}",
+        "{letter-spacing.tighter}",
+        "{letter-spacing.tight}",
+        "{letter-spacing.normal}",
+        "{letter-spacing.wide}",
+        "{letter-spacing.wider}",
+        "{button.border-width}",
         "{button.border-radius}",
+        "{button.padding-inline}",
+        "{button.padding-block}",
+        "{button.padding-inline-start}",
+        "{button.padding-inline-end}",
+        "{button.padding-block-start}",
+        "{button.padding-block-end}",
+        "{button.gap}",
+        "{button.group-gap}",
+        "{button.min-width}",
+        "{button.min-height}",
+        "{button.focus-width}",
+        "{button.focus-offset}",
+        "{checkbox.control-width}",
+        "{checkbox.control-height}",
+        "{checkbox.border-width}",
         "{checkbox.border-radius}",
+        "{checkbox.indicator-stroke-width}",
         "{checkbox.indicator-radius}",
+        "{checkbox.gap}",
+        "{checkbox.group-gap}",
+        "{checkbox.focus-width}",
+        "{checkbox.focus-offset}",
+        "{input.border-width}",
         "{input.border-radius}",
+        "{input.label-gap}",
+        "{input.padding-inline}",
+        "{input.padding-block}",
+        "{input.gap}",
+        "{input.min-height}",
+        "{input.group-gap}",
+        "{input.focus-width}",
+        "{input.focus-offset}",
+        "{pagination.border-width}",
         "{pagination.border-radius}",
-        "{radio.border-radius}",
-        "{radio.indicator-radius}",
+        "{pagination.gap}",
+        "{pagination.min-width}",
+        "{pagination.min-height}",
+        "{pagination.padding-inline}",
+        "{pagination.padding-block}",
+        "{pagination.focus-width}",
+        "{pagination.focus-offset}",
+        "{radio.control-width}",
+        "{radio.control-height}",
+        "{radio.border-width}",
+        "{radio.gap}",
+        "{radio.group-gap}",
+        "{radio.focus-width}",
+        "{radio.focus-offset}",
+        "{select.border-width}",
         "{select.border-radius}",
+        "{select.label-gap}",
+        "{select.indicator-stroke-width}",
+        "{select.padding-inline}",
+        "{select.padding-block}",
+        "{select.gap}",
+        "{select.min-height}",
+        "{select.group-gap}",
+        "{select.focus-width}",
+        "{select.focus-offset}",
+        "{textarea.border-width}",
         "{textarea.border-radius}",
+        "{textarea.label-gap}",
+        "{textarea.padding-inline}",
+        "{textarea.padding-block}",
+        "{textarea.min-block-size}",
+        "{textarea.focus-width}",
+        "{textarea.focus-offset}",
+        "{toggle.track-width}",
+        "{toggle.track-height}",
+        "{toggle.border-width}",
         "{toggle.border-radius}",
-        "{toggle.thumb-radius}",
-        "{tooltip.border-radius}"
+        "{toggle.thumb-size}",
+        "{toggle.thumb-inset}",
+        "{toggle.thumb-border-width}",
+        "{toggle.gap}",
+        "{toggle.group-gap}",
+        "{toggle.focus-width}",
+        "{toggle.focus-offset}",
+        "{tooltip.border-width}",
+        "{tooltip.border-radius}",
+        "{tooltip.padding-inline}",
+        "{tooltip.padding-block}",
+        "{tooltip.max-width}",
+        "{tooltip.arrow-size}",
+        "{tooltip.offset}"
+      ]
+    },
+    "cssDimensionValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
+      ]
+    },
+    "strokeStyleValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
+      ]
+    },
+    "cssStrokeStyleValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
       ]
     },
     "fontFamilyValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{button.transition-timing-function}",
+            "{pagination.transition-timing-function}",
+            "{tooltip.transition-timing-function}"
+          ]
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       ],
       "examples": [
         "{h1.font-family}",
@@ -579,9 +1440,6 @@
         "{font-family.primary}",
         "{font-family.alt}",
         "{font-family.monospace}",
-        "{font-family.system-sans}",
-        "{font-family.system-serif}",
-        "{font-family.system-mono}",
         "{font-family.interface}",
         "{font-family.heading}",
         "{font-family.body}",
@@ -597,39 +1455,31 @@
         "{tooltip.font-family}"
       ]
     },
-    "fontSizeValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+    "cssFontFamilyValue": {
+      "type": "string",
+      "minLength": 1,
       "examples": [
-        "{h1.font-size}",
-        "{h2.font-size}",
-        "{h3.font-size}",
-        "{h4.font-size}",
-        "{h5.font-size}",
-        "{h6.font-size}",
-        "{lede.font-size}",
-        "{list.font-size}",
-        "{p.font-size}",
-        "{button.font-size}",
-        "{checkbox.font-size}",
-        "{input.font-size}",
-        "{input.label-font-size}",
-        "{pagination.font-size}",
-        "{radio.font-size}",
-        "{select.font-size}",
-        "{select.label-font-size}",
-        "{textarea.font-size}",
-        "{textarea.label-font-size}",
-        "{toggle.font-size}",
-        "{tooltip.font-size}"
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
       ]
     },
     "fontWeightValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{button.transition-timing-function}",
+            "{pagination.transition-timing-function}",
+            "{tooltip.transition-timing-function}"
+          ]
+        }
       ],
       "examples": [
         "{h1.font-weight}",
@@ -664,12 +1514,54 @@
         "{tooltip.font-weight}"
       ]
     },
-    "lineHeightValue": {
-      "type": [
-        "string",
-        "number"
+    "cssFontWeightValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
+      ]
+    },
+    "numberValue": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{button.transition-timing-function}",
+            "{pagination.transition-timing-function}",
+            "{tooltip.transition-timing-function}"
+          ]
+        }
       ],
       "examples": [
+        "{a11y.spacing-modifier}",
+        "{a11y.spacing-text-coupling}",
+        "{a11y.line-height-modifier}",
+        "{a11y.letter-spacing-modifier}",
+        "{a11y.fallback-font-size-modifier}",
+        "{a11y.transition-duration-modifier}",
+        "{opacity.0}",
+        "{opacity.5}",
+        "{opacity.10}",
+        "{opacity.15}",
+        "{opacity.20}",
+        "{opacity.25}",
+        "{opacity.30}",
+        "{opacity.40}",
+        "{opacity.50}",
+        "{opacity.60}",
+        "{opacity.70}",
+        "{opacity.75}",
+        "{opacity.80}",
+        "{opacity.85}",
+        "{opacity.90}",
+        "{opacity.95}",
+        "{opacity.100}",
         "{h1.line-height}",
         "{h2.line-height}",
         "{h3.line-height}",
@@ -684,212 +1576,1106 @@
         "{line-height.3}",
         "{line-height.4}",
         "{line-height.5}",
+        "{z-index.0}",
+        "{z-index.10}",
+        "{z-index.20}",
+        "{z-index.30}",
+        "{z-index.40}",
+        "{z-index.50}",
+        "{z-index.60}",
+        "{z-index.70}",
+        "{z-index.80}",
+        "{z-index.90}",
+        "{z-index.100}",
+        "{z-index.dropdown}",
+        "{z-index.sticky}",
+        "{z-index.fixed}",
+        "{z-index.modal-backdrop}",
+        "{z-index.modal}",
+        "{z-index.popover}",
+        "{z-index.tooltip}",
         "{button.line-height}",
+        "{button.opacity}",
+        "{button.opacity-loading}",
         "{checkbox.line-height}",
+        "{checkbox.opacity}",
+        "{checkbox.opacity-disabled}",
         "{input.line-height}",
+        "{input.opacity}",
+        "{input.opacity-disabled}",
         "{pagination.line-height}",
         "{radio.line-height}",
+        "{radio.opacity}",
+        "{radio.opacity-disabled}",
         "{select.line-height}",
+        "{select.opacity}",
+        "{select.opacity-disabled}",
         "{textarea.field-line-height}",
+        "{textarea.opacity}",
+        "{textarea.opacity-disabled}",
         "{toggle.line-height}",
-        "{tooltip.line-height}"
+        "{toggle.opacity}",
+        "{toggle.opacity-disabled}",
+        "{tooltip.line-height}",
+        "{tooltip.z-index}",
+        "{tooltip.opacity}"
       ]
     },
-    "letterSpacingValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+    "cssNumberValue": {
+      "type": "string",
+      "minLength": 1,
       "examples": [
-        "{h1.letter-spacing}",
-        "{h2.letter-spacing}",
-        "{h3.letter-spacing}",
-        "{h4.letter-spacing}",
-        "{h5.letter-spacing}",
-        "{h6.letter-spacing}",
-        "{lede.letter-spacing}",
-        "{list.letter-spacing}",
-        "{p.letter-spacing}",
-        "{letter-spacing.tighter}",
-        "{letter-spacing.tight}",
-        "{letter-spacing.normal}",
-        "{letter-spacing.wide}",
-        "{letter-spacing.wider}",
-        "{button.letter-spacing}",
-        "{checkbox.letter-spacing}",
-        "{input.letter-spacing}",
-        "{radio.letter-spacing}",
-        "{select.letter-spacing}",
-        "{textarea.letter-spacing}",
-        "{toggle.letter-spacing}",
-        "{tooltip.letter-spacing}"
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
       ]
     },
-    "spacingValue": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "examples": [
-        "{a11y.min-interaction-size}",
-        "{focus.offset}",
-        "{h1.spacing-before}",
-        "{h1.spacing-after}",
-        "{h2.spacing-before}",
-        "{h2.spacing-after}",
-        "{h3.spacing-before}",
-        "{h3.spacing-after}",
-        "{h4.spacing-before}",
-        "{h4.spacing-after}",
-        "{h5.spacing-before}",
-        "{h5.spacing-after}",
-        "{h6.spacing-before}",
-        "{h6.spacing-after}",
-        "{lede.spacing-before}",
-        "{lede.spacing-after}",
-        "{list.spacing-before}",
-        "{list.spacing-after}",
-        "{list.padding-block-start}",
-        "{list.padding-block-end}",
-        "{p.spacing-before}",
-        "{p.spacing-after}",
-        "{spacing.2xs}",
-        "{spacing.xs}",
-        "{spacing.sm}",
-        "{spacing.md}",
-        "{spacing.lg}",
-        "{spacing.xl}",
-        "{spacing.2xl}",
-        "{spacing.3xl}",
-        "{spacing.section-margin-block}",
-        "{spacing.section-margin-inline}",
-        "{spacing.page-padding-block}",
-        "{spacing.page-padding-inline}",
-        "{button.padding-inline}",
-        "{button.padding-block}",
-        "{button.padding-inline-start}",
-        "{button.padding-inline-end}",
-        "{button.padding-block-start}",
-        "{button.padding-block-end}",
-        "{button.margin-inline}",
-        "{button.margin-block}",
-        "{button.margin-inline-start}",
-        "{button.margin-inline-end}",
-        "{button.margin-block-start}",
-        "{button.margin-block-end}",
-        "{button.gap}",
-        "{button.group-gap}",
-        "{button.focus-offset}",
-        "{checkbox.gap}",
-        "{checkbox.group-gap}",
-        "{checkbox.focus-offset}",
-        "{input.label-gap}",
-        "{input.padding-inline}",
-        "{input.padding-block}",
-        "{input.gap}",
-        "{input.group-gap}",
-        "{input.focus-offset}",
-        "{pagination.gap}",
-        "{pagination.padding-inline}",
-        "{pagination.padding-block}",
-        "{pagination.focus-offset}",
-        "{radio.gap}",
-        "{radio.group-gap}",
-        "{radio.focus-offset}",
-        "{select.label-gap}",
-        "{select.padding-inline}",
-        "{select.padding-block}",
-        "{select.gap}",
-        "{select.group-gap}",
-        "{select.focus-offset}",
-        "{textarea.label-gap}",
-        "{textarea.padding-inline}",
-        "{textarea.padding-block}",
-        "{textarea.focus-offset}",
-        "{toggle.thumb-inset}",
-        "{toggle.gap}",
-        "{toggle.group-gap}",
-        "{toggle.focus-offset}",
-        "{tooltip.padding-inline}",
-        "{tooltip.padding-block}"
-      ]
-    },
-    "sizingValue": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "examples": [
-        "{focus.width}",
-        "{h1.measure}",
-        "{h2.measure}",
-        "{h3.measure}",
-        "{h4.measure}",
-        "{h5.measure}",
-        "{h6.measure}",
-        "{lede.measure}",
-        "{list.measure}",
-        "{p.measure}",
-        "{spacing.card}",
-        "{spacing.mobile}",
-        "{spacing.mobile-lg}",
-        "{spacing.tablet}",
-        "{spacing.tablet-lg}",
-        "{spacing.desktop}",
-        "{spacing.desktop-lg}",
-        "{spacing.widescreen}",
-        "{spacing.section}",
-        "{spacing.aside}",
-        "{text-measure.1}",
-        "{text-measure.2}",
-        "{text-measure.3}",
-        "{text-measure.4}",
-        "{text-measure.5}",
-        "{button.width}",
-        "{button.min-width}",
-        "{button.max-width}",
-        "{button.height}",
-        "{button.min-height}",
-        "{button.max-height}",
-        "{button.icon-size}",
-        "{button.icon-start-size}",
-        "{button.icon-end-size}",
-        "{checkbox.control-width}",
-        "{checkbox.control-height}",
-        "{checkbox.indicator-size}",
-        "{input.icon-size}",
-        "{input.width}",
-        "{input.min-width}",
-        "{input.max-width}",
-        "{input.min-height}",
-        "{pagination.min-width}",
-        "{pagination.min-height}",
-        "{pagination.icon-size}",
-        "{radio.control-width}",
-        "{radio.control-height}",
-        "{radio.indicator-size}",
-        "{select.icon-size}",
-        "{select.indicator-size}",
-        "{select.width}",
-        "{select.min-width}",
-        "{select.max-width}",
-        "{select.min-height}",
-        "{textarea.width}",
-        "{textarea.min-width}",
-        "{textarea.max-width}",
-        "{textarea.min-block-size}",
-        "{toggle.track-width}",
-        "{toggle.track-height}",
-        "{toggle.thumb-size}",
-        "{tooltip.max-width}",
-        "{tooltip.arrow-size}",
-        "{tooltip.offset}"
-      ]
-    },
-    "boxShadowValue": {
-      "type": [
-        "string",
-        "number"
+    "shadowValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{button.transition-timing-function}",
+            "{pagination.transition-timing-function}",
+            "{tooltip.transition-timing-function}"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "color",
+            "offsetX",
+            "offsetY",
+            "blur",
+            "spread"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "color": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "colorSpace",
+                    "components"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "colorSpace": {
+                      "type": "string",
+                      "enum": [
+                        "srgb",
+                        "srgb-linear",
+                        "hsl",
+                        "hwb",
+                        "lab",
+                        "lch",
+                        "oklab",
+                        "oklch",
+                        "display-p3",
+                        "a98-rgb",
+                        "prophoto-rgb",
+                        "rec2020",
+                        "xyz-d65",
+                        "xyz-d50"
+                      ]
+                    },
+                    "components": {
+                      "type": "array",
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    },
+                    "alpha": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "hex": {
+                      "type": "string",
+                      "pattern": "^#[0-9a-fA-F]{6}$"
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "enum": [
+                              "srgb",
+                              "srgb-linear",
+                              "display-p3",
+                              "a98-rgb",
+                              "prophoto-rgb",
+                              "rec2020",
+                              "xyz-d65",
+                              "xyz-d50"
+                            ]
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "enum": [
+                              "hsl",
+                              "hwb"
+                            ]
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "exclusiveMaximum": 360
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "const": "lab"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "const": "lch"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "exclusiveMaximum": 360
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "const": "oklab"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "colorSpace": {
+                            "const": "oklch"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "components": {
+                            "items": [
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              },
+                              {
+                                "oneOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "exclusiveMaximum": 360
+                                  },
+                                  {
+                                    "const": "none"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+                }
+              ]
+            },
+            "offsetX": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+                }
+              ]
+            },
+            "offsetY": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+                }
+              ]
+            },
+            "blur": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+                }
+              ]
+            },
+            "spread": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "unit"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "enum": [
+                        "px",
+                        "rem"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "string",
+                  "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+                }
+              ]
+            },
+            "inset": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "color",
+                  "offsetX",
+                  "offsetY",
+                  "blur",
+                  "spread"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "colorSpace",
+                          "components"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "colorSpace": {
+                            "type": "string",
+                            "enum": [
+                              "srgb",
+                              "srgb-linear",
+                              "hsl",
+                              "hwb",
+                              "lab",
+                              "lch",
+                              "oklab",
+                              "oklch",
+                              "display-p3",
+                              "a98-rgb",
+                              "prophoto-rgb",
+                              "rec2020",
+                              "xyz-d65",
+                              "xyz-d50"
+                            ]
+                          },
+                          "components": {
+                            "type": "array",
+                            "minItems": 3,
+                            "maxItems": 3,
+                            "items": {
+                              "oneOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "const": "none"
+                                }
+                              ]
+                            }
+                          },
+                          "alpha": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          "hex": {
+                            "type": "string",
+                            "pattern": "^#[0-9a-fA-F]{6}$"
+                          }
+                        },
+                        "allOf": [
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "enum": [
+                                    "srgb",
+                                    "srgb-linear",
+                                    "display-p3",
+                                    "a98-rgb",
+                                    "prophoto-rgb",
+                                    "rec2020",
+                                    "xyz-d65",
+                                    "xyz-d50"
+                                  ]
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 1
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 1
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 1
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "enum": [
+                                    "hsl",
+                                    "hwb"
+                                  ]
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "exclusiveMaximum": 360
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 100
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 100
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "const": "lab"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 100
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "const": "lch"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 100
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "exclusiveMaximum": 360
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "const": "oklab"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 1
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "colorSpace": {
+                                  "const": "oklch"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "components": {
+                                  "items": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "maximum": 1
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "type": "number",
+                                          "minimum": 0,
+                                          "exclusiveMaximum": 360
+                                        },
+                                        {
+                                          "const": "none"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+                      }
+                    ]
+                  },
+                  "offsetX": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+                      }
+                    ]
+                  },
+                  "offsetY": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+                      }
+                    ]
+                  },
+                  "blur": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+                      }
+                    ]
+                  },
+                  "spread": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "value",
+                          "unit"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": [
+                              "px",
+                              "rem"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+                      }
+                    ]
+                  },
+                  "inset": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              {
+                "type": "string",
+                "pattern": "^\\{(?:(?!\\$)[^.{}]+\\.)*(?:(?!\\$)[^.{}]+|\\$root)\\}$"
+              }
+            ]
+          }
+        }
       ],
       "examples": [
         "{elevation.none}",
@@ -943,1015 +2729,1952 @@
         "{tooltip.box-shadow}"
       ]
     },
-    "zIndexValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+    "cssShadowValue": {
+      "type": "string",
+      "minLength": 1,
       "examples": [
-        "{z-index.0}",
-        "{z-index.10}",
-        "{z-index.20}",
-        "{z-index.30}",
-        "{z-index.40}",
-        "{z-index.50}",
-        "{z-index.60}",
-        "{z-index.70}",
-        "{z-index.80}",
-        "{z-index.90}",
-        "{z-index.100}",
-        "{z-index.auto}",
-        "{z-index.dropdown}",
-        "{z-index.sticky}",
-        "{z-index.fixed}",
-        "{z-index.modal-backdrop}",
-        "{z-index.modal}",
-        "{z-index.popover}",
-        "{z-index.tooltip}",
-        "{tooltip.z-index}"
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
       ]
     },
-    "transitionValue": {
-      "type": [
-        "string",
-        "number"
+    "durationValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{button.transition-timing-function}",
+            "{pagination.transition-timing-function}",
+            "{tooltip.transition-timing-function}"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "ms",
+                "s"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{transition.duration-default}",
         "{transition.duration-slow}",
         "{transition.duration-fast}",
-        "{transition.playful-motion-function-default}",
-        "{transition.playful-motion-function-slow}",
-        "{transition.playful-motion-function-fast}",
         "{transition.playful-motion-duration-default}",
         "{transition.playful-motion-duration-slow}",
         "{transition.playful-motion-duration-fast}",
-        "{transition.playful-fx-function-default}",
-        "{transition.playful-fx-function-slow}",
-        "{transition.playful-fx-function-fast}",
         "{transition.playful-fx-duration-default}",
         "{transition.playful-fx-duration-slow}",
         "{transition.playful-fx-duration-fast}",
-        "{transition.calm-motion-function-default}",
-        "{transition.calm-motion-function-slow}",
-        "{transition.calm-motion-function-fast}",
         "{transition.calm-motion-duration-default}",
         "{transition.calm-motion-duration-slow}",
         "{transition.calm-motion-duration-fast}",
-        "{transition.calm-fx-function-default}",
-        "{transition.calm-fx-function-slow}",
-        "{transition.calm-fx-function-fast}",
         "{transition.calm-fx-duration-default}",
         "{transition.calm-fx-duration-slow}",
         "{transition.calm-fx-duration-fast}",
         "{button.transition-duration}",
-        "{button.transition-timing-function}",
-        "{button.transition-property}",
         "{button.transition-delay}",
         "{checkbox.transition-duration}",
-        "{checkbox.transition-timing-function}",
-        "{checkbox.transition-property}",
         "{checkbox.transition-delay}",
         "{input.transition-duration}",
-        "{input.transition-timing-function}",
-        "{input.transition-property}",
         "{input.transition-delay}",
-        "{pagination.transition-property}",
         "{pagination.transition-duration}",
-        "{pagination.transition-timing-function}",
         "{radio.transition-duration}",
-        "{radio.transition-timing-function}",
-        "{radio.transition-property}",
         "{radio.transition-delay}",
         "{select.transition-duration}",
-        "{select.transition-timing-function}",
-        "{select.transition-property}",
         "{select.transition-delay}",
         "{textarea.transition-duration}",
-        "{textarea.transition-timing-function}",
-        "{textarea.transition-property}",
         "{textarea.transition-delay}",
         "{toggle.transition-duration}",
-        "{toggle.transition-timing-function}",
-        "{toggle.transition-property}",
         "{toggle.transition-delay}",
         "{tooltip.transition-duration}",
-        "{tooltip.transition-timing-function}",
         "{tooltip.show-delay}",
         "{tooltip.hide-grace}"
       ]
     },
-    "opacityValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+    "cssDurationValue": {
+      "type": "string",
+      "minLength": 1,
       "examples": [
-        "{opacity.0}",
-        "{opacity.5}",
-        "{opacity.10}",
-        "{opacity.15}",
-        "{opacity.20}",
-        "{opacity.25}",
-        "{opacity.30}",
-        "{opacity.40}",
-        "{opacity.50}",
-        "{opacity.60}",
-        "{opacity.70}",
-        "{opacity.75}",
-        "{opacity.80}",
-        "{opacity.85}",
-        "{opacity.90}",
-        "{opacity.95}",
-        "{opacity.100}",
-        "{button.opacity}",
-        "{button.opacity-loading}",
-        "{checkbox.opacity}",
-        "{checkbox.opacity-disabled}",
-        "{input.opacity}",
-        "{input.opacity-disabled}",
-        "{radio.opacity}",
-        "{radio.opacity-disabled}",
-        "{select.opacity}",
-        "{select.opacity-disabled}",
-        "{textarea.opacity}",
-        "{textarea.opacity-disabled}",
-        "{toggle.opacity}",
-        "{toggle.opacity-disabled}",
-        "{tooltip.opacity}"
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
       ]
-    }
-  },
-  "properties": {
-    "display": {
+    },
+    "cssEasingFunctionValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{button.transition-timing-function}",
+        "{pagination.transition-timing-function}",
+        "{tooltip.transition-timing-function}"
+      ]
+    },
+    "displayToken": {
       "type": "object",
       "description": "Display mode for the tooltip host element wrapping the trigger.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
+        "$value": {
           "$ref": "#/definitions/displayValue"
         },
-        "type": {
+        "$type": {
           "const": "display"
         },
-        "description": {
-          "type": "string"
+        "$description": {
+          "type": "string",
+          "minLength": 1
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
         }
       }
     },
-    "canvas": {
+    "colorToken": {
       "type": "object",
       "description": "Tooltip bubble background.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "ink": {
-      "type": "object",
-      "description": "Tooltip text color.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "border-color": {
-      "type": "object",
-      "description": "Tooltip bubble border color.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "border-width": {
-      "type": "object",
-      "description": "Tooltip bubble border width.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderWidthValue"
-        },
-        "type": {
-          "const": "borderWidth"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "border-style": {
-      "type": "object",
-      "description": "Tooltip bubble border style.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderStyleValue"
-        },
-        "type": {
-          "const": "borderStyle"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "border-radius": {
-      "type": "object",
-      "description": "Tooltip bubble corner radius.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderRadiusValue"
-        },
-        "type": {
-          "const": "borderRadius"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "font-family": {
-      "type": "object",
-      "description": "Font family for tooltip text.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/fontFamilyValue"
-        },
-        "type": {
-          "const": "fontFamily"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "source": {
-          "type": "string",
-          "enum": [
-            "system",
-            "google",
-            "local"
-          ],
-          "description": "Where this font family is loaded from."
-        },
-        "fallback": {
-          "type": "string",
-          "enum": [
-            "sans",
-            "serif",
-            "mono"
-          ],
-          "description": "Fallback stack category appended to the authored family."
-        },
-        "weights": {
-          "description": "Static font weights or a variable-font range such as 200..800.",
-          "oneOf": [
+        "$value": {
+          "anyOf": [
             {
-              "type": "string"
+              "$ref": "#/definitions/colorValue"
             },
             {
-              "type": "array",
-              "items": {
-                "type": [
-                  "string",
-                  "number"
-                ]
-              },
-              "uniqueItems": true
+              "$ref": "#/definitions/cssColorValue"
             }
           ]
         },
-        "styles": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "normal",
-              "italic"
-            ]
-          },
-          "uniqueItems": true
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
         },
-        "faces": {
-          "type": "array",
-          "items": {
-            "type": "object",
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
             "required": [
-              "src"
+              "$type"
             ],
-            "additionalProperties": false,
             "properties": {
-              "src": {
-                "type": "string"
-              },
-              "weight": {
-                "type": [
-                  "string",
-                  "number"
-                ]
-              },
-              "style": {
-                "type": "string",
-                "enum": [
-                  "normal",
-                  "italic",
-                  "oblique"
-                ]
-              },
-              "display": {
-                "type": "string",
-                "enum": [
-                  "auto",
-                  "block",
-                  "swap",
-                  "fallback",
-                  "optional"
-                ]
-              },
-              "format": {
-                "type": "string"
-              },
-              "unicodeRange": {
-                "type": "string"
+              "$type": {
+                "const": "color"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/colorValue"
               }
             }
           }
         },
-        "display": {
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssColor"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssColorValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "dimensionToken": {
+      "type": "object",
+      "description": "Tooltip bubble border width.",
+      "required": [
+        "$value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/dimensionValue"
+            },
+            {
+              "$ref": "#/definitions/cssDimensionValue"
+            }
+          ]
+        },
+        "$type": {
           "type": "string",
           "enum": [
-            "auto",
-            "block",
-            "swap",
-            "fallback",
-            "optional"
+            "dimension",
+            "cssDimension"
           ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "dimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/dimensionValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssDimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssDimensionValue"
+              }
+            }
+          }
+        }
+      ]
     },
-    "font-size": {
+    "strokeStyleToken": {
+      "type": "object",
+      "description": "Tooltip bubble border style.",
+      "required": [
+        "$value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/strokeStyleValue"
+            },
+            {
+              "$ref": "#/definitions/cssStrokeStyleValue"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "strokeStyle",
+            "cssStrokeStyle"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "strokeStyle"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/strokeStyleValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssStrokeStyle"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssStrokeStyleValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "fontFamilyToken": {
+      "type": "object",
+      "description": "Font family for tooltip text.",
+      "required": [
+        "$value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/fontFamilyValue"
+            },
+            {
+              "$ref": "#/definitions/cssFontFamilyValue"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "fontFamily",
+            "cssFontFamily"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                },
+                "font": {
+                  "type": "object",
+                  "description": "Font-loading metadata for this family.",
+                  "additionalProperties": false,
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "enum": [
+                        "system",
+                        "google",
+                        "local"
+                      ],
+                      "description": "Where this font family is loaded from."
+                    },
+                    "fallback": {
+                      "type": "string",
+                      "enum": [
+                        "sans",
+                        "serif",
+                        "mono"
+                      ],
+                      "description": "Fallback stack category appended to the authored family."
+                    },
+                    "weights": {
+                      "description": "Static font weights or a variable-font range such as 200..800.",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": [
+                              "string",
+                              "number"
+                            ]
+                          },
+                          "uniqueItems": true
+                        }
+                      ]
+                    },
+                    "styles": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "normal",
+                          "italic"
+                        ]
+                      },
+                      "uniqueItems": true
+                    },
+                    "faces": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "src"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "src": {
+                            "type": "string"
+                          },
+                          "weight": {
+                            "type": [
+                              "string",
+                              "number"
+                            ]
+                          },
+                          "style": {
+                            "type": "string",
+                            "enum": [
+                              "normal",
+                              "italic",
+                              "oblique"
+                            ]
+                          },
+                          "display": {
+                            "type": "string",
+                            "enum": [
+                              "auto",
+                              "block",
+                              "swap",
+                              "fallback",
+                              "optional"
+                            ]
+                          },
+                          "format": {
+                            "type": "string"
+                          },
+                          "unicodeRange": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "display": {
+                      "type": "string",
+                      "enum": [
+                        "auto",
+                        "block",
+                        "swap",
+                        "fallback",
+                        "optional"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "fontFamily"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/fontFamilyValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssFontFamily"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssFontFamilyValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "cssDimensionToken": {
       "type": "object",
       "description": "Font size for tooltip text.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/fontSizeValue"
+        "$value": {
+          "$ref": "#/definitions/cssDimensionValue"
         },
-        "type": {
-          "const": "fontSize"
+        "$type": {
+          "const": "cssDimension"
         },
-        "description": {
-          "type": "string"
+        "$description": {
+          "type": "string",
+          "minLength": 1
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
         }
       }
     },
-    "font-weight": {
+    "fontWeightToken": {
       "type": "object",
       "description": "Font weight for tooltip text.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/fontWeightValue"
-        },
-        "type": {
-          "const": "fontWeight"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/fontWeightValue"
+            },
+            {
+              "$ref": "#/definitions/cssFontWeightValue"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
+        "$type": {
+          "type": "string",
+          "enum": [
+            "fontWeight",
+            "cssFontWeight"
           ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "fontWeight"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/fontWeightValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssFontWeight"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssFontWeightValue"
+              }
+            }
+          }
+        }
+      ]
     },
-    "line-height": {
+    "numberToken": {
       "type": "object",
       "description": "Line height for tooltip text.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/lineHeightValue"
-        },
-        "type": {
-          "const": "lineHeight"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/numberValue"
+            },
+            {
+              "$ref": "#/definitions/cssNumberValue"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
+        "$type": {
+          "type": "string",
+          "enum": [
             "number",
-            "boolean"
+            "cssNumber"
           ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
         }
-      }
-    },
-    "letter-spacing": {
-      "type": "object",
-      "description": "Letter spacing for tooltip text.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/letterSpacingValue"
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "number"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/numberValue"
+              }
+            }
+          }
         },
-        "type": {
-          "const": "letterSpacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssNumber"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssNumberValue"
+              }
+            }
+          }
         }
-      }
+      ]
     },
-    "padding-inline": {
-      "type": "object",
-      "description": "Inline padding inside the bubble.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "padding-block": {
-      "type": "object",
-      "description": "Block padding inside the bubble.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "max-width": {
-      "type": "object",
-      "description": "Maximum bubble width before text wraps.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "arrow-size": {
-      "type": "object",
-      "description": "Arrow square size; also sets the default trigger-to-bubble gap.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "offset": {
-      "type": "object",
-      "description": "Gap between the trigger and the bubble.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "box-shadow": {
+    "shadowToken": {
       "type": "object",
       "description": "Bubble shadow.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/boxShadowValue"
-        },
-        "type": {
-          "const": "boxShadow"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/shadowValue"
+            },
+            {
+              "$ref": "#/definitions/cssShadowValue"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
+        "$type": {
+          "type": "string",
+          "enum": [
+            "shadow",
+            "cssShadow"
           ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
         }
-      }
-    },
-    "z-index": {
-      "type": "object",
-      "description": "Stacking order when the top-layer popover API is unavailable.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/zIndexValue"
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "shadow"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/shadowValue"
+              }
+            }
+          }
         },
-        "type": {
-          "const": "zIndex"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssShadow"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssShadowValue"
+              }
+            }
+          }
         }
-      }
+      ]
     },
-    "transition-duration": {
+    "durationToken": {
       "type": "object",
       "description": "Show/hide transition duration.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/durationValue"
+            },
+            {
+              "$ref": "#/definitions/cssDurationValue"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
+        "$type": {
+          "type": "string",
+          "enum": [
+            "duration",
+            "cssDuration"
           ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "duration"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/durationValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssDuration"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssDurationValue"
+              }
+            }
+          }
+        }
+      ]
     },
-    "transition-timing-function": {
+    "cssEasingFunctionToken": {
       "type": "object",
       "description": "Show/hide transition timing function.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
+        "$value": {
+          "$ref": "#/definitions/cssEasingFunctionValue"
         },
-        "type": {
-          "const": "transition"
+        "$type": {
+          "const": "cssEasingFunction"
         },
-        "description": {
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
           "type": "string"
+        }
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:border": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$description": {
+          "type": "string",
+          "minLength": 1
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "color": {
+          "description": "Tooltip bubble border color.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
+        "width": {
+          "description": "Tooltip bubble border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "style": {
+          "description": "Tooltip bubble border style.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/strokeStyleToken"
+            }
+          ]
+        },
+        "radius": {
+          "description": "Tooltip bubble corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
           ]
         }
       }
+    },
+    "group:font": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "family": {
+          "description": "Font family for tooltip text.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontFamilyToken"
+            }
+          ]
+        },
+        "size": {
+          "description": "Font size for tooltip text.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        },
+        "weight": {
+          "description": "Font weight for tooltip text.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/fontWeightToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:line": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "height": {
+          "description": "Line height for tooltip text.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:letter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "spacing": {
+          "description": "Letter spacing for tooltip text.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssDimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:padding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "inline": {
+          "description": "Inline padding inside the bubble.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "block": {
+          "description": "Block padding inside the bubble.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:max": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "width": {
+          "description": "Maximum bubble width before text wraps.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:arrow": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "size": {
+          "description": "Arrow square size; also sets the default trigger-to-bubble gap.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:box": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "shadow",
+            "cssShadow"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "shadow": {
+          "description": "Bubble shadow.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/shadowToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:z": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "number",
+            "cssNumber"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "index": {
+          "description": "Stacking order when the top-layer popover API is unavailable.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/numberToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "duration": {
+          "description": "Show/hide transition duration.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "timing": {
+          "$ref": "#/definitions/group:transition-timing"
+        },
+        "timing-function": {
+          "description": "Show/hide transition timing function.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssEasingFunctionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:transition-timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "cubicBezier",
+            "cssEasingFunction"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "function": {
+          "description": "Show/hide transition timing function.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cssEasingFunctionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:show": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "duration",
+            "cssDuration"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "delay": {
+          "description": "Delay before a hint tooltip shows on hover/focus. Read by the element at runtime.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:hide": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "duration",
+            "cssDuration"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "grace": {
+          "description": "Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "$description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "display": {
+      "description": "Display mode for the tooltip host element wrapping the trigger.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/displayToken"
+        }
+      ]
+    },
+    "canvas": {
+      "description": "Tooltip bubble background.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ink": {
+      "description": "Tooltip text color.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border": {
+      "$ref": "#/definitions/group:border"
+    },
+    "border-color": {
+      "description": "Tooltip bubble border color.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "border-width": {
+      "description": "Tooltip bubble border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "border-style": {
+      "description": "Tooltip bubble border style.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/strokeStyleToken"
+        }
+      ]
+    },
+    "border-radius": {
+      "description": "Tooltip bubble corner radius.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "font": {
+      "$ref": "#/definitions/group:font"
+    },
+    "font-family": {
+      "description": "Font family for tooltip text.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontFamilyToken"
+        }
+      ]
+    },
+    "font-size": {
+      "description": "Font size for tooltip text.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "font-weight": {
+      "description": "Font weight for tooltip text.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/fontWeightToken"
+        }
+      ]
+    },
+    "line": {
+      "$ref": "#/definitions/group:line"
+    },
+    "line-height": {
+      "description": "Line height for tooltip text.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "letter": {
+      "$ref": "#/definitions/group:letter"
+    },
+    "letter-spacing": {
+      "description": "Letter spacing for tooltip text.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
+        }
+      ]
+    },
+    "padding": {
+      "$ref": "#/definitions/group:padding"
+    },
+    "padding-inline": {
+      "description": "Inline padding inside the bubble.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "padding-block": {
+      "description": "Block padding inside the bubble.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "max": {
+      "$ref": "#/definitions/group:max"
+    },
+    "max-width": {
+      "description": "Maximum bubble width before text wraps.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "arrow": {
+      "$ref": "#/definitions/group:arrow"
+    },
+    "arrow-size": {
+      "description": "Arrow square size; also sets the default trigger-to-bubble gap.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "offset": {
+      "description": "Gap between the trigger and the bubble.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "box": {
+      "$ref": "#/definitions/group:box"
+    },
+    "box-shadow": {
+      "description": "Bubble shadow.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/shadowToken"
+        }
+      ]
+    },
+    "z": {
+      "$ref": "#/definitions/group:z"
+    },
+    "z-index": {
+      "description": "Stacking order when the top-layer popover API is unavailable.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
+        }
+      ]
+    },
+    "transition": {
+      "$ref": "#/definitions/group:transition"
+    },
+    "transition-duration": {
+      "description": "Show/hide transition duration.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
+        }
+      ]
+    },
+    "transition-timing": {
+      "$ref": "#/definitions/group:transition-timing"
+    },
+    "transition-timing-function": {
+      "description": "Show/hide transition timing function.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssEasingFunctionToken"
+        }
+      ]
+    },
+    "show": {
+      "$ref": "#/definitions/group:show"
     },
     "show-delay": {
-      "type": "object",
       "description": "Delay before a hint tooltip shows on hover/focus. Read by the element at runtime.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
+    },
+    "hide": {
+      "$ref": "#/definitions/group:hide"
     },
     "hide-grace": {
-      "type": "object",
       "description": "Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "opacity": {
-      "type": "object",
       "description": "Bubble opacity.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/opacityValue"
-        },
-        "type": {
-          "const": "opacity"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/numberToken"
         }
-      }
+      ]
     }
   }
 }

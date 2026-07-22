@@ -111,39 +111,39 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-pagination-ink-active` | `{action.ink-emphasis}` | color | Item label color when pressed. |
 | `--zbk-pagination-ink-disabled` | `{disabled.ink}` | color | Label color of a disabled previous/next control. |
 | `--zbk-pagination-ink-selected` | `{app.ink-inverse}` | color | Label color of the current page item (aria-current). |
-| `--zbk-pagination-canvas` | `transparent` | color | Item background at rest. |
+| `--zbk-pagination-canvas` | `{color.global-transparent}` | color | Item background at rest. |
 | `--zbk-pagination-canvas-hover` | `{action.canvas-subtle}` | color | Item background when hovered. |
 | `--zbk-pagination-canvas-active` | `{action.canvas-muted}` | color | Item background when pressed. |
-| `--zbk-pagination-canvas-disabled` | `transparent` | color | Background of a disabled previous/next control. |
+| `--zbk-pagination-canvas-disabled` | `{color.global-transparent}` | color | Background of a disabled previous/next control. |
 | `--zbk-pagination-canvas-selected` | `{accent-primary.500}` | color | Background of the current page item (aria-current). |
-| `--zbk-pagination-border-color` | `transparent` | color | Item border color at rest. |
-| `--zbk-pagination-border-color-hover` | `transparent` | color | Item border color when hovered. |
-| `--zbk-pagination-border-color-active` | `transparent` | color | Item border color when pressed. |
-| `--zbk-pagination-border-color-disabled` | `transparent` | color | Border color of a disabled previous/next control. |
+| `--zbk-pagination-border-color` | `{color.global-transparent}` | color | Item border color at rest. |
+| `--zbk-pagination-border-color-hover` | `{color.global-transparent}` | color | Item border color when hovered. |
+| `--zbk-pagination-border-color-active` | `{color.global-transparent}` | color | Item border color when pressed. |
+| `--zbk-pagination-border-color-disabled` | `{color.global-transparent}` | color | Border color of a disabled previous/next control. |
 | `--zbk-pagination-border-color-selected` | `{accent-primary.500}` | color | Border color of the current page item (aria-current). |
-| `--zbk-pagination-border-width` | `{border.width-sm}` | borderWidth | Item border width. |
-| `--zbk-pagination-border-style` | `{border.style}` | borderStyle | Item border style. |
-| `--zbk-pagination-border-radius` | `{border.radius-md}` | borderRadius | Item corner radius. |
+| `--zbk-pagination-border-width` | `{border.width-sm}` | dimension | Item border width. |
+| `--zbk-pagination-border-style` | `{border.style}` | strokeStyle | Item border style. |
+| `--zbk-pagination-border-radius` | `{border.radius-md}` | dimension | Item corner radius. |
 | `--zbk-pagination-font-family` | `{font-family.interface}` | fontFamily | Font family for pagination content. |
-| `--zbk-pagination-font-size` | `{font-size.md}` | fontSize | Base font size for pagination content. |
+| `--zbk-pagination-font-size` | `{font-size.md}` | cssDimension | Base font size for pagination content. |
 | `--zbk-pagination-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for pagination content. |
-| `--zbk-pagination-line-height` | `{line-height.2}` | lineHeight | Line height for pagination content. |
+| `--zbk-pagination-line-height` | `{line-height.2}` | number | Line height for pagination content. |
 | `--zbk-pagination-display` | `inline-flex` | display | Display mode for the pagination nav. |
-| `--zbk-pagination-gap` | `{spacing.2xs}` | spacing | Gap between pagination items. |
-| `--zbk-pagination-min-width` | `{a11y.min-interaction-size}` | sizing | Minimum item width to keep the tap target. |
-| `--zbk-pagination-min-height` | `{a11y.min-interaction-size}` | sizing | Minimum item height to keep the tap target. |
-| `--zbk-pagination-padding-inline` | `{spacing.2xs}` | spacing | Inline padding inside each item. |
-| `--zbk-pagination-padding-block` | `{spacing.2xs}` | spacing | Block padding inside each item. |
-| `--zbk-pagination-icon-size` | `{pagination.font-size}` | sizing | Size of the previous/next glyphs (drawn or slotted). |
+| `--zbk-pagination-gap` | `{spacing.2xs}` | dimension | Gap between pagination items. |
+| `--zbk-pagination-min-width` | `{a11y.min-interaction-size}` | dimension | Minimum item width to keep the tap target. |
+| `--zbk-pagination-min-height` | `{a11y.min-interaction-size}` | dimension | Minimum item height to keep the tap target. |
+| `--zbk-pagination-padding-inline` | `{spacing.2xs}` | dimension | Inline padding inside each item. |
+| `--zbk-pagination-padding-block` | `{spacing.2xs}` | dimension | Block padding inside each item. |
+| `--zbk-pagination-icon-size` | `{pagination.font-size}` | cssDimension | Size of the previous/next glyphs (drawn or slotted). |
 | `--zbk-pagination-ellipsis-ink` | `{app.ink-subtle}` | color | Color of the non-interactive ellipsis separators. |
 | `--zbk-pagination-status-ink` | `{app.ink}` | color | Color of the compact-mode "Page X of Y" status text. |
 | `--zbk-pagination-focus-color` | `{focus.color}` | color | Outline color for a focused item. |
-| `--zbk-pagination-focus-width` | `{focus.width}` | borderWidth | Outline width for a focused item. |
-| `--zbk-pagination-focus-offset` | `{focus.offset}` | spacing | Outline offset for a focused item. |
-| `--zbk-pagination-transition-property` | `background-color, color, border-color, outline` | transition | CSS properties that animate on item interaction. |
-| `--zbk-pagination-transition-duration` | `150ms` | transition | Duration for item hover/active transitions. **(a11y)** |
-| `--zbk-pagination-transition-timing-function` | `ease-out` | transition | Timing function for item transitions. |
-| `--zbk-pagination-cursor` | `pointer` | utility | Cursor over interactive pagination items. |
+| `--zbk-pagination-focus-width` | `{focus.width}` | dimension | Outline width for a focused item. |
+| `--zbk-pagination-focus-offset` | `{focus.offset}` | dimension | Outline offset for a focused item. |
+| `--zbk-pagination-transition-property` | `background-color, color, border-color, outline` | transitionProperty | CSS properties that animate on item interaction. |
+| `--zbk-pagination-transition-duration` | `150ms` | duration | Duration for item hover/active transitions. **(a11y)** |
+| `--zbk-pagination-transition-timing-function` | `ease-out` | cssEasingFunction | Timing function for item transitions. |
+| `--zbk-pagination-cursor` | `pointer` | cursor | Cursor over interactive pagination items. |
 
 ## Variants
 

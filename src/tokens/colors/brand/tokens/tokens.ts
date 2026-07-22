@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 /**
  * Zebkit brand color design tokens. 
@@ -8,64 +7,63 @@ import { tokenSchema } from "./token-schema";
 export const key = "brand";
 export const layer: LayerName = "theme";
 
-export type BrandTokenSchema = z.infer<typeof tokenSchema>;
 
 const tokens = {
   50: {
-    value: "{color.butterfield-50}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-50}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
     100: {
-    value: "{color.butterfield-100}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-100}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
     200: {
-    value: "{color.butterfield-200}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-200}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
     300: {
-    value: "{color.butterfield-300}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-300}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
     400: {
-    value: "{color.butterfield-400}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-400}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
     500: {
-    value: "{color.butterfield-500}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-500}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
     600: {
-    value: "{color.butterfield-600}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-600}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
     700: {
-    value: "{color.butterfield-700}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-700}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
     800: {
-    value: "{color.butterfield-800}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-800}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
     900: {
-    value: "{color.butterfield-900}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-900}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
     950: {
-    value: "{color.butterfield-950}",
-    type: "color",
-    description: "For primary branded surfaces."
+    $value: "{color.butterfield-950}",
+    $type: "color",
+    $description: "For primary branded surfaces."
   },
-} as const satisfies BrandTokenSchema;
+} as const satisfies TokenInterface;
 
 export default tokens;

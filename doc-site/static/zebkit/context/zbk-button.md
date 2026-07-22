@@ -130,63 +130,63 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-border-color-active` | `{button.border-color}` | color | Border color when the button is active/pressed. |
 | `--zbk-button-border-color-disabled` | `{disabled.border}` | color | Border color for disabled buttons. |
 | `--zbk-button-border-color-loading` | `{button.border-color-hover}` | color | Border color while the button is in its loading state. |
-| `--zbk-button-border-width` | `0px` | borderWidth | Base border width. |
-| `--zbk-button-border-style` | `{border.style}` | borderStyle | Border style (solid, dashed, etc) for standard buttons. |
-| `--zbk-button-border-radius` | `{border.radius-sm}` | borderRadius | Corner radius for standard buttons. |
+| `--zbk-button-border-width` | `0px` | dimension | Base border width. |
+| `--zbk-button-border-style` | `{border.style}` | strokeStyle | Border style (solid, dashed, etc) for standard buttons. |
+| `--zbk-button-border-radius` | `{border.radius-sm}` | dimension | Corner radius for standard buttons. |
 | `--zbk-button-font-family` | `{font-family.interface}` | fontFamily | Font family for button labels. |
-| `--zbk-button-font-size` | `{font-size.sm}` | fontSize | Base font size for button labels. |
+| `--zbk-button-font-size` | `{font-size.sm}` | cssDimension | Base font size for button labels. |
 | `--zbk-button-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for button labels. |
-| `--zbk-button-line-height` | `{line-height.3}` | lineHeight | Base line height for buttons. |
-| `--zbk-button-letter-spacing` | `{letter-spacing.normal}` | letterSpacing | Letter spacing for button labels. |
+| `--zbk-button-line-height` | `{line-height.3}` | number | Base line height for buttons. |
+| `--zbk-button-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for button labels. |
 | `--zbk-button-text-transform` | `none` | textTransform | Text transform for button labels. |
 | `--zbk-button-text-decoration` | `none` | textDecoration | Text decoration for button labels. |
 | `--zbk-button-text-align` | `center` | textAlignment | Text alignment for button content. |
-| `--zbk-button-padding-inline` | `{spacing.md}` | spacing | Inline (horizontal) padding for standard buttons. |
-| `--zbk-button-padding-block` | `{spacing.sm}` | spacing | Block (vertical) padding for standard buttons. |
-| `--zbk-button-padding-inline-start` | `{button.padding-inline}` | spacing | Inline-start padding override when needed. |
-| `--zbk-button-padding-inline-end` | `{button.padding-inline}` | spacing | Inline-end padding override when needed. |
-| `--zbk-button-padding-block-start` | `{button.padding-block}` | spacing | Block-start padding override when needed. |
-| `--zbk-button-padding-block-end` | `{button.padding-block}` | spacing | Block-end padding override when needed. |
-| `--zbk-button-margin-inline` | `0` | spacing | Inline margin for standalone buttons. |
-| `--zbk-button-margin-block` | `0` | spacing | Block margin for standalone buttons. |
-| `--zbk-button-margin-inline-start` | `{button.margin-inline}` | spacing | Inline-start margin override when needed. |
-| `--zbk-button-margin-inline-end` | `{button.margin-inline}` | spacing | Inline-end margin override when needed. |
-| `--zbk-button-margin-block-start` | `{button.margin-block}` | spacing | Block-start margin override when needed. |
-| `--zbk-button-margin-block-end` | `{button.margin-block}` | spacing | Block-end margin override when needed. |
-| `--zbk-button-gap` | `{button.padding-block}` | spacing | Gap between button icon and label. |
-| `--zbk-button-group-gap` | `{spacing.105}` | spacing | Gap between buttons when rendered in a group. |
+| `--zbk-button-padding-inline` | `{spacing.md}` | dimension | Inline (horizontal) padding for standard buttons. |
+| `--zbk-button-padding-block` | `{spacing.sm}` | dimension | Block (vertical) padding for standard buttons. |
+| `--zbk-button-padding-inline-start` | `{button.padding-inline}` | dimension | Inline-start padding override when needed. |
+| `--zbk-button-padding-inline-end` | `{button.padding-inline}` | dimension | Inline-end padding override when needed. |
+| `--zbk-button-padding-block-start` | `{button.padding-block}` | dimension | Block-start padding override when needed. |
+| `--zbk-button-padding-block-end` | `{button.padding-block}` | dimension | Block-end padding override when needed. |
+| `--zbk-button-margin-inline` | `0` | cssDimension | Inline margin for standalone buttons. |
+| `--zbk-button-margin-block` | `0` | cssDimension | Block margin for standalone buttons. |
+| `--zbk-button-margin-inline-start` | `{button.margin-inline}` | cssDimension | Inline-start margin override when needed. |
+| `--zbk-button-margin-inline-end` | `{button.margin-inline}` | cssDimension | Inline-end margin override when needed. |
+| `--zbk-button-margin-block-start` | `{button.margin-block}` | cssDimension | Block-start margin override when needed. |
+| `--zbk-button-margin-block-end` | `{button.margin-block}` | cssDimension | Block-end margin override when needed. |
+| `--zbk-button-gap` | `{button.padding-block}` | dimension | Gap between button icon and label. |
+| `--zbk-button-group-gap` | `{spacing.105}` | dimension | Gap between buttons when rendered in a group. |
 | `--zbk-button-display` | `inline-flex` | display | Display mode for buttons. |
-| `--zbk-button-width` | `auto` | sizing | Default button width. |
-| `--zbk-button-min-width` | `{a11y.min-interaction-size}` | sizing | Minimum button width. |
-| `--zbk-button-max-width` | `none` | sizing | Maximum button width. |
-| `--zbk-button-height` | `auto` | sizing | Default button height. |
-| `--zbk-button-min-height` | `{a11y.min-interaction-size}` | sizing | Minimum height to ensure tappable area. |
-| `--zbk-button-max-height` | `none` | sizing | Maximum button height. |
-| `--zbk-button-icon-size` | `{button.font-size}` | sizing | Default icon size within buttons. |
-| `--zbk-button-icon-start-size` | `{button.icon-size}` | sizing | Default icon size for icons at start of buttons. |
-| `--zbk-button-icon-end-size` | `{button.icon-size}` | sizing | Default icon size for icons at end of buttons. |
+| `--zbk-button-width` | `auto` | cssDimension | Default button width. |
+| `--zbk-button-min-width` | `{a11y.min-interaction-size}` | dimension | Minimum button width. |
+| `--zbk-button-max-width` | `none` | cssDimension | Maximum button width. |
+| `--zbk-button-height` | `auto` | cssDimension | Default button height. |
+| `--zbk-button-min-height` | `{a11y.min-interaction-size}` | dimension | Minimum height to ensure tappable area. |
+| `--zbk-button-max-height` | `none` | cssDimension | Maximum button height. |
+| `--zbk-button-icon-size` | `{button.font-size}` | cssDimension | Default icon size within buttons. |
+| `--zbk-button-icon-start-size` | `{button.icon-size}` | cssDimension | Default icon size for icons at start of buttons. |
+| `--zbk-button-icon-end-size` | `{button.icon-size}` | cssDimension | Default icon size for icons at end of buttons. |
 | `--zbk-button-focus-color` | `{focus.color}` | color | Outline color for focus state. |
-| `--zbk-button-focus-width` | `{focus.width}` | borderWidth | Outline width for focus state. |
-| `--zbk-button-focus-offset` | `{focus.offset}` | spacing | Outline offset for focus state. |
-| `--zbk-button-box-shadow` | `none` | boxShadow | Default box shadow for buttons. |
-| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)` | boxShadow | Box shadow on hover. |
-| `--zbk-button-box-shadow-active` | `none` | boxShadow | Box shadow when active/pressed. |
-| `--zbk-button-box-shadow-focus` | `none` | boxShadow | Box shadow in focus state (in addition to outline). |
-| `--zbk-button-transform` | `translateY(0)` | utility | Default transform property for buttons. |
-| `--zbk-button-transform-hover` | `translateY(-2%)` | utility | Transform effect on hover. |
-| `--zbk-button-transform-active` | `translateY(0)` | utility | Transform effect when active/pressed. |
-| `--zbk-button-transform-focus` | `translateY(0)` | utility | Transform effect in focus state (in addition to outline). |
-| `--zbk-button-cursor` | `pointer` | utility | Cursor style when hovering over buttons. |
-| `--zbk-button-cursor-loading` | `progress` | utility | Cursor style while the button is in its loading state. |
+| `--zbk-button-focus-width` | `{focus.width}` | dimension | Outline width for focus state. |
+| `--zbk-button-focus-offset` | `{focus.offset}` | dimension | Outline offset for focus state. |
+| `--zbk-button-box-shadow` | `none` | shadow | Default box shadow for buttons. |
+| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)` | cssShadow | Box shadow on hover. |
+| `--zbk-button-box-shadow-active` | `none` | shadow | Box shadow when active/pressed. |
+| `--zbk-button-box-shadow-focus` | `none` | shadow | Box shadow in focus state (in addition to outline). |
+| `--zbk-button-transform` | `translateY(0)` | transform | Default transform property for buttons. |
+| `--zbk-button-transform-hover` | `translateY(-2%)` | transform | Transform effect on hover. |
+| `--zbk-button-transform-active` | `translateY(0)` | transform | Transform effect when active/pressed. |
+| `--zbk-button-transform-focus` | `translateY(0)` | transform | Transform effect in focus state (in addition to outline). |
+| `--zbk-button-cursor` | `pointer` | cursor | Cursor style when hovering over buttons. |
+| `--zbk-button-cursor-loading` | `progress` | cursor | Cursor style while the button is in its loading state. |
 | `--zbk-button-flex-direction` | `row` | flex | Direction of icon and label layout. |
 | `--zbk-button-justify-content` | `center` | flex | Main axis alignment for button contents. |
 | `--zbk-button-align-items` | `center` | flex | Cross axis alignment for button contents. |
-| `--zbk-button-transition-duration` | `{transition.playful-motion-duration-default}` | transition | Duration for hover/active transitions. **(a11y)** |
-| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | transition | Timing function for button transitions. |
-| `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transition | CSS properties that should animate on interaction. |
-| `--zbk-button-transition-delay` | `0` | transition | Delay before CSS properties run through their animate on interaction. |
-| `--zbk-button-opacity` | `1` | opacity | Visual opacity of button. |
-| `--zbk-button-opacity-loading` | `1` | opacity | Visual opacity while the button is in its loading state. |
+| `--zbk-button-transition-duration` | `{transition.playful-motion-duration-default}` | duration | Duration for hover/active transitions. **(a11y)** |
+| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | cssEasingFunction | Timing function for button transitions. |
+| `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transitionProperty | CSS properties that should animate on interaction. |
+| `--zbk-button-transition-delay` | `0ms` | duration | Delay before CSS properties run through their animate on interaction. |
+| `--zbk-button-opacity` | `1` | number | Visual opacity of button. |
+| `--zbk-button-opacity-loading` | `1` | number | Visual opacity while the button is in its loading state. |
 
 ## Variants
 

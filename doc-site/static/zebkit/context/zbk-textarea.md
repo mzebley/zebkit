@@ -104,42 +104,42 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-border-color-disabled` | `{disabled.border}` | color | Field border color when disabled. |
 | `--zbk-textarea-border-color-readonly` | `{app.border-muted}` | color | Field border color when readonly. |
 | `--zbk-textarea-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the value is invalid. |
-| `--zbk-textarea-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the field box. |
-| `--zbk-textarea-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
-| `--zbk-textarea-border-radius` | `{border.radius-md}` | borderRadius | Corner radius of the field box. |
+| `--zbk-textarea-border-width` | `{border.width-sm}` | dimension | Border thickness of the field box. |
+| `--zbk-textarea-border-style` | `{border.style}` | strokeStyle | Border style of the field box. |
+| `--zbk-textarea-border-radius` | `{border.radius-md}` | dimension | Corner radius of the field box. |
 | `--zbk-textarea-font-family` | `{font-family.interface}` | fontFamily | Font family for the entered text. |
-| `--zbk-textarea-font-size` | `{font-size.md}` | fontSize | Font size for the entered text. |
+| `--zbk-textarea-font-size` | `{font-size.md}` | cssDimension | Font size for the entered text. |
 | `--zbk-textarea-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the entered text. |
-| `--zbk-textarea-field-line-height` | `{line-height.2}` | lineHeight | Line height of the entered multi-line text. |
-| `--zbk-textarea-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the entered text. |
+| `--zbk-textarea-field-line-height` | `{line-height.2}` | number | Line height of the entered multi-line text. |
+| `--zbk-textarea-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the entered text. |
 | `--zbk-textarea-label-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-textarea-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
-| `--zbk-textarea-label-font-size` | `{font-size.sm}` | fontSize | Font size for the label. |
+| `--zbk-textarea-label-font-size` | `{font-size.sm}` | cssDimension | Font size for the label. |
 | `--zbk-textarea-label-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for the label. |
-| `--zbk-textarea-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
-| `--zbk-textarea-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
-| `--zbk-textarea-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
-| `--zbk-textarea-resize` | `vertical` | utility | CSS resize behavior of the field (vertical, horizontal, both, none). |
-| `--zbk-textarea-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-textarea-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-textarea-max-width` | `100%` | sizing | Maximum width of the field box. |
-| `--zbk-textarea-min-block-size` | `44px` | sizing | Minimum field height for a multi-line box; also a tappable floor. |
+| `--zbk-textarea-label-gap` | `{spacing.2xs}` | dimension | Space between the label and the field box. |
+| `--zbk-textarea-padding-inline` | `{spacing.sm}` | dimension | Inline (horizontal) padding of the field box. |
+| `--zbk-textarea-padding-block` | `{spacing.2xs}` | dimension | Block (vertical) padding of the field box. |
+| `--zbk-textarea-resize` | `vertical` | resize | CSS resize behavior of the field (vertical, horizontal, both, none). |
+| `--zbk-textarea-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-textarea-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-textarea-max-width` | `100%` | cssDimension | Maximum width of the field box. |
+| `--zbk-textarea-min-block-size` | `44px` | dimension | Minimum field height for a multi-line box; also a tappable floor. |
 | `--zbk-textarea-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-textarea-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-textarea-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
-| `--zbk-textarea-box-shadow` | `none` | boxShadow | Default field shadow. |
-| `--zbk-textarea-box-shadow-hover` | `none` | boxShadow | Field shadow when hovered. |
-| `--zbk-textarea-box-shadow-focus` | `none` | boxShadow | Field shadow while focused (in addition to the outline). |
-| `--zbk-textarea-box-shadow-active` | `none` | boxShadow | Field shadow while pressed. |
-| `--zbk-textarea-box-shadow-invalid` | `none` | boxShadow | Field shadow when the value is invalid. |
-| `--zbk-textarea-cursor` | `text` | utility | Cursor over the editable field. |
-| `--zbk-textarea-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
-| `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
-| `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
-| `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-textarea-transition-delay` | `0` | transition | Delay before field transitions run. |
-| `--zbk-textarea-opacity` | `1` | opacity | Opacity of the field. |
-| `--zbk-textarea-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
+| `--zbk-textarea-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-textarea-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
+| `--zbk-textarea-box-shadow` | `none` | shadow | Default field shadow. |
+| `--zbk-textarea-box-shadow-hover` | `none` | shadow | Field shadow when hovered. |
+| `--zbk-textarea-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
+| `--zbk-textarea-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
+| `--zbk-textarea-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
+| `--zbk-textarea-cursor` | `text` | cursor | Cursor over the editable field. |
+| `--zbk-textarea-cursor-disabled` | `not-allowed` | cursor | Cursor over a disabled field. |
+| `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
+| `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
+| `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-textarea-transition-delay` | `0ms` | duration | Delay before field transitions run. |
+| `--zbk-textarea-opacity` | `1` | number | Opacity of the field. |
+| `--zbk-textarea-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
 ## Variants
 

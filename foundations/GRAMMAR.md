@@ -65,7 +65,7 @@ Every visual property that varies by state gets the suffixed token. A state whos
 
 - **Full surface**: every visual property the component renders is a `--zbk-{component}-*` token. If adapting the component to a design requires touching the component, the surface is incomplete.
 - **Strata discipline**: component tokens default to alias tokens, never directly to primitives. Raw values appear only in primitives.
-- Every token carries a `type`, a `description`, and an `a11y` flag where applicable, validated by the component's Zod schema (`token-schema.ts` stays in sync with `tokens.ts`).
+- Every token carries a `$type`, a `$description`, and — where applicable — an `a11y` flag under `$extensions["dev.zebkit"]` (the DTCG 2025.10 entry shape), validated at build against the generic `tokenModuleSchema` unless the module ships a bespoke `token-schema.ts`.
 
 ## 6. Variants
 

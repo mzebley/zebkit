@@ -197,6 +197,22 @@ h1.display {
   border-block-end: var(--zbk-border-width-xs) solid var(--zbk-app-border-subtle);
 }
 
+@media (max-width: 40rem) {
+  .editorial-main .authoring-strata {
+    inline-size: 100%;
+    table-layout: fixed;
+  }
+
+  .editorial-main .authoring-strata :is(th, td) {
+    padding-inline: var(--zbk-spacing-025);
+    overflow-wrap: anywhere;
+  }
+
+  .editorial-main .authoring-strata :is(th, td):last-child {
+    padding-inline-end: 0;
+  }
+}
+
 /* Blockquote — indented aside voice. */
 .editorial-main blockquote {
   margin-inline: 0;

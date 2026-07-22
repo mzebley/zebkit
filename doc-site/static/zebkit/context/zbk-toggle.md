@@ -73,67 +73,67 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | Token | Default | Type | Description |
 |---|---|---|---|
 | `--zbk-toggle-display` | `contents` | display | Display mode for the <zbk-toggle> host element. |
-| `--zbk-toggle-track-width` | `{spacing.205}` | sizing | Width of the toggle track. |
-| `--zbk-toggle-track-height` | `{spacing.105}` | sizing | Height of the toggle track; the thumb and pill radius derive from it. |
+| `--zbk-toggle-track-width` | `{spacing.2}` | dimension | Width of the toggle track. |
+| `--zbk-toggle-track-height` | `{spacing.1}` | dimension | Height of the toggle track; the thumb and pill radius derive from it. |
 | `--zbk-toggle-canvas` | `{app.canvas-muted}` | color | Track background when the toggle is off. |
 | `--zbk-toggle-canvas-hover` | `{toggle.canvas}` | color | Track background when hovered. |
 | `--zbk-toggle-canvas-active` | `{toggle.canvas}` | color | Track background while pressed. |
 | `--zbk-toggle-canvas-checked` | `{action.ink}` | color | Track background when the toggle is on. |
 | `--zbk-toggle-canvas-disabled` | `{disabled.canvas}` | color | Track background when disabled. |
 | `--zbk-toggle-border-color` | `{app.border}` | color | Track border color when the toggle is off. |
-| `--zbk-toggle-border-color-hover` | `{app.border}` | color | Track border color when hovered. |
-| `--zbk-toggle-border-color-active` | `{app.border}` | color | Track border color while pressed. |
-| `--zbk-toggle-border-color-checked` | `{toggle.canvas-checked}` | color | Track border color when the toggle is on. |
+| `--zbk-toggle-border-color-hover` | `{toggle.border-color}` | color | Track border color when hovered. |
+| `--zbk-toggle-border-color-active` | `{toggle.border-color}` | color | Track border color while pressed. |
+| `--zbk-toggle-border-color-checked` | `{toggle.border-color}` | color | Track border color when the toggle is on. |
 | `--zbk-toggle-border-color-disabled` | `{disabled.border}` | color | Track border color when disabled. |
-| `--zbk-toggle-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the toggle track. |
-| `--zbk-toggle-border-style` | `{border.style}` | borderStyle | Border style of the toggle track. |
-| `--zbk-toggle-border-radius` | `{toggle.track-height}` | borderRadius | Corner radius of the track (track-height yields a pill). |
-| `--zbk-toggle-box-shadow` | `none` | boxShadow | Default track shadow. |
-| `--zbk-toggle-box-shadow-hover` | `none` | boxShadow | Track shadow when hovered. |
-| `--zbk-toggle-box-shadow-active` | `none` | boxShadow | Track shadow while pressed. |
-| `--zbk-toggle-box-shadow-checked` | `none` | boxShadow | Track shadow when the toggle is on. |
-| `--zbk-toggle-box-shadow-focus` | `none` | boxShadow | Track shadow in the focus state (in addition to the outline). |
-| `--zbk-toggle-thumb-size` | `{toggle.track-height}` | sizing | Diameter of the thumb. |
-| `--zbk-toggle-thumb-inset` | `{spacing.neg-2px}` | spacing | Thumb offset from the track's start edge; negative overlaps the border. |
-| `--zbk-toggle-thumb-canvas` | `{app.canvas}` | color | Thumb background when the toggle is off. |
+| `--zbk-toggle-border-width` | `{border.width-sm}` | dimension | Border thickness of the toggle track. |
+| `--zbk-toggle-border-style` | `{border.style}` | strokeStyle | Border style of the toggle track. |
+| `--zbk-toggle-border-radius` | `{toggle.track-height}` | dimension | Corner radius of the track (track-height yields a pill). |
+| `--zbk-toggle-box-shadow` | `none` | shadow | Default track shadow. |
+| `--zbk-toggle-box-shadow-hover` | `none` | shadow | Track shadow when hovered. |
+| `--zbk-toggle-box-shadow-active` | `none` | shadow | Track shadow while pressed. |
+| `--zbk-toggle-box-shadow-checked` | `none` | shadow | Track shadow when the toggle is on. |
+| `--zbk-toggle-box-shadow-focus` | `none` | shadow | Track shadow in the focus state (in addition to the outline). |
+| `--zbk-toggle-thumb-size` | `{toggle.track-height}` | dimension | Diameter of the thumb. |
+| `--zbk-toggle-thumb-inset` | `{spacing.neg-2px}` | dimension | Thumb offset from the track's start edge; negative overlaps the border. |
+| `--zbk-toggle-thumb-canvas` | `{app.canvas-inverse}` | color | Thumb background when the toggle is off. |
 | `--zbk-toggle-thumb-canvas-hover` | `{toggle.thumb-canvas}` | color | Thumb background when hovered. |
 | `--zbk-toggle-thumb-canvas-checked` | `{toggle.thumb-canvas}` | color | Thumb background when the toggle is on. |
 | `--zbk-toggle-thumb-canvas-disabled` | `{toggle.thumb-canvas}` | color | Thumb background when disabled. |
-| `--zbk-toggle-thumb-border-color` | `{toggle.border-color}` | color | Thumb border color when the toggle is off. |
+| `--zbk-toggle-thumb-border-color` | `{toggle.thumb-canvas}` | color | Thumb border color when the toggle is off. |
 | `--zbk-toggle-thumb-border-color-checked` | `{toggle.thumb-border-color}` | color | Thumb border color when the toggle is on. |
-| `--zbk-toggle-thumb-border-width` | `{toggle.border-width}` | borderWidth | Border thickness of the thumb. |
-| `--zbk-toggle-thumb-border-style` | `{toggle.border-style}` | borderStyle | Border style of the thumb. |
-| `--zbk-toggle-thumb-radius` | `50%` | borderRadius | Corner radius of the thumb (a circle by default). |
-| `--zbk-toggle-thumb-shadow` | `none` | boxShadow | Default thumb shadow. |
-| `--zbk-toggle-thumb-shadow-hover` | `none` | boxShadow | Thumb shadow when hovered. |
-| `--zbk-toggle-thumb-shadow-active` | `none` | boxShadow | Thumb shadow while pressed. |
-| `--zbk-toggle-thumb-shadow-checked` | `none` | boxShadow | Thumb shadow when the toggle is on. |
-| `--zbk-toggle-thumb-transform` | `none` | utility | Default thumb transform (travel is handled structurally). |
-| `--zbk-toggle-thumb-transform-hover` | `none` | utility | Thumb transform when hovered (e.g. a translateY lift). |
-| `--zbk-toggle-thumb-transform-active` | `none` | utility | Thumb transform while pressed (e.g. a press-down). |
-| `--zbk-toggle-thumb-transform-checked` | `none` | utility | Thumb transform when the toggle is on. |
+| `--zbk-toggle-thumb-border-width` | `{toggle.border-width}` | dimension | Border thickness of the thumb. |
+| `--zbk-toggle-thumb-border-style` | `{toggle.border-style}` | strokeStyle | Border style of the thumb. |
+| `--zbk-toggle-thumb-radius` | `50%` | cssDimension | Corner radius of the thumb (a circle by default). |
+| `--zbk-toggle-thumb-shadow` | `0 0 0 2px var(--zbk-app-canvas-muted)` | cssShadow | Default thumb shadow. |
+| `--zbk-toggle-thumb-shadow-hover` | `{toggle.thumb-shadow}` | shadow | Thumb shadow when hovered. |
+| `--zbk-toggle-thumb-shadow-active` | `{toggle.thumb-shadow}` | shadow | Thumb shadow while pressed. |
+| `--zbk-toggle-thumb-shadow-checked` | `{toggle.thumb-shadow}` | shadow | Thumb shadow when the toggle is on. |
+| `--zbk-toggle-thumb-transform` | `none` | transform | Default thumb transform (travel is handled structurally). |
+| `--zbk-toggle-thumb-transform-hover` | `none` | transform | Thumb transform when hovered (e.g. a translateY lift). |
+| `--zbk-toggle-thumb-transform-active` | `none` | transform | Thumb transform while pressed (e.g. a press-down). |
+| `--zbk-toggle-thumb-transform-checked` | `none` | transform | Thumb transform when the toggle is on. |
 | `--zbk-toggle-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-toggle-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-toggle-font-family` | `{font-family.interface}` | fontFamily | Font family for the toggle label. |
-| `--zbk-toggle-font-size` | `{font-size.md}` | fontSize | Font size for the toggle label. |
+| `--zbk-toggle-font-size` | `{font-size.sm}` | cssDimension | Font size for the toggle label. |
 | `--zbk-toggle-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the toggle label. |
-| `--zbk-toggle-line-height` | `{line-height.2}` | lineHeight | Line height for the toggle label. |
-| `--zbk-toggle-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the toggle label. |
-| `--zbk-toggle-gap` | `{spacing.sm}` | spacing | Space between the track and its label. |
+| `--zbk-toggle-line-height` | `{line-height.2}` | number | Line height for the toggle label. |
+| `--zbk-toggle-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the toggle label. |
+| `--zbk-toggle-gap` | `{spacing.sm}` | dimension | Space between the track and its label. |
 | `--zbk-toggle-align-items` | `center` | flex | Cross-axis alignment of track and label. |
-| `--zbk-toggle-group-gap` | `{spacing.md}` | spacing | Gap between toggles in a .zbk-toggle-group. |
+| `--zbk-toggle-group-gap` | `{spacing.md}` | dimension | Gap between toggles in a .zbk-toggle-group. |
 | `--zbk-toggle-group-direction` | `column` | flex | Flow direction of a .zbk-toggle-group (column or row). |
 | `--zbk-toggle-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-toggle-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-toggle-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
-| `--zbk-toggle-cursor` | `pointer` | utility | Cursor when hovering an enabled toggle. |
-| `--zbk-toggle-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled toggle. |
-| `--zbk-toggle-transition-duration` | `{transition.playful-fx-duration-default}` | transition | Duration for toggle state transitions, including thumb travel. **(a11y)** |
-| `--zbk-toggle-transition-timing-function` | `{transition.playful-fx-function-default}` | transition | Easing for toggle state transitions. |
-| `--zbk-toggle-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transition | CSS properties that animate on track state changes. |
-| `--zbk-toggle-transition-delay` | `0` | transition | Delay before toggle transitions run. |
-| `--zbk-toggle-opacity` | `1` | opacity | Opacity of the toggle. |
-| `--zbk-toggle-opacity-disabled` | `{opacity.70}` | opacity | Track and thumb opacity when disabled. |
+| `--zbk-toggle-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-toggle-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
+| `--zbk-toggle-cursor` | `pointer` | cursor | Cursor when hovering an enabled toggle. |
+| `--zbk-toggle-cursor-disabled` | `not-allowed` | cursor | Cursor when hovering a disabled toggle. |
+| `--zbk-toggle-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for toggle state transitions, including thumb travel. **(a11y)** |
+| `--zbk-toggle-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for toggle state transitions. |
+| `--zbk-toggle-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on track state changes. |
+| `--zbk-toggle-transition-delay` | `0ms` | duration | Delay before toggle transitions run. |
+| `--zbk-toggle-opacity` | `1` | number | Opacity of the toggle. |
+| `--zbk-toggle-opacity-disabled` | `{opacity.70}` | number | Track and thumb opacity when disabled. |
 
 ## Variants
 

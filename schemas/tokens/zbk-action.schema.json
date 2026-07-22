@@ -6,9 +6,385 @@
   "additionalProperties": false,
   "definitions": {
     "colorValue": {
-      "type": [
-        "string",
-        "number"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "colorSpace",
+            "components"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "colorSpace": {
+              "type": "string",
+              "enum": [
+                "srgb",
+                "srgb-linear",
+                "hsl",
+                "hwb",
+                "lab",
+                "lch",
+                "oklab",
+                "oklch",
+                "display-p3",
+                "a98-rgb",
+                "prophoto-rgb",
+                "rec2020",
+                "xyz-d65",
+                "xyz-d50"
+              ]
+            },
+            "components": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "const": "none"
+                  }
+                ]
+              }
+            },
+            "alpha": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "hex": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "enum": [
+                      "srgb",
+                      "srgb-linear",
+                      "display-p3",
+                      "a98-rgb",
+                      "prophoto-rgb",
+                      "rec2020",
+                      "xyz-d65",
+                      "xyz-d50"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "enum": [
+                      "hsl",
+                      "hwb"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "lab"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "lch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "oklab"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "oklch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
       ],
       "examples": [
         "{accent-primary.50}",
@@ -127,6 +503,284 @@
         "{neutral.800}",
         "{neutral.900}",
         "{neutral.950}",
+        "{color.red-50}",
+        "{color.red-100}",
+        "{color.red-200}",
+        "{color.red-300}",
+        "{color.red-400}",
+        "{color.red-500}",
+        "{color.red-600}",
+        "{color.red-700}",
+        "{color.red-800}",
+        "{color.red-900}",
+        "{color.red-950}",
+        "{color.pink-50}",
+        "{color.pink-100}",
+        "{color.pink-200}",
+        "{color.pink-300}",
+        "{color.pink-400}",
+        "{color.pink-500}",
+        "{color.pink-600}",
+        "{color.pink-700}",
+        "{color.pink-800}",
+        "{color.pink-900}",
+        "{color.pink-950}",
+        "{color.orange-50}",
+        "{color.orange-100}",
+        "{color.orange-200}",
+        "{color.orange-300}",
+        "{color.orange-400}",
+        "{color.orange-500}",
+        "{color.orange-600}",
+        "{color.orange-700}",
+        "{color.orange-800}",
+        "{color.orange-900}",
+        "{color.orange-950}",
+        "{color.gold-50}",
+        "{color.gold-100}",
+        "{color.gold-200}",
+        "{color.gold-300}",
+        "{color.gold-400}",
+        "{color.gold-500}",
+        "{color.gold-600}",
+        "{color.gold-700}",
+        "{color.gold-800}",
+        "{color.gold-900}",
+        "{color.gold-950}",
+        "{color.yellow-50}",
+        "{color.yellow-100}",
+        "{color.yellow-200}",
+        "{color.yellow-300}",
+        "{color.yellow-400}",
+        "{color.yellow-500}",
+        "{color.yellow-600}",
+        "{color.yellow-700}",
+        "{color.yellow-800}",
+        "{color.yellow-900}",
+        "{color.yellow-950}",
+        "{color.lime-50}",
+        "{color.lime-100}",
+        "{color.lime-200}",
+        "{color.lime-300}",
+        "{color.lime-400}",
+        "{color.lime-500}",
+        "{color.lime-600}",
+        "{color.lime-700}",
+        "{color.lime-800}",
+        "{color.lime-900}",
+        "{color.lime-950}",
+        "{color.green-50}",
+        "{color.green-100}",
+        "{color.green-200}",
+        "{color.green-300}",
+        "{color.green-400}",
+        "{color.green-500}",
+        "{color.green-600}",
+        "{color.green-700}",
+        "{color.green-800}",
+        "{color.green-900}",
+        "{color.green-950}",
+        "{color.teal-50}",
+        "{color.teal-100}",
+        "{color.teal-200}",
+        "{color.teal-300}",
+        "{color.teal-400}",
+        "{color.teal-500}",
+        "{color.teal-600}",
+        "{color.teal-700}",
+        "{color.teal-800}",
+        "{color.teal-900}",
+        "{color.teal-950}",
+        "{color.cyan-50}",
+        "{color.cyan-100}",
+        "{color.cyan-200}",
+        "{color.cyan-300}",
+        "{color.cyan-400}",
+        "{color.cyan-500}",
+        "{color.cyan-600}",
+        "{color.cyan-700}",
+        "{color.cyan-800}",
+        "{color.cyan-900}",
+        "{color.cyan-950}",
+        "{color.blue-50}",
+        "{color.blue-100}",
+        "{color.blue-200}",
+        "{color.blue-300}",
+        "{color.blue-400}",
+        "{color.blue-500}",
+        "{color.blue-600}",
+        "{color.blue-700}",
+        "{color.blue-800}",
+        "{color.blue-900}",
+        "{color.blue-950}",
+        "{color.indigo-50}",
+        "{color.indigo-100}",
+        "{color.indigo-200}",
+        "{color.indigo-300}",
+        "{color.indigo-400}",
+        "{color.indigo-500}",
+        "{color.indigo-600}",
+        "{color.indigo-700}",
+        "{color.indigo-800}",
+        "{color.indigo-900}",
+        "{color.indigo-950}",
+        "{color.violet-50}",
+        "{color.violet-100}",
+        "{color.violet-200}",
+        "{color.violet-300}",
+        "{color.violet-400}",
+        "{color.violet-500}",
+        "{color.violet-600}",
+        "{color.violet-700}",
+        "{color.violet-800}",
+        "{color.violet-900}",
+        "{color.violet-950}",
+        "{color.merlot-50}",
+        "{color.merlot-100}",
+        "{color.merlot-200}",
+        "{color.merlot-300}",
+        "{color.merlot-400}",
+        "{color.merlot-500}",
+        "{color.merlot-600}",
+        "{color.merlot-700}",
+        "{color.merlot-800}",
+        "{color.merlot-900}",
+        "{color.merlot-950}",
+        "{color.butterfield-50}",
+        "{color.butterfield-100}",
+        "{color.butterfield-200}",
+        "{color.butterfield-300}",
+        "{color.butterfield-400}",
+        "{color.butterfield-500}",
+        "{color.butterfield-600}",
+        "{color.butterfield-700}",
+        "{color.butterfield-800}",
+        "{color.butterfield-900}",
+        "{color.butterfield-950}",
+        "{color.mint-50}",
+        "{color.mint-100}",
+        "{color.mint-200}",
+        "{color.mint-300}",
+        "{color.mint-400}",
+        "{color.mint-500}",
+        "{color.mint-600}",
+        "{color.mint-700}",
+        "{color.mint-800}",
+        "{color.mint-900}",
+        "{color.mint-950}",
+        "{color.sea-50}",
+        "{color.sea-100}",
+        "{color.sea-200}",
+        "{color.sea-300}",
+        "{color.sea-400}",
+        "{color.sea-500}",
+        "{color.sea-600}",
+        "{color.sea-700}",
+        "{color.sea-800}",
+        "{color.sea-900}",
+        "{color.sea-950}",
+        "{color.dusk-50}",
+        "{color.dusk-100}",
+        "{color.dusk-200}",
+        "{color.dusk-300}",
+        "{color.dusk-400}",
+        "{color.dusk-500}",
+        "{color.dusk-600}",
+        "{color.dusk-700}",
+        "{color.dusk-800}",
+        "{color.dusk-900}",
+        "{color.dusk-950}",
+        "{color.stone-50}",
+        "{color.stone-100}",
+        "{color.stone-200}",
+        "{color.stone-300}",
+        "{color.stone-400}",
+        "{color.stone-500}",
+        "{color.stone-600}",
+        "{color.stone-700}",
+        "{color.stone-800}",
+        "{color.stone-900}",
+        "{color.stone-950}",
+        "{color.charcoal-50}",
+        "{color.charcoal-100}",
+        "{color.charcoal-200}",
+        "{color.charcoal-300}",
+        "{color.charcoal-400}",
+        "{color.charcoal-500}",
+        "{color.charcoal-600}",
+        "{color.charcoal-700}",
+        "{color.charcoal-800}",
+        "{color.charcoal-900}",
+        "{color.charcoal-950}",
+        "{color.lavenderfield-50}",
+        "{color.lavenderfield-100}",
+        "{color.lavenderfield-200}",
+        "{color.lavenderfield-300}",
+        "{color.lavenderfield-400}",
+        "{color.lavenderfield-500}",
+        "{color.lavenderfield-600}",
+        "{color.lavenderfield-700}",
+        "{color.lavenderfield-800}",
+        "{color.lavenderfield-900}",
+        "{color.lavenderfield-950}",
+        "{color.rosewater-50}",
+        "{color.rosewater-100}",
+        "{color.rosewater-200}",
+        "{color.rosewater-300}",
+        "{color.rosewater-400}",
+        "{color.rosewater-500}",
+        "{color.rosewater-600}",
+        "{color.rosewater-700}",
+        "{color.rosewater-800}",
+        "{color.rosewater-900}",
+        "{color.rosewater-950}",
+        "{color.ember-50}",
+        "{color.ember-100}",
+        "{color.ember-200}",
+        "{color.ember-300}",
+        "{color.ember-400}",
+        "{color.ember-500}",
+        "{color.ember-600}",
+        "{color.ember-700}",
+        "{color.ember-800}",
+        "{color.ember-900}",
+        "{color.ember-950}",
+        "{color.deepcurrent-50}",
+        "{color.deepcurrent-100}",
+        "{color.deepcurrent-200}",
+        "{color.deepcurrent-300}",
+        "{color.deepcurrent-400}",
+        "{color.deepcurrent-500}",
+        "{color.deepcurrent-600}",
+        "{color.deepcurrent-700}",
+        "{color.deepcurrent-800}",
+        "{color.deepcurrent-900}",
+        "{color.deepcurrent-950}",
+        "{color.foxglove-50}",
+        "{color.foxglove-100}",
+        "{color.foxglove-200}",
+        "{color.foxglove-300}",
+        "{color.foxglove-400}",
+        "{color.foxglove-500}",
+        "{color.foxglove-600}",
+        "{color.foxglove-700}",
+        "{color.foxglove-800}",
+        "{color.foxglove-900}",
+        "{color.foxglove-950}",
+        "{color.chestnut-50}",
+        "{color.chestnut-100}",
+        "{color.chestnut-200}",
+        "{color.chestnut-300}",
+        "{color.chestnut-400}",
+        "{color.chestnut-500}",
+        "{color.chestnut-600}",
+        "{color.chestnut-700}",
+        "{color.chestnut-800}",
+        "{color.chestnut-900}",
+        "{color.chestnut-950}",
+        "{color.global-black}",
+        "{color.global-white}",
+        "{color.global-transparent}",
         "{focus.color}",
         "{h1.color}",
         "{h2.color}",
@@ -466,776 +1120,927 @@
         "{tooltip.ink}",
         "{tooltip.border-color}"
       ]
-    }
-  },
-  "properties": {
-    "canvas": {
+    },
+    "cssColorValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{border.style}",
+        "{button.border-style}",
+        "{checkbox.border-style}",
+        "{input.border-style}",
+        "{pagination.border-style}",
+        "{radio.border-style}",
+        "{select.border-style}",
+        "{textarea.border-style}",
+        "{toggle.border-style}",
+        "{toggle.thumb-border-style}",
+        "{tooltip.border-style}"
+      ]
+    },
+    "colorToken": {
       "type": "object",
       "description": "Base action canvas color for primary surfaces.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/colorValue"
+            },
+            {
+              "$ref": "#/definitions/cssColorValue"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "color"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/colorValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssColor"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssColorValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:canvas": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "subtle": {
+          "description": "Subtle action canvas color for the least-prominent, lightly tinted surfaces.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "muted": {
+          "description": "Muted action canvas color for low-emphasis, recessed surfaces.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "emphasis": {
+          "description": "Emphasis action canvas color for high-prominence surfaces.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "inverse": {
+          "anyOf": [
+            {
+              "description": "Base inverse action canvas color for surfaces on dark or inverted contexts.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/colorToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:canvas-inverse"
+            }
+          ]
+        },
+        "inverse-subtle": {
+          "description": "Subtle inverse action canvas color for the least-prominent surfaces in inverse contexts.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "inverse-muted": {
+          "description": "Muted inverse action canvas color for low-emphasis surfaces in inverse contexts.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "inverse-emphasis": {
+          "description": "Emphasis inverse action canvas color for high-prominence surfaces in inverse contexts.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
           ]
         }
       }
+    },
+    "group:canvas-inverse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "subtle": {
+          "description": "Subtle inverse action canvas color for the least-prominent surfaces in inverse contexts.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "muted": {
+          "description": "Muted inverse action canvas color for low-emphasis surfaces in inverse contexts.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "emphasis": {
+          "description": "Emphasis inverse action canvas color for high-prominence surfaces in inverse contexts.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:ink": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "subtle": {
+          "description": "Subtle action ink color for the least-prominent, tertiary text and icons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "muted": {
+          "description": "Muted action ink color for secondary text and icons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "emphasis": {
+          "description": "Emphasis action ink color for high-prominence text and icons.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "inverse": {
+          "anyOf": [
+            {
+              "description": "Base inverse action ink color for body text and icons on inverse or dark canvases.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/colorToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:ink-inverse"
+            }
+          ]
+        },
+        "inverse-subtle": {
+          "description": "Subtle inverse action ink color for the least-prominent text and icons on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "inverse-muted": {
+          "description": "Muted inverse action ink color for secondary text and icons on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "inverse-emphasis": {
+          "description": "Emphasis inverse action ink color for high-prominence text on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:ink-inverse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "subtle": {
+          "description": "Subtle inverse action ink color for the least-prominent text and icons on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "muted": {
+          "description": "Muted inverse action ink color for secondary text and icons on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "emphasis": {
+          "description": "Emphasis inverse action ink color for high-prominence text on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:border": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "subtle": {
+          "description": "Subtle action border color for the least-prominent outlines and dividers.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "muted": {
+          "description": "Muted action border color for low-emphasis outlines and dividers.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "emphasis": {
+          "description": "Emphasis action border color for high-prominence outlines and dividers.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "inverse": {
+          "anyOf": [
+            {
+              "description": "Base inverse action border color for outlines and dividers on inverse canvases.",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/colorToken"
+                }
+              ]
+            },
+            {
+              "$ref": "#/definitions/group:border-inverse"
+            }
+          ]
+        },
+        "inverse-subtle": {
+          "description": "Subtle inverse action border color for the least-prominent outlines on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "inverse-muted": {
+          "description": "Muted inverse action border color for low-emphasis outlines on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "inverse-emphasis": {
+          "description": "Emphasis inverse action border color for high-prominence outlines on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:border-inverse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "subtle": {
+          "description": "Subtle inverse action border color for the least-prominent outlines on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "muted": {
+          "description": "Muted inverse action border color for low-emphasis outlines on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "emphasis": {
+          "description": "Emphasis inverse action border color for high-prominence outlines on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "$type": {
+      "type": "string",
+      "enum": [
+        "color",
+        "cssColor"
+      ]
+    },
+    "$description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "canvas": {
+      "anyOf": [
+        {
+          "description": "Base action canvas color for primary surfaces.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        {
+          "$ref": "#/definitions/group:canvas"
+        }
+      ]
     },
     "canvas-subtle": {
-      "type": "object",
       "description": "Subtle action canvas color for the least-prominent, lightly tinted surfaces.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "canvas-muted": {
-      "type": "object",
       "description": "Muted action canvas color for low-emphasis, recessed surfaces.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "canvas-emphasis": {
-      "type": "object",
       "description": "Emphasis action canvas color for high-prominence surfaces.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "canvas-inverse": {
-      "type": "object",
-      "description": "Base inverse action canvas color for surfaces on dark or inverted contexts.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+      "anyOf": [
+        {
+          "description": "Base inverse action canvas color for surfaces on dark or inverted contexts.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "$ref": "#/definitions/group:canvas-inverse"
         }
-      }
+      ]
     },
     "canvas-inverse-subtle": {
-      "type": "object",
       "description": "Subtle inverse action canvas color for the least-prominent surfaces in inverse contexts.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "canvas-inverse-muted": {
-      "type": "object",
       "description": "Muted inverse action canvas color for low-emphasis surfaces in inverse contexts.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "canvas-inverse-emphasis": {
-      "type": "object",
       "description": "Emphasis inverse action canvas color for high-prominence surfaces in inverse contexts.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "ink": {
-      "type": "object",
-      "description": "Base action ink color for body text and icons on neutral or light canvases.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+      "anyOf": [
+        {
+          "description": "Base action ink color for body text and icons on neutral or light canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "$ref": "#/definitions/group:ink"
         }
-      }
+      ]
     },
     "ink-subtle": {
-      "type": "object",
       "description": "Subtle action ink color for the least-prominent, tertiary text and icons.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "ink-muted": {
-      "type": "object",
       "description": "Muted action ink color for secondary text and icons.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "ink-emphasis": {
-      "type": "object",
       "description": "Emphasis action ink color for high-prominence text and icons.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "ink-inverse": {
-      "type": "object",
-      "description": "Base inverse action ink color for body text and icons on inverse or dark canvases.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+      "anyOf": [
+        {
+          "description": "Base inverse action ink color for body text and icons on inverse or dark canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "$ref": "#/definitions/group:ink-inverse"
         }
-      }
+      ]
     },
     "ink-inverse-subtle": {
-      "type": "object",
       "description": "Subtle inverse action ink color for the least-prominent text and icons on inverse canvases.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "ink-inverse-muted": {
-      "type": "object",
       "description": "Muted inverse action ink color for secondary text and icons on inverse canvases.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "ink-inverse-emphasis": {
-      "type": "object",
       "description": "Emphasis inverse action ink color for high-prominence text on inverse canvases.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "border": {
-      "type": "object",
-      "description": "Base action border color for outlines, strokes, and dividers.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+      "anyOf": [
+        {
+          "description": "Base action border color for outlines, strokes, and dividers.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "$ref": "#/definitions/group:border"
         }
-      }
+      ]
     },
     "border-subtle": {
-      "type": "object",
       "description": "Subtle action border color for the least-prominent outlines and dividers.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "border-muted": {
-      "type": "object",
       "description": "Muted action border color for low-emphasis outlines and dividers.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "border-emphasis": {
-      "type": "object",
       "description": "Emphasis action border color for high-prominence outlines and dividers.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "border-inverse": {
-      "type": "object",
-      "description": "Base inverse action border color for outlines and dividers on inverse canvases.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+      "anyOf": [
+        {
+          "description": "Base inverse action border color for outlines and dividers on inverse canvases.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "$ref": "#/definitions/group:border-inverse"
         }
-      }
+      ]
     },
     "border-inverse-subtle": {
-      "type": "object",
       "description": "Subtle inverse action border color for the least-prominent outlines on inverse canvases.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "border-inverse-muted": {
-      "type": "object",
       "description": "Muted inverse action border color for low-emphasis outlines on inverse canvases.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     },
     "border-inverse-emphasis": {
-      "type": "object",
       "description": "Emphasis inverse action border color for high-prominence outlines on inverse canvases.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/colorValue"
-        },
-        "type": {
-          "const": "color"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
         }
-      }
+      ]
     }
   }
 }

@@ -1,44 +1,41 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
-
-// TODO: Add descriptions
+import type { TokenInterface } from "@definitions/tokens";
+import { ZEBKIT_PREFIX } from "@config";
 
 export const key = "letter-spacing";
 export const layer: LayerName = "theme";
-export type LetterSpacingTokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   tighter: {
-    value: `-.05rem`,
-    type: "letterSpacing",
-    description: "",
-    a11y: true
+    $value: { value: -0.05, unit: "rem" },
+    $type: "dimension",
+    $description: "Strongly condensed tracking for short display text.",
+    $extensions: { "dev.zebkit": { a11y: `--${ZEBKIT_PREFIX}-a11y-letter-spacing-modifier` } }
   },
   tight: {
-    value: `-.025rem`,
-    type: "letterSpacing",
-    description: "",
-    a11y: true
+    $value: { value: -0.025, unit: "rem" },
+    $type: "dimension",
+    $description: "Condensed tracking for headings and compact labels.",
+    $extensions: { "dev.zebkit": { a11y: `--${ZEBKIT_PREFIX}-a11y-letter-spacing-modifier` } }
   },
   normal: {
-    value: `0rem`,
-    type: "letterSpacing",
-    description: "",
-    a11y: true
+    $value: { value: 0, unit: "rem" },
+    $type: "dimension",
+    $description: "Neutral tracking that preserves the font's default spacing.",
+    $extensions: { "dev.zebkit": { a11y: `--${ZEBKIT_PREFIX}-a11y-letter-spacing-modifier` } }
   },
   wide: {
-    value: `.025rem`,
-    type: "letterSpacing",
-    description: "",
-    a11y: true
+    $value: { value: 0.025, unit: "rem" },
+    $type: "dimension",
+    $description: "Expanded tracking for labels and small uppercase text.",
+    $extensions: { "dev.zebkit": { a11y: `--${ZEBKIT_PREFIX}-a11y-letter-spacing-modifier` } }
   },
   wider: {
-    value: `.05rem`,
-    type: "letterSpacing",
-    description: "",
-    a11y: true
+    $value: { value: 0.05, unit: "rem" },
+    $type: "dimension",
+    $description: "Strongly expanded tracking for short display text.",
+    $extensions: { "dev.zebkit": { a11y: `--${ZEBKIT_PREFIX}-a11y-letter-spacing-modifier` } }
   },
-} as const satisfies LetterSpacingTokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

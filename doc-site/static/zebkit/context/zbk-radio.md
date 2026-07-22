@@ -87,8 +87,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | Token | Default | Type | Description |
 |---|---|---|---|
 | `--zbk-radio-display` | `contents` | display | Display mode for the <zbk-radio> host element. |
-| `--zbk-radio-control-width` | `{spacing.105}` | sizing | Width of the radio control. |
-| `--zbk-radio-control-height` | `{spacing.105}` | sizing | Height of the radio control. |
+| `--zbk-radio-control-width` | `{spacing.105}` | dimension | Width of the radio control. |
+| `--zbk-radio-control-height` | `{spacing.105}` | dimension | Height of the radio control. |
 | `--zbk-radio-canvas` | `{app.canvas}` | color | Background of an unselected radio control. |
 | `--zbk-radio-canvas-hover` | `{app.canvas-subtle}` | color | Control background when hovered. |
 | `--zbk-radio-canvas-active` | `{app.canvas-muted}` | color | Control background while pressed. |
@@ -99,40 +99,40 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-radio-border-color-active` | `{accent-primary.500}` | color | Control border color while pressed. |
 | `--zbk-radio-border-color-checked` | `{radio.canvas-checked}` | color | Control border color when selected. |
 | `--zbk-radio-border-color-disabled` | `{disabled.border}` | color | Control border color when disabled. |
-| `--zbk-radio-border-width` | `{border.width-md}` | borderWidth | Border thickness of the radio control. |
-| `--zbk-radio-border-style` | `{border.style}` | borderStyle | Border style of the radio control. |
-| `--zbk-radio-border-radius` | `50%` | borderRadius | Corner radius of the radio control (a circle by default). |
+| `--zbk-radio-border-width` | `{border.width-md}` | dimension | Border thickness of the radio control. |
+| `--zbk-radio-border-style` | `{border.style}` | strokeStyle | Border style of the radio control. |
+| `--zbk-radio-border-radius` | `50%` | cssDimension | Corner radius of the radio control (a circle by default). |
 | `--zbk-radio-indicator-color` | `{app.ink-inverse}` | color | Color of the selection dot. |
 | `--zbk-radio-indicator-color-disabled` | `{disabled.ink}` | color | Selection dot color when disabled. |
-| `--zbk-radio-indicator-size` | `0.75em` | sizing | Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size. |
-| `--zbk-radio-indicator-radius` | `50%` | borderRadius | Corner radius of the selection dot (a circle by default). |
+| `--zbk-radio-indicator-size` | `0.75em` | cssDimension | Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size. |
+| `--zbk-radio-indicator-radius` | `50%` | cssDimension | Corner radius of the selection dot (a circle by default). |
 | `--zbk-radio-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-radio-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-radio-font-family` | `{font-family.interface}` | fontFamily | Font family for the radio label. |
-| `--zbk-radio-font-size` | `{font-size.md}` | fontSize | Font size for the radio label. |
+| `--zbk-radio-font-size` | `{font-size.md}` | cssDimension | Font size for the radio label. |
 | `--zbk-radio-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the radio label. |
-| `--zbk-radio-line-height` | `{line-height.2}` | lineHeight | Line height for the radio label. |
-| `--zbk-radio-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the radio label. |
-| `--zbk-radio-gap` | `{spacing.sm}` | spacing | Space between the control and its label. |
+| `--zbk-radio-line-height` | `{line-height.2}` | number | Line height for the radio label. |
+| `--zbk-radio-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the radio label. |
+| `--zbk-radio-gap` | `{spacing.sm}` | dimension | Space between the control and its label. |
 | `--zbk-radio-align-items` | `center` | flex | Cross-axis alignment of control and label. |
-| `--zbk-radio-group-gap` | `{spacing.md}` | spacing | Gap between radios in a .zbk-radio-group. |
+| `--zbk-radio-group-gap` | `{spacing.md}` | dimension | Gap between radios in a .zbk-radio-group. |
 | `--zbk-radio-group-direction` | `column` | flex | Flow direction of a .zbk-radio-group (column or row). |
 | `--zbk-radio-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-radio-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-radio-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
-| `--zbk-radio-box-shadow` | `none` | boxShadow | Default control shadow. |
-| `--zbk-radio-box-shadow-hover` | `none` | boxShadow | Control shadow when hovered. |
-| `--zbk-radio-box-shadow-active` | `none` | boxShadow | Control shadow while pressed. |
-| `--zbk-radio-box-shadow-checked` | `none` | boxShadow | Control shadow when selected. |
-| `--zbk-radio-box-shadow-focus` | `none` | boxShadow | Control shadow in the focus state (in addition to the outline). |
-| `--zbk-radio-cursor` | `pointer` | utility | Cursor when hovering an enabled radio. |
-| `--zbk-radio-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled radio. |
-| `--zbk-radio-transition-duration` | `{transition.playful-fx-duration-default}` | transition | Duration for radio state transitions. **(a11y)** |
-| `--zbk-radio-transition-timing-function` | `{transition.playful-fx-function-default}` | transition | Easing for radio state transitions. |
-| `--zbk-radio-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-radio-transition-delay` | `0` | transition | Delay before radio transitions run. |
-| `--zbk-radio-opacity` | `1` | opacity | Opacity of the radio. |
-| `--zbk-radio-opacity-disabled` | `{opacity.70}` | opacity | Control opacity when disabled. |
+| `--zbk-radio-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-radio-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
+| `--zbk-radio-box-shadow` | `none` | shadow | Default control shadow. |
+| `--zbk-radio-box-shadow-hover` | `none` | shadow | Control shadow when hovered. |
+| `--zbk-radio-box-shadow-active` | `none` | shadow | Control shadow while pressed. |
+| `--zbk-radio-box-shadow-checked` | `none` | shadow | Control shadow when selected. |
+| `--zbk-radio-box-shadow-focus` | `none` | shadow | Control shadow in the focus state (in addition to the outline). |
+| `--zbk-radio-cursor` | `pointer` | cursor | Cursor when hovering an enabled radio. |
+| `--zbk-radio-cursor-disabled` | `not-allowed` | cursor | Cursor when hovering a disabled radio. |
+| `--zbk-radio-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for radio state transitions. **(a11y)** |
+| `--zbk-radio-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for radio state transitions. |
+| `--zbk-radio-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-radio-transition-delay` | `0ms` | duration | Delay before radio transitions run. |
+| `--zbk-radio-opacity` | `1` | number | Opacity of the radio. |
+| `--zbk-radio-opacity-disabled` | `{opacity.70}` | number | Control opacity when disabled. |
 
 ## Variants
 

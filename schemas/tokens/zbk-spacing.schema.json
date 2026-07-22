@@ -5,12 +5,94 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "rootSizeValue": {
-      "type": [
-        "string",
-        "number"
+    "dimensionValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{border.style}",
+            "{button.border-style}",
+            "{checkbox.border-style}",
+            "{input.border-style}",
+            "{pagination.border-style}",
+            "{radio.border-style}",
+            "{select.border-style}",
+            "{textarea.border-style}",
+            "{toggle.border-style}",
+            "{toggle.thumb-border-style}",
+            "{tooltip.border-style}"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
+        "{a11y.min-interaction-size}",
+        "{breakpoint.tablet}",
+        "{breakpoint.tablet-lg}",
+        "{breakpoint.desktop}",
+        "{breakpoint.desktop-lg}",
+        "{breakpoint.widescreen}",
+        "{focus.width}",
+        "{focus.offset}",
+        "{h1.letter-spacing}",
+        "{h1.spacing-before}",
+        "{h1.spacing-after}",
+        "{h2.letter-spacing}",
+        "{h2.spacing-before}",
+        "{h2.spacing-after}",
+        "{h3.letter-spacing}",
+        "{h3.spacing-before}",
+        "{h3.spacing-after}",
+        "{h4.letter-spacing}",
+        "{h4.spacing-before}",
+        "{h4.spacing-after}",
+        "{h5.letter-spacing}",
+        "{h5.spacing-before}",
+        "{h5.spacing-after}",
+        "{h6.letter-spacing}",
+        "{h6.spacing-before}",
+        "{h6.spacing-after}",
+        "{lede.letter-spacing}",
+        "{lede.spacing-before}",
+        "{lede.spacing-after}",
+        "{list.letter-spacing}",
+        "{list.spacing-before}",
+        "{list.spacing-after}",
+        "{list.padding-block-start}",
+        "{list.padding-block-end}",
+        "{p.letter-spacing}",
+        "{p.spacing-before}",
+        "{p.spacing-after}",
+        "{border.width-xs}",
+        "{border.width-sm}",
+        "{border.width-md}",
+        "{border.width-lg}",
+        "{border.width-xl}",
+        "{border.radius-xs}",
+        "{border.radius-sm}",
+        "{border.radius-md}",
+        "{border.radius-lg}",
+        "{border.radius-xl}",
         "{spacing.0}",
         "{spacing.1}",
         "{spacing.2}",
@@ -35,6 +117,28 @@
         "{spacing.100}",
         "{spacing.105}",
         "{spacing.205}",
+        "{spacing.2xs}",
+        "{spacing.xs}",
+        "{spacing.sm}",
+        "{spacing.md}",
+        "{spacing.lg}",
+        "{spacing.xl}",
+        "{spacing.2xl}",
+        "{spacing.3xl}",
+        "{spacing.card}",
+        "{spacing.mobile}",
+        "{spacing.mobile-lg}",
+        "{spacing.tablet}",
+        "{spacing.tablet-lg}",
+        "{spacing.desktop}",
+        "{spacing.desktop-lg}",
+        "{spacing.widescreen}",
+        "{spacing.section}",
+        "{spacing.section-margin-block}",
+        "{spacing.section-margin-inline}",
+        "{spacing.aside}",
+        "{spacing.page-padding-block}",
+        "{spacing.page-padding-inline}",
         "{spacing.neg-15}",
         "{spacing.neg-10}",
         "{spacing.neg-9}",
@@ -55,2362 +159,1378 @@
         "{spacing.1px}",
         "{spacing.2px}",
         "{spacing.025}",
-        "{spacing.05}"
-      ]
-    },
-    "spacingValue": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "examples": [
-        "{a11y.min-interaction-size}",
-        "{focus.offset}",
-        "{h1.spacing-before}",
-        "{h1.spacing-after}",
-        "{h2.spacing-before}",
-        "{h2.spacing-after}",
-        "{h3.spacing-before}",
-        "{h3.spacing-after}",
-        "{h4.spacing-before}",
-        "{h4.spacing-after}",
-        "{h5.spacing-before}",
-        "{h5.spacing-after}",
-        "{h6.spacing-before}",
-        "{h6.spacing-after}",
-        "{lede.spacing-before}",
-        "{lede.spacing-after}",
-        "{list.spacing-before}",
-        "{list.spacing-after}",
-        "{list.padding-block-start}",
-        "{list.padding-block-end}",
-        "{p.spacing-before}",
-        "{p.spacing-after}",
-        "{spacing.2xs}",
-        "{spacing.xs}",
-        "{spacing.sm}",
-        "{spacing.md}",
-        "{spacing.lg}",
-        "{spacing.xl}",
-        "{spacing.2xl}",
-        "{spacing.3xl}",
-        "{spacing.section-margin-block}",
-        "{spacing.section-margin-inline}",
-        "{spacing.page-padding-block}",
-        "{spacing.page-padding-inline}",
+        "{spacing.05}",
+        "{letter-spacing.tighter}",
+        "{letter-spacing.tight}",
+        "{letter-spacing.normal}",
+        "{letter-spacing.wide}",
+        "{letter-spacing.wider}",
+        "{button.border-width}",
+        "{button.border-radius}",
         "{button.padding-inline}",
         "{button.padding-block}",
         "{button.padding-inline-start}",
         "{button.padding-inline-end}",
         "{button.padding-block-start}",
         "{button.padding-block-end}",
-        "{button.margin-inline}",
-        "{button.margin-block}",
-        "{button.margin-inline-start}",
-        "{button.margin-inline-end}",
-        "{button.margin-block-start}",
-        "{button.margin-block-end}",
         "{button.gap}",
         "{button.group-gap}",
+        "{button.min-width}",
+        "{button.min-height}",
+        "{button.focus-width}",
         "{button.focus-offset}",
+        "{checkbox.control-width}",
+        "{checkbox.control-height}",
+        "{checkbox.border-width}",
+        "{checkbox.border-radius}",
+        "{checkbox.indicator-stroke-width}",
+        "{checkbox.indicator-radius}",
         "{checkbox.gap}",
         "{checkbox.group-gap}",
+        "{checkbox.focus-width}",
         "{checkbox.focus-offset}",
+        "{input.border-width}",
+        "{input.border-radius}",
         "{input.label-gap}",
         "{input.padding-inline}",
         "{input.padding-block}",
         "{input.gap}",
+        "{input.min-height}",
         "{input.group-gap}",
+        "{input.focus-width}",
         "{input.focus-offset}",
+        "{pagination.border-width}",
+        "{pagination.border-radius}",
         "{pagination.gap}",
+        "{pagination.min-width}",
+        "{pagination.min-height}",
         "{pagination.padding-inline}",
         "{pagination.padding-block}",
+        "{pagination.focus-width}",
         "{pagination.focus-offset}",
+        "{radio.control-width}",
+        "{radio.control-height}",
+        "{radio.border-width}",
         "{radio.gap}",
         "{radio.group-gap}",
+        "{radio.focus-width}",
         "{radio.focus-offset}",
+        "{select.border-width}",
+        "{select.border-radius}",
         "{select.label-gap}",
+        "{select.indicator-stroke-width}",
         "{select.padding-inline}",
         "{select.padding-block}",
         "{select.gap}",
+        "{select.min-height}",
         "{select.group-gap}",
+        "{select.focus-width}",
         "{select.focus-offset}",
+        "{textarea.border-width}",
+        "{textarea.border-radius}",
         "{textarea.label-gap}",
         "{textarea.padding-inline}",
         "{textarea.padding-block}",
-        "{textarea.focus-offset}",
-        "{toggle.thumb-inset}",
-        "{toggle.gap}",
-        "{toggle.group-gap}",
-        "{toggle.focus-offset}",
-        "{tooltip.padding-inline}",
-        "{tooltip.padding-block}"
-      ]
-    },
-    "sizingValue": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "examples": [
-        "{focus.width}",
-        "{h1.measure}",
-        "{h2.measure}",
-        "{h3.measure}",
-        "{h4.measure}",
-        "{h5.measure}",
-        "{h6.measure}",
-        "{lede.measure}",
-        "{list.measure}",
-        "{p.measure}",
-        "{spacing.card}",
-        "{spacing.mobile}",
-        "{spacing.mobile-lg}",
-        "{spacing.tablet}",
-        "{spacing.tablet-lg}",
-        "{spacing.desktop}",
-        "{spacing.desktop-lg}",
-        "{spacing.widescreen}",
-        "{spacing.section}",
-        "{spacing.aside}",
-        "{text-measure.1}",
-        "{text-measure.2}",
-        "{text-measure.3}",
-        "{text-measure.4}",
-        "{text-measure.5}",
-        "{button.width}",
-        "{button.min-width}",
-        "{button.max-width}",
-        "{button.height}",
-        "{button.min-height}",
-        "{button.max-height}",
-        "{button.icon-size}",
-        "{button.icon-start-size}",
-        "{button.icon-end-size}",
-        "{checkbox.control-width}",
-        "{checkbox.control-height}",
-        "{checkbox.indicator-size}",
-        "{input.icon-size}",
-        "{input.width}",
-        "{input.min-width}",
-        "{input.max-width}",
-        "{input.min-height}",
-        "{pagination.min-width}",
-        "{pagination.min-height}",
-        "{pagination.icon-size}",
-        "{radio.control-width}",
-        "{radio.control-height}",
-        "{radio.indicator-size}",
-        "{select.icon-size}",
-        "{select.indicator-size}",
-        "{select.width}",
-        "{select.min-width}",
-        "{select.max-width}",
-        "{select.min-height}",
-        "{textarea.width}",
-        "{textarea.min-width}",
-        "{textarea.max-width}",
         "{textarea.min-block-size}",
+        "{textarea.focus-width}",
+        "{textarea.focus-offset}",
         "{toggle.track-width}",
         "{toggle.track-height}",
+        "{toggle.border-width}",
+        "{toggle.border-radius}",
         "{toggle.thumb-size}",
+        "{toggle.thumb-inset}",
+        "{toggle.thumb-border-width}",
+        "{toggle.gap}",
+        "{toggle.group-gap}",
+        "{toggle.focus-width}",
+        "{toggle.focus-offset}",
+        "{tooltip.border-width}",
+        "{tooltip.border-radius}",
+        "{tooltip.padding-inline}",
+        "{tooltip.padding-block}",
         "{tooltip.max-width}",
         "{tooltip.arrow-size}",
         "{tooltip.offset}"
       ]
     },
-    "settingValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+    "cssDimensionValue": {
+      "type": "string",
+      "minLength": 1,
       "examples": [
-        "{spacing.max-scale}",
-        "{font-size.min-viewport}",
-        "{font-size.max-viewport}",
-        "{font-size.min-base}",
-        "{font-size.max-base}",
-        "{font-size.min-ratio}",
-        "{font-size.max-ratio}"
+        "{border.style}",
+        "{button.border-style}",
+        "{checkbox.border-style}",
+        "{input.border-style}",
+        "{pagination.border-style}",
+        "{radio.border-style}",
+        "{select.border-style}",
+        "{textarea.border-style}",
+        "{toggle.border-style}",
+        "{toggle.thumb-border-style}",
+        "{tooltip.border-style}"
       ]
+    },
+    "dimensionToken": {
+      "type": "object",
+      "description": "Zero spacing.",
+      "required": [
+        "$value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/dimensionValue"
+            },
+            {
+              "$ref": "#/definitions/cssDimensionValue"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "dimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/dimensionValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssDimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssDimensionValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:mobile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "lg": {
+          "description": "Size of a larger mobile device.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:tablet": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "lg": {
+          "description": "Size of a larger tablet device.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:desktop": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "lg": {
+          "description": "Size of a larger desktop device.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:section": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "margin": {
+          "$ref": "#/definitions/group:section-margin"
+        },
+        "margin-block": {
+          "description": "Preferred vertical margin for page sections.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "margin-inline": {
+          "description": "Preferred horizontal margin for page sections.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:section-margin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "block": {
+          "description": "Preferred vertical margin for page sections.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "inline": {
+          "description": "Preferred horizontal margin for page sections.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:page": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "padding": {
+          "$ref": "#/definitions/group:page-padding"
+        },
+        "padding-block": {
+          "description": "Preferred vertical padding for page.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "padding-inline": {
+          "description": "Preferred horizontal padding for page.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:page-padding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "block": {
+          "description": "Preferred vertical padding for page.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "inline": {
+          "description": "Preferred horizontal padding for page.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:neg": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "1": {
+          "description": "Minimal negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "2": {
+          "description": "Tiny negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "3": {
+          "description": "Small negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "4": {
+          "description": "Small-medium negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "5": {
+          "description": "Medium negative spacing (slightly smaller).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "6": {
+          "description": "Medium negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "7": {
+          "description": "Medium-large negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "8": {
+          "description": "Large negative spacing (slightly smaller).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "9": {
+          "description": "Large negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "10": {
+          "description": "Very large negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "15": {
+          "description": "Extremely large negative spacing (major overlap or pull effects).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "105": {
+          "description": "Very tiny negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "205": {
+          "description": "Extra-small negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "05": {
+          "description": "Minimal negative spacing (smaller).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "025": {
+          "description": "Hairline negative spacing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "2px": {
+          "description": "Precision negative spacing (coarse).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "1px": {
+          "description": "Precision negative spacing (fine).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
     }
   },
   "properties": {
     "0": {
-      "type": "object",
       "description": "Zero spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "1": {
-      "type": "object",
       "description": "Small spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "2": {
-      "type": "object",
       "description": "Base spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "3": {
-      "type": "object",
       "description": "Medium spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "4": {
-      "type": "object",
       "description": "Medium-plus spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "5": {
-      "type": "object",
       "description": "Large spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "6": {
-      "type": "object",
       "description": "Large-plus spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "7": {
-      "type": "object",
       "description": "XL spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "8": {
-      "type": "object",
       "description": "XL-plus spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "9": {
-      "type": "object",
       "description": "2XL spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "10": {
-      "type": "object",
       "description": "2XL-plus spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "15": {
-      "type": "object",
       "description": "3XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "20": {
-      "type": "object",
       "description": "4XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "25": {
-      "type": "object",
       "description": "5XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "30": {
-      "type": "object",
       "description": "6XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "40": {
-      "type": "object",
       "description": "7XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "50": {
-      "type": "object",
       "description": "8XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "60": {
-      "type": "object",
       "description": "9XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "70": {
-      "type": "object",
       "description": "10XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "80": {
-      "type": "object",
       "description": "11XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "90": {
-      "type": "object",
       "description": "12XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "100": {
-      "type": "object",
       "description": "13XL layout spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "105": {
-      "type": "object",
       "description": "Small-plus spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "205": {
-      "type": "object",
       "description": "Base-plus spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
+    },
+    "$type": {
+      "type": "string",
+      "enum": [
+        "dimension",
+        "cssDimension"
+      ]
+    },
+    "$description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
     },
     "2xs": {
-      "type": "object",
       "description": "Smallest semantic spacing value.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "xs": {
-      "type": "object",
       "description": "Second smallest semantic spacing value.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "sm": {
-      "type": "object",
       "description": "Third smallest semantic spacing value.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "md": {
-      "type": "object",
       "description": "Base semantic spacing value.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "lg": {
-      "type": "object",
       "description": "Large semantic spacing value.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "xl": {
-      "type": "object",
       "description": "Third largest semantic spacing value.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "2xl": {
-      "type": "object",
       "description": "Second largest semantic spacing value.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "3xl": {
-      "type": "object",
       "description": "Largest semantic spacing value.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "card": {
-      "type": "object",
       "description": "Size of a basic card.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "mobile": {
-      "type": "object",
-      "description": "Size of a small mobile device.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+      "anyOf": [
+        {
+          "description": "Size of a small mobile device.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "$ref": "#/definitions/group:mobile"
         }
-      }
+      ]
     },
     "mobile-lg": {
-      "type": "object",
       "description": "Size of a larger mobile device.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "tablet": {
-      "type": "object",
-      "description": "Size of a tablet device.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+      "anyOf": [
+        {
+          "description": "Size of a tablet device.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "$ref": "#/definitions/group:tablet"
         }
-      }
+      ]
     },
     "tablet-lg": {
-      "type": "object",
       "description": "Size of a larger tablet device.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "desktop": {
-      "type": "object",
-      "description": "Size of a small desktop device.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+      "anyOf": [
+        {
+          "description": "Size of a small desktop device.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "$ref": "#/definitions/group:desktop"
         }
-      }
+      ]
     },
     "desktop-lg": {
-      "type": "object",
       "description": "Size of a larger desktop device.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "widescreen": {
-      "type": "object",
       "description": "Size of a large desktop device.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "section": {
-      "type": "object",
-      "description": "Ideal max size of a page section.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+      "anyOf": [
+        {
+          "description": "Ideal max size of a page section.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "$ref": "#/definitions/group:section"
         }
-      }
+      ]
+    },
+    "section-margin": {
+      "$ref": "#/definitions/group:section-margin"
     },
     "section-margin-block": {
-      "type": "object",
       "description": "Preferred vertical margin for page sections.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "section-margin-inline": {
-      "type": "object",
       "description": "Preferred horizontal margin for page sections.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "aside": {
-      "type": "object",
       "description": "Preferred size for an aside element.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
+    },
+    "page": {
+      "$ref": "#/definitions/group:page"
+    },
+    "page-padding": {
+      "$ref": "#/definitions/group:page-padding"
     },
     "page-padding-block": {
-      "type": "object",
       "description": "Preferred vertical padding for page.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "page-padding-inline": {
-      "type": "object",
       "description": "Preferred horizontal padding for page.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/spacingValue"
-        },
-        "type": {
-          "const": "spacing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
-    "max-scale": {
-      "type": "object",
-      "description": "Growth ceiling: how much the largest layout spacing tokens bloom from their authored (min-viewport) floor to the max viewport. Per-token growth ramps up to this on a log curve by floor magnitude; micro spacing stays flat.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/settingValue"
-        },
-        "type": {
-          "const": "setting"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
+    "neg": {
+      "$ref": "#/definitions/group:neg"
     },
     "neg-15": {
-      "type": "object",
       "description": "Extremely large negative spacing (major overlap or pull effects).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-10": {
-      "type": "object",
       "description": "Very large negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-9": {
-      "type": "object",
       "description": "Large negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-8": {
-      "type": "object",
       "description": "Large negative spacing (slightly smaller).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-7": {
-      "type": "object",
       "description": "Medium-large negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-6": {
-      "type": "object",
       "description": "Medium negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-5": {
-      "type": "object",
       "description": "Medium negative spacing (slightly smaller).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-4": {
-      "type": "object",
       "description": "Small-medium negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-3": {
-      "type": "object",
       "description": "Small negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-205": {
-      "type": "object",
       "description": "Extra-small negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-2": {
-      "type": "object",
       "description": "Tiny negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-105": {
-      "type": "object",
       "description": "Very tiny negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-1": {
-      "type": "object",
       "description": "Minimal negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-05": {
-      "type": "object",
       "description": "Minimal negative spacing (smaller).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-025": {
-      "type": "object",
       "description": "Hairline negative spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-2px": {
-      "type": "object",
       "description": "Precision negative spacing (coarse).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "neg-1px": {
-      "type": "object",
       "description": "Precision negative spacing (fine).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "1px": {
-      "type": "object",
       "description": "Precision spacing (fine).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "2px": {
-      "type": "object",
       "description": "Precision spacing (coarse).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "025": {
-      "type": "object",
       "description": "Extra-tiny spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "05": {
-      "type": "object",
       "description": "Tiny spacing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootSizeValue"
-        },
-        "type": {
-          "const": "rootSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     }
   }
 }

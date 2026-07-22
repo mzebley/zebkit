@@ -1,0 +1,6524 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Zebkit zbk-color Token Overrides",
+  "description": "Authorable overrides for the zbk-color token module.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "colorValue": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "colorSpace",
+            "components"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "colorSpace": {
+              "type": "string",
+              "enum": [
+                "srgb",
+                "srgb-linear",
+                "hsl",
+                "hwb",
+                "lab",
+                "lch",
+                "oklab",
+                "oklch",
+                "display-p3",
+                "a98-rgb",
+                "prophoto-rgb",
+                "rec2020",
+                "xyz-d65",
+                "xyz-d50"
+              ]
+            },
+            "components": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "const": "none"
+                  }
+                ]
+              }
+            },
+            "alpha": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "hex": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "enum": [
+                      "srgb",
+                      "srgb-linear",
+                      "display-p3",
+                      "a98-rgb",
+                      "prophoto-rgb",
+                      "rec2020",
+                      "xyz-d65",
+                      "xyz-d50"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "enum": [
+                      "hsl",
+                      "hwb"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "lab"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "lch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "oklab"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "colorSpace": {
+                    "const": "oklch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "components": {
+                    "items": [
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      },
+                      {
+                        "oneOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 360
+                          },
+                          {
+                            "const": "none"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "examples": [
+        "{accent-primary.50}",
+        "{accent-primary.100}",
+        "{accent-primary.200}",
+        "{accent-primary.300}",
+        "{accent-primary.400}",
+        "{accent-primary.500}",
+        "{accent-primary.600}",
+        "{accent-primary.700}",
+        "{accent-primary.800}",
+        "{accent-primary.900}",
+        "{accent-primary.950}",
+        "{accent-primary.canvas}",
+        "{accent-primary.canvas-subtle}",
+        "{accent-primary.canvas-muted}",
+        "{accent-primary.canvas-emphasis}",
+        "{accent-primary.canvas-inverse}",
+        "{accent-primary.canvas-inverse-subtle}",
+        "{accent-primary.canvas-inverse-muted}",
+        "{accent-primary.canvas-inverse-emphasis}",
+        "{accent-primary.ink}",
+        "{accent-primary.ink-subtle}",
+        "{accent-primary.ink-muted}",
+        "{accent-primary.ink-emphasis}",
+        "{accent-primary.ink-inverse}",
+        "{accent-primary.ink-inverse-subtle}",
+        "{accent-primary.ink-inverse-muted}",
+        "{accent-primary.ink-inverse-emphasis}",
+        "{accent-primary.border}",
+        "{accent-primary.border-subtle}",
+        "{accent-primary.border-muted}",
+        "{accent-primary.border-emphasis}",
+        "{accent-primary.border-inverse}",
+        "{accent-primary.border-inverse-subtle}",
+        "{accent-primary.border-inverse-muted}",
+        "{accent-primary.border-inverse-emphasis}",
+        "{accent-secondary.50}",
+        "{accent-secondary.100}",
+        "{accent-secondary.200}",
+        "{accent-secondary.300}",
+        "{accent-secondary.400}",
+        "{accent-secondary.500}",
+        "{accent-secondary.600}",
+        "{accent-secondary.700}",
+        "{accent-secondary.800}",
+        "{accent-secondary.900}",
+        "{accent-secondary.950}",
+        "{accent-secondary.canvas}",
+        "{accent-secondary.canvas-subtle}",
+        "{accent-secondary.canvas-muted}",
+        "{accent-secondary.canvas-emphasis}",
+        "{accent-secondary.canvas-inverse}",
+        "{accent-secondary.canvas-inverse-subtle}",
+        "{accent-secondary.canvas-inverse-muted}",
+        "{accent-secondary.canvas-inverse-emphasis}",
+        "{accent-secondary.ink}",
+        "{accent-secondary.ink-subtle}",
+        "{accent-secondary.ink-muted}",
+        "{accent-secondary.ink-emphasis}",
+        "{accent-secondary.ink-inverse}",
+        "{accent-secondary.ink-inverse-subtle}",
+        "{accent-secondary.ink-inverse-muted}",
+        "{accent-secondary.ink-inverse-emphasis}",
+        "{accent-secondary.border}",
+        "{accent-secondary.border-subtle}",
+        "{accent-secondary.border-muted}",
+        "{accent-secondary.border-emphasis}",
+        "{accent-secondary.border-inverse}",
+        "{accent-secondary.border-inverse-subtle}",
+        "{accent-secondary.border-inverse-muted}",
+        "{accent-secondary.border-inverse-emphasis}",
+        "{brand.50}",
+        "{brand.100}",
+        "{brand.200}",
+        "{brand.300}",
+        "{brand.400}",
+        "{brand.500}",
+        "{brand.600}",
+        "{brand.700}",
+        "{brand.800}",
+        "{brand.900}",
+        "{brand.950}",
+        "{brand.canvas}",
+        "{brand.canvas-subtle}",
+        "{brand.canvas-muted}",
+        "{brand.canvas-emphasis}",
+        "{brand.canvas-inverse}",
+        "{brand.canvas-inverse-subtle}",
+        "{brand.canvas-inverse-muted}",
+        "{brand.canvas-inverse-emphasis}",
+        "{brand.ink}",
+        "{brand.ink-subtle}",
+        "{brand.ink-muted}",
+        "{brand.ink-emphasis}",
+        "{brand.ink-inverse}",
+        "{brand.ink-inverse-subtle}",
+        "{brand.ink-inverse-muted}",
+        "{brand.ink-inverse-emphasis}",
+        "{brand.border}",
+        "{brand.border-subtle}",
+        "{brand.border-muted}",
+        "{brand.border-emphasis}",
+        "{brand.border-inverse}",
+        "{brand.border-inverse-subtle}",
+        "{brand.border-inverse-muted}",
+        "{brand.border-inverse-emphasis}",
+        "{neutral.50}",
+        "{neutral.100}",
+        "{neutral.200}",
+        "{neutral.300}",
+        "{neutral.400}",
+        "{neutral.500}",
+        "{neutral.600}",
+        "{neutral.700}",
+        "{neutral.800}",
+        "{neutral.900}",
+        "{neutral.950}",
+        "{color.red-50}",
+        "{color.red-100}",
+        "{color.red-200}",
+        "{color.red-300}",
+        "{color.red-400}",
+        "{color.red-500}",
+        "{color.red-600}",
+        "{color.red-700}",
+        "{color.red-800}",
+        "{color.red-900}",
+        "{color.red-950}",
+        "{color.pink-50}",
+        "{color.pink-100}",
+        "{color.pink-200}",
+        "{color.pink-300}",
+        "{color.pink-400}",
+        "{color.pink-500}",
+        "{color.pink-600}",
+        "{color.pink-700}",
+        "{color.pink-800}",
+        "{color.pink-900}",
+        "{color.pink-950}",
+        "{color.orange-50}",
+        "{color.orange-100}",
+        "{color.orange-200}",
+        "{color.orange-300}",
+        "{color.orange-400}",
+        "{color.orange-500}",
+        "{color.orange-600}",
+        "{color.orange-700}",
+        "{color.orange-800}",
+        "{color.orange-900}",
+        "{color.orange-950}",
+        "{color.gold-50}",
+        "{color.gold-100}",
+        "{color.gold-200}",
+        "{color.gold-300}",
+        "{color.gold-400}",
+        "{color.gold-500}",
+        "{color.gold-600}",
+        "{color.gold-700}",
+        "{color.gold-800}",
+        "{color.gold-900}",
+        "{color.gold-950}",
+        "{color.yellow-50}",
+        "{color.yellow-100}",
+        "{color.yellow-200}",
+        "{color.yellow-300}",
+        "{color.yellow-400}",
+        "{color.yellow-500}",
+        "{color.yellow-600}",
+        "{color.yellow-700}",
+        "{color.yellow-800}",
+        "{color.yellow-900}",
+        "{color.yellow-950}",
+        "{color.lime-50}",
+        "{color.lime-100}",
+        "{color.lime-200}",
+        "{color.lime-300}",
+        "{color.lime-400}",
+        "{color.lime-500}",
+        "{color.lime-600}",
+        "{color.lime-700}",
+        "{color.lime-800}",
+        "{color.lime-900}",
+        "{color.lime-950}",
+        "{color.green-50}",
+        "{color.green-100}",
+        "{color.green-200}",
+        "{color.green-300}",
+        "{color.green-400}",
+        "{color.green-500}",
+        "{color.green-600}",
+        "{color.green-700}",
+        "{color.green-800}",
+        "{color.green-900}",
+        "{color.green-950}",
+        "{color.teal-50}",
+        "{color.teal-100}",
+        "{color.teal-200}",
+        "{color.teal-300}",
+        "{color.teal-400}",
+        "{color.teal-500}",
+        "{color.teal-600}",
+        "{color.teal-700}",
+        "{color.teal-800}",
+        "{color.teal-900}",
+        "{color.teal-950}",
+        "{color.cyan-50}",
+        "{color.cyan-100}",
+        "{color.cyan-200}",
+        "{color.cyan-300}",
+        "{color.cyan-400}",
+        "{color.cyan-500}",
+        "{color.cyan-600}",
+        "{color.cyan-700}",
+        "{color.cyan-800}",
+        "{color.cyan-900}",
+        "{color.cyan-950}",
+        "{color.blue-50}",
+        "{color.blue-100}",
+        "{color.blue-200}",
+        "{color.blue-300}",
+        "{color.blue-400}",
+        "{color.blue-500}",
+        "{color.blue-600}",
+        "{color.blue-700}",
+        "{color.blue-800}",
+        "{color.blue-900}",
+        "{color.blue-950}",
+        "{color.indigo-50}",
+        "{color.indigo-100}",
+        "{color.indigo-200}",
+        "{color.indigo-300}",
+        "{color.indigo-400}",
+        "{color.indigo-500}",
+        "{color.indigo-600}",
+        "{color.indigo-700}",
+        "{color.indigo-800}",
+        "{color.indigo-900}",
+        "{color.indigo-950}",
+        "{color.violet-50}",
+        "{color.violet-100}",
+        "{color.violet-200}",
+        "{color.violet-300}",
+        "{color.violet-400}",
+        "{color.violet-500}",
+        "{color.violet-600}",
+        "{color.violet-700}",
+        "{color.violet-800}",
+        "{color.violet-900}",
+        "{color.violet-950}",
+        "{color.merlot-50}",
+        "{color.merlot-100}",
+        "{color.merlot-200}",
+        "{color.merlot-300}",
+        "{color.merlot-400}",
+        "{color.merlot-500}",
+        "{color.merlot-600}",
+        "{color.merlot-700}",
+        "{color.merlot-800}",
+        "{color.merlot-900}",
+        "{color.merlot-950}",
+        "{color.butterfield-50}",
+        "{color.butterfield-100}",
+        "{color.butterfield-200}",
+        "{color.butterfield-300}",
+        "{color.butterfield-400}",
+        "{color.butterfield-500}",
+        "{color.butterfield-600}",
+        "{color.butterfield-700}",
+        "{color.butterfield-800}",
+        "{color.butterfield-900}",
+        "{color.butterfield-950}",
+        "{color.mint-50}",
+        "{color.mint-100}",
+        "{color.mint-200}",
+        "{color.mint-300}",
+        "{color.mint-400}",
+        "{color.mint-500}",
+        "{color.mint-600}",
+        "{color.mint-700}",
+        "{color.mint-800}",
+        "{color.mint-900}",
+        "{color.mint-950}",
+        "{color.sea-50}",
+        "{color.sea-100}",
+        "{color.sea-200}",
+        "{color.sea-300}",
+        "{color.sea-400}",
+        "{color.sea-500}",
+        "{color.sea-600}",
+        "{color.sea-700}",
+        "{color.sea-800}",
+        "{color.sea-900}",
+        "{color.sea-950}",
+        "{color.dusk-50}",
+        "{color.dusk-100}",
+        "{color.dusk-200}",
+        "{color.dusk-300}",
+        "{color.dusk-400}",
+        "{color.dusk-500}",
+        "{color.dusk-600}",
+        "{color.dusk-700}",
+        "{color.dusk-800}",
+        "{color.dusk-900}",
+        "{color.dusk-950}",
+        "{color.stone-50}",
+        "{color.stone-100}",
+        "{color.stone-200}",
+        "{color.stone-300}",
+        "{color.stone-400}",
+        "{color.stone-500}",
+        "{color.stone-600}",
+        "{color.stone-700}",
+        "{color.stone-800}",
+        "{color.stone-900}",
+        "{color.stone-950}",
+        "{color.charcoal-50}",
+        "{color.charcoal-100}",
+        "{color.charcoal-200}",
+        "{color.charcoal-300}",
+        "{color.charcoal-400}",
+        "{color.charcoal-500}",
+        "{color.charcoal-600}",
+        "{color.charcoal-700}",
+        "{color.charcoal-800}",
+        "{color.charcoal-900}",
+        "{color.charcoal-950}",
+        "{color.lavenderfield-50}",
+        "{color.lavenderfield-100}",
+        "{color.lavenderfield-200}",
+        "{color.lavenderfield-300}",
+        "{color.lavenderfield-400}",
+        "{color.lavenderfield-500}",
+        "{color.lavenderfield-600}",
+        "{color.lavenderfield-700}",
+        "{color.lavenderfield-800}",
+        "{color.lavenderfield-900}",
+        "{color.lavenderfield-950}",
+        "{color.rosewater-50}",
+        "{color.rosewater-100}",
+        "{color.rosewater-200}",
+        "{color.rosewater-300}",
+        "{color.rosewater-400}",
+        "{color.rosewater-500}",
+        "{color.rosewater-600}",
+        "{color.rosewater-700}",
+        "{color.rosewater-800}",
+        "{color.rosewater-900}",
+        "{color.rosewater-950}",
+        "{color.ember-50}",
+        "{color.ember-100}",
+        "{color.ember-200}",
+        "{color.ember-300}",
+        "{color.ember-400}",
+        "{color.ember-500}",
+        "{color.ember-600}",
+        "{color.ember-700}",
+        "{color.ember-800}",
+        "{color.ember-900}",
+        "{color.ember-950}",
+        "{color.deepcurrent-50}",
+        "{color.deepcurrent-100}",
+        "{color.deepcurrent-200}",
+        "{color.deepcurrent-300}",
+        "{color.deepcurrent-400}",
+        "{color.deepcurrent-500}",
+        "{color.deepcurrent-600}",
+        "{color.deepcurrent-700}",
+        "{color.deepcurrent-800}",
+        "{color.deepcurrent-900}",
+        "{color.deepcurrent-950}",
+        "{color.foxglove-50}",
+        "{color.foxglove-100}",
+        "{color.foxglove-200}",
+        "{color.foxglove-300}",
+        "{color.foxglove-400}",
+        "{color.foxglove-500}",
+        "{color.foxglove-600}",
+        "{color.foxglove-700}",
+        "{color.foxglove-800}",
+        "{color.foxglove-900}",
+        "{color.foxglove-950}",
+        "{color.chestnut-50}",
+        "{color.chestnut-100}",
+        "{color.chestnut-200}",
+        "{color.chestnut-300}",
+        "{color.chestnut-400}",
+        "{color.chestnut-500}",
+        "{color.chestnut-600}",
+        "{color.chestnut-700}",
+        "{color.chestnut-800}",
+        "{color.chestnut-900}",
+        "{color.chestnut-950}",
+        "{color.global-black}",
+        "{color.global-white}",
+        "{color.global-transparent}",
+        "{focus.color}",
+        "{h1.color}",
+        "{h2.color}",
+        "{h3.color}",
+        "{h4.color}",
+        "{h5.color}",
+        "{h6.color}",
+        "{lede.color}",
+        "{list.color}",
+        "{p.color}",
+        "{action.canvas}",
+        "{action.canvas-subtle}",
+        "{action.canvas-muted}",
+        "{action.canvas-emphasis}",
+        "{action.canvas-inverse}",
+        "{action.canvas-inverse-subtle}",
+        "{action.canvas-inverse-muted}",
+        "{action.canvas-inverse-emphasis}",
+        "{action.ink}",
+        "{action.ink-subtle}",
+        "{action.ink-muted}",
+        "{action.ink-emphasis}",
+        "{action.ink-inverse}",
+        "{action.ink-inverse-subtle}",
+        "{action.ink-inverse-muted}",
+        "{action.ink-inverse-emphasis}",
+        "{action.border}",
+        "{action.border-subtle}",
+        "{action.border-muted}",
+        "{action.border-emphasis}",
+        "{action.border-inverse}",
+        "{action.border-inverse-subtle}",
+        "{action.border-inverse-muted}",
+        "{action.border-inverse-emphasis}",
+        "{app.canvas}",
+        "{app.canvas-subtle}",
+        "{app.canvas-muted}",
+        "{app.canvas-emphasis}",
+        "{app.canvas-inverse}",
+        "{app.canvas-inverse-subtle}",
+        "{app.canvas-inverse-muted}",
+        "{app.canvas-inverse-emphasis}",
+        "{app.ink}",
+        "{app.ink-subtle}",
+        "{app.ink-muted}",
+        "{app.ink-emphasis}",
+        "{app.ink-inverse}",
+        "{app.ink-inverse-subtle}",
+        "{app.ink-inverse-muted}",
+        "{app.ink-inverse-emphasis}",
+        "{app.border}",
+        "{app.border-subtle}",
+        "{app.border-muted}",
+        "{app.border-emphasis}",
+        "{app.border-inverse}",
+        "{app.border-inverse-subtle}",
+        "{app.border-inverse-muted}",
+        "{app.border-inverse-emphasis}",
+        "{caution.canvas}",
+        "{caution.canvas-subtle}",
+        "{caution.canvas-muted}",
+        "{caution.canvas-emphasis}",
+        "{caution.canvas-inverse}",
+        "{caution.canvas-inverse-subtle}",
+        "{caution.canvas-inverse-muted}",
+        "{caution.canvas-inverse-emphasis}",
+        "{caution.ink}",
+        "{caution.ink-subtle}",
+        "{caution.ink-muted}",
+        "{caution.ink-emphasis}",
+        "{caution.ink-inverse}",
+        "{caution.ink-inverse-subtle}",
+        "{caution.ink-inverse-muted}",
+        "{caution.ink-inverse-emphasis}",
+        "{caution.border}",
+        "{caution.border-subtle}",
+        "{caution.border-muted}",
+        "{caution.border-emphasis}",
+        "{caution.border-inverse}",
+        "{caution.border-inverse-subtle}",
+        "{caution.border-inverse-muted}",
+        "{caution.border-inverse-emphasis}",
+        "{critical.canvas}",
+        "{critical.canvas-subtle}",
+        "{critical.canvas-muted}",
+        "{critical.canvas-emphasis}",
+        "{critical.canvas-inverse}",
+        "{critical.canvas-inverse-subtle}",
+        "{critical.canvas-inverse-muted}",
+        "{critical.canvas-inverse-emphasis}",
+        "{critical.ink}",
+        "{critical.ink-subtle}",
+        "{critical.ink-muted}",
+        "{critical.ink-emphasis}",
+        "{critical.ink-inverse}",
+        "{critical.ink-inverse-subtle}",
+        "{critical.ink-inverse-muted}",
+        "{critical.ink-inverse-emphasis}",
+        "{critical.border}",
+        "{critical.border-subtle}",
+        "{critical.border-muted}",
+        "{critical.border-emphasis}",
+        "{critical.border-inverse}",
+        "{critical.border-inverse-subtle}",
+        "{critical.border-inverse-muted}",
+        "{critical.border-inverse-emphasis}",
+        "{disabled.canvas}",
+        "{disabled.canvas-subtle}",
+        "{disabled.canvas-muted}",
+        "{disabled.canvas-emphasis}",
+        "{disabled.canvas-inverse}",
+        "{disabled.canvas-inverse-subtle}",
+        "{disabled.canvas-inverse-muted}",
+        "{disabled.canvas-inverse-emphasis}",
+        "{disabled.ink}",
+        "{disabled.ink-subtle}",
+        "{disabled.ink-muted}",
+        "{disabled.ink-emphasis}",
+        "{disabled.ink-inverse}",
+        "{disabled.ink-inverse-subtle}",
+        "{disabled.ink-inverse-muted}",
+        "{disabled.ink-inverse-emphasis}",
+        "{disabled.border}",
+        "{disabled.border-subtle}",
+        "{disabled.border-muted}",
+        "{disabled.border-emphasis}",
+        "{disabled.border-inverse}",
+        "{disabled.border-inverse-subtle}",
+        "{disabled.border-inverse-muted}",
+        "{disabled.border-inverse-emphasis}",
+        "{info.canvas}",
+        "{info.canvas-subtle}",
+        "{info.canvas-muted}",
+        "{info.canvas-emphasis}",
+        "{info.canvas-inverse}",
+        "{info.canvas-inverse-subtle}",
+        "{info.canvas-inverse-muted}",
+        "{info.canvas-inverse-emphasis}",
+        "{info.ink}",
+        "{info.ink-subtle}",
+        "{info.ink-muted}",
+        "{info.ink-emphasis}",
+        "{info.ink-inverse}",
+        "{info.ink-inverse-subtle}",
+        "{info.ink-inverse-muted}",
+        "{info.ink-inverse-emphasis}",
+        "{info.border}",
+        "{info.border-subtle}",
+        "{info.border-muted}",
+        "{info.border-emphasis}",
+        "{info.border-inverse}",
+        "{info.border-inverse-subtle}",
+        "{info.border-inverse-muted}",
+        "{info.border-inverse-emphasis}",
+        "{positive.canvas}",
+        "{positive.canvas-subtle}",
+        "{positive.canvas-muted}",
+        "{positive.canvas-emphasis}",
+        "{positive.canvas-inverse}",
+        "{positive.canvas-inverse-subtle}",
+        "{positive.canvas-inverse-muted}",
+        "{positive.canvas-inverse-emphasis}",
+        "{positive.ink}",
+        "{positive.ink-subtle}",
+        "{positive.ink-muted}",
+        "{positive.ink-emphasis}",
+        "{positive.ink-inverse}",
+        "{positive.ink-inverse-subtle}",
+        "{positive.ink-inverse-muted}",
+        "{positive.ink-inverse-emphasis}",
+        "{positive.border}",
+        "{positive.border-subtle}",
+        "{positive.border-muted}",
+        "{positive.border-emphasis}",
+        "{positive.border-inverse}",
+        "{positive.border-inverse-subtle}",
+        "{positive.border-inverse-muted}",
+        "{positive.border-inverse-emphasis}",
+        "{button.ink}",
+        "{button.ink-hover}",
+        "{button.ink-active}",
+        "{button.ink-disabled}",
+        "{button.ink-loading}",
+        "{button.canvas}",
+        "{button.canvas-hover}",
+        "{button.canvas-active}",
+        "{button.canvas-disabled}",
+        "{button.canvas-loading}",
+        "{button.border-color}",
+        "{button.border-color-hover}",
+        "{button.border-color-active}",
+        "{button.border-color-disabled}",
+        "{button.border-color-loading}",
+        "{button.focus-color}",
+        "{checkbox.canvas}",
+        "{checkbox.canvas-hover}",
+        "{checkbox.canvas-active}",
+        "{checkbox.canvas-checked}",
+        "{checkbox.canvas-indeterminate}",
+        "{checkbox.canvas-disabled}",
+        "{checkbox.border-color}",
+        "{checkbox.border-color-hover}",
+        "{checkbox.border-color-active}",
+        "{checkbox.border-color-checked}",
+        "{checkbox.border-color-indeterminate}",
+        "{checkbox.border-color-disabled}",
+        "{checkbox.indicator-color}",
+        "{checkbox.indicator-color-disabled}",
+        "{checkbox.ink}",
+        "{checkbox.ink-disabled}",
+        "{checkbox.focus-color}",
+        "{input.canvas}",
+        "{input.canvas-hover}",
+        "{input.canvas-focus}",
+        "{input.canvas-active}",
+        "{input.canvas-disabled}",
+        "{input.canvas-readonly}",
+        "{input.canvas-invalid}",
+        "{input.ink}",
+        "{input.ink-disabled}",
+        "{input.ink-readonly}",
+        "{input.ink-invalid}",
+        "{input.placeholder-ink}",
+        "{input.placeholder-ink-disabled}",
+        "{input.caret-color}",
+        "{input.border-color}",
+        "{input.border-color-hover}",
+        "{input.border-color-focus}",
+        "{input.border-color-active}",
+        "{input.border-color-disabled}",
+        "{input.border-color-readonly}",
+        "{input.border-color-invalid}",
+        "{input.label-ink}",
+        "{input.label-ink-disabled}",
+        "{input.affix-ink}",
+        "{input.affix-ink-disabled}",
+        "{input.focus-color}",
+        "{pagination.ink}",
+        "{pagination.ink-hover}",
+        "{pagination.ink-active}",
+        "{pagination.ink-disabled}",
+        "{pagination.ink-selected}",
+        "{pagination.canvas}",
+        "{pagination.canvas-hover}",
+        "{pagination.canvas-active}",
+        "{pagination.canvas-disabled}",
+        "{pagination.canvas-selected}",
+        "{pagination.border-color}",
+        "{pagination.border-color-hover}",
+        "{pagination.border-color-active}",
+        "{pagination.border-color-disabled}",
+        "{pagination.border-color-selected}",
+        "{pagination.ellipsis-ink}",
+        "{pagination.status-ink}",
+        "{pagination.focus-color}",
+        "{radio.canvas}",
+        "{radio.canvas-hover}",
+        "{radio.canvas-active}",
+        "{radio.canvas-checked}",
+        "{radio.canvas-disabled}",
+        "{radio.border-color}",
+        "{radio.border-color-hover}",
+        "{radio.border-color-active}",
+        "{radio.border-color-checked}",
+        "{radio.border-color-disabled}",
+        "{radio.indicator-color}",
+        "{radio.indicator-color-disabled}",
+        "{radio.ink}",
+        "{radio.ink-disabled}",
+        "{radio.focus-color}",
+        "{select.canvas}",
+        "{select.canvas-hover}",
+        "{select.canvas-focus}",
+        "{select.canvas-active}",
+        "{select.canvas-disabled}",
+        "{select.canvas-invalid}",
+        "{select.ink}",
+        "{select.ink-disabled}",
+        "{select.ink-invalid}",
+        "{select.border-color}",
+        "{select.border-color-hover}",
+        "{select.border-color-focus}",
+        "{select.border-color-active}",
+        "{select.border-color-disabled}",
+        "{select.border-color-invalid}",
+        "{select.label-ink}",
+        "{select.label-ink-disabled}",
+        "{select.affix-ink}",
+        "{select.affix-ink-disabled}",
+        "{select.indicator-color}",
+        "{select.indicator-color-disabled}",
+        "{select.focus-color}",
+        "{textarea.canvas}",
+        "{textarea.canvas-hover}",
+        "{textarea.canvas-focus}",
+        "{textarea.canvas-active}",
+        "{textarea.canvas-disabled}",
+        "{textarea.canvas-readonly}",
+        "{textarea.canvas-invalid}",
+        "{textarea.ink}",
+        "{textarea.ink-disabled}",
+        "{textarea.ink-readonly}",
+        "{textarea.ink-invalid}",
+        "{textarea.placeholder-ink}",
+        "{textarea.placeholder-ink-disabled}",
+        "{textarea.caret-color}",
+        "{textarea.border-color}",
+        "{textarea.border-color-hover}",
+        "{textarea.border-color-focus}",
+        "{textarea.border-color-active}",
+        "{textarea.border-color-disabled}",
+        "{textarea.border-color-readonly}",
+        "{textarea.border-color-invalid}",
+        "{textarea.label-ink}",
+        "{textarea.label-ink-disabled}",
+        "{textarea.focus-color}",
+        "{toggle.canvas}",
+        "{toggle.canvas-hover}",
+        "{toggle.canvas-active}",
+        "{toggle.canvas-checked}",
+        "{toggle.canvas-disabled}",
+        "{toggle.border-color}",
+        "{toggle.border-color-hover}",
+        "{toggle.border-color-active}",
+        "{toggle.border-color-checked}",
+        "{toggle.border-color-disabled}",
+        "{toggle.thumb-canvas}",
+        "{toggle.thumb-canvas-hover}",
+        "{toggle.thumb-canvas-checked}",
+        "{toggle.thumb-canvas-disabled}",
+        "{toggle.thumb-border-color}",
+        "{toggle.thumb-border-color-checked}",
+        "{toggle.ink}",
+        "{toggle.ink-disabled}",
+        "{toggle.focus-color}",
+        "{tooltip.canvas}",
+        "{tooltip.ink}",
+        "{tooltip.border-color}"
+      ]
+    },
+    "cssColorValue": {
+      "type": "string",
+      "minLength": 1
+    },
+    "colorToken": {
+      "type": "object",
+      "description": "Primitive red ramp, step 50 (98% lightness).",
+      "required": [
+        "$value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/colorValue"
+            },
+            {
+              "$ref": "#/definitions/cssColorValue"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "color"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/colorValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssColor"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssColorValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:red": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive red ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive red ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive red ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive red ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive red ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive red ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive red ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive red ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive red ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive red ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive red ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:pink": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive pink ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive pink ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive pink ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive pink ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive pink ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive pink ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive pink ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive pink ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive pink ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive pink ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive pink ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:orange": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive orange ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive orange ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive orange ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive orange ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive orange ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive orange ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive orange ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive orange ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive orange ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive orange ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive orange ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:gold": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive gold ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive gold ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive gold ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive gold ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive gold ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive gold ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive gold ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive gold ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive gold ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive gold ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive gold ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:yellow": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive yellow ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive yellow ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive yellow ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive yellow ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive yellow ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive yellow ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive yellow ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive yellow ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive yellow ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive yellow ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive yellow ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:lime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive lime ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive lime ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive lime ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive lime ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive lime ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive lime ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive lime ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive lime ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive lime ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive lime ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive lime ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:green": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive green ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive green ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive green ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive green ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive green ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive green ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive green ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive green ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive green ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive green ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive green ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:teal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive teal ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive teal ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive teal ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive teal ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive teal ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive teal ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive teal ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive teal ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive teal ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive teal ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive teal ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:cyan": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive cyan ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive cyan ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive cyan ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive cyan ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive cyan ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive cyan ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive cyan ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive cyan ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive cyan ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive cyan ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive cyan ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:blue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive blue ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive blue ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive blue ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive blue ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive blue ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive blue ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive blue ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive blue ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive blue ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive blue ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive blue ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:indigo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive indigo ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive indigo ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive indigo ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive indigo ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive indigo ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive indigo ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive indigo ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive indigo ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive indigo ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive indigo ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive indigo ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:violet": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive violet ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive violet ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive violet ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive violet ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive violet ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive violet ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive violet ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive violet ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive violet ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive violet ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive violet ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:merlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive merlot ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive merlot ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive merlot ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive merlot ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive merlot ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive merlot ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive merlot ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive merlot ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive merlot ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive merlot ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive merlot ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:butterfield": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive butterfield ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive butterfield ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive butterfield ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive butterfield ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive butterfield ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive butterfield ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive butterfield ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive butterfield ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive butterfield ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive butterfield ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive butterfield ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:mint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive mint ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive mint ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive mint ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive mint ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive mint ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive mint ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive mint ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive mint ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive mint ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive mint ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive mint ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:sea": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive sea ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive sea ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive sea ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive sea ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive sea ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive sea ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive sea ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive sea ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive sea ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive sea ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive sea ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:dusk": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive dusk ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive dusk ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive dusk ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive dusk ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive dusk ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive dusk ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive dusk ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive dusk ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive dusk ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive dusk ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive dusk ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:stone": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive stone ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive stone ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive stone ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive stone ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive stone ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive stone ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive stone ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive stone ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive stone ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive stone ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive stone ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:charcoal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive charcoal ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive charcoal ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive charcoal ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive charcoal ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive charcoal ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive charcoal ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive charcoal ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive charcoal ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive charcoal ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive charcoal ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive charcoal ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:lavenderfield": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive lavenderfield ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive lavenderfield ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive lavenderfield ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive lavenderfield ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive lavenderfield ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive lavenderfield ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive lavenderfield ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive lavenderfield ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive lavenderfield ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive lavenderfield ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive lavenderfield ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:rosewater": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive rosewater ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive rosewater ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive rosewater ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive rosewater ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive rosewater ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive rosewater ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive rosewater ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive rosewater ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive rosewater ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive rosewater ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive rosewater ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:ember": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive ember ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive ember ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive ember ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive ember ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive ember ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive ember ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive ember ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive ember ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive ember ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive ember ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive ember ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:deepcurrent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive deepcurrent ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive deepcurrent ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive deepcurrent ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive deepcurrent ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive deepcurrent ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive deepcurrent ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive deepcurrent ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive deepcurrent ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive deepcurrent ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive deepcurrent ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive deepcurrent ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:foxglove": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive foxglove ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive foxglove ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive foxglove ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive foxglove ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive foxglove ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive foxglove ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive foxglove ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive foxglove ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive foxglove ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive foxglove ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive foxglove ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:chestnut": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "50": {
+          "description": "Primitive chestnut ramp, step 50 (98% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "100": {
+          "description": "Primitive chestnut ramp, step 100 (93% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "200": {
+          "description": "Primitive chestnut ramp, step 200 (87% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "300": {
+          "description": "Primitive chestnut ramp, step 300 (78% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "400": {
+          "description": "Primitive chestnut ramp, step 400 (69% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "500": {
+          "description": "Primitive chestnut ramp, step 500 (58% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "600": {
+          "description": "Primitive chestnut ramp, step 600 (48% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "700": {
+          "description": "Primitive chestnut ramp, step 700 (36% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "800": {
+          "description": "Primitive chestnut ramp, step 800 (26% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "900": {
+          "description": "Primitive chestnut ramp, step 900 (18% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "950": {
+          "description": "Primitive chestnut ramp, step 950 (10% lightness).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        }
+      }
+    },
+    "group:global": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "color",
+            "cssColor"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "black": {
+          "description": "Global near-black for maximum-contrast ink on any canvas.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "white": {
+          "description": "Global near-white for maximum-contrast canvas surfaces.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        },
+        "transparent": {
+          "description": "Fully transparent color for surfaces that must not paint.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/colorToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "$type": {
+      "type": "string",
+      "enum": [
+        "color",
+        "cssColor"
+      ]
+    },
+    "$description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "red": {
+      "$ref": "#/definitions/group:red"
+    },
+    "red-50": {
+      "description": "Primitive red ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "red-100": {
+      "description": "Primitive red ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "red-200": {
+      "description": "Primitive red ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "red-300": {
+      "description": "Primitive red ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "red-400": {
+      "description": "Primitive red ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "red-500": {
+      "description": "Primitive red ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "red-600": {
+      "description": "Primitive red ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "red-700": {
+      "description": "Primitive red ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "red-800": {
+      "description": "Primitive red ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "red-900": {
+      "description": "Primitive red ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "red-950": {
+      "description": "Primitive red ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink": {
+      "$ref": "#/definitions/group:pink"
+    },
+    "pink-50": {
+      "description": "Primitive pink ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink-100": {
+      "description": "Primitive pink ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink-200": {
+      "description": "Primitive pink ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink-300": {
+      "description": "Primitive pink ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink-400": {
+      "description": "Primitive pink ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink-500": {
+      "description": "Primitive pink ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink-600": {
+      "description": "Primitive pink ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink-700": {
+      "description": "Primitive pink ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink-800": {
+      "description": "Primitive pink ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink-900": {
+      "description": "Primitive pink ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "pink-950": {
+      "description": "Primitive pink ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange": {
+      "$ref": "#/definitions/group:orange"
+    },
+    "orange-50": {
+      "description": "Primitive orange ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange-100": {
+      "description": "Primitive orange ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange-200": {
+      "description": "Primitive orange ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange-300": {
+      "description": "Primitive orange ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange-400": {
+      "description": "Primitive orange ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange-500": {
+      "description": "Primitive orange ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange-600": {
+      "description": "Primitive orange ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange-700": {
+      "description": "Primitive orange ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange-800": {
+      "description": "Primitive orange ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange-900": {
+      "description": "Primitive orange ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "orange-950": {
+      "description": "Primitive orange ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold": {
+      "$ref": "#/definitions/group:gold"
+    },
+    "gold-50": {
+      "description": "Primitive gold ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold-100": {
+      "description": "Primitive gold ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold-200": {
+      "description": "Primitive gold ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold-300": {
+      "description": "Primitive gold ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold-400": {
+      "description": "Primitive gold ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold-500": {
+      "description": "Primitive gold ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold-600": {
+      "description": "Primitive gold ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold-700": {
+      "description": "Primitive gold ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold-800": {
+      "description": "Primitive gold ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold-900": {
+      "description": "Primitive gold ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "gold-950": {
+      "description": "Primitive gold ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow": {
+      "$ref": "#/definitions/group:yellow"
+    },
+    "yellow-50": {
+      "description": "Primitive yellow ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow-100": {
+      "description": "Primitive yellow ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow-200": {
+      "description": "Primitive yellow ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow-300": {
+      "description": "Primitive yellow ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow-400": {
+      "description": "Primitive yellow ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow-500": {
+      "description": "Primitive yellow ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow-600": {
+      "description": "Primitive yellow ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow-700": {
+      "description": "Primitive yellow ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow-800": {
+      "description": "Primitive yellow ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow-900": {
+      "description": "Primitive yellow ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "yellow-950": {
+      "description": "Primitive yellow ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime": {
+      "$ref": "#/definitions/group:lime"
+    },
+    "lime-50": {
+      "description": "Primitive lime ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime-100": {
+      "description": "Primitive lime ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime-200": {
+      "description": "Primitive lime ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime-300": {
+      "description": "Primitive lime ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime-400": {
+      "description": "Primitive lime ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime-500": {
+      "description": "Primitive lime ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime-600": {
+      "description": "Primitive lime ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime-700": {
+      "description": "Primitive lime ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime-800": {
+      "description": "Primitive lime ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime-900": {
+      "description": "Primitive lime ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lime-950": {
+      "description": "Primitive lime ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green": {
+      "$ref": "#/definitions/group:green"
+    },
+    "green-50": {
+      "description": "Primitive green ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green-100": {
+      "description": "Primitive green ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green-200": {
+      "description": "Primitive green ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green-300": {
+      "description": "Primitive green ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green-400": {
+      "description": "Primitive green ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green-500": {
+      "description": "Primitive green ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green-600": {
+      "description": "Primitive green ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green-700": {
+      "description": "Primitive green ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green-800": {
+      "description": "Primitive green ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green-900": {
+      "description": "Primitive green ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "green-950": {
+      "description": "Primitive green ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal": {
+      "$ref": "#/definitions/group:teal"
+    },
+    "teal-50": {
+      "description": "Primitive teal ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal-100": {
+      "description": "Primitive teal ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal-200": {
+      "description": "Primitive teal ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal-300": {
+      "description": "Primitive teal ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal-400": {
+      "description": "Primitive teal ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal-500": {
+      "description": "Primitive teal ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal-600": {
+      "description": "Primitive teal ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal-700": {
+      "description": "Primitive teal ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal-800": {
+      "description": "Primitive teal ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal-900": {
+      "description": "Primitive teal ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "teal-950": {
+      "description": "Primitive teal ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan": {
+      "$ref": "#/definitions/group:cyan"
+    },
+    "cyan-50": {
+      "description": "Primitive cyan ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan-100": {
+      "description": "Primitive cyan ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan-200": {
+      "description": "Primitive cyan ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan-300": {
+      "description": "Primitive cyan ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan-400": {
+      "description": "Primitive cyan ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan-500": {
+      "description": "Primitive cyan ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan-600": {
+      "description": "Primitive cyan ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan-700": {
+      "description": "Primitive cyan ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan-800": {
+      "description": "Primitive cyan ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan-900": {
+      "description": "Primitive cyan ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "cyan-950": {
+      "description": "Primitive cyan ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue": {
+      "$ref": "#/definitions/group:blue"
+    },
+    "blue-50": {
+      "description": "Primitive blue ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue-100": {
+      "description": "Primitive blue ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue-200": {
+      "description": "Primitive blue ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue-300": {
+      "description": "Primitive blue ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue-400": {
+      "description": "Primitive blue ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue-500": {
+      "description": "Primitive blue ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue-600": {
+      "description": "Primitive blue ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue-700": {
+      "description": "Primitive blue ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue-800": {
+      "description": "Primitive blue ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue-900": {
+      "description": "Primitive blue ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "blue-950": {
+      "description": "Primitive blue ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo": {
+      "$ref": "#/definitions/group:indigo"
+    },
+    "indigo-50": {
+      "description": "Primitive indigo ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo-100": {
+      "description": "Primitive indigo ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo-200": {
+      "description": "Primitive indigo ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo-300": {
+      "description": "Primitive indigo ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo-400": {
+      "description": "Primitive indigo ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo-500": {
+      "description": "Primitive indigo ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo-600": {
+      "description": "Primitive indigo ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo-700": {
+      "description": "Primitive indigo ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo-800": {
+      "description": "Primitive indigo ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo-900": {
+      "description": "Primitive indigo ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "indigo-950": {
+      "description": "Primitive indigo ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet": {
+      "$ref": "#/definitions/group:violet"
+    },
+    "violet-50": {
+      "description": "Primitive violet ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet-100": {
+      "description": "Primitive violet ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet-200": {
+      "description": "Primitive violet ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet-300": {
+      "description": "Primitive violet ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet-400": {
+      "description": "Primitive violet ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet-500": {
+      "description": "Primitive violet ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet-600": {
+      "description": "Primitive violet ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet-700": {
+      "description": "Primitive violet ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet-800": {
+      "description": "Primitive violet ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet-900": {
+      "description": "Primitive violet ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "violet-950": {
+      "description": "Primitive violet ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot": {
+      "$ref": "#/definitions/group:merlot"
+    },
+    "merlot-50": {
+      "description": "Primitive merlot ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot-100": {
+      "description": "Primitive merlot ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot-200": {
+      "description": "Primitive merlot ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot-300": {
+      "description": "Primitive merlot ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot-400": {
+      "description": "Primitive merlot ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot-500": {
+      "description": "Primitive merlot ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot-600": {
+      "description": "Primitive merlot ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot-700": {
+      "description": "Primitive merlot ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot-800": {
+      "description": "Primitive merlot ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot-900": {
+      "description": "Primitive merlot ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "merlot-950": {
+      "description": "Primitive merlot ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield": {
+      "$ref": "#/definitions/group:butterfield"
+    },
+    "butterfield-50": {
+      "description": "Primitive butterfield ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield-100": {
+      "description": "Primitive butterfield ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield-200": {
+      "description": "Primitive butterfield ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield-300": {
+      "description": "Primitive butterfield ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield-400": {
+      "description": "Primitive butterfield ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield-500": {
+      "description": "Primitive butterfield ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield-600": {
+      "description": "Primitive butterfield ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield-700": {
+      "description": "Primitive butterfield ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield-800": {
+      "description": "Primitive butterfield ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield-900": {
+      "description": "Primitive butterfield ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "butterfield-950": {
+      "description": "Primitive butterfield ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint": {
+      "$ref": "#/definitions/group:mint"
+    },
+    "mint-50": {
+      "description": "Primitive mint ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint-100": {
+      "description": "Primitive mint ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint-200": {
+      "description": "Primitive mint ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint-300": {
+      "description": "Primitive mint ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint-400": {
+      "description": "Primitive mint ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint-500": {
+      "description": "Primitive mint ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint-600": {
+      "description": "Primitive mint ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint-700": {
+      "description": "Primitive mint ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint-800": {
+      "description": "Primitive mint ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint-900": {
+      "description": "Primitive mint ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "mint-950": {
+      "description": "Primitive mint ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea": {
+      "$ref": "#/definitions/group:sea"
+    },
+    "sea-50": {
+      "description": "Primitive sea ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea-100": {
+      "description": "Primitive sea ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea-200": {
+      "description": "Primitive sea ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea-300": {
+      "description": "Primitive sea ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea-400": {
+      "description": "Primitive sea ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea-500": {
+      "description": "Primitive sea ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea-600": {
+      "description": "Primitive sea ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea-700": {
+      "description": "Primitive sea ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea-800": {
+      "description": "Primitive sea ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea-900": {
+      "description": "Primitive sea ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "sea-950": {
+      "description": "Primitive sea ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk": {
+      "$ref": "#/definitions/group:dusk"
+    },
+    "dusk-50": {
+      "description": "Primitive dusk ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk-100": {
+      "description": "Primitive dusk ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk-200": {
+      "description": "Primitive dusk ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk-300": {
+      "description": "Primitive dusk ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk-400": {
+      "description": "Primitive dusk ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk-500": {
+      "description": "Primitive dusk ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk-600": {
+      "description": "Primitive dusk ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk-700": {
+      "description": "Primitive dusk ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk-800": {
+      "description": "Primitive dusk ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk-900": {
+      "description": "Primitive dusk ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "dusk-950": {
+      "description": "Primitive dusk ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone": {
+      "$ref": "#/definitions/group:stone"
+    },
+    "stone-50": {
+      "description": "Primitive stone ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone-100": {
+      "description": "Primitive stone ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone-200": {
+      "description": "Primitive stone ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone-300": {
+      "description": "Primitive stone ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone-400": {
+      "description": "Primitive stone ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone-500": {
+      "description": "Primitive stone ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone-600": {
+      "description": "Primitive stone ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone-700": {
+      "description": "Primitive stone ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone-800": {
+      "description": "Primitive stone ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone-900": {
+      "description": "Primitive stone ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "stone-950": {
+      "description": "Primitive stone ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal": {
+      "$ref": "#/definitions/group:charcoal"
+    },
+    "charcoal-50": {
+      "description": "Primitive charcoal ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal-100": {
+      "description": "Primitive charcoal ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal-200": {
+      "description": "Primitive charcoal ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal-300": {
+      "description": "Primitive charcoal ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal-400": {
+      "description": "Primitive charcoal ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal-500": {
+      "description": "Primitive charcoal ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal-600": {
+      "description": "Primitive charcoal ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal-700": {
+      "description": "Primitive charcoal ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal-800": {
+      "description": "Primitive charcoal ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal-900": {
+      "description": "Primitive charcoal ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "charcoal-950": {
+      "description": "Primitive charcoal ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield": {
+      "$ref": "#/definitions/group:lavenderfield"
+    },
+    "lavenderfield-50": {
+      "description": "Primitive lavenderfield ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield-100": {
+      "description": "Primitive lavenderfield ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield-200": {
+      "description": "Primitive lavenderfield ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield-300": {
+      "description": "Primitive lavenderfield ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield-400": {
+      "description": "Primitive lavenderfield ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield-500": {
+      "description": "Primitive lavenderfield ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield-600": {
+      "description": "Primitive lavenderfield ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield-700": {
+      "description": "Primitive lavenderfield ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield-800": {
+      "description": "Primitive lavenderfield ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield-900": {
+      "description": "Primitive lavenderfield ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "lavenderfield-950": {
+      "description": "Primitive lavenderfield ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater": {
+      "$ref": "#/definitions/group:rosewater"
+    },
+    "rosewater-50": {
+      "description": "Primitive rosewater ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater-100": {
+      "description": "Primitive rosewater ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater-200": {
+      "description": "Primitive rosewater ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater-300": {
+      "description": "Primitive rosewater ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater-400": {
+      "description": "Primitive rosewater ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater-500": {
+      "description": "Primitive rosewater ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater-600": {
+      "description": "Primitive rosewater ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater-700": {
+      "description": "Primitive rosewater ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater-800": {
+      "description": "Primitive rosewater ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater-900": {
+      "description": "Primitive rosewater ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "rosewater-950": {
+      "description": "Primitive rosewater ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember": {
+      "$ref": "#/definitions/group:ember"
+    },
+    "ember-50": {
+      "description": "Primitive ember ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember-100": {
+      "description": "Primitive ember ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember-200": {
+      "description": "Primitive ember ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember-300": {
+      "description": "Primitive ember ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember-400": {
+      "description": "Primitive ember ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember-500": {
+      "description": "Primitive ember ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember-600": {
+      "description": "Primitive ember ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember-700": {
+      "description": "Primitive ember ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember-800": {
+      "description": "Primitive ember ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember-900": {
+      "description": "Primitive ember ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "ember-950": {
+      "description": "Primitive ember ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent": {
+      "$ref": "#/definitions/group:deepcurrent"
+    },
+    "deepcurrent-50": {
+      "description": "Primitive deepcurrent ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent-100": {
+      "description": "Primitive deepcurrent ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent-200": {
+      "description": "Primitive deepcurrent ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent-300": {
+      "description": "Primitive deepcurrent ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent-400": {
+      "description": "Primitive deepcurrent ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent-500": {
+      "description": "Primitive deepcurrent ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent-600": {
+      "description": "Primitive deepcurrent ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent-700": {
+      "description": "Primitive deepcurrent ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent-800": {
+      "description": "Primitive deepcurrent ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent-900": {
+      "description": "Primitive deepcurrent ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "deepcurrent-950": {
+      "description": "Primitive deepcurrent ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove": {
+      "$ref": "#/definitions/group:foxglove"
+    },
+    "foxglove-50": {
+      "description": "Primitive foxglove ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove-100": {
+      "description": "Primitive foxglove ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove-200": {
+      "description": "Primitive foxglove ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove-300": {
+      "description": "Primitive foxglove ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove-400": {
+      "description": "Primitive foxglove ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove-500": {
+      "description": "Primitive foxglove ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove-600": {
+      "description": "Primitive foxglove ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove-700": {
+      "description": "Primitive foxglove ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove-800": {
+      "description": "Primitive foxglove ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove-900": {
+      "description": "Primitive foxglove ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "foxglove-950": {
+      "description": "Primitive foxglove ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut": {
+      "$ref": "#/definitions/group:chestnut"
+    },
+    "chestnut-50": {
+      "description": "Primitive chestnut ramp, step 50 (98% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut-100": {
+      "description": "Primitive chestnut ramp, step 100 (93% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut-200": {
+      "description": "Primitive chestnut ramp, step 200 (87% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut-300": {
+      "description": "Primitive chestnut ramp, step 300 (78% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut-400": {
+      "description": "Primitive chestnut ramp, step 400 (69% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut-500": {
+      "description": "Primitive chestnut ramp, step 500 (58% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut-600": {
+      "description": "Primitive chestnut ramp, step 600 (48% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut-700": {
+      "description": "Primitive chestnut ramp, step 700 (36% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut-800": {
+      "description": "Primitive chestnut ramp, step 800 (26% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut-900": {
+      "description": "Primitive chestnut ramp, step 900 (18% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "chestnut-950": {
+      "description": "Primitive chestnut ramp, step 950 (10% lightness).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "global": {
+      "$ref": "#/definitions/group:global"
+    },
+    "global-black": {
+      "description": "Global near-black for maximum-contrast ink on any canvas.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "global-white": {
+      "description": "Global near-white for maximum-contrast canvas surfaces.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    },
+    "global-transparent": {
+      "description": "Fully transparent color for surfaces that must not paint.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        }
+      ]
+    }
+  }
+}

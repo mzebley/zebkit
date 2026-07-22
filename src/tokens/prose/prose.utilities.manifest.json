@@ -199,6 +199,33 @@
         { "selector": ".prose>*+.lede", "declarations": { "margin-top": "var(--zbk-lede-spacing-before)" } },
         { "selector": ".prose>.lede+*, .lede.prose+*", "declarations": { "margin-top": "var(--zbk-lede-spacing-after)" } }
       ]
+    },
+    {
+      "name": "prose-list",
+      "description": "Ordered and unordered list typography and spacing inside a .prose context.",
+      "guidance": ["Use semantic ul/ol markup; list tokens keep typography and rhythm aligned with the surrounding prose."],
+      "source": "src/tokens/prose/styles.scss",
+      "properties": ["font-family", "font-size", "font-weight", "line-height", "letter-spacing", "max-width", "color", "font-style", "text-transform", "padding-block-start", "padding-block-end", "margin-top"],
+      "rules": [
+        {
+          "selector": ".prose > ul, .prose > ol, ul.prose, ol.prose",
+          "declarations": {
+            "font-family": "var(--zbk-list-font-family)",
+            "font-size": "var(--zbk-list-font-size)",
+            "font-weight": "var(--zbk-list-font-weight)",
+            "line-height": "var(--zbk-list-line-height)",
+            "letter-spacing": "var(--zbk-list-letter-spacing)",
+            "max-width": "var(--zbk-list-measure)",
+            "color": "var(--zbk-list-color)",
+            "font-style": "var(--zbk-list-font-style)",
+            "text-transform": "var(--zbk-list-text-transform)",
+            "padding-block-start": "var(--zbk-list-padding-block-start)",
+            "padding-block-end": "var(--zbk-list-padding-block-end)"
+          }
+        },
+        { "selector": ".prose>*+ul, .prose>*+ol", "declarations": { "margin-top": "var(--zbk-list-spacing-before)" } },
+        { "selector": ".prose>ul+*, .prose>ol+*, ul.prose+*, ol.prose+*", "declarations": { "margin-top": "var(--zbk-list-spacing-after)" } }
+      ]
     }
   ]
 }

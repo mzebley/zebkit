@@ -1,11 +1,11 @@
 import { compiledTokens, type CompiledToken } from '../data/compiled-tokens';
+import { formatTokenValue } from './token-docs';
 import lookup from '../data/generated/token-lookup.json';
 
 // Token x-ray resolver: walks a token's reference chain through the three strata
 // (component -> alias -> primitive) using the synced token registry. The chain
-// terminates at a primitive — including the raw `color.*` palette, which lives
-// only as runtime CSS vars (not in the compiled registry), so the terminal node
-// is derived rather than looked up.
+// terminates at a primitive. The generated registry includes the `color.*`
+// palette, so palette terminals resolve through the same path as other tokens.
 
 export type Stratum = 'component' | 'alias' | 'primitive';
 
@@ -129,12 +129,12 @@ export function resolveChain(input: string): ChainNode[] {
     const entry = lookupEntry(path);
 
     if (!entry) {
-      // Out of the registry (e.g. a raw `color.*` primitive) — terminal node.
+      // Out of the registry — preserve an inspectable terminal node.
       nodes.push({ path, cssVar, stratum: 'primitive', raw: '', ref: null });
       break;
     }
 
-    const raw = String(entry.value ?? '');
+    const raw = String(formatTokenValue(entry.$value, entry.$displayValue));
     const ref = isReference(raw) ? raw.slice(1, -1) : null;
     nodes.push({ path, cssVar, stratum: stratumFor(group), raw, ref });
     path = ref;

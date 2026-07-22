@@ -26,6 +26,26 @@ describe('published pull command', () => {
     }
   });
 
+  it('ships real zebkit-docs app border aliases without empty-placeholder markers', async () => {
+    const app = await fs.readJson(
+      path.join(PROJECT_ROOT, 'dist', 'cli', 'presets', 'zebkit-docs', 'zbk-app.json')
+    );
+    const names = [
+      'border',
+      'border-subtle',
+      'border-muted',
+      'border-emphasis',
+      'border-inverse',
+      'border-inverse-subtle',
+      'border-inverse-muted',
+      'border-inverse-emphasis',
+    ];
+    for (const name of names) {
+      expect(app[name].$value).toMatch(/^\{brand\./);
+      expect(app[name].$extensions?.['dev.zebkit']?.emptyColorPlaceholder).toBeUndefined();
+    }
+  });
+
   it('validates config and safely reconciles defaults through the compiled CLI', async () => {
     const projectDir = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-pull-cli-'));
     const configPath = path.join(projectDir, 'zebkit.config.json');
@@ -37,9 +57,11 @@ describe('published pull command', () => {
       };
       const module = manifest.modules[0];
       const rawDefault = await fs.readJson(path.join(DEFAULTS_DIR, module.file)) as Record<string, any>;
-      const firstTokenKey = Object.keys(rawDefault).find((key) => !key.startsWith('_'))!;
+      const firstTokenKey = Object.keys(rawDefault).find(
+        (key) => !key.startsWith('_') && !key.startsWith('$')
+      )!;
       const currentDefault = rawDefault[firstTokenKey];
-      const customValue = { ...currentDefault, value: '__custom__' };
+      const customValue = { ...currentDefault, $value: '__custom__' };
       const projectTokenFile = `${module.key}.tokens.json`;
 
       await fs.ensureDir(tokensDir);
@@ -98,9 +120,13 @@ describe('published pull command', () => {
       const state = await fs.readJson(statePath);
       const projectTokensPath = path.join(tokensDir, projectTokenFile);
       const projectFile = await fs.readJson(projectTokensPath);
-      const oldDefault = { ...currentDefault, value: '__old-default__' };
-      const retiredDefault = { value: '__retired__', type: 'color', description: 'Retired.' };
-      const retiredCustom = { ...retiredDefault, value: '__retired-custom__' };
+      const oldDefault = { ...currentDefault, $value: '__old-default__' };
+      const retiredDefault = {
+        $value: '__retired__',
+        $type: 'color',
+        $description: 'Retired.',
+      };
+      const retiredCustom = { ...retiredDefault, $value: '__retired-custom__' };
 
       state.modules[module.key].tokens[firstTokenKey] = hashToken(oldDefault);
       state.modules[module.key].tokens['integration-retired'] = hashToken(retiredDefault);
@@ -145,6 +171,62 @@ describe('published pull command', () => {
       ).rejects.toMatchObject({
         stderr: expect.stringContaining('Unknown config item `tokens.fonts.stratgy`'),
       });
+    } finally {
+      await fs.remove(projectDir);
+    }
+  });
+
+  it('round-trips the pulled primitive palette through the bundled build', async () => {
+    const projectDir = await fs.mkdtemp(path.join(os.tmpdir(), 'zebkit-pull-palette-'));
+    const configPath = path.join(projectDir, 'zebkit.config.json');
+    const tokensDir = path.join(projectDir, 'tokens');
+    const destinationPath = path.join(projectDir, 'dist');
+    try {
+      await fs.writeJson(configPath, {
+        configVersion: 1,
+        tokens: {
+          basePreset: 'default',
+          tokenPath: './tokens',
+          destinationPath: './dist',
+          themeName: 'pull-palette',
+          exportTokens: false,
+          writeVariantRegistry: false,
+        },
+      });
+
+      await execFileAsync(process.execPath, [CLI_PATH, 'pull', '--config', configPath], {
+        cwd: projectDir,
+        env: { ...process.env, CI: 'true', FORCE_COLOR: '0' },
+      });
+
+      const palettePath = path.join(tokensDir, 'zbk-color.tokens.json');
+      const palette = await fs.readJson(palettePath);
+      expect(palette.$extensions?.['dev.zebkit']?.cssEmission).toBeUndefined();
+      expect(palette['red-500'].$value).toBeDefined();
+
+      await execFileAsync(process.execPath, [CLI_PATH, 'build', '--config', configPath], {
+        cwd: projectDir,
+        env: { ...process.env, CI: 'true', FORCE_COLOR: '0' },
+      });
+      const cssPath = path.join(destinationPath, 'zbk-pull-palette.min.css');
+      const untouchedCss = await fs.readFile(cssPath, 'utf8');
+      expect(untouchedCss.split('--zbk-color-red-500:').length - 1).toBe(1);
+
+      palette['red-500'].$value = {
+        colorSpace: 'srgb',
+        components: [0.070588, 0.203922, 0.337255],
+        hex: '#123456',
+      };
+      await fs.writeJson(palettePath, palette, { spaces: 2 });
+
+      await execFileAsync(process.execPath, [CLI_PATH, 'build', '--config', configPath], {
+        cwd: projectDir,
+        env: { ...process.env, CI: 'true', FORCE_COLOR: '0' },
+      });
+      const overriddenCss = await fs.readFile(cssPath, 'utf8');
+      const declarations = [...overriddenCss.matchAll(/--zbk-color-red-500:([^;}]+)/g)];
+      expect(declarations).toHaveLength(2);
+      expect(declarations[1][1]).toContain('#123456');
     } finally {
       await fs.remove(projectDir);
     }

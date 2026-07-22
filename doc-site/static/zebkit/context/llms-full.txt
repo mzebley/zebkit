@@ -143,63 +143,63 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-button-border-color-active` | `{button.border-color}` | color | Border color when the button is active/pressed. |
 | `--zbk-button-border-color-disabled` | `{disabled.border}` | color | Border color for disabled buttons. |
 | `--zbk-button-border-color-loading` | `{button.border-color-hover}` | color | Border color while the button is in its loading state. |
-| `--zbk-button-border-width` | `0px` | borderWidth | Base border width. |
-| `--zbk-button-border-style` | `{border.style}` | borderStyle | Border style (solid, dashed, etc) for standard buttons. |
-| `--zbk-button-border-radius` | `{border.radius-sm}` | borderRadius | Corner radius for standard buttons. |
+| `--zbk-button-border-width` | `0px` | dimension | Base border width. |
+| `--zbk-button-border-style` | `{border.style}` | strokeStyle | Border style (solid, dashed, etc) for standard buttons. |
+| `--zbk-button-border-radius` | `{border.radius-sm}` | dimension | Corner radius for standard buttons. |
 | `--zbk-button-font-family` | `{font-family.interface}` | fontFamily | Font family for button labels. |
-| `--zbk-button-font-size` | `{font-size.sm}` | fontSize | Base font size for button labels. |
+| `--zbk-button-font-size` | `{font-size.sm}` | cssDimension | Base font size for button labels. |
 | `--zbk-button-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for button labels. |
-| `--zbk-button-line-height` | `{line-height.3}` | lineHeight | Base line height for buttons. |
-| `--zbk-button-letter-spacing` | `{letter-spacing.normal}` | letterSpacing | Letter spacing for button labels. |
+| `--zbk-button-line-height` | `{line-height.3}` | number | Base line height for buttons. |
+| `--zbk-button-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for button labels. |
 | `--zbk-button-text-transform` | `none` | textTransform | Text transform for button labels. |
 | `--zbk-button-text-decoration` | `none` | textDecoration | Text decoration for button labels. |
 | `--zbk-button-text-align` | `center` | textAlignment | Text alignment for button content. |
-| `--zbk-button-padding-inline` | `{spacing.md}` | spacing | Inline (horizontal) padding for standard buttons. |
-| `--zbk-button-padding-block` | `{spacing.sm}` | spacing | Block (vertical) padding for standard buttons. |
-| `--zbk-button-padding-inline-start` | `{button.padding-inline}` | spacing | Inline-start padding override when needed. |
-| `--zbk-button-padding-inline-end` | `{button.padding-inline}` | spacing | Inline-end padding override when needed. |
-| `--zbk-button-padding-block-start` | `{button.padding-block}` | spacing | Block-start padding override when needed. |
-| `--zbk-button-padding-block-end` | `{button.padding-block}` | spacing | Block-end padding override when needed. |
-| `--zbk-button-margin-inline` | `0` | spacing | Inline margin for standalone buttons. |
-| `--zbk-button-margin-block` | `0` | spacing | Block margin for standalone buttons. |
-| `--zbk-button-margin-inline-start` | `{button.margin-inline}` | spacing | Inline-start margin override when needed. |
-| `--zbk-button-margin-inline-end` | `{button.margin-inline}` | spacing | Inline-end margin override when needed. |
-| `--zbk-button-margin-block-start` | `{button.margin-block}` | spacing | Block-start margin override when needed. |
-| `--zbk-button-margin-block-end` | `{button.margin-block}` | spacing | Block-end margin override when needed. |
-| `--zbk-button-gap` | `{button.padding-block}` | spacing | Gap between button icon and label. |
-| `--zbk-button-group-gap` | `{spacing.105}` | spacing | Gap between buttons when rendered in a group. |
+| `--zbk-button-padding-inline` | `{spacing.md}` | dimension | Inline (horizontal) padding for standard buttons. |
+| `--zbk-button-padding-block` | `{spacing.sm}` | dimension | Block (vertical) padding for standard buttons. |
+| `--zbk-button-padding-inline-start` | `{button.padding-inline}` | dimension | Inline-start padding override when needed. |
+| `--zbk-button-padding-inline-end` | `{button.padding-inline}` | dimension | Inline-end padding override when needed. |
+| `--zbk-button-padding-block-start` | `{button.padding-block}` | dimension | Block-start padding override when needed. |
+| `--zbk-button-padding-block-end` | `{button.padding-block}` | dimension | Block-end padding override when needed. |
+| `--zbk-button-margin-inline` | `0` | cssDimension | Inline margin for standalone buttons. |
+| `--zbk-button-margin-block` | `0` | cssDimension | Block margin for standalone buttons. |
+| `--zbk-button-margin-inline-start` | `{button.margin-inline}` | cssDimension | Inline-start margin override when needed. |
+| `--zbk-button-margin-inline-end` | `{button.margin-inline}` | cssDimension | Inline-end margin override when needed. |
+| `--zbk-button-margin-block-start` | `{button.margin-block}` | cssDimension | Block-start margin override when needed. |
+| `--zbk-button-margin-block-end` | `{button.margin-block}` | cssDimension | Block-end margin override when needed. |
+| `--zbk-button-gap` | `{button.padding-block}` | dimension | Gap between button icon and label. |
+| `--zbk-button-group-gap` | `{spacing.105}` | dimension | Gap between buttons when rendered in a group. |
 | `--zbk-button-display` | `inline-flex` | display | Display mode for buttons. |
-| `--zbk-button-width` | `auto` | sizing | Default button width. |
-| `--zbk-button-min-width` | `{a11y.min-interaction-size}` | sizing | Minimum button width. |
-| `--zbk-button-max-width` | `none` | sizing | Maximum button width. |
-| `--zbk-button-height` | `auto` | sizing | Default button height. |
-| `--zbk-button-min-height` | `{a11y.min-interaction-size}` | sizing | Minimum height to ensure tappable area. |
-| `--zbk-button-max-height` | `none` | sizing | Maximum button height. |
-| `--zbk-button-icon-size` | `{button.font-size}` | sizing | Default icon size within buttons. |
-| `--zbk-button-icon-start-size` | `{button.icon-size}` | sizing | Default icon size for icons at start of buttons. |
-| `--zbk-button-icon-end-size` | `{button.icon-size}` | sizing | Default icon size for icons at end of buttons. |
+| `--zbk-button-width` | `auto` | cssDimension | Default button width. |
+| `--zbk-button-min-width` | `{a11y.min-interaction-size}` | dimension | Minimum button width. |
+| `--zbk-button-max-width` | `none` | cssDimension | Maximum button width. |
+| `--zbk-button-height` | `auto` | cssDimension | Default button height. |
+| `--zbk-button-min-height` | `{a11y.min-interaction-size}` | dimension | Minimum height to ensure tappable area. |
+| `--zbk-button-max-height` | `none` | cssDimension | Maximum button height. |
+| `--zbk-button-icon-size` | `{button.font-size}` | cssDimension | Default icon size within buttons. |
+| `--zbk-button-icon-start-size` | `{button.icon-size}` | cssDimension | Default icon size for icons at start of buttons. |
+| `--zbk-button-icon-end-size` | `{button.icon-size}` | cssDimension | Default icon size for icons at end of buttons. |
 | `--zbk-button-focus-color` | `{focus.color}` | color | Outline color for focus state. |
-| `--zbk-button-focus-width` | `{focus.width}` | borderWidth | Outline width for focus state. |
-| `--zbk-button-focus-offset` | `{focus.offset}` | spacing | Outline offset for focus state. |
-| `--zbk-button-box-shadow` | `none` | boxShadow | Default box shadow for buttons. |
-| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)` | boxShadow | Box shadow on hover. |
-| `--zbk-button-box-shadow-active` | `none` | boxShadow | Box shadow when active/pressed. |
-| `--zbk-button-box-shadow-focus` | `none` | boxShadow | Box shadow in focus state (in addition to outline). |
-| `--zbk-button-transform` | `translateY(0)` | utility | Default transform property for buttons. |
-| `--zbk-button-transform-hover` | `translateY(-2%)` | utility | Transform effect on hover. |
-| `--zbk-button-transform-active` | `translateY(0)` | utility | Transform effect when active/pressed. |
-| `--zbk-button-transform-focus` | `translateY(0)` | utility | Transform effect in focus state (in addition to outline). |
-| `--zbk-button-cursor` | `pointer` | utility | Cursor style when hovering over buttons. |
-| `--zbk-button-cursor-loading` | `progress` | utility | Cursor style while the button is in its loading state. |
+| `--zbk-button-focus-width` | `{focus.width}` | dimension | Outline width for focus state. |
+| `--zbk-button-focus-offset` | `{focus.offset}` | dimension | Outline offset for focus state. |
+| `--zbk-button-box-shadow` | `none` | shadow | Default box shadow for buttons. |
+| `--zbk-button-box-shadow-hover` | `0 var(--zbk-spacing-025) 0 var(--zbk-action-border-inverse-muted)` | cssShadow | Box shadow on hover. |
+| `--zbk-button-box-shadow-active` | `none` | shadow | Box shadow when active/pressed. |
+| `--zbk-button-box-shadow-focus` | `none` | shadow | Box shadow in focus state (in addition to outline). |
+| `--zbk-button-transform` | `translateY(0)` | transform | Default transform property for buttons. |
+| `--zbk-button-transform-hover` | `translateY(-2%)` | transform | Transform effect on hover. |
+| `--zbk-button-transform-active` | `translateY(0)` | transform | Transform effect when active/pressed. |
+| `--zbk-button-transform-focus` | `translateY(0)` | transform | Transform effect in focus state (in addition to outline). |
+| `--zbk-button-cursor` | `pointer` | cursor | Cursor style when hovering over buttons. |
+| `--zbk-button-cursor-loading` | `progress` | cursor | Cursor style while the button is in its loading state. |
 | `--zbk-button-flex-direction` | `row` | flex | Direction of icon and label layout. |
 | `--zbk-button-justify-content` | `center` | flex | Main axis alignment for button contents. |
 | `--zbk-button-align-items` | `center` | flex | Cross axis alignment for button contents. |
-| `--zbk-button-transition-duration` | `{transition.playful-motion-duration-default}` | transition | Duration for hover/active transitions. **(a11y)** |
-| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | transition | Timing function for button transitions. |
-| `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transition | CSS properties that should animate on interaction. |
-| `--zbk-button-transition-delay` | `0` | transition | Delay before CSS properties run through their animate on interaction. |
-| `--zbk-button-opacity` | `1` | opacity | Visual opacity of button. |
-| `--zbk-button-opacity-loading` | `1` | opacity | Visual opacity while the button is in its loading state. |
+| `--zbk-button-transition-duration` | `{transition.playful-motion-duration-default}` | duration | Duration for hover/active transitions. **(a11y)** |
+| `--zbk-button-transition-timing-function` | `{transition.playful-motion-function-default}` | cssEasingFunction | Timing function for button transitions. |
+| `--zbk-button-transition-property` | `background-color, color, border-color, box-shadow, transform, outline` | transitionProperty | CSS properties that should animate on interaction. |
+| `--zbk-button-transition-delay` | `0ms` | duration | Delay before CSS properties run through their animate on interaction. |
+| `--zbk-button-opacity` | `1` | number | Visual opacity of button. |
+| `--zbk-button-opacity-loading` | `1` | number | Visual opacity while the button is in its loading state. |
 
 ## Variants
 
@@ -313,8 +313,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | Token | Default | Type | Description |
 |---|---|---|---|
 | `--zbk-checkbox-display` | `contents` | display | Display mode for the <zbk-checkbox> host element. |
-| `--zbk-checkbox-control-width` | `{spacing.105}` | sizing | Width of the checkbox control. |
-| `--zbk-checkbox-control-height` | `{spacing.105}` | sizing | Height of the checkbox control. |
+| `--zbk-checkbox-control-width` | `{spacing.105}` | dimension | Width of the checkbox control. |
+| `--zbk-checkbox-control-height` | `{spacing.105}` | dimension | Height of the checkbox control. |
 | `--zbk-checkbox-canvas` | `{app.canvas}` | color | Background of an unchecked checkbox control. |
 | `--zbk-checkbox-canvas-hover` | `{app.canvas-subtle}` | color | Control background when hovered. |
 | `--zbk-checkbox-canvas-active` | `{app.canvas-muted}` | color | Control background while pressed. |
@@ -327,41 +327,41 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-checkbox-border-color-checked` | `{checkbox.canvas-checked}` | color | Control border color when checked. |
 | `--zbk-checkbox-border-color-indeterminate` | `{checkbox.canvas-indeterminate}` | color | Control border color in the indeterminate state. |
 | `--zbk-checkbox-border-color-disabled` | `{disabled.border}` | color | Control border color when disabled. |
-| `--zbk-checkbox-border-width` | `{border.width-md}` | borderWidth | Border thickness of the checkbox control. |
-| `--zbk-checkbox-border-style` | `{border.style}` | borderStyle | Border style of the checkbox control. |
-| `--zbk-checkbox-border-radius` | `{border.radius-xs}` | borderRadius | Corner radius of the checkbox control. |
+| `--zbk-checkbox-border-width` | `{border.width-md}` | dimension | Border thickness of the checkbox control. |
+| `--zbk-checkbox-border-style` | `{border.style}` | strokeStyle | Border style of the checkbox control. |
+| `--zbk-checkbox-border-radius` | `{border.radius-xs}` | dimension | Corner radius of the checkbox control. |
 | `--zbk-checkbox-indicator-color` | `{app.ink-inverse}` | color | Color of the checkmark and indeterminate bar. |
 | `--zbk-checkbox-indicator-color-disabled` | `{disabled.ink}` | color | Indicator color when disabled. |
-| `--zbk-checkbox-indicator-stroke-width` | `{border.width-md}` | borderWidth | Stroke width of the checkmark; also the indeterminate bar's thickness. |
-| `--zbk-checkbox-indicator-radius` | `{border.radius-xs}` | borderRadius | Corner radius of the indeterminate bar. |
-| `--zbk-checkbox-indicator-size` | `1em` | sizing | Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it. |
+| `--zbk-checkbox-indicator-stroke-width` | `{border.width-md}` | dimension | Stroke width of the checkmark; also the indeterminate bar's thickness. |
+| `--zbk-checkbox-indicator-radius` | `{border.radius-xs}` | dimension | Corner radius of the indeterminate bar. |
+| `--zbk-checkbox-indicator-size` | `1em` | cssDimension | Size of slotted indicator content (checked/unchecked/indeterminate slots); 1em tracks the component's font-size so size variants rescale it. |
 | `--zbk-checkbox-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-checkbox-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-checkbox-font-family` | `{font-family.interface}` | fontFamily | Font family for the checkbox label. |
-| `--zbk-checkbox-font-size` | `{font-size.md}` | fontSize | Font size for the checkbox label. |
+| `--zbk-checkbox-font-size` | `{font-size.md}` | cssDimension | Font size for the checkbox label. |
 | `--zbk-checkbox-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the checkbox label. |
-| `--zbk-checkbox-line-height` | `{line-height.2}` | lineHeight | Line height for the checkbox label. |
-| `--zbk-checkbox-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the checkbox label. |
-| `--zbk-checkbox-gap` | `{spacing.sm}` | spacing | Space between the control and its label. |
+| `--zbk-checkbox-line-height` | `{line-height.2}` | number | Line height for the checkbox label. |
+| `--zbk-checkbox-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the checkbox label. |
+| `--zbk-checkbox-gap` | `{spacing.sm}` | dimension | Space between the control and its label. |
 | `--zbk-checkbox-align-items` | `center` | flex | Cross-axis alignment of control and label. |
-| `--zbk-checkbox-group-gap` | `{spacing.md}` | spacing | Gap between checkboxes in a .zbk-checkbox-group. |
+| `--zbk-checkbox-group-gap` | `{spacing.md}` | dimension | Gap between checkboxes in a .zbk-checkbox-group. |
 | `--zbk-checkbox-group-direction` | `column` | flex | Flow direction of a .zbk-checkbox-group (column or row). |
 | `--zbk-checkbox-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-checkbox-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-checkbox-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
-| `--zbk-checkbox-box-shadow` | `none` | boxShadow | Default control shadow. |
-| `--zbk-checkbox-box-shadow-hover` | `none` | boxShadow | Control shadow when hovered. |
-| `--zbk-checkbox-box-shadow-active` | `none` | boxShadow | Control shadow while pressed. |
-| `--zbk-checkbox-box-shadow-checked` | `none` | boxShadow | Control shadow when checked. |
-| `--zbk-checkbox-box-shadow-focus` | `none` | boxShadow | Control shadow in the focus state (in addition to the outline). |
-| `--zbk-checkbox-cursor` | `pointer` | utility | Cursor when hovering an enabled checkbox. |
-| `--zbk-checkbox-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled checkbox. |
-| `--zbk-checkbox-transition-duration` | `{transition.playful-fx-duration-default}` | transition | Duration for checkbox state transitions. **(a11y)** |
-| `--zbk-checkbox-transition-timing-function` | `{transition.playful-fx-function-default}` | transition | Easing for checkbox state transitions. |
-| `--zbk-checkbox-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-checkbox-transition-delay` | `0` | transition | Delay before checkbox transitions run. |
-| `--zbk-checkbox-opacity` | `1` | opacity | Opacity of the checkbox. |
-| `--zbk-checkbox-opacity-disabled` | `{opacity.70}` | opacity | Control opacity when disabled. |
+| `--zbk-checkbox-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-checkbox-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
+| `--zbk-checkbox-box-shadow` | `none` | shadow | Default control shadow. |
+| `--zbk-checkbox-box-shadow-hover` | `none` | shadow | Control shadow when hovered. |
+| `--zbk-checkbox-box-shadow-active` | `none` | shadow | Control shadow while pressed. |
+| `--zbk-checkbox-box-shadow-checked` | `none` | shadow | Control shadow when checked. |
+| `--zbk-checkbox-box-shadow-focus` | `none` | shadow | Control shadow in the focus state (in addition to the outline). |
+| `--zbk-checkbox-cursor` | `pointer` | cursor | Cursor when hovering an enabled checkbox. |
+| `--zbk-checkbox-cursor-disabled` | `not-allowed` | cursor | Cursor when hovering a disabled checkbox. |
+| `--zbk-checkbox-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for checkbox state transitions. **(a11y)** |
+| `--zbk-checkbox-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for checkbox state transitions. |
+| `--zbk-checkbox-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-checkbox-transition-delay` | `0ms` | duration | Delay before checkbox transitions run. |
+| `--zbk-checkbox-opacity` | `1` | number | Opacity of the checkbox. |
+| `--zbk-checkbox-opacity-disabled` | `{opacity.70}` | number | Control opacity when disabled. |
 
 ## Variants
 
@@ -530,47 +530,47 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-input-border-color-disabled` | `{disabled.border}` | color | Field border color when disabled. |
 | `--zbk-input-border-color-readonly` | `{app.border-muted}` | color | Field border color when readonly. |
 | `--zbk-input-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the value is invalid. |
-| `--zbk-input-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the field box. |
-| `--zbk-input-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
-| `--zbk-input-border-radius` | `{border.radius-md}` | borderRadius | Corner radius of the field box. |
+| `--zbk-input-border-width` | `{border.width-sm}` | dimension | Border thickness of the field box. |
+| `--zbk-input-border-style` | `{border.style}` | strokeStyle | Border style of the field box. |
+| `--zbk-input-border-radius` | `{border.radius-md}` | dimension | Corner radius of the field box. |
 | `--zbk-input-font-family` | `{font-family.interface}` | fontFamily | Font family for the entered text. |
-| `--zbk-input-font-size` | `{font-size.md}` | fontSize | Font size for the entered text. |
+| `--zbk-input-font-size` | `{font-size.md}` | cssDimension | Font size for the entered text. |
 | `--zbk-input-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the entered text. |
-| `--zbk-input-line-height` | `{line-height.2}` | lineHeight | Line height for the entered text. |
-| `--zbk-input-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the entered text. |
+| `--zbk-input-line-height` | `{line-height.2}` | number | Line height for the entered text. |
+| `--zbk-input-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the entered text. |
 | `--zbk-input-label-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-input-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
-| `--zbk-input-label-font-size` | `{font-size.sm}` | fontSize | Font size for the label. |
+| `--zbk-input-label-font-size` | `{font-size.sm}` | cssDimension | Font size for the label. |
 | `--zbk-input-label-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for the label. |
-| `--zbk-input-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
+| `--zbk-input-label-gap` | `{spacing.2xs}` | dimension | Space between the label and the field box. |
 | `--zbk-input-affix-ink` | `{app.ink-muted}` | color | Color of prefix/suffix affix content (icon fonts and currentColor SVGs inherit it). |
 | `--zbk-input-affix-ink-disabled` | `{disabled.ink}` | color | Affix color when disabled. |
-| `--zbk-input-icon-size` | `1em` | sizing | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
-| `--zbk-input-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
-| `--zbk-input-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
-| `--zbk-input-gap` | `{spacing.2xs}` | spacing | Space between affixes and the entered text. |
-| `--zbk-input-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-input-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-input-max-width` | `100%` | sizing | Maximum width of the field box. |
-| `--zbk-input-min-height` | `44px` | sizing | Minimum field height to ensure a tappable area. |
-| `--zbk-input-group-gap` | `{spacing.md}` | spacing | Gap between fields in a .zbk-input-group. |
+| `--zbk-input-icon-size` | `1em` | cssDimension | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
+| `--zbk-input-padding-inline` | `{spacing.sm}` | dimension | Inline (horizontal) padding of the field box. |
+| `--zbk-input-padding-block` | `{spacing.2xs}` | dimension | Block (vertical) padding of the field box. |
+| `--zbk-input-gap` | `{spacing.2xs}` | dimension | Space between affixes and the entered text. |
+| `--zbk-input-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-input-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-input-max-width` | `100%` | cssDimension | Maximum width of the field box. |
+| `--zbk-input-min-height` | `44px` | dimension | Minimum field height to ensure a tappable area. |
+| `--zbk-input-group-gap` | `{spacing.md}` | dimension | Gap between fields in a .zbk-input-group. |
 | `--zbk-input-group-direction` | `column` | flex | Flow direction of a .zbk-input-group (column or row). |
 | `--zbk-input-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-input-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-input-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
-| `--zbk-input-box-shadow` | `none` | boxShadow | Default field shadow. |
-| `--zbk-input-box-shadow-hover` | `none` | boxShadow | Field shadow when hovered. |
-| `--zbk-input-box-shadow-focus` | `none` | boxShadow | Field shadow while focused (in addition to the outline). |
-| `--zbk-input-box-shadow-active` | `none` | boxShadow | Field shadow while pressed. |
-| `--zbk-input-box-shadow-invalid` | `none` | boxShadow | Field shadow when the value is invalid. |
-| `--zbk-input-cursor` | `text` | utility | Cursor over the editable field. |
-| `--zbk-input-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
-| `--zbk-input-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
-| `--zbk-input-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
-| `--zbk-input-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-input-transition-delay` | `0` | transition | Delay before field transitions run. |
-| `--zbk-input-opacity` | `1` | opacity | Opacity of the field. |
-| `--zbk-input-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
+| `--zbk-input-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-input-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
+| `--zbk-input-box-shadow` | `none` | shadow | Default field shadow. |
+| `--zbk-input-box-shadow-hover` | `none` | shadow | Field shadow when hovered. |
+| `--zbk-input-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
+| `--zbk-input-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
+| `--zbk-input-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
+| `--zbk-input-cursor` | `text` | cursor | Cursor over the editable field. |
+| `--zbk-input-cursor-disabled` | `not-allowed` | cursor | Cursor over a disabled field. |
+| `--zbk-input-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
+| `--zbk-input-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
+| `--zbk-input-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-input-transition-delay` | `0ms` | duration | Delay before field transitions run. |
+| `--zbk-input-opacity` | `1` | number | Opacity of the field. |
+| `--zbk-input-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
 ## Variants
 
@@ -698,39 +698,39 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-pagination-ink-active` | `{action.ink-emphasis}` | color | Item label color when pressed. |
 | `--zbk-pagination-ink-disabled` | `{disabled.ink}` | color | Label color of a disabled previous/next control. |
 | `--zbk-pagination-ink-selected` | `{app.ink-inverse}` | color | Label color of the current page item (aria-current). |
-| `--zbk-pagination-canvas` | `transparent` | color | Item background at rest. |
+| `--zbk-pagination-canvas` | `{color.global-transparent}` | color | Item background at rest. |
 | `--zbk-pagination-canvas-hover` | `{action.canvas-subtle}` | color | Item background when hovered. |
 | `--zbk-pagination-canvas-active` | `{action.canvas-muted}` | color | Item background when pressed. |
-| `--zbk-pagination-canvas-disabled` | `transparent` | color | Background of a disabled previous/next control. |
+| `--zbk-pagination-canvas-disabled` | `{color.global-transparent}` | color | Background of a disabled previous/next control. |
 | `--zbk-pagination-canvas-selected` | `{accent-primary.500}` | color | Background of the current page item (aria-current). |
-| `--zbk-pagination-border-color` | `transparent` | color | Item border color at rest. |
-| `--zbk-pagination-border-color-hover` | `transparent` | color | Item border color when hovered. |
-| `--zbk-pagination-border-color-active` | `transparent` | color | Item border color when pressed. |
-| `--zbk-pagination-border-color-disabled` | `transparent` | color | Border color of a disabled previous/next control. |
+| `--zbk-pagination-border-color` | `{color.global-transparent}` | color | Item border color at rest. |
+| `--zbk-pagination-border-color-hover` | `{color.global-transparent}` | color | Item border color when hovered. |
+| `--zbk-pagination-border-color-active` | `{color.global-transparent}` | color | Item border color when pressed. |
+| `--zbk-pagination-border-color-disabled` | `{color.global-transparent}` | color | Border color of a disabled previous/next control. |
 | `--zbk-pagination-border-color-selected` | `{accent-primary.500}` | color | Border color of the current page item (aria-current). |
-| `--zbk-pagination-border-width` | `{border.width-sm}` | borderWidth | Item border width. |
-| `--zbk-pagination-border-style` | `{border.style}` | borderStyle | Item border style. |
-| `--zbk-pagination-border-radius` | `{border.radius-md}` | borderRadius | Item corner radius. |
+| `--zbk-pagination-border-width` | `{border.width-sm}` | dimension | Item border width. |
+| `--zbk-pagination-border-style` | `{border.style}` | strokeStyle | Item border style. |
+| `--zbk-pagination-border-radius` | `{border.radius-md}` | dimension | Item corner radius. |
 | `--zbk-pagination-font-family` | `{font-family.interface}` | fontFamily | Font family for pagination content. |
-| `--zbk-pagination-font-size` | `{font-size.md}` | fontSize | Base font size for pagination content. |
+| `--zbk-pagination-font-size` | `{font-size.md}` | cssDimension | Base font size for pagination content. |
 | `--zbk-pagination-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for pagination content. |
-| `--zbk-pagination-line-height` | `{line-height.2}` | lineHeight | Line height for pagination content. |
+| `--zbk-pagination-line-height` | `{line-height.2}` | number | Line height for pagination content. |
 | `--zbk-pagination-display` | `inline-flex` | display | Display mode for the pagination nav. |
-| `--zbk-pagination-gap` | `{spacing.2xs}` | spacing | Gap between pagination items. |
-| `--zbk-pagination-min-width` | `{a11y.min-interaction-size}` | sizing | Minimum item width to keep the tap target. |
-| `--zbk-pagination-min-height` | `{a11y.min-interaction-size}` | sizing | Minimum item height to keep the tap target. |
-| `--zbk-pagination-padding-inline` | `{spacing.2xs}` | spacing | Inline padding inside each item. |
-| `--zbk-pagination-padding-block` | `{spacing.2xs}` | spacing | Block padding inside each item. |
-| `--zbk-pagination-icon-size` | `{pagination.font-size}` | sizing | Size of the previous/next glyphs (drawn or slotted). |
+| `--zbk-pagination-gap` | `{spacing.2xs}` | dimension | Gap between pagination items. |
+| `--zbk-pagination-min-width` | `{a11y.min-interaction-size}` | dimension | Minimum item width to keep the tap target. |
+| `--zbk-pagination-min-height` | `{a11y.min-interaction-size}` | dimension | Minimum item height to keep the tap target. |
+| `--zbk-pagination-padding-inline` | `{spacing.2xs}` | dimension | Inline padding inside each item. |
+| `--zbk-pagination-padding-block` | `{spacing.2xs}` | dimension | Block padding inside each item. |
+| `--zbk-pagination-icon-size` | `{pagination.font-size}` | cssDimension | Size of the previous/next glyphs (drawn or slotted). |
 | `--zbk-pagination-ellipsis-ink` | `{app.ink-subtle}` | color | Color of the non-interactive ellipsis separators. |
 | `--zbk-pagination-status-ink` | `{app.ink}` | color | Color of the compact-mode "Page X of Y" status text. |
 | `--zbk-pagination-focus-color` | `{focus.color}` | color | Outline color for a focused item. |
-| `--zbk-pagination-focus-width` | `{focus.width}` | borderWidth | Outline width for a focused item. |
-| `--zbk-pagination-focus-offset` | `{focus.offset}` | spacing | Outline offset for a focused item. |
-| `--zbk-pagination-transition-property` | `background-color, color, border-color, outline` | transition | CSS properties that animate on item interaction. |
-| `--zbk-pagination-transition-duration` | `150ms` | transition | Duration for item hover/active transitions. **(a11y)** |
-| `--zbk-pagination-transition-timing-function` | `ease-out` | transition | Timing function for item transitions. |
-| `--zbk-pagination-cursor` | `pointer` | utility | Cursor over interactive pagination items. |
+| `--zbk-pagination-focus-width` | `{focus.width}` | dimension | Outline width for a focused item. |
+| `--zbk-pagination-focus-offset` | `{focus.offset}` | dimension | Outline offset for a focused item. |
+| `--zbk-pagination-transition-property` | `background-color, color, border-color, outline` | transitionProperty | CSS properties that animate on item interaction. |
+| `--zbk-pagination-transition-duration` | `150ms` | duration | Duration for item hover/active transitions. **(a11y)** |
+| `--zbk-pagination-transition-timing-function` | `ease-out` | cssEasingFunction | Timing function for item transitions. |
+| `--zbk-pagination-cursor` | `pointer` | cursor | Cursor over interactive pagination items. |
 
 ## Variants
 
@@ -834,8 +834,8 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | Token | Default | Type | Description |
 |---|---|---|---|
 | `--zbk-radio-display` | `contents` | display | Display mode for the <zbk-radio> host element. |
-| `--zbk-radio-control-width` | `{spacing.105}` | sizing | Width of the radio control. |
-| `--zbk-radio-control-height` | `{spacing.105}` | sizing | Height of the radio control. |
+| `--zbk-radio-control-width` | `{spacing.105}` | dimension | Width of the radio control. |
+| `--zbk-radio-control-height` | `{spacing.105}` | dimension | Height of the radio control. |
 | `--zbk-radio-canvas` | `{app.canvas}` | color | Background of an unselected radio control. |
 | `--zbk-radio-canvas-hover` | `{app.canvas-subtle}` | color | Control background when hovered. |
 | `--zbk-radio-canvas-active` | `{app.canvas-muted}` | color | Control background while pressed. |
@@ -846,40 +846,40 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-radio-border-color-active` | `{accent-primary.500}` | color | Control border color while pressed. |
 | `--zbk-radio-border-color-checked` | `{radio.canvas-checked}` | color | Control border color when selected. |
 | `--zbk-radio-border-color-disabled` | `{disabled.border}` | color | Control border color when disabled. |
-| `--zbk-radio-border-width` | `{border.width-md}` | borderWidth | Border thickness of the radio control. |
-| `--zbk-radio-border-style` | `{border.style}` | borderStyle | Border style of the radio control. |
-| `--zbk-radio-border-radius` | `50%` | borderRadius | Corner radius of the radio control (a circle by default). |
+| `--zbk-radio-border-width` | `{border.width-md}` | dimension | Border thickness of the radio control. |
+| `--zbk-radio-border-style` | `{border.style}` | strokeStyle | Border style of the radio control. |
+| `--zbk-radio-border-radius` | `50%` | cssDimension | Corner radius of the radio control (a circle by default). |
 | `--zbk-radio-indicator-color` | `{app.ink-inverse}` | color | Color of the selection dot. |
 | `--zbk-radio-indicator-color-disabled` | `{disabled.ink}` | color | Selection dot color when disabled. |
-| `--zbk-radio-indicator-size` | `0.75em` | sizing | Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size. |
-| `--zbk-radio-indicator-radius` | `50%` | borderRadius | Corner radius of the selection dot (a circle by default). |
+| `--zbk-radio-indicator-size` | `0.75em` | cssDimension | Diameter of the selection dot and size of slotted indicator content; em-based so size variants rescale it through font-size. |
+| `--zbk-radio-indicator-radius` | `50%` | cssDimension | Corner radius of the selection dot (a circle by default). |
 | `--zbk-radio-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-radio-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-radio-font-family` | `{font-family.interface}` | fontFamily | Font family for the radio label. |
-| `--zbk-radio-font-size` | `{font-size.md}` | fontSize | Font size for the radio label. |
+| `--zbk-radio-font-size` | `{font-size.md}` | cssDimension | Font size for the radio label. |
 | `--zbk-radio-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the radio label. |
-| `--zbk-radio-line-height` | `{line-height.2}` | lineHeight | Line height for the radio label. |
-| `--zbk-radio-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the radio label. |
-| `--zbk-radio-gap` | `{spacing.sm}` | spacing | Space between the control and its label. |
+| `--zbk-radio-line-height` | `{line-height.2}` | number | Line height for the radio label. |
+| `--zbk-radio-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the radio label. |
+| `--zbk-radio-gap` | `{spacing.sm}` | dimension | Space between the control and its label. |
 | `--zbk-radio-align-items` | `center` | flex | Cross-axis alignment of control and label. |
-| `--zbk-radio-group-gap` | `{spacing.md}` | spacing | Gap between radios in a .zbk-radio-group. |
+| `--zbk-radio-group-gap` | `{spacing.md}` | dimension | Gap between radios in a .zbk-radio-group. |
 | `--zbk-radio-group-direction` | `column` | flex | Flow direction of a .zbk-radio-group (column or row). |
 | `--zbk-radio-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-radio-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-radio-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
-| `--zbk-radio-box-shadow` | `none` | boxShadow | Default control shadow. |
-| `--zbk-radio-box-shadow-hover` | `none` | boxShadow | Control shadow when hovered. |
-| `--zbk-radio-box-shadow-active` | `none` | boxShadow | Control shadow while pressed. |
-| `--zbk-radio-box-shadow-checked` | `none` | boxShadow | Control shadow when selected. |
-| `--zbk-radio-box-shadow-focus` | `none` | boxShadow | Control shadow in the focus state (in addition to the outline). |
-| `--zbk-radio-cursor` | `pointer` | utility | Cursor when hovering an enabled radio. |
-| `--zbk-radio-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled radio. |
-| `--zbk-radio-transition-duration` | `{transition.playful-fx-duration-default}` | transition | Duration for radio state transitions. **(a11y)** |
-| `--zbk-radio-transition-timing-function` | `{transition.playful-fx-function-default}` | transition | Easing for radio state transitions. |
-| `--zbk-radio-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-radio-transition-delay` | `0` | transition | Delay before radio transitions run. |
-| `--zbk-radio-opacity` | `1` | opacity | Opacity of the radio. |
-| `--zbk-radio-opacity-disabled` | `{opacity.70}` | opacity | Control opacity when disabled. |
+| `--zbk-radio-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-radio-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
+| `--zbk-radio-box-shadow` | `none` | shadow | Default control shadow. |
+| `--zbk-radio-box-shadow-hover` | `none` | shadow | Control shadow when hovered. |
+| `--zbk-radio-box-shadow-active` | `none` | shadow | Control shadow while pressed. |
+| `--zbk-radio-box-shadow-checked` | `none` | shadow | Control shadow when selected. |
+| `--zbk-radio-box-shadow-focus` | `none` | shadow | Control shadow in the focus state (in addition to the outline). |
+| `--zbk-radio-cursor` | `pointer` | cursor | Cursor when hovering an enabled radio. |
+| `--zbk-radio-cursor-disabled` | `not-allowed` | cursor | Cursor when hovering a disabled radio. |
+| `--zbk-radio-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for radio state transitions. **(a11y)** |
+| `--zbk-radio-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for radio state transitions. |
+| `--zbk-radio-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-radio-transition-delay` | `0ms` | duration | Delay before radio transitions run. |
+| `--zbk-radio-opacity` | `1` | number | Opacity of the radio. |
+| `--zbk-radio-opacity-disabled` | `{opacity.70}` | number | Control opacity when disabled. |
 
 ## Variants
 
@@ -1007,51 +1007,51 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-select-border-color-active` | `{select.border-color-focus}` | color | Field border color while pressed. |
 | `--zbk-select-border-color-disabled` | `{disabled.border}` | color | Field border color when disabled. |
 | `--zbk-select-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the selection is invalid. |
-| `--zbk-select-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the field box. |
-| `--zbk-select-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
-| `--zbk-select-border-radius` | `{border.radius-md}` | borderRadius | Corner radius of the field box. |
+| `--zbk-select-border-width` | `{border.width-sm}` | dimension | Border thickness of the field box. |
+| `--zbk-select-border-style` | `{border.style}` | strokeStyle | Border style of the field box. |
+| `--zbk-select-border-radius` | `{border.radius-md}` | dimension | Corner radius of the field box. |
 | `--zbk-select-font-family` | `{font-family.interface}` | fontFamily | Font family for the selected option's text. |
-| `--zbk-select-font-size` | `{font-size.md}` | fontSize | Font size for the selected option's text. |
+| `--zbk-select-font-size` | `{font-size.md}` | cssDimension | Font size for the selected option's text. |
 | `--zbk-select-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the selected option's text. |
-| `--zbk-select-line-height` | `{line-height.2}` | lineHeight | Line height for the selected option's text. |
-| `--zbk-select-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the selected option's text. |
+| `--zbk-select-line-height` | `{line-height.2}` | number | Line height for the selected option's text. |
+| `--zbk-select-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the selected option's text. |
 | `--zbk-select-label-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-select-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
-| `--zbk-select-label-font-size` | `{font-size.sm}` | fontSize | Font size for the label. |
+| `--zbk-select-label-font-size` | `{font-size.sm}` | cssDimension | Font size for the label. |
 | `--zbk-select-label-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for the label. |
-| `--zbk-select-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
+| `--zbk-select-label-gap` | `{spacing.2xs}` | dimension | Space between the label and the field box. |
 | `--zbk-select-affix-ink` | `{app.ink-muted}` | color | Color of prefix/suffix affix content (icon fonts and currentColor SVGs inherit it). |
 | `--zbk-select-affix-ink-disabled` | `{disabled.ink}` | color | Affix color when disabled. |
-| `--zbk-select-icon-size` | `1em` | sizing | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
+| `--zbk-select-icon-size` | `1em` | cssDimension | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
 | `--zbk-select-indicator-color` | `{app.ink-muted}` | color | Color of the drawn chevron indicator. |
 | `--zbk-select-indicator-color-disabled` | `{disabled.ink}` | color | Chevron color when disabled. |
-| `--zbk-select-indicator-size` | `0.5em` | sizing | Side length of the drawn chevron; 0.5em tracks the field's font-size. |
-| `--zbk-select-indicator-stroke-width` | `{border.width-md}` | borderWidth | Stroke width of the drawn chevron. |
-| `--zbk-select-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
-| `--zbk-select-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
-| `--zbk-select-gap` | `{spacing.2xs}` | spacing | Space between affixes, the select, and the indicator. |
-| `--zbk-select-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-select-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-select-max-width` | `100%` | sizing | Maximum width of the field box. |
-| `--zbk-select-min-height` | `44px` | sizing | Minimum field height to ensure a tappable area. |
-| `--zbk-select-group-gap` | `{spacing.md}` | spacing | Gap between fields in a .zbk-select-group. |
+| `--zbk-select-indicator-size` | `0.5em` | cssDimension | Side length of the drawn chevron; 0.5em tracks the field's font-size. |
+| `--zbk-select-indicator-stroke-width` | `{border.width-md}` | dimension | Stroke width of the drawn chevron. |
+| `--zbk-select-padding-inline` | `{spacing.sm}` | dimension | Inline (horizontal) padding of the field box. |
+| `--zbk-select-padding-block` | `{spacing.2xs}` | dimension | Block (vertical) padding of the field box. |
+| `--zbk-select-gap` | `{spacing.2xs}` | dimension | Space between affixes, the select, and the indicator. |
+| `--zbk-select-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-select-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-select-max-width` | `100%` | cssDimension | Maximum width of the field box. |
+| `--zbk-select-min-height` | `44px` | dimension | Minimum field height to ensure a tappable area. |
+| `--zbk-select-group-gap` | `{spacing.md}` | dimension | Gap between fields in a .zbk-select-group. |
 | `--zbk-select-group-direction` | `column` | flex | Flow direction of a .zbk-select-group (column or row). |
 | `--zbk-select-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-select-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-select-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
-| `--zbk-select-box-shadow` | `none` | boxShadow | Default field shadow. |
-| `--zbk-select-box-shadow-hover` | `none` | boxShadow | Field shadow when hovered. |
-| `--zbk-select-box-shadow-focus` | `none` | boxShadow | Field shadow while focused (in addition to the outline). |
-| `--zbk-select-box-shadow-active` | `none` | boxShadow | Field shadow while pressed. |
-| `--zbk-select-box-shadow-invalid` | `none` | boxShadow | Field shadow when the selection is invalid. |
-| `--zbk-select-cursor` | `pointer` | utility | Cursor over an enabled select. |
-| `--zbk-select-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled select. |
-| `--zbk-select-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
-| `--zbk-select-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
-| `--zbk-select-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-select-transition-delay` | `0` | transition | Delay before field transitions run. |
-| `--zbk-select-opacity` | `1` | opacity | Opacity of the field. |
-| `--zbk-select-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
+| `--zbk-select-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-select-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
+| `--zbk-select-box-shadow` | `none` | shadow | Default field shadow. |
+| `--zbk-select-box-shadow-hover` | `none` | shadow | Field shadow when hovered. |
+| `--zbk-select-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
+| `--zbk-select-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
+| `--zbk-select-box-shadow-invalid` | `none` | shadow | Field shadow when the selection is invalid. |
+| `--zbk-select-cursor` | `pointer` | cursor | Cursor over an enabled select. |
+| `--zbk-select-cursor-disabled` | `not-allowed` | cursor | Cursor over a disabled select. |
+| `--zbk-select-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
+| `--zbk-select-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
+| `--zbk-select-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-select-transition-delay` | `0ms` | duration | Delay before field transitions run. |
+| `--zbk-select-opacity` | `1` | number | Opacity of the field. |
+| `--zbk-select-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
 ## Variants
 
@@ -1172,42 +1172,42 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-textarea-border-color-disabled` | `{disabled.border}` | color | Field border color when disabled. |
 | `--zbk-textarea-border-color-readonly` | `{app.border-muted}` | color | Field border color when readonly. |
 | `--zbk-textarea-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the value is invalid. |
-| `--zbk-textarea-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the field box. |
-| `--zbk-textarea-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
-| `--zbk-textarea-border-radius` | `{border.radius-md}` | borderRadius | Corner radius of the field box. |
+| `--zbk-textarea-border-width` | `{border.width-sm}` | dimension | Border thickness of the field box. |
+| `--zbk-textarea-border-style` | `{border.style}` | strokeStyle | Border style of the field box. |
+| `--zbk-textarea-border-radius` | `{border.radius-md}` | dimension | Corner radius of the field box. |
 | `--zbk-textarea-font-family` | `{font-family.interface}` | fontFamily | Font family for the entered text. |
-| `--zbk-textarea-font-size` | `{font-size.md}` | fontSize | Font size for the entered text. |
+| `--zbk-textarea-font-size` | `{font-size.md}` | cssDimension | Font size for the entered text. |
 | `--zbk-textarea-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the entered text. |
-| `--zbk-textarea-field-line-height` | `{line-height.2}` | lineHeight | Line height of the entered multi-line text. |
-| `--zbk-textarea-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the entered text. |
+| `--zbk-textarea-field-line-height` | `{line-height.2}` | number | Line height of the entered multi-line text. |
+| `--zbk-textarea-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the entered text. |
 | `--zbk-textarea-label-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-textarea-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
-| `--zbk-textarea-label-font-size` | `{font-size.sm}` | fontSize | Font size for the label. |
+| `--zbk-textarea-label-font-size` | `{font-size.sm}` | cssDimension | Font size for the label. |
 | `--zbk-textarea-label-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for the label. |
-| `--zbk-textarea-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
-| `--zbk-textarea-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
-| `--zbk-textarea-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
-| `--zbk-textarea-resize` | `vertical` | utility | CSS resize behavior of the field (vertical, horizontal, both, none). |
-| `--zbk-textarea-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-textarea-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-textarea-max-width` | `100%` | sizing | Maximum width of the field box. |
-| `--zbk-textarea-min-block-size` | `44px` | sizing | Minimum field height for a multi-line box; also a tappable floor. |
+| `--zbk-textarea-label-gap` | `{spacing.2xs}` | dimension | Space between the label and the field box. |
+| `--zbk-textarea-padding-inline` | `{spacing.sm}` | dimension | Inline (horizontal) padding of the field box. |
+| `--zbk-textarea-padding-block` | `{spacing.2xs}` | dimension | Block (vertical) padding of the field box. |
+| `--zbk-textarea-resize` | `vertical` | resize | CSS resize behavior of the field (vertical, horizontal, both, none). |
+| `--zbk-textarea-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-textarea-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-textarea-max-width` | `100%` | cssDimension | Maximum width of the field box. |
+| `--zbk-textarea-min-block-size` | `44px` | dimension | Minimum field height for a multi-line box; also a tappable floor. |
 | `--zbk-textarea-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-textarea-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-textarea-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
-| `--zbk-textarea-box-shadow` | `none` | boxShadow | Default field shadow. |
-| `--zbk-textarea-box-shadow-hover` | `none` | boxShadow | Field shadow when hovered. |
-| `--zbk-textarea-box-shadow-focus` | `none` | boxShadow | Field shadow while focused (in addition to the outline). |
-| `--zbk-textarea-box-shadow-active` | `none` | boxShadow | Field shadow while pressed. |
-| `--zbk-textarea-box-shadow-invalid` | `none` | boxShadow | Field shadow when the value is invalid. |
-| `--zbk-textarea-cursor` | `text` | utility | Cursor over the editable field. |
-| `--zbk-textarea-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled field. |
-| `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
-| `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
-| `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-textarea-transition-delay` | `0` | transition | Delay before field transitions run. |
-| `--zbk-textarea-opacity` | `1` | opacity | Opacity of the field. |
-| `--zbk-textarea-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
+| `--zbk-textarea-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-textarea-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
+| `--zbk-textarea-box-shadow` | `none` | shadow | Default field shadow. |
+| `--zbk-textarea-box-shadow-hover` | `none` | shadow | Field shadow when hovered. |
+| `--zbk-textarea-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
+| `--zbk-textarea-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
+| `--zbk-textarea-box-shadow-invalid` | `none` | shadow | Field shadow when the value is invalid. |
+| `--zbk-textarea-cursor` | `text` | cursor | Cursor over the editable field. |
+| `--zbk-textarea-cursor-disabled` | `not-allowed` | cursor | Cursor over a disabled field. |
+| `--zbk-textarea-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
+| `--zbk-textarea-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
+| `--zbk-textarea-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-textarea-transition-delay` | `0ms` | duration | Delay before field transitions run. |
+| `--zbk-textarea-opacity` | `1` | number | Opacity of the field. |
+| `--zbk-textarea-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
 ## Variants
 
@@ -1297,67 +1297,67 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | Token | Default | Type | Description |
 |---|---|---|---|
 | `--zbk-toggle-display` | `contents` | display | Display mode for the <zbk-toggle> host element. |
-| `--zbk-toggle-track-width` | `{spacing.205}` | sizing | Width of the toggle track. |
-| `--zbk-toggle-track-height` | `{spacing.105}` | sizing | Height of the toggle track; the thumb and pill radius derive from it. |
+| `--zbk-toggle-track-width` | `{spacing.2}` | dimension | Width of the toggle track. |
+| `--zbk-toggle-track-height` | `{spacing.1}` | dimension | Height of the toggle track; the thumb and pill radius derive from it. |
 | `--zbk-toggle-canvas` | `{app.canvas-muted}` | color | Track background when the toggle is off. |
 | `--zbk-toggle-canvas-hover` | `{toggle.canvas}` | color | Track background when hovered. |
 | `--zbk-toggle-canvas-active` | `{toggle.canvas}` | color | Track background while pressed. |
 | `--zbk-toggle-canvas-checked` | `{action.ink}` | color | Track background when the toggle is on. |
 | `--zbk-toggle-canvas-disabled` | `{disabled.canvas}` | color | Track background when disabled. |
 | `--zbk-toggle-border-color` | `{app.border}` | color | Track border color when the toggle is off. |
-| `--zbk-toggle-border-color-hover` | `{app.border}` | color | Track border color when hovered. |
-| `--zbk-toggle-border-color-active` | `{app.border}` | color | Track border color while pressed. |
-| `--zbk-toggle-border-color-checked` | `{toggle.canvas-checked}` | color | Track border color when the toggle is on. |
+| `--zbk-toggle-border-color-hover` | `{toggle.border-color}` | color | Track border color when hovered. |
+| `--zbk-toggle-border-color-active` | `{toggle.border-color}` | color | Track border color while pressed. |
+| `--zbk-toggle-border-color-checked` | `{toggle.border-color}` | color | Track border color when the toggle is on. |
 | `--zbk-toggle-border-color-disabled` | `{disabled.border}` | color | Track border color when disabled. |
-| `--zbk-toggle-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the toggle track. |
-| `--zbk-toggle-border-style` | `{border.style}` | borderStyle | Border style of the toggle track. |
-| `--zbk-toggle-border-radius` | `{toggle.track-height}` | borderRadius | Corner radius of the track (track-height yields a pill). |
-| `--zbk-toggle-box-shadow` | `none` | boxShadow | Default track shadow. |
-| `--zbk-toggle-box-shadow-hover` | `none` | boxShadow | Track shadow when hovered. |
-| `--zbk-toggle-box-shadow-active` | `none` | boxShadow | Track shadow while pressed. |
-| `--zbk-toggle-box-shadow-checked` | `none` | boxShadow | Track shadow when the toggle is on. |
-| `--zbk-toggle-box-shadow-focus` | `none` | boxShadow | Track shadow in the focus state (in addition to the outline). |
-| `--zbk-toggle-thumb-size` | `{toggle.track-height}` | sizing | Diameter of the thumb. |
-| `--zbk-toggle-thumb-inset` | `{spacing.neg-2px}` | spacing | Thumb offset from the track's start edge; negative overlaps the border. |
-| `--zbk-toggle-thumb-canvas` | `{app.canvas}` | color | Thumb background when the toggle is off. |
+| `--zbk-toggle-border-width` | `{border.width-sm}` | dimension | Border thickness of the toggle track. |
+| `--zbk-toggle-border-style` | `{border.style}` | strokeStyle | Border style of the toggle track. |
+| `--zbk-toggle-border-radius` | `{toggle.track-height}` | dimension | Corner radius of the track (track-height yields a pill). |
+| `--zbk-toggle-box-shadow` | `none` | shadow | Default track shadow. |
+| `--zbk-toggle-box-shadow-hover` | `none` | shadow | Track shadow when hovered. |
+| `--zbk-toggle-box-shadow-active` | `none` | shadow | Track shadow while pressed. |
+| `--zbk-toggle-box-shadow-checked` | `none` | shadow | Track shadow when the toggle is on. |
+| `--zbk-toggle-box-shadow-focus` | `none` | shadow | Track shadow in the focus state (in addition to the outline). |
+| `--zbk-toggle-thumb-size` | `{toggle.track-height}` | dimension | Diameter of the thumb. |
+| `--zbk-toggle-thumb-inset` | `{spacing.neg-2px}` | dimension | Thumb offset from the track's start edge; negative overlaps the border. |
+| `--zbk-toggle-thumb-canvas` | `{app.canvas-inverse}` | color | Thumb background when the toggle is off. |
 | `--zbk-toggle-thumb-canvas-hover` | `{toggle.thumb-canvas}` | color | Thumb background when hovered. |
 | `--zbk-toggle-thumb-canvas-checked` | `{toggle.thumb-canvas}` | color | Thumb background when the toggle is on. |
 | `--zbk-toggle-thumb-canvas-disabled` | `{toggle.thumb-canvas}` | color | Thumb background when disabled. |
-| `--zbk-toggle-thumb-border-color` | `{toggle.border-color}` | color | Thumb border color when the toggle is off. |
+| `--zbk-toggle-thumb-border-color` | `{toggle.thumb-canvas}` | color | Thumb border color when the toggle is off. |
 | `--zbk-toggle-thumb-border-color-checked` | `{toggle.thumb-border-color}` | color | Thumb border color when the toggle is on. |
-| `--zbk-toggle-thumb-border-width` | `{toggle.border-width}` | borderWidth | Border thickness of the thumb. |
-| `--zbk-toggle-thumb-border-style` | `{toggle.border-style}` | borderStyle | Border style of the thumb. |
-| `--zbk-toggle-thumb-radius` | `50%` | borderRadius | Corner radius of the thumb (a circle by default). |
-| `--zbk-toggle-thumb-shadow` | `none` | boxShadow | Default thumb shadow. |
-| `--zbk-toggle-thumb-shadow-hover` | `none` | boxShadow | Thumb shadow when hovered. |
-| `--zbk-toggle-thumb-shadow-active` | `none` | boxShadow | Thumb shadow while pressed. |
-| `--zbk-toggle-thumb-shadow-checked` | `none` | boxShadow | Thumb shadow when the toggle is on. |
-| `--zbk-toggle-thumb-transform` | `none` | utility | Default thumb transform (travel is handled structurally). |
-| `--zbk-toggle-thumb-transform-hover` | `none` | utility | Thumb transform when hovered (e.g. a translateY lift). |
-| `--zbk-toggle-thumb-transform-active` | `none` | utility | Thumb transform while pressed (e.g. a press-down). |
-| `--zbk-toggle-thumb-transform-checked` | `none` | utility | Thumb transform when the toggle is on. |
+| `--zbk-toggle-thumb-border-width` | `{toggle.border-width}` | dimension | Border thickness of the thumb. |
+| `--zbk-toggle-thumb-border-style` | `{toggle.border-style}` | strokeStyle | Border style of the thumb. |
+| `--zbk-toggle-thumb-radius` | `50%` | cssDimension | Corner radius of the thumb (a circle by default). |
+| `--zbk-toggle-thumb-shadow` | `0 0 0 2px var(--zbk-app-canvas-muted)` | cssShadow | Default thumb shadow. |
+| `--zbk-toggle-thumb-shadow-hover` | `{toggle.thumb-shadow}` | shadow | Thumb shadow when hovered. |
+| `--zbk-toggle-thumb-shadow-active` | `{toggle.thumb-shadow}` | shadow | Thumb shadow while pressed. |
+| `--zbk-toggle-thumb-shadow-checked` | `{toggle.thumb-shadow}` | shadow | Thumb shadow when the toggle is on. |
+| `--zbk-toggle-thumb-transform` | `none` | transform | Default thumb transform (travel is handled structurally). |
+| `--zbk-toggle-thumb-transform-hover` | `none` | transform | Thumb transform when hovered (e.g. a translateY lift). |
+| `--zbk-toggle-thumb-transform-active` | `none` | transform | Thumb transform while pressed (e.g. a press-down). |
+| `--zbk-toggle-thumb-transform-checked` | `none` | transform | Thumb transform when the toggle is on. |
 | `--zbk-toggle-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-toggle-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
 | `--zbk-toggle-font-family` | `{font-family.interface}` | fontFamily | Font family for the toggle label. |
-| `--zbk-toggle-font-size` | `{font-size.md}` | fontSize | Font size for the toggle label. |
+| `--zbk-toggle-font-size` | `{font-size.sm}` | cssDimension | Font size for the toggle label. |
 | `--zbk-toggle-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the toggle label. |
-| `--zbk-toggle-line-height` | `{line-height.2}` | lineHeight | Line height for the toggle label. |
-| `--zbk-toggle-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the toggle label. |
-| `--zbk-toggle-gap` | `{spacing.sm}` | spacing | Space between the track and its label. |
+| `--zbk-toggle-line-height` | `{line-height.2}` | number | Line height for the toggle label. |
+| `--zbk-toggle-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the toggle label. |
+| `--zbk-toggle-gap` | `{spacing.sm}` | dimension | Space between the track and its label. |
 | `--zbk-toggle-align-items` | `center` | flex | Cross-axis alignment of track and label. |
-| `--zbk-toggle-group-gap` | `{spacing.md}` | spacing | Gap between toggles in a .zbk-toggle-group. |
+| `--zbk-toggle-group-gap` | `{spacing.md}` | dimension | Gap between toggles in a .zbk-toggle-group. |
 | `--zbk-toggle-group-direction` | `column` | flex | Flow direction of a .zbk-toggle-group (column or row). |
 | `--zbk-toggle-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-toggle-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-toggle-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
-| `--zbk-toggle-cursor` | `pointer` | utility | Cursor when hovering an enabled toggle. |
-| `--zbk-toggle-cursor-disabled` | `not-allowed` | utility | Cursor when hovering a disabled toggle. |
-| `--zbk-toggle-transition-duration` | `{transition.playful-fx-duration-default}` | transition | Duration for toggle state transitions, including thumb travel. **(a11y)** |
-| `--zbk-toggle-transition-timing-function` | `{transition.playful-fx-function-default}` | transition | Easing for toggle state transitions. |
-| `--zbk-toggle-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transition | CSS properties that animate on track state changes. |
-| `--zbk-toggle-transition-delay` | `0` | transition | Delay before toggle transitions run. |
-| `--zbk-toggle-opacity` | `1` | opacity | Opacity of the toggle. |
-| `--zbk-toggle-opacity-disabled` | `{opacity.70}` | opacity | Track and thumb opacity when disabled. |
+| `--zbk-toggle-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-toggle-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
+| `--zbk-toggle-cursor` | `pointer` | cursor | Cursor when hovering an enabled toggle. |
+| `--zbk-toggle-cursor-disabled` | `not-allowed` | cursor | Cursor when hovering a disabled toggle. |
+| `--zbk-toggle-transition-duration` | `{transition.playful-fx-duration-default}` | duration | Duration for toggle state transitions, including thumb travel. **(a11y)** |
+| `--zbk-toggle-transition-timing-function` | `{transition.playful-fx-function-default}` | cubicBezier | Easing for toggle state transitions. |
+| `--zbk-toggle-transition-property` | `background-color, border-color, box-shadow, transform, opacity, outline` | transitionProperty | CSS properties that animate on track state changes. |
+| `--zbk-toggle-transition-delay` | `0ms` | duration | Delay before toggle transitions run. |
+| `--zbk-toggle-opacity` | `1` | number | Opacity of the toggle. |
+| `--zbk-toggle-opacity-disabled` | `{opacity.70}` | number | Track and thumb opacity when disabled. |
 
 ## Variants
 
@@ -1461,26 +1461,26 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-tooltip-canvas` | `{app.canvas-inverse}` | color | Tooltip bubble background. |
 | `--zbk-tooltip-ink` | `{app.ink-inverse}` | color | Tooltip text color. |
 | `--zbk-tooltip-border-color` | `transparent` | color | Tooltip bubble border color. |
-| `--zbk-tooltip-border-width` | `{border.width-sm}` | borderWidth | Tooltip bubble border width. |
-| `--zbk-tooltip-border-style` | `{border.style}` | borderStyle | Tooltip bubble border style. |
-| `--zbk-tooltip-border-radius` | `{border.radius-md}` | borderRadius | Tooltip bubble corner radius. |
+| `--zbk-tooltip-border-width` | `{border.width-sm}` | dimension | Tooltip bubble border width. |
+| `--zbk-tooltip-border-style` | `{border.style}` | strokeStyle | Tooltip bubble border style. |
+| `--zbk-tooltip-border-radius` | `{border.radius-md}` | dimension | Tooltip bubble corner radius. |
 | `--zbk-tooltip-font-family` | `{font-family.interface}` | fontFamily | Font family for tooltip text. |
-| `--zbk-tooltip-font-size` | `{font-size.sm}` | fontSize | Font size for tooltip text. |
+| `--zbk-tooltip-font-size` | `{font-size.sm}` | cssDimension | Font size for tooltip text. |
 | `--zbk-tooltip-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for tooltip text. |
-| `--zbk-tooltip-line-height` | `{line-height.2}` | lineHeight | Line height for tooltip text. |
-| `--zbk-tooltip-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for tooltip text. |
-| `--zbk-tooltip-padding-inline` | `{spacing.xs}` | spacing | Inline padding inside the bubble. |
-| `--zbk-tooltip-padding-block` | `{spacing.2xs}` | spacing | Block padding inside the bubble. |
-| `--zbk-tooltip-max-width` | `20rem` | sizing | Maximum bubble width before text wraps. |
-| `--zbk-tooltip-arrow-size` | `8px` | sizing | Arrow square size; also sets the default trigger-to-bubble gap. |
-| `--zbk-tooltip-offset` | `{tooltip.arrow-size}` | sizing | Gap between the trigger and the bubble. |
-| `--zbk-tooltip-box-shadow` | `{elevation.sm}` | boxShadow | Bubble shadow. |
-| `--zbk-tooltip-z-index` | `{z-index.tooltip}` | zIndex | Stacking order when the top-layer popover API is unavailable. |
-| `--zbk-tooltip-transition-duration` | `150ms` | transition | Show/hide transition duration. **(a11y)** |
-| `--zbk-tooltip-transition-timing-function` | `ease-out` | transition | Show/hide transition timing function. |
-| `--zbk-tooltip-show-delay` | `150ms` | transition | Delay before a hint tooltip shows on hover/focus. Read by the element at runtime. **(a11y)** |
-| `--zbk-tooltip-hide-grace` | `120ms` | transition | Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime. **(a11y)** |
-| `--zbk-tooltip-opacity` | `1` | opacity | Bubble opacity. |
+| `--zbk-tooltip-line-height` | `{line-height.2}` | number | Line height for tooltip text. |
+| `--zbk-tooltip-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for tooltip text. |
+| `--zbk-tooltip-padding-inline` | `{spacing.xs}` | dimension | Inline padding inside the bubble. |
+| `--zbk-tooltip-padding-block` | `{spacing.2xs}` | dimension | Block padding inside the bubble. |
+| `--zbk-tooltip-max-width` | `20rem` | dimension | Maximum bubble width before text wraps. |
+| `--zbk-tooltip-arrow-size` | `8px` | dimension | Arrow square size; also sets the default trigger-to-bubble gap. |
+| `--zbk-tooltip-offset` | `{tooltip.arrow-size}` | dimension | Gap between the trigger and the bubble. |
+| `--zbk-tooltip-box-shadow` | `{elevation.sm}` | shadow | Bubble shadow. |
+| `--zbk-tooltip-z-index` | `{z-index.tooltip}` | number | Stacking order when the top-layer popover API is unavailable. |
+| `--zbk-tooltip-transition-duration` | `150ms` | duration | Show/hide transition duration. **(a11y)** |
+| `--zbk-tooltip-transition-timing-function` | `ease-out` | cssEasingFunction | Show/hide transition timing function. |
+| `--zbk-tooltip-show-delay` | `150ms` | duration | Delay before a hint tooltip shows on hover/focus. Read by the element at runtime. **(a11y)** |
+| `--zbk-tooltip-hide-grace` | `120ms` | duration | Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime. **(a11y)** |
+| `--zbk-tooltip-opacity` | `1` | number | Bubble opacity. |
 
 ## Variants
 
@@ -1586,7 +1586,7 @@ Grammar: `flex-shrink-{value}` · values: 0…5 · responsive: prefix with `tabl
 
 Sets the initial main size of a flex item before any extra space is distributed or shrinking occurs.
 
-Grammar: `flex-basis-{value}` · values: 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, aside, section, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, 0, full, auto, max-content, min-content, fit-content (spacing tokens: sizing, rootSize) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `flex-basis-{value}` · values: 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, aside, section, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, 0, full, auto, max-content, min-content, fit-content (spacing tokens: dimension) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Controls width when flex direction is 'row'
 - Controls height when flex direction is 'column'
@@ -1619,7 +1619,7 @@ Grammar: `display-{value}` · values: flex, inline-flex, block, inline-block, in
 
 Sets the gutters between flex or grid tracks: the bare form sets both axes, with logical block (row-gap) and inline (column-gap) edges.
 
-Grammar: `gap[-edge]-{value}` — edges: block, inline · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 2xs, xs, sm, md, lg, xl, 2xl, 3xl (spacing tokens: spacing, rootSize) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `gap[-edge]-{value}` — edges: block, inline · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 2xs, xs, sm, md, lg, xl, 2xl, 3xl (spacing tokens: dimension) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Accessibility: Gap values rescale with the spacing accessibility dial.
 - Prefer gap on the flex or grid container over per-child margins — it only adds space between items, never around the outer edges.
@@ -1903,7 +1903,7 @@ Width/height sizing and top/right/bottom/left position-offset utilities bound to
 
 Sets the element's block size (height).
 
-Grammar: `height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `height-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Accessibility: Fixed heights can clip content when users enlarge text; prefer min-height or auto.
 - Prefer intrinsic sizing (auto, min-content, max-content) over fixed heights so content is never clipped when it grows or text is enlarged by the a11y dial.
@@ -1912,19 +1912,19 @@ Grammar: `height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 2
 
 Sets the element's minimum block size.
 
-Grammar: `min-height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `min-height-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 ### max-height
 
 Sets the element's maximum block size.
 
-Grammar: `max-height-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `max-height-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 ### width
 
 Sets the element's inline size (width).
 
-Grammar: `width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `width-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Prefer intrinsic or percentage widths over fixed widths so layouts reflow; a fixed width can force horizontal scrolling at small viewports or large text.
 
@@ -1932,13 +1932,13 @@ Grammar: `width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 20
 
 Sets the element's minimum inline size.
 
-Grammar: `min-width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `min-width-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 ### max-width
 
 Sets the element's maximum inline size.
 
-Grammar: `max-width-{value}` · values: neg-1px, 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `max-width-{value}` · values: 0, 1px, 2px, 025, 05, 1, 105, 2, 205, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, card, mobile, mobile-lg, tablet, tablet-lg, desktop, desktop-lg, widescreen, section, aside, auto, full, viewport, min, max, inherit (spacing tokens) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - max-width on text containers improves readability; prefer the measure/prose utilities for body copy line length.
 
@@ -1976,7 +1976,7 @@ Dictates spacing outside of the defined border of an element, separating it from
 
 Sets the empty space around an element.
 
-Grammar: `margin[-edge]-{value}` — edges: block, inline, block-start, block-end, inline-start, inline-end · values: 2xs, xs, sm, md, lg, xl, 2xl, 3xl, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 105, 205, 1px, 2px, 025, 05, auto, unset (spacing tokens: spacing, rootSize) · negatives: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 105, 205, 1px, 2px, 025, 05 · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `margin[-edge]-{value}` — edges: block, inline, block-start, block-end, inline-start, inline-end · values: 2xs, xs, sm, md, lg, xl, 2xl, 3xl, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 105, 205, 1px, 2px, 025, 05, auto, unset (spacing tokens: dimension) · negatives: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 105, 205, 1px, 2px, 025, 05 · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - 'block' margin values have no effect on elements with 'inline' display, they must be set to something like 'inline-block'
 - Zebkit uses logical margin operators (inline/block) for improved international accessibility. 'block' is vertical, 'inline' is horizontal.
@@ -1989,7 +1989,7 @@ Dictates spacing inside of the defined border of an element, separating content 
 
 Sets the empty space inside an element.
 
-Grammar: `padding[-edge]-{value}` — edges: block, inline, block-start, block-end, inline-start, inline-end · values: 2xs, xs, sm, md, lg, xl, 2xl, 3xl, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 105, 205, 1px, 2px, 025, 05, unset (spacing tokens: spacing, rootSize) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
+Grammar: `padding[-edge]-{value}` — edges: block, inline, block-start, block-end, inline-start, inline-end · values: 2xs, xs, sm, md, lg, xl, 2xl, 3xl, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 105, 205, 1px, 2px, 025, 05, unset (spacing tokens: dimension) · responsive: prefix with `tablet:` `tablet-lg:` `desktop:` `desktop-lg:` `widescreen:`
 
 - Zebkit uses logical padding operators (inline/block) for improved international accessibility. 'block' is vertical, 'inline' is horizontal.
 
@@ -2069,6 +2069,15 @@ Defines: `prose`, `lede`.
 The prose context styles matching descendant elements; use it for long-form content rather than as an element-by-element utility.
 
 - Use .lede for the short introductory paragraph that summarizes or frames a page, article, or section.
+
+### prose-list
+
+Ordered and unordered list typography and spacing inside a .prose context.
+
+Defines: `prose`.
+The prose context styles matching descendant elements; use it for long-form content rather than as an element-by-element utility.
+
+- Use semantic ul/ol markup; list tokens keep typography and rhythm aligned with the surrounding prose.
 
 ## Text utilities
 

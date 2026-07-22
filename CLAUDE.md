@@ -14,9 +14,10 @@ npm run test:watch          # Run tests in watch mode
 npm run type-check          # TypeScript type checking (tsc --noEmit)
 npm run build:tokens        # Build design tokens (interactive prompts)
 npm run build:components    # Build web components
-npm run generate            # Regenerate all manifest-derived source (utilities + components)
+npm run generate            # Regenerate all derived source (utilities + components + palette SCSS)
 npm run generate:utilities  # Utility SCSS from utility manifests
 npm run generate:components # Component slot-contract.ts from component manifests
+npm run generate:palette    # Palette SCSS from the palette token definition
 npm run build               # Full build: generate -> CEM -> tokens/CSS -> components -> doc-site/context -> editor/CLI
 npm run lint                # Lint components + utilities
 npm run lint:utilities      # Lint utility manifests against generated SCSS
@@ -28,7 +29,7 @@ npm run docs:build          # Refresh every generated artifact, then build stati
 
 **Configuration**: Token/component builds can skip prompts via `zebkit.config.json`, or pass `--config path/to/config.json`.
 
-**Manifests are the source of truth.** Utility classes are generated from hand-authored `*utilities.manifest.json` contracts (`src/scripts/utilities/README.md`); component slot contracts and agent docs are generated from `zbk-*.manifest.json` (`src/scripts/components/README.md`). Never hand-edit a generated `*.scss` partial or `slot-contract.ts` — edit the manifest and regenerate.
+**Manifests are the source of truth.** Utility classes are generated from hand-authored `*utilities.manifest.json` contracts (`src/scripts/utilities/README.md`); component slot contracts and agent docs are generated from `zbk-*.manifest.json` (`src/scripts/components/README.md`); the primitive palette SCSS (mixin, family partials, globals) is generated from `src/tokens/colors/palette/tokens/palette-definition.ts`. Never hand-edit a generated `*.scss` partial or `slot-contract.ts` — edit the manifest/definition and regenerate.
 
 ## Architecture Overview
 
@@ -46,7 +47,7 @@ All CSS variables use the `--zbk-` prefix. Interaction-state suffixes (default s
 
 - `src/tokens/` - The token language: primitive + semantic token modules and utility SCSS
 - `src/tokens/semantic/` - Semantic token aliases (border, color, spacing) that merge with primitives
-- `src/components/` - Web components; each owns `index.ts`, `tokens/tokens.ts`, `tokens/token-schema.ts`, `variants/`, `styles.scss`
+- `src/components/` - Web components; each owns `index.ts`, `tokens/tokens.ts`, `variants/`, `styles.scss` (and, only where structural constraints require it, a bespoke `tokens/token-schema.ts`)
 - `src/components/base/` - `ZebkitElement` (light-DOM Lit base class) and the shared live-region announcer
 - `src/definitions/` - Shared token types, maps, and Zod schemas
 - `src/scripts/tokens/` - Token build pipeline (gather, compile, convert to CSS vars)
@@ -56,11 +57,11 @@ All CSS variables use the `--zbk-` prefix. Interaction-state suffixes (default s
 
 Each token module exports:
 - `key`: Module namespace string
-- Default export: Token map object matching the Zod schema in `token-schema.ts`
+- Default export: Token map object. Most modules validate against the generic `tokenModuleSchema`; a module supplies its own `token-schema.ts` only for structural constraints (breakpoint ordering, generated scale steps, font-family loading metadata)
 
-Token entries follow `TokenObject` shape from `src/definitions/tokens.ts`:
+Token entries follow the DTCG 2025.10 shape — `TokenObject` from `src/definitions/tokens.ts`; anything zebkit-specific (the `a11y` modifier opt-in, font metadata, scale-step index) is namespaced under `$extensions["dev.zebkit"]`:
 ```typescript
-{ value: string | number, type: AllowedTokenTypes, description: string, a11y?: boolean | string }
+{ $value: string | number | StructuredValue, $type: AllowedTokenTypes, $description: string, $extensions?: { "dev.zebkit": { a11y?: boolean | string, ... } } }
 ```
 
 ### Foundation Token Modules
@@ -103,4 +104,4 @@ Zebkit generates utility classes via SCSS generators in `src/tokens/styles/mixin
 - Components are Lit custom elements rendering into light DOM, extending `ZebkitElement` (`src/components/base/`)
 - Include keyboard interactions, focus management, and ARIA hooks in base HTML
 - Provide visual state tokens for: `default`, `hover`, `active`, `focus-visible`, `disabled`
-- Token schemas use Zod for validation; keep `token-schema.ts` in sync with `tokens.ts`
+- Token entries use the DTCG `$value`/`$type`/`$description` shape and validate against the generic `tokenModuleSchema` by default; add a bespoke `token-schema.ts` only for structural constraints

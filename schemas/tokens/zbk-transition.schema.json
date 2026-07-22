@@ -5,941 +5,1764 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "transitionValue": {
-      "type": [
-        "string",
-        "number"
+    "durationValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{border.style}",
+            "{button.border-style}",
+            "{checkbox.border-style}",
+            "{input.border-style}",
+            "{pagination.border-style}",
+            "{radio.border-style}",
+            "{select.border-style}",
+            "{textarea.border-style}",
+            "{toggle.border-style}",
+            "{toggle.thumb-border-style}",
+            "{tooltip.border-style}"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "ms",
+                "s"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
         "{transition.duration-default}",
         "{transition.duration-slow}",
         "{transition.duration-fast}",
-        "{transition.playful-motion-function-default}",
-        "{transition.playful-motion-function-slow}",
-        "{transition.playful-motion-function-fast}",
         "{transition.playful-motion-duration-default}",
         "{transition.playful-motion-duration-slow}",
         "{transition.playful-motion-duration-fast}",
-        "{transition.playful-fx-function-default}",
-        "{transition.playful-fx-function-slow}",
-        "{transition.playful-fx-function-fast}",
         "{transition.playful-fx-duration-default}",
         "{transition.playful-fx-duration-slow}",
         "{transition.playful-fx-duration-fast}",
-        "{transition.calm-motion-function-default}",
-        "{transition.calm-motion-function-slow}",
-        "{transition.calm-motion-function-fast}",
         "{transition.calm-motion-duration-default}",
         "{transition.calm-motion-duration-slow}",
         "{transition.calm-motion-duration-fast}",
-        "{transition.calm-fx-function-default}",
-        "{transition.calm-fx-function-slow}",
-        "{transition.calm-fx-function-fast}",
         "{transition.calm-fx-duration-default}",
         "{transition.calm-fx-duration-slow}",
         "{transition.calm-fx-duration-fast}",
         "{button.transition-duration}",
-        "{button.transition-timing-function}",
-        "{button.transition-property}",
         "{button.transition-delay}",
         "{checkbox.transition-duration}",
-        "{checkbox.transition-timing-function}",
-        "{checkbox.transition-property}",
         "{checkbox.transition-delay}",
         "{input.transition-duration}",
-        "{input.transition-timing-function}",
-        "{input.transition-property}",
         "{input.transition-delay}",
-        "{pagination.transition-property}",
         "{pagination.transition-duration}",
-        "{pagination.transition-timing-function}",
         "{radio.transition-duration}",
-        "{radio.transition-timing-function}",
-        "{radio.transition-property}",
         "{radio.transition-delay}",
         "{select.transition-duration}",
-        "{select.transition-timing-function}",
-        "{select.transition-property}",
         "{select.transition-delay}",
         "{textarea.transition-duration}",
-        "{textarea.transition-timing-function}",
-        "{textarea.transition-property}",
         "{textarea.transition-delay}",
         "{toggle.transition-duration}",
-        "{toggle.transition-timing-function}",
-        "{toggle.transition-property}",
         "{toggle.transition-delay}",
         "{tooltip.transition-duration}",
-        "{tooltip.transition-timing-function}",
         "{tooltip.show-delay}",
         "{tooltip.hide-grace}"
       ]
-    }
-  },
-  "properties": {
-    "duration-default": {
+    },
+    "cssDurationValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{border.style}",
+        "{button.border-style}",
+        "{checkbox.border-style}",
+        "{input.border-style}",
+        "{pagination.border-style}",
+        "{radio.border-style}",
+        "{select.border-style}",
+        "{textarea.border-style}",
+        "{toggle.border-style}",
+        "{toggle.thumb-border-style}",
+        "{tooltip.border-style}"
+      ]
+    },
+    "cubicBezierValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{border.style}",
+            "{button.border-style}",
+            "{checkbox.border-style}",
+            "{input.border-style}",
+            "{pagination.border-style}",
+            "{radio.border-style}",
+            "{select.border-style}",
+            "{textarea.border-style}",
+            "{toggle.border-style}",
+            "{toggle.thumb-border-style}",
+            "{tooltip.border-style}"
+          ]
+        },
+        {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "additionalItems": false
+        }
+      ],
+      "examples": [
+        "{transition.playful-motion-function-default}",
+        "{transition.playful-motion-function-slow}",
+        "{transition.playful-motion-function-fast}",
+        "{transition.playful-fx-function-default}",
+        "{transition.playful-fx-function-slow}",
+        "{transition.playful-fx-function-fast}",
+        "{transition.calm-motion-function-default}",
+        "{transition.calm-motion-function-slow}",
+        "{transition.calm-motion-function-fast}",
+        "{transition.calm-fx-function-default}",
+        "{transition.calm-fx-function-slow}",
+        "{transition.calm-fx-function-fast}",
+        "{checkbox.transition-timing-function}",
+        "{input.transition-timing-function}",
+        "{radio.transition-timing-function}",
+        "{select.transition-timing-function}",
+        "{textarea.transition-timing-function}",
+        "{toggle.transition-timing-function}"
+      ]
+    },
+    "cssEasingFunctionValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{border.style}",
+        "{button.border-style}",
+        "{checkbox.border-style}",
+        "{input.border-style}",
+        "{pagination.border-style}",
+        "{radio.border-style}",
+        "{select.border-style}",
+        "{textarea.border-style}",
+        "{toggle.border-style}",
+        "{toggle.thumb-border-style}",
+        "{tooltip.border-style}"
+      ]
+    },
+    "durationToken": {
       "type": "object",
       "description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/durationValue"
+            },
+            {
+              "$ref": "#/definitions/cssDurationValue"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
+        "$type": {
+          "type": "string",
+          "enum": [
+            "duration",
+            "cssDuration"
           ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
         }
-      }
-    },
-    "duration-slow": {
-      "type": "object",
-      "description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "duration"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/durationValue"
+              }
+            }
+          }
         },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssDuration"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssDurationValue"
+              }
+            }
+          }
         }
-      }
+      ]
     },
-    "duration-fast": {
-      "type": "object",
-      "description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "playful-motion-function-default": {
+    "cubicBezierToken": {
       "type": "object",
       "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/cubicBezierValue"
+            },
+            {
+              "$ref": "#/definitions/cssEasingFunctionValue"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
+        "$type": {
+          "type": "string",
+          "enum": [
+            "cubicBezier",
+            "cssEasingFunction"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cubicBezier"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cubicBezierValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssEasingFunction"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssEasingFunctionValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:duration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "duration",
+            "cssDuration"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "default": {
+          "description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "slow": {
+          "description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fast": {
+          "description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
           ]
         }
       }
+    },
+    "group:playful": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "motion": {
+          "$ref": "#/definitions/group:playful-motion"
+        },
+        "motion-function": {
+          "$ref": "#/definitions/group:playful-motion-function"
+        },
+        "motion-function-default": {
+          "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "motion-function-slow": {
+          "description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "motion-function-fast": {
+          "description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "motion-duration": {
+          "$ref": "#/definitions/group:playful-motion-duration"
+        },
+        "motion-duration-default": {
+          "description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "motion-duration-slow": {
+          "description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "motion-duration-fast": {
+          "description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fx": {
+          "$ref": "#/definitions/group:playful-fx"
+        },
+        "fx-function": {
+          "$ref": "#/definitions/group:playful-fx-function"
+        },
+        "fx-function-default": {
+          "description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "fx-function-slow": {
+          "description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "fx-function-fast": {
+          "description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "fx-duration": {
+          "$ref": "#/definitions/group:playful-fx-duration"
+        },
+        "fx-duration-default": {
+          "description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fx-duration-slow": {
+          "description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fx-duration-fast": {
+          "description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:playful-motion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "function": {
+          "$ref": "#/definitions/group:playful-motion-function"
+        },
+        "function-default": {
+          "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "function-slow": {
+          "description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "function-fast": {
+          "description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "duration": {
+          "$ref": "#/definitions/group:playful-motion-duration"
+        },
+        "duration-default": {
+          "description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "duration-slow": {
+          "description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "duration-fast": {
+          "description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:playful-motion-function": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "cubicBezier",
+            "cssEasingFunction"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "default": {
+          "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "slow": {
+          "description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "fast": {
+          "description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:playful-motion-duration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "duration",
+            "cssDuration"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "default": {
+          "description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "slow": {
+          "description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fast": {
+          "description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:playful-fx": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "function": {
+          "$ref": "#/definitions/group:playful-fx-function"
+        },
+        "function-default": {
+          "description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "function-slow": {
+          "description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "function-fast": {
+          "description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "duration": {
+          "$ref": "#/definitions/group:playful-fx-duration"
+        },
+        "duration-default": {
+          "description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "duration-slow": {
+          "description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "duration-fast": {
+          "description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:playful-fx-function": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "cubicBezier",
+            "cssEasingFunction"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "default": {
+          "description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "slow": {
+          "description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "fast": {
+          "description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:playful-fx-duration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "duration",
+            "cssDuration"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "default": {
+          "description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "slow": {
+          "description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fast": {
+          "description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:calm": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "motion": {
+          "$ref": "#/definitions/group:calm-motion"
+        },
+        "motion-function": {
+          "$ref": "#/definitions/group:calm-motion-function"
+        },
+        "motion-function-default": {
+          "description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "motion-function-slow": {
+          "description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "motion-function-fast": {
+          "description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "motion-duration": {
+          "$ref": "#/definitions/group:calm-motion-duration"
+        },
+        "motion-duration-default": {
+          "description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "motion-duration-slow": {
+          "description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "motion-duration-fast": {
+          "description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fx": {
+          "$ref": "#/definitions/group:calm-fx"
+        },
+        "fx-function": {
+          "$ref": "#/definitions/group:calm-fx-function"
+        },
+        "fx-function-default": {
+          "description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "fx-function-slow": {
+          "description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "fx-function-fast": {
+          "description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "fx-duration": {
+          "$ref": "#/definitions/group:calm-fx-duration"
+        },
+        "fx-duration-default": {
+          "description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fx-duration-slow": {
+          "description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fx-duration-fast": {
+          "description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:calm-motion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "function": {
+          "$ref": "#/definitions/group:calm-motion-function"
+        },
+        "function-default": {
+          "description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "function-slow": {
+          "description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "function-fast": {
+          "description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "duration": {
+          "$ref": "#/definitions/group:calm-motion-duration"
+        },
+        "duration-default": {
+          "description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "duration-slow": {
+          "description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "duration-fast": {
+          "description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:calm-motion-function": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "cubicBezier",
+            "cssEasingFunction"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "default": {
+          "description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "slow": {
+          "description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "fast": {
+          "description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:calm-motion-duration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "duration",
+            "cssDuration"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "default": {
+          "description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "slow": {
+          "description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fast": {
+          "description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:calm-fx": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "function": {
+          "$ref": "#/definitions/group:calm-fx-function"
+        },
+        "function-default": {
+          "description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "function-slow": {
+          "description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "function-fast": {
+          "description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "duration": {
+          "$ref": "#/definitions/group:calm-fx-duration"
+        },
+        "duration-default": {
+          "description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "duration-slow": {
+          "description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "duration-fast": {
+          "description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:calm-fx-function": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "cubicBezier",
+            "cssEasingFunction"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "default": {
+          "description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "slow": {
+          "description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        },
+        "fast": {
+          "description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/cubicBezierToken"
+            }
+          ]
+        }
+      }
+    },
+    "group:calm-fx-duration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "duration",
+            "cssDuration"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "default": {
+          "description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "slow": {
+          "description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        },
+        "fast": {
+          "description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/durationToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "$description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "duration": {
+      "$ref": "#/definitions/group:duration"
+    },
+    "duration-default": {
+      "description": "Default duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
+        }
+      ]
+    },
+    "duration-slow": {
+      "description": "Slower duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
+        }
+      ]
+    },
+    "duration-fast": {
+      "description": "Faster duration used by utility transition classes with non-specialized timing functions (ease, linear, ease-in, etc",
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
+        }
+      ]
+    },
+    "playful": {
+      "$ref": "#/definitions/group:playful"
+    },
+    "playful-motion": {
+      "$ref": "#/definitions/group:playful-motion"
+    },
+    "playful-motion-function": {
+      "$ref": "#/definitions/group:playful-motion-function"
+    },
+    "playful-motion-function-default": {
+      "description": "Playful motion (spatial) default timing curve. Use for movement and layout-related transitions where a lively, expressive settle feels appropriate.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
+        }
+      ]
     },
     "playful-motion-function-slow": {
-      "type": "object",
       "description": "Playful motion (spatial) slow timing curve. Use for larger, more noticeable movement where you want a longer, expressive ease into the final position without feeling abrupt.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
     },
     "playful-motion-function-fast": {
-      "type": "object",
       "description": "Playful motion (spatial) fast timing curve. Use for quick movement that still feels springy and characterful—snappy, but not rigid.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
+    },
+    "playful-motion-duration": {
+      "$ref": "#/definitions/group:playful-motion-duration"
     },
     "playful-motion-duration-default": {
-      "type": "object",
       "description": "Playful motion (spatial) default duration. Pairs with the playful motion default curve for common movement transitions.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "playful-motion-duration-slow": {
-      "type": "object",
       "description": "Playful motion (spatial) slow duration. Pairs with the playful motion slow curve for larger or more prominent movement transitions.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "playful-motion-duration-fast": {
-      "type": "object",
       "description": "Playful motion (spatial) fast duration. Pairs with the playful motion fast curve for quick spatial transitions that should still feel expressive.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
+    },
+    "playful-fx": {
+      "$ref": "#/definitions/group:playful-fx"
+    },
+    "playful-fx-function": {
+      "$ref": "#/definitions/group:playful-fx-function"
     },
     "playful-fx-function-default": {
-      "type": "object",
       "description": "Playful effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
     },
     "playful-fx-function-slow": {
-      "type": "object",
       "description": "Playful effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and deliberate without bounce.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
     },
     "playful-fx-function-fast": {
-      "type": "object",
       "description": "Playful effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive but still smooth.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
+    },
+    "playful-fx-duration": {
+      "$ref": "#/definitions/group:playful-fx-duration"
     },
     "playful-fx-duration-default": {
-      "type": "object",
       "description": "Playful effects (non-spatial) default duration. Pairs with the playful effects default curve for common fades and visual effect transitions.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "playful-fx-duration-slow": {
-      "type": "object",
       "description": "Playful effects (non-spatial) slow duration. Pairs with the playful effects slow curve for more noticeable fades or effect changes.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "playful-fx-duration-fast": {
-      "type": "object",
       "description": "Playful effects (non-spatial) fast duration. Pairs with the playful effects fast curve for subtle, quick visual updates.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
+    },
+    "calm": {
+      "$ref": "#/definitions/group:calm"
+    },
+    "calm-motion": {
+      "$ref": "#/definitions/group:calm-motion"
+    },
+    "calm-motion-function": {
+      "$ref": "#/definitions/group:calm-motion-function"
     },
     "calm-motion-function-default": {
-      "type": "object",
       "description": "Calm motion (spatial) timing curve. Use for movement and layout-related transitions when you want a standard, stable feel with minimal flourish.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
     },
     "calm-motion-function-slow": {
-      "type": "object",
       "description": "Calm motion (spatial) timing curve for slow movement. The curve is consistent across speeds; use the slow duration to make the transition feel more deliberate.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
     },
     "calm-motion-function-fast": {
-      "type": "object",
       "description": "Calm motion (spatial) timing curve for fast movement. The curve is consistent across speeds; use the fast duration for snappier, standard motion.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
+    },
+    "calm-motion-duration": {
+      "$ref": "#/definitions/group:calm-motion-duration"
     },
     "calm-motion-duration-default": {
-      "type": "object",
       "description": "Calm motion (spatial) default duration. Pairs with the calm motion curve for common movement transitions.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "calm-motion-duration-slow": {
-      "type": "object",
       "description": "Calm motion (spatial) slow duration. Pairs with the calm motion curve for larger or more prominent movement transitions that should feel steady and unhurried.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "calm-motion-duration-fast": {
-      "type": "object",
       "description": "Calm motion (spatial) fast duration. Pairs with the calm motion curve for quick, standard movement transitions.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
+    },
+    "calm-fx": {
+      "$ref": "#/definitions/group:calm-fx"
+    },
+    "calm-fx-function": {
+      "$ref": "#/definitions/group:calm-fx-function"
     },
     "calm-fx-function-default": {
-      "type": "object",
       "description": "Calm effects (non-spatial) default timing curve. Use for opacity, color, shadow, blur, and other visual effects where overshoot is not appropriate.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
     },
     "calm-fx-function-slow": {
-      "type": "object",
       "description": "Calm effects (non-spatial) slow timing curve. Use for slower fades and effect changes that should feel smooth and restrained.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
     },
     "calm-fx-function-fast": {
-      "type": "object",
       "description": "Calm effects (non-spatial) fast timing curve. Use for quick effect transitions that should feel responsive without drawing attention.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cubicBezierToken"
         }
-      }
+      ]
+    },
+    "calm-fx-duration": {
+      "$ref": "#/definitions/group:calm-fx-duration"
     },
     "calm-fx-duration-default": {
-      "type": "object",
       "description": "Calm effects (non-spatial) default duration. Pairs with the calm effects default curve for common fades and visual effect transitions.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "calm-fx-duration-slow": {
-      "type": "object",
       "description": "Calm effects (non-spatial) slow duration. Pairs with the calm effects slow curve for more noticeable fades or effect changes.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     },
     "calm-fx-duration-fast": {
-      "type": "object",
       "description": "Calm effects (non-spatial) fast duration. Pairs with the calm effects fast curve for subtle, quick visual updates.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/transitionValue"
-        },
-        "type": {
-          "const": "transition"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/durationToken"
         }
-      }
+      ]
     }
   }
 }

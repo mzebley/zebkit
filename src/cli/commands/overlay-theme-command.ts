@@ -105,7 +105,7 @@ async function promptOverlayFields(
       default: current?.destinationPath ?? '',
     },
     {
-      type: 'list',
+      type: 'select',
       name: 'fontsStrategy',
       message: 'Google Fonts strategy:',
       choices: FONT_STRATEGY_CHOICES,
@@ -201,7 +201,7 @@ async function resolveOverlay(
   }
   const { selected } = await deps.prompt([
     {
-      type: 'list',
+      type: 'select',
       name: 'selected',
       message: `Which overlay to ${action}?`,
       choices: overlays.map((o) => o.themeName),
@@ -350,7 +350,7 @@ export async function runOverlayDefault(deps: OverlayThemeCommandDeps): Promise<
     if (overlays.length > 0) {
       const res = await deps.prompt([
         {
-          type: 'list',
+          type: 'select',
           name: 'action',
           message: 'What would you like to do?',
           choices: [

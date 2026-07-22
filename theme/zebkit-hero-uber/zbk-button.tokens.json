@@ -1,193 +1,197 @@
 {
   "ink": {
-    "value": "{color.global-white}",
-    "type": "color",
-    "description": "Default button label color — white on the Uber black button."
+    "$value": "{color.global-white}",
+    "$type": "color",
+    "$description": "Default button label color — white on the Uber black button."
   },
   "ink-hover": {
-    "value": "{color.global-white}",
-    "type": "color",
-    "description": "Label color when hovered."
+    "$value": "{color.global-white}",
+    "$type": "color",
+    "$description": "Label color when hovered."
   },
   "ink-active": {
-    "value": "{color.global-white}",
-    "type": "color",
-    "description": "Label color when active or pressed."
+    "$value": "{color.global-white}",
+    "$type": "color",
+    "$description": "Label color when active or pressed."
   },
   "ink-disabled": {
-    "value": "{disabled.ink}",
-    "type": "color",
-    "description": "Label color for disabled buttons."
+    "$value": "{disabled.ink}",
+    "$type": "color",
+    "$description": "Label color for disabled buttons."
   },
   "canvas": {
-    "value": "{action.canvas}",
-    "type": "color",
-    "description": "Default button background — Uber black."
+    "$value": "{action.canvas}",
+    "$type": "color",
+    "$description": "Default button background — Uber black."
   },
   "canvas-hover": {
-    "value": "{action.canvas-muted}",
-    "type": "color",
-    "description": "Background for hover state — Base button-primary-hover."
+    "$value": "{action.canvas-muted}",
+    "$type": "color",
+    "$description": "Background for hover state — Base button-primary-hover."
   },
   "canvas-active": {
-    "value": "{action.canvas-subtle}",
-    "type": "color",
-    "description": "Background for active/pressed state — Base button-primary-active."
+    "$value": "{action.canvas-subtle}",
+    "$type": "color",
+    "$description": "Background for active/pressed state — Base button-primary-active."
   },
   "canvas-disabled": {
-    "value": "{disabled.canvas}",
-    "type": "color",
-    "description": "Background for disabled buttons."
+    "$value": "{disabled.canvas}",
+    "$type": "color",
+    "$description": "Background for disabled buttons."
   },
   "border-color": {
-    "value": "{action.canvas}",
-    "type": "color",
-    "description": "Default button border color."
+    "$value": "{action.canvas}",
+    "$type": "color",
+    "$description": "Default button border color."
   },
   "border-color-hover": {
-    "value": "{action.canvas-muted}",
-    "type": "color",
-    "description": "Border color on hover."
+    "$value": "{action.canvas-muted}",
+    "$type": "color",
+    "$description": "Border color on hover."
   },
   "border-color-active": {
-    "value": "{action.canvas-subtle}",
-    "type": "color",
-    "description": "Border color when the button is selected/active."
+    "$value": "{action.canvas-subtle}",
+    "$type": "color",
+    "$description": "Border color when the button is selected/active."
   },
   "border-color-disabled": {
-    "value": "{disabled.border}",
-    "type": "color",
-    "description": "Border color for disabled buttons."
+    "$value": "{disabled.border}",
+    "$type": "color",
+    "$description": "Border color for disabled buttons."
   },
   "border-width": {
-    "value": "0px",
-    "type": "borderWidth",
-    "description": "Base border width — Uber filled button is borderless."
+    "$value": "0px",
+    "$type": "dimension",
+    "$description": "Base border width — Uber filled button is borderless."
   },
   "border-style": {
-    "value": "{border.style}",
-    "type": "borderStyle",
-    "description": "Border style for standard buttons."
+    "$value": "{border.style}",
+    "$type": "strokeStyle",
+    "$description": "Border style for standard buttons."
   },
   "border-radius": {
-    "value": "{border.radius-md}",
-    "type": "borderRadius",
-    "description": "Corner radius — Base button shape (8px rounded rectangle)."
+    "$value": "{border.radius-md}",
+    "$type": "dimension",
+    "$description": "Corner radius — Base button shape (8px rounded rectangle)."
   },
   "font-family": {
-    "value": "{font-family.interface}",
-    "type": "fontFamily",
-    "description": "Font family for button labels."
+    "$value": "{font-family.interface}",
+    "$type": "fontFamily",
+    "$description": "Font family for button labels."
   },
   "font-size": {
-    "value": "{font-size.md}",
-    "type": "fontSize",
-    "description": "Base font size for button labels — Uber's prominent 16px labels."
+    "$value": "{font-size.md}",
+    "$type": "cssDimension",
+    "$description": "Base font size for button labels — Uber's prominent 16px labels."
   },
   "font-weight": {
-    "value": "{font-weight.medium}",
-    "type": "fontWeight",
-    "description": "Font weight for button labels — Base label-medium (Medium 500)."
+    "$value": "{font-weight.medium}",
+    "$type": "fontWeight",
+    "$description": "Font weight for button labels — Base label-medium (Medium 500)."
   },
   "line-height": {
-    "value": "1.5",
-    "type": "lineHeight",
-    "description": "Base line height for buttons."
+    "$value": 1.5,
+    "$type": "number",
+    "$description": "Base line height for buttons."
   },
   "letter-spacing": {
-    "value": "0",
-    "type": "letterSpacing",
-    "description": "Letter spacing for button labels — Base uses neutral tracking."
+    "$value": "0",
+    "$type": "cssDimension",
+    "$description": "Letter spacing for button labels — Base uses neutral tracking."
   },
   "text-transform": {
-    "value": "none",
-    "type": "textTransform",
-    "description": "Text transform for button labels."
+    "$value": "none",
+    "$type": "textTransform",
+    "$description": "Text transform for button labels."
   },
   "text-decoration": {
-    "value": "none",
-    "type": "textDecoration",
-    "description": "Text decoration for button labels."
+    "$value": "none",
+    "$type": "textDecoration",
+    "$description": "Text decoration for button labels."
   },
   "text-align": {
-    "value": "center",
-    "type": "textAlignment",
-    "description": "Text alignment for button content."
+    "$value": "center",
+    "$type": "textAlignment",
+    "$description": "Text alignment for button content."
   },
   "padding-inline": {
-    "value": "{spacing.1}",
-    "type": "spacing",
-    "description": "Inline (horizontal) padding for standard buttons."
+    "$value": "{spacing.1}",
+    "$type": "dimension",
+    "$description": "Inline (horizontal) padding for standard buttons."
   },
   "padding-block": {
-    "value": "{spacing.05}",
-    "type": "spacing",
-    "description": "Block (vertical) padding (min-height drives the 48px Uber target)."
+    "$value": "{spacing.05}",
+    "$type": "dimension",
+    "$description": "Block (vertical) padding (min-height drives the 48px Uber target)."
   },
   "gap": {
-    "value": "{spacing.05}",
-    "type": "spacing",
-    "description": "Gap between button icon and label."
+    "$value": "{spacing.05}",
+    "$type": "dimension",
+    "$description": "Gap between button icon and label."
   },
   "group-gap": {
-    "value": "{spacing.05}",
-    "type": "spacing",
-    "description": "Gap between buttons when rendered in a group."
+    "$value": "{spacing.05}",
+    "$type": "dimension",
+    "$description": "Gap between buttons when rendered in a group."
   },
   "justify-content": {
-    "value": "center",
-    "type": "flex",
-    "description": "Main axis alignment for button contents."
+    "$value": "center",
+    "$type": "flex",
+    "$description": "Main axis alignment for button contents."
   },
   "min-height": {
-    "value": "48px",
-    "type": "sizing",
-    "description": "Minimum height — Uber's tall, tappable buttons (48px)."
+    "$value": "48px",
+    "$type": "dimension",
+    "$description": "Minimum height — Uber's tall, tappable buttons (48px)."
   },
   "min-width": {
-    "value": "44px",
-    "type": "sizing",
-    "description": "Minimum button width."
+    "$value": "44px",
+    "$type": "dimension",
+    "$description": "Minimum button width."
   },
   "icon-size": {
-    "value": "1.25rem",
-    "type": "sizing",
-    "description": "Default icon size within buttons — Base 20px icon."
+    "$value": "1.25rem",
+    "$type": "cssDimension",
+    "$description": "Default icon size within buttons — Base 20px icon."
   },
   "focus-color": {
-    "value": "{focus.color}",
-    "type": "color",
-    "description": "Outline color for focus state."
+    "$value": "{focus.color}",
+    "$type": "color",
+    "$description": "Outline color for focus state."
   },
   "focus-width": {
-    "value": "{focus.width}",
-    "type": "borderWidth",
-    "description": "Outline width for focus state."
+    "$value": "{focus.width}",
+    "$type": "dimension",
+    "$description": "Outline width for focus state."
   },
   "focus-offset": {
-    "value": "{focus.offset}",
-    "type": "spacing",
-    "description": "Outline offset for focus state."
+    "$value": "{focus.offset}",
+    "$type": "dimension",
+    "$description": "Outline offset for focus state."
   },
   "box-shadow": {
-    "value": "none",
-    "type": "boxShadow",
-    "description": "Default box shadow — Uber buttons are flat."
+    "$value": "none",
+    "$type": "shadow",
+    "$description": "Default box shadow — Uber buttons are flat."
   },
   "box-shadow-hover": {
-    "value": "none",
-    "type": "boxShadow",
-    "description": "Box shadow on hover."
+    "$value": "none",
+    "$type": "shadow",
+    "$description": "Box shadow on hover."
   },
   "transition-duration": {
-    "value": "150ms",
-    "type": "transition",
-    "description": "Duration for hover/active transitions.",
-    "a11y": true
+    "$value": "150ms",
+    "$type": "duration",
+    "$description": "Duration for hover/active transitions.",
+    "$extensions": {
+      "dev.zebkit": {
+        "a11y": true
+      }
+    }
   },
   "transition-timing-function": {
-    "value": "ease-in-out",
-    "type": "transition",
-    "description": "Timing function for button transitions."
+    "$value": "ease-in-out",
+    "$type": "cssEasingFunction",
+    "$description": "Timing function for button transitions."
   }
 }

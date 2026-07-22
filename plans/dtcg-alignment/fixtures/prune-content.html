@@ -1,0 +1,23 @@
+<!--
+  Fixed content fixture for the DTCG golden-baseline pruned build
+  (scripts/check-dtcg-baseline.ts). The pruned output must be a pure function of
+  the compiled CSS plus this file, so the fixture deliberately contains no
+  component custom-element tags and no component-library import specifier: either
+  signal would union the dist-dependent component-token list into the prune roots
+  and make the baseline depend on whether dist/ has been built.
+
+  Do not edit during the DTCG migration — changing this file changes the pruned
+  golden baseline.
+-->
+<main class="padding-1 align-items-center border-accent-primary">
+  <section class="padding-05 text-align-center">
+    <h1 class="margin-0">Baseline fixture</h1>
+    <p class="padding-025">
+      Utility classes above plus the custom-property references below seed the
+      prune candidate set and token roots.
+    </p>
+    <div style="color: var(--zbk-accent-primary-default); background: var(--zbk-app-background)">
+      token roots: --zbk-accent-primary-default --zbk-app-background --zbk-font-family-body
+    </div>
+  </section>
+</main>

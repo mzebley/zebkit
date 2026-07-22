@@ -5,17 +5,23 @@ import {
   FontSource,
   FontFallback,
   FontFaceObject,
+  serializeFontFamilyValue,
+  tokenA11y,
+  tokenFontMeta,
 } from "@definitions/tokens";
 import {
   FONT_FALLBACK_STACKS,
   FontFallbackCategory,
 } from "@definitions/font-fallbacks";
 import { a11yMap } from "@definitions/a11y-map";
-import { paletteMap } from "@definitions/palette-map";
 import {
-  tokenAliasMap,
-  areTokensTypesCompatible,
-} from "@definitions/token-maps";
+  buildTokenReferenceLookup,
+  isCompatibleReference,
+  parseTokenReference,
+  resolveTokenReferenceLookupId,
+  serializeTokenValueWithReferences,
+  tokenReferenceToCssVariable,
+} from "./token-references";
 import { DEFAULT_LAYER, LAYER_ORDER, LayerName } from "@definitions/layers";
 import { ZEBKIT_PREFIX } from "@config";
 
@@ -33,96 +39,40 @@ function validateCssReferencesExist(
   type: AllowedTokenTypes | string,
   globalPrefix: string,
   availableTokens: { [key: string]: TokenInterface },
-  errors?: string[]
+  errors?: string[],
+  referenceLookup = buildTokenReferenceLookup(availableTokens),
+  moduleId?: string
 ): boolean {
   const report = (message: string) => {
     console.error(chalk.red(message));
     errors?.push(message);
   };
-  const tokenPath = value.slice(1, -1).split(".");
-  if (tokenPath.length !== 2) {
+  const reference = parseTokenReference(value);
+  if (!reference) {
     report(
-      `Invalid token reference: ${value}. References must be exactly '{module.entry}' (two dot-separated segments).`
+      `Invalid token reference: ${value}. References must use non-empty dot-separated identifier segments.`
     );
     return false;
   }
-  const parent = tokenPath[0] as string;
-  const child = tokenPath[1] as string;
-  let valid = false;
-  let invalidType = false;
+  const lookupId = resolveTokenReferenceLookupId(reference, referenceLookup, moduleId);
+  const target = lookupId ? referenceLookup.get(lookupId) : undefined;
 
-  if (availableTokens.hasOwnProperty(`${globalPrefix}-${parent}`)) {
-    if (availableTokens[`${globalPrefix}-${parent}`].hasOwnProperty(child)) {
-      const tokenType =
-        availableTokens[`${globalPrefix}-${parent}`][child].type;
-      if (areTokensTypesCompatible(type as AllowedTokenTypes, tokenType as AllowedTokenTypes)) {
-        valid = true;
-      } else {
-        invalidType = true;
-        report(
-          `Invalid token reference: ${value} (type '${type}' cannot reference '${tokenType}').`
-        );
-      }
-    }
-  }
-
-  if (!valid && !invalidType) {
-    const paletteKeyDirect = child;
-    const paletteKeyNested = `${parent}-${child}`;
-    const paletteHit =
-      typeof child === "string" &&
-      typeof parent === "string" &&
-      (paletteMap.includes(paletteKeyDirect) || paletteMap.includes(paletteKeyNested));
-
-    if (paletteHit) {
-      if (type === "color" || type === "borderColor") {
-        valid = true;
-      } else {
-        invalidType = true;
-        report(
-          `Invalid token reference: ${value}. Token type '${type}' is not a color-compatible token.`
-        );
-      }
-    }
-  }
-
-  if (!valid && !invalidType && tokenAliasMap.hasOwnProperty(parent)) {
-    if (typeof tokenAliasMap[parent] === "string") {
-      const tokenType = tokenAliasMap[parent] as AllowedTokenTypes;
-      if (areTokensTypesCompatible(type as AllowedTokenTypes, tokenType as AllowedTokenTypes)) {
-        valid = true;
-      } else {
-        invalidType = true;
-        report(
-          `Invalid token reference: ${value}. Token type '${type}' does not match '${tokenType}'.`
-        );
-      }
-    } else if (
-      typeof tokenAliasMap[parent] === "object" &&
-      tokenAliasMap[parent] !== null &&
-      tokenAliasMap[parent].hasOwnProperty(child)
-    ) {
-      const tokenType = (
-        tokenAliasMap[parent] as Record<string, AllowedTokenTypes>
-      )[child];
-      if (areTokensTypesCompatible(type as AllowedTokenTypes, tokenType as AllowedTokenTypes)) {
-        valid = true;
-      } else {
-        invalidType = true;
-        report(
-          `Invalid token reference: ${value}. Token type '${type}' does not match '${tokenType}'.`
-        );
-      }
-    }
-  }
-
-  if (!valid && !invalidType) {
+  // Closed-world resolution (I5): every reference must resolve against a real
+  // token module in the document. The former `tokenAliasMap` virtual targets
+  // (`font-weight.*`, `tracking.*`, `letter-spacing.*`) were retired in Phase 2e
+  // — font-weight/letter-spacing are real modules and `{tracking.*}` was
+  // repointed to `{letter-spacing.*}`.
+  if (!target) {
     report(
       `Invalid token reference: ${value}. Ensure the target token or palette color exists.`
     );
+    return false;
   }
-
-  return valid;
+  if (!isCompatibleReference(type as AllowedTokenTypes, target.entry.$type)) {
+    report(`Invalid token reference: ${value} (type '${type}' cannot reference '${target.entry.$type}').`);
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -137,7 +87,9 @@ export function convertDotNotation(
   globalPrefix: string,
   availableTokens: { [key: string]: TokenInterface },
   byPass = false,
-  errors?: string[]
+  errors?: string[],
+  referenceLookup = buildTokenReferenceLookup(availableTokens),
+  moduleId?: string
 ): string {
   if (
     typeof value === "string" &&
@@ -146,11 +98,17 @@ export function convertDotNotation(
   ) {
     const valid =
       byPass ||
-      validateCssReferencesExist(value, type, globalPrefix, availableTokens, errors);
+      validateCssReferencesExist(value, type, globalPrefix, availableTokens, errors, referenceLookup, moduleId);
 
     if (valid) {
-      const variableName = value.slice(1, -1).replace(/\./g, "-");
-      return `var(--${globalPrefix}-${variableName})`;
+      const reference = parseTokenReference(value);
+      const lookupId = reference
+        ? resolveTokenReferenceLookupId(reference, referenceLookup, moduleId)
+        : undefined;
+      const cssReference = lookupId ?? (byPass ? reference : undefined);
+      return cssReference
+        ? `var(${tokenReferenceToCssVariable(cssReference, globalPrefix)})`
+        : "undefined";
     }
     return "undefined";
   }
@@ -178,6 +136,8 @@ export interface CssVarGenerationOptions {
    * Defaults to the emitted `tokens`.
    */
   referenceTokens?: { [key: string]: TokenInterface };
+  /** Emit declarations outside cascade layers (palette overrides must outrank unlayered palette SCSS). */
+  unlayered?: boolean;
 }
 
 /** Structured `<head>` requirements for `link`/`preload` font strategies, used to write the
@@ -216,9 +176,11 @@ export const convertTokensToCssVars = (
     fontStrategy = "import",
     assetFilePath,
     referenceTokens,
+    unlayered = false,
   } = options;
   // References resolve against the full theme when emitting a subset; otherwise the emitted set.
   const refTokens = (referenceTokens ?? tokens) as Record<string, TokenInterface>;
+  const referenceLookup = buildTokenReferenceLookup(refTokens);
   const perLayer: Record<LayerName, string> = {
     theme: "",
     base: "",
@@ -233,16 +195,11 @@ export const convertTokensToCssVars = (
   const errors: string[] = [];
 
   Object.entries(tokens).forEach(([key, tokenProperties]) => {
+    const moduleId = key.replace(/^zbk-/, '');
     const layer = layers[key] ?? defaultLayer;
     let currentStyles = `${selector} {\n`;
     Object.entries(tokenProperties).forEach(([propertyKey, item]) => {
       const cssVariableKey = join(key, propertyKey);
-
-      // Build-time settings (e.g. fluid type-scale controls) are consumed during
-      // compilation and must never be emitted as CSS variables.
-      if (item && typeof item === "object" && "type" in item && item.type === "setting") {
-        return;
-      }
 
       // Font-family tokens get bespoke handling: normalize the shape, append the fallback stack,
       // and emit the relevant loading artifact (Google request or `@font-face`) based on `source`.
@@ -260,7 +217,9 @@ export const convertTokensToCssVars = (
             ZEBKIT_PREFIX,
             refTokens,
             false,
-            errors
+            errors,
+            referenceLookup,
+            moduleId
           );
         } else {
           cssVariableValue = applyFallback(rawValue, norm.fallback);
@@ -289,32 +248,36 @@ export const convertTokensToCssVars = (
         return;
       }
 
-      if (item && typeof item === "object" && "value" in item) {
-        let cssVariableValue: string | number = item.value as string | number;
-
-        cssVariableValue = convertDotNotation(
-          String(item.value),
-          item.type as AllowedTokenTypes,
+      if (item && typeof item === "object" && "$value" in item) {
+        // Structured dimensions serialize to their canonical CSS string here;
+        // plain strings (including references) and numbers pass through.
+        let cssVariableValue: string | number = convertDotNotation(
+          serializeTokenValueWithReferences(item.$value, item.$type as AllowedTokenTypes, {
+            referenceLookup,
+            prefix: ZEBKIT_PREFIX,
+            errors,
+            moduleId,
+          }),
+          item.$type as AllowedTokenTypes,
           ZEBKIT_PREFIX,
           refTokens,
           false,
-          errors
+          errors,
+          referenceLookup,
+          moduleId
         );
 
-        const baseValue = String(cssVariableValue);
-
-        if ("type" in item && (item.type === "rootFontSize" || item.type === "rootSize")) {
-          // Pre-resolved by `resolveTypeScale` / `resolveSpaceScale` (fluid clamp or static
-          // value, with a11y modifiers already baked in). Emit the value verbatim.
-          cssVariableValue = baseValue;
-        } else if ("a11y" in item && "type" in item) {
-          let a11yValue = item["a11y"];
-          if (typeof a11yValue === "boolean") {
-            a11yValue = a11yMap[item.type as string];
-          }
-          if (a11yValue) {
-            cssVariableValue = `calc(${cssVariableValue} * var(${a11yValue}))`;
-          }
+        // Entries pre-resolved by `resolveTypeScale` / `resolveSpaceScale` carry no
+        // `$extensions` (a11y modifiers are already baked into their values), so they
+        // fall through this wrap untouched. `a11y: true` resolves the default modifier
+        // for the token's type; dimension-family entries name their modifier variable
+        // explicitly (the collapsed `$type` no longer identifies one).
+        let a11yValue = tokenA11y(item);
+        if (typeof a11yValue === "boolean") {
+          a11yValue = a11yValue ? a11yMap[item.$type as string] : undefined;
+        }
+        if (a11yValue) {
+          cssVariableValue = `calc(${cssVariableValue} * var(${a11yValue}))`;
         }
 
         currentStyles += `--${cssVariableKey}: ${cssVariableValue};\n`;
@@ -334,12 +297,12 @@ export const convertTokensToCssVars = (
   let css = "";
   if (importLines.length) css += `${importLines.join("\n")}\n`;
   if (faceBlocks.length) css += `${faceBlocks.join("\n")}\n`;
-  css += "@layer theme, base, components, utilities;\n\n";
+  if (!unlayered) css += "@layer theme, base, components, utilities;\n\n";
 
   for (const layer of LAYER_ORDER) {
     const body = perLayer[layer];
     if (!body) continue;
-    css += `@layer ${layer} {\n${body}}\n\n`;
+    css += unlayered ? `${body}\n` : `@layer ${layer} {\n${body}}\n\n`;
   }
 
   return {
@@ -370,21 +333,29 @@ function isFontToken(item: unknown): boolean {
   return (
     !!item &&
     typeof item === "object" &&
-    "type" in item &&
-    (item as { type?: unknown }).type === "fontFamily"
+    "$type" in item &&
+    (item as { $type?: unknown }).$type === "fontFamily"
   );
 }
 
-/** Reads a font token's fields into a source-agnostic shape, defaulting `source` to `system`. */
+/** Reads a font token's fields (loading metadata lives under `$extensions["dev.zebkit"].font`)
+ * into a source-agnostic shape, defaulting `source` to `system`. */
 function normalizeFontToken(item: Record<string, unknown>): NormalizedFontToken {
+  const font = tokenFontMeta(item) ?? {};
   return {
-    value: String(item.value ?? ""),
-    source: (item.source as FontSource) ?? "system",
-    fallback: item.fallback as FontFallback | undefined,
-    weights: item.weights as NormalizedFontToken["weights"],
-    styles: item.styles as NormalizedFontToken["styles"],
-    faces: item.faces as FontFaceObject[] | undefined,
-    display: item.display as string | undefined,
+    value: typeof item.$value === 'string' && parseTokenReference(item.$value)
+      ? item.$value
+      : Array.isArray(item.$value) && item.$value.every((family) => typeof family === 'string')
+        ? serializeFontFamilyValue(item.$value)
+        : typeof item.$value === 'string'
+          ? serializeFontFamilyValue([item.$value])
+          : String(item.$value ?? ""),
+    source: (font.source as FontSource) ?? "system",
+    fallback: font.fallback as FontFallback | undefined,
+    weights: font.weights as NormalizedFontToken["weights"],
+    styles: font.styles as NormalizedFontToken["styles"],
+    faces: font.faces as FontFaceObject[] | undefined,
+    display: font.display as string | undefined,
   };
 }
 

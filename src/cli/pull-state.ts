@@ -5,8 +5,10 @@ import {
   extractVariantOverrideEntries,
   isVariantOverrideFile,
 } from '../scripts/tokens/compile-variant-helpers';
+import { fromDtcgDocument, toDtcgDocument } from '../scripts/tokens/dtcg-document';
+import type { TokenInterface } from '../definitions/tokens';
 
-export const PULL_STATE_VERSION = 1;
+export const PULL_STATE_VERSION = 2;
 export const PULL_STATE_RELATIVE_PATH = '.zebkit/pull-state.json';
 
 export type TokenModuleManifestEntry = { key: string; file: string };
@@ -14,7 +16,18 @@ export type TokenModuleManifestEntry = { key: string; file: string };
 export type PullState = {
   stateVersion: typeof PULL_STATE_VERSION;
   basePreset: string;
-  modules: Record<string, { file: string; tokens: Record<string, string> }>;
+  modules: Record<
+    string,
+    {
+      file: string;
+      /** DTCG token paths (`group.child`, including terminal `$root`) to shipped-value hashes. */
+      tokens: Record<string, string>;
+      /** Structural group paths. Empty groups have no other state, so they must be explicit. */
+      groups: string[];
+      /** JSON-pointer paths to atomic group-metadata values. */
+      groupMetadata: Record<string, string>;
+    }
+  >;
   variants?: Record<string, { file: string; variants: Record<string, string> }>;
 };
 
@@ -93,16 +106,480 @@ export function hashToken(value: unknown): string {
   return createHash('sha256').update(stableJson(value)).digest('hex');
 }
 
-/** Token override files contain only entries with a concrete authorable value. */
+const GROUP_METADATA_KEYS = ['$type', '$description', '$deprecated', '$extensions'] as const;
+
+type StructuralValue = {
+  path: string[];
+  value: unknown;
+};
+
+type GroupMetadataValue = StructuralValue & {
+  groupPath: string[];
+};
+
+type StructuralTokenDocument = {
+  tokens: Map<string, StructuralValue>;
+  groups: Map<string, string[]>;
+  groupMetadata: Map<string, GroupMetadataValue>;
+};
+
+function tokenPathKey(pathSegments: string[]): string {
+  return pathSegments.join('.');
+}
+
+function jsonPointer(pathSegments: string[]): string {
+  return `/${pathSegments
+    .map((segment) => segment.replace(/~/g, '~0').replace(/\//g, '~1'))
+    .join('/')}`;
+}
+
+function fromJsonPointer(pointer: string): string[] {
+  if (!pointer.startsWith('/')) throw new Error(`Invalid pull-state metadata path '${pointer}'.`);
+  return pointer
+    .slice(1)
+    .split('/')
+    .map((segment) => segment.replace(/~1/g, '/').replace(/~0/g, '~'));
+}
+
+function isTokenObject(value: unknown): value is Record<string, unknown> {
+  return isRecord(value) && Object.prototype.hasOwnProperty.call(value, '$value');
+}
+
+function addMetadataValues(
+  values: Map<string, GroupMetadataValue>,
+  groupPath: string[],
+  propertyPath: string[],
+  value: unknown
+): void {
+  if (isRecord(value) && Object.keys(value).length > 0) {
+    for (const [key, child] of Object.entries(value)) {
+      addMetadataValues(values, groupPath, [...propertyPath, key], child);
+    }
+    return;
+  }
+
+  const pathSegments = [...groupPath, ...propertyPath];
+  values.set(jsonPointer(pathSegments), {
+    path: pathSegments,
+    groupPath: [...groupPath],
+    value,
+  });
+}
+
+/** Split a DTCG document into independently reconcilable token, group, and metadata units. */
+function describeTokenDocument(document: Record<string, unknown>): StructuralTokenDocument {
+  const described: StructuralTokenDocument = {
+    tokens: new Map(),
+    groups: new Map(),
+    groupMetadata: new Map(),
+  };
+
+  const walkGroup = (group: Record<string, unknown>, groupPath: string[]) => {
+    if (groupPath.length > 0) described.groups.set(tokenPathKey(groupPath), [...groupPath]);
+
+    for (const metadataKey of GROUP_METADATA_KEYS) {
+      if (!Object.prototype.hasOwnProperty.call(group, metadataKey)) continue;
+      addMetadataValues(
+        described.groupMetadata,
+        groupPath,
+        [metadataKey],
+        group[metadataKey]
+      );
+    }
+
+    if (Object.prototype.hasOwnProperty.call(group, '$root')) {
+      const rootPath = [...groupPath, '$root'];
+      described.tokens.set(tokenPathKey(rootPath), {
+        path: rootPath,
+        value: group.$root,
+      });
+    }
+
+    for (const [key, value] of Object.entries(group)) {
+      if (key.startsWith('$')) continue;
+      const childPath = [...groupPath, key];
+      if (isTokenObject(value)) {
+        described.tokens.set(tokenPathKey(childPath), { path: childPath, value });
+      } else if (isRecord(value)) {
+        walkGroup(value, childPath);
+      }
+    }
+  };
+
+  walkGroup(document, []);
+  return described;
+}
+
+function hasOwnAtPath(root: Record<string, unknown>, pathSegments: string[]): boolean {
+  let current: unknown = root;
+  for (const segment of pathSegments) {
+    if (!isRecord(current) || !Object.prototype.hasOwnProperty.call(current, segment)) {
+      return false;
+    }
+    current = current[segment];
+  }
+  return true;
+}
+
+function valueAtPath(root: Record<string, unknown>, pathSegments: string[]): unknown {
+  let current: unknown = root;
+  for (const segment of pathSegments) {
+    if (!isRecord(current) || !Object.prototype.hasOwnProperty.call(current, segment)) {
+      return undefined;
+    }
+    current = current[segment];
+  }
+  return current;
+}
+
+function defineOwn(record: Record<string, unknown>, key: string, value: unknown): void {
+  Object.defineProperty(record, key, {
+    value,
+    enumerable: true,
+    configurable: true,
+    writable: true,
+  });
+}
+
+function formatTokenPath(moduleKey: string, pathSegments: string[]): string {
+  return `${moduleKey}.${tokenPathKey(pathSegments)}`;
+}
+
+function shapeConflict(
+  moduleKey: string,
+  pathSegments: string[],
+  packageShape: 'token' | 'group',
+  projectShape: string
+): Error {
+  const tokenPath = formatTokenPath(moduleKey, pathSegments);
+  return new Error(
+    `Token shape conflict at '${tokenPath}': the package defines a ${packageShape}, ` +
+      `but the project file contains ${projectShape}. Remove or relocate '${tokenPath}' ` +
+      `and run zebkit pull again.`
+  );
+}
+
+function ensureGroupAtPath(
+  root: Record<string, unknown>,
+  pathSegments: string[],
+  moduleKey: string
+): { group: Record<string, unknown>; created: boolean } {
+  let group = root;
+  let created = false;
+  for (let index = 0; index < pathSegments.length; index += 1) {
+    const segment = pathSegments[index];
+    const traversed = pathSegments.slice(0, index + 1);
+    if (!Object.prototype.hasOwnProperty.call(group, segment)) {
+      const child: Record<string, unknown> = {};
+      defineOwn(group, segment, child);
+      group = child;
+      created = true;
+      continue;
+    }
+    const existing = group[segment];
+    if (!isRecord(existing) || isTokenObject(existing)) {
+      throw shapeConflict(
+        moduleKey,
+        traversed,
+        'group',
+        isTokenObject(existing) ? 'a token' : 'a non-object value'
+      );
+    }
+    group = existing;
+  }
+  return { group, created };
+}
+
+function setAtPath(
+  root: Record<string, unknown>,
+  pathSegments: string[],
+  value: unknown,
+  moduleKey: string,
+  expectedShape?: 'token'
+): void {
+  const parentPath = pathSegments.slice(0, -1);
+  const { group } = ensureGroupAtPath(root, parentPath, moduleKey);
+  const leaf = pathSegments[pathSegments.length - 1];
+  if (expectedShape === 'token' && Object.prototype.hasOwnProperty.call(group, leaf)) {
+    const existing = group[leaf];
+    if (!isTokenObject(existing)) {
+      throw shapeConflict(
+        moduleKey,
+        pathSegments,
+        'token',
+        isRecord(existing) ? 'a group' : 'a non-object value'
+      );
+    }
+  }
+  defineOwn(group, leaf, value);
+}
+
+function setMetadataAtPath(
+  root: Record<string, unknown>,
+  metadata: GroupMetadataValue,
+  value: unknown,
+  moduleKey: string
+): void {
+  const { group } = ensureGroupAtPath(root, metadata.groupPath, moduleKey);
+  const propertyPath = metadata.path.slice(metadata.groupPath.length);
+  let container = group;
+  for (let index = 0; index < propertyPath.length - 1; index += 1) {
+    const segment = propertyPath[index];
+    if (!Object.prototype.hasOwnProperty.call(container, segment)) {
+      const child: Record<string, unknown> = {};
+      defineOwn(container, segment, child);
+      container = child;
+      continue;
+    }
+    const existing = container[segment];
+    if (!isRecord(existing)) {
+      throw new Error(
+        `Token metadata shape conflict at '${formatTokenPath(moduleKey, [
+          ...metadata.groupPath,
+          ...propertyPath.slice(0, index + 1),
+        ])}': the package defines nested metadata, but the project file contains ` +
+          `a non-object value. Remove or relocate that metadata and run zebkit pull again.`
+      );
+    }
+    container = existing;
+  }
+  defineOwn(container, propertyPath[propertyPath.length - 1], value);
+}
+
+function deleteAtPath(root: Record<string, unknown>, pathSegments: string[]): void {
+  const parent = valueAtPath(root, pathSegments.slice(0, -1));
+  if (isRecord(parent)) delete parent[pathSegments[pathSegments.length - 1]];
+}
+
+function pruneEmptyMetadataContainers(
+  root: Record<string, unknown>,
+  metadata: GroupMetadataValue
+): void {
+  for (
+    let length = metadata.path.length - 1;
+    length > metadata.groupPath.length;
+    length -= 1
+  ) {
+    const containerPath = metadata.path.slice(0, length);
+    const container = valueAtPath(root, containerPath);
+    if (!isRecord(container) || Object.keys(container).length > 0) break;
+    deleteAtPath(root, containerPath);
+  }
+}
+
+function stateForDocument(document: Record<string, unknown>) {
+  const described = describeTokenDocument(document);
+  return {
+    tokens: Object.fromEntries(
+      [...described.tokens].map(([key, entry]) => [key, hashToken(entry.value)])
+    ),
+    groups: [...described.groups.keys()].sort((left, right) => left.localeCompare(right)),
+    groupMetadata: Object.fromEntries(
+      [...described.groupMetadata].map(([key, entry]) => [key, hashToken(entry.value)])
+    ),
+  };
+}
+
+function metadataFromStatePath(pointer: string): GroupMetadataValue {
+  const pathSegments = fromJsonPointer(pointer);
+  const metadataIndex = pathSegments.findIndex((segment) =>
+    (GROUP_METADATA_KEYS as readonly string[]).includes(segment)
+  );
+  if (metadataIndex < 0) {
+    throw new Error(`Invalid pull-state group metadata path '${pointer}'.`);
+  }
+  return {
+    path: pathSegments,
+    groupPath: pathSegments.slice(0, metadataIndex),
+    value: undefined,
+  };
+}
+
+type ModulePullState = PullState['modules'][string];
+
+function reconcileTokenModule(
+  moduleKey: string,
+  projectTokens: Record<string, unknown>,
+  currentTokens: Record<string, unknown>,
+  priorModule: ModulePullState | undefined,
+  summary: PullSyncSummary
+): boolean {
+  const current = describeTokenDocument(currentTokens);
+  let dirty = false;
+
+  // Token/group changes are intentionally surfaced as conflicts instead of
+  // guessing whether a project customization should be destroyed.
+  for (const groupPath of current.groups.values()) {
+    if (!hasOwnAtPath(projectTokens, groupPath)) continue;
+    const projectValue = valueAtPath(projectTokens, groupPath);
+    if (!isRecord(projectValue) || isTokenObject(projectValue)) {
+      throw shapeConflict(
+        moduleKey,
+        groupPath,
+        'group',
+        isTokenObject(projectValue) ? 'a token' : 'a non-object value'
+      );
+    }
+  }
+  for (const tokenEntry of current.tokens.values()) {
+    if (!hasOwnAtPath(projectTokens, tokenEntry.path)) continue;
+    const projectValue = valueAtPath(projectTokens, tokenEntry.path);
+    if (!isTokenObject(projectValue)) {
+      throw shapeConflict(
+        moduleKey,
+        tokenEntry.path,
+        'token',
+        isRecord(projectValue) ? 'a group' : 'a non-object value'
+      );
+    }
+  }
+
+  // Retire old leaves independently. Removing an untouched child must not be
+  // blocked by a customized sibling in the same group.
+  for (const [tokenKey, oldHash] of Object.entries(priorModule?.tokens ?? {})) {
+    if (current.tokens.has(tokenKey)) continue;
+    const tokenPath = tokenKey.split('.');
+    if (!hasOwnAtPath(projectTokens, tokenPath)) continue;
+    const projectValue = valueAtPath(projectTokens, tokenPath);
+    if (hashToken(projectValue) === oldHash) {
+      deleteAtPath(projectTokens, tokenPath);
+      summary.keysRemoved += 1;
+      dirty = true;
+    } else {
+      summary.preservedRetired.push(formatTokenPath(moduleKey, tokenPath));
+    }
+  }
+
+  for (const [metadataKey, oldHash] of Object.entries(
+    priorModule?.groupMetadata ?? {}
+  )) {
+    if (current.groupMetadata.has(metadataKey)) continue;
+    const metadata = metadataFromStatePath(metadataKey);
+    if (!hasOwnAtPath(projectTokens, metadata.path)) continue;
+    const projectValue = valueAtPath(projectTokens, metadata.path);
+    if (hashToken(projectValue) === oldHash) {
+      deleteAtPath(projectTokens, metadata.path);
+      pruneEmptyMetadataContainers(projectTokens, metadata);
+      summary.keysRemoved += 1;
+      dirty = true;
+    } else {
+      summary.preservedRetired.push(formatTokenPath(moduleKey, metadata.path));
+    }
+  }
+
+  // Remove retired group shells only after their untouched contents have been
+  // removed. Custom children or metadata keep the group and file alive.
+  for (const groupKey of [...(priorModule?.groups ?? [])]
+    .filter((key) => !current.groups.has(key))
+    .sort((left, right) => right.split('.').length - left.split('.').length)) {
+    const groupPath = groupKey.split('.');
+    const projectValue = valueAtPath(projectTokens, groupPath);
+    if (isRecord(projectValue) && !isTokenObject(projectValue) && Object.keys(projectValue).length === 0) {
+      deleteAtPath(projectTokens, groupPath);
+      dirty = true;
+    }
+  }
+
+  // Materialize shipped empty groups. Non-empty groups are created by their
+  // token or metadata leaves.
+  for (const groupPath of current.groups.values()) {
+    if (hasOwnAtPath(projectTokens, groupPath)) continue;
+    const hasContent =
+      [...current.tokens.values()].some((entry) =>
+        entry.path.length > groupPath.length &&
+        groupPath.every((segment, index) => entry.path[index] === segment)
+      ) ||
+      [...current.groupMetadata.values()].some((entry) =>
+        entry.groupPath.length >= groupPath.length &&
+        groupPath.every((segment, index) => entry.groupPath[index] === segment)
+      ) ||
+      [...current.groups.values()].some((entry) =>
+        entry.length > groupPath.length &&
+        groupPath.every((segment, index) => entry[index] === segment)
+      );
+    if (!hasContent) {
+      ensureGroupAtPath(projectTokens, groupPath, moduleKey);
+      summary.keysAdded += 1;
+      dirty = true;
+    }
+  }
+
+  for (const [tokenKey, currentEntry] of current.tokens) {
+    const exists = hasOwnAtPath(projectTokens, currentEntry.path);
+    const oldHash = priorModule?.tokens[tokenKey];
+    if (!exists) {
+      setAtPath(projectTokens, currentEntry.path, currentEntry.value, moduleKey, 'token');
+      summary.keysAdded += 1;
+      dirty = true;
+      continue;
+    }
+    const projectValue = valueAtPath(projectTokens, currentEntry.path);
+    if (
+      oldHash &&
+      hashToken(projectValue) === oldHash &&
+      hashToken(currentEntry.value) !== oldHash
+    ) {
+      setAtPath(projectTokens, currentEntry.path, currentEntry.value, moduleKey, 'token');
+      summary.defaultsUpdated += 1;
+      dirty = true;
+    }
+  }
+
+  for (const [metadataKey, currentEntry] of current.groupMetadata) {
+    const exists = hasOwnAtPath(projectTokens, currentEntry.path);
+    const oldHash = priorModule?.groupMetadata[metadataKey];
+    if (!exists) {
+      setMetadataAtPath(projectTokens, currentEntry, currentEntry.value, moduleKey);
+      summary.keysAdded += 1;
+      dirty = true;
+      continue;
+    }
+    const projectValue = valueAtPath(projectTokens, currentEntry.path);
+    if (
+      oldHash &&
+      hashToken(projectValue) === oldHash &&
+      hashToken(currentEntry.value) !== oldHash
+    ) {
+      setMetadataAtPath(projectTokens, currentEntry, currentEntry.value, moduleKey);
+      summary.defaultsUpdated += 1;
+      dirty = true;
+    }
+  }
+
+  return dirty;
+}
+
+/**
+ * Token override files contain entries with a concrete authorable value, plus
+ * the module's group-level `$extensions` member (fluid-scale controls) — the
+ * only authorable surface for build-time scale settings.
+ */
 export function getAuthorableTokenData(raw: Record<string, unknown>): Record<string, unknown> {
   return Object.fromEntries(
     Object.entries(raw).filter(
       ([key, token]) =>
-        !key.startsWith('_') &&
-        isRecord(token) &&
-        Object.prototype.hasOwnProperty.call(token, 'value')
+        (key === '$extensions' && isRecord(token)) ||
+        (!key.startsWith('_') &&
+          !key.startsWith('$') &&
+          isRecord(token) &&
+          Object.prototype.hasOwnProperty.call(token, '$value'))
     )
   );
+}
+
+/** Remove package-owned emission metadata while retaining authorable extensions. */
+function authoringRootExtensions(
+  extensions: Record<string, unknown> | undefined
+): Record<string, unknown> | undefined {
+  if (!extensions) return undefined;
+  const authorable = structuredClone(extensions);
+  const vendor = authorable['dev.zebkit'];
+  if (isRecord(vendor)) {
+    delete vendor.layer;
+    delete vendor.cssEmission;
+    if (Object.keys(vendor).length === 0) delete authorable['dev.zebkit'];
+  }
+  return Object.keys(authorable).length > 0 ? authorable : undefined;
 }
 
 export async function readTokenSnapshot(
@@ -133,7 +610,22 @@ export async function readTokenSnapshot(
     if (!isRecord(raw)) {
       throw new Error(`Bundled token module ${module.file} must contain a JSON object.`);
     }
-    const tokens = getAuthorableTokenData(raw);
+    // Restore runtime/authoring values before materializing the pull snapshot.
+    // This removes export-only generated scale values and restores raw CSS
+    // values/types from their DTCG provenance extensions. Palette documents use
+    // external emission for their defaults but remain authorable.
+    const { entries, meta } = fromDtcgDocument(raw, { mode: 'runtime' });
+    const authorableEntries = getAuthorableTokenData(entries) as TokenInterface;
+    const extensions = authoringRootExtensions(meta.extensions ?? meta.groupExtensions);
+    const tokens = toDtcgDocument(
+      authorableEntries,
+      {
+        ...meta,
+        extensions,
+        groupExtensions: extensions,
+      },
+      { mode: 'authoring' }
+    );
     if (Object.keys(tokens).length === 0) continue;
     modules[module.key] = {
       file: `${module.key}.tokens.json`,
@@ -260,9 +752,7 @@ export function createPullState(
         moduleKey,
         {
           file: module.file,
-          tokens: Object.fromEntries(
-            Object.entries(module.tokens).map(([tokenKey, value]) => [tokenKey, hashToken(value)])
-          ),
+          ...stateForDocument(module.tokens),
         },
       ])
     ),
@@ -317,7 +807,13 @@ export async function readPullState(
         isRecord(module) &&
         isSafeTokenFile(module.file) &&
         isRecord(module.tokens) &&
-        Object.values(module.tokens).every((hash) => typeof hash === 'string')
+        Object.values(module.tokens).every((hash) => typeof hash === 'string') &&
+        Array.isArray(module.groups) &&
+        module.groups.every((group) => typeof group === 'string') &&
+        isRecord(module.groupMetadata) &&
+        Object.entries(module.groupMetadata).every(
+          ([metadataPath, hash]) => metadataPath.startsWith('/') && typeof hash === 'string'
+        )
     );
   const validVariants =
     value?.variants === undefined ||
@@ -377,39 +873,14 @@ export async function syncTokenSnapshot(options: {
     }
     if (!exists) summary.filesAdded.push(currentModule.file);
 
-    let dirty = !exists;
-    for (const [tokenKey, currentValue] of Object.entries(currentModule.tokens)) {
-      if (!(tokenKey in projectTokens)) {
-        projectTokens[tokenKey] = currentValue;
-        summary.keysAdded += 1;
-        dirty = true;
-        continue;
-      }
-
-      const oldHash = priorState?.modules[moduleKey]?.tokens[tokenKey];
-      if (
-        oldHash &&
-        hashToken(projectTokens[tokenKey]) === oldHash &&
-        hashToken(currentValue) !== oldHash
-      ) {
-        projectTokens[tokenKey] = currentValue;
-        summary.defaultsUpdated += 1;
-        dirty = true;
-      }
-    }
-
-    for (const [tokenKey, oldHash] of Object.entries(
-      priorState?.modules[moduleKey]?.tokens ?? {}
-    )) {
-      if (tokenKey in currentModule.tokens || !(tokenKey in projectTokens)) continue;
-      if (hashToken(projectTokens[tokenKey]) === oldHash) {
-        delete projectTokens[tokenKey];
-        summary.keysRemoved += 1;
-        dirty = true;
-      } else {
-        summary.preservedRetired.push(`${moduleKey}.${tokenKey}`);
-      }
-    }
+    const reconciled = reconcileTokenModule(
+      moduleKey,
+      projectTokens,
+      currentModule.tokens,
+      priorState?.modules[moduleKey],
+      summary
+    );
+    const dirty = !exists || reconciled;
 
     if (dirty) await deps.writeJson(filePath, projectTokens, { spaces: 2 });
   }
@@ -423,15 +894,7 @@ export async function syncTokenSnapshot(options: {
       throw new Error(`Token file ${filePath} must contain a JSON object.`);
     }
 
-    for (const [tokenKey, oldHash] of Object.entries(oldModule.tokens)) {
-      if (!(tokenKey in projectTokens)) continue;
-      if (hashToken(projectTokens[tokenKey]) === oldHash) {
-        delete projectTokens[tokenKey];
-        summary.keysRemoved += 1;
-      } else {
-        summary.preservedRetired.push(`${moduleKey}.${tokenKey}`);
-      }
-    }
+    reconcileTokenModule(moduleKey, projectTokens, {}, oldModule, summary);
 
     if (Object.keys(projectTokens).length === 0) {
       await deps.remove(filePath);

@@ -5,239 +5,356 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "sizingValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+    "cssDimensionValue": {
+      "type": "string",
+      "minLength": 1,
       "examples": [
-        "{focus.width}",
+        "{h1.font-size}",
         "{h1.measure}",
+        "{h2.font-size}",
         "{h2.measure}",
+        "{h3.font-size}",
         "{h3.measure}",
+        "{h4.font-size}",
         "{h4.measure}",
+        "{h5.font-size}",
         "{h5.measure}",
+        "{h6.font-size}",
         "{h6.measure}",
+        "{lede.font-size}",
         "{lede.measure}",
+        "{list.font-size}",
         "{list.measure}",
+        "{p.font-size}",
         "{p.measure}",
-        "{spacing.card}",
-        "{spacing.mobile}",
-        "{spacing.mobile-lg}",
-        "{spacing.tablet}",
-        "{spacing.tablet-lg}",
-        "{spacing.desktop}",
-        "{spacing.desktop-lg}",
-        "{spacing.widescreen}",
-        "{spacing.section}",
-        "{spacing.aside}",
         "{text-measure.1}",
         "{text-measure.2}",
         "{text-measure.3}",
         "{text-measure.4}",
         "{text-measure.5}",
+        "{font-size.3xs}",
+        "{font-size.2xs}",
+        "{font-size.xs}",
+        "{font-size.sm}",
+        "{font-size.md}",
+        "{font-size.lg}",
+        "{font-size.xl}",
+        "{font-size.2xl}",
+        "{font-size.3xl}",
+        "{font-size.4xl}",
+        "{font-size.5xl}",
+        "{button.font-size}",
+        "{button.letter-spacing}",
+        "{button.margin-inline}",
+        "{button.margin-block}",
+        "{button.margin-inline-start}",
+        "{button.margin-inline-end}",
+        "{button.margin-block-start}",
+        "{button.margin-block-end}",
         "{button.width}",
-        "{button.min-width}",
         "{button.max-width}",
         "{button.height}",
-        "{button.min-height}",
         "{button.max-height}",
         "{button.icon-size}",
         "{button.icon-start-size}",
         "{button.icon-end-size}",
-        "{checkbox.control-width}",
-        "{checkbox.control-height}",
         "{checkbox.indicator-size}",
+        "{checkbox.font-size}",
+        "{checkbox.letter-spacing}",
+        "{input.font-size}",
+        "{input.letter-spacing}",
+        "{input.label-font-size}",
         "{input.icon-size}",
         "{input.width}",
         "{input.min-width}",
         "{input.max-width}",
-        "{input.min-height}",
-        "{pagination.min-width}",
-        "{pagination.min-height}",
+        "{pagination.font-size}",
         "{pagination.icon-size}",
-        "{radio.control-width}",
-        "{radio.control-height}",
+        "{radio.border-radius}",
         "{radio.indicator-size}",
+        "{radio.indicator-radius}",
+        "{radio.font-size}",
+        "{radio.letter-spacing}",
+        "{select.font-size}",
+        "{select.letter-spacing}",
+        "{select.label-font-size}",
         "{select.icon-size}",
         "{select.indicator-size}",
         "{select.width}",
         "{select.min-width}",
         "{select.max-width}",
-        "{select.min-height}",
+        "{textarea.font-size}",
+        "{textarea.letter-spacing}",
+        "{textarea.label-font-size}",
         "{textarea.width}",
         "{textarea.min-width}",
         "{textarea.max-width}",
-        "{textarea.min-block-size}",
-        "{toggle.track-width}",
-        "{toggle.track-height}",
-        "{toggle.thumb-size}",
-        "{tooltip.max-width}",
-        "{tooltip.arrow-size}",
-        "{tooltip.offset}"
+        "{toggle.thumb-radius}",
+        "{toggle.font-size}",
+        "{toggle.letter-spacing}",
+        "{tooltip.font-size}",
+        "{tooltip.letter-spacing}"
       ]
+    },
+    "cssDimensionToken": {
+      "type": "object",
+      "description": "Cards, sidebars, tight UI.",
+      "required": [
+        "$value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "$ref": "#/definitions/cssDimensionValue"
+        },
+        "$type": {
+          "const": "cssDimension"
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
     }
   },
   "properties": {
     "1": {
-      "type": "object",
       "description": "Cards, sidebars, tight UI.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
         }
-      }
+      ]
     },
     "2": {
-      "type": "object",
       "description": "Short text blocks, captions.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
         }
-      }
+      ]
     },
     "3": {
-      "type": "object",
       "description": "Base body content measure.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
         }
-      }
+      ]
     },
     "4": {
-      "type": "object",
       "description": "Articles, long-form content.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
         }
-      }
+      ]
     },
     "5": {
-      "type": "object",
       "description": "Articles, long-form content.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/sizingValue"
-        },
-        "type": {
-          "const": "sizing"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionToken"
         }
-      }
+      ]
+    },
+    "$type": {
+      "type": "string",
+      "enum": [
+        "dimension",
+        "cssDimension"
+      ]
+    },
+    "$description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
     }
   }
 }

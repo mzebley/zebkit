@@ -36,6 +36,7 @@ export const navigation: NavSection[] = [
     label: 'Foundations',
     items: [
       { label: 'Tokens — the strata', link: '/foundations/tokens' },
+      { label: 'Authoring tokens', link: '/foundations/token-authoring' },
       { label: 'Why tokens', link: '/foundations/why-tokens' },
       { label: 'Layers', link: '/foundations/layers' },
       { label: 'Overlay themes', link: '/foundations/theming' },
@@ -99,13 +100,6 @@ export const navigation: NavSection[] = [
   {
     label: 'Pruning',
     link: '/pruning'
-  },
-  {
-    label: 'Theming',
-    items: [
-      { label: 'Playground', link: '/theming/playground' },
-      { label: 'Export config', link: '/theming/export' }
-    ]
   },
   {
     label: 'For Agents',

@@ -1,84 +1,49 @@
 import { AllowedTokenTypes } from "@definitions/tokens";
 
 /**
- * Semantic aliases that map friendly token names to underlying token types.
- * These help keep overrides readable while still validating compatibility.
- * This also allows us to reference primitives as if they were tokens (IE,font-weight.bold, tracking.tighter) even though their values are hardcoded to the css and can't be changed by token updates
- */
-export const tokenAliasMap: {
-  [key: string]: AllowedTokenTypes | { [key: string]: AllowedTokenTypes };
-} = {
-  "font-weight": {
-    thin: "fontWeight",
-    extralight: "fontWeight",
-    light: "fontWeight",
-    normal: "fontWeight",
-    medium: "fontWeight",
-    semibold: "fontWeight",
-    bold: "fontWeight",
-    extrabold: "fontWeight",
-    black: "fontWeight",
-  },
-  tracking: {
-    tighter: "letterSpacing",
-    tight: "letterSpacing",
-    normal: "letterSpacing",
-    wide: "letterSpacing",
-    wider: "letterSpacing",
-  },
-  "letter-spacing": {
-    tighter: "letterSpacing",
-    tight: "letterSpacing",
-    normal: "letterSpacing",
-    wide: "letterSpacing",
-    wider: "letterSpacing",
-  },
-};
-
-/**
  * Token types that can be safely referenced from one another.
  */
 export const tokenCompatibilityMap: {
   [key in AllowedTokenTypes]: AllowedTokenTypes[];
 } = {
-  color: ["color", "borderColor"],
-  fontFamily: ["fontFamily"],
-  fontSize: ["fontSize", "rootFontSize"],
-  rootFontSize: ["rootFontSize"],
-  lineHeight: [
-    "lineHeight",
-    "dimension",
-    "spacing",
-    "sizing",
-    "rootSize",
-    "fontSize",
-    "rootFontSize",
-  ],
-  letterSpacing: ["letterSpacing"],
-  fontWeight: ["fontWeight"],
+  color: ["color", "cssColor"],
+  cssColor: ["cssColor", "color"],
+  fontFamily: ["fontFamily", "cssFontFamily"],
+  cssFontFamily: ["cssFontFamily", "fontFamily"],
+  fontWeight: ["fontWeight", "cssFontWeight"],
+  cssFontWeight: ["cssFontWeight", "fontWeight"],
   textDecoration: ["textDecoration"],
   textTransform: ["textTransform"],
   fontStyle: ["fontStyle"],
   textAlignment: ["textAlignment"],
-  sizing: ["sizing", "dimension", "spacing", "rootSize", "fontSize"],
-  spacing: ["spacing", "dimension", "sizing", "rootSize"],
-  dimension: ["dimension", "spacing", "sizing", "rootSize"],
-  rootSize: ["rootSize"],
+  // The dimension family: structured px/rem (`dimension`) and every other CSS
+  // length surface (`cssDimension`) reference each other freely — a semantic
+  // alias resolves through the fluid-scale resolvers, whose emitted values are
+  // clamp()/calc() strings regardless of which side authored the floor.
+  dimension: ["dimension", "cssDimension"],
+  cssDimension: ["cssDimension", "dimension"],
+  duration: ["duration", "cssDuration"],
+  cssDuration: ["cssDuration", "duration"],
   display: ["display"],
-  borderRadius: ["borderRadius", "sizing", "dimension", "spacing", "rootSize"],
-  borderWidth: ["borderWidth", "sizing", "dimension", "spacing", "rootSize"],
-  borderColor: ["borderColor", "color"],
-  borderStyle: ["borderStyle"],
-  utility: ["utility", "boolean"],
-  zIndex: ["zIndex"],
+  cursor: ["cursor"],
+  transform: ["transform"],
+  // The numbers family covers literal numbers plus property-level CSS such as
+  // `auto`, percentages, and calc()/var() expressions.
+  number: ["number", "cssNumber"],
+  cssNumber: ["cssNumber", "number"],
+  strokeStyle: ["strokeStyle", "cssStrokeStyle"],
+  cssStrokeStyle: ["cssStrokeStyle", "strokeStyle"],
   asset: ["asset"],
-  opacity: ["opacity"],
   content: ["content"],
   boolean: ["boolean"],
-  boxShadow: ["boxShadow"],
+  shadow: ["shadow", "cssShadow"],
+  cssShadow: ["cssShadow", "shadow"],
   flex: ["flex"],
-  setting: ["setting"],
-  transition: ["transition"]
+  resize: ["resize"],
+  // DTCG cubicBezier values and CSS easing functions share one destination.
+  cubicBezier: ["cubicBezier", "cssEasingFunction"],
+  cssEasingFunction: ["cssEasingFunction", "cubicBezier"],
+  transitionProperty: ["transitionProperty"],
 };
 
 /**

@@ -1,0 +1,674 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+@layer theme, base, components, utilities;
+@charset "UTF-8";
+@layer base {
+  .prose > h1, h1.prose {
+    font-family: var(--zbk-h1-font-family);
+    font-size: var(--zbk-h1-font-size);
+    font-weight: var(--zbk-h1-font-weight);
+    line-height: var(--zbk-h1-line-height);
+    letter-spacing: var(--zbk-h1-letter-spacing);
+    max-width: var(--zbk-h1-measure);
+    color: var(--zbk-h1-color);
+    font-style: var(--zbk-h1-font-style);
+    text-transform: var(--zbk-h1-text-transform);
+  }
+  .prose > * + h1 {
+    margin-top: var(--zbk-h1-spacing-before);
+  }
+  .prose > h1 + *, h1.prose + * {
+    margin-top: var(--zbk-h1-spacing-after);
+  }
+  .prose > h2, h2.prose {
+    font-family: var(--zbk-h2-font-family);
+    font-size: var(--zbk-h2-font-size);
+    font-weight: var(--zbk-h2-font-weight);
+    line-height: var(--zbk-h2-line-height);
+    letter-spacing: var(--zbk-h2-letter-spacing);
+    max-width: var(--zbk-h2-measure);
+    color: var(--zbk-h2-color);
+    font-style: var(--zbk-h2-font-style);
+    text-transform: var(--zbk-h2-text-transform);
+  }
+  .prose > * + h2 {
+    margin-top: var(--zbk-h2-spacing-before);
+  }
+  .prose > h2 + *, h2.prose + * {
+    margin-top: var(--zbk-h2-spacing-after);
+  }
+  .prose > h3, h3.prose {
+    font-family: var(--zbk-h3-font-family);
+    font-size: var(--zbk-h3-font-size);
+    font-weight: var(--zbk-h3-font-weight);
+    line-height: var(--zbk-h3-line-height);
+    letter-spacing: var(--zbk-h3-letter-spacing);
+    max-width: var(--zbk-h3-measure);
+    color: var(--zbk-h3-color);
+    font-style: var(--zbk-h3-font-style);
+    text-transform: var(--zbk-h3-text-transform);
+  }
+  .prose > * + h3 {
+    margin-top: var(--zbk-h3-spacing-before);
+  }
+  .prose > h3 + *, h3.prose + * {
+    margin-top: var(--zbk-h3-spacing-after);
+  }
+  .prose > h4, h4.prose {
+    font-family: var(--zbk-h4-font-family);
+    font-size: var(--zbk-h4-font-size);
+    font-weight: var(--zbk-h4-font-weight);
+    line-height: var(--zbk-h4-line-height);
+    letter-spacing: var(--zbk-h4-letter-spacing);
+    max-width: var(--zbk-h4-measure);
+    color: var(--zbk-h4-color);
+    font-style: var(--zbk-h4-font-style);
+    text-transform: var(--zbk-h4-text-transform);
+  }
+  .prose > * + h4 {
+    margin-top: var(--zbk-h4-spacing-before);
+  }
+  .prose > h4 + *, h4.prose + * {
+    margin-top: var(--zbk-h4-spacing-after);
+  }
+  .prose > h5, h5.prose {
+    font-family: var(--zbk-h5-font-family);
+    font-size: var(--zbk-h5-font-size);
+    font-weight: var(--zbk-h5-font-weight);
+    line-height: var(--zbk-h5-line-height);
+    letter-spacing: var(--zbk-h5-letter-spacing);
+    max-width: var(--zbk-h5-measure);
+    color: var(--zbk-h5-color);
+    font-style: var(--zbk-h5-font-style);
+    text-transform: var(--zbk-h5-text-transform);
+  }
+  .prose > * + h5 {
+    margin-top: var(--zbk-h5-spacing-before);
+  }
+  .prose > h5 + *, h5.prose + * {
+    margin-top: var(--zbk-h5-spacing-after);
+  }
+  .prose > h6, h6.prose {
+    font-family: var(--zbk-h6-font-family);
+    font-size: var(--zbk-h6-font-size);
+    font-weight: var(--zbk-h6-font-weight);
+    line-height: var(--zbk-h6-line-height);
+    letter-spacing: var(--zbk-h6-letter-spacing);
+    max-width: var(--zbk-h6-measure);
+    color: var(--zbk-h6-color);
+    font-style: var(--zbk-h6-font-style);
+    text-transform: var(--zbk-h6-text-transform);
+  }
+  .prose > * + h6 {
+    margin-top: var(--zbk-h6-spacing-before);
+  }
+  .prose > h6 + *, h6.prose + * {
+    margin-top: var(--zbk-h6-spacing-after);
+  }
+  .prose > p, p.prose {
+    font-family: var(--zbk-p-font-family);
+    font-size: var(--zbk-p-font-size);
+    font-weight: var(--zbk-p-font-weight);
+    line-height: var(--zbk-p-line-height);
+    letter-spacing: var(--zbk-p-letter-spacing);
+    max-width: var(--zbk-p-measure);
+    color: var(--zbk-p-color);
+    font-style: var(--zbk-p-font-style);
+    text-transform: var(--zbk-p-text-transform);
+  }
+  .prose > * + p {
+    margin-top: var(--zbk-p-spacing-before);
+  }
+  .prose > p + *, p.prose + * {
+    margin-top: var(--zbk-p-spacing-after);
+  }
+  .prose > .lede, .lede.prose {
+    font-family: var(--zbk-lede-font-family);
+    font-size: var(--zbk-lede-font-size);
+    font-weight: var(--zbk-lede-font-weight);
+    line-height: var(--zbk-lede-line-height);
+    letter-spacing: var(--zbk-lede-letter-spacing);
+    max-width: var(--zbk-lede-measure);
+    color: var(--zbk-lede-color);
+    font-style: var(--zbk-lede-font-style);
+    text-transform: var(--zbk-lede-text-transform);
+  }
+  .prose > * + .lede {
+    margin-top: var(--zbk-lede-spacing-before);
+  }
+  .prose > .lede + *, .lede.prose + * {
+    margin-top: var(--zbk-lede-spacing-after);
+  }
+  .prose > ul, .prose > ol, ul.prose, ol.prose {
+    font-family: var(--zbk-list-font-family);
+    font-size: var(--zbk-list-font-size);
+    font-weight: var(--zbk-list-font-weight);
+    line-height: var(--zbk-list-line-height);
+    letter-spacing: var(--zbk-list-letter-spacing);
+    max-width: var(--zbk-list-measure);
+    color: var(--zbk-list-color);
+    font-style: var(--zbk-list-font-style);
+    text-transform: var(--zbk-list-text-transform);
+    padding-block-start: var(--zbk-list-padding-block-start);
+    padding-block-end: var(--zbk-list-padding-block-end);
+  }
+  .prose > * + ul, .prose > * + ol {
+    margin-top: var(--zbk-list-spacing-before);
+  }
+  .prose > ul + *, .prose > ol + *, ul.prose + *, ol.prose + * {
+    margin-top: var(--zbk-list-spacing-after);
+  }
+}
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+         text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+       tab-size: 4;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
+  }
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+  textarea {
+    resize: vertical;
+  }
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+  ul[role=list],
+  ol[role=list] {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    color: inherit;
+  }
+}
+@layer base {
+  :is(zbk-button,
+  zbk-checkbox,
+  zbk-heading,
+  zbk-input,
+  zbk-pagination,
+  zbk-radio,
+  zbk-select,
+  zbk-textarea,
+  zbk-toggle,
+  zbk-tooltip):not(:defined) {
+    visibility: hidden;
+    animation: zbk-reveal-unupgraded 0s linear 3s forwards;
+  }
+}
+@keyframes zbk-reveal-unupgraded {
+  to {
+    visibility: visible;
+  }
+}
+:root {
+  --zbk-transition-timing-function: ease;
+  --zbk-transition-duration: var(--zbk-transition-duration-default);
+}
+
+@layer utilities {
+  [class^=transition-], [class*=" transition-"] {
+    transition-timing-function: var(--zbk-transition-timing-function);
+    transition-duration: var(--zbk-transition-duration);
+  }
+}
+:root {
+  --zbk-a11y-font-size-modifier-sm: 1;
+  --zbk-a11y-font-size-modifier-md: 1;
+  --zbk-a11y-font-size-modifier-lg: 1;
+  --zbk-a11y-font-size-modifier-xl: 1;
+  --zbk-a11y-font-size-modifier-3xl: 1;
+}
+@layer components {
+  /* Hover state (only when interactive) */
+  /* Active / pressed state */
+  /* Focus-visible state (keyboard focus) */
+  /* Disabled state (native + ARIA) */
+  /* Loading / busy state: focusable, announced via aria-busy, activation
+     suppressed by the element. */
+  /* Icon sizing / layout */
+  /* Button groups (using group-gap token) */
+}
+@layer components {
+  zbk-checkbox {
+    display: var(--zbk-checkbox-display);
+  }
+  /* The native input: functional but invisible, stretched across the whole
+     label so hover, press, click, and focus land on it natively anywhere in
+     the component. It stays in the DOM (focusable, announced, submitted). */
+  /* The visual control the input's state drives via sibling selectors. */
+  /* The checkmark: a stroked corner rotated into a check. Its proportions are
+     structure (the shape of a check); its color and stroke are tokens. */
+  /* The indeterminate bar. */
+  /* Slotted state indicators (slot="checked|unchecked|indeterminate"): any
+     authored content — svg, icon-font glyph, HTML character, image — layered
+     over the control, sized by the indicator-size token, colored by
+     indicator-color (fonts and currentColor SVGs inherit), and animated with
+     the component's transition tokens. */
+  /* Authored indicators retire the drawn pseudo they replace. */
+  /* Each indicator shows for exactly its state (indeterminate wins over
+     checked, matching the drawn visuals). */
+  /* Hover (only on devices where hover is a real signal) */
+  /* Active / pressed */
+  /* Focus-visible (keyboard focus) */
+  /* Checked */
+  /* Indeterminate (wins over checked visuals; the platform allows both) */
+  /* Disabled */
+  /* Checkbox groups */
+}
+@layer components {
+  zbk-input {
+    display: var(--zbk-input-display);
+  }
+  /* Label typography */
+  /* The field box: border, background, and state visuals live here so affixes
+     sit inside the bordered area with the input. */
+  /* The native input: unboxed (the field box carries the visuals), growing to
+     fill the space between affixes. */
+  /* Affixes (prefix/suffix slots): any authored content — svg, icon-font
+     glyph, HTML character, image — sized by icon-size, colored by affix-ink
+     (fonts and currentColor SVGs inherit). Aria-hidden: presentational. */
+  /* Hover (only on devices where hover is a real signal) */
+  /* Active / pressed (pointer down before focus) */
+  /* Focus. Editable controls match :focus-visible whenever focused, so the
+     ring shows for keyboard and pointer alike (that's correct for a field). */
+  /* Invalid: only after the user has interacted (:user-invalid), or when the
+     author asserts it (aria-invalid). */
+  /* Readonly: focusable and legible, value locked. */
+  /* Disabled */
+  /* Field groups (stacked forms) */
+}
+@layer components {
+  /* Every interactive item: page numbers and the prev/next controls. The
+     selectors cover both spellings of an item — <button> and <a>. */
+  /* The current page (`-selected` semantic state). Declared after hover/active
+     so the marked page holds its appearance under the pointer. */
+  /* Disabled prev/next: aria-disabled (not native disabled) so the control
+     stays focusable and keyboard users don't lose their place at the ends.
+     Link-mode controls also drop their href. */
+  /* Non-interactive window gap. */
+  /* Compact-mode "Page X of Y" readout. */
+  /* Prev/next glyph box: the drawn chevron or slotted icon content. */
+}
+@layer components {
+  zbk-radio {
+    display: var(--zbk-radio-display);
+  }
+  /* The native input: functional but invisible, stretched across the whole
+     label so hover, press, click, and focus land on it natively anywhere in
+     the component. It stays in the DOM (focusable, announced, submitted). */
+  /* The visual control the input's state drives via sibling selectors. */
+  /* The selection dot. */
+  /* Slotted state indicators (slot="checked|unchecked"): any authored
+     content — svg, icon-font glyph, HTML character, image — layered over the
+     control, sized by the indicator-size token, colored by indicator-color
+     (fonts and currentColor SVGs inherit), and animated with the component's
+     transition tokens. */
+  /* Authored indicators retire the drawn dot they replace. */
+  /* Each indicator shows for exactly its state. */
+  /* Hover (only on devices where hover is a real signal) */
+  /* Active / pressed */
+  /* Focus-visible (keyboard focus) */
+  /* Checked / selected */
+  /* Disabled */
+  /* Radio groups */
+}
+@layer components {
+  zbk-select {
+    display: var(--zbk-select-display);
+  }
+  /* Label typography */
+  /* The field box: border, background, and state visuals live here so affixes
+     and the drawn chevron sit inside the bordered area with the select. */
+  /* The native select: unboxed (the field box carries the visuals), with the
+     platform's own arrow suppressed — the indicator is the token layer's. */
+  /* The chevron: a stroked corner rotated to point down. Its proportions are
+     structure (the shape of a chevron); its color and stroke are tokens.
+     Rendered as the field's last flex item, after any suffix. */
+  /* Authored suffix content replaces the drawn chevron; a multiple select is
+     a list box and has no picker affordance to indicate. */
+  /* Affixes (prefix/suffix slots): any authored content — svg, icon-font
+     glyph, HTML character, image — sized by icon-size, colored by affix-ink
+     (fonts and currentColor SVGs inherit). Aria-hidden: presentational. */
+  /* Hover (only on devices where hover is a real signal) */
+  /* Active / pressed */
+  /* Focus-visible (keyboard focus) */
+  /* Invalid: only after the user has interacted (:user-invalid), or when the
+     author asserts it (aria-invalid). */
+  /* Disabled */
+  /* Field groups (stacked forms) */
+}
+@layer components {
+  zbk-textarea {
+    display: var(--zbk-textarea-display);
+  }
+  /* Label typography */
+  /* The field box: border, background, and state visuals live here so the
+     bordered area wraps the native textarea. */
+  /* The native textarea: unboxed (the field box carries the visuals), growing
+     to fill the field. Resizing and scrolling live on this element. */
+  /* Hover (only on devices where hover is a real signal) */
+  /* Active / pressed (pointer down before focus) */
+  /* Focus. A single control per field, so :focus-within shows the ring for
+     keyboard and pointer alike (that's correct for a text field). */
+  /* Invalid: only after the user has interacted (:user-invalid), or when the
+     author asserts it (aria-invalid). */
+  /* Readonly: focusable and legible, value locked. */
+  /* Disabled */
+}
+@layer components {
+  zbk-toggle {
+    display: var(--zbk-toggle-display);
+  }
+  /* The native input: functional but invisible, stretched across the whole
+     label so hover, press, click, and focus land on it natively anywhere in
+     the component. It stays in the DOM (focusable, announced, submitted). */
+  /* The track the input's state drives via sibling selectors. */
+  /* The thumb. Vertical centering and travel are structural (they derive from
+     the geometry tokens); every visual property is a token. Travel animates
+     inset-inline-start so the thumb-transform-* physics tokens stay free to
+     compose lift/press effects on top. */
+  /* Checked / on — track fills, thumb travels to the far end */
+  /* Hover (only on devices where hover is a real signal). Placed after the
+     checked rules so lift physics apply mid-travel too; the thumb's hover
+     color applies only while off so it can't fight the checked color. */
+  /* Active / pressed */
+  /* Focus-visible (keyboard focus) */
+  /* Disabled */
+  /* Toggle groups */
+}
+@layer components {
+  zbk-tooltip {
+    display: var(--zbk-tooltip-display);
+  }
+}
+
+:root {
+  --zbk-color-dusk-hue: 220;
+  --zbk-color-dusk-saturation: 22%;
+  --zbk-color-dusk-800: hsl(var(--zbk-color-dusk-hue), var(--zbk-color-dusk-saturation), 26%);
+  --zbk-color-dusk-900: hsl(var(--zbk-color-dusk-hue), var(--zbk-color-dusk-saturation), 18%);
+}
+
+:root {
+  --zbk-color-violet-hue: 268;
+  --zbk-color-violet-saturation: 76%;
+  --zbk-color-violet-500: hsl(var(--zbk-color-violet-hue), var(--zbk-color-violet-saturation), 58%);
+}
+@layer utilities {
+  .border-accent-primary {
+    border-color: var(--zbk-accent-primary-border);
+  }
+}
+@layer utilities {
+  .align-items-center {
+    align-items: center;
+  }
+}
+@layer utilities {
+  .margin-0 {
+    margin: var(--zbk-spacing-0);
+  }
+}
+@layer utilities {
+  .padding-1 {
+    padding: var(--zbk-spacing-1);
+  }
+  .padding-025 {
+    padding: var(--zbk-spacing-025);
+  }
+  .padding-05 {
+    padding: var(--zbk-spacing-05);
+  }
+}
+
+@layer theme {
+:root {
+--zbk-accent-primary-500: var(--zbk-color-violet-500);
+--zbk-accent-primary-border: var(--zbk-accent-primary-500);
+}
+:root {
+--zbk-h1-font-family: var(--zbk-font-family-heading);
+--zbk-h1-font-size: var(--zbk-font-size-3xl);
+--zbk-h1-font-weight: var(--zbk-font-weight-bold);
+--zbk-h1-line-height: var(--zbk-line-height-2);
+--zbk-h1-letter-spacing: var(--zbk-letter-spacing-normal);
+--zbk-h1-measure: var(--zbk-text-measure-3);
+--zbk-h1-spacing-before: var(--zbk-spacing-0);
+--zbk-h1-spacing-after: var(--zbk-spacing-1);
+--zbk-h1-color: var(--zbk-app-ink);
+--zbk-h1-font-style: normal;
+--zbk-h1-text-transform: none;
+}
+:root {
+--zbk-lede-font-family: var(--zbk-font-family-body);
+--zbk-lede-font-size: var(--zbk-font-size-lg);
+--zbk-lede-font-weight: var(--zbk-font-weight-normal);
+--zbk-lede-line-height: var(--zbk-line-height-3);
+--zbk-lede-letter-spacing: var(--zbk-letter-spacing-normal);
+--zbk-lede-measure: var(--zbk-text-measure-3);
+--zbk-lede-spacing-before: var(--zbk-spacing-0);
+--zbk-lede-spacing-after: var(--zbk-spacing-105);
+--zbk-lede-color: var(--zbk-app-ink-muted);
+--zbk-lede-font-style: normal;
+--zbk-lede-text-transform: none;
+}
+:root {
+--zbk-font-family-primary: "Atkinson Hyperlegible Next", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+--zbk-font-family-alt: "Merriweather", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+--zbk-font-family-heading: var(--zbk-font-family-alt);
+--zbk-font-family-body: var(--zbk-font-family-primary);
+}
+:root {
+--zbk-font-weight-normal: 400;
+--zbk-font-weight-semibold: 600;
+--zbk-font-weight-bold: 700;
+}
+:root {
+--zbk-letter-spacing-normal: calc(0rem * var(--zbk-a11y-letter-spacing-modifier));
+}
+:root {
+--zbk-line-height-2: calc(1.25 * var(--zbk-a11y-line-height-modifier));
+--zbk-line-height-3: calc(1.5 * var(--zbk-a11y-line-height-modifier));
+}
+:root {
+--zbk-text-measure-3: 60ch;
+--zbk-text-measure-4: 72ch;
+}
+}
+
+@layer base {
+:root {
+--zbk-a11y-spacing-modifier: 1;
+--zbk-a11y-spacing-text-coupling: 0.5;
+--zbk-a11y-line-height-modifier: 1;
+--zbk-a11y-letter-spacing-modifier: 1;
+--zbk-a11y-transition-duration-modifier: 1;
+}
+:root {
+--zbk-h2-font-family: var(--zbk-font-family-heading);
+--zbk-h2-font-size: var(--zbk-font-size-xl);
+--zbk-h2-font-weight: var(--zbk-font-weight-bold);
+--zbk-h2-line-height: var(--zbk-line-height-3);
+--zbk-h2-letter-spacing: var(--zbk-letter-spacing-normal);
+--zbk-h2-measure: var(--zbk-text-measure-3);
+--zbk-h2-spacing-before: var(--zbk-spacing-3);
+--zbk-h2-spacing-after: var(--zbk-spacing-2);
+--zbk-h2-color: var(--zbk-app-ink);
+--zbk-h2-font-style: normal;
+--zbk-h2-text-transform: none;
+}
+:root {
+--zbk-h3-font-family: var(--zbk-font-family-heading);
+--zbk-h3-font-size: var(--zbk-font-size-lg);
+--zbk-h3-font-weight: var(--zbk-font-weight-semibold);
+--zbk-h3-line-height: var(--zbk-line-height-3);
+--zbk-h3-letter-spacing: var(--zbk-letter-spacing-normal);
+--zbk-h3-measure: var(--zbk-text-measure-3);
+--zbk-h3-spacing-before: var(--zbk-spacing-3);
+--zbk-h3-spacing-after: var(--zbk-spacing-2);
+--zbk-h3-color: var(--zbk-app-ink);
+--zbk-h3-font-style: normal;
+--zbk-h3-text-transform: none;
+}
+:root {
+--zbk-h4-font-family: var(--zbk-font-family-heading);
+--zbk-h4-font-size: var(--zbk-font-size-md);
+--zbk-h4-font-weight: var(--zbk-font-weight-semibold);
+--zbk-h4-line-height: var(--zbk-line-height-3);
+--zbk-h4-letter-spacing: var(--zbk-letter-spacing-normal);
+--zbk-h4-measure: var(--zbk-text-measure-3);
+--zbk-h4-spacing-before: var(--zbk-spacing-3);
+--zbk-h4-spacing-after: var(--zbk-spacing-105);
+--zbk-h4-color: var(--zbk-app-ink);
+--zbk-h4-font-style: normal;
+--zbk-h4-text-transform: none;
+}
+:root {
+--zbk-h5-font-family: var(--zbk-font-family-heading);
+--zbk-h5-font-size: var(--zbk-font-size-sm);
+--zbk-h5-font-weight: var(--zbk-font-weight-bold);
+--zbk-h5-line-height: var(--zbk-line-height-3);
+--zbk-h5-letter-spacing: var(--zbk-letter-spacing-normal);
+--zbk-h5-measure: var(--zbk-text-measure-3);
+--zbk-h5-spacing-before: var(--zbk-spacing-2);
+--zbk-h5-spacing-after: var(--zbk-spacing-1);
+--zbk-h5-color: var(--zbk-app-ink);
+--zbk-h5-font-style: italic;
+--zbk-h5-text-transform: none;
+}
+:root {
+--zbk-h6-font-family: var(--zbk-font-family-heading);
+--zbk-h6-font-size: var(--zbk-font-size-sm);
+--zbk-h6-font-weight: var(--zbk-font-weight-semibold);
+--zbk-h6-line-height: var(--zbk-line-height-3);
+--zbk-h6-letter-spacing: var(--zbk-letter-spacing-normal);
+--zbk-h6-measure: var(--zbk-text-measure-3);
+--zbk-h6-spacing-before: var(--zbk-spacing-2);
+--zbk-h6-spacing-after: var(--zbk-spacing-1);
+--zbk-h6-color: var(--zbk-app-ink);
+--zbk-h6-font-style: normal;
+--zbk-h6-text-transform: uppercase;
+}
+:root {
+--zbk-list-font-family: var(--zbk-font-family-heading);
+--zbk-list-font-size: var(--zbk-font-size-sm);
+--zbk-list-font-weight: var(--zbk-font-weight-semibold);
+--zbk-list-line-height: var(--zbk-line-height-3);
+--zbk-list-letter-spacing: var(--zbk-letter-spacing-normal);
+--zbk-list-measure: var(--zbk-text-measure-3);
+--zbk-list-spacing-before: var(--zbk-spacing-2);
+--zbk-list-spacing-after: var(--zbk-spacing-1);
+--zbk-list-padding-block-start: var(--zbk-spacing-105);
+--zbk-list-padding-block-end: var(--zbk-spacing-0);
+--zbk-list-color: var(--zbk-app-ink);
+--zbk-list-font-style: normal;
+--zbk-list-text-transform: uppercase;
+}
+:root {
+--zbk-p-font-family: var(--zbk-font-family-body);
+--zbk-p-font-size: var(--zbk-font-size-sm);
+--zbk-p-font-weight: var(--zbk-font-weight-normal);
+--zbk-p-line-height: var(--zbk-line-height-3);
+--zbk-p-letter-spacing: var(--zbk-letter-spacing-normal);
+--zbk-p-measure: var(--zbk-text-measure-4);
+--zbk-p-spacing-before: var(--zbk-spacing-0);
+--zbk-p-spacing-after: var(--zbk-spacing-05);
+--zbk-p-color: var(--zbk-app-ink);
+--zbk-p-font-style: normal;
+--zbk-p-text-transform: none;
+}
+:root {
+--zbk-app-ink: var(--zbk-color-dusk-900);
+--zbk-app-ink-muted: var(--zbk-color-dusk-800);
+}
+:root {
+--zbk-spacing-0: 0;
+--zbk-spacing-1: clamp(calc(1rem * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))), calc((0.9795rem + 0.0909vw) * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))), calc(1.05rem * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))));
+--zbk-spacing-2: clamp(calc(2rem * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))), calc((1.9182rem + 0.3636vw) * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))), calc(2.2rem * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))));
+--zbk-spacing-3: clamp(calc(3rem * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))), calc((2.8414rem + 0.705vw) * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))), calc(3.3877rem * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))));
+--zbk-spacing-105: clamp(calc(1.5rem * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))), calc((1.4514rem + 0.2161vw) * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))), calc(1.6189rem * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling))));
+--zbk-spacing-025: calc(0.25rem * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling)));
+--zbk-spacing-05: calc(0.5rem * var(--zbk-a11y-spacing-modifier) * (1 + (var(--zbk-a11y-font-size-modifier-md) - 1) * var(--zbk-a11y-spacing-text-coupling)));
+}
+:root {
+--zbk-transition-duration-default: calc(325ms * var(--zbk-a11y-transition-duration-modifier));
+}
+:root {
+--zbk-font-size-sm: clamp(calc(0.9375rem * var(--zbk-a11y-font-size-modifier-sm)), calc((0.9119rem + 0.1136vw) * var(--zbk-a11y-font-size-modifier-sm)), calc(1rem * var(--zbk-a11y-font-size-modifier-sm)));
+--zbk-font-size-md: clamp(calc(1.125rem * var(--zbk-a11y-font-size-modifier-md)), calc((1.0739rem + 0.2273vw) * var(--zbk-a11y-font-size-modifier-md)), calc(1.25rem * var(--zbk-a11y-font-size-modifier-md)));
+--zbk-font-size-lg: clamp(calc(1.35rem * var(--zbk-a11y-font-size-modifier-lg)), calc((1.2631rem + 0.3864vw) * var(--zbk-a11y-font-size-modifier-lg)), calc(1.5625rem * var(--zbk-a11y-font-size-modifier-lg)));
+--zbk-font-size-xl: clamp(calc(1.62rem * var(--zbk-a11y-font-size-modifier-xl)), calc((1.4837rem + 0.6057vw) * var(--zbk-a11y-font-size-modifier-xl)), calc(1.9531rem * var(--zbk-a11y-font-size-modifier-xl)));
+--zbk-font-size-3xl: clamp(calc(2.3328rem * var(--zbk-a11y-font-size-modifier-3xl)), calc((2.0387rem + 1.3072vw) * var(--zbk-a11y-font-size-modifier-3xl)), calc(3.0518rem * var(--zbk-a11y-font-size-modifier-3xl)));
+}
+:root {
+--zbk-checkbox-display: contents;
+}
+:root {
+--zbk-input-display: contents;
+}
+:root {
+--zbk-radio-display: contents;
+}
+:root {
+--zbk-select-display: contents;
+}
+:root {
+--zbk-textarea-display: contents;
+}
+:root {
+--zbk-toggle-display: contents;
+}
+:root {
+--zbk-tooltip-display: contents;
+}
+}

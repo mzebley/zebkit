@@ -5,18 +5,35 @@ import ora from 'ora';
 import { glob } from 'glob';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { ZodSchema, z } from 'zod';
-import { TokenInterface } from '@definitions/tokens';
+import { TokenInterface, TokenGroupExtensions, tokenModuleSchema } from '@definitions/tokens';
 import { DEFAULT_LAYER, LayerName } from '@definitions/layers';
 import { ZEBKIT_PREFIX } from '@config';
+import {
+  fromDtcgDocument,
+  mergeModuleMetadata,
+  toCombinedDtcgDocument,
+  toDtcgDocuments,
+  toStrictDtcgDocument,
+  validateDtcgDocuments,
+  type ModuleMeta,
+} from './dtcg-document';
 import {
   buildFilePayload,
   inferTokenKeyFromFilename,
   isCanonicalTokenOverrideFile,
   isVariantOverrideFile,
+  mergeGroupExtensions,
   mergeOverrideObject,
   mergeTokens,
   validateTokenExport,
 } from './compile-token-helpers';
+import {
+  loadTokenCssDestinations,
+  propagateTokenCssDestinations,
+  unmappedCssTokens,
+  validateTokenCssValues,
+  type TokenCssDestinations,
+} from './css-token-destinations';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,17 +47,45 @@ export interface BuildZebkitTokensOptions {
    * overrides that still target them a warning that names the fix.
    */
   excludedComponents?: ReadonlySet<string>;
+  /**
+   * Also emit spec-only strict-mode token documents + a drop-manifest alongside
+   * the full export (decision D9). Only meaningful when `exportFile` is set.
+   */
+  exportStrict?: boolean;
 }
 
 export interface BuildZebkitTokensResult {
   tokens: Record<string, TokenInterface>;
   layers: Record<string, LayerName>;
+  moduleMetadata: Record<string, ModuleMeta>;
   /**
    * Per-module set of leaf token names that overrides actually wrote, e.g.
    * `{ 'zbk-accent-primary': Set('default','hover') }`. Empty when no overrides applied.
-   * Drives minimal overlay emission (emit only what changed).
+   * Drives minimal overlay emission (emit only what changed). Overridden group-level
+   * scale controls appear here under their control name (e.g. `max-scale`) — they
+   * never exist as entries in `tokens`, which is exactly how the emission closure
+   * recognizes them as consumed build-time controls.
    */
   overriddenKeys: Record<string, Set<string>>;
+  /**
+   * Group-level `$extensions["dev.zebkit"]` metadata per module (fluid-scale
+   * controls), collected from module `extensions` exports / snapshot JSON and
+   * merged with override documents' top-level `$extensions` members. Not tokens;
+   * never emitted as CSS custom properties.
+   */
+  groupExtensions: Record<string, TokenGroupExtensions>;
+  /**
+   * Modules whose CSS custom properties are emitted outside the token converter
+   * (the primitive palette rides the generated palette SCSS). They participate
+   * in reference validation, exports, editor schemas, and `zebkit pull`; only
+   * their unchanged defaults are excluded from normal CSS-var emission. Declared
+   * via a `cssEmission = "external"` module export or DTCG group extension.
+   */
+  externalModules: Set<string>;
+  /** Overrides applied through base-context paths, retained for external CSS emission. */
+  externalOverriddenKeys: Record<string, Set<string>>;
+  /** Final token-to-CSS-property reachability, used by docs and validation. */
+  cssDestinations: TokenCssDestinations;
 }
 
 /**
@@ -61,7 +106,11 @@ export async function buildZebkitTokens(
   const tokens: Record<string, TokenInterface> = {};
   const layers: Record<string, LayerName> = {};
   const tokenSchemas: Record<string, ZodSchema> = {};
+  const moduleMetadata: Record<string, ModuleMeta> = {};
   const overriddenKeys: Record<string, Set<string>> = {};
+  const groupExtensions: Record<string, TokenGroupExtensions> = {};
+  const externalModules = new Set<string>();
+  const externalOverriddenKeys: Record<string, Set<string>> = {};
   const splitMode = options.splitMode ?? 'combined';
   const overridePaths = options.overridePaths ?? [];
 
@@ -75,15 +124,24 @@ export async function buildZebkitTokens(
 
   try {
     for (const file of files) {
-      // JSON mode: pre-compiled defaults loaded by the installed CLI
+      // JSON mode: pre-compiled DTCG documents loaded by the installed CLI. The
+      // module key is the filename; layer / cssEmission / scale ride the group
+      // `$extensions["dev.zebkit"]` block, and a hoisted group `$type` expands
+      // back onto the entries (see fromDtcgDocument).
       if (path.isAbsolute(file) && file.endsWith('.json')) {
         try {
           const data = await fs.readJson(file);
-          const { _key, _layer, ...tokenData } = data as Record<string, any>;
-          const tokenKey: string = _key ?? path.basename(file, '.json');
-          const moduleLayer: LayerName = _layer ?? DEFAULT_LAYER;
-          tokens[tokenKey] = tokenData as TokenInterface;
-          layers[tokenKey] = moduleLayer;
+          const tokenKey: string = path.basename(file, '.json');
+          const { entries, meta } = fromDtcgDocument(data as Record<string, unknown>, { mode: 'runtime' });
+          tokens[tokenKey] = entries;
+          layers[tokenKey] = meta.layer;
+          moduleMetadata[tokenKey] = meta;
+          if (meta.cssEmission === 'external') {
+            externalModules.add(tokenKey);
+          }
+          if (meta.groupExtensions) {
+            mergeGroupExtensions(tokenKey, meta.groupExtensions, groupExtensions);
+          }
         } catch (error) {
           console.error(chalk.red(`Error loading JSON token file ${file}:`), error);
           fatalErrors.push(`Failed to load JSON token file ${file}: ${error}`);
@@ -113,19 +171,19 @@ export async function buildZebkitTokens(
         fatalErrors.push(`Token file missing: ${tokenPath}`);
         continue;
       }
-      if (!(await fs.pathExists(schemaPath))) {
-        fatalErrors.push(`Schema missing for token file: ${schemaPath}`);
-        continue;
-      }
+      // A bespoke `token-schema.ts` is optional (Phase 3 schema consolidation):
+      // modules without one validate against the generic DTCG entry-record
+      // schema; only modules with structural constraints (breakpoint, type-scale,
+      // font-family) keep a hand-written schema.
+      const hasBespokeSchema = await fs.pathExists(schemaPath);
 
       try {
-        const [tokenModule, schemaModule] = await Promise.all([
-          import(pathToFileURL(tokenPath).href),
-          import(pathToFileURL(schemaPath).href),
-        ]);
+        const tokenModule = await import(pathToFileURL(tokenPath).href);
+        const tokenSchema: ZodSchema = hasBespokeSchema
+          ? ((await import(pathToFileURL(schemaPath).href))['tokenSchema'] as ZodSchema)
+          : tokenModuleSchema;
 
         const tokensExport = tokenModule.default ?? tokenModule;
-        const tokenSchema = schemaModule['tokenSchema'] as ZodSchema;
         const moduleLayer: LayerName = tokenModule.layer ?? DEFAULT_LAYER;
 
         const moduleKey =
@@ -134,6 +192,14 @@ export async function buildZebkitTokens(
 
         const schemaErrors = validateTokenExport(tokensExport, tokenSchema);
         if (schemaErrors.length === 0) {
+          // Group-level metadata (fluid-scale controls) rides a named `extensions`
+          // export next to the default token map.
+          if (tokenModule.extensions) {
+            mergeGroupExtensions(tokenKey, tokenModule.extensions, groupExtensions);
+          }
+          if (tokenModule.cssEmission === 'external') {
+            externalModules.add(tokenKey);
+          }
           // Merge modules that share the same logical key (e.g., primitive + semantic spacing).
           // Copy the imported export rather than aliasing it: token modules are ES singletons
           // cached for the process lifetime, so mutating one (below, or via overrides) would
@@ -170,6 +236,15 @@ export async function buildZebkitTokens(
               (tokens[tokenKey] as any)[prop] = value;
             }
           }
+          moduleMetadata[tokenKey] = mergeModuleMetadata(moduleMetadata[tokenKey], {
+            layer: moduleLayer,
+            ...(groupExtensions[tokenKey]
+              ? {
+                  extensions: groupExtensions[tokenKey],
+                  groupExtensions: groupExtensions[tokenKey],
+                }
+              : {}),
+          });
         } else {
           fatalErrors.push(`Invalid token structure in file: ${file}\n${schemaErrors.map((issue) => `    ${issue}`).join('\n')}`);
         }
@@ -192,20 +267,37 @@ export async function buildZebkitTokens(
   const resolvedDestination = path.isAbsolute(destinationPath)
     ? destinationPath
     : path.resolve(process.cwd(), destinationPath);
+  const directCssDestinations = await loadTokenCssDestinations(tokens, files);
 
   // `overridePaths` supply base context (source/variant theme overrides) and are NOT
   // tracked. Only `customTokenPath` is tracked into `overriddenKeys`, so an overlay build
   // can emit just the tokens that overlay itself changed (minimal emission).
   for (const overridePath of overridePaths) {
-    await applyCustomOverrides(overridePath, tokens, tokenSchemas, undefined, options.excludedComponents);
+    await applyCustomOverrides(
+      overridePath,
+      tokens,
+      tokenSchemas,
+      groupExtensions,
+      moduleMetadata,
+      undefined,
+      options.excludedComponents,
+      externalModules,
+      externalOverriddenKeys,
+      directCssDestinations
+    );
   }
   if (customTokenPath) {
     await applyCustomOverrides(
       customTokenPath,
       tokens,
       tokenSchemas,
+      groupExtensions,
+      moduleMetadata,
       overriddenKeys,
-      options.excludedComponents
+      options.excludedComponents,
+      externalModules,
+      undefined,
+      directCssDestinations
     );
   }
 
@@ -215,17 +307,73 @@ export async function buildZebkitTokens(
     );
   }
 
-  if (exportFile) await writeTokensToFile(tokens, resolvedDestination, outputFormats, themeName, splitMode);
+  const cssDestinations = propagateTokenCssDestinations(tokens, directCssDestinations);
+  const unmapped = unmappedCssTokens(tokens, cssDestinations);
+  const cssValueProblems = validateTokenCssValues(tokens, cssDestinations);
+  if (unmapped.length > 0 || cssValueProblems.length > 0) {
+    throw new Error(
+      `Token CSS destination validation failed:\n${[
+        ...unmapped.map((id) =>
+          `  - ${id}: no authoritative CSS destination; replace an ambiguous token type or bind it in shipped CSS.`
+        ),
+        ...cssValueProblems.map((problem) => `  - ${problem}`),
+      ].join('\n')}`
+    );
+  }
 
-  return { tokens, layers, overriddenKeys };
+  // Validate the final merged collection for every build, including CSS-only
+  // builds. Reference existence, compatibility, and cycles are collection
+  // properties; deferring this to token export allowed invalid graphs to reach
+  // CSS conversion whenever `exportTokens` was disabled.
+  const validationProblems = validateDtcgDocuments(
+    toDtcgDocuments({ tokens, layers, groupExtensions, externalModules, moduleMetadata }),
+    `theme '${themeName}'`
+  );
+  if (validationProblems.length > 0) {
+    throw new Error(
+      `Token collection validation failed:\n${validationProblems
+        .map((problem) => `  - ${problem}`)
+        .join('\n')}`
+    );
+  }
+
+  if (exportFile)
+    await writeTokensToFile(
+      tokens,
+      resolvedDestination,
+      outputFormats,
+      themeName,
+      splitMode,
+      groupExtensions,
+      layers,
+      externalModules,
+      moduleMetadata,
+      options.exportStrict ?? false
+    );
+
+  return {
+    tokens,
+    layers,
+    moduleMetadata,
+    overriddenKeys,
+    groupExtensions,
+    externalModules,
+    externalOverriddenKeys,
+    cssDestinations,
+  };
 }
 
 async function applyCustomOverrides(
   overridePath: string,
   tokens: Record<string, TokenInterface>,
   tokenSchemas: Record<string, ZodSchema>,
+  groupExtensions: Record<string, TokenGroupExtensions>,
+  moduleMetadata: Record<string, ModuleMeta>,
   touched?: Record<string, Set<string>>,
-  excludedComponents?: ReadonlySet<string>
+  excludedComponents?: ReadonlySet<string>,
+  externalModules?: ReadonlySet<string>,
+  externalTouched?: Record<string, Set<string>>,
+  directCssDestinations: TokenCssDestinations = {}
 ) {
   const spinner = ora('Processing custom token overrides...').start();
   const resolvedOverridePath = path.isAbsolute(overridePath)
@@ -250,15 +398,22 @@ async function applyCustomOverrides(
         resolvedOverridePath,
         tokens,
         tokenSchemas,
+        groupExtensions,
+        moduleMetadata,
         touched,
-        excludedModuleKeys
+        excludedModuleKeys,
+        externalModules,
+        externalTouched
       );
     } else if (stats.isDirectory()) {
-      const overrideFiles = await glob('**/*.json', {
-        cwd: resolvedOverridePath,
-        absolute: true,
-        nodir: true,
-      });
+      const overrideFiles = (
+        await glob('**/*.json', {
+          cwd: resolvedOverridePath,
+          absolute: true,
+          nodir: true,
+        })
+      ).sort((left, right) => left.localeCompare(right));
+      const overrideErrors: string[] = [];
 
       for (const file of overrideFiles) {
         if (isVariantOverrideFile(file)) {
@@ -270,14 +425,35 @@ async function applyCustomOverrides(
             )
           );
         } else {
-          await applyTokenOverrideFile(
-            file,
-            tokens,
-            tokenSchemas,
-            touched,
-            excludedModuleKeys
-          );
+          try {
+            await applyTokenOverrideFile(
+              file,
+              tokens,
+              tokenSchemas,
+              groupExtensions,
+              moduleMetadata,
+              touched,
+              excludedModuleKeys,
+              externalModules,
+              externalTouched
+            );
+          } catch (error) {
+            overrideErrors.push(error instanceof Error ? error.message : String(error));
+          }
         }
+      }
+      if (overrideErrors.length > 0) {
+        const cssDestinations = propagateTokenCssDestinations(tokens, directCssDestinations);
+        overrideErrors.push(
+          ...validateTokenCssValues(tokens, cssDestinations).map(
+            (problem) => `CSS destination validation: ${problem}`
+          )
+        );
+        throw new Error(
+          `Invalid token override files:\n${overrideErrors
+            .map((error) => `  - ${error}`)
+            .join('\n')}`
+        );
       }
     } else {
       console.warn(chalk.yellow('Custom overrides path is not a file or directory.'));
@@ -295,8 +471,12 @@ async function applyTokenOverrideFile(
   file: string,
   tokens: Record<string, TokenInterface>,
   tokenSchemas: Record<string, ZodSchema>,
+  groupExtensions: Record<string, TokenGroupExtensions>,
+  moduleMetadata: Record<string, ModuleMeta>,
   touched: Record<string, Set<string>> | undefined,
-  excludedModuleKeys: ReadonlySet<string>
+  excludedModuleKeys: ReadonlySet<string>,
+  externalModules?: ReadonlySet<string>,
+  externalTouched?: Record<string, Set<string>>
 ): Promise<void> {
   if (!isCanonicalTokenOverrideFile(file)) {
     const basename = path.basename(file);
@@ -323,7 +503,48 @@ async function applyTokenOverrideFile(
 
   const inferredKey = inferTokenKeyFromFilename(file)!;
   if (tokens[inferredKey]) {
-    mergeOverrideObject({ [inferredKey]: data }, tokens, tokenSchemas, touched);
+    // Read the override as a DTCG document: flatten nested groups (joining path
+    // segments with `-`), expand a hoisted group `$type` onto its entries, and
+    // reject `$ref` / `$extends` (D6) with an actionable error. A group-level
+    // `$extensions` block carries scale-control overrides — not token entries —
+    // whose names are recorded into `touched` so overlay emission re-emits the
+    // modules they shape.
+    try {
+      const { entries, meta } = fromDtcgDocument(data as Record<string, unknown>, {
+        mode: 'runtime',
+      });
+      if (meta.groupExtensions) {
+        mergeGroupExtensions(inferredKey, meta.groupExtensions, groupExtensions, touched);
+      }
+      const effectiveTouched =
+        touched ??
+        (externalModules?.has(inferredKey) && externalTouched ? externalTouched : undefined);
+      mergeOverrideObject(
+        { [inferredKey]: entries },
+        tokens,
+        tokenSchemas,
+        effectiveTouched,
+        undefined,
+        externalModules?.has(inferredKey) === true
+      );
+      moduleMetadata[inferredKey] = mergeModuleMetadata(
+        moduleMetadata[inferredKey],
+        {
+          ...meta,
+          ...(groupExtensions[inferredKey]
+            ? {
+                extensions: groupExtensions[inferredKey],
+                groupExtensions: groupExtensions[inferredKey],
+              }
+            : {}),
+        }
+      );
+    } catch (error) {
+      throw new Error(
+        `Invalid token override '${file}' for module '${inferredKey}': ` +
+          (error instanceof Error ? error.message : String(error))
+      );
+    }
     return;
   }
   if (excludedModuleKeys.has(inferredKey)) {
@@ -346,6 +567,7 @@ export {
   inferTokenKeyFromFilename,
   isCanonicalTokenOverrideFile,
   isVariantOverrideFile,
+  mergeGroupExtensions,
   mergeOverrideObject,
   mergeTokens,
 } from './compile-token-helpers';
@@ -355,12 +577,28 @@ export async function writeTokensToFile(
   destinationPath: string,
   outputFormats: string[],
   themeName: string,
-  splitMode: BuildZebkitTokensOptions['splitMode']
+  splitMode: BuildZebkitTokensOptions['splitMode'],
+  groupExtensions: Record<string, TokenGroupExtensions> = {},
+  layers: Record<string, LayerName> = {},
+  externalModules: ReadonlySet<string> = new Set(),
+  moduleMetadata: Record<string, ModuleMeta> = {},
+  strict = false
 ) {
   const writeSpinner = ora('Writing tokens to file(s)...').start();
   const destinationPaths: string[] = [];
   const normalizedFormats = outputFormats.map((format) => format.toLowerCase());
   const resolvedSplitMode = splitMode ?? 'combined';
+
+  // Each module serializes to a DTCG document: a hoisted group `$type` when the
+  // module is homogeneous, plus a group-level `$extensions["dev.zebkit"]` block
+  // carrying the module's layer, emission mode, and fluid-scale controls.
+  const documents = toDtcgDocuments({
+    tokens,
+    layers,
+    groupExtensions,
+    externalModules,
+    moduleMetadata,
+  });
 
   try {
     await fs.ensureDir(destinationPath);
@@ -371,7 +609,7 @@ export async function writeTokensToFile(
           const { filePath, fileContent } = buildFilePayload(
             format,
             path.join(destinationPath, `${tokenKey}.tokens`),
-            tokens[tokenKey]
+            documents[tokenKey]
           );
           await fs.writeFile(filePath, fileContent);
           destinationPaths.push(filePath);
@@ -382,11 +620,22 @@ export async function writeTokensToFile(
         const { filePath, fileContent } = buildFilePayload(
           format,
           path.join(destinationPath, `${themeName}-tokens`),
-          tokens
+          toCombinedDtcgDocument(documents)
         );
         await fs.writeFile(filePath, fileContent);
         destinationPaths.push(filePath);
       }
+    }
+
+    if (strict) {
+      destinationPaths.push(
+        ...(await writeStrictTokenExport(
+          documents,
+          destinationPath,
+          normalizedFormats,
+          themeName
+        ))
+      );
     }
 
     writeSpinner.succeed(chalk.green('All tokens have been written successfully.'));
@@ -395,4 +644,37 @@ export async function writeTokensToFile(
     writeSpinner.fail(chalk.red('Failed to write tokens to file(s).'));
     throw error;
   }
+}
+
+/**
+ * Strict-mode export (decision D9): alongside the full export, write spec-only
+ * DTCG document — every proprietary-typed token dropped — for tools that
+ * hard-fail on an unknown `$type`, plus a `<theme>.drop-manifest.json` recording
+ * exactly which tokens were shed per module. Strict output is always one
+ * canonical combined document so every alias resolves from the document root;
+ * `splitMode` controls only the full-profile export. Returns the paths written.
+ */
+async function writeStrictTokenExport(
+  documents: Record<string, Record<string, unknown>>,
+  destinationPath: string,
+  normalizedFormats: string[],
+  themeName: string
+): Promise<string[]> {
+  const written: string[] = [];
+  const { document: strictDocument, dropped: dropManifest } = toStrictDtcgDocument(documents);
+
+  for (const format of normalizedFormats) {
+    const { filePath, fileContent } = buildFilePayload(
+      format,
+      path.join(destinationPath, `${themeName}-tokens.strict`),
+      strictDocument
+    );
+    await fs.writeFile(filePath, fileContent);
+    written.push(filePath);
+  }
+
+  const manifestPath = path.join(destinationPath, `${themeName}.drop-manifest.json`);
+  await fs.writeJson(manifestPath, { theme: themeName, dropped: dropManifest }, { spaces: 2 });
+  written.push(manifestPath);
+  return written;
 }

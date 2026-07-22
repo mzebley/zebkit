@@ -1,7 +1,7 @@
 # DTCG Alignment — Findings & Review
 
-**Status:** Proposal / assessment. Companion implementation plan: [plan.md](plan.md).
-**Spec target:** [DTCG Design Tokens Format Module **2025.10**](https://www.designtokens.org/tr/drafts/format/) — the first *stable* release of the spec (announced 2025-10-28). The [Resolver Module](https://www.designtokens.org/tr/drafts/resolver/) (themes/modes) is still a draft and is explicitly **not** a target here.
+**Status:** Implemented alignment record. Companion implementation plan: [plan.md](plan.md).
+**Spec target:** [DTCG Design Tokens Format Module **2025.10**](https://www.designtokens.org/TR/2025.10/format/). The Resolver Module (themes/modes) is explicitly not a target here.
 
 This document is the review: what zebkit's token system looks like against the spec, what alignment costs, what it buys, and what it risks. The plan document holds the phased execution detail.
 
@@ -9,7 +9,7 @@ This document is the review: what zebkit's token system looks like against the s
 
 ## TL;DR recommendation
 
-Do it, and do it now — but at the **"conformant document, documented escape hatch"** depth, not "100% of tokens strictly spec-typed."
+The implemented contract is a **Zebkit DTCG 2025.10 profile** for complete-fidelity artifacts and a validated strict export for conformant interoperability.
 
 - The timing is uniquely good: the spec just went stable, zebkit is pre-release with an explicit no-back-compat policy, and roughly a third of the work is a scriptable rename.
 - Zebkit already matches the spec in the places that are hardest to retrofit later: the alias syntax is already DTCG's `{group.token}` curly-brace form, override files already use the spec's recommended `.tokens.json` extension, token names already satisfy the spec's naming rules, and the three-strata reference discipline maps cleanly onto DTCG groups and aliases.
@@ -19,16 +19,16 @@ Estimated effort: **~14–23 focused engineering days** (see [Level of effort](#
 
 ---
 
-## Current state (inventory)
+## Pre-alignment inventory
 
-What actually exists today, verified against the source:
+This is the baseline the alignment was measured against; it is historical, not the launch contract:
 
 | Surface | Count / shape |
 |---|---|
 | Token modules (`**/tokens/tokens.ts`) | 47 under `src/tokens/` + 8 component modules under `src/components/` |
 | Token entries | ~1,000+ `{ value, type, description, a11y?, additional? }` objects |
 | Token types (`allowedTokenTypes`) | 28 custom types (`color`, `spacing`, `rootSize`, `boxShadow`, `transition`, `utility`, `display`, `flex`, `setting`, …) |
-| Alias syntax | `{module.entry}` — exactly two segments, validated + type-compat-checked in `token-converter.ts` |
+| Alias syntax | Arbitrary-depth curly references (`{group.nested.token}`), resolved and type-checked through the shared reference graph |
 | Theme override files | 204 × `zbk-<module>.tokens.json` under `theme/` (hero themes, docs theme) — flat maps of the same `{value, type, description}` objects |
 | Zod schemas | One `token-schema.ts` per module (55+), plus `tokenObjectSchema` / `fontFamilyTokenObjectSchema` in `src/definitions/tokens.ts` |
 | Pipeline consumers of the shape | 51 non-test TS files; core: `compile-tokens`, `token-converter`, `build-type-scale`, `build-space-scale`, `compile-variants`, `build-helpers`, prune engine/graph |
@@ -99,7 +99,7 @@ Confidence: the top end covers the two known risk pockets — the fluid-scale re
 
 ## Cons
 
-1. **DTCG covers less than zebkit needs.** The ~150–200 CSS-keyword/percentage/ch tokens stay proprietary forever (or until the spec grows). "Aligned with DTCG" will always mean "conformant document with a documented extension registry," not "every token strictly spec-typed." Anyone auditing with a strict validator needs the strict-mode export, not the full document.
+1. **DTCG covers less than zebkit needs.** CSS-keyword, percentage, and other CSS-surface tokens remain proprietary until the standard can express them completely. Full artifacts therefore use the Zebkit profile; tools requiring only standard types use the strict export.
 2. **Authoring verbosity for structured values.** `{ value: 4, unit: "px" }` and five-member shadow objects are heavier to write than `"4px"` and a CSS string. Mitigated by group `$type`, TS helper constructors, and the fact that most authored values are aliases anyway — but real.
 3. **New serialization layer = new bug surface.** Structure → CSS string conversion (colors, shadows, dimensions, beziers) is new code in the hottest path of the build. The golden-baseline diff (plan Phase 0) exists precisely to catch this, but it's the largest genuine risk.
 4. **Breadth of churn.** 55 modules, 204 theme files, 51 pipeline files, every schema, the tests, the docs data layer, the editor schemas, the CLI snapshots. All shallow, but a long tail of touch-points — the kind of refactor where the last 10% (a forgotten hero-theme file, a docs component reading `.value`) produces annoying drift. Hence the plan's per-phase gates.
@@ -117,10 +117,10 @@ Rejected because it institutionalizes **two formats and a mapping layer forever*
 ## Things you may not be thinking of
 
 1. **The Resolver Module is coming, and overlays are already shaped for it.** DTCG's draft resolver spec expresses "contexts" (light/dark, brand A/B) over token sets — which is structurally what `tokens.overlays` + hero themes + `[data-zbk-theme]` scoping already do. Don't build against the draft, but when phase 3 shapes the document artifacts, keep base-vs-overlay as *separate DTCG documents* (which they already are) so a future resolver manifest can point at them without another refactor.
-2. **Aliases deeper than two segments.** DTCG allows `{a.b.c.d}`; zebkit hard-codes exactly two segments (`token-converter.validateCssReferencesExist`). Alignment should keep zebkit's two-level authoring convention (it *is* the `--zbk-module-entry` CSS naming scheme) but the reference *parser* should accept arbitrary depth so imported DTCG documents with nested groups can resolve. Flattening rule (group path → CSS var name) must be defined once, in one place.
-3. **JSON Pointer (`$ref`) and `$extends` are in the stable spec.** You don't have to support authoring with them, but a conformant *reader* (theme override ingestion) will meet them in files exported by other tools. Decide explicitly: phase 3 supports curly-brace aliases fully and rejects `$ref`/`$extends` with a clear error (documented limitation), rather than half-supporting them silently.
+2. **Nested aliases.** The shared parser accepts arbitrary-depth curly references and flattens group paths by joining segments with `-`; validation, CSS conversion, pruning, docs, and context consume the same canonical path mapping.
+3. **JSON Pointer (`$ref`) and `$extends`.** These standard forms are deliberately outside the Zebkit reader profile. Ingestion rejects them with an actionable error; strict exports remain valid artifacts but this reader should not be described as a fully conformant DTCG implementation.
 4. **`$type` group inheritance interacts with Zod strategy.** Once `$type` can live on the group, per-entry schemas can't require it. The cleanest end-state: one generic DTCG-document Zod schema in `src/definitions/` + per-module *refinements* (which entries must exist, which extension fields are allowed), rather than 55 hand-maintained near-identical schemas. That's a net deletion of code.
-5. **The palette inversion has a UX consequence for theming.** Today a consumer can't override primitive ramp colors via token overrides (they're SCSS). Materialized palette tokens make `zbk-color.tokens.json` overrides *possible* — decide deliberately whether that's now supported or lint-blocked (VISION's strata rules say aliases reference primitives; it's silent on overriding primitives themselves — GRAMMAR/VISION should gain a sentence either way).
+5. **Primitive palette overrides are supported.** `zbk-color.tokens.json` participates in pull, editor schemas, base builds, overlays, smart-color retention, full export, and strict export. Unlayered override declarations follow the generated palette so the cascade is deterministic.
 6. **`transparent` and `currentColor`.** DTCG color has no keyword form. `global-transparent` already exists as a palette concept — materialize it as `{colorSpace: "srgb", components: [0,0,0], alpha: 0}` and keep `currentColor` (if it ever appears) as a proprietary-typed token. Check variants too: variant override values (`canvas: 'transparent'`) are raw strings in a *separate* system (`compile-variants`) that DTCG doesn't govern — variants stay untouched by this effort. Worth stating loudly in the plan so scope doesn't creep.
 7. **Numeric-looking keys and JS object ordering.** Spacing keys like `"0"`, `"1"`, `"10"` iterate in numeric-first order in JS objects. This is already true today (so no regression), but if phase 3 round-trips documents through other tools, key order may shuffle. Nothing in the pipeline may ever depend on entry order — the plan adds a test asserting output stability under key reordering.
 8. **Media type.** Serve/emit exported documents as `application/design-tokens+json` where content type matters (docs site static serving config).

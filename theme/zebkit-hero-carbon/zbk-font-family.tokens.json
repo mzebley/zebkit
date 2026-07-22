@@ -1,26 +1,55 @@
 {
   "primary": {
-    "value": "\"IBM Plex Sans\"",
-    "description": "Primary family (body + interface) — IBM Plex Sans.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "weights": [300, 400, 600]
+    "$value": "IBM Plex Sans",
+    "$description": "Primary family (body + interface) — IBM Plex Sans.",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "weights": [
+            300,
+            400,
+            600
+          ]
+        }
+      }
+    }
   },
   "alt": {
-    "value": "\"IBM Plex Sans\"",
-    "description": "Display / heading family — Carbon uses Plex Sans for headings.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "weights": [300, 400, 600]
+    "$value": "IBM Plex Sans",
+    "$description": "Display / heading family — Carbon uses Plex Sans for headings.",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "weights": [
+            300,
+            400,
+            600
+          ]
+        }
+      }
+    }
   },
   "monospace": {
-    "value": "\"IBM Plex Mono\"",
-    "description": "Monospace family (code, labels, values) — IBM Plex Mono.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "mono",
-    "weights": [400, 500]
+    "$value": "IBM Plex Mono",
+    "$description": "Monospace family (code, labels, values) — IBM Plex Mono.",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "mono",
+          "weights": [
+            400,
+            500
+          ]
+        }
+      }
+    }
   }
 }

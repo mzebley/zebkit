@@ -111,51 +111,51 @@ Values are alias references (`{family.name}` compiles to `var(--zbk-family-name)
 | `--zbk-select-border-color-active` | `{select.border-color-focus}` | color | Field border color while pressed. |
 | `--zbk-select-border-color-disabled` | `{disabled.border}` | color | Field border color when disabled. |
 | `--zbk-select-border-color-invalid` | `{critical.border-emphasis}` | color | Field border color when the selection is invalid. |
-| `--zbk-select-border-width` | `{border.width-sm}` | borderWidth | Border thickness of the field box. |
-| `--zbk-select-border-style` | `{border.style}` | borderStyle | Border style of the field box. |
-| `--zbk-select-border-radius` | `{border.radius-md}` | borderRadius | Corner radius of the field box. |
+| `--zbk-select-border-width` | `{border.width-sm}` | dimension | Border thickness of the field box. |
+| `--zbk-select-border-style` | `{border.style}` | strokeStyle | Border style of the field box. |
+| `--zbk-select-border-radius` | `{border.radius-md}` | dimension | Corner radius of the field box. |
 | `--zbk-select-font-family` | `{font-family.interface}` | fontFamily | Font family for the selected option's text. |
-| `--zbk-select-font-size` | `{font-size.md}` | fontSize | Font size for the selected option's text. |
+| `--zbk-select-font-size` | `{font-size.md}` | cssDimension | Font size for the selected option's text. |
 | `--zbk-select-font-weight` | `{font-weight.normal}` | fontWeight | Font weight for the selected option's text. |
-| `--zbk-select-line-height` | `{line-height.2}` | lineHeight | Line height for the selected option's text. |
-| `--zbk-select-letter-spacing` | `{tracking.normal}` | letterSpacing | Letter spacing for the selected option's text. |
+| `--zbk-select-line-height` | `{line-height.2}` | number | Line height for the selected option's text. |
+| `--zbk-select-letter-spacing` | `{letter-spacing.normal}` | cssDimension | Letter spacing for the selected option's text. |
 | `--zbk-select-label-ink` | `{app.ink}` | color | Label text color. |
 | `--zbk-select-label-ink-disabled` | `{disabled.ink}` | color | Label text color when disabled. |
-| `--zbk-select-label-font-size` | `{font-size.sm}` | fontSize | Font size for the label. |
+| `--zbk-select-label-font-size` | `{font-size.sm}` | cssDimension | Font size for the label. |
 | `--zbk-select-label-font-weight` | `{font-weight.medium}` | fontWeight | Font weight for the label. |
-| `--zbk-select-label-gap` | `{spacing.2xs}` | spacing | Space between the label and the field box. |
+| `--zbk-select-label-gap` | `{spacing.2xs}` | dimension | Space between the label and the field box. |
 | `--zbk-select-affix-ink` | `{app.ink-muted}` | color | Color of prefix/suffix affix content (icon fonts and currentColor SVGs inherit it). |
 | `--zbk-select-affix-ink-disabled` | `{disabled.ink}` | color | Affix color when disabled. |
-| `--zbk-select-icon-size` | `1em` | sizing | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
+| `--zbk-select-icon-size` | `1em` | cssDimension | Size of slotted affix content (prefix/suffix slots); 1em tracks the field's font-size so size variants rescale it. |
 | `--zbk-select-indicator-color` | `{app.ink-muted}` | color | Color of the drawn chevron indicator. |
 | `--zbk-select-indicator-color-disabled` | `{disabled.ink}` | color | Chevron color when disabled. |
-| `--zbk-select-indicator-size` | `0.5em` | sizing | Side length of the drawn chevron; 0.5em tracks the field's font-size. |
-| `--zbk-select-indicator-stroke-width` | `{border.width-md}` | borderWidth | Stroke width of the drawn chevron. |
-| `--zbk-select-padding-inline` | `{spacing.sm}` | spacing | Inline (horizontal) padding of the field box. |
-| `--zbk-select-padding-block` | `{spacing.2xs}` | spacing | Block (vertical) padding of the field box. |
-| `--zbk-select-gap` | `{spacing.2xs}` | spacing | Space between affixes, the select, and the indicator. |
-| `--zbk-select-width` | `auto` | sizing | Width of the field box. |
-| `--zbk-select-min-width` | `0` | sizing | Minimum width of the field box. |
-| `--zbk-select-max-width` | `100%` | sizing | Maximum width of the field box. |
-| `--zbk-select-min-height` | `44px` | sizing | Minimum field height to ensure a tappable area. |
-| `--zbk-select-group-gap` | `{spacing.md}` | spacing | Gap between fields in a .zbk-select-group. |
+| `--zbk-select-indicator-size` | `0.5em` | cssDimension | Side length of the drawn chevron; 0.5em tracks the field's font-size. |
+| `--zbk-select-indicator-stroke-width` | `{border.width-md}` | dimension | Stroke width of the drawn chevron. |
+| `--zbk-select-padding-inline` | `{spacing.sm}` | dimension | Inline (horizontal) padding of the field box. |
+| `--zbk-select-padding-block` | `{spacing.2xs}` | dimension | Block (vertical) padding of the field box. |
+| `--zbk-select-gap` | `{spacing.2xs}` | dimension | Space between affixes, the select, and the indicator. |
+| `--zbk-select-width` | `auto` | cssDimension | Width of the field box. |
+| `--zbk-select-min-width` | `0` | cssDimension | Minimum width of the field box. |
+| `--zbk-select-max-width` | `100%` | cssDimension | Maximum width of the field box. |
+| `--zbk-select-min-height` | `44px` | dimension | Minimum field height to ensure a tappable area. |
+| `--zbk-select-group-gap` | `{spacing.md}` | dimension | Gap between fields in a .zbk-select-group. |
 | `--zbk-select-group-direction` | `column` | flex | Flow direction of a .zbk-select-group (column or row). |
 | `--zbk-select-focus-color` | `{focus.color}` | color | Outline color for keyboard focus. |
-| `--zbk-select-focus-width` | `{focus.width}` | borderWidth | Outline width for keyboard focus. |
-| `--zbk-select-focus-offset` | `{focus.offset}` | spacing | Outline offset for keyboard focus. |
-| `--zbk-select-box-shadow` | `none` | boxShadow | Default field shadow. |
-| `--zbk-select-box-shadow-hover` | `none` | boxShadow | Field shadow when hovered. |
-| `--zbk-select-box-shadow-focus` | `none` | boxShadow | Field shadow while focused (in addition to the outline). |
-| `--zbk-select-box-shadow-active` | `none` | boxShadow | Field shadow while pressed. |
-| `--zbk-select-box-shadow-invalid` | `none` | boxShadow | Field shadow when the selection is invalid. |
-| `--zbk-select-cursor` | `pointer` | utility | Cursor over an enabled select. |
-| `--zbk-select-cursor-disabled` | `not-allowed` | utility | Cursor over a disabled select. |
-| `--zbk-select-transition-duration` | `{transition.calm-fx-duration-default}` | transition | Duration for field state transitions. **(a11y)** |
-| `--zbk-select-transition-timing-function` | `{transition.calm-fx-function-default}` | transition | Easing for field state transitions. |
-| `--zbk-select-transition-property` | `background-color, border-color, box-shadow, outline` | transition | CSS properties that animate on state changes. |
-| `--zbk-select-transition-delay` | `0` | transition | Delay before field transitions run. |
-| `--zbk-select-opacity` | `1` | opacity | Opacity of the field. |
-| `--zbk-select-opacity-disabled` | `{opacity.70}` | opacity | Field opacity when disabled. |
+| `--zbk-select-focus-width` | `{focus.width}` | dimension | Outline width for keyboard focus. |
+| `--zbk-select-focus-offset` | `{focus.offset}` | dimension | Outline offset for keyboard focus. |
+| `--zbk-select-box-shadow` | `none` | shadow | Default field shadow. |
+| `--zbk-select-box-shadow-hover` | `none` | shadow | Field shadow when hovered. |
+| `--zbk-select-box-shadow-focus` | `none` | shadow | Field shadow while focused (in addition to the outline). |
+| `--zbk-select-box-shadow-active` | `none` | shadow | Field shadow while pressed. |
+| `--zbk-select-box-shadow-invalid` | `none` | shadow | Field shadow when the selection is invalid. |
+| `--zbk-select-cursor` | `pointer` | cursor | Cursor over an enabled select. |
+| `--zbk-select-cursor-disabled` | `not-allowed` | cursor | Cursor over a disabled select. |
+| `--zbk-select-transition-duration` | `{transition.calm-fx-duration-default}` | duration | Duration for field state transitions. **(a11y)** |
+| `--zbk-select-transition-timing-function` | `{transition.calm-fx-function-default}` | cubicBezier | Easing for field state transitions. |
+| `--zbk-select-transition-property` | `background-color, border-color, box-shadow, outline` | transitionProperty | CSS properties that animate on state changes. |
+| `--zbk-select-transition-delay` | `0ms` | duration | Delay before field transitions run. |
+| `--zbk-select-opacity` | `1` | number | Opacity of the field. |
+| `--zbk-select-opacity-disabled` | `{opacity.70}` | number | Field opacity when disabled. |
 
 ## Variants
 

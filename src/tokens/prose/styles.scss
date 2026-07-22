@@ -162,4 +162,26 @@
   .prose>.lede+*, .lede.prose+* {
     margin-top: var(--#{prefix.$cssVar}-lede-spacing-after);
   }
+
+  .prose > ul, .prose > ol, ul.prose, ol.prose {
+    font-family: var(--#{prefix.$cssVar}-list-font-family);
+    font-size: var(--#{prefix.$cssVar}-list-font-size);
+    font-weight: var(--#{prefix.$cssVar}-list-font-weight);
+    line-height: var(--#{prefix.$cssVar}-list-line-height);
+    letter-spacing: var(--#{prefix.$cssVar}-list-letter-spacing);
+    max-width: var(--#{prefix.$cssVar}-list-measure);
+    color: var(--#{prefix.$cssVar}-list-color);
+    font-style: var(--#{prefix.$cssVar}-list-font-style);
+    text-transform: var(--#{prefix.$cssVar}-list-text-transform);
+    padding-block-start: var(--#{prefix.$cssVar}-list-padding-block-start);
+    padding-block-end: var(--#{prefix.$cssVar}-list-padding-block-end);
+  }
+
+  .prose>*+ul, .prose>*+ol {
+    margin-top: var(--#{prefix.$cssVar}-list-spacing-before);
+  }
+
+  .prose>ul+*, .prose>ol+*, ul.prose+*, ol.prose+* {
+    margin-top: var(--#{prefix.$cssVar}-list-spacing-after);
+  }
 }

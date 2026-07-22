@@ -8,10 +8,12 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { glob } from 'glob';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { tokenValueToString } from '@definitions/tokens';
 import type { TokenInterface } from '@definitions/tokens';
 import type { VariantConfig } from '@definitions/token-variants';
 import type { ComponentsFilter } from '../components-config';
 import { convertDotNotation } from './token-converter';
+import { buildTokenReferenceLookup } from './token-references';
 import { computeEmissionClosure } from './build-helpers';
 import { ZEBKIT_PREFIX } from '@config';
 import {
@@ -544,6 +546,7 @@ function buildVariantOutputs(
   const inlineCssBlocks: string[] = [];
   const extraStylesheetSet = new Set<string>();
   const referenceErrors: string[] = [];
+  const referenceLookup = buildTokenReferenceLookup(tokens);
 
   for (const [component, variants] of Object.entries(registry)) {
     const tokenKey = `${ZEBKIT_PREFIX}-${component}`;
@@ -562,11 +565,13 @@ function buildVariantOutputs(
           typeof value === 'string'
             ? convertDotNotation(
                 value,
-                sourceToken.type,
+                sourceToken.$type,
                 ZEBKIT_PREFIX,
                 tokens,
                 false,
-                referenceErrors
+                referenceErrors,
+                referenceLookup,
+                component
               )
             : String(value);
         declarations.push(`--${tokenKey}-${key}: ${resolvedValue};`);
@@ -585,18 +590,20 @@ function buildVariantOutputs(
       for (const [key, sourceToken] of Object.entries(sourceTokens)) {
         if (entry.overrides && key in entry.overrides) continue;
         if (!closure.has(`${tokenKey}.${key}`)) continue;
-        const raw = sourceToken.value;
+        const raw = sourceToken.$value;
         const resolvedValue =
           typeof raw === 'string'
             ? convertDotNotation(
                 raw,
-                sourceToken.type,
+                sourceToken.$type,
                 ZEBKIT_PREFIX,
                 tokens,
                 false,
-                referenceErrors
+                referenceErrors,
+                referenceLookup,
+                component
               )
-            : String(raw);
+            : tokenValueToString(raw, sourceToken.$type);
         declarations.push(`--${tokenKey}-${key}: ${resolvedValue};`);
       }
 

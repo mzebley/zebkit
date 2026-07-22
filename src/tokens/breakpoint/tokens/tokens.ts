@@ -13,29 +13,29 @@ export type BreakpointTokens = z.infer<typeof tokenSchema>;
 // Disable a breakpoint for a theme by setting its `value` to `null`.
 const tokens = {
   "tablet": {
-    value: "40rem",
-    type: "dimension",
-    description: "Small tablets and large phones in landscape (640px).",
+    $value: { value: 40, unit: "rem" },
+    $type: "dimension",
+    $description: "Small tablets and large phones in landscape (640px).",
   },
   "tablet-lg": {
-    value: "50rem",
-    type: "dimension",
-    description: "Large tablets (800px).",
+    $value: { value: 50, unit: "rem" },
+    $type: "dimension",
+    $description: "Large tablets (800px).",
   },
   "desktop": {
-    value: "70rem",
-    type: "dimension",
-    description: "Small desktops and laptops (1120px).",
+    $value: { value: 70, unit: "rem" },
+    $type: "dimension",
+    $description: "Small desktops and laptops (1120px).",
   },
   "desktop-lg": {
-    value: "80rem",
-    type: "dimension",
-    description: "Large desktops (1280px).",
+    $value: { value: 80, unit: "rem" },
+    $type: "dimension",
+    $description: "Large desktops (1280px).",
   },
   "widescreen": {
-    value: "100rem",
-    type: "dimension",
-    description: "Widescreen and ultra-wide displays (1600px).",
+    $value: { value: 100, unit: "rem" },
+    $type: "dimension",
+    $description: "Widescreen and ultra-wide displays (1600px).",
   },
 } as const satisfies BreakpointTokens;
 

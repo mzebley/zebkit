@@ -1,78 +1,76 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 export const key = "h6";
 export const layer: LayerName = "base";
-export type H6Tokens = z.infer<typeof tokenSchema>;
 
 const tokens = {
   "font-family": {
-    value: `{font-family.heading}`,
-    type: "fontFamily",
-    description:
+    $value: `{font-family.heading}`,
+    $type: "fontFamily",
+    $description:
       "Font size for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-size": {
-    value: `{font-size.sm}`,
-    type: "fontSize",
-    description:
+    $value: `{font-size.sm}`,
+    $type: "cssDimension",
+    $description:
       "Font size for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-weight": {
-    value: `{font-weight.semibold}`,
-    type: "fontWeight",
-    description:
+    $value: `{font-weight.semibold}`,
+    $type: "fontWeight",
+    $description:
       "Font weight for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "line-height": {
-    value: `{line-height.3}`,
-    type: "lineHeight",
-    description:
+    $value: `{line-height.3}`,
+    $type: "number",
+    $description:
       "Line height for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "letter-spacing": {
-    value: `{letter-spacing.normal}`,
-    type: "letterSpacing",
-    description:
+    $value: `{letter-spacing.normal}`,
+    $type: "dimension",
+    $description:
       "Tracking for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   measure: {
-    value: `{text-measure.3}`,
-    type: "sizing",
-    description:
+    $value: `{text-measure.3}`,
+    $type: "cssDimension",
+    $description:
       "Maximum width for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-before": {
-    value: `{spacing.2}`,
-    type: "spacing",
-    description:
+    $value: `{spacing.2}`,
+    $type: "dimension",
+    $description:
       "Amount of margin inline start for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "spacing-after": {
-    value: `{spacing.1}`,
-    type: "spacing",
-    description:
+    $value: `{spacing.1}`,
+    $type: "dimension",
+    $description:
       "Amount of margin inline end for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   color: {
-    value: `{app.ink}`,
-    type: "color",
-    description:
+    $value: `{app.ink}`,
+    $type: "color",
+    $description:
       "Color of H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "font-style": {
-    value: `none`,
-    type: "fontStyle",
-    description:
+    $value: `normal`,
+    $type: "fontStyle",
+    $description:
       "Font style for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
   "text-transform": {
-    value: `uppercase`,
-    type: "textTransform",
-    description:
+    $value: `uppercase`,
+    $type: "textTransform",
+    $description:
       "Text transform for H6 elements with .prose applied directly or that are a child of a .prose container.",
   },
-} as const satisfies H6Tokens;
+} as const satisfies TokenInterface;
 
 export default tokens;

@@ -9,6 +9,7 @@ import {
   createPullState,
   getAuthorableTokenData,
   getPullStatePath,
+  PULL_STATE_VERSION,
   readTokenSnapshot,
   readVariantSnapshot,
   syncTokenSnapshot,
@@ -18,7 +19,7 @@ import {
   type VariantSnapshot,
 } from './pull-state';
 
-const token = (value: string) => ({ value, type: 'color' });
+const token = (value: string) => ({ $value: value, $type: 'color' });
 
 function snapshot(modules: Record<string, Record<string, unknown>>): TokenSnapshot {
   return {
@@ -82,10 +83,13 @@ describe('pull state reconciliation', () => {
     expect(
       getAuthorableTokenData({
         _key: 'zbk-font-size',
-        generated: { index: 0, type: 'rootSize' },
-        authorable: { value: '1rem', type: 'sizing' },
+        generated: {
+          $type: 'cssDimension',
+          $extensions: { 'dev.zebkit': { scale: { index: 0 } } },
+        },
+        authorable: { $value: '1rem', $type: 'dimension' },
       })
-    ).toEqual({ authorable: { value: '1rem', type: 'sizing' } });
+    ).toEqual({ authorable: { $value: '1rem', $type: 'dimension' } });
   });
 
   it('rejects bundled manifests that do not use the internal zbk-*.json contract', async () => {
@@ -98,6 +102,68 @@ describe('pull state reconciliation', () => {
     await expect(readTokenSnapshot(sourceDir, deps)).rejects.toThrow(
       'Invalid bundled token manifest'
     );
+  });
+
+  it('keeps palette tokens but strips package-owned external-emission metadata', async () => {
+    const sourceDir = path.join(projectDir, 'snapshot');
+    await fs.ensureDir(sourceDir);
+    await fs.writeJson(path.join(sourceDir, 'manifest.json'), {
+      modules: [{ key: 'zbk-color', file: 'zbk-color.json' }],
+    });
+    await fs.writeJson(path.join(sourceDir, 'zbk-color.json'), {
+      $extensions: { 'dev.zebkit': { cssEmission: 'external' } },
+      blue: { $value: '#00f', $type: 'color' },
+    });
+
+    await expect(readTokenSnapshot(sourceDir, deps)).resolves.toEqual({
+      manifest: { modules: [{ key: 'zbk-color', file: 'zbk-color.json' }] },
+      modules: {
+        'zbk-color': {
+          file: 'zbk-color.tokens.json',
+          tokens: {
+            blue: { $value: '#00f', $type: 'color' },
+          },
+        },
+      },
+    });
+  });
+
+  it('restores authoring form before creating a pulled token snapshot', async () => {
+    const sourceDir = path.join(projectDir, 'snapshot');
+    await fs.ensureDir(sourceDir);
+    await fs.writeJson(path.join(sourceDir, 'manifest.json'), {
+      modules: [{ key: 'zbk-font-size', file: 'zbk-font-size.json' }],
+    });
+    await fs.writeJson(path.join(sourceDir, 'zbk-font-size.json'), {
+      $type: 'cssDimension',
+      $extensions: {
+        'dev.zebkit': { scale: { 'min-base': '1rem', 'max-base': '1.25rem' } },
+      },
+      generated: {
+        $value: 'clamp(1rem, 2vw, 1.25rem)',
+        $extensions: {
+          'dev.zebkit': { scale: { index: 0, valueSource: 'generated' } },
+        },
+      },
+      pinned: {
+        $value: '2rem',
+        $extensions: {
+          'dev.zebkit': { scale: { index: 1, valueSource: 'pinned' } },
+        },
+      },
+    });
+
+    const result = await readTokenSnapshot(sourceDir, deps);
+    expect(result.modules['zbk-font-size'].tokens).toEqual({
+      $type: 'cssDimension',
+      $extensions: {
+        'dev.zebkit': { scale: { 'min-base': '1rem', 'max-base': '1.25rem' } },
+      },
+      pinned: {
+        $value: '2rem',
+        $extensions: { 'dev.zebkit': { scale: { index: 1 } } },
+      },
+    });
   });
 
   it('reads effective shipped variants, including preset patches and component filters', async () => {
@@ -200,6 +266,114 @@ describe('pull state reconciliation', () => {
       ink: token('#custom'),
     });
     expect(result.defaultsUpdated).toBe(1);
+  });
+
+  it('reconciles nested token leaves, $root, and group metadata independently', async () => {
+    const old = snapshot({
+      'zbk-app': {
+        surface: {
+          $description: 'Old surface group.',
+          $deprecated: false,
+          $extensions: {
+            'dev.zebkit': { scale: { min: '1rem', max: '2rem' } },
+          },
+          $root: token('#root-old'),
+          customized: token('#customizable-old'),
+          updated: token('#updated-old'),
+          restored: token('#restored'),
+          retired: token('#retired-old'),
+          'retired-custom': token('#retired-custom-old'),
+          reserved: {},
+        },
+      },
+    });
+    const current = snapshot({
+      'zbk-app': {
+        surface: {
+          $description: 'New surface group.',
+          $deprecated: false,
+          $extensions: {
+            'dev.zebkit': {
+              scale: { min: '1.25rem', max: '2.5rem', ratio: 1.2 },
+            },
+          },
+          $root: token('#root-new'),
+          customized: token('#customizable-new'),
+          updated: token('#updated-new'),
+          restored: token('#restored'),
+          added: token('#added'),
+          reserved: {},
+        },
+      },
+    });
+    await writePullState(configPath, createPullState('default', old), deps);
+    await fs.writeJson(path.join(tokensDir, 'zbk-app.tokens.json'), {
+      surface: {
+        $description: 'Old surface group.',
+        $extensions: {
+          'dev.zebkit': { scale: { min: '9rem', max: '2rem' } },
+        },
+        $root: token('#root-old'),
+        customized: token('#project-custom'),
+        updated: token('#updated-old'),
+        retired: token('#retired-old'),
+        'retired-custom': token('#project-retired'),
+      },
+    });
+
+    const result = await syncTokenSnapshot({
+      tokensDir,
+      configPath,
+      basePreset: 'default',
+      snapshot: current,
+      deps,
+    });
+
+    expect(await fs.readJson(path.join(tokensDir, 'zbk-app.tokens.json'))).toEqual({
+      surface: {
+        $description: 'New surface group.',
+        $deprecated: false,
+        $extensions: {
+          'dev.zebkit': { scale: { min: '9rem', max: '2.5rem', ratio: 1.2 } },
+        },
+        $root: token('#root-new'),
+        customized: token('#project-custom'),
+        updated: token('#updated-new'),
+        restored: token('#restored'),
+        'retired-custom': token('#project-retired'),
+        added: token('#added'),
+        reserved: {},
+      },
+    });
+    expect(result).toMatchObject({
+      keysAdded: 5,
+      defaultsUpdated: 4,
+      keysRemoved: 1,
+      preservedRetired: ['zbk-app.surface.retired-custom'],
+    });
+  });
+
+  it('reports a fix-oriented token-to-group shape conflict before writing', async () => {
+    const old = snapshot({ 'zbk-app': { layout: token('#old') } });
+    const current = snapshot({
+      'zbk-app': { layout: { compact: token('#new') } },
+    });
+    await writePullState(configPath, createPullState('default', old), deps);
+    const filePath = path.join(tokensDir, 'zbk-app.tokens.json');
+    await fs.writeJson(filePath, { layout: token('#old') });
+
+    await expect(
+      syncTokenSnapshot({
+        tokensDir,
+        configPath,
+        basePreset: 'default',
+        snapshot: current,
+        deps,
+      })
+    ).rejects.toThrow(
+      /Token shape conflict at 'zbk-app\.layout'.*package defines a group.*project file contains a token.*run zebkit pull again/i
+    );
+    expect(await fs.readJson(filePath)).toEqual({ layout: token('#old') });
   });
 
   it('removes untouched retirements and preserves customized retired values', async () => {
@@ -320,10 +494,15 @@ describe('pull state reconciliation', () => {
   it('rejects non-canonical filenames in pull state before touching token files', async () => {
     await fs.ensureDir(path.dirname(getPullStatePath(configPath)));
     await fs.writeJson(getPullStatePath(configPath), {
-      stateVersion: 1,
+      stateVersion: PULL_STATE_VERSION,
       basePreset: 'default',
       modules: {
-        'zbk-app': { file: 'zbk-app.json', tokens: { canvas: 'hash' } },
+        'zbk-app': {
+          file: 'zbk-app.json',
+          tokens: { canvas: 'hash' },
+          groups: [],
+          groupMetadata: {},
+        },
       },
     });
 

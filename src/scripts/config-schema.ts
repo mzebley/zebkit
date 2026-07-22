@@ -92,6 +92,18 @@ export const ZEBKIT_CONFIG_SCHEMA = {
       type: 'object',
       description: 'Token, CSS, theme, overlay, font, and pruning build settings.',
       additionalProperties: false,
+      allOf: [
+        {
+          if: {
+            properties: { exportStrict: { const: true } },
+            required: ['exportStrict'],
+          },
+          then: {
+            properties: { exportTokens: { const: true } },
+            required: ['exportTokens'],
+          },
+        },
+      ],
       properties: {
         destinationPath: {
           type: 'string',
@@ -151,11 +163,17 @@ export const ZEBKIT_CONFIG_SCHEMA = {
           default: false,
           description: 'Write authorable token artifacts alongside compiled CSS.',
         },
+        exportStrict: {
+          type: 'boolean',
+          default: false,
+          description:
+            'Emit one combined, reference-closed DTCG 2025.10 document plus a drop manifest. Requires exportTokens; splitMode applies only to the full-profile export.',
+        },
         splitMode: {
           type: 'string',
           enum: ['combined', 'per-module'],
           default: 'combined',
-          description: 'Write one token export per format or one per token module.',
+          description: 'Write the full-profile export as one document per format or one file per token module. Strict output is always combined.',
         },
         outputFormats: {
           type: 'array',

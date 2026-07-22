@@ -39,140 +39,140 @@ export type TooltipTokenKey =
 const tokens = {
   // Host layout: the element wraps its trigger without disturbing layout.
   display: {
-    value: "contents",
-    type: "display",
-    description: "Display mode for the tooltip host element wrapping the trigger.",
+    $value: "contents",
+    $type: "display",
+    $description: "Display mode for the tooltip host element wrapping the trigger.",
   },
 
   // Bubble surface
   canvas: {
-    value: "{app.canvas-inverse}",
-    type: "color",
-    description: "Tooltip bubble background.",
+    $value: "{app.canvas-inverse}",
+    $type: "color",
+    $description: "Tooltip bubble background.",
   },
   ink: {
-    value: "{app.ink-inverse}",
-    type: "color",
-    description: "Tooltip text color.",
+    $value: "{app.ink-inverse}",
+    $type: "color",
+    $description: "Tooltip text color.",
   },
   "border-color": {
-    value: "transparent",
-    type: "color",
-    description: "Tooltip bubble border color.",
+    $value: "{color.global-transparent}",
+    $type: "color",
+    $description: "Tooltip bubble border color.",
   },
   "border-width": {
-    value: "{border.width-sm}",
-    type: "borderWidth",
-    description: "Tooltip bubble border width.",
+    $value: "{border.width-sm}",
+    $type: "dimension",
+    $description: "Tooltip bubble border width.",
   },
   "border-style": {
-    value: "{border.style}",
-    type: "borderStyle",
-    description: "Tooltip bubble border style.",
+    $value: "{border.style}",
+    $type: "strokeStyle",
+    $description: "Tooltip bubble border style.",
   },
   "border-radius": {
-    value: "{border.radius-md}",
-    type: "borderRadius",
-    description: "Tooltip bubble corner radius.",
+    $value: "{border.radius-md}",
+    $type: "dimension",
+    $description: "Tooltip bubble corner radius.",
   },
 
   // Typography
   "font-family": {
-    value: "{font-family.interface}",
-    type: "fontFamily",
-    description: "Font family for tooltip text.",
+    $value: "{font-family.interface}",
+    $type: "fontFamily",
+    $description: "Font family for tooltip text.",
   },
   "font-size": {
-    value: "{font-size.sm}",
-    type: "fontSize",
-    description: "Font size for tooltip text.",
+    $value: "{font-size.sm}",
+    $type: "cssDimension",
+    $description: "Font size for tooltip text.",
   },
   "font-weight": {
-    value: "{font-weight.normal}",
-    type: "fontWeight",
-    description: "Font weight for tooltip text.",
+    $value: "{font-weight.normal}",
+    $type: "fontWeight",
+    $description: "Font weight for tooltip text.",
   },
   "line-height": {
-    value: "{line-height.2}",
-    type: "lineHeight",
-    description: "Line height for tooltip text.",
+    $value: "{line-height.2}",
+    $type: "number",
+    $description: "Line height for tooltip text.",
   },
   "letter-spacing": {
-    value: "{tracking.normal}",
-    type: "letterSpacing",
-    description: "Letter spacing for tooltip text.",
+    $value: "{letter-spacing.normal}",
+    $type: "cssDimension",
+    $description: "Letter spacing for tooltip text.",
   },
 
   // Spacing & sizing
   "padding-inline": {
-    value: "{spacing.xs}",
-    type: "spacing",
-    description: "Inline padding inside the bubble.",
+    $value: "{spacing.xs}",
+    $type: "dimension",
+    $description: "Inline padding inside the bubble.",
   },
   "padding-block": {
-    value: "{spacing.2xs}",
-    type: "spacing",
-    description: "Block padding inside the bubble.",
+    $value: "{spacing.2xs}",
+    $type: "dimension",
+    $description: "Block padding inside the bubble.",
   },
   "max-width": {
-    value: "20rem",
-    type: "sizing",
-    description: "Maximum bubble width before text wraps.",
+    $value: { value: 20, unit: "rem" },
+    $type: "dimension",
+    $description: "Maximum bubble width before text wraps.",
   },
   "arrow-size": {
-    value: "8px",
-    type: "sizing",
-    description: "Arrow square size; also sets the default trigger-to-bubble gap.",
+    $value: { value: 8, unit: "px" },
+    $type: "dimension",
+    $description: "Arrow square size; also sets the default trigger-to-bubble gap.",
   },
   offset: {
-    value: "{tooltip.arrow-size}",
-    type: "sizing",
-    description: "Gap between the trigger and the bubble.",
+    $value: "{tooltip.arrow-size}",
+    $type: "dimension",
+    $description: "Gap between the trigger and the bubble.",
   },
 
   // Elevation & stacking
   "box-shadow": {
-    value: "{elevation.sm}",
-    type: "boxShadow",
-    description: "Bubble shadow.",
+    $value: "{elevation.sm}",
+    $type: "shadow",
+    $description: "Bubble shadow.",
   },
   "z-index": {
-    value: "{z-index.tooltip}",
-    type: "zIndex",
-    description: "Stacking order when the top-layer popover API is unavailable.",
+    $value: "{z-index.tooltip}",
+    $type: "number",
+    $description: "Stacking order when the top-layer popover API is unavailable.",
   },
 
   // Motion & timing
   "transition-duration": {
-    value: "150ms",
-    type: "transition",
-    description: "Show/hide transition duration.",
-    a11y: true,
+    $value: { value: 150, unit: "ms" },
+    $type: "duration",
+    $description: "Show/hide transition duration.",
+    $extensions: { "dev.zebkit": { a11y: true } },
   },
   "transition-timing-function": {
-    value: "ease-out",
-    type: "transition",
-    description: "Show/hide transition timing function.",
+    $value: "ease-out",
+    $type: "cssEasingFunction",
+    $description: "Show/hide transition timing function.",
   },
   "show-delay": {
-    value: "150ms",
-    type: "transition",
-    description:
+    $value: { value: 150, unit: "ms" },
+    $type: "duration",
+    $description:
       "Delay before a hint tooltip shows on hover/focus. Read by the element at runtime.",
-    a11y: true,
+    $extensions: { "dev.zebkit": { a11y: true } },
   },
   "hide-grace": {
-    value: "120ms",
-    type: "transition",
-    description:
+    $value: { value: 120, unit: "ms" },
+    $type: "duration",
+    $description:
       "Grace period before hiding, so the pointer can travel onto the bubble (WCAG 1.4.13 hoverable). Read by the element at runtime.",
-    a11y: true,
+    $extensions: { "dev.zebkit": { a11y: true } },
   },
 
   opacity: {
-    value: 1,
-    type: "opacity",
-    description: "Bubble opacity.",
+    $value: 1,
+    $type: "number",
+    $description: "Bubble opacity.",
   },
 } as const satisfies Record<TooltipTokenKey, TokenObject>;
 

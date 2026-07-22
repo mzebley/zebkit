@@ -16,6 +16,18 @@ import {
   ZEBKIT_CONFIG_SCHEMA,
   ZEBKIT_CONFIG_SCHEMA_FILENAME,
 } from '../src/scripts/config-schema';
+import {
+  tokenScaleIndex,
+  type AllowedTokenTypes,
+} from '../src/definitions/tokens';
+import { ALLOWED_TOKEN_TYPE_VALUES, CSS_FALLBACK_TYPE_BY_DTCG_TYPE } from '../src/definitions/dtcg';
+import { areTokensTypesCompatible } from '../src/definitions/token-maps';
+import { fromDtcgDocument, type ModuleMeta } from '../src/scripts/tokens/dtcg-document';
+import { tokenForGroupRoot } from '../src/scripts/editor-schema-paths';
+import {
+  AUTHORABLE_VALUE_SCHEMAS,
+  structuredDimensionSchema,
+} from '../src/scripts/editor-value-schemas';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,35 +49,42 @@ interface ManifestModule {
 }
 
 interface TokenObject {
-  value: string | number;
-  type: string;
-  description: string;
-  a11y?: boolean | string;
+  $value: string | number | { value: number; unit: string };
+  $type: string;
+  $description: string;
+  $extensions?: Record<string, unknown>;
   [key: string]: unknown;
 }
 
-interface TokenData {
-  _key: string;
-  _layer: string;
-  [key: string]: unknown;
-}
+// The flat, group-$type-expanded entries of one module's DTCG snapshot
+// (fromDtcgDocument strips the group $type/$extensions metadata into `meta`).
+type TokenData = Record<string, TokenObject>;
 
-/**
- * Extract allowedTokenTypes enum values from src/definitions/tokens.ts
- */
-async function extractAllowedTokenTypes(): Promise<string[]> {
-  const tokensDefPath = path.resolve(__dirname, '../src/definitions/tokens.ts');
-  const source = await fs.readFile(tokensDefPath, 'utf-8');
-
-  const match = source.match(/allowedTokenTypes = z\.enum\(\[([\s\S]*?)\]\)/);
-  if (!match) {
-    throw new Error('Could not extract allowedTokenTypes from tokens.ts');
+/** Load a per-module DTCG snapshot and expand it to flat entries + module metadata. */
+async function readModuleSnapshot(
+  file: string
+): Promise<{ entries: TokenData; meta: ModuleMeta }> {
+  const doc = await fs.readJson(file);
+  const { entries, meta } = fromDtcgDocument(doc as Record<string, unknown>, {
+    mode: 'literal',
+  });
+  const tokenData = entries as unknown as TokenData;
+  for (const token of Object.values(tokenData)) {
+    const originalType = (
+      token.$extensions?.['dev.zebkit'] as { originalType?: unknown } | undefined
+    )?.originalType;
+    if (ALLOWED_TOKEN_TYPE_VALUES.includes(originalType as AllowedTokenTypes)) {
+      token.$type = originalType as AllowedTokenTypes;
+    }
   }
-
-  const enumContent = match[1];
-  const values = enumContent.match(/'([^']+)'/g) || [];
-  return values.map(v => v.replace(/'/g, ''));
+  return { entries: tokenData, meta };
 }
+
+type JsonSchema = Record<string, unknown>;
+
+const deprecatedSchema: JsonSchema = {
+  oneOf: [{ type: 'boolean' }, { type: 'string' }],
+};
 
 function fontMetadataProperties() {
   return {
@@ -117,48 +136,145 @@ function fontMetadataProperties() {
   };
 }
 
-function generateTokenProperties(
-  tokenData: TokenData
-): Record<string, any> {
-  const properties: Record<string, any> = {};
-
-  for (const [tokenName, tokenObj] of Object.entries(tokenData)) {
-    if (tokenName.startsWith('_')) continue; // Skip _key, _layer
-
-    const token = tokenObj as TokenObject;
-    const tokenProperties: Record<string, any> = {
-      value: { $ref: `#/definitions/${token.type}Value` },
-      type: {
-        const: token.type,
-      },
-      description: {
-        type: 'string',
-      },
-      a11y: {
-        type: ['boolean', 'string'],
-      },
-      additional: {
-        type: ['string', 'number', 'boolean'],
-      },
-    };
-
-    if ('index' in token || token.type === 'rootFontSize') {
-      tokenProperties.index = { type: 'number' };
-    }
-    if (token.type === 'fontFamily') {
-      Object.assign(tokenProperties, fontMetadataProperties());
-    }
-
-    properties[tokenName] = {
+function zebkitExtensionsSchema(type: string, includeScale: boolean) {
+  const vendorProperties: Record<string, any> = {
+    a11y: {
+      type: ['boolean', 'string'],
+      description:
+        'Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable.',
+    },
+  };
+  if (type === 'fontFamily' || type === 'cssFontFamily') {
+    vendorProperties.font = {
       type: 'object',
-      description: token.description,
-      required: ['value'],
+      description: 'Font-loading metadata for this family.',
       additionalProperties: false,
-      properties: tokenProperties,
+      properties: fontMetadataProperties(),
     };
   }
+  if (includeScale) {
+    vendorProperties.scale = {
+      type: 'object',
+      description: 'Generated-scale step metadata (index 0 = base step).',
+      additionalProperties: false,
+      properties: {
+        index: { type: 'integer' },
+        valueSource: { type: 'string', enum: ['generated', 'pinned'] },
+      },
+    };
+  }
+  return {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      'dev.zebkit': {
+        type: 'object',
+        additionalProperties: false,
+        properties: vendorProperties,
+      },
+    },
+    patternProperties: {
+      '^(?!dev\\.zebkit$).+': {},
+    },
+  };
+}
 
-  return properties;
+/**
+ * Group-level `$extensions` on a token override document: fluid-scale controls
+ * (viewport anchors, base sizes, ratios, spacing `max-scale`) — build-time
+ * metadata, never tokens.
+ */
+function groupExtensionsSchema() {
+  const authoredDimension = {
+    oneOf: [
+      structuredDimensionSchema,
+      { type: 'string', pattern: '^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$' },
+    ],
+  };
+  return {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      'dev.zebkit': {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          scale: {
+            type: 'object',
+            description:
+              'Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).',
+            additionalProperties: false,
+            properties: {
+              'min-viewport': authoredDimension,
+              'max-viewport': authoredDimension,
+              'min-base': authoredDimension,
+              'max-base': authoredDimension,
+              'min-ratio': { type: 'number', exclusiveMinimum: 0 },
+              'max-ratio': { type: 'number', exclusiveMinimum: 0 },
+              'max-scale': { type: 'number', exclusiveMinimum: 0 },
+            },
+          },
+        },
+      },
+    },
+    patternProperties: {
+      '^(?!dev\\.zebkit$).+': {},
+    },
+  };
+}
+
+function generateTokenDefinition(token: TokenObject): JsonSchema {
+  const fallbackType = CSS_FALLBACK_TYPE_BY_DTCG_TYPE[
+    token.$type as keyof typeof CSS_FALLBACK_TYPE_BY_DTCG_TYPE
+  ];
+  const valueSchemas = [
+    { $ref: `#/definitions/${token.$type}Value` },
+    ...(fallbackType ? [{ $ref: `#/definitions/${fallbackType}Value` }] : []),
+  ];
+  const tokenProperties: Record<string, unknown> = {
+    $value: valueSchemas.length === 1 ? valueSchemas[0] : { anyOf: valueSchemas },
+    $type: fallbackType
+      ? { type: 'string', enum: [token.$type, fallbackType] }
+      : { const: token.$type },
+    $description: {
+      type: 'string',
+      minLength: 1,
+    },
+    $deprecated: { $ref: '#/definitions/deprecated' },
+    $extensions: zebkitExtensionsSchema(token.$type, tokenScaleIndex(token) != null),
+  };
+
+  return {
+    type: 'object',
+    description: token.$description,
+    required: ['$value'],
+    additionalProperties: false,
+    properties: tokenProperties,
+    ...(fallbackType ? {
+      allOf: [
+        {
+          if: { required: ['$type'], properties: { $type: { const: token.$type } } },
+          then: { properties: { $value: { $ref: `#/definitions/${token.$type}Value` } } },
+        },
+        {
+          if: { required: ['$type'], properties: { $type: { const: fallbackType } } },
+          then: { properties: { $value: { $ref: `#/definitions/${fallbackType}Value` } } },
+        },
+      ],
+    } : {}),
+  };
+}
+
+function tokenDefinitionName(token: TokenObject): string {
+  const scaleSuffix = tokenScaleIndex(token) == null ? '' : 'Scaled';
+  return `${token.$type}${scaleSuffix}Token`;
+}
+
+function generateTokenProperty(token: TokenObject): JsonSchema {
+  return {
+    description: token.$description,
+    allOf: [{ $ref: `#/definitions/${tokenDefinitionName(token)}` }],
+  };
 }
 
 function generateValueDefinitions(
@@ -167,14 +283,27 @@ function generateValueDefinitions(
 ): Record<string, any> {
   const definitions: Record<string, any> = {};
 
-  for (const tokenObj of Object.values(tokenData)) {
-    if (!tokenObj || typeof tokenObj !== 'object' || !('type' in tokenObj)) continue;
-    const type = String((tokenObj as TokenObject).type);
+  const usedTypes = new Set(
+    Object.values(tokenData)
+      .map((token) => token?.$type)
+      .filter((type): type is AllowedTokenTypes =>
+        ALLOWED_TOKEN_TYPE_VALUES.includes(type as AllowedTokenTypes)
+      )
+  );
+  for (const type of usedTypes) {
     const key = `${type}Value`;
-    if (definitions[key]) continue;
-
-    definitions[key] = { type: ['string', 'number'] };
+    definitions[key] = AUTHORABLE_VALUE_SCHEMAS[type];
     if (refsByType[type]?.length) definitions[key].examples = refsByType[type];
+    const fallbackType = CSS_FALLBACK_TYPE_BY_DTCG_TYPE[
+      type as keyof typeof CSS_FALLBACK_TYPE_BY_DTCG_TYPE
+    ];
+    if (fallbackType) definitions[`${fallbackType}Value`] = AUTHORABLE_VALUE_SCHEMAS[fallbackType];
+  }
+
+  for (const token of Object.values(tokenData)) {
+    if (!token?.$type) continue;
+    const name = tokenDefinitionName(token);
+    definitions[name] ??= generateTokenDefinition(token);
   }
 
   return definitions;
@@ -186,14 +315,87 @@ function generateTokenSchema(
   tokenData: TokenData,
   refsByType: Record<string, string[]>
 ): object {
+  const definitions = generateValueDefinitions(tokenData, refsByType);
+  definitions.deprecated = deprecatedSchema;
+  definitions.groupExtensions = groupExtensionsSchema();
+  const groupMetadata = (types: readonly AllowedTokenTypes[]) => ({
+    ...(types.length > 0 ? { $type: { type: 'string', enum: [...types] } } : {}),
+    $description: { type: 'string', minLength: 1 },
+    $deprecated: { $ref: '#/definitions/deprecated' },
+    $extensions: { $ref: '#/definitions/groupExtensions' },
+  });
+  const entries = Object.fromEntries(
+    Object.entries(tokenData).filter(
+      ([name, entry]) =>
+        !name.startsWith('$') && !name.startsWith('_') && entry?.$type
+    )
+  );
+  const knownPrefixes = new Set<string>();
+  for (const name of Object.keys(entries)) {
+    const parts = name.split('-');
+    for (let length = 1; length <= parts.length; length += 1) {
+      knownPrefixes.add(parts.slice(0, length).join('-'));
+    }
+  }
+  const groupPrefixes = new Set(
+    [...knownPrefixes].filter((prefix) =>
+      Object.keys(entries).some((name) => name.startsWith(`${prefix}-`))
+    )
+  );
+
+  const groupDefinitionName = (prefix: string) => `group:${prefix}`;
+  const compatibleGroupTypes = (prefix?: string): AllowedTokenTypes[] => {
+    const descendantTypes = new Set(
+      Object.entries(entries)
+        .filter(([name]) => !prefix || name === prefix || name.startsWith(`${prefix}-`))
+        .map(([, token]) => token.$type as AllowedTokenTypes)
+    );
+    return ALLOWED_TOKEN_TYPE_VALUES.filter((candidate) =>
+      [...descendantTypes].every((type) => areTokensTypesCompatible(candidate, type))
+    );
+  };
+  const groupRef = (prefix: string) => ({
+    $ref: `#/definitions/${groupDefinitionName(prefix)}`,
+  });
+  const pathNode = (prefix: string): JsonSchema => {
+    const token = entries[prefix];
+    const group = groupPrefixes.has(prefix);
+    if (token && group) {
+      return { anyOf: [generateTokenProperty(token), groupRef(prefix)] };
+    }
+    return token ? generateTokenProperty(token) : groupRef(prefix);
+  };
+
+  for (const prefix of groupPrefixes) {
+    const properties: Record<string, JsonSchema> = { ...groupMetadata(compatibleGroupTypes(prefix)) };
+    const rootToken = tokenForGroupRoot(entries, prefix);
+    if (rootToken) {
+      properties.$root = generateTokenProperty(rootToken);
+    }
+    for (const descendant of knownPrefixes) {
+      if (!descendant.startsWith(`${prefix}-`)) continue;
+      const childPath = descendant.slice(prefix.length + 1);
+      properties[childPath] = pathNode(descendant);
+    }
+    definitions[groupDefinitionName(prefix)] = {
+      type: 'object',
+      additionalProperties: false,
+      properties,
+    };
+  }
+
+  const properties: Record<string, JsonSchema> = { ...groupMetadata(compatibleGroupTypes()) };
+  for (const prefix of knownPrefixes) properties[prefix] = pathNode(prefix);
+  if (entries.root) properties.$root = generateTokenProperty(entries.root);
+
   return {
     $schema: 'http://json-schema.org/draft-07/schema',
     title: `Zebkit ${module.key} Token Overrides`,
     description: `Authorable overrides for the ${module.key} token module.`,
     type: 'object',
     additionalProperties: false,
-    definitions: generateValueDefinitions(tokenData, refsByType),
-    properties: generateTokenProperties(tokenData),
+    definitions,
+    properties,
   };
 }
 
@@ -203,20 +405,25 @@ function generateTokenSchema(
 function getTokenTypeSyntax(type: string): string | undefined {
   const syntaxMap: Record<string, string> = {
     'color': '<color>',
-    'borderColor': '<color>',
-    'fontSize': '<length>',
-    'rootFontSize': '<length>',
-    'spacing': '<length>',
+    'cssColor': '<color>',
     'dimension': '<length>',
-    'rootSize': '<length>',
-    'sizing': '<length>',
-    'borderWidth': '<length>',
-    'borderRadius': '<length>',
+    'cssDimension': '<length-percentage>',
+    'duration': '<time>',
+    'cssDuration': '<time>',
     'fontFamily': '<family-name>',
+    'cssFontFamily': '<family-name>',
     'fontWeight': '<number>',
-    'lineHeight': '<number> | <length>',
-    'opacity': '<number>',
-    'transition': '<string>',
+    'cssFontWeight': '<font-weight-absolute>',
+    'number': '<number>',
+    'cssNumber': '<number>',
+    'strokeStyle': '<line-style>',
+    'cssStrokeStyle': '<line-style>',
+    'shadow': '<shadow>',
+    'cssShadow': '<shadow>',
+    'cubicBezier': '<easing-function>',
+    'cssEasingFunction': '<easing-function>',
+    'transitionProperty': '<single-transition-property>#',
+    'resize': 'none | both | horizontal | vertical | block | inline',
   };
 
   return syntaxMap[type];
@@ -237,17 +444,15 @@ async function generateCssCustomData(): Promise<object> {
 
   for (const module of manifest.modules) {
     const tokenFilePath = path.join(defaultsDir, module.file);
-    const tokenFile = await fs.readJson(tokenFilePath) as TokenData;
+    const { entries: tokenFile } = await readModuleSnapshot(tokenFilePath);
 
-    // Iterate over token entries, skipping metadata fields
+    // Iterate over the module's leaf token entries (group $type already expanded).
     for (const [tokenName, tokenObj] of Object.entries(tokenFile)) {
-      if (tokenName.startsWith('_')) continue; // Skip _key, _layer
-
       const token = tokenObj as TokenObject;
       const cssVarName = `--zbk-${module.key.replace('zbk-', '')}-${tokenName}`;
-      const description = `${token.description} [${module.key.replace('zbk-', '')}]`;
+      const description = `${token.$description} [${module.key.replace('zbk-', '')}]`;
 
-      const syntax = getTokenTypeSyntax(token.type);
+      const syntax = getTokenTypeSyntax(token.$type);
       const property: any = {
         name: cssVarName,
         description,
@@ -282,25 +487,20 @@ async function buildEditor() {
     const manifestPath = path.join(defaultsDir, 'manifest.json');
     const manifest = await fs.readJson(manifestPath) as { modules: ManifestModule[] };
 
-    // Extract allowed token types once
-    const allowedTokenTypes = await extractAllowedTokenTypes();
-
     // PASS 1: Build map of token type -> list of reference strings
     console.log('Scanning token modules for references...');
     const refsByType: Record<string, string[]> = {};
 
     for (const module of manifest.modules) {
       const tokenFilePath = path.join(defaultsDir, module.file);
-      const tokenData = await fs.readJson(tokenFilePath) as TokenData;
+      const { entries: tokenData } = await readModuleSnapshot(tokenFilePath);
 
       // Extract namespace from module key: "zbk-brand" -> "brand", "zbk-app" -> "app"
       const namespace = module.key.replace('zbk-', '');
 
       for (const [tokenName, tokenObj] of Object.entries(tokenData)) {
-        if (tokenName.startsWith('_')) continue; // Skip _key, _layer
-
         const token = tokenObj as TokenObject;
-        const tokenType = token.type;
+        const tokenType = token.$type;
 
         if (!refsByType[tokenType]) {
           refsByType[tokenType] = [];
@@ -323,7 +523,7 @@ async function buildEditor() {
 
     for (const module of manifest.modules) {
       const tokenFilePath = path.join(defaultsDir, module.file);
-      const tokenData = await fs.readJson(tokenFilePath) as TokenData;
+      const { entries: tokenData } = await readModuleSnapshot(tokenFilePath);
 
       const tokenSchema = generateTokenSchema(module, tokenData, refsByType);
       const schemaFileName = `${module.key}.schema.json`;
@@ -369,4 +569,6 @@ async function buildEditor() {
   }
 }
 
-buildEditor();
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  void buildEditor();
+}

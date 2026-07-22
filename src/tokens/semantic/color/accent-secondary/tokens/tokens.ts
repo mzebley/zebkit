@@ -1,6 +1,5 @@
 import type { LayerName } from "@definitions/layers";
-import { z } from "zod";
-import { tokenSchema } from "./token-schema";
+import type { TokenInterface } from "@definitions/tokens";
 
 /**
  * Zebkit secondary-accent role tokens (canvas / ink / border).
@@ -14,140 +13,139 @@ import { tokenSchema } from "./token-schema";
 export const key = "accent-secondary";
 export const layer: LayerName = "theme";
 
-export type AccentSecondaryRoleSchema = z.infer<typeof tokenSchema>;
 
 const tokens = {
   // Canvas: accent surfaces
   "canvas": {
-    value: "{accent-secondary.500}",
-    type: "color",
-    description: "Base secondary-accent canvas color for secondary accent surfaces."
+    $value: "{accent-secondary.500}",
+    $type: "color",
+    $description: "Base secondary-accent canvas color for secondary accent surfaces."
   },
   "canvas-subtle": {
-    value: "{accent-secondary.50}",
-    type: "color",
-    description: "Subtle secondary-accent canvas color for the least-prominent, lightly tinted surfaces."
+    $value: "{accent-secondary.50}",
+    $type: "color",
+    $description: "Subtle secondary-accent canvas color for the least-prominent, lightly tinted surfaces."
   },
   "canvas-muted": {
-    value: "{accent-secondary.100}",
-    type: "color",
-    description: "Muted secondary-accent canvas color for low-emphasis, recessed surfaces."
+    $value: "{accent-secondary.100}",
+    $type: "color",
+    $description: "Muted secondary-accent canvas color for low-emphasis, recessed surfaces."
   },
   "canvas-emphasis": {
-    value: "{accent-secondary.600}",
-    type: "color",
-    description: "Emphasis secondary-accent canvas color for high-prominence surfaces."
+    $value: "{accent-secondary.600}",
+    $type: "color",
+    $description: "Emphasis secondary-accent canvas color for high-prominence surfaces."
   },
 
   // Canvas (inverse): accent surfaces in inverse contexts
   "canvas-inverse": {
-    value: "{accent-secondary.400}",
-    type: "color",
-    description: "Base inverse secondary-accent canvas color for surfaces on dark or inverted contexts."
+    $value: "{accent-secondary.400}",
+    $type: "color",
+    $description: "Base inverse secondary-accent canvas color for surfaces on dark or inverted contexts."
   },
   "canvas-inverse-subtle": {
-    value: "{accent-secondary.900}",
-    type: "color",
-    description: "Subtle inverse secondary-accent canvas color for the least-prominent surfaces in inverse contexts."
+    $value: "{accent-secondary.900}",
+    $type: "color",
+    $description: "Subtle inverse secondary-accent canvas color for the least-prominent surfaces in inverse contexts."
   },
   "canvas-inverse-muted": {
-    value: "{accent-secondary.800}",
-    type: "color",
-    description: "Muted inverse secondary-accent canvas color for low-emphasis surfaces in inverse contexts."
+    $value: "{accent-secondary.800}",
+    $type: "color",
+    $description: "Muted inverse secondary-accent canvas color for low-emphasis surfaces in inverse contexts."
   },
   "canvas-inverse-emphasis": {
-    value: "{accent-secondary.300}",
-    type: "color",
-    description: "Emphasis inverse secondary-accent canvas color for high-prominence surfaces in inverse contexts."
+    $value: "{accent-secondary.300}",
+    $type: "color",
+    $description: "Emphasis inverse secondary-accent canvas color for high-prominence surfaces in inverse contexts."
   },
 
   // Ink: accent text and icon colors (the accent hue itself)
   "ink": {
-    value: "{accent-secondary.700}",
-    type: "color",
-    description: "Base secondary-accent ink color (the accent hue) for body text and icons on neutral or light canvases."
+    $value: "{accent-secondary.700}",
+    $type: "color",
+    $description: "Base secondary-accent ink color (the accent hue) for body text and icons on neutral or light canvases."
   },
   "ink-subtle": {
-    value: "{accent-secondary.400}",
-    type: "color",
-    description: "Subtle secondary-accent ink color for the least-prominent, tertiary text and icons."
+    $value: "{accent-secondary.400}",
+    $type: "color",
+    $description: "Subtle secondary-accent ink color for the least-prominent, tertiary text and icons."
   },
   "ink-muted": {
-    value: "{accent-secondary.500}",
-    type: "color",
-    description: "Muted secondary-accent ink color for secondary text and icons."
+    $value: "{accent-secondary.500}",
+    $type: "color",
+    $description: "Muted secondary-accent ink color for secondary text and icons."
   },
   "ink-emphasis": {
-    value: "{accent-secondary.800}",
-    type: "color",
-    description: "Emphasis secondary-accent ink color for high-prominence text and icons."
+    $value: "{accent-secondary.800}",
+    $type: "color",
+    $description: "Emphasis secondary-accent ink color for high-prominence text and icons."
   },
 
   // Ink (inverse): accent text and icon colors on inverse canvases
   "ink-inverse": {
-    value: "{accent-secondary.300}",
-    type: "color",
-    description: "Base inverse secondary-accent ink color for body text and icons on inverse or dark canvases."
+    $value: "{accent-secondary.300}",
+    $type: "color",
+    $description: "Base inverse secondary-accent ink color for body text and icons on inverse or dark canvases."
   },
   "ink-inverse-subtle": {
-    value: "{accent-secondary.500}",
-    type: "color",
-    description: "Subtle inverse secondary-accent ink color for the least-prominent text and icons on inverse canvases."
+    $value: "{accent-secondary.500}",
+    $type: "color",
+    $description: "Subtle inverse secondary-accent ink color for the least-prominent text and icons on inverse canvases."
   },
   "ink-inverse-muted": {
-    value: "{accent-secondary.400}",
-    type: "color",
-    description: "Muted inverse secondary-accent ink color for secondary text and icons on inverse canvases."
+    $value: "{accent-secondary.400}",
+    $type: "color",
+    $description: "Muted inverse secondary-accent ink color for secondary text and icons on inverse canvases."
   },
   "ink-inverse-emphasis": {
-    value: "{accent-secondary.200}",
-    type: "color",
-    description: "Emphasis inverse secondary-accent ink color for high-prominence text on inverse canvases."
+    $value: "{accent-secondary.200}",
+    $type: "color",
+    $description: "Emphasis inverse secondary-accent ink color for high-prominence text on inverse canvases."
   },
 
   // Border: accent border, outline, and divider colors
   "border": {
-    value: "{accent-secondary.500}",
-    type: "color",
-    description: "Base secondary-accent border color for outlines, strokes, and dividers."
+    $value: "{accent-secondary.500}",
+    $type: "color",
+    $description: "Base secondary-accent border color for outlines, strokes, and dividers."
   },
   "border-subtle": {
-    value: "{accent-secondary.200}",
-    type: "color",
-    description: "Subtle secondary-accent border color for the least-prominent outlines and dividers."
+    $value: "{accent-secondary.200}",
+    $type: "color",
+    $description: "Subtle secondary-accent border color for the least-prominent outlines and dividers."
   },
   "border-muted": {
-    value: "{accent-secondary.300}",
-    type: "color",
-    description: "Muted secondary-accent border color for low-emphasis outlines and dividers."
+    $value: "{accent-secondary.300}",
+    $type: "color",
+    $description: "Muted secondary-accent border color for low-emphasis outlines and dividers."
   },
   "border-emphasis": {
-    value: "{accent-secondary.600}",
-    type: "color",
-    description: "Emphasis secondary-accent border color for high-prominence outlines and dividers."
+    $value: "{accent-secondary.600}",
+    $type: "color",
+    $description: "Emphasis secondary-accent border color for high-prominence outlines and dividers."
   },
 
   // Border (inverse): accent borders in inverse contexts
   "border-inverse": {
-    value: "{accent-secondary.500}",
-    type: "color",
-    description: "Base inverse secondary-accent border color for outlines and dividers on inverse canvases."
+    $value: "{accent-secondary.500}",
+    $type: "color",
+    $description: "Base inverse secondary-accent border color for outlines and dividers on inverse canvases."
   },
   "border-inverse-subtle": {
-    value: "{accent-secondary.800}",
-    type: "color",
-    description: "Subtle inverse secondary-accent border color for the least-prominent outlines on inverse canvases."
+    $value: "{accent-secondary.800}",
+    $type: "color",
+    $description: "Subtle inverse secondary-accent border color for the least-prominent outlines on inverse canvases."
   },
   "border-inverse-muted": {
-    value: "{accent-secondary.700}",
-    type: "color",
-    description: "Muted inverse secondary-accent border color for low-emphasis outlines on inverse canvases."
+    $value: "{accent-secondary.700}",
+    $type: "color",
+    $description: "Muted inverse secondary-accent border color for low-emphasis outlines on inverse canvases."
   },
   "border-inverse-emphasis": {
-    value: "{accent-secondary.400}",
-    type: "color",
-    description: "Emphasis inverse secondary-accent border color for high-prominence outlines on inverse canvases."
+    $value: "{accent-secondary.400}",
+    $type: "color",
+    $description: "Emphasis inverse secondary-accent border color for high-prominence outlines on inverse canvases."
   }
-} as const satisfies AccentSecondaryRoleSchema;
+} as const satisfies TokenInterface;
 
 export default tokens;

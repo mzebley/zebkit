@@ -1,26 +1,44 @@
 {
   "primary": {
-    "value": "\"Inter\"",
-    "description": "Primary family (body + interface).",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "weights": "400..700"
+    "$value": "Inter",
+    "$description": "Primary family (body + interface).",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "weights": "400..700"
+        }
+      }
+    }
   },
   "alt": {
-    "value": "\"Inter\"",
-    "description": "Display / heading family.",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "weights": "400..700"
+    "$value": "Inter",
+    "$description": "Display / heading family.",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "weights": "400..700"
+        }
+      }
+    }
   },
   "monospace": {
-    "value": "\"JetBrains Mono\"",
-    "description": "Monospace family (code, labels, values).",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "mono",
-    "weights": "400..700"
+    "$value": "JetBrains Mono",
+    "$description": "Monospace family (code, labels, values).",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "mono",
+          "weights": "400..700"
+        }
+      }
+    }
   }
 }

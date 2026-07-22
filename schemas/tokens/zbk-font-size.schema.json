@@ -5,27 +5,33 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "settingValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+    "cssDimensionValue": {
+      "type": "string",
+      "minLength": 1,
       "examples": [
-        "{spacing.max-scale}",
-        "{font-size.min-viewport}",
-        "{font-size.max-viewport}",
-        "{font-size.min-base}",
-        "{font-size.max-base}",
-        "{font-size.min-ratio}",
-        "{font-size.max-ratio}"
-      ]
-    },
-    "rootFontSizeValue": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "examples": [
+        "{h1.font-size}",
+        "{h1.measure}",
+        "{h2.font-size}",
+        "{h2.measure}",
+        "{h3.font-size}",
+        "{h3.measure}",
+        "{h4.font-size}",
+        "{h4.measure}",
+        "{h5.font-size}",
+        "{h5.measure}",
+        "{h6.font-size}",
+        "{h6.measure}",
+        "{lede.font-size}",
+        "{lede.measure}",
+        "{list.font-size}",
+        "{list.measure}",
+        "{p.font-size}",
+        "{p.measure}",
+        "{text-measure.1}",
+        "{text-measure.2}",
+        "{text-measure.3}",
+        "{text-measure.4}",
+        "{text-measure.5}",
         "{font-size.3xs}",
         "{font-size.2xs}",
         "{font-size.xs}",
@@ -36,587 +42,384 @@
         "{font-size.2xl}",
         "{font-size.3xl}",
         "{font-size.4xl}",
-        "{font-size.5xl}"
+        "{font-size.5xl}",
+        "{button.font-size}",
+        "{button.letter-spacing}",
+        "{button.margin-inline}",
+        "{button.margin-block}",
+        "{button.margin-inline-start}",
+        "{button.margin-inline-end}",
+        "{button.margin-block-start}",
+        "{button.margin-block-end}",
+        "{button.width}",
+        "{button.max-width}",
+        "{button.height}",
+        "{button.max-height}",
+        "{button.icon-size}",
+        "{button.icon-start-size}",
+        "{button.icon-end-size}",
+        "{checkbox.indicator-size}",
+        "{checkbox.font-size}",
+        "{checkbox.letter-spacing}",
+        "{input.font-size}",
+        "{input.letter-spacing}",
+        "{input.label-font-size}",
+        "{input.icon-size}",
+        "{input.width}",
+        "{input.min-width}",
+        "{input.max-width}",
+        "{pagination.font-size}",
+        "{pagination.icon-size}",
+        "{radio.border-radius}",
+        "{radio.indicator-size}",
+        "{radio.indicator-radius}",
+        "{radio.font-size}",
+        "{radio.letter-spacing}",
+        "{select.font-size}",
+        "{select.letter-spacing}",
+        "{select.label-font-size}",
+        "{select.icon-size}",
+        "{select.indicator-size}",
+        "{select.width}",
+        "{select.min-width}",
+        "{select.max-width}",
+        "{textarea.font-size}",
+        "{textarea.letter-spacing}",
+        "{textarea.label-font-size}",
+        "{textarea.width}",
+        "{textarea.min-width}",
+        "{textarea.max-width}",
+        "{toggle.thumb-radius}",
+        "{toggle.font-size}",
+        "{toggle.letter-spacing}",
+        "{tooltip.font-size}",
+        "{tooltip.letter-spacing}"
       ]
-    }
-  },
-  "properties": {
-    "min-viewport": {
-      "type": "object",
-      "description": "Lower anchor viewport for fluid type sizing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/settingValue"
-        },
-        "type": {
-          "const": "setting"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
     },
-    "max-viewport": {
-      "type": "object",
-      "description": "Upper anchor viewport for fluid type sizing.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/settingValue"
-        },
-        "type": {
-          "const": "setting"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "min-base": {
-      "type": "object",
-      "description": "Base (md) font size at the min viewport.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/settingValue"
-        },
-        "type": {
-          "const": "setting"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "max-base": {
-      "type": "object",
-      "description": "Base (md) font size at the max viewport.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/settingValue"
-        },
-        "type": {
-          "const": "setting"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "min-ratio": {
-      "type": "object",
-      "description": "Type scale ratio at the min viewport (minor third).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/settingValue"
-        },
-        "type": {
-          "const": "setting"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "max-ratio": {
-      "type": "object",
-      "description": "Type scale ratio at the max viewport (major third).",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/settingValue"
-        },
-        "type": {
-          "const": "setting"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "3xs": {
+    "cssDimensionScaledToken": {
       "type": "object",
       "description": "Smallest font size.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
+        "$value": {
+          "$ref": "#/definitions/cssDimensionValue"
         },
-        "type": {
-          "const": "rootFontSize"
+        "$type": {
+          "const": "cssDimension"
         },
-        "description": {
-          "type": "string"
+        "$description": {
+          "type": "string",
+          "minLength": 1
         },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                },
+                "scale": {
+                  "type": "object",
+                  "description": "Generated-scale step metadata (index 0 = base step).",
+                  "additionalProperties": false,
+                  "properties": {
+                    "index": {
+                      "type": "integer"
+                    },
+                    "valueSource": {
+                      "type": "string",
+                      "enum": [
+                        "generated",
+                        "pinned"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
         }
       }
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    }
+  },
+  "properties": {
+    "$type": {
+      "type": "string",
+      "enum": [
+        "dimension",
+        "cssDimension"
+      ]
+    },
+    "$description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "3xs": {
+      "description": "Smallest font size.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
+        }
+      ]
     },
     "2xs": {
-      "type": "object",
       "description": "Second smallest font size.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
-        },
-        "type": {
-          "const": "rootFontSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "xs": {
-      "type": "object",
       "description": "Extra small font size.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
-        },
-        "type": {
-          "const": "rootFontSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "sm": {
-      "type": "object",
       "description": "Small font size.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
-        },
-        "type": {
-          "const": "rootFontSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "md": {
-      "type": "object",
       "description": "Base / body font size.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
-        },
-        "type": {
-          "const": "rootFontSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "lg": {
-      "type": "object",
       "description": "Large font size.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
-        },
-        "type": {
-          "const": "rootFontSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "xl": {
-      "type": "object",
       "description": "Extra large font size.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
-        },
-        "type": {
-          "const": "rootFontSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "2xl": {
-      "type": "object",
       "description": "Double extra large font size.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
-        },
-        "type": {
-          "const": "rootFontSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "3xl": {
-      "type": "object",
       "description": "Triple extra large font size.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
-        },
-        "type": {
-          "const": "rootFontSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "4xl": {
-      "type": "object",
       "description": "Quadruple extra large font size.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
-        },
-        "type": {
-          "const": "rootFontSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     },
     "5xl": {
-      "type": "object",
       "description": "Quintuple extra large font size.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/rootFontSizeValue"
-        },
-        "type": {
-          "const": "rootFontSize"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        },
-        "index": {
-          "type": "number"
+      "allOf": [
+        {
+          "$ref": "#/definitions/cssDimensionScaledToken"
         }
-      }
+      ]
     }
   }
 }

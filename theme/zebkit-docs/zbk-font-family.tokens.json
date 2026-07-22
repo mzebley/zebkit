@@ -1,77 +1,113 @@
 {
   "primary": {
-    "value": "\"Proza Libre\"",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "sans",
-    "styles": [
-      "normal",
-      "italic"
-    ],
-    "weights": [
-      400,
-      500,
-      600,
-      700,
-      800
-    ]
+    "$value": "Proza Libre",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "sans",
+          "styles": [
+            "normal",
+            "italic"
+          ],
+          "weights": [
+            400,
+            500,
+            600,
+            700,
+            800
+          ]
+        }
+      }
+    }
   },
   "alt": {
-    "value": "\"Fraunces\"",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "serif",
-    "styles": [
-      "normal",
-      "italic"
-    ],
-    "weights": "300..700"
+    "$value": "Fraunces",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "serif",
+          "styles": [
+            "normal",
+            "italic"
+          ],
+          "weights": "300..700"
+        }
+      }
+    }
   },
   "monospace": {
-    "value": "\"Inconsolata\"",
-    "type": "fontFamily",
-    "source": "google",
-    "fallback": "mono",
-    "styles": [
-      "normal",
-      "italic"
-    ],
-    "weights": "300..700"
+    "$value": "Inconsolata",
+    "$type": "fontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "google",
+          "fallback": "mono",
+          "styles": [
+            "normal",
+            "italic"
+          ],
+          "weights": "300..700"
+        }
+      }
+    }
   },
   "interface": {
-    "value": "{font-family.primary}"
+    "$value": "{font-family.primary}"
   },
   "system-sans": {
-    "value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
-    "description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
-    "type": "fontFamily",
-    "source": "system"
+    "$value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
+    "$description": "System sans-serif stack. Zero network cost; uses the platform UI font.",
+    "$type": "cssFontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "system"
+        }
+      }
+    }
   },
   "system-serif": {
-    "value": "ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif",
-    "description": "System serif stack. Zero network cost.",
-    "type": "fontFamily",
-    "source": "system"
+    "$value": "ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif",
+    "$description": "System serif stack. Zero network cost.",
+    "$type": "cssFontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "system"
+        }
+      }
+    }
   },
   "system-mono": {
-    "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
-    "description": "System monospace stack. Zero network cost.",
-    "type": "fontFamily",
-    "source": "system"
+    "$value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+    "$description": "System monospace stack. Zero network cost.",
+    "$type": "cssFontFamily",
+    "$extensions": {
+      "dev.zebkit": {
+        "font": {
+          "source": "system"
+        }
+      }
+    }
   },
   "heading": {
-    "value": "{font-family.alt}",
-    "description": "Font family used for heading elements.",
-    "type": "fontFamily"
+    "$value": "{font-family.alt}",
+    "$description": "Font family used for heading elements.",
+    "$type": "fontFamily"
   },
   "body": {
-    "value": "{font-family.primary}",
-    "description": "Font family used for <p>, <li>, etc.",
-    "type": "fontFamily"
+    "$value": "{font-family.primary}",
+    "$description": "Font family used for <p>, <li>, etc.",
+    "$type": "fontFamily"
   },
   "code": {
-    "value": "{font-family.monospace}",
-    "description": "Font family used within <code> blocks",
-    "type": "fontFamily"
+    "$value": "{font-family.monospace}",
+    "$description": "Font family used within <code> blocks",
+    "$type": "fontFamily"
   }
 }

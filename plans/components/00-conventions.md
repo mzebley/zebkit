@@ -27,7 +27,6 @@ src/components/{name}/
   styles.scss              # auto-discovered by the token build (glob **/styles.scss)
   README.md
   tokens/tokens.ts         # auto-discovered (glob **/tokens/tokens.ts)
-  tokens/token-schema.ts
   variants/                # only if the plan specifies variants
     index.ts  types.ts  {variant}.ts
 ```
@@ -62,16 +61,16 @@ Mirror `src/components/input/tokens/tokens.ts`:
 ```ts
 export const key = "{name}";           // becomes the --zbk-{name}-* namespace
 export const layer: LayerName = "base";
-export type {Name}Tokens = z.infer<typeof tokenSchema>;
-const tokens = { /* ... */ } as const satisfies {Name}Tokens;
+export type {Name}TokenKey = 'canvas' | 'canvas-hover' | /* ... */;
+const tokens = { /* ... */ } as const satisfies Record<{Name}TokenKey, TokenObject>;
 export default tokens;
 ```
 
 - Every value is an alias reference (`{app.canvas}`, `{spacing.sm}`, ...) or a structural literal (`transparent`, `none`, `0`, `1em`, `currentColor`, `inherit`, `contents`). Never a primitive reference, never a raw visual value.
-- Every entry has `type` and `description`. Motion durations get `a11y: true`.
+- Every entry uses the DTCG shape: `$value`, `$type`, `$description`. Motion durations opt into the reduced-motion modifier with `$extensions: { "dev.zebkit": { a11y: true } }`.
 - State suffixes exactly as GRAMMAR.md §4: `-hover`, `-active`, `-focus`, `-disabled`, plus only the semantic states the plan's §9 lists.
-- Self-references are allowed and encouraged for "same as X" defaults: `{ value: "{{name}.canvas-focus}" }`.
-- `tokens/token-schema.ts` mirrors `src/components/input/tokens/token-schema.ts`: a strict `z.object` whose keys exactly match tokens.ts, all `tokenObjectSchema`.
+- Self-references are allowed and encouraged for "same as X" defaults: `{ $value: "{{name}.canvas-focus}" }`.
+- No per-component `token-schema.ts`: component modules validate against the generic `tokenModuleSchema`. Type the default export `as const satisfies Record<{Name}TokenKey, TokenObject>` so a dropped or mistyped key fails compilation.
 
 ### Alias vocabulary (do not invent names outside this list)
 
@@ -126,7 +125,7 @@ Commit regenerated artifacts (`custom-elements.json`, `doc-site/static/zebkit/co
 
 - [ ] All files from "Files every component ships", including the three external edits
 - [ ] Skeleton, attributes, behavior, ARIA, tokens, variants, events, warnings match the plan sections exactly
-- [ ] `token-schema.ts` keys identical to `tokens.ts` keys
+- [ ] `tokens.ts` satisfies its explicit token-key union; add `token-schema.ts` only for a documented structural constraint
 - [ ] No raw visual values outside structural literals; no primitives referenced from component tokens
 - [ ] Keyboard path exercised in tests; accessible-name warning tested where the plan requires one
 - [ ] All six Verify commands pass; regenerated artifacts committed

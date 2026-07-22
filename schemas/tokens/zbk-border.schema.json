@@ -5,44 +5,258 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "borderWidthValue": {
-      "type": [
-        "string",
-        "number"
+    "dimensionValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "{border.style}",
+            "{button.border-style}",
+            "{checkbox.border-style}",
+            "{input.border-style}",
+            "{pagination.border-style}",
+            "{radio.border-style}",
+            "{select.border-style}",
+            "{textarea.border-style}",
+            "{toggle.border-style}",
+            "{toggle.thumb-border-style}",
+            "{tooltip.border-style}"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "px",
+                "rem"
+              ]
+            }
+          }
+        }
       ],
       "examples": [
+        "{a11y.min-interaction-size}",
+        "{breakpoint.tablet}",
+        "{breakpoint.tablet-lg}",
+        "{breakpoint.desktop}",
+        "{breakpoint.desktop-lg}",
+        "{breakpoint.widescreen}",
+        "{focus.width}",
+        "{focus.offset}",
+        "{h1.letter-spacing}",
+        "{h1.spacing-before}",
+        "{h1.spacing-after}",
+        "{h2.letter-spacing}",
+        "{h2.spacing-before}",
+        "{h2.spacing-after}",
+        "{h3.letter-spacing}",
+        "{h3.spacing-before}",
+        "{h3.spacing-after}",
+        "{h4.letter-spacing}",
+        "{h4.spacing-before}",
+        "{h4.spacing-after}",
+        "{h5.letter-spacing}",
+        "{h5.spacing-before}",
+        "{h5.spacing-after}",
+        "{h6.letter-spacing}",
+        "{h6.spacing-before}",
+        "{h6.spacing-after}",
+        "{lede.letter-spacing}",
+        "{lede.spacing-before}",
+        "{lede.spacing-after}",
+        "{list.letter-spacing}",
+        "{list.spacing-before}",
+        "{list.spacing-after}",
+        "{list.padding-block-start}",
+        "{list.padding-block-end}",
+        "{p.letter-spacing}",
+        "{p.spacing-before}",
+        "{p.spacing-after}",
         "{border.width-xs}",
         "{border.width-sm}",
         "{border.width-md}",
         "{border.width-lg}",
         "{border.width-xl}",
+        "{border.radius-xs}",
+        "{border.radius-sm}",
+        "{border.radius-md}",
+        "{border.radius-lg}",
+        "{border.radius-xl}",
+        "{spacing.0}",
+        "{spacing.1}",
+        "{spacing.2}",
+        "{spacing.3}",
+        "{spacing.4}",
+        "{spacing.5}",
+        "{spacing.6}",
+        "{spacing.7}",
+        "{spacing.8}",
+        "{spacing.9}",
+        "{spacing.10}",
+        "{spacing.15}",
+        "{spacing.20}",
+        "{spacing.25}",
+        "{spacing.30}",
+        "{spacing.40}",
+        "{spacing.50}",
+        "{spacing.60}",
+        "{spacing.70}",
+        "{spacing.80}",
+        "{spacing.90}",
+        "{spacing.100}",
+        "{spacing.105}",
+        "{spacing.205}",
+        "{spacing.2xs}",
+        "{spacing.xs}",
+        "{spacing.sm}",
+        "{spacing.md}",
+        "{spacing.lg}",
+        "{spacing.xl}",
+        "{spacing.2xl}",
+        "{spacing.3xl}",
+        "{spacing.card}",
+        "{spacing.mobile}",
+        "{spacing.mobile-lg}",
+        "{spacing.tablet}",
+        "{spacing.tablet-lg}",
+        "{spacing.desktop}",
+        "{spacing.desktop-lg}",
+        "{spacing.widescreen}",
+        "{spacing.section}",
+        "{spacing.section-margin-block}",
+        "{spacing.section-margin-inline}",
+        "{spacing.aside}",
+        "{spacing.page-padding-block}",
+        "{spacing.page-padding-inline}",
+        "{spacing.neg-15}",
+        "{spacing.neg-10}",
+        "{spacing.neg-9}",
+        "{spacing.neg-8}",
+        "{spacing.neg-7}",
+        "{spacing.neg-6}",
+        "{spacing.neg-5}",
+        "{spacing.neg-4}",
+        "{spacing.neg-3}",
+        "{spacing.neg-205}",
+        "{spacing.neg-2}",
+        "{spacing.neg-105}",
+        "{spacing.neg-1}",
+        "{spacing.neg-05}",
+        "{spacing.neg-025}",
+        "{spacing.neg-2px}",
+        "{spacing.neg-1px}",
+        "{spacing.1px}",
+        "{spacing.2px}",
+        "{spacing.025}",
+        "{spacing.05}",
+        "{letter-spacing.tighter}",
+        "{letter-spacing.tight}",
+        "{letter-spacing.normal}",
+        "{letter-spacing.wide}",
+        "{letter-spacing.wider}",
         "{button.border-width}",
+        "{button.border-radius}",
+        "{button.padding-inline}",
+        "{button.padding-block}",
+        "{button.padding-inline-start}",
+        "{button.padding-inline-end}",
+        "{button.padding-block-start}",
+        "{button.padding-block-end}",
+        "{button.gap}",
+        "{button.group-gap}",
+        "{button.min-width}",
+        "{button.min-height}",
         "{button.focus-width}",
+        "{button.focus-offset}",
+        "{checkbox.control-width}",
+        "{checkbox.control-height}",
         "{checkbox.border-width}",
+        "{checkbox.border-radius}",
         "{checkbox.indicator-stroke-width}",
+        "{checkbox.indicator-radius}",
+        "{checkbox.gap}",
+        "{checkbox.group-gap}",
         "{checkbox.focus-width}",
+        "{checkbox.focus-offset}",
         "{input.border-width}",
+        "{input.border-radius}",
+        "{input.label-gap}",
+        "{input.padding-inline}",
+        "{input.padding-block}",
+        "{input.gap}",
+        "{input.min-height}",
+        "{input.group-gap}",
         "{input.focus-width}",
+        "{input.focus-offset}",
         "{pagination.border-width}",
+        "{pagination.border-radius}",
+        "{pagination.gap}",
+        "{pagination.min-width}",
+        "{pagination.min-height}",
+        "{pagination.padding-inline}",
+        "{pagination.padding-block}",
         "{pagination.focus-width}",
+        "{pagination.focus-offset}",
+        "{radio.control-width}",
+        "{radio.control-height}",
         "{radio.border-width}",
+        "{radio.gap}",
+        "{radio.group-gap}",
         "{radio.focus-width}",
+        "{radio.focus-offset}",
         "{select.border-width}",
+        "{select.border-radius}",
+        "{select.label-gap}",
         "{select.indicator-stroke-width}",
+        "{select.padding-inline}",
+        "{select.padding-block}",
+        "{select.gap}",
+        "{select.min-height}",
+        "{select.group-gap}",
         "{select.focus-width}",
+        "{select.focus-offset}",
         "{textarea.border-width}",
+        "{textarea.border-radius}",
+        "{textarea.label-gap}",
+        "{textarea.padding-inline}",
+        "{textarea.padding-block}",
+        "{textarea.min-block-size}",
         "{textarea.focus-width}",
+        "{textarea.focus-offset}",
+        "{toggle.track-width}",
+        "{toggle.track-height}",
         "{toggle.border-width}",
+        "{toggle.border-radius}",
+        "{toggle.thumb-size}",
+        "{toggle.thumb-inset}",
         "{toggle.thumb-border-width}",
+        "{toggle.gap}",
+        "{toggle.group-gap}",
         "{toggle.focus-width}",
-        "{tooltip.border-width}"
+        "{toggle.focus-offset}",
+        "{tooltip.border-width}",
+        "{tooltip.border-radius}",
+        "{tooltip.padding-inline}",
+        "{tooltip.padding-block}",
+        "{tooltip.max-width}",
+        "{tooltip.arrow-size}",
+        "{tooltip.offset}"
       ]
     },
-    "borderStyleValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+    "cssDimensionValue": {
+      "type": "string",
+      "minLength": 1,
       "examples": [
         "{border.style}",
         "{button.border-style}",
@@ -57,384 +271,619 @@
         "{tooltip.border-style}"
       ]
     },
-    "borderRadiusValue": {
-      "type": [
-        "string",
-        "number"
-      ],
+    "strokeStyleValue": {
+      "type": "string",
+      "minLength": 1,
       "examples": [
-        "{border.radius-xs}",
-        "{border.radius-sm}",
-        "{border.radius-md}",
-        "{border.radius-lg}",
-        "{border.radius-xl}",
-        "{button.border-radius}",
-        "{checkbox.border-radius}",
-        "{checkbox.indicator-radius}",
-        "{input.border-radius}",
-        "{pagination.border-radius}",
-        "{radio.border-radius}",
-        "{radio.indicator-radius}",
-        "{select.border-radius}",
-        "{textarea.border-radius}",
-        "{toggle.border-radius}",
-        "{toggle.thumb-radius}",
-        "{tooltip.border-radius}"
+        "{border.style}",
+        "{button.border-style}",
+        "{checkbox.border-style}",
+        "{input.border-style}",
+        "{pagination.border-style}",
+        "{radio.border-style}",
+        "{select.border-style}",
+        "{textarea.border-style}",
+        "{toggle.border-style}",
+        "{toggle.thumb-border-style}",
+        "{tooltip.border-style}"
       ]
-    }
-  },
-  "properties": {
-    "width-xs": {
+    },
+    "cssStrokeStyleValue": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "{border.style}",
+        "{button.border-style}",
+        "{checkbox.border-style}",
+        "{input.border-style}",
+        "{pagination.border-style}",
+        "{radio.border-style}",
+        "{select.border-style}",
+        "{textarea.border-style}",
+        "{toggle.border-style}",
+        "{toggle.thumb-border-style}",
+        "{tooltip.border-style}"
+      ]
+    },
+    "dimensionToken": {
       "type": "object",
       "description": "Smallest semantic border width.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/borderWidthValue"
-        },
-        "type": {
-          "const": "borderWidth"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/dimensionValue"
+            },
+            {
+              "$ref": "#/definitions/cssDimensionValue"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
           ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
         }
-      }
-    },
-    "width-sm": {
-      "type": "object",
-      "description": "Small semantic border width.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderWidthValue"
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "dimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/dimensionValue"
+              }
+            }
+          }
         },
-        "type": {
-          "const": "borderWidth"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssDimension"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssDimensionValue"
+              }
+            }
+          }
         }
-      }
+      ]
     },
-    "width-md": {
-      "type": "object",
-      "description": "Base semantic border width.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderWidthValue"
-        },
-        "type": {
-          "const": "borderWidth"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "width-lg": {
-      "type": "object",
-      "description": "Larger semantic border width.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderWidthValue"
-        },
-        "type": {
-          "const": "borderWidth"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "width-xl": {
-      "type": "object",
-      "description": "Largest semantic border width.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderWidthValue"
-        },
-        "type": {
-          "const": "borderWidth"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
-        }
-      }
-    },
-    "style": {
+    "strokeStyleToken": {
       "type": "object",
       "description": "Standarized border style for project.",
       "required": [
-        "value"
+        "$value"
       ],
       "additionalProperties": false,
       "properties": {
-        "value": {
-          "$ref": "#/definitions/borderStyleValue"
-        },
-        "type": {
-          "const": "borderStyle"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
+        "$value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/strokeStyleValue"
+            },
+            {
+              "$ref": "#/definitions/cssStrokeStyleValue"
+            }
           ]
         },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
+        "$type": {
+          "type": "string",
+          "enum": [
+            "strokeStyle",
+            "cssStrokeStyle"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dev.zebkit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "a11y": {
+                  "type": [
+                    "boolean",
+                    "string"
+                  ],
+                  "description": "Runtime accessibility-modifier opt-in: true uses the default modifier for the token type; a string names a custom modifier variable."
+                }
+              }
+            }
+          },
+          "patternProperties": {
+            "^(?!dev\\.zebkit$).+": {}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "strokeStyle"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/strokeStyleValue"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "$type"
+            ],
+            "properties": {
+              "$type": {
+                "const": "cssStrokeStyle"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "$ref": "#/definitions/cssStrokeStyleValue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "deprecated": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "groupExtensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dev.zebkit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "object",
+              "description": "Fluid-scale controls for this module (e.g. min-viewport/max-viewport/min-base/max-base/min-ratio/max-ratio on font-size, max-scale on spacing).",
+              "additionalProperties": false,
+              "properties": {
+                "min-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-viewport": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "max-base": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "unit"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "px",
+                            "rem"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem)$"
+                    }
+                  ]
+                },
+                "min-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "max-scale": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dev\\.zebkit$).+": {}
+      }
+    },
+    "group:width": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "xs": {
+          "description": "Smallest semantic border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "sm": {
+          "description": "Small semantic border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "md": {
+          "description": "Base semantic border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "lg": {
+          "description": "Larger semantic border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "xl": {
+          "description": "Largest semantic border width.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
           ]
         }
       }
+    },
+    "group:radius": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$type": {
+          "type": "string",
+          "enum": [
+            "dimension",
+            "cssDimension"
+          ]
+        },
+        "$description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "$deprecated": {
+          "$ref": "#/definitions/deprecated"
+        },
+        "$extensions": {
+          "$ref": "#/definitions/groupExtensions"
+        },
+        "xs": {
+          "description": "Smallest semantic corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "sm": {
+          "description": "Small semantic corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "md": {
+          "description": "Base semantic corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "lg": {
+          "description": "Larger semantic corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        },
+        "xl": {
+          "description": "Largest semantic corner radius.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/dimensionToken"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "$description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$deprecated": {
+      "$ref": "#/definitions/deprecated"
+    },
+    "$extensions": {
+      "$ref": "#/definitions/groupExtensions"
+    },
+    "width": {
+      "$ref": "#/definitions/group:width"
+    },
+    "width-xs": {
+      "description": "Smallest semantic border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "width-sm": {
+      "description": "Small semantic border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "width-md": {
+      "description": "Base semantic border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "width-lg": {
+      "description": "Larger semantic border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "width-xl": {
+      "description": "Largest semantic border width.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
+        }
+      ]
+    },
+    "style": {
+      "description": "Standarized border style for project.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/strokeStyleToken"
+        }
+      ]
+    },
+    "radius": {
+      "$ref": "#/definitions/group:radius"
     },
     "radius-xs": {
-      "type": "object",
       "description": "Smallest semantic corner radius.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderRadiusValue"
-        },
-        "type": {
-          "const": "borderRadius"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "radius-sm": {
-      "type": "object",
       "description": "Small semantic corner radius.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderRadiusValue"
-        },
-        "type": {
-          "const": "borderRadius"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "radius-md": {
-      "type": "object",
       "description": "Base semantic corner radius.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderRadiusValue"
-        },
-        "type": {
-          "const": "borderRadius"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "radius-lg": {
-      "type": "object",
       "description": "Larger semantic corner radius.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderRadiusValue"
-        },
-        "type": {
-          "const": "borderRadius"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     },
     "radius-xl": {
-      "type": "object",
       "description": "Largest semantic corner radius.",
-      "required": [
-        "value"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "value": {
-          "$ref": "#/definitions/borderRadiusValue"
-        },
-        "type": {
-          "const": "borderRadius"
-        },
-        "description": {
-          "type": "string"
-        },
-        "a11y": {
-          "type": [
-            "boolean",
-            "string"
-          ]
-        },
-        "additional": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+      "allOf": [
+        {
+          "$ref": "#/definitions/dimensionToken"
         }
-      }
+      ]
     }
   }
 }

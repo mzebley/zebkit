@@ -23,7 +23,7 @@ export interface PromptContext {
 
 /** A minimal inquirer-compatible question shape (avoids a hard inquirer type dep). */
 export interface Question {
-  type: 'input' | 'list' | 'confirm' | 'checkbox';
+  type: 'input' | 'select' | 'confirm' | 'checkbox';
   name: string;
   message: string;
   default?: unknown;
@@ -122,7 +122,7 @@ export const CONFIG_OPTIONS: ConfigOption[] = [
     default: 'default',
     parse: (raw) => raw,
     buildQuestion: (def, ctx) => ({
-      type: 'list',
+      type: 'select',
       name: 'basePreset',
       message: 'Starting theme:',
       choices: ctx.themeChoices ?? ['default'],
@@ -152,7 +152,7 @@ export const CONFIG_OPTIONS: ConfigOption[] = [
     default: 'import',
     parse: (raw) => parseEnum(raw, FONT_STRATEGIES),
     buildQuestion: (def) => ({
-      type: 'list',
+      type: 'select',
       name: 'fontsStrategy',
       message: 'Google Fonts delivery strategy:',
       choices: [
@@ -171,7 +171,7 @@ export const CONFIG_OPTIONS: ConfigOption[] = [
     default: 'all',
     parse: (raw) => parseEnum(raw, ['all', 'smart'] as const),
     buildQuestion: (def) => ({
-      type: 'list',
+      type: 'select',
       name: 'colors',
       message: 'Primitive color palettes to compile:',
       choices: [
@@ -218,7 +218,7 @@ export const CONFIG_OPTIONS: ConfigOption[] = [
     default: 'combined',
     parse: (raw) => parseEnum(raw, ['combined', 'per-module'] as const),
     buildQuestion: (def) => ({
-      type: 'list',
+      type: 'select',
       name: 'splitMode',
       message: 'Token export file splitting (only used when exporting token artifacts):',
       choices: [
@@ -316,7 +316,7 @@ export const CONFIG_OPTIONS: ConfigOption[] = [
     parse: (raw) => parseEnum(raw, PRUNE_OUTPUT_MODES),
     when: (answers) => answers.pruneEnabled === true,
     buildQuestion: (def) => ({
-      type: 'list',
+      type: 'select',
       name: 'pruneOutputMode',
       message: 'Prune output disposition:',
       choices: [
@@ -353,6 +353,20 @@ export const CONFIG_OPTIONS: ConfigOption[] = [
       type: 'confirm',
       name: 'exportTokens',
       message: 'Export token artifacts (JSON/TS/JS) alongside CSS?',
+      default: def,
+    }),
+  },
+  {
+    path: 'tokens.exportStrict',
+    id: 'exportStrict',
+    tier: 'advanced',
+    default: false,
+    parse: parseBoolean,
+    when: (answers) => answers.exportTokens === true,
+    buildQuestion: (def) => ({
+      type: 'confirm',
+      name: 'exportStrict',
+      message: 'Also export one combined, standard DTCG document and drop manifest?',
       default: def,
     }),
   },

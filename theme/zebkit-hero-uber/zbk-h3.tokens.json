@@ -1,57 +1,57 @@
 {
   "font-family": {
-    "value": "{font-family.heading}",
-    "type": "fontFamily",
-    "description": "Font family for H3 elements with .prose applied directly or that are a child of a .prose container."
+    "$value": "{font-family.heading}",
+    "$type": "fontFamily",
+    "$description": "Font family for H3 elements with .prose applied directly or that are a child of a .prose container."
   },
   "font-size": {
-    "value": "{font-size.xl}",
-    "type": "fontSize",
-    "description": "Font size for H3 elements — Base heading-small (~24px)."
+    "$value": "{font-size.xl}",
+    "$type": "cssDimension",
+    "$description": "Font size for H3 elements — Base heading-small (~24px)."
   },
   "font-weight": {
-    "value": "{font-weight.semibold}",
-    "type": "fontWeight",
-    "description": "Font weight for H3 — Uber SemiBold at sub-headline sizes."
+    "$value": "{font-weight.semibold}",
+    "$type": "fontWeight",
+    "$description": "Font weight for H3 — Uber SemiBold at sub-headline sizes."
   },
   "line-height": {
-    "value": "1.25",
-    "type": "lineHeight",
-    "description": "Line height for H3 elements with .prose applied directly or that are a child of a .prose container."
+    "$value": 1.25,
+    "$type": "number",
+    "$description": "Line height for H3 elements with .prose applied directly or that are a child of a .prose container."
   },
   "letter-spacing": {
-    "value": "-0.01em",
-    "type": "letterSpacing",
-    "description": "Tracking for H3 — slightly tight."
+    "$value": "-0.01em",
+    "$type": "dimension",
+    "$description": "Tracking for H3 — slightly tight."
   },
   "measure": {
-    "value": "{text-measure.3}",
-    "type": "sizing",
-    "description": "Maximum width for H3 elements with .prose applied directly or that are a child of a .prose container."
+    "$value": "{text-measure.3}",
+    "$type": "cssDimension",
+    "$description": "Maximum width for H3 elements with .prose applied directly or that are a child of a .prose container."
   },
   "spacing-before": {
-    "value": "1em",
-    "type": "spacing",
-    "description": "Amount of margin block start for H3 elements with .prose applied directly or that are a child of a .prose container."
+    "$value": "1em",
+    "$type": "dimension",
+    "$description": "Amount of margin block start for H3 elements with .prose applied directly or that are a child of a .prose container."
   },
   "spacing-after": {
-    "value": "1em",
-    "type": "spacing",
-    "description": "Amount of margin block end for H3 elements with .prose applied directly or that are a child of a .prose container."
+    "$value": "1em",
+    "$type": "dimension",
+    "$description": "Amount of margin block end for H3 elements with .prose applied directly or that are a child of a .prose container."
   },
   "color": {
-    "value": "{app.ink}",
-    "type": "color",
-    "description": "Color of H3 elements with .prose applied directly or that are a child of a .prose container."
+    "$value": "{app.ink}",
+    "$type": "color",
+    "$description": "Color of H3 elements with .prose applied directly or that are a child of a .prose container."
   },
   "font-style": {
-    "value": "none",
-    "type": "fontStyle",
-    "description": "Font style for H3 elements with .prose applied directly or that are a child of a .prose container."
+    "$value": "normal",
+    "$type": "fontStyle",
+    "$description": "Font style for H3 elements with .prose applied directly or that are a child of a .prose container."
   },
   "text-transform": {
-    "value": "none",
-    "type": "textTransform",
-    "description": "Text transform for H3 elements with .prose applied directly or that are a child of a .prose container."
+    "$value": "none",
+    "$type": "textTransform",
+    "$description": "Text transform for H3 elements with .prose applied directly or that are a child of a .prose container."
   }
 }

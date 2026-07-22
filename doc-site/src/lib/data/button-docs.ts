@@ -5,7 +5,7 @@ const buttonTokenKey = 'zbk-button';
 const buttonTokens = compiledTokens[buttonTokenKey];
 
 const cssVar = (tokenName: string) => `--${buttonTokenKey}-${tokenName}`;
-const describe = (tokenName: string) => buttonTokens?.[tokenName]?.description;
+const describe = (tokenName: string) => buttonTokens?.[tokenName]?.$description;
 
 const buttonTokenBlueprint = [
   {
